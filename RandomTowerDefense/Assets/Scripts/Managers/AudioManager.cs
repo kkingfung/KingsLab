@@ -4,10 +4,16 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    public AudioSource audioSource;
-
+    private AudioSource audioSource;
+    public Dictionary<string, AudioClip> bgmList;
+    public Dictionary<string, AudioClip> seList;
+    void Start() 
+    {
+        audioSource = GetComponent<AudioSource>();
+    }
     void Record()
     {
+        if (audioSource == null) return;
         audioSource.clip = Microphone.Start("Built-in Microphone", true, 10, 44100);
         audioSource.Play();
     }
@@ -20,25 +26,27 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    float[] GetWaveform() 
+    float[] GetWaveform(string clipname) 
     {
         float[] data=new float[Microphone.GetPosition("Built-in Microphone")];
-        audioSource.clip.GetData(data, 0);
+        if (bgmList[clipname].GetData(data, 0) == false) {
+            seList[clipname].GetData(data, 0);
+        }
         return data;
     }
 
-    public void PlayAudio(AudioClip audioClip)
+    public void PlayAudio(string clipname)
     {
         audioSource.pitch = 1;
-        audioSource.clip = audioClip;
+        audioSource.clip = bgmList[clipname] ? bgmList[clipname] : seList[clipname];
         audioSource.Play();
 
     }
-    public void PlayReverseAudio(AudioClip audioClip)
+    public void PlayReverseAudio(string clipname)
     {
         audioSource.pitch = -1;
         audioSource.loop = true;
-        audioSource.clip = audioClip;
+        audioSource.clip = bgmList[clipname] ? bgmList[clipname] : seList[clipname];
         audioSource.Play();
         StartCoroutine(StopLoop());
     }

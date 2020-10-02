@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class CanvaManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public Canvas PortraitCanva;
+    public Canvas LandscapeCanva;
+
+    // Use this for initialization
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        PortraitCanva.enabled = Screen.width <= Screen.height;
+        LandscapeCanva.enabled = Screen.width > Screen.height;
     }
 }

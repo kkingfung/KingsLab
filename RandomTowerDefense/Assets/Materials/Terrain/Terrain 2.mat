@@ -76,7 +76,7 @@ Material:
     - _GrassHeightFadePower: 2.37
     - _GrassMaxHeight: 0.75
     - _GrassSlopeThreshold: 0.32
-    - _MaxHeight: 10
+    - _MaxHeight: 30
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1

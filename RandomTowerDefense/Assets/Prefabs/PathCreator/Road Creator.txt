@@ -1,0 +1,2 @@
+﻿Road Creator.prefab have to be unpacked in Scene
+Due to the Original Setting in Prefab, variables may be reset when run

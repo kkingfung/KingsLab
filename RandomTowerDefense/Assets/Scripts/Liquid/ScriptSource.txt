@@ -1,0 +1,3 @@
+Author:         VueCode
+GitHub:         https://github.com/ivuecode/
+Youtube:        https://www.youtube.com/watch?v=3r6o8CfRlA4

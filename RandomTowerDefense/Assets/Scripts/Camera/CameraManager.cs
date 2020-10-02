@@ -5,9 +5,6 @@ using UnityEngine.Rendering.Universal.Internal;
 
 public class CameraManager : MonoBehaviour
 {
-    public Camera PortraitCamera;
-    public Camera LandscapeCamera;
-
     // Use this for initialization
     void Start()
     {
@@ -17,9 +14,5 @@ public class CameraManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        PortraitCamera.enabled = Screen.width <= Screen.height;
-        PortraitCamera.GetComponent<AudioListener>().enabled = PortraitCamera.enabled;
-        LandscapeCamera.enabled = Screen.width > Screen.height;
-        LandscapeCamera.GetComponent<AudioListener>().enabled = LandscapeCamera.enabled;
     }
 }

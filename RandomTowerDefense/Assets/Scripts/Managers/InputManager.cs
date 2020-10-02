@@ -106,7 +106,7 @@ public class InputManager : MonoBehaviour
         if (useTouch) UpdateTouchInfo();
         else UpdateMouseInfo();
 
-        LBMTesting(); //TODO: Only for Loading Scene
+        LBMTesting(); //Only for Loading Scene
     }
 
     void LateUpdate()
@@ -187,5 +187,9 @@ public class InputManager : MonoBehaviour
         }
         else 
             LBMTest.Interaction(Input.GetMouseButton(0), !Input.GetMouseButton(0),Input.mousePosition,true);
+    }
+
+    public bool GetAnyInput() {
+        return mobileInput.isTouch[0] || Input.GetMouseButton(0);
     }
 }

@@ -1,8 +1,0 @@
-AR Session Origin
-
--AR Tracked Image[AR Tracked Image Manager,Image Recognition(customize)] + XR Reference Image Library
--AR Plane Detection[AR Plane Manager]
--AR Raycast[AR Raycast Manager,SpawnObject(customize)]]
--AR FaceTrack[AR Face Manager]
-
--AR HandTrack(mediapipe)[ARManager[AR FrameProcessor+ HRHandProcessor],ARHandModel(boneSphere)]

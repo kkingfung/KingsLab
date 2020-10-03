@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class CanvaManager : MonoBehaviour
 {
-    public Canvas PortraitCanva;
-    public Canvas LandscapeCanva;
+    public List<Canvas> LandscapeCanva;
+    public List<Canvas> PortraitCanva;
 
     // Use this for initialization
     void Start()
@@ -16,7 +16,9 @@ public class CanvaManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        PortraitCanva.enabled = Screen.width <= Screen.height;
-        LandscapeCanva.enabled = Screen.width > Screen.height;
+        foreach (Canvas i in LandscapeCanva)
+            i.enabled = (Screen.width > Screen.height);
+        foreach (Canvas i in PortraitCanva)
+            i.enabled = (Screen.width <= Screen.height);
     }
 }

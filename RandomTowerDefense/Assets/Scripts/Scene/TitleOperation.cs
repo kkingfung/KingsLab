@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class TitleOperation: MonoBehaviour
+public class TitleOperation: ISceneChange
 {
     public Scene nextScene;
-    public List<GameObject> LandscapeObjs;
-    public List<GameObject> PortraitObjs;
     public GameObject BoidSpawn;
 
     AudioManager AudioManager;
@@ -21,6 +19,7 @@ public class TitleOperation: MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        base.Start();
         isOpening = true;
         inputMgt = FindObjectOfType<InputManager>();
         AudioManager = FindObjectOfType<AudioManager>();
@@ -31,16 +30,15 @@ public class TitleOperation: MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        foreach (GameObject i in LandscapeObjs)
-            i.SetActive(Screen.width > Screen.height);
-        foreach (GameObject i in PortraitObjs)
-            i.SetActive(Screen.width <= Screen.height);
+        base.Update();
 
-        if (isOpening) BoidSpawnEffect(inputMgt.GetAnyInput());
+        if (isOpening && inputMgt.GetAnyInput()) BoidSpawnEffect();
     }
 
-    void BoidSpawnEffect(bool Action)
+    void BoidSpawnEffect()
     {
+        BoidSpawn.transform.position = Camera.main.transform.position- Camera.main.transform.forward*2.0f;
+        GameObject.FindGameObjectWithTag("BoidWall").transform.position = BoidSpawn.transform.position;
         BoidSpawn.SetActive(true);
         isOpening = false;
         AudioManager.PlayAudio("bgm_Title");

@@ -20,8 +20,8 @@ public class LoadingOperation : ISceneChange
 
         Progress = 0;
         isFinished = false;
-        Debug.Log("reached");
         if (RandomObjs.Count == 0) return;
+        Random.seed = Time.frameCount;
         int RndNum = Random.Range(0,RandomObjs.Count-1);
         foreach (GameObject i in RandomObjs) {
             i.SetActive(false);

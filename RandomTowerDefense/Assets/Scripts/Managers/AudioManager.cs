@@ -12,9 +12,11 @@ public class AudioManager : MonoBehaviour
     Dictionary<string, AudioClip> seList;
 
 
-    void Start() 
+    void Awake() 
     {
         audioSource = GetComponent<AudioSource>();
+        bgmList = new Dictionary<string, AudioClip>();
+        seList = new Dictionary<string, AudioClip>();
 
         int i = 0;
         bgmList.Add("bgm_Battle", bgmSource[i++]);

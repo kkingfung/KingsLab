@@ -10,8 +10,10 @@ public class TitleOperation: MonoBehaviour
     public List<GameObject> PortraitObjs;
     public GameObject BoidSpawn;
 
+    AudioManager AudioManager;
     InputManager inputMgt;
     bool isOpening;
+   
     private void OnEnable()
     {
         BoidSpawn.SetActive(false);
@@ -21,6 +23,9 @@ public class TitleOperation: MonoBehaviour
     {
         isOpening = true;
         inputMgt = FindObjectOfType<InputManager>();
+        AudioManager = FindObjectOfType<AudioManager>();
+
+        AudioManager.PlayAudio("bgm_Opening");
     }
 
     // Update is called once per frame
@@ -31,12 +36,13 @@ public class TitleOperation: MonoBehaviour
         foreach (GameObject i in PortraitObjs)
             i.SetActive(Screen.width <= Screen.height);
 
-        if (!isOpening)
-        {
-            BoidSpawn.SetActive(true);
-        }
-        else {
-            isOpening=!inputMgt.GetAnyInput();
-        }
+        if (isOpening) BoidSpawnEffect(inputMgt.GetAnyInput());
+    }
+
+    void BoidSpawnEffect(bool Action)
+    {
+        BoidSpawn.SetActive(true);
+        isOpening = false;
+        AudioManager.PlayAudio("bgm_Title");
     }
 }

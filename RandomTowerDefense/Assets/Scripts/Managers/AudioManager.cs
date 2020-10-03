@@ -1,15 +1,43 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 public class AudioManager : MonoBehaviour
 {
-    private AudioSource audioSource;
-    public Dictionary<string, AudioClip> bgmList;
-    public Dictionary<string, AudioClip> seList;
+    public List<AudioClip> bgmSource;
+    public List<AudioClip> seSource;
+
+    AudioSource audioSource;
+    Dictionary<string, AudioClip> bgmList;
+    Dictionary<string, AudioClip> seList;
+
+
     void Start() 
     {
         audioSource = GetComponent<AudioSource>();
+
+        int i = 0;
+        bgmList.Add("bgm_Battle", bgmSource[i++]);
+        bgmList.Add("bgm_Opening", bgmSource[i++]);
+        bgmList.Add("bgm_Title", bgmSource[i++]);
+
+        i = 0;
+        seList.Add("se_Katana", seSource[i++]);
+        seList.Add("se_LongDist", seSource[i++]);
+        seList.Add("se_Punch", seSource[i++]);
+
+        seList.Add("se_MagicBuff", seSource[i++]);
+        seList.Add("se_MagicFire", seSource[i++]);
+        seList.Add("se_MagicGolem", seSource[i++]);
+        seList.Add("se_MagicIce1", seSource[i++]);
+        seList.Add("se_MagicIce2", seSource[i++]);
+        seList.Add("se_MagicTornado", seSource[i++]);
+
+        seList.Add("se_Button", seSource[i++]);
+        seList.Add("se_Clear", seSource[i++]);
+        seList.Add("se_Lose", seSource[i++]);
     }
+
     void Record()
     {
         if (audioSource == null) return;
@@ -34,26 +62,26 @@ public class AudioManager : MonoBehaviour
         return data;
     }
 
-    public void PlayAudio(string clipname)
+    public void PlayAudio(string clipname,bool isLoop=false)
     {
         audioSource.pitch = 1;
         audioSource.clip = bgmList[clipname] ? bgmList[clipname] : seList[clipname];
+        audioSource.loop = isLoop;
         audioSource.Play();
 
     }
-    public void PlayReverseAudio(string clipname)
+    public void PlayReverseAudio(string clipname, bool isLoop = false)
     {
         audioSource.pitch = -1;
-        audioSource.loop = true;
         audioSource.clip = bgmList[clipname] ? bgmList[clipname] : seList[clipname];
         audioSource.Play();
-        StartCoroutine(StopLoop());
+        StartCoroutine(StopLoop(isLoop));
     }
 
-    public IEnumerator StopLoop()
+    public IEnumerator StopLoop(bool isLoop)
     {
         yield return new WaitForSeconds(1f);
-        audioSource.loop = false;
+        audioSource.loop = isLoop;
     }
 
     public void SetAudioPitch(float pitch) {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameEndOperation : MonoBehaviour
+public class GameEndOperation : ISceneChange
 {
     // Start is called before the first frame update
     void Start()

@@ -6,7 +6,14 @@ public class FadeEffect : MonoBehaviour
 {
     float Threshold;
     float FadeRate = 0.01f;
+
+    Material FadeMat;
     public bool isReady { get; private set;}
+
+    private void Start()
+    {
+        FadeMat = GetComponent<MeshRenderer>().material;
+    }
     public void FadeIn() {
         Threshold = 0.0f;
         isReady = false;
@@ -19,29 +26,28 @@ public class FadeEffect : MonoBehaviour
         StartCoroutine(FadeOutRoutine());
     }
 
-    public IEnumerator FadeOutRoutine()
+    private IEnumerator FadeOutRoutine()
     {
         while (Threshold > 0f) {
-            GetComponent<MeshRenderer>().material.SetFloat("_FadeThreshold", Threshold);
-            Debug.Log(Threshold);
+            FadeMat.SetFloat("_FadeThreshold", Threshold);
             Threshold -= FadeRate;
             yield return new WaitForSeconds(0f);
         }
         Threshold = 0f;
-        GetComponent<MeshRenderer>().material.SetFloat("_FadeThreshold", Threshold);
+        FadeMat.SetFloat("_FadeThreshold", Threshold);
         isReady = true;
     }
 
-    public IEnumerator FadeInRoutine()
+    private IEnumerator FadeInRoutine()
     {
         while (Threshold < 1f)
         {
-            GetComponent<MeshRenderer>().material.SetFloat("_FadeThreshold", Threshold);
+            FadeMat.SetFloat("_FadeThreshold", Threshold);
             Threshold += FadeRate;
             yield return new WaitForSeconds(0f);
         }
         Threshold = 1f;
-        GetComponent<MeshRenderer>().material.SetFloat("_FadeThreshold", Threshold);
+        FadeMat.SetFloat("_FadeThreshold", Threshold);
         isReady = true;
     }
 }

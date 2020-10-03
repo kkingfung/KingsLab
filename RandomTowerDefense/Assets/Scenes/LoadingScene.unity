@@ -634,11 +634,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f4f49fa7951bd141a66f99b2a25eea1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nextScene:
-    m_Handle: 0
+  nextScene: LoadingScene
   LandscapeObjs:
   - {fileID: 84682716}
-  - {fileID: 1123217635}
   - {fileID: 1123217635}
   PortraitObjs:
   - {fileID: 2071277376}

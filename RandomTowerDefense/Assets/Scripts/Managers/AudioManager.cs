@@ -7,14 +7,30 @@ public class AudioManager : MonoBehaviour
     public List<AudioClip> bgmSource;
     public List<AudioClip> seSource;
 
-    AudioSource audioSource;
+    AudioSource[] audioSource;
     Dictionary<string, AudioClip> bgmList;
     Dictionary<string, AudioClip> seList;
 
+    [HideInInspector]
+    public bool enabledBGM;
+    [HideInInspector]
+    public bool enabledSE;
+
+    private void OnEnable()
+    {
+        enabledBGM = PlayerPrefs.GetInt("BGM", 1) == 1;
+        enabledSE = PlayerPrefs.GetInt("SE", 1) == 1;
+    }
+
+    private void OnDisable()
+    {
+        PlayerPrefs.SetInt("BGM", enabledBGM ? 1 : 0);
+        PlayerPrefs.SetInt("SE", enabledSE ? 1 : 0);
+    }
 
     void Awake() 
     {
-        audioSource = GetComponent<AudioSource>();
+        audioSource = GetComponents<AudioSource>();
         bgmList = new Dictionary<string, AudioClip>();
         seList = new Dictionary<string, AudioClip>();
 
@@ -43,8 +59,8 @@ public class AudioManager : MonoBehaviour
     void Record()
     {
         if (audioSource == null) return;
-        audioSource.clip = Microphone.Start("Built-in Microphone", true, 10, 44100);
-        audioSource.Play();
+        audioSource[1].clip = Microphone.Start("Built-in Microphone", true, 10, 44100);
+        audioSource[1].Play();
     }
 
     void Release() {
@@ -66,27 +82,48 @@ public class AudioManager : MonoBehaviour
 
     public void PlayAudio(string clipname,bool isLoop=false)
     {
-        audioSource.pitch = 1;
-        audioSource.clip = bgmList[clipname] ? bgmList[clipname] : seList[clipname];
-        audioSource.loop = isLoop;
-        audioSource.Play();
-
+        if (bgmList.ContainsKey(clipname))
+        {
+            audioSource[0].pitch = 1;
+            audioSource[0].clip = bgmList[clipname];
+            audioSource[0].loop = isLoop;
+            audioSource[0].Play();
+        }
+        else {
+            audioSource[1].pitch = 1;
+            audioSource[1].clip = seList[clipname];
+            audioSource[1].loop = isLoop;
+            audioSource[1].Play();
+        }
     }
     public void PlayReverseAudio(string clipname, bool isLoop = false)
     {
-        audioSource.pitch = -1;
-        audioSource.clip = bgmList[clipname] ? bgmList[clipname] : seList[clipname];
-        audioSource.Play();
-        StartCoroutine(StopLoop(isLoop));
+        if (bgmList.ContainsKey(clipname))
+        {
+            audioSource[0].pitch = -1;
+            audioSource[0].clip = bgmList[clipname];
+            audioSource[0].loop = isLoop;
+            audioSource[0].Play();
+            StartCoroutine(StopLoop(isLoop,0));
+        }
+        else
+        {
+            audioSource[1].pitch = -1;
+            audioSource[1].clip = seList[clipname];
+            audioSource[1].loop = isLoop;
+            audioSource[1].Play();
+            StartCoroutine(StopLoop(isLoop,1));
+        }
+        
     }
 
-    public IEnumerator StopLoop(bool isLoop)
+    public IEnumerator StopLoop(bool isLoop,int SourceID)
     {
         yield return new WaitForSeconds(1f);
-        audioSource.loop = isLoop;
+        audioSource[SourceID].loop = isLoop;
     }
 
-    public void SetAudioPitch(float pitch) {
-        audioSource.pitch = pitch;
+    public void SetAudioPitch(float pitch, int SourceID) {
+        audioSource[SourceID].pitch = pitch;
     }
 }

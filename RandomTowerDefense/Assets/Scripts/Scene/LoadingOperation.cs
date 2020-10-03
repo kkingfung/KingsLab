@@ -9,7 +9,7 @@ public class LoadingOperation : ISceneChange
     public List<GameObject> RandomObjs;
     public List<GameObject> LoadingIcon;
 
-    bool isFinished;
+
     float Progress;
 
     // Start is called before the first frame update
@@ -18,8 +18,10 @@ public class LoadingOperation : ISceneChange
         base.Start();
         base.SceneIn();
 
+        nextScene = PlayerPrefs.GetString("nextScene");
+
         Progress = 0;
-        isFinished = false;
+     
         if (RandomObjs.Count == 0) return;
         Random.seed = Time.frameCount;
         int RndNum = Random.Range(0,RandomObjs.Count-1);
@@ -35,19 +37,16 @@ public class LoadingOperation : ISceneChange
         base.Update();
 
         //Change Scene
-        if (isFinished && nextScene != null)
-        {
-            if (fadeQuad.isReady)
+        if (isSceneFinished && nextScene != null && fadeQuad.isReady)
                 SceneManager.LoadScene(nextScene);
-        }
 
         //LoadingScene Animation
-        if (isFinished||LoadingIcon.Count == 0 || fadeQuad.isReady==false) return;
+        if (isSceneFinished||LoadingIcon.Count == 0 || fadeQuad.isReady==false) return;
         //Amend if necessary
         if (Progress < 1) Progress += 0.01f;
         else
         {
-            isFinished = true;
+            isSceneFinished = true;
             if (fadeQuad) SceneOut();
         }
         foreach (GameObject i in LoadingIcon)

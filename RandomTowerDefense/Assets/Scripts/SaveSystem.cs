@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+using System;
 
 public static class SaveSystem {
 
@@ -14,11 +16,31 @@ public static class SaveSystem {
             // Create Save Folder
             Directory.CreateDirectory(SAVE_FOLDER);
         }
+
+        //SaveObject defaultRecord = new SaveObject();
+        //Record record;
+        //record.name = "AAAAA"; record.score = 50000;
+        //defaultRecord.record.Add(record);
+        //record.name = "BBBBB"; record.score = 10000;
+        //defaultRecord.record.Add(record);
+        //record.name = "CCCCC"; record.score = 5000;
+        //defaultRecord.record.Add(record);
+        //record.name = "DDDDD"; record.score = 1000;
+        //defaultRecord.record.Add(record);
+        //record.name = "EEEEE"; record.score = 100;
+        //defaultRecord.record.Add(record);
+
+        //for (int i = 0; i < 4; i++)
+        //{
+        //    defaultRecord.stageID = i;
+        //    SaveObject("Record", defaultRecord, true);
+        //}
     }
 
     public static void Save(string fileName, string saveString, bool overwrite)
     {
         Init();
+        
         string saveFileName = fileName;
         if (!overwrite)
         {
@@ -92,6 +114,7 @@ public static class SaveSystem {
     {
         Init();
         string json = JsonUtility.ToJson(saveObject);
+     
         Save(fileName, json, overwrite);
     }
 
@@ -126,8 +149,31 @@ public static class SaveSystem {
     }
 }
 
+public struct Record
+{
+    public string name;
+    public int score;
+}
+
+[Serializable]
 public class SaveObject
 {
-    public int goldAmount;
-    public Vector3 playerPosition;
+    public int stageID;
+    public List<Record> record;
+
+    public SaveObject() {
+        record = new List<Record>();
+    }
+    public void InsertObject(SaveObject savedObj, string newName, int newScore)
+    {
+        Record newRecord;
+        newRecord.name = newName;
+        newRecord.score = newScore;
+
+        record.Add(newRecord);
+        record = record.OrderByDescending(x => x.score).ToList();
+
+        record.RemoveAt(5);
+    }
 }
+

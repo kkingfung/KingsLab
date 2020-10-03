@@ -16,6 +16,7 @@ TagManager:
   - 
   - BoidsWall
   - Background
+  - RecordBroad
   - 
   - 
   - 
@@ -36,8 +37,7 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
+  - FadeLayer
   m_SortingLayers:
   - name: Default
     uniqueID: 0

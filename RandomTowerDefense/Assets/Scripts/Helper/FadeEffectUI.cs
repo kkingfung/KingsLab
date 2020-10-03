@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class FadeEffect : MonoBehaviour
+using UnityEngine.UI;
+public class FadeEffectUI : MonoBehaviour
 {
     float Threshold;
     float FadeRate = 0.01f;
@@ -12,9 +12,10 @@ public class FadeEffect : MonoBehaviour
 
     private void Start()
     {
-        FadeMat = GetComponent<MeshRenderer>().material;
+        FadeMat = GetComponent<RawImage>().material;
         FadeMat.SetFloat("_FadeThreshold", 1f);
     }
+
     public void FadeIn() {
         Threshold = 0.0f;
         isReady = false;

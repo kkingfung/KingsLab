@@ -364,6 +364,7 @@ GameObject:
   - component: {fileID: 84682721}
   - component: {fileID: 84682717}
   - component: {fileID: 84682719}
+  - component: {fileID: 84682718}
   m_Layer: 0
   m_Name: LandscapeCamera
   m_TagString: Untagged
@@ -414,6 +415,23 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &84682718
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 84682716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: e2cbdb99dc921b444a84fe7681dd284d, type: 2}
 --- !u!114 &84682719
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -436,7 +454,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -620,7 +638,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &652263797
 MonoBehaviour:
@@ -1050,6 +1068,7 @@ GameObject:
   - component: {fileID: 1188347963}
   - component: {fileID: 1188347962}
   - component: {fileID: 1188347961}
+  - component: {fileID: 1188347965}
   m_Layer: 0
   m_Name: BackgroundCamera
   m_TagString: MainCamera
@@ -1156,6 +1175,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1188347965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1188347960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 10fc4df2da32a41aaa32d77bc913491c, type: 2}
 --- !u!1 &1292970423
 GameObject:
   m_ObjectHideFlags: 0
@@ -1267,7 +1303,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2018536928
 GameObject:
@@ -1298,10 +1334,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07ce54b857bd83d48ab89eee39181943, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LandscapeCam:
+  LandscapeCam_Main:
   - {fileID: 84682717}
-  PortraitCam:
+  LandscapeCam_Sub: []
+  PortraitCam_Main:
   - {fileID: 2071277378}
+  PortraitCam_Sub: []
+  isOpening: 0
 --- !u!4 &2018536930
 Transform:
   m_ObjectHideFlags: 0
@@ -1327,6 +1366,7 @@ GameObject:
   - component: {fileID: 2071277379}
   - component: {fileID: 2071277378}
   - component: {fileID: 2071277380}
+  - component: {fileID: 2071277377}
   m_Layer: 0
   m_Name: PortraitCamera
   m_TagString: Untagged
@@ -1334,6 +1374,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &2071277377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071277376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: e2cbdb99dc921b444a84fe7681dd284d, type: 2}
 --- !u!20 &2071277378
 Camera:
   m_ObjectHideFlags: 0
@@ -1413,7 +1470,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -1482,6 +1539,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Usurper
       objectReference: {fileID: 0}
+    - target: {fileID: 3076270889337058690, guid: 3505ded4f2b53eb44812431b33b42b7c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3505ded4f2b53eb44812431b33b42b7c, type: 3}
 --- !u!1001 &3399818597275430327
@@ -1539,6 +1600,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Nightmare
       objectReference: {fileID: 0}
+    - target: {fileID: 3399818596272553920, guid: b4f6e2cf593dd404ab2fff025ac480c4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4f6e2cf593dd404ab2fff025ac480c4, type: 3}
 --- !u!1001 &4176275406268784214
@@ -1551,6 +1616,10 @@ PrefabInstance:
     - target: {fileID: 4176275406277170457, guid: 7b918033c9b4bf84a99a297c7ef996c2, type: 3}
       propertyPath: m_Name
       value: Terrorbringer
+      objectReference: {fileID: 0}
+    - target: {fileID: 4176275406277170457, guid: 7b918033c9b4bf84a99a297c7ef996c2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4176275406277366895, guid: 7b918033c9b4bf84a99a297c7ef996c2, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1608,6 +1677,10 @@ PrefabInstance:
     - target: {fileID: 5624818867113790556, guid: 7b02029f7af02fa43beda3774ecda8ec, type: 3}
       propertyPath: m_Name
       value: SoulEater
+      objectReference: {fileID: 0}
+    - target: {fileID: 5624818867113790556, guid: 7b02029f7af02fa43beda3774ecda8ec, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5624818867113824380, guid: 7b02029f7af02fa43beda3774ecda8ec, type: 3}
       propertyPath: m_LocalPosition.x

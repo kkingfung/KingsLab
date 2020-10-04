@@ -3717,7 +3717,7 @@ GameObject:
   m_Component:
   - component: {fileID: 697138489}
   m_Layer: 0
-  m_Name: '------Title--------- '
+  m_Name: '------Main--------- '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4811,7 +4811,7 @@ GameObject:
   - component: {fileID: 946681068}
   - component: {fileID: 946681069}
   m_Layer: 0
-  m_Name: TitleSceneManager
+  m_Name: SceneManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

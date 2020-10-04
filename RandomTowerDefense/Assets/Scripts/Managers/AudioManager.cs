@@ -12,9 +12,18 @@ public class AudioManager : MonoBehaviour
     Dictionary<string, AudioClip> seList;
 
     [HideInInspector]
-    public bool enabledBGM;
+    bool enabledBGM;
     [HideInInspector]
-    public bool enabledSE;
+    bool enabledSE;
+
+    public void EnableBGM(bool enable) {
+        enabledBGM = enable;
+    }
+
+    public void EnableSE(bool enable)
+    {
+        enabledSE = enable;
+    }
 
     private void OnEnable()
     {

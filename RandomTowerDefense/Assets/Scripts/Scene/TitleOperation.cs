@@ -30,6 +30,7 @@ public class TitleOperation: ISceneChange
     CameraManager CameraManager;
     CanvaManager CanvaManager;
     InputManager InputManager;
+    GyroscopeManager GyroscopeManager;
     bool isOpening;
     bool isOption;
     bool showCredit;
@@ -78,6 +79,7 @@ public class TitleOperation: ISceneChange
         AudioManager = FindObjectOfType<AudioManager>();
         CameraManager = FindObjectOfType<CameraManager>();
         CanvaManager = FindObjectOfType<CanvaManager>();
+        GyroscopeManager = FindObjectOfType<GyroscopeManager>();
 
         LandscapeFade = LandscapeFadeImg.GetComponent<FadeEffectUI>();
         PortraitFade = PortraitFadeImg.GetComponent<FadeEffectUI>();
@@ -140,6 +142,7 @@ public class TitleOperation: ISceneChange
     public void OptionStatus(bool enabled) {
         isOption = enabled;
         CanvaManager.isOption = enabled;
+        GyroscopeManager.isFunctioning = !enabled;
     }
 
     public void EnableCredit() {

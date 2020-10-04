@@ -8,6 +8,9 @@ public class TitleOperation: ISceneChange
 {
     //Camera Start/Stay/End Point
     [Header("Camera Settings")]
+    public GameObject DarkenCam;
+    public GameObject DarkenCamSub;
+
     public GameObject RightCam;
     public List<Vector3> RightCamStartPt;
     public List<Vector3> RightCamStayPt;
@@ -34,7 +37,7 @@ public class TitleOperation: ISceneChange
     bool isOpening;
     bool isOption;
     bool showCredit;
-
+    int ButtonWait = 0;
     List<SaveObject> save;
 
     enum RecordCameraState {
@@ -53,7 +56,7 @@ public class TitleOperation: ISceneChange
 
     const int maxRecStatus = 4;
     const int maxRecFrame = 20;
-    const float maxRecWait = 5f;
+    const int maxRecWaitFrame = 120;
 
 
     private void OnEnable()
@@ -85,13 +88,6 @@ public class TitleOperation: ISceneChange
         PortraitFade = PortraitFadeImg.GetComponent<FadeEffectUI>();
 
         AudioManager.PlayAudio("bgm_Opening");
-
-        SaveSystem.Init();
-        //save = new List<SaveObject>();
-        //for (int i = 0; i < 4; i++)
-        //{
-        //    save.Add(SaveSystem.LoadObject<SaveObject>("Record" + i.ToString()));
-        //}
     }
 
     // Update is called once per frame
@@ -99,10 +95,13 @@ public class TitleOperation: ISceneChange
     {
         base.Update();
         //Change Scene
-        if (isSceneFinished && (LandscapeFade && LandscapeFade.isReady) && (PortraitFade && PortraitFade.isReady)) { 
-            SceneManager.LoadScene(PlayerPrefs.GetString("nextScene"));
+        if (isSceneFinished && ((LandscapeFade && LandscapeFade.isReady) || (PortraitFade && PortraitFade.isReady)))
+        {
+            SceneManager.LoadScene("LoadingScene");
             return;
         }
+
+        if (isSceneFinished) return;
 
         if (CameraManager) CameraManager.isOpening = isOpening;
         if (CanvaManager) CanvaManager.isOpening = isOpening;
@@ -122,11 +121,17 @@ public class TitleOperation: ISceneChange
         }
 
         if (Input.GetMouseButtonDown(1)) MoveToStageSelection();
+
+        DarkenCam.SetActive(isOption);
+        DarkenCamSub.SetActive(showCredit);
+
+        if (!showCredit&&ButtonWait > 0) ButtonWait--;
     }
 
     public void MoveToStageSelection() {
         SetNextScene("StageSelection");
         SceneOut();
+        isSceneFinished = true;
     }
 
     void BoidSpawnEffect()
@@ -146,9 +151,11 @@ public class TitleOperation: ISceneChange
     }
 
     public void EnableCredit() {
+        if (showCredit || ButtonWait>0) return;
         showCredit = !showCredit;
         nextRecStatusRightCam = 0;
-        Debug.Log("reach");
+        nextRecStatusBottomCam = 0;
+        ButtonWait =5;
     }
 
     private IEnumerator RecRightCamOperation()
@@ -173,11 +180,20 @@ public class TitleOperation: ISceneChange
 
         //Stay
         rightCamState = RecordCameraState.Stay;
-        yield return new WaitForSeconds(maxRecWait);
-
-        while (showCredit && currentRecStatusRightCam == 0)
-            yield return new WaitForSeconds(0f);
-
+        frame = 0;
+        if (showCredit)
+        {
+            while (showCredit && currentRecStatusRightCam == 0)
+                yield return new WaitForSeconds(0f);
+        }
+        else
+        {
+            while (frame < maxRecWaitFrame && !showCredit)
+            {
+                frame++;
+                yield return new WaitForSeconds(0f);
+            }
+        }
 
         //StaytoExit
         rightCamState = RecordCameraState.StaytoExit;
@@ -220,11 +236,20 @@ public class TitleOperation: ISceneChange
 
         //Stay
         bottomCamState = RecordCameraState.Stay;
-        yield return new WaitForSeconds(maxRecWait);
-
-        while (showCredit && currentRecStatusBottomCam == 0)
-            yield return new WaitForSeconds(0f);
-
+        frame = 0;
+        if (showCredit)
+        {
+            while (showCredit && currentRecStatusBottomCam == 0)
+                yield return new WaitForSeconds(0f);
+        }
+        else
+        {
+            while (frame < maxRecWaitFrame && !showCredit)
+            {
+                frame++;
+                yield return new WaitForSeconds(0f);
+            }
+        }
 
         //StaytoExit
         bottomCamState = RecordCameraState.StaytoExit;

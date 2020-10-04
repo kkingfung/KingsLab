@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class FadeEffectUI : MonoBehaviour
 {
     float Threshold;
-    float FadeRate = 0.01f;
+    float FadeRate = 0.05f;
 
     Material FadeMat;
     public bool isReady { get; private set;}
@@ -19,12 +19,14 @@ public class FadeEffectUI : MonoBehaviour
     public void FadeIn() {
         Threshold = 0.0f;
         isReady = false;
-        StartCoroutine(FadeInRoutine());
+        if (this.transform.parent.gameObject.activeSelf)
+            StartCoroutine(FadeInRoutine());
     }
     public void FadeOut()
     {
         Threshold = 1.0f;
         isReady = false;
+        if (this.transform.parent.gameObject.activeSelf)
         StartCoroutine(FadeOutRoutine());
     }
 

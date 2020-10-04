@@ -34,11 +34,9 @@ public class CanvaManager : MonoBehaviour
         foreach (GameObject i in PortraitCanva_Sub)
             i.SetActive(!isOpening && (Screen.width <= Screen.height));
 
-        if (isOption) {
-            foreach (GameObject i in LandscapeCanva_Open)
-                i.SetActive((Screen.width > Screen.height));
-            foreach (GameObject i in PortraitCanva_Open)
-                i.SetActive((Screen.width <= Screen.height));
-        }
+        foreach (GameObject i in LandscapeCanva_Open)
+            i.SetActive(isOption && (Screen.width > Screen.height));
+        foreach (GameObject i in PortraitCanva_Open)
+            i.SetActive(isOption && (Screen.width <= Screen.height));
     }
 }

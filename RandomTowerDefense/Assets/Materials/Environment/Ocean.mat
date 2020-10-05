@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Ocean
+  m_Shader: {fileID: -6465566751694194690, guid: 864b1c76a4d07c449bd25ea197c4ae15, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - Texture2D_3E132965:
+        m_Texture: {fileID: 2800000, guid: 2f886aab0d13de8458d802ddfac5e77b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_BF41ED65:
+        m_Texture: {fileID: 2800000, guid: 6da079abfc470f644a4620d84a05281b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_FBDEFE76:
+        m_Texture: {fileID: 2800000, guid: ee4d71c3c93ff944c9b7ac35d73f593a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - Vector1_14D0AD15: 0.973
+    - Vector1_1A84BBAF: 0.12
+    - Vector1_3FBB05F2: 0.119
+    - Vector1_5040AB64: 0.5
+    - Vector1_5F225D4: 0.33
+    - Vector1_717C0F78: 1.02
+    - Vector1_7CFEBE35: 1.1
+    - Vector1_8C14A236: 5.05
+    - Vector1_B20449F: 0.85
+    - Vector1_B50DBDF8: 1.73
+    - Vector1_DF5D8973: 0.5
+    m_Colors:
+    - Color_17ADFB2C: {r: 0, g: 0.8867924, b: 0.8697737, a: 0.5529412}
+    - Color_4B8AE984: {r: 0.053711258, g: 0.5567383, b: 0.6698113, a: 0.4196078}
+    - Color_A29D43B8: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []

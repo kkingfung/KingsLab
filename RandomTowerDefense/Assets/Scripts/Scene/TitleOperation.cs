@@ -20,6 +20,11 @@ public class TitleOperation: ISceneChange
     public List<Vector3> BottomCamStayPt;
     public List<Vector3> BottomCamEndPt;
 
+    [Header("Button Settings")]
+    public List<Button> StartButton;
+    public List<Button> OptionButton;
+    public List<Button> CreditButton;
+
     [Header("Other Settings")]
     public GameObject BoidSpawn;
     public GameObject LandscapeFadeImg;
@@ -38,6 +43,7 @@ public class TitleOperation: ISceneChange
     bool isOption;
     bool showCredit;
     int ButtonWait = 0;
+    const int ButtonWaitCnt = 5;
     List<SaveObject> save;
 
     enum RecordCameraState {
@@ -126,6 +132,13 @@ public class TitleOperation: ISceneChange
         DarkenCamSub.SetActive(showCredit);
 
         if (!showCredit&&ButtonWait > 0) ButtonWait--;
+
+            foreach (Button i in StartButton)
+                i.interactable = !showCredit && !isOption;
+            foreach (Button i in OptionButton)
+                i.interactable = !showCredit;
+            foreach (Button i in CreditButton)
+                i.interactable = !isOption;
     }
 
     public void MoveToStageSelection() {
@@ -144,10 +157,12 @@ public class TitleOperation: ISceneChange
         AudioManager.PlayAudio("se_Button");
     }
 
-    public void OptionStatus(bool enabled) {
-        isOption = enabled;
-        CanvaManager.isOption = enabled;
-        GyroscopeManager.isFunctioning = !enabled;
+    public void OptionStatus() {
+        if (ButtonWait > 0) return;
+        isOption = !isOption;
+        CanvaManager.isOption = isOption;
+        GyroscopeManager.isFunctioning = !isOption;
+        ButtonWait = ButtonWaitCnt;
     }
 
     public void EnableCredit() {
@@ -155,7 +170,7 @@ public class TitleOperation: ISceneChange
         showCredit = !showCredit;
         nextRecStatusRightCam = 0;
         nextRecStatusBottomCam = 0;
-        ButtonWait =5;
+        ButtonWait = ButtonWaitCnt;
     }
 
     private IEnumerator RecRightCamOperation()

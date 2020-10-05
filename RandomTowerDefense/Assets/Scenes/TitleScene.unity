@@ -1097,7 +1097,7 @@ MonoBehaviour:
       - m_Target: {fileID: 946681069}
         m_TargetAssemblyTypeName: TitleOperation, Assembly-CSharp
         m_MethodName: OptionStatus
-        m_Mode: 6
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -4885,6 +4885,15 @@ MonoBehaviour:
   - {x: 326, y: -16, z: -151}
   - {x: 626, y: 187, z: -151}
   - {x: 626, y: -16, z: -151}
+  StartButton:
+  - {fileID: 1452681555}
+  - {fileID: 1097071274}
+  OptionButton:
+  - {fileID: 1090470279}
+  - {fileID: 1336674217}
+  CreditButton:
+  - {fileID: 2014551688}
+  - {fileID: 1739106579}
   BoidSpawn: {fileID: 1563674594}
   LandscapeFadeImg: {fileID: 548952175}
   PortraitFadeImg: {fileID: 100818823}
@@ -5523,7 +5532,7 @@ MonoBehaviour:
       - m_Target: {fileID: 946681069}
         m_TargetAssemblyTypeName: TitleOperation, Assembly-CSharp
         m_MethodName: OptionStatus
-        m_Mode: 6
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -6960,7 +6969,7 @@ MonoBehaviour:
       - m_Target: {fileID: 946681069}
         m_TargetAssemblyTypeName: TitleOperation, Assembly-CSharp
         m_MethodName: OptionStatus
-        m_Mode: 6
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -10122,7 +10131,7 @@ MonoBehaviour:
       - m_Target: {fileID: 946681069}
         m_TargetAssemblyTypeName: TitleOperation, Assembly-CSharp
         m_MethodName: OptionStatus
-        m_Mode: 6
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

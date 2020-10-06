@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StageSelectOperation : MonoBehaviour
+public class DebugManager : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -13,6 +13,6 @@ public class StageSelectOperation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 }

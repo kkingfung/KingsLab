@@ -117,6 +117,7 @@ public class TitleOperation: ISceneChange
             showCredit = false; 
             nextRecStatusRightCam = 1; 
             nextRecStatusBottomCam = 1;
+            ButtonWait = ButtonWaitCnt;
         }
 
         if (!isOpening){
@@ -142,6 +143,7 @@ public class TitleOperation: ISceneChange
     }
 
     public void MoveToStageSelection() {
+        if (ButtonWait > 0) return;
         SetNextScene("StageSelection");
         SceneOut();
         isSceneFinished = true;

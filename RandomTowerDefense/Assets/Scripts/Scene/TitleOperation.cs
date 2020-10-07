@@ -39,12 +39,12 @@ public class TitleOperation: ISceneChange
     CanvaManager CanvaManager;
     InputManager InputManager;
     GyroscopeManager GyroscopeManager;
+
     bool isOpening;
     bool isOption;
     bool showCredit;
     int ButtonWait = 0;
     const int ButtonWaitCnt = 5;
-    List<SaveObject> save;
 
     enum RecordCameraState {
         StarttoStay,

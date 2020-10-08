@@ -6,11 +6,11 @@ public class CanvaManager : MonoBehaviour
 {
     public List<GameObject> LandscapeCanva_Main;
     public List<GameObject> LandscapeCanva_Sub;
-    public List<GameObject> LandscapeCanva_Open;
+    public List<GameObject> LandscapeCanva_Opt;
 
     public List<GameObject> PortraitCanva_Main;
     public List<GameObject> PortraitCanva_Sub;
-    public List<GameObject> PortraitCanva_Open;
+    public List<GameObject> PortraitCanva_Opt;
     [HideInInspector]
     public bool isOpening;
     [HideInInspector]
@@ -34,9 +34,9 @@ public class CanvaManager : MonoBehaviour
         foreach (GameObject i in PortraitCanva_Sub)
             i.SetActive(!isOpening && (Screen.width <= Screen.height));
 
-        foreach (GameObject i in LandscapeCanva_Open)
+        foreach (GameObject i in LandscapeCanva_Opt)
             i.SetActive(isOption && (Screen.width > Screen.height));
-        foreach (GameObject i in PortraitCanva_Open)
+        foreach (GameObject i in PortraitCanva_Opt)
             i.SetActive(isOption && (Screen.width <= Screen.height));
     }
 }

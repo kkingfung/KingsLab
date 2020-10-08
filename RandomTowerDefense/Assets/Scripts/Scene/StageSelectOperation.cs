@@ -1,34 +1,43 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class StageSelectOperation : ISceneChange
 {
+    const int IslandNum = 4;
+
     [Header("Debugger")]
     public bool isDebugging;
 
     //Camera Start/Stay/End Point
     [Header("MainCamera Settings")]
     public GameObject MainCam;
-    public List<Vector3> MainCamStartPt;
     public List<Vector3> MainCamStayPt;
-    public List<Vector3> MainCamEndPt;
     [Header("UICamera Settings")]
     public GameObject RightCam;
-    public List<Vector3> RightCamStartPt;
     public List<Vector3> RightCamStayPt;
-    public List<Vector3> RightCamEndPt;
     public GameObject BottomCam;
-    public List<Vector3> BottomCamStartPt;
     public List<Vector3> BottomCamStayPt;
-    public List<Vector3> BottomCamEndPt;
     [Header("OtherCamera Settings")]
     public GameObject DarkenCam;
-    public GameObject DarkenCamSub;
+
+    [Header("Button Settings")]
+    public List<Button> OptionButton;
+    public List<Button> OtherButton;
+
+    [Header("Other Settings")]
+    public GameObject LandscapeFadeImg;
+    public GameObject PortraitFadeImg;
+
+    FadeEffectUI LandscapeFade;
+    FadeEffectUI PortraitFade;
 
     int IslandNow = 0;
+    int IslandNext = 0;
     int IslandEnabled = 0;
-    const int IslandNum = 4;
 
     //Manager
     AudioManager AudioManager;
@@ -38,50 +47,101 @@ public class StageSelectOperation : ISceneChange
     GyroscopeManager GyroscopeManager;
 
     bool isOption;
-    int ButtonWait = 0;
-    const int ButtonWaitCnt = 5;
-
-    //CustomizedIslandDetail
-    int stageSize = 0;
+    float TimeRecord = 0;
+    const float TimeWait = 0.5f;
 
     //CameraOperation
-    enum RecordCameraState
-    {
-        StarttoStay,
-        Stay,
-        StaytoExit,
-        Exit
-    };
-
-    int currentRecStatusMainCam;
-    int nextRecStatusMainCam;
-    RecordCameraState mainCamState;
-
-    int currentRecStatusRightCam;
-    int nextRecStatusRightCam;
-    RecordCameraState rightCamState;
-
-    int currentRecStatusBottomCam;
-    int nextRecStatusBottomCam;
-    RecordCameraState bottomCamState;
-
-    const int maxRecStatus = 4;
     const int maxRecFrame = 20;
-    const int maxRecWaitFrame = 120;
 
     // Start is called before the first frame update
     void Start()
     {
+        base.Start();
+        base.SceneIn();
+
         IslandNow = PlayerPrefs.GetInt("IslandNow");
+        IslandNext = IslandNow;
+        MainCam.transform.position = MainCamStayPt[IslandNow];
+
         if (isDebugging) IslandEnabled = IslandNum;
         else IslandEnabled = PlayerPrefs.GetInt("IslandEnabled");
 
+        InputManager = FindObjectOfType<InputManager>();
+        AudioManager = FindObjectOfType<AudioManager>();
+        CameraManager = FindObjectOfType<CameraManager>();
+        CanvaManager = FindObjectOfType<CanvaManager>();
+        GyroscopeManager = FindObjectOfType<GyroscopeManager>();
+
+        LandscapeFade = LandscapeFadeImg.GetComponent<FadeEffectUI>();
+        PortraitFade = PortraitFadeImg.GetComponent<FadeEffectUI>();
+
+        AudioManager.PlayAudio("bgm_Title");
     }
 
     // Update is called once per frame
     void Update()
     {
+        base.Update();
+        //Change Scene
+        if (isSceneFinished && ((LandscapeFade && LandscapeFade.isReady) || (PortraitFade && PortraitFade.isReady)))
+        {
+            SceneManager.LoadScene("LoadingScene");
+            return;
+        }
 
+        if (isSceneFinished) return;
+
+        if (!isOption)ChangeIsland();
+
+        DarkenCam.SetActive(isOption);
+        foreach (Button i in OptionButton)
+            i.interactable = !isOption;
+        foreach (Button i in OtherButton)
+            i.interactable = !isOption;
+    }
+
+    public void ChangeIsland()
+    {
+        //Update Curr Island ID
+        if (MainCam.transform.position == MainCamStayPt[IslandNext]
+            && RightCam.transform.position == RightCamStayPt[IslandNext]
+            && BottomCam.transform.position == BottomCamStayPt[IslandNext])
+            IslandNow = IslandNext;
+
+        if (Time.time - TimeRecord < TimeWait) return;
+
+        //Gyroscope Operation
+        if (GyroscopeManager.LeftShake) 
+            IslandNext = Mathf.Clamp(IslandNow - 1, 0, IslandNum);
+        if (GyroscopeManager.RightShake) 
+            IslandNext = Mathf.Clamp(IslandNow + 1, 0, IslandNum);
+
+        if (IslandNext != IslandNow)
+        {
+            StartCoroutine("RecMainCamOperation");
+            StartCoroutine("RecRightCamOperation");
+            StartCoroutine("RecBottomCamOperation");
+        }
+
+        TimeRecord = Time.time;
+    }
+
+    public void MoveToStage()
+    {
+        if (Time.time - TimeRecord < TimeWait) return;
+        SetNextScene("GameScene");
+        SceneOut();
+        isSceneFinished = true;
+        TimeRecord = Time.time;
+    }
+
+    public void OptionStatus()
+    {
+        if (Time.time - TimeRecord < TimeWait) return;
+        isOption = !isOption;
+        CanvaManager.isOption = isOption;
+        GyroscopeManager.isFunctioning = !isOption;
+        TimeRecord = Time.time;
     }
 
     private IEnumerator RecMainCamOperation()
@@ -89,11 +149,9 @@ public class StageSelectOperation : ISceneChange
         Vector3 spd;
         int frame;
 
-        //StarttoStay
-        mainCamState = RecordCameraState.StarttoStay;
-        MainCam.transform.position = MainCamStartPt[currentRecStatusMainCam];
+        MainCam.transform.position = MainCamStayPt[IslandNow];
 
-        spd = MainCamStayPt[currentRecStatusMainCam] - MainCamStartPt[currentRecStatusMainCam];
+        spd = MainCamStayPt[IslandNext] - MainCamStayPt[IslandNow];
         spd /= maxRecFrame;
         frame = 0;
 
@@ -103,45 +161,16 @@ public class StageSelectOperation : ISceneChange
             MainCam.transform.position += spd;
             yield return new WaitForSeconds(0f);
         }
-
-        //Stay
-        mainCamState = RecordCameraState.Stay;
-        frame = 0;
-
-            while (frame < maxRecWaitFrame)
-            {
-                frame++;
-                yield return new WaitForSeconds(0f);
-            }
-
-        //StaytoExit
-        mainCamState = RecordCameraState.StaytoExit;
-        spd = MainCamEndPt[currentRecStatusMainCam] - MainCamStayPt[currentRecStatusMainCam];
-        spd /= maxRecFrame;
-        frame = 0;
-
-        while (frame < maxRecFrame)
-        {
-            frame++;
-            MainCam.transform.position += spd;
-            yield return new WaitForSeconds(0f);
-        }
-
-        //Exit
-        mainCamState = RecordCameraState.Exit;
-        currentRecStatusMainCam = nextRecStatusMainCam;
-        nextRecStatusMainCam = (currentRecStatusMainCam % maxRecStatus) + 1;
     }
+
     private IEnumerator RecRightCamOperation()
     {
         Vector3 spd;
         int frame;
 
-        //StarttoStay
-        rightCamState = RecordCameraState.StarttoStay;
-        RightCam.transform.position = RightCamStartPt[currentRecStatusRightCam];
+        RightCam.transform.position = RightCamStayPt[IslandNow];
 
-        spd = RightCamStayPt[currentRecStatusRightCam] - RightCamStartPt[currentRecStatusRightCam];
+        spd = RightCamStayPt[IslandNext] - RightCamStayPt[IslandNow];
         spd /= maxRecFrame;
         frame = 0;
 
@@ -151,45 +180,15 @@ public class StageSelectOperation : ISceneChange
             RightCam.transform.position += spd;
             yield return new WaitForSeconds(0f);
         }
-
-        //Stay
-        rightCamState = RecordCameraState.Stay;
-        frame = 0;
-
-            while (frame < maxRecWaitFrame)
-            {
-                frame++;
-                yield return new WaitForSeconds(0f);
-            }
-
-        //StaytoExit
-        rightCamState = RecordCameraState.StaytoExit;
-        spd = RightCamEndPt[currentRecStatusRightCam] - RightCamStayPt[currentRecStatusRightCam];
-        spd /= maxRecFrame;
-        frame = 0;
-
-        while (frame < maxRecFrame)
-        {
-            frame++;
-            RightCam.transform.position += spd;
-            yield return new WaitForSeconds(0f);
-        }
-
-        //Exit
-        rightCamState = RecordCameraState.Exit;
-        currentRecStatusRightCam = nextRecStatusRightCam;
-        nextRecStatusRightCam = (currentRecStatusRightCam % maxRecStatus) + 1;
     }
     private IEnumerator RecBottomCamOperation()
     {
         Vector3 spd;
         int frame;
 
-        //StarttoStay
-        bottomCamState = RecordCameraState.StarttoStay;
-        BottomCam.transform.position = BottomCamStartPt[currentRecStatusBottomCam];
+        BottomCam.transform.position = BottomCamStayPt[IslandNow];
 
-        spd = BottomCamStayPt[currentRecStatusBottomCam] - BottomCamStartPt[currentRecStatusBottomCam];
+        spd = BottomCamStayPt[IslandNext] - BottomCamStayPt[IslandNow];
         spd /= maxRecFrame;
         frame = 0;
 
@@ -199,33 +198,5 @@ public class StageSelectOperation : ISceneChange
             BottomCam.transform.position += spd;
             yield return new WaitForSeconds(0f);
         }
-
-        //Stay
-        bottomCamState = RecordCameraState.Stay;
-        frame = 0;
-
-            while (frame < maxRecWaitFrame)
-            {
-                frame++;
-                yield return new WaitForSeconds(0f);
-            }
-
-        //StaytoExit
-        bottomCamState = RecordCameraState.StaytoExit;
-        spd = BottomCamEndPt[currentRecStatusBottomCam] - BottomCamStayPt[currentRecStatusBottomCam];
-        spd /= maxRecFrame;
-        frame = 0;
-
-        while (frame < maxRecFrame)
-        {
-            frame++;
-            BottomCam.transform.position += spd;
-            yield return new WaitForSeconds(0f);
-        }
-
-        //Exit
-        bottomCamState = RecordCameraState.Exit;
-        currentRecStatusBottomCam = nextRecStatusBottomCam;
-        nextRecStatusBottomCam = (currentRecStatusBottomCam % maxRecStatus) + 1;
     }
 }

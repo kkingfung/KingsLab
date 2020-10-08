@@ -43,15 +43,17 @@ public class TitleOperation: ISceneChange
     bool isOpening;
     bool isOption;
     bool showCredit;
-    int ButtonWait = 0;
-    const int ButtonWaitCnt = 5;
+    float TimeRecord = 0;
+    const float TimeWait = 0.5f;
 
-    enum RecordCameraState {
+    enum RecordCameraState
+    {
         StarttoStay,
         Stay,
         StaytoExit,
         Exit
     };
+
     int currentRecStatusRightCam;
     int nextRecStatusRightCam;
     RecordCameraState rightCamState;
@@ -117,7 +119,7 @@ public class TitleOperation: ISceneChange
             showCredit = false; 
             nextRecStatusRightCam = 1; 
             nextRecStatusBottomCam = 1;
-            ButtonWait = ButtonWaitCnt;
+            TimeRecord = Time.time;
         }
 
         if (!isOpening){
@@ -127,12 +129,8 @@ public class TitleOperation: ISceneChange
                 StartCoroutine(RecBottomCamOperation());
         }
 
-        if (Input.GetMouseButtonDown(1)) MoveToStageSelection();
-
         DarkenCam.SetActive(isOption);
         DarkenCamSub.SetActive(showCredit);
-
-        if (!showCredit&&ButtonWait > 0) ButtonWait--;
 
             foreach (Button i in StartButton)
                 i.interactable = !showCredit && !isOption;
@@ -142,11 +140,13 @@ public class TitleOperation: ISceneChange
                 i.interactable = !isOption;
     }
 
-    public void MoveToStageSelection() {
-        if (ButtonWait > 0) return;
+    public void MoveToStageSelection()
+    {
+        if (Time.time - TimeRecord < TimeWait) return;
         SetNextScene("StageSelection");
         SceneOut();
         isSceneFinished = true;
+        TimeRecord = Time.time;
     }
 
     void BoidSpawnEffect()
@@ -159,20 +159,22 @@ public class TitleOperation: ISceneChange
         AudioManager.PlayAudio("se_Button");
     }
 
-    public void OptionStatus() {
-        if (ButtonWait > 0) return;
+    public void OptionStatus() 
+    {
+        if (Time.time - TimeRecord < TimeWait) return;
         isOption = !isOption;
         CanvaManager.isOption = isOption;
         GyroscopeManager.isFunctioning = !isOption;
-        ButtonWait = ButtonWaitCnt;
+        TimeRecord = Time.time;
     }
 
-    public void EnableCredit() {
-        if (showCredit || ButtonWait>0) return;
+    public void EnableCredit() 
+    {
+        if (Time.time - TimeRecord < TimeWait) return;
         showCredit = !showCredit;
         nextRecStatusRightCam = 0;
         nextRecStatusBottomCam = 0;
-        ButtonWait = ButtonWaitCnt;
+        TimeRecord = Time.time;
     }
 
     private IEnumerator RecRightCamOperation()

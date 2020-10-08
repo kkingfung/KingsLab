@@ -4,17 +4,18 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    public bool isDamageable = false;
-
     [HideInInspector]
-    public InputManager input;
-    [HideInInspector]
-    public Vector3 velocity;
+    public bool isSkillActive;
 
     // Start is called before the first frame update
     void Awake()
     {
-        input = FindObjectOfType<InputManager>();
+
     }
 
+
+    public void CheckSkill(Vector2 touchPos) 
+    { 
+    
+    }
 }

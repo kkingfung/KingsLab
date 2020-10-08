@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class InGameOperation : MonoBehaviour
 {
+    //Remark: zoom to canva
     // Start is called before the first frame update
     void Start()
     {

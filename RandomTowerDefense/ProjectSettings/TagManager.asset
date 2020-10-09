@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - BoidWall
+  - UpperEgg
+  - LowerEgg
   layers:
   - Default
   - TransparentFX
@@ -36,7 +38,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - EggLayer
   - FadeLayer
   m_SortingLayers:
   - name: Default

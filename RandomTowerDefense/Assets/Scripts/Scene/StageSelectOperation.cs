@@ -28,6 +28,10 @@ public class StageSelectOperation : ISceneChange
     public List<Button> OptionButton;
     public List<Button> OtherButton;
 
+    [Header("Arrow Settings")]
+    public List<GameObject> UILeftArrow;
+    public List<GameObject> UIRightArrow;
+
     [Header("Other Settings")]
     public GameObject LandscapeFadeImg;
     public GameObject PortraitFadeImg;
@@ -91,8 +95,8 @@ public class StageSelectOperation : ISceneChange
 
         if (isSceneFinished) return;
 
-        if (!isOption)ChangeIsland();
-
+        if (!isOption) ChangeIsland();
+        ArrowOperation();
         DarkenCam.SetActive(isOption);
         foreach (Button i in OptionButton)
             i.interactable = !isOption;
@@ -100,10 +104,32 @@ public class StageSelectOperation : ISceneChange
             i.interactable = !isOption;
     }
 
+    public void ArrowOperation()
+    {
+        foreach (GameObject i in UILeftArrow)
+            i.SetActive(IslandNow > 0);
+        foreach (GameObject i in UIRightArrow)
+            i.SetActive(IslandNow < IslandEnabled);
+    }
+
+    public void ChangeIslandByButton(int chgValue)
+    {
+        IslandNext = Mathf.Clamp(IslandNow + chgValue, 0, IslandEnabled);
+    }
+
+    private void ChangeIslandByGyro()
+    {
+        //Gyroscope Operation
+        if (GyroscopeManager.LeftShake)
+            IslandNext = Mathf.Clamp(IslandNow - 1, 0, IslandEnabled);
+        if (GyroscopeManager.RightShake)
+            IslandNext = Mathf.Clamp(IslandNow + 1, 0, IslandEnabled);
+    }
+
     public void ChangeIsland()
     {
         //Update Curr Island ID
-        if (MainCam.transform.position == MainCamStayPt[IslandNext]
+        if (IslandNow!= IslandNext && MainCam.transform.position == MainCamStayPt[IslandNext]
             && RightCam.transform.position == RightCamStayPt[IslandNext]
             && BottomCam.transform.position == BottomCamStayPt[IslandNext])
             IslandNow = IslandNext;
@@ -111,10 +137,7 @@ public class StageSelectOperation : ISceneChange
         if (Time.time - TimeRecord < TimeWait) return;
 
         //Gyroscope Operation
-        if (GyroscopeManager.LeftShake) 
-            IslandNext = Mathf.Clamp(IslandNow - 1, 0, IslandNum);
-        if (GyroscopeManager.RightShake) 
-            IslandNext = Mathf.Clamp(IslandNow + 1, 0, IslandNum);
+        ChangeIslandByGyro();
 
         if (IslandNext != IslandNow)
         {
@@ -143,6 +166,9 @@ public class StageSelectOperation : ISceneChange
         GyroscopeManager.isFunctioning = !isOption;
         TimeRecord = Time.time;
     }
+
+
+
 
     private IEnumerator RecMainCamOperation()
     {

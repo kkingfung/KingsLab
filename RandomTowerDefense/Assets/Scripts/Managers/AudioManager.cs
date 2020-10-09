@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour
 {
     public List<AudioClip> bgmSource;
     public List<AudioClip> seSource;
+
+    public List<Toggle> bgmUI;
+    public List<Toggle> seUI;
 
     AudioSource[] audioSource;
     Dictionary<string, AudioClip> bgmList;
@@ -18,11 +22,17 @@ public class AudioManager : MonoBehaviour
 
     public void EnableBGM(bool enable) {
         enabledBGM = enable;
+        PlayerPrefs.SetInt("BGM", enabledBGM ? 1 : 0);
+        foreach (Toggle i in bgmUI)
+            i.isOn = enabledBGM;
     }
 
     public void EnableSE(bool enable)
     {
         enabledSE = enable;
+        PlayerPrefs.SetInt("SE", enabledSE ? 1 : 0);
+        foreach (Toggle i in seUI)
+            i.isOn = enabledSE;
     }
 
     private void OnEnable()
@@ -37,9 +47,10 @@ public class AudioManager : MonoBehaviour
         PlayerPrefs.SetInt("SE", enabledSE ? 1 : 0);
     }
 
-    void Awake() 
+    private void Awake() 
     {
         audioSource = GetComponents<AudioSource>();
+
         bgmList = new Dictionary<string, AudioClip>();
         seList = new Dictionary<string, AudioClip>();
 

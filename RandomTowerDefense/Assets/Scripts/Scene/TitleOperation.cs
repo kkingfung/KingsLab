@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEditor.Experimental.TerrainAPI;
 
 public class TitleOperation: ISceneChange
 {
@@ -26,6 +27,7 @@ public class TitleOperation: ISceneChange
     public List<Button> CreditButton;
 
     [Header("Other Settings")]
+    public List<GameObject> TitleImg;
     public GameObject BoidSpawn;
     public GameObject LandscapeFadeImg;
     public GameObject PortraitFadeImg;
@@ -42,9 +44,13 @@ public class TitleOperation: ISceneChange
 
     bool isOpening;
     bool isOption;
+    bool isWaiting;
     bool showCredit;
     float TimeRecord = 0;
-    const float TimeWait = 0.5f;
+    const float TimeWait = 0.2f;
+
+    //CameraAnimation
+    const float targetCamAngle = -45f;
 
     enum RecordCameraState
     {
@@ -69,7 +75,7 @@ public class TitleOperation: ISceneChange
 
     private void OnEnable()
     {
-        BoidSpawn.SetActive(false);
+        BoidSpawn.SetActive(true);
     }
     // Start is called before the first frame update
     void Start()
@@ -102,6 +108,7 @@ public class TitleOperation: ISceneChange
     void Update()
     {
         base.Update();
+        if (isWaiting) return;
         //Change Scene
         if (isSceneFinished && ((LandscapeFade && LandscapeFade.isReady) || (PortraitFade && PortraitFade.isReady)))
         {
@@ -111,10 +118,11 @@ public class TitleOperation: ISceneChange
 
         if (isSceneFinished) return;
 
-        if (CameraManager) CameraManager.isOpening = isOpening;
-        if (CanvaManager) CanvaManager.isOpening = isOpening;
+        if (isOpening && InputManager.GetAnyInput()) {
+            isWaiting = true;
+            StartCoroutine(PreparationToMain());
+        }
 
-        if (isOpening && InputManager.GetAnyInput()) BoidSpawnEffect();
         if (showCredit && InputManager.GetAnyInput()) { 
             showCredit = false; 
             nextRecStatusRightCam = 1; 
@@ -149,11 +157,18 @@ public class TitleOperation: ISceneChange
         TimeRecord = Time.time;
     }
 
-    void BoidSpawnEffect()
+    void OpeningAnimation()
     {
-        BoidSpawn.transform.position = Camera.main.transform.position- Camera.main.transform.forward*2.0f;
-        GameObject.FindGameObjectWithTag("BoidWall").transform.position = BoidSpawn.transform.position;
-        BoidSpawn.SetActive(true);
+        CameraManager.RotateCam(targetCamAngle);
+
+        GameObject[] Upper = GameObject.FindGameObjectsWithTag("UpperEgg");
+        StartCoroutine(UpperEggAnimation(Upper[0], 0.4f));
+        StartCoroutine(UpperEggAnimation(Upper[1], 0.4f));
+
+        GameObject[] Lower = GameObject.FindGameObjectsWithTag("LowerEgg");
+        StartCoroutine(LowerEggAnimation(Lower[0], -0.4f));
+        StartCoroutine(LowerEggAnimation(Lower[1], -0.15f));
+
         isOpening = false;
         AudioManager.PlayAudio("bgm_Title");
         AudioManager.PlayAudio("se_Button");
@@ -288,4 +303,50 @@ public class TitleOperation: ISceneChange
         currentRecStatusBottomCam = nextRecStatusBottomCam;
         nextRecStatusBottomCam = (currentRecStatusBottomCam % maxRecStatus) + 1;
     }
+
+    private IEnumerator UpperEggAnimation(GameObject Upper,float dist)
+    {
+       int frame = 30;
+        float posChgsbyFrame = (dist - this.transform.localPosition.y) / frame;
+        while (frame-- >0)
+        {
+                Upper.transform.localPosition = new Vector3(Upper.transform.localPosition.x,
+                    Upper.transform.localPosition.y + posChgsbyFrame, Upper.transform.localPosition.z);
+            yield return new WaitForSeconds(0f);
+        }
+    }
+
+    private IEnumerator LowerEggAnimation(GameObject Lower, float dist)
+    {
+        int frame = 50;
+        float posChgsbyFrame = (dist - this.transform.localPosition.y) / frame;
+        while (frame-- > 0)
+        {
+            Lower.transform.localPosition = new Vector3(Lower.transform.localPosition.x,
+                    Lower.transform.localPosition.y + posChgsbyFrame, Lower.transform.localPosition.z);
+            yield return new WaitForSeconds(0f);
+        }
+    }
+    private IEnumerator PreparationToMain()
+    {
+        int frame = 20;
+        
+        while (frame-- > 0)
+        {
+            foreach (GameObject i in TitleImg)
+            {
+                if (i.GetComponent<RawImage>())
+                    i.GetComponent<RawImage>().color = new Color(1, 1, 1, frame / 20f);
+                if (i.GetComponent<Text>())
+                    i.GetComponent<Text>().color = new Color(1, 1, 1, frame / 20f);
+            }
+
+            yield return new WaitForSeconds(0f);
+        }
+
+        OpeningAnimation();
+        if (CameraManager) CameraManager.isOpening = isOpening;
+        if (CanvaManager) CanvaManager.isOpening = isOpening;
+    }
+    
 }

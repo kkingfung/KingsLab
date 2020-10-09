@@ -9,6 +9,7 @@ public class GyroscopeManager : MonoBehaviour
     readonly float timeInterval = 1f;
 
     public bool isFunctioning = false;
+    public List<GameObject> gyroDiffUI;
 
     //For Slightly Changes
     [Range(0,1)]
@@ -30,22 +31,16 @@ public class GyroscopeManager : MonoBehaviour
 
     Gyroscope Gyro;
 
-    private void OnEnable()
+    private void Awake()
     {
-        sensitivity = PlayerPrefs.GetFloat("Gyro");
         Gyro = Input.gyro;
         Gyro.enabled = true;
-    }
-
-    private void OnDisable()
-    {
-        PlayerPrefs.SetFloat("Gyro", sensitivity);
-        Gyro.enabled = false;
     }
 
     private void Start()
     {
         ResetReference();
+        sensitivity=PlayerPrefs.GetFloat("Gyro");
         foreach (Slider i in senseSlider)
             i.value = sensitivity;
         timeRecord = Time.time;
@@ -56,13 +51,28 @@ public class GyroscopeManager : MonoBehaviour
         if (isFunctioning)
         {
             GyroModify();
+            if (gyroDiffUI.Count > 0)
+            {
+                foreach (GameObject i in gyroDiffUI)
+                {
+                    if (Input.deviceOrientation == DeviceOrientation.Portrait || Input.deviceOrientation == DeviceOrientation.PortraitUpsideDown)
+                    {
+                        i.transform.eulerAngles = new Vector3(i.transform.eulerAngles.x,i.transform.eulerAngles.y, currRotation.y - ReferenceCenter.y);
+                    }
+                    else
+                    {
+                        i.transform.eulerAngles = new Vector3(i.transform.eulerAngles.x,i.transform.eulerAngles.y, currRotation.x - ReferenceCenter.x);
+                    }
+                }    
+            }
         }
     }
 
     public void SetGyro(float value) {
         sensitivity = value;
         foreach (Slider i in senseSlider)
-            sensitivity = i.value;
+            i.value = sensitivity;
+        PlayerPrefs.SetFloat("Gyro", sensitivity);
     }
 
     void GyroModify()

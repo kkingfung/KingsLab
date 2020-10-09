@@ -6,6 +6,7 @@ using UnityEngine.Rendering.Universal.Internal;
 public class CameraManager : MonoBehaviour
 {
     readonly float defaultFOV = 60f;
+    readonly int rotateFrame = 60;
 
     public List<Camera> LandscapeCam_Main;
     public List<Camera> LandscapeCam_Sub;
@@ -22,7 +23,7 @@ public class CameraManager : MonoBehaviour
 
     GyroscopeManager GyroscopeManager;
     Vector3[] baseRotation;
-    
+
     private void OnEnable()
     {
         isOpening = true;
@@ -81,5 +82,26 @@ public class CameraManager : MonoBehaviour
                 }
             }
         }
-    } 
+    }
+
+    public void RotateCam(float targetAngle)
+    {
+        StartCoroutine(RotateMainCamera(targetAngle));
+
+
+    }
+
+    private IEnumerator RotateMainCamera(float targetAngle) 
+    {
+        int frame = 0;
+        float angleChgsbyFrame = (targetAngle - this.transform.eulerAngles.x) / rotateFrame;
+
+        while (frame < rotateFrame)
+        {
+            this.transform.eulerAngles = new Vector3(this.transform.eulerAngles.x+ angleChgsbyFrame,
+                this.transform.eulerAngles.y, this.transform.eulerAngles.z);
+            frame ++;
+            yield return new WaitForSeconds(0f);
+        }
+    }
 }

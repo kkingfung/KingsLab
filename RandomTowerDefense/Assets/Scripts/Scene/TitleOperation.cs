@@ -170,6 +170,7 @@ public class TitleOperation: ISceneChange
         StartCoroutine(LowerEggAnimation(Lower[1], -0.15f));
 
         isOpening = false;
+
         AudioManager.PlayAudio("bgm_Title");
         AudioManager.PlayAudio("se_Button");
     }
@@ -345,6 +346,7 @@ public class TitleOperation: ISceneChange
         }
 
         OpeningAnimation();
+        isWaiting = false;
         if (CameraManager) CameraManager.isOpening = isOpening;
         if (CanvaManager) CanvaManager.isOpening = isOpening;
     }

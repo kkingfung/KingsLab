@@ -4,12 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class StageSelectOperation : ISceneChange
 {
     const int IslandNum = 4;
-
-    [Header("Debugger")]
     public bool isDebugging;
 
     //Camera Start/Stay/End Point
@@ -26,13 +25,15 @@ public class StageSelectOperation : ISceneChange
 
     [Header("Button Settings")]
     public List<Button> OptionButton;
-    public List<Button> OtherButton;
+    public List<EventTrigger> OtherButton;
 
     [Header("Arrow Settings")]
     public List<GameObject> UILeftArrow;
     public List<GameObject> UIRightArrow;
 
     [Header("Other Settings")]
+    public List<TextMesh> StageCustomText;
+    public List<TextMesh> StageCustomTextDirect;
     public GameObject LandscapeFadeImg;
     public GameObject PortraitFadeImg;
 
@@ -49,6 +50,9 @@ public class StageSelectOperation : ISceneChange
     CanvaManager CanvaManager;
     InputManager InputManager;
     GyroscopeManager GyroscopeManager;
+
+    TouchScreenKeyboard keyboard;
+    int currInfoID = 0;
 
     bool isOption;
     float TimeRecord = 0;
@@ -69,6 +73,13 @@ public class StageSelectOperation : ISceneChange
 
         if (isDebugging) IslandEnabled = IslandNum;
         else IslandEnabled = PlayerPrefs.GetInt("IslandEnabled");
+
+        GameObject[] ClearMarks = GameObject.FindGameObjectsWithTag("ClearMark");
+        for (int i = 0; i < ClearMarks.Length; ++i)
+            ClearMarks[i].SetActive(i < IslandEnabled);
+
+        for (int i = 0; i < StageCustomText.Count; ++i)
+            StageInfoOperation(i, 0);
 
         InputManager = FindObjectOfType<InputManager>();
         AudioManager = FindObjectOfType<AudioManager>();
@@ -100,8 +111,10 @@ public class StageSelectOperation : ISceneChange
         DarkenCam.SetActive(isOption);
         foreach (Button i in OptionButton)
             i.interactable = !isOption;
-        foreach (Button i in OtherButton)
-            i.interactable = !isOption;
+        foreach (EventTrigger i in OtherButton)
+        {
+                i.enabled = !isOption && IslandNow == IslandNum - 1;
+        }
     }
 
     public void ArrowOperation()
@@ -167,9 +180,6 @@ public class StageSelectOperation : ISceneChange
         TimeRecord = Time.time;
     }
 
-
-
-
     private IEnumerator RecMainCamOperation()
     {
         Vector3 spd;
@@ -224,5 +234,78 @@ public class StageSelectOperation : ISceneChange
             BottomCam.transform.position += spd;
             yield return new WaitForSeconds(0f);
         }
+    }
+
+    public int CurrentIslandNum() { return IslandNow; }
+    public int EnabledtIslandNum() { return IslandEnabled; }
+    public int NextIslandNum() { return IslandNext; }
+
+    private void StageInfoOperation(int infoID,int chg)
+    {
+        float result = StageInfo.SaveDataInPrefs(infoID, chg);
+        StageCustomText[infoID].text = result.ToString();
+    }
+
+    public void StageInfoChgAdd(int infoID)
+    {
+        StageInfoOperation(infoID, 1);
+    }
+    public void StageInfoChgSubtract(int infoID)
+    {
+        StageInfoOperation(infoID, -1);
+    }
+
+    public void TouchKeybroad(int infoID) {
+        currInfoID = infoID;
+        keyboard =TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default, false, false, true);
+
+        if (keyboard != null)
+        {
+            keyboard.characterLimit = 2;
+            StartCoroutine(TouchScreenInputUpdate(infoID));
+        }
+    }
+
+    private IEnumerator TouchScreenInputUpdate(int infoID)
+    {
+        while (keyboard.status== TouchScreenKeyboard.Status.Visible) {
+            StageCustomText[infoID].text = keyboard.text;
+            yield return new WaitForSeconds(0f);
+        }
+
+        if(keyboard.status == TouchScreenKeyboard.Status.Done || keyboard.status == TouchScreenKeyboard.Status.Canceled)
+            switch (infoID)
+            {
+                case 0:
+                case 1:
+                case 4:
+                    int Input_int;
+                    if (int.TryParse(keyboard.text, out Input_int))
+                    {
+                        StageCustomText[infoID].text = Input_int.ToString();
+                        StageInfo.SaveDataInPrefs_DirectInput(infoID, Input_int);
+                    }
+                    else
+                    {
+                        StageCustomText[infoID].text = StageInfo.SaveDataInPrefs(infoID, 0).ToString();
+                    }
+                    break;
+                case 2:
+                case 3:
+                case 5:
+                case 6:
+                    float Output_int;
+                    if (float.TryParse(keyboard.text, out Output_int))
+                    {
+                        StageCustomText[infoID].text = Output_int.ToString();
+                        StageInfo.SaveDataInPrefs_DirectInput(infoID, Output_int);
+                    }
+                    else
+                    {
+                        StageCustomText[infoID].text = StageInfo.SaveDataInPrefs(infoID, 0).ToString();
+                    }
+                    break;
+            }
+        keyboard = null;
     }
 }

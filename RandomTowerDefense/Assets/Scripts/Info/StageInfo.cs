@@ -61,21 +61,32 @@ public static class StageInfo
         };
 
     //Extra Stage Customization
-    static readonly int[] waveNumFactor = { 30, 35, 50, 51 };
+    public enum StageInfoID{
+        Enum_stageSize = 0,
+        Enum_waveNum,
+        Enum_enmNum,
+        Enum_enmSpeed,
+        Enum_hpMax,
+        Enum_spawnSpeed,
+        Enum_resource
+    }
+
     static readonly int[] stageSizeFactor = { 36, 72, 108, 144 };//6*6 + 9*8 + 12*9 + 16*9
+    static readonly int[] waveNumFactor = { 30, 35, 50, 51 };
     static readonly float[] enmNumFactor = { 0.5f, 1f, 2f, 4f, 8f };
     static readonly float[] enmSpeedFactor = { 0.5f, 1f,1.5f, 2f, 4f };
-    static readonly float[] spawnSpeedFactor = { 4f, 2f, 1.5f, 1f, 0.5f };
     static readonly int[] hpMaxFactor = { 1, 5, 10, 30 };
+    static readonly float[] spawnSpeedFactor = { 4f, 2f, 1.5f, 1f, 0.5f };
     static readonly float[] resourceFactor = { 1.25f, 1f, 0.75f, 0.5f };
 
-    static int waveNumEx=0;
-    static int stageSizeEx=0;
-    static float enmNumEx = 0;
-    static float enmSpeedEx = 0;
-    static float spawnSpeedEx = 0;
-    static int hpMaxEx = 0;
-    static float resourceEx = 0;
+
+    static public float stageSizeEx =0;
+    static public float waveNumEx = 0;
+    static public float enmNumEx = 0;
+    static public float enmSpeedEx = 0;
+    static public float hpMaxEx = 0;
+    static public float spawnSpeedEx = 0;
+    static public float resourceEx = 0;
 
     static List<int> ExtraEnmNum;
     static List<string> ExtraEnmType;
@@ -95,16 +106,78 @@ public static class StageInfo
         stageInfo.Clear();
     }
 
-    public static void UpdateCustomizedData(int waveNumCustom,int stageSizeCustom,
-         int enmNumCustom, int enmSpeedCustom, int spawnSpeedCustom, int hpMaxCustom, int resourceCustom) {
+    public static void SaveDataInPrefs_DirectInput(int infoID, float input)
+    {
+        switch ((StageInfoID)infoID)
+        {
+            case StageInfoID.Enum_waveNum:
+                PlayerPrefs.SetFloat("waveNumDir", input);
+                break;
+            case StageInfoID.Enum_stageSize:
+                PlayerPrefs.SetFloat("stageSize", input);
+                break;
+            case StageInfoID.Enum_enmNum:
+                PlayerPrefs.SetFloat("enmNum", input);
+                break;
+            case StageInfoID.Enum_enmSpeed:
+                PlayerPrefs.SetFloat("enmSpeed", input);
+                break;
+            case StageInfoID.Enum_spawnSpeed:
+                PlayerPrefs.SetFloat("spawnSpeed", input);
+                break;
+            case StageInfoID.Enum_hpMax:
+                PlayerPrefs.SetFloat("hpMax", input);
+                break;
+            case StageInfoID.Enum_resource:
+                PlayerPrefs.SetFloat("resource", input);
+                break;
+        }
+    }
+        public static float SaveDataInPrefs(int infoID, int chg)
+    {
+        float tempVal = 0;
+        switch ((StageInfoID)infoID) {
+            case StageInfoID.Enum_waveNum:
+                tempVal = PlayerPrefs.GetFloat("waveNum");
+                PlayerPrefs.SetFloat("waveNum", (tempVal + chg)% waveNumFactor.Length);
+                return waveNumFactor[(int)tempVal];
+            case StageInfoID.Enum_stageSize:
+                tempVal = PlayerPrefs.GetFloat("stageSize");
+                PlayerPrefs.SetFloat("stageSize", (tempVal + chg) % stageSizeFactor.Length);
+                return stageSizeFactor[(int)tempVal];
+            case StageInfoID.Enum_enmNum:
+                tempVal = PlayerPrefs.GetFloat("enmNum");
+                PlayerPrefs.SetFloat("enmNum", (tempVal + chg) % enmNumFactor.Length);
+                return enmNumFactor[(int)tempVal];
+            case StageInfoID.Enum_enmSpeed:
+                tempVal = PlayerPrefs.GetFloat("enmSpeed");
+                PlayerPrefs.SetFloat("enmSpeed", (tempVal + chg) % enmSpeedFactor.Length);
+                return enmSpeedFactor[(int)tempVal];
+            case StageInfoID.Enum_spawnSpeed:
+                tempVal = PlayerPrefs.GetFloat("spawnSpeed");
+                PlayerPrefs.SetFloat("spawnSpeed", (tempVal + chg) % spawnSpeedFactor.Length);
+                return spawnSpeedFactor[(int)tempVal];
+            case StageInfoID.Enum_hpMax:
+                tempVal = PlayerPrefs.GetFloat("hpMax");
+                PlayerPrefs.SetFloat("hpMax", (tempVal + chg) % hpMaxFactor.Length);
+                return hpMaxFactor[(int)tempVal];
+            case StageInfoID.Enum_resource:
+                tempVal = PlayerPrefs.GetFloat("resource");
+                PlayerPrefs.SetFloat("resource", (tempVal + chg) % resourceFactor.Length);
+                return resourceFactor[(int)tempVal];
+        }
+        return 0f;
+    }
 
-        waveNumEx = waveNumFactor[waveNumCustom];
-        stageSizeEx = stageSizeFactor[stageSizeCustom];
-        enmNumEx = enmNumFactor[enmNumCustom];
-        enmSpeedEx = enmSpeedFactor[enmSpeedCustom];
-        spawnSpeedEx = spawnSpeedFactor[spawnSpeedCustom];
-        hpMaxEx = hpMaxFactor[hpMaxCustom];
-        resourceEx = resourceFactor[resourceCustom];
+    public static void UpdateCustomizedData() {
+
+        waveNumEx = waveNumFactor[(int)PlayerPrefs.GetFloat("waveNum")];
+        stageSizeEx = stageSizeFactor[(int)PlayerPrefs.GetFloat("stageSize")];
+        enmNumEx = enmNumFactor[(int)PlayerPrefs.GetFloat("enmNum")];
+        enmSpeedEx = enmSpeedFactor[(int)PlayerPrefs.GetFloat("enmSpeed")];
+        spawnSpeedEx = spawnSpeedFactor[(int)PlayerPrefs.GetFloat("spawnSpeed")];
+        hpMaxEx = hpMaxFactor[(int)PlayerPrefs.GetFloat("hpMax")];
+        resourceEx = resourceFactor[(int)PlayerPrefs.GetFloat("resource")];
 
         //Stage Adjustment
         ResetExtraStage(); 
@@ -157,7 +230,7 @@ public static class StageInfo
         
         }
 
-        stageInfo["Extra"] = new StageAttr(waveNumEx, stageSizeEx, ExtraEnmNum.ToArray(), ExtraEnmType.ToArray());
+        stageInfo["Extra"] = new StageAttr((int)waveNumEx, (int)stageSizeEx, ExtraEnmNum.ToArray(), ExtraEnmType.ToArray());
     }
 
     public static StageAttr GetStageInfo(string enmName)

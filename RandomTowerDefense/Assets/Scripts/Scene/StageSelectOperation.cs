@@ -5,11 +5,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using UnityEngine.VFX;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class StageSelectOperation : ISceneChange
 {
     const int IslandNum = 4;
-    public bool isDebugging;
+    const float bloomInt_Default = 1.5f;
 
     //Camera Start/Stay/End Point
     [Header("MainCamera Settings")]
@@ -34,11 +37,10 @@ public class StageSelectOperation : ISceneChange
     [Header("Other Settings")]
     public List<TextMesh> StageCustomText;
     public List<TextMesh> StageCustomTextDirect;
-    public GameObject LandscapeFadeImg;
-    public GameObject PortraitFadeImg;
+    public List<VisualEffect> SceneChgPS;
 
-    FadeEffectUI LandscapeFade;
-    FadeEffectUI PortraitFade;
+    public bool isDebugging;
+    public VolumeProfile volumeProfile;
 
     int IslandNow = 0;
     int IslandNext = 0;
@@ -46,14 +48,15 @@ public class StageSelectOperation : ISceneChange
 
     //Manager
     AudioManager AudioManager;
-    CameraManager CameraManager;
+    //CameraManager CameraManager;
     CanvaManager CanvaManager;
-    InputManager InputManager;
+    //InputManager InputManager;
     GyroscopeManager GyroscopeManager;
 
     TouchScreenKeyboard keyboard;
     int currInfoID = 0;
 
+    bool NextSceneReady;
     bool isOption;
     float TimeRecord = 0;
     const float TimeWait = 0.5f;
@@ -67,6 +70,7 @@ public class StageSelectOperation : ISceneChange
         base.Start();
         base.SceneIn();
 
+        NextSceneReady = false;
         IslandNow = PlayerPrefs.GetInt("IslandNow");
         IslandNext = IslandNow;
         MainCam.transform.position = MainCamStayPt[IslandNow];
@@ -81,16 +85,17 @@ public class StageSelectOperation : ISceneChange
         for (int i = 0; i < StageCustomText.Count; ++i)
             StageInfoOperation(i, 0);
 
-        InputManager = FindObjectOfType<InputManager>();
+        //InputManager = FindObjectOfType<InputManager>();
         AudioManager = FindObjectOfType<AudioManager>();
-        CameraManager = FindObjectOfType<CameraManager>();
+        //CameraManager = FindObjectOfType<CameraManager>();
         CanvaManager = FindObjectOfType<CanvaManager>();
         GyroscopeManager = FindObjectOfType<GyroscopeManager>();
 
-        LandscapeFade = LandscapeFadeImg.GetComponent<FadeEffectUI>();
-        PortraitFade = PortraitFadeImg.GetComponent<FadeEffectUI>();
-
         AudioManager.PlayAudio("bgm_Title");
+
+        UnityEngine.Rendering.Universal.Bloom bloom;
+        volumeProfile.TryGet<UnityEngine.Rendering.Universal.Bloom>(out bloom);
+        bloom.intensity.value = bloomInt_Default;
     }
 
     // Update is called once per frame
@@ -98,7 +103,7 @@ public class StageSelectOperation : ISceneChange
     {
         base.Update();
         //Change Scene
-        if (isSceneFinished && ((LandscapeFade && LandscapeFade.isReady) || (PortraitFade && PortraitFade.isReady)))
+        if (isSceneFinished && NextSceneReady)
         {
             SceneManager.LoadScene("LoadingScene");
             return;
@@ -166,7 +171,8 @@ public class StageSelectOperation : ISceneChange
     {
         if (Time.time - TimeRecord < TimeWait) return;
         SetNextScene("GameScene");
-        SceneOut();
+        //SceneOut();
+        StartCoroutine("SceneChgAnimation");
         isSceneFinished = true;
         TimeRecord = Time.time;
     }
@@ -307,5 +313,26 @@ public class StageSelectOperation : ISceneChange
                     break;
             }
         keyboard = null;
+    }
+
+    private IEnumerator SceneChgAnimation()
+    {
+        foreach (VisualEffect i in SceneChgPS)
+            i.enabled = true;
+
+        int frame = 120;
+        UnityEngine.Rendering.Universal.Bloom bloom;
+        volumeProfile.TryGet<UnityEngine.Rendering.Universal.Bloom>(out bloom);
+        float bloomValOri = bloom.intensity.value;
+        float bloomVal = 20f;
+        float bloomChg = (bloomVal - bloomValOri) / frame;
+        bloomVal = bloomValOri;
+        while (frame-- > 0)
+        {
+            bloomVal += bloomChg;
+            bloom.intensity.value=bloomVal;
+            yield return new WaitForSeconds(0f);
+        }
+        NextSceneReady = true;
     }
 }

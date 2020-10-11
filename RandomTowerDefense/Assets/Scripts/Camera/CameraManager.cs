@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering.Universal.Internal;
+using UnityEngine.UI;
 
 public class CameraManager : MonoBehaviour
 {
     readonly float defaultFOV = 60f;
+    readonly float minFOV = 30f;
     readonly int rotateFrame = 60;
 
     public List<Camera> LandscapeCam_Main;
@@ -14,7 +15,9 @@ public class CameraManager : MonoBehaviour
     public List<Camera> PortraitCam_Main;
     public List<Camera> PortraitCam_Sub;
 
-    public List<GameObject> GyroCamHolder;
+    public List<Camera> GyroCamGp;
+
+    public List<Slider> uiSlider;
 
     [HideInInspector]
     public bool isOpening;
@@ -28,18 +31,32 @@ public class CameraManager : MonoBehaviour
     {
         isOpening = true;
         isGyroEnabled = false;
-        baseRotation = new Vector3[GyroCamHolder.Count];
+        baseRotation = new Vector3[GyroCamGp.Count];
 
-        for (int i = 0; i < GyroCamHolder.Count; ++i) 
+        for (int i = 0; i < GyroCamGp.Count; ++i) 
         {
-            baseRotation[i] = GyroCamHolder[i].transform.eulerAngles;
-        } 
+            baseRotation[i] = GyroCamGp[i].transform.eulerAngles;
+        }
+
+        foreach (Slider i in uiSlider)
+            i.value = .5f;
     }
 
     // Use this for initialization
     void Start()
     {
         GyroscopeManager = FindObjectOfType<GyroscopeManager>();
+        //GyroOperation
+        if (GyroCamGp.Count > 0)
+        {
+            if (GyroscopeManager && GyroscopeManager.isFunctioning)
+            {
+                for (int i = 0; i < GyroCamGp.Count; ++i)
+                {
+                    GyroCamGp[i].fieldOfView = defaultFOV;
+                }
+            }
+        }
     }
 
     // Update is called once per frame
@@ -58,36 +75,33 @@ public class CameraManager : MonoBehaviour
             i.enabled = !isOpening && (Screen.width <= Screen.height);
 
         //GyroOperation
-        if (GyroCamHolder.Count > 0)
+        if (GyroCamGp.Count > 0)
         {
             if (GyroscopeManager && GyroscopeManager.isFunctioning)
             {
-                for (int i = 0; i < GyroCamHolder.Count; ++i)
+                for (int i = 0; i < GyroCamGp.Count; ++i)
                 {
-                    GyroCamHolder[i].transform.eulerAngles = baseRotation[i] + GyroscopeManager.CurrGyroRotation();
+                    GyroCamGp[i].transform.eulerAngles = baseRotation[i] + GyroscopeManager.CurrGyroRotation();
                 }
             }
         }
     }
 
     public void Zoom(float zoomRate) {
-        if (GyroCamHolder.Count > 0)
+        if (GyroCamGp.Count > 0)
         {
-            foreach (GameObject i in GyroCamHolder)
+            foreach (Camera i in GyroCamGp)
             {
-                Camera[] cam = i.GetComponentsInChildren<Camera>();
-                foreach (Camera j in cam)
-                {
-                    j.fieldOfView = Mathf.Clamp(zoomRate * defaultFOV, 30f, 90f);
-                }
+                i.fieldOfView = Mathf.Clamp(defaultFOV - (zoomRate - 0.5f) * (defaultFOV - minFOV), minFOV, minFOV + defaultFOV);
             }
+            foreach (Slider i in uiSlider)
+                i.value = zoomRate;
         }
     }
 
     public void RotateCam(float targetAngle)
     {
         StartCoroutine(RotateMainCamera(targetAngle));
-
 
     }
 
@@ -104,4 +118,5 @@ public class CameraManager : MonoBehaviour
             yield return new WaitForSeconds(0f);
         }
     }
+
 }

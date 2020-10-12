@@ -39,7 +39,9 @@ public class CameraManager : MonoBehaviour
         }
 
         foreach (Slider i in uiSlider)
-            i.value = .5f;
+            i.value = PlayerPrefs.GetFloat("zoomRate");
+
+        Zoom(PlayerPrefs.GetFloat("zoomRate"));
     }
 
     // Use this for initialization
@@ -92,11 +94,13 @@ public class CameraManager : MonoBehaviour
         {
             foreach (Camera i in GyroCamGp)
             {
-                i.fieldOfView = Mathf.Clamp(defaultFOV - (zoomRate - 0.5f) * (defaultFOV - minFOV), minFOV, minFOV + defaultFOV);
+                i.fieldOfView = Mathf.Clamp(defaultFOV - zoomRate * (defaultFOV - minFOV), minFOV, defaultFOV);
             }
             foreach (Slider i in uiSlider)
                 i.value = zoomRate;
         }
+
+        PlayerPrefs.SetFloat("zoomRate", zoomRate);
     }
 
     public void RotateCam(float targetAngle)

@@ -39,11 +39,12 @@ public class GyroscopeManager : MonoBehaviour
 
     private void Start()
     {
-        ResetReference();
         sensitivity=PlayerPrefs.GetFloat("Gyro");
         foreach (Slider i in senseSlider)
             i.value = sensitivity;
         timeRecord = Time.time;
+        currRotation = GyroToUnity(Input.gyro.attitude).eulerAngles;
+        ResetReference();
     }
 
     private void Update()
@@ -110,7 +111,8 @@ public class GyroscopeManager : MonoBehaviour
 
     public void ResetReference()
     {
-        ReferenceCenter= currRotation;
+        if (FindObjectOfType<ISceneChange>().GetOptionStatus()) return;
+        ReferenceCenter = currRotation;
     }
 
     public Vector3 CurrGyroRotation() 

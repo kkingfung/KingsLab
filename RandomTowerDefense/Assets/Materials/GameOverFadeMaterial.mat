@@ -7,9 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: FadeMaterial
+  m_Name: GameOverFadeMaterial
   m_Shader: {fileID: -6465566751694194690, guid: e2e4408fc52fb104ab535f875440cd90, type: 3}
-  m_ShaderKeywords: BOOLEAN_6C4164AC_ON ETC1_EXTERNAL_ALPHA
+  m_ShaderKeywords: BOOLEAN_6C4164AC_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -24,11 +24,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_9E2A9813:
-        m_Texture: {fileID: 2800000, guid: 230bbf8ca0de1d94a8fd4e75dafd3ac6, type: 3}
+        m_Texture: {fileID: 2800000, guid: db8fc633e5d81294d9bf37e049d64398, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_D6B169D1:
-        m_Texture: {fileID: 2800000, guid: e7591ecca0369464a9cd4a316961ef43, type: 3}
+        m_Texture: {fileID: 2800000, guid: 3af907ca3faacd34c99c1d61c3c43d5c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_EA899870:
@@ -36,7 +36,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - Texture2D_F500327D:
-        m_Texture: {fileID: 2800000, guid: 230bbf8ca0de1d94a8fd4e75dafd3ac6, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
@@ -69,7 +69,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - BOOLEAN_6C4164AC: 1
-    - Boolean_A5977E21: 0
+    - Boolean_A5977E21: 1
     - Vector1_1BFFE264: 1
     - Vector1_21074ADF: 0.2
     - Vector1_28071F70: 5
@@ -93,7 +93,7 @@ Material:
     - _DissolveAmount: 2
     - _DstBlend: 0
     - _EnvironmentReflections: 1
-    - _FadeThreshold: -0.009999329
+    - _FadeThreshold: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
@@ -112,6 +112,7 @@ Material:
     - Color_13D83271: {r: 0, g: 0.64363235, b: 1, a: 0}
     - Color_4E0A2478: {r: 1, g: 0.5356668, b: 0, a: 0}
     - Color_58E0201D: {r: 0, g: 0, b: 0, a: 1}
+    - Color_874963C2: {r: 1, g: 1, b: 1, a: 0}
     - Color_A10D4510: {r: 1, g: 0.24999997, b: 0.24999997, a: 0}
     - Color_CC20CDD9: {r: 1, g: 0.46698105, b: 0.94930357, a: 0}
     - Color_D2121AE6: {r: 1, g: 1, b: 1, a: 1}

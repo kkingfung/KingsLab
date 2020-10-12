@@ -24,6 +24,8 @@ public class UIEffect : MonoBehaviour
     string fullText;
     int textCnt;
 
+    bool Orientation;
+
     StageSelectOperation sceneManager;
 
     // Start is called before the first frame update
@@ -36,7 +38,8 @@ public class UIEffect : MonoBehaviour
 
         textMesh = this.GetComponentInParent<TextMesh>();
         spr = this.GetComponentInParent<SpriteRenderer>();
-
+        if (image==null && spr) oriColour = spr.color;
+        
         sceneManager = FindObjectOfType<StageSelectOperation>();
 
         oriPos = this.transform.position;
@@ -45,17 +48,24 @@ public class UIEffect : MonoBehaviour
         alpha = 0f;
         textCnt = 0;
         if (textMesh) fullText = textMesh.text;
+        Orientation = Screen.width > Screen.height;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        switch (EffectID) {
+        if (Orientation != (Screen.width > Screen.height)) {
+            oriPos = this.transform.position;
+            Orientation = !Orientation;
+        }
+
+            switch (EffectID) {
             case 0://for Title Scene Instruction
                 if (text) text.color =new Color (text.color.r, text.color.g, text.color.b,Mathf.Sin(Time.time*8.0f));
                 break;
             case 1://for Selection Scene Arrow
-                this.transform.position = oriPos + Mathf.Sin(Time.time)*new Vector3(1,0,0);
+                this.transform.position = oriPos + Mathf.Sin(Time.time) * new Vector3(1, 0, 0);
                 break;
             case 2://for Selection Scene Arrow
                 this.transform.position = oriPos - Mathf.Sin(Time.time) * new Vector3(1, 0, 0);
@@ -68,23 +78,23 @@ public class UIEffect : MonoBehaviour
                 if (spr == null) break;
                 alpha = (sceneManager.CurrentIslandNum() == sceneManager.NextIslandNum()
                     && sceneManager.CurrentIslandNum() == uiID) ? (alpha < 1f ? alpha + .1f : 1f) : 0;
-                spr.color = new Color(1, 1, 1, alpha);
+                spr.color = new Color(oriColour.r, oriColour.g, oriColour.b, alpha);
                 break;
             case 5://for Selection Scene Island Information
                 if (sceneManager == null || textMesh==null) break;
-                textCnt = (sceneManager.CurrentIslandNum()==uiID) ? Mathf.Max( textCnt + 1,fullText.Length) : 0;
+                textCnt = (sceneManager.CurrentIslandNum()==uiID) ? Mathf.Min( textCnt + 1,fullText.Length) : 0;
                 textMesh.text = fullText.Substring(0, textCnt);
                 break;
             case 6://for Selection Scene Boss Spr
-                if (sceneManager == null || image == null) break;
-                image.color = (sceneManager.EnabledtIslandNum() - 1 > uiID) ? oriColour : new Color(0, 0, 0, 1);
+                if (sceneManager == null || spr == null) break;
+                spr.color = (sceneManager.EnabledtIslandNum()  -1 > uiID) ? oriColour : new Color(0, 0, 0, 1);
                 break;
             case 7://for Selection Scene Clear Mark
                 if (sceneManager == null || image == null) break;
                 image.color = (sceneManager.EnabledtIslandNum() - 1 > uiID) ? oriColour : new Color(0, 0, 0, 0);
                 break;
             case 8://for Selection Scene Boss Frame
-                this.transform.localScale = oriScale - Mathf.Sin(Time.time) * new Vector3(0.1f, 0, 0);
+                this.transform.localScale = oriScale - Mathf.Sin(Time.time*12.0f) * new Vector3(0.1f, 0.1f, 0);
                 break;
         }
     }

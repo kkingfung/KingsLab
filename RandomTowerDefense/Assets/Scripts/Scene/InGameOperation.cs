@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InGameOperation : MonoBehaviour
+public class InGameOperation : ISceneChange
 {
     //Remark: zoom to canva
     // Start is called before the first frame update

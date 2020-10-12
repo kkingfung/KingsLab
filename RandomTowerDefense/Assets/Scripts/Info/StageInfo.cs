@@ -139,31 +139,38 @@ public static class StageInfo
         switch ((StageInfoID)infoID) {
             case StageInfoID.Enum_waveNum:
                 tempVal = PlayerPrefs.GetFloat("waveNum");
-                PlayerPrefs.SetFloat("waveNum", (tempVal + chg)% waveNumFactor.Length);
+                tempVal = (tempVal + chg + waveNumFactor.Length) % waveNumFactor.Length;
+                PlayerPrefs.SetFloat("waveNum", tempVal);
                 return waveNumFactor[(int)tempVal];
             case StageInfoID.Enum_stageSize:
                 tempVal = PlayerPrefs.GetFloat("stageSize");
-                PlayerPrefs.SetFloat("stageSize", (tempVal + chg) % stageSizeFactor.Length);
+                tempVal = (tempVal + chg + stageSizeFactor.Length) % stageSizeFactor.Length;
+                PlayerPrefs.SetFloat("stageSize", tempVal);
                 return stageSizeFactor[(int)tempVal];
             case StageInfoID.Enum_enmNum:
                 tempVal = PlayerPrefs.GetFloat("enmNum");
-                PlayerPrefs.SetFloat("enmNum", (tempVal + chg) % enmNumFactor.Length);
+                tempVal = (tempVal + chg + enmNumFactor.Length) % enmNumFactor.Length;
+                PlayerPrefs.SetFloat("enmNum", tempVal);
                 return enmNumFactor[(int)tempVal];
             case StageInfoID.Enum_enmSpeed:
                 tempVal = PlayerPrefs.GetFloat("enmSpeed");
-                PlayerPrefs.SetFloat("enmSpeed", (tempVal + chg) % enmSpeedFactor.Length);
+                tempVal = (tempVal + chg + enmSpeedFactor.Length) % enmSpeedFactor.Length;
+                PlayerPrefs.SetFloat("enmSpeed", tempVal);
                 return enmSpeedFactor[(int)tempVal];
             case StageInfoID.Enum_spawnSpeed:
                 tempVal = PlayerPrefs.GetFloat("spawnSpeed");
-                PlayerPrefs.SetFloat("spawnSpeed", (tempVal + chg) % spawnSpeedFactor.Length);
+                tempVal = (tempVal + chg + spawnSpeedFactor.Length) % spawnSpeedFactor.Length;
+                PlayerPrefs.SetFloat("spawnSpeed", tempVal);
                 return spawnSpeedFactor[(int)tempVal];
             case StageInfoID.Enum_hpMax:
                 tempVal = PlayerPrefs.GetFloat("hpMax");
-                PlayerPrefs.SetFloat("hpMax", (tempVal + chg) % hpMaxFactor.Length);
+                tempVal = (tempVal + chg + hpMaxFactor.Length) % hpMaxFactor.Length;
+                PlayerPrefs.SetFloat("hpMax", tempVal);
                 return hpMaxFactor[(int)tempVal];
             case StageInfoID.Enum_resource:
                 tempVal = PlayerPrefs.GetFloat("resource");
-                PlayerPrefs.SetFloat("resource", (tempVal + chg) % resourceFactor.Length);
+                tempVal = (tempVal + chg + resourceFactor.Length) % resourceFactor.Length;
+                PlayerPrefs.SetFloat("resource", tempVal);
                 return resourceFactor[(int)tempVal];
         }
         return 0f;

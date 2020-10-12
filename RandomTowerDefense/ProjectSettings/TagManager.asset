@@ -38,7 +38,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - StoreLayer
   - EggLayer
   - FadeLayer
   m_SortingLayers:

@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class LoadingOperation : ISceneChange
 {
+    [HideInInspector]
     public string nextScene;
     public List<GameObject> RandomObjs;
     public List<GameObject> LoadingIcon;
@@ -19,7 +20,6 @@ public class LoadingOperation : ISceneChange
         base.SceneIn();
 
         nextScene = PlayerPrefs.GetString("nextScene");
-
         Progress = 0;
      
         if (RandomObjs.Count == 0) return;
@@ -37,17 +37,17 @@ public class LoadingOperation : ISceneChange
         base.Update();
 
         //Change Scene
-        if (isSceneFinished && nextScene != null && fadeQuad.isReady)
+        if (isSceneFinished && nextScene != null && (fadeQuad[0].isReady|| fadeQuad[1].isReady))
                 SceneManager.LoadScene(nextScene);
 
         //LoadingScene Animation
-        if (isSceneFinished||LoadingIcon.Count == 0 || fadeQuad.isReady==false) return;
+        if (isSceneFinished||LoadingIcon.Count == 0 ||(!fadeQuad[0].isReady && !fadeQuad[1].isReady)) return;
         //Amend if necessary
         if (Progress < 1) Progress += 0.01f;
         else
         {
             isSceneFinished = true;
-            if (fadeQuad) SceneOut();
+            if (fadeQuad[0]&& fadeQuad[1]) SceneOut();
         }
         foreach (GameObject i in LoadingIcon)
         {

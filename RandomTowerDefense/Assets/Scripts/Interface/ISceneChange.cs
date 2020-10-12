@@ -8,48 +8,37 @@ public class ISceneChange : MonoBehaviour
     public List<GameObject> LandscapeObjs;
     public List<GameObject> PortraitObjs;
 
-    protected  FadeEffect fadeQuad;
-    protected  FadeEffectUI[] fadeQuadUI;
+    protected  FadeEffect[] fadeQuad;
 
     delegate void FadeAction();
     FadeAction FadeInDelegate;
     FadeAction FadeOutDelegate;
 
     protected bool isSceneFinished;
+    protected bool isOption;
 
     protected void Start()
     {
         isSceneFinished = false;
 
-        fadeQuadUI = FindObjectsOfType<FadeEffectUI>();
-        if (fadeQuadUI.Length>0) {
-            foreach (FadeEffectUI i in fadeQuadUI) {
+        fadeQuad = FindObjectsOfType<FadeEffect>();
+        if (fadeQuad.Length > 0) {
+            foreach (FadeEffect i in fadeQuad)
+            {
                 FadeInDelegate += i.FadeIn;
                 FadeOutDelegate += i.FadeOut;
             }
         }
-
-        fadeQuad = FindObjectOfType<FadeEffect>();
-        if (fadeQuad) {
-            FadeInDelegate += fadeQuad.FadeIn;
-            FadeOutDelegate += fadeQuad.FadeOut;
-        }
     }
     protected void OnDisable()
     {
-        if (fadeQuadUI.Length > 0)
+        if (fadeQuad.Length > 0)
         {
-            foreach (FadeEffectUI i in fadeQuadUI)
+            foreach (FadeEffect i in fadeQuad)
             {
                 FadeInDelegate -= i.FadeIn;
                 FadeOutDelegate -= i.FadeOut;
             }
-        }
-
-        if (fadeQuad)
-        {
-            FadeInDelegate -= fadeQuad.FadeIn;
-            FadeOutDelegate -= fadeQuad.FadeOut;
         }
     }
     protected void SceneIn() {
@@ -75,4 +64,6 @@ public class ISceneChange : MonoBehaviour
     protected void SetNextScene(string sceneName) {
         PlayerPrefs.SetString("nextScene", sceneName);
     }
+
+    public bool GetOptionStatus() { return isOption; }
 }

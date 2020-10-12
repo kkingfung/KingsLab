@@ -32,8 +32,8 @@ public class TitleOperation: ISceneChange
     public GameObject LandscapeFadeImg;
     public GameObject PortraitFadeImg;
 
-    FadeEffectUI LandscapeFade;
-    FadeEffectUI PortraitFade;
+    FadeEffect LandscapeFade;
+    FadeEffect PortraitFade;
 
     //Manager
     AudioManager AudioManager;
@@ -43,7 +43,6 @@ public class TitleOperation: ISceneChange
     GyroscopeManager GyroscopeManager;
 
     bool isOpening;
-    bool isOption;
     bool isWaiting;
     bool showCredit;
     float TimeRecord = 0;
@@ -98,8 +97,8 @@ public class TitleOperation: ISceneChange
         CanvaManager = FindObjectOfType<CanvaManager>();
         GyroscopeManager = FindObjectOfType<GyroscopeManager>();
 
-        LandscapeFade = LandscapeFadeImg.GetComponent<FadeEffectUI>();
-        PortraitFade = PortraitFadeImg.GetComponent<FadeEffectUI>();
+        LandscapeFade = LandscapeFadeImg.GetComponent<FadeEffect>();
+        PortraitFade = PortraitFadeImg.GetComponent<FadeEffect>();
 
         AudioManager.PlayAudio("bgm_Opening");
     }

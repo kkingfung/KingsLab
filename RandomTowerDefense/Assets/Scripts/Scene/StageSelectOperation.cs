@@ -13,6 +13,7 @@ public class StageSelectOperation : ISceneChange
 {
     const int IslandNum = 4;
     const float bloomInt_Default = 1.5f;
+    const float bloomInt_Max = 60.0f;
 
     //Camera Start/Stay/End Point
     [Header("MainCamera Settings")]
@@ -28,7 +29,8 @@ public class StageSelectOperation : ISceneChange
 
     [Header("Button Settings")]
     public List<Button> OptionButton;
-    public List<EventTrigger> OtherButton;
+    public List<GameObject> OtherButtonH;
+    public List<GameObject> OtherButtonV;
 
     [Header("Arrow Settings")]
     public List<GameObject> UILeftArrow;
@@ -38,6 +40,12 @@ public class StageSelectOperation : ISceneChange
     public List<TextMesh> StageCustomText;
     public List<TextMesh> StageCustomTextDirect;
     public List<VisualEffect> SceneChgPS;
+    public List<Slider> zoomSlider;
+    public GameObject LandscapeFadeImg;
+    public GameObject PortraitFadeImg;
+
+    FadeEffect LandscapeFade;
+    FadeEffect PortraitFade;
 
     public bool isDebugging;
     public VolumeProfile volumeProfile;
@@ -54,10 +62,7 @@ public class StageSelectOperation : ISceneChange
     GyroscopeManager GyroscopeManager;
 
     TouchScreenKeyboard keyboard;
-    int currInfoID = 0;
 
-    bool NextSceneReady;
-    bool isOption;
     float TimeRecord = 0;
     const float TimeWait = 0.5f;
 
@@ -70,10 +75,11 @@ public class StageSelectOperation : ISceneChange
         base.Start();
         base.SceneIn();
 
-        NextSceneReady = false;
         IslandNow = PlayerPrefs.GetInt("IslandNow");
         IslandNext = IslandNow;
         MainCam.transform.position = MainCamStayPt[IslandNow];
+        RightCam.transform.position = RightCamStayPt[IslandNow];
+        BottomCam.transform.position = BottomCamStayPt[IslandNow];
 
         if (isDebugging) IslandEnabled = IslandNum;
         else IslandEnabled = PlayerPrefs.GetInt("IslandEnabled");
@@ -85,6 +91,9 @@ public class StageSelectOperation : ISceneChange
         for (int i = 0; i < StageCustomText.Count; ++i)
             StageInfoOperation(i, 0);
 
+        LandscapeFade = LandscapeFadeImg.GetComponent<FadeEffect>();
+        PortraitFade = PortraitFadeImg.GetComponent<FadeEffect>();
+
         //InputManager = FindObjectOfType<InputManager>();
         AudioManager = FindObjectOfType<AudioManager>();
         //CameraManager = FindObjectOfType<CameraManager>();
@@ -95,7 +104,9 @@ public class StageSelectOperation : ISceneChange
 
         UnityEngine.Rendering.Universal.Bloom bloom;
         volumeProfile.TryGet<UnityEngine.Rendering.Universal.Bloom>(out bloom);
-        bloom.intensity.value = bloomInt_Default;
+        bloom.intensity.value = bloomInt_Max;
+
+        StartCoroutine("SceneChgAnimation");
     }
 
     // Update is called once per frame
@@ -103,31 +114,44 @@ public class StageSelectOperation : ISceneChange
     {
         base.Update();
         //Change Scene
-        if (isSceneFinished && NextSceneReady)
+        if (isSceneFinished && ((LandscapeFade && LandscapeFade.isReady) || (PortraitFade && PortraitFade.isReady)))
         {
             SceneManager.LoadScene("LoadingScene");
             return;
         }
 
+        foreach (Button i in OptionButton)
+            i.interactable = !isOption;
+
+        foreach (GameObject i in OtherButtonH)
+        {
+            i.SetActive(!isOption && !isSceneFinished && IslandNow == IslandNum - 1 && IslandNext == IslandNum - 1 && (Screen.width > Screen.height));
+        }
+
+        foreach (GameObject i in OtherButtonV)
+        {
+            i.SetActive(!isOption && !isSceneFinished && IslandNow == IslandNum - 1 && IslandNext == IslandNum - 1 && (Screen.width <= Screen.height));
+        }
+
+        foreach (Slider i in zoomSlider)
+        {
+            i.interactable = !isOption;
+        }
+
+        ArrowOperation();
+
         if (isSceneFinished) return;
 
         if (!isOption) ChangeIsland();
-        ArrowOperation();
         DarkenCam.SetActive(isOption);
-        foreach (Button i in OptionButton)
-            i.interactable = !isOption;
-        foreach (EventTrigger i in OtherButton)
-        {
-                i.enabled = !isOption && IslandNow == IslandNum - 1;
-        }
     }
 
     public void ArrowOperation()
     {
         foreach (GameObject i in UILeftArrow)
-            i.SetActive(IslandNow > 0);
+            i.SetActive(!isSceneFinished && IslandNow > 0);
         foreach (GameObject i in UIRightArrow)
-            i.SetActive(IslandNow < IslandEnabled);
+            i.SetActive(!isSceneFinished && IslandNow < IslandEnabled-1);
     }
 
     public void ChangeIslandByButton(int chgValue)
@@ -146,12 +170,6 @@ public class StageSelectOperation : ISceneChange
 
     public void ChangeIsland()
     {
-        //Update Curr Island ID
-        if (IslandNow!= IslandNext && MainCam.transform.position == MainCamStayPt[IslandNext]
-            && RightCam.transform.position == RightCamStayPt[IslandNext]
-            && BottomCam.transform.position == BottomCamStayPt[IslandNext])
-            IslandNow = IslandNext;
-
         if (Time.time - TimeRecord < TimeWait) return;
 
         //Gyroscope Operation
@@ -162,17 +180,15 @@ public class StageSelectOperation : ISceneChange
             StartCoroutine("RecMainCamOperation");
             StartCoroutine("RecRightCamOperation");
             StartCoroutine("RecBottomCamOperation");
+            TimeRecord = Time.time;
         }
-
-        TimeRecord = Time.time;
     }
 
     public void MoveToStage()
     {
         if (Time.time - TimeRecord < TimeWait) return;
         SetNextScene("GameScene");
-        //SceneOut();
-        StartCoroutine("SceneChgAnimation");
+        SceneOut();
         isSceneFinished = true;
         TimeRecord = Time.time;
     }
@@ -203,6 +219,7 @@ public class StageSelectOperation : ISceneChange
             MainCam.transform.position += spd;
             yield return new WaitForSeconds(0f);
         }
+      IslandNow = IslandNext;
     }
 
     private IEnumerator RecRightCamOperation()
@@ -246,7 +263,7 @@ public class StageSelectOperation : ISceneChange
     public int EnabledtIslandNum() { return IslandEnabled; }
     public int NextIslandNum() { return IslandNext; }
 
-    private void StageInfoOperation(int infoID,int chg)
+    private void StageInfoOperation(int infoID, int chg)
     {
         float result = StageInfo.SaveDataInPrefs(infoID, chg);
         StageCustomText[infoID].text = result.ToString();
@@ -261,9 +278,9 @@ public class StageSelectOperation : ISceneChange
         StageInfoOperation(infoID, -1);
     }
 
-    public void TouchKeybroad(int infoID) {
-        currInfoID = infoID;
-        keyboard =TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default, false, false, true);
+    public void TouchKeybroad(int infoID)
+    {
+        keyboard = TouchScreenKeyboard.Open("", TouchScreenKeyboardType.Default, false, false, true);
 
         if (keyboard != null)
         {
@@ -274,12 +291,13 @@ public class StageSelectOperation : ISceneChange
 
     private IEnumerator TouchScreenInputUpdate(int infoID)
     {
-        while (keyboard.status== TouchScreenKeyboard.Status.Visible) {
+        while (keyboard.status == TouchScreenKeyboard.Status.Visible)
+        {
             StageCustomText[infoID].text = keyboard.text;
             yield return new WaitForSeconds(0f);
         }
 
-        if(keyboard.status == TouchScreenKeyboard.Status.Done || keyboard.status == TouchScreenKeyboard.Status.Canceled)
+        if (keyboard.status == TouchScreenKeyboard.Status.Done || keyboard.status == TouchScreenKeyboard.Status.Canceled)
             switch (infoID)
             {
                 case 0:
@@ -317,22 +335,20 @@ public class StageSelectOperation : ISceneChange
 
     private IEnumerator SceneChgAnimation()
     {
-        foreach (VisualEffect i in SceneChgPS)
-            i.enabled = true;
-
-        int frame = 120;
+        int frame = 200;
         UnityEngine.Rendering.Universal.Bloom bloom;
         volumeProfile.TryGet<UnityEngine.Rendering.Universal.Bloom>(out bloom);
         float bloomValOri = bloom.intensity.value;
-        float bloomVal = 20f;
+        float bloomVal = bloomInt_Default;
         float bloomChg = (bloomVal - bloomValOri) / frame;
         bloomVal = bloomValOri;
         while (frame-- > 0)
         {
             bloomVal += bloomChg;
-            bloom.intensity.value=bloomVal;
+            bloom.intensity.value = bloomVal;
             yield return new WaitForSeconds(0f);
         }
-        NextSceneReady = true;
+        foreach (VisualEffect i in SceneChgPS)
+            i.Stop();
     }
 }

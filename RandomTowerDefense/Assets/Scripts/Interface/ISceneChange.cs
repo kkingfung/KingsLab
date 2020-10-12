@@ -17,9 +17,13 @@ public class ISceneChange : MonoBehaviour
     protected bool isSceneFinished;
     protected bool isOption;
 
+    [HideInInspector]
+    public int toDrag;// 0: No Action, 1: Left Dir, 2: Right Dir
+
     protected void Start()
     {
         isSceneFinished = false;
+        toDrag = 0;
 
         fadeQuad = FindObjectsOfType<FadeEffect>();
         if (fadeQuad.Length > 0) {

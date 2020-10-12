@@ -175,6 +175,19 @@ public class StageSelectOperation : ISceneChange
         //Gyroscope Operation
         ChangeIslandByGyro();
 
+        //Touch Operation
+        switch(toDrag){
+            case 0: default: break;
+            case 1:
+                IslandNext = Mathf.Clamp(IslandNow - 1, 0, IslandEnabled);
+                break;
+            case 2:
+                IslandNext = Mathf.Clamp(IslandNow + 1, 0, IslandEnabled);
+                break;
+        }
+
+        toDrag = 0;
+
         if (IslandNext != IslandNow)
         {
             StartCoroutine("RecMainCamOperation");

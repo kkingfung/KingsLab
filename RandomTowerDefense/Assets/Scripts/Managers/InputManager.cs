@@ -18,6 +18,7 @@ public class MyMobileInput
 public class InputManager : MonoBehaviour
 {
     readonly float tapStayTime = 2f;
+    readonly float dragDiff = 5.0f;
 
     //Input Test
     public LBM LBMTest;
@@ -27,13 +28,13 @@ public class InputManager : MonoBehaviour
     bool isiOS;
     MyMobileInput mobileInput;
     bool useTouch;
+    bool isDragging;
+    Vector3 posDragging;
 
     //Common Variables
     PlayerManager playerManager;
     CameraManager cameraManager;
     float timeRecord;
-    [HideInInspector]
-    public float zoomFactor;
 
     void Awake()
     {
@@ -46,7 +47,7 @@ public class InputManager : MonoBehaviour
 
     void Start()
     {
-        zoomFactor = 1f;
+        isDragging = false;
         useTouch = isAndroid || isiOS;
         playerManager = FindObjectOfType<PlayerManager>();
         cameraManager = FindObjectOfType<CameraManager>();
@@ -55,25 +56,49 @@ public class InputManager : MonoBehaviour
     void Update()
     {
         if (useTouch) UpdateTouchInfo();
+        else UpdateMouseInfo();
         if (LBMTest) LBMTesting(); //Only for Loading Scene
+    }
+
+    void UpdateMouseInfo()
+    {
+        if (isDragging)
+        {
+            if (Input.mousePosition.x - posDragging.x > dragDiff)
+            {
+                FindObjectOfType<ISceneChange>().toDrag = 2;
+                isDragging = false;
+            }
+            if (Input.mousePosition.x - posDragging.x < -dragDiff)
+            {
+                FindObjectOfType<ISceneChange>().toDrag = 1;
+                isDragging = false;
+            }
+        }
     }
 
     void UpdateTouchInfo()
     {
         int TouchCount = Input.touchCount;
-        if (TouchCount == 0) return;
+        if (TouchCount == 0)
+        {
+            isDragging = false;
+            return;
+        }
 
         //reset Boolean
         mobileInput.isTouch[0] = false;
         mobileInput.isTouch[1] = false;
 
-        for (int touchId = 0; touchId < Math.Min(TouchCount,mobileInput.maxTouch); ++touchId)
+        for (int touchId = 0; touchId < Math.Min(TouchCount, mobileInput.maxTouch); ++touchId)
         {
             Touch touch = Input.GetTouch(touchId);
             mobileInput.TouchInfo[touchId] = touch;
             mobileInput.isTouch[touchId] = true;
             if (Time.time - timeRecord > tapStayTime)
+            {
                 playerManager.isSkillActive = true;
+            }
 
             switch (touch.phase)
             {
@@ -82,18 +107,57 @@ public class InputManager : MonoBehaviour
                     if (touchId == 0) timeRecord = Time.time;
                     break;
                 case TouchPhase.Moved:
-                    if (TouchCount==2) HandleZoom();
+                    if (TouchCount == 2) HandleZoom();
                     break;
                 case TouchPhase.Ended:
-                    if (touchId == 0) {
+                    if (touchId == 0)
+                    {
                         if (playerManager && playerManager.isSkillActive)
-                            playerManager.CheckSkill(touch.position); 
+                            playerManager.CheckSkill(touch.position);
+                    }
+                    if (isDragging && touchId == 0)
+                    {
+                        if (touch.position.x - posDragging.x > dragDiff)
+                        {
+                            FindObjectOfType<ISceneChange>().toDrag = 2;
+                            isDragging = false;
+                        }
+                        if (touch.position.x - posDragging.x < -dragDiff)
+                        {
+                            FindObjectOfType<ISceneChange>().toDrag = 1;
+                            isDragging = false;
+                        }
                     }
                     break;
                 case TouchPhase.Stationary:
                     break;
             }
         }
+    }
+
+    public void BeginDrag() { //For Specified Screen Area (Button)
+        isDragging = true;
+        if (Input.touchCount>0)
+        posDragging = Input.touches[0].position;
+        else 
+        posDragging = Input.mousePosition;
+    }
+
+    public void EndDrag() //For Spare
+    {
+        isDragging = false;
+        /*
+             if (touch.position.x - posDragging.x > dragDiff)
+             {
+                 FindObjectOfType<ISceneChange>().toDrag = 2;
+                 isDragging = false;
+             }
+             if (touch.position.x - posDragging.x < -dragDiff)
+             {
+                 FindObjectOfType<ISceneChange>().toDrag = 1;
+                 isDragging = false;
+             }
+        */
     }
 
     void HandleZoom()
@@ -110,8 +174,8 @@ public class InputManager : MonoBehaviour
         float currentMagnitude = (touchZero.position - touchOne.position).magnitude;
 
         float difference = currentMagnitude - prevMagnitude;
-        zoomFactor -= difference * 0.01f;
-        zoomFactor = Mathf.Clamp(zoomFactor, 0.5f, 1.5f);
+        float zoomFactor = difference * 0.01f + PlayerPrefs.GetFloat("zoomRate");
+        zoomFactor = Mathf.Clamp(zoomFactor, 0.0f, 1.0f);
         cameraManager.Zoom(zoomFactor);
     }
 

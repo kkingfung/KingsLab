@@ -1,10 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Entities.Editor;
 using UnityEditor;
 using UnityEngine;
-
 public class StageAttr
 {
     public int waveNum;
@@ -250,7 +248,7 @@ public static class StageInfo
     static int GetRandom()
     {
         int temp = Random.Range(0, 30);
-        if (ArrayUtility.Contains(invalidChoices, temp)) return GetRandom();
+        if (invalidChoices.Contains<int>(temp)) return GetRandom();
         return temp;
     }
 }

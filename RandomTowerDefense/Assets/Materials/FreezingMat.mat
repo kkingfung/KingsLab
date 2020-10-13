@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BlendSkyboxMat
-  m_Shader: {fileID: -6465566751694194690, guid: 7879a693c866b6b449fcee963b5b6027, type: 3}
+  m_Name: FreezingMat
+  m_Shader: {fileID: -6465566751694194690, guid: 90e8c45a35f40324096458ce33fa6ca0, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -19,19 +19,26 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - Cubemap_1E35B75B:
-        m_Texture: {fileID: 8900000, guid: ca5ff00289a7c9f46ab44f3e784dacdb, type: 3}
+    - Texture2D_101201D1:
+        m_Texture: {fileID: 2800000, guid: 607d064242915a040b685a36ec2dfafd, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - Cubemap_3706C785:
-        m_Texture: {fileID: 8900000, guid: 6efac3eba94ffce46921101bcd0b8dfc, type: 3}
+    - Texture2D_219E7577:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - Cubemap_5E010379:
-        m_Texture: {fileID: 8900000, guid: 482c081856874f24493b1bddc5b919ed, type: 3}
+    - Texture2D_7C151282:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_D9307BC1:
+        m_Texture: {fileID: 2800000, guid: 101a9e33bf80c9a488682f5ac74d4c85, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - SkyboxFactor: 1.549191
-    m_Colors: []
+    - Vector1_1FE216E6: 10
+    - Vector1_C81187EE: 5
+    - Vector1_F29EBC87: 1
+    m_Colors:
+    - Color_B9A3D235: {r: 1, g: 0, b: 0.03486824, a: 0}
   m_BuildTextureStacks: []

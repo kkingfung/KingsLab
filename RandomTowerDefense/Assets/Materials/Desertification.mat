@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BlendSkyboxMat
-  m_Shader: {fileID: -6465566751694194690, guid: 7879a693c866b6b449fcee963b5b6027, type: 3}
+  m_Name: Desertification
+  m_Shader: {fileID: -6465566751694194690, guid: 94fd526ff2ce6f34fafe15c1f7236d8b, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -19,19 +19,25 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - Cubemap_1E35B75B:
-        m_Texture: {fileID: 8900000, guid: ca5ff00289a7c9f46ab44f3e784dacdb, type: 3}
+    - Texture2D_144F9586:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - Cubemap_3706C785:
-        m_Texture: {fileID: 8900000, guid: 6efac3eba94ffce46921101bcd0b8dfc, type: 3}
+    - Texture2D_199EE2EE:
+        m_Texture: {fileID: 2800000, guid: dd1ad706663683546b665fd5b0286bbd, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - Cubemap_5E010379:
-        m_Texture: {fileID: 8900000, guid: 482c081856874f24493b1bddc5b919ed, type: 3}
+    - Texture2D_A5D9F322:
+        m_Texture: {fileID: 2800000, guid: b1c3a3ae3c6da4f46b2d8de63695e7fc, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_D1FA1BAB:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - SkyboxFactor: 1.549191
-    m_Colors: []
+    - Vector1_1053584E: 1
+    - _Progress: 0
+    m_Colors:
+    - Color_E1A7676C: {r: 1, g: 0.92415786, b: 0.7877358, a: 1}
   m_BuildTextureStacks: []

@@ -112,22 +112,22 @@ public static class StageInfo
                 PlayerPrefs.SetFloat("waveNumDir", input);
                 break;
             case StageInfoID.Enum_stageSize:
-                PlayerPrefs.SetFloat("stageSize", input);
+                PlayerPrefs.SetFloat("stageSizeDir", input);
                 break;
             case StageInfoID.Enum_enmNum:
-                PlayerPrefs.SetFloat("enmNum", input);
+                PlayerPrefs.SetFloat("enmNumDir", input);
                 break;
             case StageInfoID.Enum_enmSpeed:
-                PlayerPrefs.SetFloat("enmSpeed", input);
+                PlayerPrefs.SetFloat("enmSpeedDir", input);
                 break;
             case StageInfoID.Enum_spawnSpeed:
-                PlayerPrefs.SetFloat("spawnSpeed", input);
+                PlayerPrefs.SetFloat("spawnSpeedDir", input);
                 break;
             case StageInfoID.Enum_hpMax:
-                PlayerPrefs.SetFloat("hpMax", input);
+                PlayerPrefs.SetFloat("hpMaxDir", input);
                 break;
             case StageInfoID.Enum_resource:
-                PlayerPrefs.SetFloat("resource", input);
+                PlayerPrefs.SetFloat("resourceDir", input);
                 break;
         }
     }

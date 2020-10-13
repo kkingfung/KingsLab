@@ -3961,8 +3961,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98eed839a4822604e95df70319bffcb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Buttons: []
   LBMTest: {fileID: 0}
-  zoomFactor: 0
+  refCamL: {fileID: 0}
+  refCamP: {fileID: 0}
 --- !u!4 &675448557
 Transform:
   m_ObjectHideFlags: 0
@@ -5227,6 +5229,7 @@ MonoBehaviour:
   - {fileID: 1211553611}
   PortraitObjs:
   - {fileID: 1537103406}
+  toDrag: 0
   DarkenCam: {fileID: 1537512924}
   DarkenCamSub: {fileID: 1849355739}
   RightCam: {fileID: 1285845743}
@@ -5276,6 +5279,15 @@ MonoBehaviour:
   CreditButton:
   - {fileID: 2014551688}
   - {fileID: 1739106579}
+  PetrifyImgs:
+  - {fileID: 1452681556}
+  - {fileID: 1090470280}
+  - {fileID: 2014551689}
+  - {fileID: 1097071275}
+  - {fileID: 1336674218}
+  - {fileID: 1739106580}
+  PetrifyRImgs: []
+  PetrifySpr: []
   TitleImg:
   - {fileID: 1064867940}
   - {fileID: 1578533419}
@@ -5942,7 +5954,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 1b3bc4d840783024883ae287456b8ba2, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -6120,7 +6132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 1b3bc4d840783024883ae287456b8ba2, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -7845,7 +7857,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 1b3bc4d840783024883ae287456b8ba2, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -8676,7 +8688,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 1b3bc4d840783024883ae287456b8ba2, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -10847,7 +10859,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 1b3bc4d840783024883ae287456b8ba2, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -12640,7 +12652,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 1b3bc4d840783024883ae287456b8ba2, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}

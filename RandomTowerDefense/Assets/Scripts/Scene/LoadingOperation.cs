@@ -36,12 +36,21 @@ public class LoadingOperation : ISceneChange
     {
         base.Update();
 
+        bool chkFadeReady = false;
+        foreach (FadeEffect i in fadeQuad) {
+            if (i.isReady) {
+                chkFadeReady = true;
+                break;
+            }
+        }
+
+
         //Change Scene
-        if (isSceneFinished && nextScene != null && (fadeQuad[0].isReady|| fadeQuad[1].isReady))
+        if (isSceneFinished && nextScene != null && chkFadeReady)
                 SceneManager.LoadScene(nextScene);
 
         //LoadingScene Animation
-        if (isSceneFinished||LoadingIcon.Count == 0 ||(!fadeQuad[0].isReady && !fadeQuad[1].isReady)) return;
+        if (isSceneFinished||LoadingIcon.Count == 0 ||!chkFadeReady) return;
         //Amend if necessary
         if (Progress < 1) Progress += 0.01f;
         else

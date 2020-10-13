@@ -8,7 +8,7 @@ public class ISceneChange : MonoBehaviour
     public List<GameObject> LandscapeObjs;
     public List<GameObject> PortraitObjs;
 
-    protected  FadeEffect[] fadeQuad;
+    protected FadeEffect[] fadeQuad;
 
     delegate void FadeAction();
     FadeAction FadeInDelegate;

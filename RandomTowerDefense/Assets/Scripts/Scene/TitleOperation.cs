@@ -25,6 +25,11 @@ public class TitleOperation: ISceneChange
     public List<Button> OptionButton;
     public List<Button> CreditButton;
 
+    [Header("Petrify Settings")]
+    public List<Image> PetrifyImgs;
+    public List<RawImage> PetrifyRImgs;
+    public List<SpriteRenderer> PetrifySpr;
+
     [Header("Other Settings")]
     public List<GameObject> TitleImg;
     public GameObject BoidSpawn;
@@ -70,7 +75,6 @@ public class TitleOperation: ISceneChange
     const int maxRecFrame = 20;
     const int maxRecWaitFrame = 120;
 
-
     private void OnEnable()
     {
         BoidSpawn.SetActive(true);
@@ -100,6 +104,24 @@ public class TitleOperation: ISceneChange
         PortraitFade = PortraitFadeImg.GetComponent<FadeEffect>();
 
         AudioManager.PlayAudio("bgm_Opening");
+        PlayerPrefs.SetFloat("zoomRate", 0f);
+
+
+        if (PetrifyImgs.Count > 0)
+        {
+            foreach (Image i in PetrifyImgs)
+                i.material.SetFloat("_Progress", 0);
+        }
+        if (PetrifyRImgs.Count > 0)
+        {
+            foreach (RawImage i in PetrifyRImgs)
+                i.material.SetFloat("_Progress", 0);
+        }
+        if (PetrifySpr.Count > 0)
+        {
+            foreach (SpriteRenderer i in PetrifySpr)
+                i.material.SetFloat("_Progress", 0);
+        }
     }
 
     // Update is called once per frame
@@ -149,9 +171,7 @@ public class TitleOperation: ISceneChange
     public void MoveToStageSelection()
     {
         if (Time.time - TimeRecord < TimeWait) return;
-        SetNextScene("StageSelection");
-        SceneOut();
-        isSceneFinished = true;
+        StartCoroutine(PetrifyAnimation());
         TimeRecord = Time.time;
     }
 
@@ -348,5 +368,34 @@ public class TitleOperation: ISceneChange
         if (CameraManager) CameraManager.isOpening = isOpening;
         if (CanvaManager) CanvaManager.isOpening = isOpening;
     }
-    
+
+    private IEnumerator PetrifyAnimation()
+    {
+        float progress = 0f;
+        int frame =60;
+        float rate = 1 / (float)frame;
+        while (frame-- > 0)
+        {
+            progress += rate;
+            foreach (Image i in PetrifyImgs)
+            {
+                //i.material.EnableKeyword("_Progress");
+                i.material.SetFloat("_Progress", progress);
+            }
+            foreach (RawImage i in PetrifyRImgs)
+            {
+                //i.material.EnableKeyword("_Progress");
+                i.material.SetFloat("_Progress", progress);
+            }
+            foreach (SpriteRenderer i in PetrifySpr)
+            {
+                //i.material.EnableKeyword("_Progress");
+                i.material.SetFloat("_Progress", progress);
+            }
+            yield return new WaitForSeconds(0f);
+        }
+        SetNextScene("StageSelection");
+        SceneOut();
+        isSceneFinished = true;
+    }
 }

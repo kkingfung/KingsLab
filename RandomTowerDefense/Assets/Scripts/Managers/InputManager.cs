@@ -20,6 +20,9 @@ public class InputManager : MonoBehaviour
     readonly float tapStayTime = 2f;
     readonly float dragDiff = 5.0f;
 
+    //TouchButton
+    public List<GameObject> Buttons;
+
     //Input Test
     public LBM LBMTest;
 
@@ -35,6 +38,9 @@ public class InputManager : MonoBehaviour
     PlayerManager playerManager;
     CameraManager cameraManager;
     float timeRecord;
+
+    public Camera refCamL;
+    public Camera refCamP;
 
     void Awake()
     {
@@ -58,6 +64,7 @@ public class InputManager : MonoBehaviour
         if (useTouch) UpdateTouchInfo();
         else UpdateMouseInfo();
         if (LBMTest) LBMTesting(); //Only for Loading Scene
+        if (Buttons.Count > 0) RaycastTest();
     }
 
     void UpdateMouseInfo()
@@ -193,5 +200,53 @@ public class InputManager : MonoBehaviour
 
     public bool GetAnyInput() {
         return mobileInput.isTouch[0] || Input.GetMouseButton(0);
+    }
+
+    private void RaycastTest() {
+        Ray ray = new Ray();
+        RaycastHit hit = new RaycastHit();
+
+        if (Input.touchCount > 0)
+        {
+            foreach (Touch t in Input.touches)
+            {
+                if (Screen.width > Screen.height)
+                {
+                    ray = refCamL.ScreenPointToRay(Input.GetTouch(t.fingerId).position);
+                }
+                else
+                {
+                    ray = refCamP.ScreenPointToRay(Input.GetTouch(t.fingerId).position);
+                }
+
+                if (Input.GetTouch(t.fingerId).phase == TouchPhase.Began)
+                {
+                    if (Physics.Raycast(ray, out hit, 1000, LayerMask.NameToLayer("ButtonLayer"))
+                    &&  Buttons.Contains(hit.transform.gameObject))
+                    {
+                        if(hit.transform.GetComponent<RaycastFunction>())
+                            hit.transform.GetComponent<RaycastFunction>().ActionFunc();
+                        break;
+                    }
+                }
+            }
+        }
+        else if (Input.GetMouseButtonDown(0))
+        {
+            if (Screen.width > Screen.height)
+            {
+                ray = refCamL.ScreenPointToRay(Input.mousePosition);
+            }
+            else
+            {
+                ray = refCamP.ScreenPointToRay(Input.mousePosition);
+            }
+
+            if (Physics.Raycast(ray, out hit) && Buttons.Contains(hit.transform.gameObject))
+            {
+                if (hit.transform.GetComponent<RaycastFunction>())
+                    hit.transform.GetComponent<RaycastFunction>().ActionFunc();
+            }
+        }
     }
 }

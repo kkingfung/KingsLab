@@ -36,11 +36,17 @@ public class StageSelectOperation : ISceneChange
     public List<GameObject> UILeftArrow;
     public List<GameObject> UIRightArrow;
 
+    [Header("Petrify Settings")]
+    public List<Image> PetrifyImgs;
+    public List<RawImage> PetrifyRImgs;
+    public List<SpriteRenderer> PetrifySpr;
+
     [Header("Other Settings")]
     public List<TextMesh> StageCustomText;
     public List<TextMesh> StageCustomTextDirect;
     public List<VisualEffect> SceneChgPS;
     public List<Slider> zoomSlider;
+
     public GameObject LandscapeFadeImg;
     public GameObject PortraitFadeImg;
 
@@ -62,7 +68,7 @@ public class StageSelectOperation : ISceneChange
     GyroscopeManager GyroscopeManager;
 
     TouchScreenKeyboard keyboard;
-
+    bool CancelKeybroad=false;
     float TimeRecord = 0;
     const float TimeWait = 0.5f;
 
@@ -107,6 +113,21 @@ public class StageSelectOperation : ISceneChange
         bloom.intensity.value = bloomInt_Max;
 
         StartCoroutine("SceneChgAnimation");
+
+        if (PetrifyImgs.Count>0) {
+            foreach (Image i in PetrifyImgs)
+                i.material.SetFloat("_Progress", 0);
+        }
+        if (PetrifyRImgs.Count > 0)
+        {
+            foreach (RawImage i in PetrifyRImgs) 
+                i.material.SetFloat("_Progress", 0);
+        }
+        if (PetrifySpr.Count > 0)
+        {
+            foreach (SpriteRenderer i in PetrifySpr)
+                i.material.SetFloat("_Progress", 0);
+        }
     }
 
     // Update is called once per frame
@@ -200,9 +221,7 @@ public class StageSelectOperation : ISceneChange
     public void MoveToStage()
     {
         if (Time.time - TimeRecord < TimeWait) return;
-        SetNextScene("GameScene");
-        SceneOut();
-        isSceneFinished = true;
+        StartCoroutine(PetrifyAnimation());
         TimeRecord = Time.time;
     }
 
@@ -278,6 +297,7 @@ public class StageSelectOperation : ISceneChange
 
     private void StageInfoOperation(int infoID, int chg)
     {
+        CancelKeybroad = true;
         float result = StageInfo.SaveDataInPrefs(infoID, chg);
         StageCustomText[infoID].text = result.ToString();
     }
@@ -299,51 +319,55 @@ public class StageSelectOperation : ISceneChange
         {
             keyboard.characterLimit = 2;
             StartCoroutine(TouchScreenInputUpdate(infoID));
+            CancelKeybroad = false;
         }
     }
 
     private IEnumerator TouchScreenInputUpdate(int infoID)
     {
-        while (keyboard.status == TouchScreenKeyboard.Status.Visible)
+        if (keyboard != null)
         {
-            StageCustomText[infoID].text = keyboard.text;
-            yield return new WaitForSeconds(0f);
-        }
-
-        if (keyboard.status == TouchScreenKeyboard.Status.Done || keyboard.status == TouchScreenKeyboard.Status.Canceled)
-            switch (infoID)
+            while (keyboard.status == TouchScreenKeyboard.Status.Visible && CancelKeybroad==false)
             {
-                case 0:
-                case 1:
-                case 4:
-                    int Input_int;
-                    if (int.TryParse(keyboard.text, out Input_int))
-                    {
-                        StageCustomText[infoID].text = Input_int.ToString();
-                        StageInfo.SaveDataInPrefs_DirectInput(infoID, Input_int);
-                    }
-                    else
-                    {
-                        StageCustomText[infoID].text = StageInfo.SaveDataInPrefs(infoID, 0).ToString();
-                    }
-                    break;
-                case 2:
-                case 3:
-                case 5:
-                case 6:
-                    float Output_int;
-                    if (float.TryParse(keyboard.text, out Output_int))
-                    {
-                        StageCustomText[infoID].text = Output_int.ToString();
-                        StageInfo.SaveDataInPrefs_DirectInput(infoID, Output_int);
-                    }
-                    else
-                    {
-                        StageCustomText[infoID].text = StageInfo.SaveDataInPrefs(infoID, 0).ToString();
-                    }
-                    break;
+                StageCustomText[infoID].text = keyboard.text;
+                yield return new WaitForSeconds(0f);
             }
-        keyboard = null;
+
+            if (keyboard.status == TouchScreenKeyboard.Status.Done || keyboard.status == TouchScreenKeyboard.Status.Canceled)
+                switch (infoID)
+                {
+                    case 0:
+                    case 1:
+                    case 4:
+                        int Input_int;
+                        if (int.TryParse(keyboard.text, out Input_int))
+                        {
+                            StageCustomText[infoID].text = Input_int.ToString();
+                            StageInfo.SaveDataInPrefs_DirectInput(infoID, Input_int);
+                        }
+                        else
+                        {
+                            StageCustomText[infoID].text = StageInfo.SaveDataInPrefs(infoID, 0).ToString();
+                        }
+                        break;
+                    case 2:
+                    case 3:
+                    case 5:
+                    case 6:
+                        float Output_int;
+                        if (float.TryParse(keyboard.text, out Output_int))
+                        {
+                            StageCustomText[infoID].text = Output_int.ToString();
+                            StageInfo.SaveDataInPrefs_DirectInput(infoID, Output_int);
+                        }
+                        else
+                        {
+                            StageCustomText[infoID].text = StageInfo.SaveDataInPrefs(infoID, 0).ToString();
+                        }
+                        break;
+                }
+            keyboard = null;
+        }
     }
 
     private IEnumerator SceneChgAnimation()
@@ -363,5 +387,35 @@ public class StageSelectOperation : ISceneChange
         }
         foreach (VisualEffect i in SceneChgPS)
             i.Stop();
+    }
+
+    private IEnumerator PetrifyAnimation()
+    {
+        float progress=0f;
+        int frame = 60;
+        float rate = 1 / (float)frame;
+        while (frame-- > 0)
+        {
+            progress += rate;
+            foreach (Image i in PetrifyImgs)
+            {
+                //i.material.EnableKeyword("_Progress");
+                i.material.SetFloat("_Progress", progress);
+            }
+            foreach (RawImage i in PetrifyRImgs)
+            {
+                //i.material.EnableKeyword("_Progress");
+                i.material.SetFloat("_Progress", progress);
+            }
+            foreach (SpriteRenderer i in PetrifySpr)
+            {
+                //i.material.EnableKeyword("_Progress");
+                i.material.SetFloat("_Progress", progress);
+            }
+            yield return new WaitForSeconds(0f);
+        }
+        SetNextScene("GameScene");
+        SceneOut();
+        isSceneFinished = true;
     }
 }

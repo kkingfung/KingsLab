@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class FadeEffect : MonoBehaviour
 {
     float Threshold = 0.0f;
-    float FadeRate = 0.01f;
+    float FadeRate = 0.02f;
 
     Material FadeMat;
     public bool isReady { get; private set;}

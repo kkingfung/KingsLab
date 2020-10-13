@@ -168,29 +168,12 @@ public class TitleOperation: ISceneChange
                 i.interactable = !isOption;
     }
 
+    #region CommonOperation
     public void MoveToStageSelection()
     {
         if (Time.time - TimeRecord < TimeWait) return;
         StartCoroutine(PetrifyAnimation());
         TimeRecord = Time.time;
-    }
-
-    void OpeningAnimation()
-    {
-        CameraManager.RotateCam(targetCamAngle);
-
-        GameObject[] Upper = GameObject.FindGameObjectsWithTag("UpperEgg");
-        StartCoroutine(UpperEggAnimation(Upper[0], 0.4f));
-        StartCoroutine(UpperEggAnimation(Upper[1], 0.4f));
-
-        GameObject[] Lower = GameObject.FindGameObjectsWithTag("LowerEgg");
-        StartCoroutine(LowerEggAnimation(Lower[0], -0.4f));
-        StartCoroutine(LowerEggAnimation(Lower[1], -0.15f));
-
-        isOpening = false;
-
-        AudioManager.PlayAudio("bgm_Title");
-        AudioManager.PlayAudio("se_Button");
     }
 
     public void OptionStatus() 
@@ -210,7 +193,38 @@ public class TitleOperation: ISceneChange
         nextRecStatusBottomCam = 0;
         TimeRecord = Time.time;
     }
+    private IEnumerator PetrifyAnimation()
+    {
+        float progress = 0f;
+        int frame = 60;
+        float rate = 1 / (float)frame;
+        while (frame-- > 0)
+        {
+            progress += rate;
+            foreach (Image i in PetrifyImgs)
+            {
+                //i.material.EnableKeyword("_Progress");
+                i.material.SetFloat("_Progress", progress);
+            }
+            foreach (RawImage i in PetrifyRImgs)
+            {
+                //i.material.EnableKeyword("_Progress");
+                i.material.SetFloat("_Progress", progress);
+            }
+            foreach (SpriteRenderer i in PetrifySpr)
+            {
+                //i.material.EnableKeyword("_Progress");
+                i.material.SetFloat("_Progress", progress);
+            }
+            yield return new WaitForSeconds(0f);
+        }
+        SetNextScene("StageSelection");
+        SceneOut();
+        isSceneFinished = true;
+    }
+    #endregion
 
+    #region CamOperation
     private IEnumerator RecRightCamOperation()
     {
         Vector3 spd;
@@ -322,6 +336,26 @@ public class TitleOperation: ISceneChange
         currentRecStatusBottomCam = nextRecStatusBottomCam;
         nextRecStatusBottomCam = (currentRecStatusBottomCam % maxRecStatus) + 1;
     }
+    #endregion
+
+    #region OpeningOperation
+    void OpeningAnimation()
+    {
+        CameraManager.RotateCam(targetCamAngle);
+
+        GameObject[] Upper = GameObject.FindGameObjectsWithTag("UpperEgg");
+        StartCoroutine(UpperEggAnimation(Upper[0], 0.4f));
+        StartCoroutine(UpperEggAnimation(Upper[1], 0.4f));
+
+        GameObject[] Lower = GameObject.FindGameObjectsWithTag("LowerEgg");
+        StartCoroutine(LowerEggAnimation(Lower[0], -0.4f));
+        StartCoroutine(LowerEggAnimation(Lower[1], -0.15f));
+
+        isOpening = false;
+
+        AudioManager.PlayAudio("bgm_Title");
+        AudioManager.PlayAudio("se_Button");
+    }
 
     private IEnumerator UpperEggAnimation(GameObject Upper,float dist)
     {
@@ -368,34 +402,5 @@ public class TitleOperation: ISceneChange
         if (CameraManager) CameraManager.isOpening = isOpening;
         if (CanvaManager) CanvaManager.isOpening = isOpening;
     }
-
-    private IEnumerator PetrifyAnimation()
-    {
-        float progress = 0f;
-        int frame =60;
-        float rate = 1 / (float)frame;
-        while (frame-- > 0)
-        {
-            progress += rate;
-            foreach (Image i in PetrifyImgs)
-            {
-                //i.material.EnableKeyword("_Progress");
-                i.material.SetFloat("_Progress", progress);
-            }
-            foreach (RawImage i in PetrifyRImgs)
-            {
-                //i.material.EnableKeyword("_Progress");
-                i.material.SetFloat("_Progress", progress);
-            }
-            foreach (SpriteRenderer i in PetrifySpr)
-            {
-                //i.material.EnableKeyword("_Progress");
-                i.material.SetFloat("_Progress", progress);
-            }
-            yield return new WaitForSeconds(0f);
-        }
-        SetNextScene("StageSelection");
-        SceneOut();
-        isSceneFinished = true;
-    }
+    #endregion
 }

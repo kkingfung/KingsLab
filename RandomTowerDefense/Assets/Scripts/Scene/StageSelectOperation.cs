@@ -4,10 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEngine.EventSystems;
 using UnityEngine.VFX;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
 
 public class StageSelectOperation : ISceneChange
 {
@@ -69,6 +67,8 @@ public class StageSelectOperation : ISceneChange
 
     TouchScreenKeyboard keyboard;
     bool CancelKeybroad=false;
+
+    //Prevent DoubleHit
     float TimeRecord = 0;
     const float TimeWait = 0.5f;
 
@@ -167,6 +167,7 @@ public class StageSelectOperation : ISceneChange
         DarkenCam.SetActive(isOption);
     }
 
+    #region CommonOperation
     public void ArrowOperation()
     {
         foreach (GameObject i in UILeftArrow)
@@ -174,7 +175,55 @@ public class StageSelectOperation : ISceneChange
         foreach (GameObject i in UIRightArrow)
             i.SetActive(!isSceneFinished && IslandNow < IslandEnabled-1);
     }
+    public void MoveToStage()
+    {
+        if (Time.time - TimeRecord < TimeWait) return;
+        StartCoroutine(PetrifyAnimation());
+        TimeRecord = Time.time;
+    }
 
+    public void OptionStatus()
+    {
+        if (Time.time - TimeRecord < TimeWait) return;
+        isOption = !isOption;
+        CanvaManager.isOption = isOption;
+        GyroscopeManager.isFunctioning = !isOption;
+        TimeRecord = Time.time;
+    }
+
+    private IEnumerator PetrifyAnimation()
+    {
+        float progress = 0f;
+        int frame = 60;
+        float rate = 1 / (float)frame;
+        while (frame-- > 0)
+        {
+            progress += rate;
+            foreach (Image i in PetrifyImgs)
+            {
+                //i.material.EnableKeyword("_Progress");
+                i.material.SetFloat("_Progress", progress);
+            }
+            foreach (RawImage i in PetrifyRImgs)
+            {
+                //i.material.EnableKeyword("_Progress");
+                i.material.SetFloat("_Progress", progress);
+            }
+            foreach (SpriteRenderer i in PetrifySpr)
+            {
+                //i.material.EnableKeyword("_Progress");
+                i.material.SetFloat("_Progress", progress);
+            }
+            yield return new WaitForSeconds(0f);
+        }
+        SetNextScene("GameScene");
+        PlayerPrefs.SetInt("IslandNow", IslandNow);
+        SceneOut();
+        isSceneFinished = true;
+    }
+    #endregion
+
+    #region ChangeIsland
     public void ChangeIslandByButton(int chgValue)
     {
         IslandNext = Mathf.Clamp(IslandNow + chgValue, 0, IslandEnabled);
@@ -217,23 +266,9 @@ public class StageSelectOperation : ISceneChange
             TimeRecord = Time.time;
         }
     }
+    #endregion
 
-    public void MoveToStage()
-    {
-        if (Time.time - TimeRecord < TimeWait) return;
-        StartCoroutine(PetrifyAnimation());
-        TimeRecord = Time.time;
-    }
-
-    public void OptionStatus()
-    {
-        if (Time.time - TimeRecord < TimeWait) return;
-        isOption = !isOption;
-        CanvaManager.isOption = isOption;
-        GyroscopeManager.isFunctioning = !isOption;
-        TimeRecord = Time.time;
-    }
-
+    #region CamOperation
     private IEnumerator RecMainCamOperation()
     {
         Vector3 spd;
@@ -290,11 +325,9 @@ public class StageSelectOperation : ISceneChange
             yield return new WaitForSeconds(0f);
         }
     }
+    #endregion
 
-    public int CurrentIslandNum() { return IslandNow; }
-    public int EnabledtIslandNum() { return IslandEnabled; }
-    public int NextIslandNum() { return IslandNext; }
-
+    #region CustomizeStageOperation
     private void StageInfoOperation(int infoID, int chg)
     {
         CancelKeybroad = true;
@@ -369,6 +402,7 @@ public class StageSelectOperation : ISceneChange
             keyboard = null;
         }
     }
+    #endregion
 
     private IEnumerator SceneChgAnimation()
     {
@@ -389,33 +423,7 @@ public class StageSelectOperation : ISceneChange
             i.Stop();
     }
 
-    private IEnumerator PetrifyAnimation()
-    {
-        float progress=0f;
-        int frame = 60;
-        float rate = 1 / (float)frame;
-        while (frame-- > 0)
-        {
-            progress += rate;
-            foreach (Image i in PetrifyImgs)
-            {
-                //i.material.EnableKeyword("_Progress");
-                i.material.SetFloat("_Progress", progress);
-            }
-            foreach (RawImage i in PetrifyRImgs)
-            {
-                //i.material.EnableKeyword("_Progress");
-                i.material.SetFloat("_Progress", progress);
-            }
-            foreach (SpriteRenderer i in PetrifySpr)
-            {
-                //i.material.EnableKeyword("_Progress");
-                i.material.SetFloat("_Progress", progress);
-            }
-            yield return new WaitForSeconds(0f);
-        }
-        SetNextScene("GameScene");
-        SceneOut();
-        isSceneFinished = true;
-    }
+    public int CurrentIslandNum() { return IslandNow; }
+    public int EnabledtIslandNum() { return IslandEnabled; }
+    public int NextIslandNum() { return IslandNext; }
 }

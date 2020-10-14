@@ -38,8 +38,8 @@ public static class StageInfo
         };
     static readonly string[] NormEnmType = {
             "Mushroom", "TurtleShell", "Footman", "Grunt", "Footman",
-            "Grunt", "TurtleShell", "FootmanS", "Mushroom", "Grunt",
-            "Footman", "Footman", "GruntS", "FootmanS", "Bull"
+            "Grunt", "TurtleShell", "Skeleton", "Mushroom", "Grunt",
+            "Footman", "Skeleton", "GruntS", "FootmanS", "Bull"
         };
     static readonly int[] HardEnmNum = {
             10, 10, 15, 15, 15,
@@ -52,10 +52,10 @@ public static class StageInfo
     static readonly string[] HardEnmType = {
             "Slime", "Mushroom", "Slime", "TurtleShell", "Footman",
             "SpiderGhost", "Skeleton", "Grunt", "SkeletonArmed", "StoneMonster",
-            "Slime", "FreeLich", "FootmanS", "Mushroom", "SkeletonArmed",
-            "GruntS", "Footman", "FootmanS", "GruntS", "Bull",
+            "Golem", "FreeLich", "FootmanS", "Mushroom", "SkeletonArmed",
+            "GruntS", "Footman", "Golem", "GruntS", "Bull",
             "SpiderGhost", "SkeletonArmed", "FootmanS", "FreeLichS", "TurtleShell",
-            "SkeletonArmed", "GruntS", "FreeLichS", "SkeletonArmed", "Dragon"
+            "GolemS", "GruntS", "FreeLichS", "SkeletonArmed", "Dragon"
         };
 
     //Extra Stage Customization

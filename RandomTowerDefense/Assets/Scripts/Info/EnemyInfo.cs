@@ -45,11 +45,13 @@ public class EnemyAttr {
         //Stage 3
         enemyInfo.Add("FreeLichS", new EnemyAttr(5, 150, 7.5f, 1, 1));
         enemyInfo.Add("FreeLich", new EnemyAttr(3, 80, 6, 1, 0));
-        enemyInfo.Add("Skeleton", new EnemyAttr(3, 60, 9.5f, 1, 0));
+        enemyInfo.Add("GolemS", new EnemyAttr(5, 220, 7.5f, 1, 1));
+        enemyInfo.Add("Golem", new EnemyAttr(3, 180, 6, 1, 0));
         enemyInfo.Add("SkeletonArmed", new EnemyAttr(3, 120, 9, 1, 0));
         enemyInfo.Add("SpiderGhost", new EnemyAttr(3, 40, 12, 1, 0));
 
         //Stage 2
+        enemyInfo.Add("Skeleton", new EnemyAttr(3, 60, 9.5f, 1, 0));
         enemyInfo.Add("GruntS", new EnemyAttr(3, 80, 15, 1, 1));
         enemyInfo.Add("FootmanS", new EnemyAttr(3, 120, 8, 1, 1));
         enemyInfo.Add("Grunt", new EnemyAttr(2, 30, 10, 1, 0));

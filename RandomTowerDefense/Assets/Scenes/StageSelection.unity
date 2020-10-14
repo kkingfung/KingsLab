@@ -4309,7 +4309,7 @@ TextMesh:
   m_Alignment: 0
   m_TabSize: 4
   m_FontSize: 0
-  m_FontStyle: 1
+  m_FontStyle: 0
   m_RichText: 1
   m_Font: {fileID: 12800000, guid: b2e297ee5bfac574a8377ce166043881, type: 3}
   m_Color:
@@ -8777,7 +8777,7 @@ TextMesh:
   m_Alignment: 0
   m_TabSize: 4
   m_FontSize: 0
-  m_FontStyle: 1
+  m_FontStyle: 0
   m_RichText: 1
   m_Font: {fileID: 12800000, guid: b2e297ee5bfac574a8377ce166043881, type: 3}
   m_Color:
@@ -12959,7 +12959,7 @@ TextMesh:
   m_Alignment: 0
   m_TabSize: 4
   m_FontSize: 0
-  m_FontStyle: 1
+  m_FontStyle: 0
   m_RichText: 1
   m_Font: {fileID: 12800000, guid: b2e297ee5bfac574a8377ce166043881, type: 3}
   m_Color:
@@ -18311,7 +18311,7 @@ TextMesh:
   m_Alignment: 0
   m_TabSize: 4
   m_FontSize: 0
-  m_FontStyle: 1
+  m_FontStyle: 0
   m_RichText: 1
   m_Font: {fileID: 12800000, guid: b2e297ee5bfac574a8377ce166043881, type: 3}
   m_Color:
@@ -18426,7 +18426,7 @@ TextMesh:
   m_Alignment: 0
   m_TabSize: 4
   m_FontSize: 0
-  m_FontStyle: 1
+  m_FontStyle: 0
   m_RichText: 1
   m_Font: {fileID: 12800000, guid: b2e297ee5bfac574a8377ce166043881, type: 3}
   m_Color:
@@ -19218,8 +19218,8 @@ TextMesh:
   m_GameObject: {fileID: 1891750445}
   m_Text: "\n\u6226\u5834\u30B5\u30A4\u30BA\uFF1A\n\u6575\u306E\u8ECD\u56E3\u6570
     (\u500D)\uFF1A\n\u6575\u8ECD\u56E3\u306E\u898F\u6A21 (\u500D)\uFF1A\n\u6575\u306E\u5F37\u3055
-    (\u500D)\uFF1A\uFF1A\n\n\u8010\u4E45\u529B\r\uFF1A\n\u6E96\u5099\u6642\u9593
-    (\u500D)\uFF1A\n\u8CC7\u6E90\u56DE\u53CE\u7387 (\u500D)\uFF1A"
+    (\u500D)\uFF1A\n\n\u8010\u4E45\u529B\r\uFF1A\n\u6E96\u5099\u6642\u9593 (\u500D)\uFF1A\n\u8CC7\u6E90\u56DE\u53CE\u7387
+    (\u500D)\uFF1A"
   m_OffsetZ: 0
   m_CharacterSize: 34
   m_LineSpacing: 1
@@ -19227,7 +19227,7 @@ TextMesh:
   m_Alignment: 0
   m_TabSize: 4
   m_FontSize: 0
-  m_FontStyle: 1
+  m_FontStyle: 0
   m_RichText: 1
   m_Font: {fileID: 12800000, guid: b2e297ee5bfac574a8377ce166043881, type: 3}
   m_Color:
@@ -19500,7 +19500,7 @@ TextMesh:
   m_Alignment: 0
   m_TabSize: 4
   m_FontSize: 0
-  m_FontStyle: 1
+  m_FontStyle: 0
   m_RichText: 1
   m_Font: {fileID: 12800000, guid: b2e297ee5bfac574a8377ce166043881, type: 3}
   m_Color:

@@ -24,34 +24,13 @@ MonoBehaviour:
     - model: {fileID: 8926484042661615680}
       id: 0
       isStickyNote: 0
-    - model: {fileID: 8926484042661615682}
-      id: 0
-      isStickyNote: 0
     - model: {fileID: 8926484042661615702}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661615705}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661615706}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661615708}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661615725}
       id: 0
       isStickyNote: 0
     - model: {fileID: 8926484042661615710}
       id: 0
       isStickyNote: 0
     - model: {fileID: 8926484042661615648}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661615678}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661615713}
       id: 0
       isStickyNote: 0
     - model: {fileID: 8926484042661615286}
@@ -61,9 +40,6 @@ MonoBehaviour:
       id: 0
       isStickyNote: 0
     - model: {fileID: 8926484042661615645}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661615646}
       id: 0
       isStickyNote: 0
   - title: Magic
@@ -77,46 +53,13 @@ MonoBehaviour:
     - model: {fileID: 8926484042661614555}
       id: 0
       isStickyNote: 0
-    - model: {fileID: 8926484042661614556}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661614913}
-      id: 0
-      isStickyNote: 0
     - model: {fileID: 8926484042661614558}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661614595}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661614648}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661614659}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661614715}
       id: 0
       isStickyNote: 0
     - model: {fileID: 8926484042661614583}
       id: 0
       isStickyNote: 0
-    - model: {fileID: 8926484042661614689}
-      id: 0
-      isStickyNote: 0
     - model: {fileID: 8926484042661614585}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661614589}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661614591}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661614593}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661615302}
       id: 0
       isStickyNote: 0
     - model: {fileID: 8926484042661614673}
@@ -128,37 +71,10 @@ MonoBehaviour:
     - model: {fileID: 8926484042661615914}
       id: 0
       isStickyNote: 0
-    - model: {fileID: 8926484042661615904}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661615905}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661615907}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661615909}
-      id: 0
-      isStickyNote: 0
     - model: {fileID: 8926484042661614730}
       id: 0
       isStickyNote: 0
-    - model: {fileID: 8926484042661614732}
-      id: 0
-      isStickyNote: 0
     - model: {fileID: 8926484042661614752}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661614763}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661614773}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661614784}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661614787}
       id: 0
       isStickyNote: 0
     - model: {fileID: 8926484042661614800}
@@ -10120,7 +10036,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d78581a96eae8bf4398c282eb0b098bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Parent: {fileID: 0}
+  m_Parent: {fileID: 114350483966674976}
   m_Children: []
   m_UIPosition: {x: 0, y: 0}
   m_UICollapsed: 1
@@ -12713,7 +12629,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d78581a96eae8bf4398c282eb0b098bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Parent: {fileID: 0}
+  m_Parent: {fileID: 114350483966674976}
   m_Children: []
   m_UIPosition: {x: 0, y: 0}
   m_UICollapsed: 1
@@ -14275,7 +14191,7 @@ MonoBehaviour:
   - {fileID: 8926484042661616082}
   m_ExposedName: Lifetime A
   m_Exposed: 1
-  m_Order: 11
+  m_Order: 6
   m_Category: 
   m_Min:
     m_Type:
@@ -14354,7 +14270,7 @@ MonoBehaviour:
   - {fileID: 8926484042661616084}
   m_ExposedName: Lifetime B
   m_Exposed: 1
-  m_Order: 12
+  m_Order: 7
   m_Category: 
   m_Min:
     m_Type:
@@ -14433,7 +14349,7 @@ MonoBehaviour:
   - {fileID: 8926484042661616086}
   m_ExposedName: Color over life
   m_Exposed: 1
-  m_Order: 13
+  m_Order: 8
   m_Category: 
   m_Min:
     m_Type:
@@ -14510,7 +14426,7 @@ MonoBehaviour:
   - {fileID: 8926484042661616088}
   m_ExposedName: Particle Size
   m_Exposed: 1
-  m_Order: 14
+  m_Order: 9
   m_Category: 
   m_Min:
     m_Type:
@@ -14587,7 +14503,7 @@ MonoBehaviour:
   - {fileID: 8926484042661616090}
   m_ExposedName: Random speed
   m_Exposed: 1
-  m_Order: 15
+  m_Order: 10
   m_Category: 
   m_Min:
     m_Type:
@@ -14666,7 +14582,7 @@ MonoBehaviour:
   - {fileID: 8926484042661616092}
   m_ExposedName: Tangent speed
   m_Exposed: 1
-  m_Order: 16
+  m_Order: 11
   m_Category: 
   m_Min:
     m_Type:
@@ -14745,7 +14661,7 @@ MonoBehaviour:
   - {fileID: 8926484042661616094}
   m_ExposedName: Portal radius
   m_Exposed: 1
-  m_Order: 17
+  m_Order: 12
   m_Category: 
   m_Min:
     m_Type:
@@ -17215,7 +17131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d78581a96eae8bf4398c282eb0b098bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Parent: {fileID: 0}
+  m_Parent: {fileID: 114350483966674976}
   m_Children: []
   m_UIPosition: {x: 0, y: 0}
   m_UICollapsed: 1
@@ -18323,7 +18239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d78581a96eae8bf4398c282eb0b098bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Parent: {fileID: 0}
+  m_Parent: {fileID: 114350483966674976}
   m_Children: []
   m_UIPosition: {x: 0, y: 0}
   m_UICollapsed: 1

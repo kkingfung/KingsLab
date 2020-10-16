@@ -4,15 +4,21 @@ using UnityEngine;
 
 public class ResourceManager : MonoBehaviour
 {
+    private readonly int StartingMaterialNum = 300;
+
+    private int CurrentMaterial;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        CurrentMaterial = StartingMaterialNum;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public bool ChangeMaterial(int Chg) {
+        if (Chg < 0 && CurrentMaterial < Chg) return false;
+        CurrentMaterial += Chg;
+        return true;
     }
+
+    public int GetCurrMaterial() { return CurrentMaterial; }
 }

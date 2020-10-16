@@ -7,6 +7,13 @@ using UnityEngine.Rendering;
 
 public class InGameOperation : ISceneChange
 {
+    public enum ScreenShownID {
+        SSIDArena = 0,
+        SSIDTopLeft = 1,
+        SSIDTop = 2,
+        SSIDTopRight = 3,
+    }
+
     //Camera Start/Stay/End Point
     [Header("MainCamera Settings")]
     public GameObject MainCam;
@@ -18,8 +25,6 @@ public class InGameOperation : ISceneChange
 
     [Header("Button Settings")]
     public List<Button> OptionButton;
-    public List<GameObject> OtherButtonH;
-    public List<GameObject> OtherButtonV;
 
     [Header("Arrow Settings")]
     public List<GameObject> UIUpArrow;
@@ -33,10 +38,6 @@ public class InGameOperation : ISceneChange
     public List<SpriteRenderer> PetrifySpr;
 
     [Header("Other Settings")]
-    public List<TextMesh> StageCustomText;
-    public List<TextMesh> StageCustomTextDirect;
-    public List<Slider> zoomSlider;
-
     public GameObject LandscapeFadeImg;
     public GameObject PortraitFadeImg;
 
@@ -45,12 +46,13 @@ public class InGameOperation : ISceneChange
 
     public bool isDebugging;//For ingame Debugger
     public bool isTutorial;//For 1st Stage Only
-    public VolumeProfile volumeProfile;
+    //public VolumeProfile volumeProfile; // For Spare
 
     int IslandNow = 0;//For changing colour of Sea/Sky
     int IslandEnabled = 0;//Check when win
 
-    int currScreenShown = 0;//0:Main, 1:Top-Left, 2:Top, 3:Top-Right
+    [HideInInspector]
+    public int currScreenShown = 0;//0:Main, 1:Top-Left, 2:Top, 3:Top-Right
 
     //Manager
     AudioManager AudioManager;
@@ -121,39 +123,42 @@ public class InGameOperation : ISceneChange
         foreach (Button i in OptionButton)
             i.interactable = !isOption;
 
-        foreach (GameObject i in OtherButtonH)
-        {
-            i.SetActive(!isOption && !isSceneFinished && (Screen.width > Screen.height));
-        }
-
-        foreach (GameObject i in OtherButtonV)
-        {
-            i.SetActive(!isOption && !isSceneFinished && (Screen.width <= Screen.height));
-        }
-
-        foreach (Slider i in zoomSlider)
-        {
-            i.interactable = !isOption;
-        }
-
         ArrowOperation();
     }
 
     #region CommonOperation
     public void ArrowOperation()
     {
-        switch (currScreenShown)
+        //0:Main, 1:Top-Left, 2:Top, 3:Top-Right
+        switch ((ScreenShownID)currScreenShown)
         {
-            case 0:
+            case ScreenShownID.SSIDArena:
+                foreach (GameObject i in UIUpArrow) i.SetActive(true);
+                foreach (GameObject i in UIDownArrow) i.SetActive(false);
+                foreach (GameObject i in UILeftArrow) i.SetActive(false);
+                foreach (GameObject i in UIRightArrow) i.SetActive(false);
                 break;
-            case 1:
+            case ScreenShownID.SSIDTopLeft:
+                foreach (GameObject i in UIUpArrow) i.SetActive(false);
+                foreach (GameObject i in UIDownArrow) i.SetActive(true);
+                foreach (GameObject i in UILeftArrow) i.SetActive(false);
+                foreach (GameObject i in UIRightArrow) i.SetActive(true);
                 break;
-            case 2:
+            case ScreenShownID.SSIDTop:
+                foreach (GameObject i in UIUpArrow) i.SetActive(false);
+                foreach (GameObject i in UIDownArrow) i.SetActive(true);
+                foreach (GameObject i in UILeftArrow) i.SetActive(true);
+                foreach (GameObject i in UIRightArrow) i.SetActive(true);
                 break;
-            case 3:
+            case ScreenShownID.SSIDTopRight:
+                foreach (GameObject i in UIUpArrow) i.SetActive(false);
+                foreach (GameObject i in UIDownArrow) i.SetActive(true);
+                foreach (GameObject i in UILeftArrow) i.SetActive(true);
+                foreach (GameObject i in UIRightArrow) i.SetActive(false);
                 break;
         }
     }
+
     public void MoveToStage(int SceneID)
     {
         if (Time.time - TimeRecord < TimeWait) return;

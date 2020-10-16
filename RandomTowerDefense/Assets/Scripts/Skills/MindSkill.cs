@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tower : MonoBehaviour
+public class MindSkill : MonoBehaviour
 {
+    //TODO: Ability Ratio
     // Start is called before the first frame update
     void Start()
     {
@@ -14,5 +15,9 @@ public class Tower : MonoBehaviour
     void Update()
     {
         
+    }
+    void ResetforPlayer()
+    {
+        GameObject.FindObjectOfType<PlayerManager>().isSkillActive = false;
     }
 }

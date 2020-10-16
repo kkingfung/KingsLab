@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SummonSkill : MonoBehaviour
 {
+    //TODO: Ability Ratio
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,5 +16,9 @@ public class SummonSkill : MonoBehaviour
     void Update()
     {
         
+    }
+
+    void ResetforPlayer() {
+        GameObject.FindObjectOfType<PlayerManager>().isSkillActive = false;
     }
 }

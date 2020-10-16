@@ -20,11 +20,16 @@ public class ISceneChange : MonoBehaviour
     [HideInInspector]
     public int toDrag;// 0: No Action, 1: Left Dir, 2: Right Dir
 
+    [HideInInspector]
+    public bool OrientationLand;
+    public bool OrientationLock;
+
     protected void Start()
     {
         isSceneFinished = false;
         toDrag = 0;
 
+        OrientationLock = false;
         fadeQuad = FindObjectsOfType<FadeEffect>();
         if (fadeQuad.Length > 0) {
             foreach (FadeEffect i in fadeQuad)
@@ -51,6 +56,7 @@ public class ISceneChange : MonoBehaviour
         }
     }
     protected void SceneOut() {
+        OrientationLock = true;
         if (FadeOutDelegate != null)
         {
             FadeOutDelegate();
@@ -59,10 +65,13 @@ public class ISceneChange : MonoBehaviour
 
     protected void Update()
     {
+        if(!OrientationLock)
+        OrientationLand = Screen.width > Screen.height;
+
         foreach (GameObject i in LandscapeObjs)
-            i.SetActive(Screen.width > Screen.height);
+            i.SetActive(OrientationLand);
         foreach (GameObject i in PortraitObjs)
-            i.SetActive(Screen.width <= Screen.height);
+            i.SetActive(!OrientationLand);
     }
 
     protected void SetNextScene(string sceneName) {

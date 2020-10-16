@@ -868,7 +868,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 102482712}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -500, z: 0.3}
+  m_LocalPosition: {x: 0, y: -500, z: 0.31}
   m_LocalScale: {x: 0.033808284, y: 0.05634714, z: 0.5634714}
   m_Children: []
   m_Father: {fileID: 0}
@@ -3827,7 +3827,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1073741824
+    m_Bits: 1207959552
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -3961,10 +3961,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98eed839a4822604e95df70319bffcb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ClickPrefab: {fileID: 4650432991836946194, guid: 40b1dc16cbf53a64b928dd91b5454d85, type: 3}
   Buttons: []
   LBMTest: {fileID: 0}
-  refCamL: {fileID: 0}
-  refCamP: {fileID: 0}
+  refCamL: {fileID: 1225335766}
+  refCamP: {fileID: 654067875}
+  refCamLSub: {fileID: 912783844648849575}
+  refCamPSub: {fileID: 912783846233839672}
 --- !u!4 &675448557
 Transform:
   m_ObjectHideFlags: 0
@@ -5230,6 +5233,8 @@ MonoBehaviour:
   PortraitObjs:
   - {fileID: 1537103406}
   toDrag: 0
+  OrientationLand: 0
+  OrientationLock: 0
   DarkenCam: {fileID: 1537512924}
   DarkenCamSub: {fileID: 1849355739}
   RightCam: {fileID: 1285845743}
@@ -6644,7 +6649,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1211553611}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -600, z: 0.3}
+  m_LocalPosition: {x: 0, y: -600, z: 0.31}
   m_LocalScale: {x: 0.12, y: 0.075, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -7018,7 +7023,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1073741824
+    m_Bits: 1207959552
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -8367,7 +8372,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1427594117}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -500, z: 0.3}
+  m_LocalPosition: {x: 0, y: -500, z: 0.31}
   m_LocalScale: {x: 0.033808284, y: 0.05634714, z: 0.5634714}
   m_Children: []
   m_Father: {fileID: 0}
@@ -9296,7 +9301,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1537103406}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -500, z: 0.3}
+  m_LocalPosition: {x: 0, y: -500, z: 0.31}
   m_LocalScale: {x: 0.075, y: 0.13, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -9946,7 +9951,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1644270486}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -600, z: 0.3}
+  m_LocalPosition: {x: 0, y: -600, z: 0.31}
   m_LocalScale: {x: 0.06, y: 0.035, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -10028,7 +10033,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1649132454}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -600, z: 0.3}
+  m_LocalPosition: {x: 0, y: -600, z: 0.31}
   m_LocalScale: {x: 0.06, y: 0.035, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -13812,7 +13817,7 @@ GameObject:
   - component: {fileID: 912783844648849573}
   m_Layer: 0
   m_Name: LandscapeCamera
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -13932,7 +13937,7 @@ GameObject:
   - component: {fileID: 912783846233839678}
   m_Layer: 0
   m_Name: PortraitCamera
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

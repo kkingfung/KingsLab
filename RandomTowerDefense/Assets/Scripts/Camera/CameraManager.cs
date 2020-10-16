@@ -17,7 +17,7 @@ public class CameraManager : MonoBehaviour
 
     public List<Camera> GyroCamGp;
 
-    public List<Slider> uiSlider;
+    public List<Slider> zoomSlider;
 
     [HideInInspector]
     public bool isOpening;
@@ -26,19 +26,21 @@ public class CameraManager : MonoBehaviour
 
     GyroscopeManager GyroscopeManager;
     Vector3[] baseRotation;
+    ISceneChange SceneManager;
 
     private void OnEnable()
     {
         isOpening = true;
         isGyroEnabled = false;
         baseRotation = new Vector3[GyroCamGp.Count];
+        SceneManager = FindObjectOfType<ISceneChange>();
 
         for (int i = 0; i < GyroCamGp.Count; ++i) 
         {
             baseRotation[i] = GyroCamGp[i].transform.eulerAngles;
         }
 
-        foreach (Slider i in uiSlider)
+        foreach (Slider i in zoomSlider)
             i.value = PlayerPrefs.GetFloat("zoomRate");
 
         Zoom(PlayerPrefs.GetFloat("zoomRate"));
@@ -64,19 +66,25 @@ public class CameraManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         //Landscape
         foreach (Camera i in LandscapeCam_Main)
-            i.enabled = isOpening && (Screen.width > Screen.height);
+            i.enabled = isOpening && (SceneManager.OrientationLand);
         foreach (Camera i in LandscapeCam_Sub)
-            i.enabled = !isOpening && (Screen.width > Screen.height);
+            i.enabled = !isOpening && (SceneManager.OrientationLand);
 
         //Portrait
         foreach (Camera i in PortraitCam_Main)
-            i.enabled = isOpening && (Screen.width <= Screen.height);
+            i.enabled = isOpening && (!SceneManager.OrientationLand);
         foreach (Camera i in PortraitCam_Sub)
-            i.enabled = !isOpening && (Screen.width <= Screen.height);
+            i.enabled = !isOpening && (!SceneManager.OrientationLand);
 
         //GyroOperation
+        foreach (Slider i in zoomSlider)
+        {
+            i.interactable = !SceneManager.GetOptionStatus();
+        }
+
         if (GyroCamGp.Count > 0)
         {
             if (GyroscopeManager && GyroscopeManager.isFunctioning)
@@ -96,7 +104,7 @@ public class CameraManager : MonoBehaviour
             {
                 i.fieldOfView = Mathf.Clamp(defaultFOV - zoomRate * (defaultFOV - minFOV), minFOV, defaultFOV);
             }
-            foreach (Slider i in uiSlider)
+            foreach (Slider i in zoomSlider)
                 i.value = zoomRate;
         }
 

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class FireSkill : MonoBehaviour
 {
+    //TODO: Ability Ratio
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,5 +16,9 @@ public class FireSkill : MonoBehaviour
     void Update()
     {
         
+    }
+    void ResetforPlayer()
+    {
+        GameObject.FindObjectOfType<PlayerManager>().isSkillActive = false;
     }
 }

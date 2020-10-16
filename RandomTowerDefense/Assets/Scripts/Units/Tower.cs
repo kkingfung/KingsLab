@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SupportSkill : MonoBehaviour
+public class Tower : MonoBehaviour
 {
+    //TODO: Ability Ratio
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,5 +16,10 @@ public class SupportSkill : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public bool detectEnemy() {
+
+        return false;
     }
 }

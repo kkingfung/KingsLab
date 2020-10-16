@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class IceSkill : MonoBehaviour
 {
+    //TODO: Ability Ratio
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,5 +16,9 @@ public class IceSkill : MonoBehaviour
     void Update()
     {
         
+    }
+    void ResetforPlayer()
+    {
+        GameObject.FindObjectOfType<PlayerManager>().isSkillActive = false;
     }
 }

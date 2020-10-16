@@ -15,28 +15,32 @@ public class CanvaManager : MonoBehaviour
     public bool isOpening;
     [HideInInspector]
     public bool isOption;
+
+    ISceneChange SceneManager;
+
     // Use this for initialization
     void Start()
     {
         isOpening = true;
+        SceneManager = FindObjectOfType<ISceneChange>();
     }
 
     // Update is called once per frame
     void Update()
     {
         foreach (GameObject i in LandscapeCanva_Main)
-            i.SetActive(isOpening && (Screen.width > Screen.height));
+            i.SetActive(isOpening && (SceneManager.OrientationLand));
         foreach (GameObject i in LandscapeCanva_Sub)
-            i.SetActive(!isOpening && (Screen.width > Screen.height));
+            i.SetActive(!isOpening && (SceneManager.OrientationLand));
 
         foreach (GameObject i in PortraitCanva_Main)
-            i.SetActive(isOpening && (Screen.width <= Screen.height));
+            i.SetActive(isOpening && (!SceneManager.OrientationLand));
         foreach (GameObject i in PortraitCanva_Sub)
-            i.SetActive(!isOpening && (Screen.width <= Screen.height));
+            i.SetActive(!isOpening && (!SceneManager.OrientationLand));
 
         foreach (GameObject i in LandscapeCanva_Opt)
-            i.SetActive(isOption && (Screen.width > Screen.height));
+            i.SetActive(isOption && (SceneManager.OrientationLand));
         foreach (GameObject i in PortraitCanva_Opt)
-            i.SetActive(isOption && (Screen.width <= Screen.height));
+            i.SetActive(isOption && (SceneManager.OrientationLand));
     }
 }

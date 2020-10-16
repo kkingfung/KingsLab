@@ -4039,7 +4039,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4026533687
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -4215,7 +4215,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4026533687
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -4649,7 +4649,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4026533687
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -11580,10 +11580,7 @@ VFXRenderer:
   m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  m_Materials: []
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -11612,7 +11609,7 @@ VisualEffect:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1118434480}
   m_Enabled: 1
-  m_Asset: {fileID: 8926484042661614526, guid: 09b81a171ffd2bb40841544fdbe1476a, type: 3}
+  m_Asset: {fileID: 0}
   m_InitialEventName: OnPlay
   m_InitialEventNameOverriden: 0
   m_StartSeed: 0
@@ -16996,6 +16993,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98eed839a4822604e95df70319bffcb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ClickPrefab: {fileID: 4650432991836946194, guid: 40b1dc16cbf53a64b928dd91b5454d85, type: 3}
   Buttons:
   - {fileID: 233198102}
   - {fileID: 2103673085}
@@ -17019,8 +17017,8 @@ MonoBehaviour:
   - {fileID: 1073579306}
   - {fileID: 458357438}
   LBMTest: {fileID: 0}
-  refCamL: {fileID: 1566493579}
-  refCamP: {fileID: 894084725}
+  refCamL: {fileID: 1699173587}
+  refCamP: {fileID: 1699173587}
 --- !u!4 &1644384250
 Transform:
   m_ObjectHideFlags: 0
@@ -17467,7 +17465,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 2147483680
+    m_Bits: 2281701408
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0

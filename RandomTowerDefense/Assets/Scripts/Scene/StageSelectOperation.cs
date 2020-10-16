@@ -27,8 +27,6 @@ public class StageSelectOperation : ISceneChange
 
     [Header("Button Settings")]
     public List<Button> OptionButton;
-    public List<GameObject> OtherButtonH;
-    public List<GameObject> OtherButtonV;
 
     [Header("Arrow Settings")]
     public List<GameObject> UILeftArrow;
@@ -43,7 +41,6 @@ public class StageSelectOperation : ISceneChange
     public List<TextMesh> StageCustomText;
     public List<TextMesh> StageCustomTextDirect;
     public List<VisualEffect> SceneChgPS;
-    public List<Slider> zoomSlider;
 
     public GameObject LandscapeFadeImg;
     public GameObject PortraitFadeImg;
@@ -143,21 +140,6 @@ public class StageSelectOperation : ISceneChange
 
         foreach (Button i in OptionButton)
             i.interactable = !isOption;
-
-        foreach (GameObject i in OtherButtonH)
-        {
-            i.SetActive(!isOption && !isSceneFinished && IslandNow == IslandNum - 1 && IslandNext == IslandNum - 1 && (Screen.width > Screen.height));
-        }
-
-        foreach (GameObject i in OtherButtonV)
-        {
-            i.SetActive(!isOption && !isSceneFinished && IslandNow == IslandNum - 1 && IslandNext == IslandNum - 1 && (Screen.width <= Screen.height));
-        }
-
-        foreach (Slider i in zoomSlider)
-        {
-            i.interactable = !isOption;
-        }
 
         ArrowOperation();
 

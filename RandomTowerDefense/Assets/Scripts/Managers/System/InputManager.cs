@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Unity.Entities;
 using UnityEngine;
 
 public class MyMobileInput
@@ -20,6 +21,7 @@ public class InputManager : MonoBehaviour
     readonly float tapStayTime = 2f;
     readonly float dragDiff = 5.0f;
 
+    public GameObject ClickPrefab;
     //TouchButton
     public List<GameObject> Buttons;
 
@@ -32,7 +34,7 @@ public class InputManager : MonoBehaviour
     MyMobileInput mobileInput;
     bool useTouch;
     bool isDragging;
-    Vector3 posDragging;
+    Vector2 posDragging;
 
     //Common Variables
     PlayerManager playerManager;
@@ -41,6 +43,8 @@ public class InputManager : MonoBehaviour
 
     public Camera refCamL;
     public Camera refCamP;
+    public Camera refCamLSub;
+    public Camera refCamPSub;
 
     void Awake()
     {
@@ -65,6 +69,15 @@ public class InputManager : MonoBehaviour
         else UpdateMouseInfo();
         if (LBMTest) LBMTesting(); //Only for Loading Scene
         if (Buttons.Count > 0) RaycastTest();
+
+        //ClickEffect
+        if (ClickPrefab != null)
+        {
+            if (refCamL != null)
+                ClickEffect((Screen.width > Screen.height) ? refCamL : refCamP);
+            if (refCamLSub != null)
+                ClickEffect((Screen.width > Screen.height) ? refCamLSub : refCamPSub);
+        }
     }
 
     void UpdateMouseInfo()
@@ -111,7 +124,15 @@ public class InputManager : MonoBehaviour
             {
                 //TODO: Use Skills / Sell Tower
                 case TouchPhase.Began:
-                    if (touchId == 0) timeRecord = Time.time;
+                    if (touchId == 0)
+                    {
+                        timeRecord = Time.time;
+                        if (playerManager && playerManager.isSkillActive == false)
+                        {
+                            BeginDrag();
+                            playerManager.CheckStock(posDragging);
+                        }
+                    }
                     break;
                 case TouchPhase.Moved:
                     if (TouchCount == 2) HandleZoom();
@@ -119,8 +140,8 @@ public class InputManager : MonoBehaviour
                 case TouchPhase.Ended:
                     if (touchId == 0)
                     {
-                        if (playerManager && playerManager.isSkillActive)
-                            playerManager.CheckSkill(touch.position);
+                        if (playerManager && playerManager.isSkillActive==false && isDragging)
+                            playerManager.UseStock(posDragging);
                     }
                     if (isDragging && touchId == 0)
                     {
@@ -246,6 +267,31 @@ public class InputManager : MonoBehaviour
             {
                 if (hit.transform.GetComponent<RaycastFunction>())
                     hit.transform.GetComponent<RaycastFunction>().ActionFunc();
+            }
+        }
+    }
+
+    private void ClickEffect(Camera TargetCam)
+    {
+        if (TargetCam == null) return;
+        if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+        {
+            GameObject tmpObj = Instantiate(ClickPrefab, TargetCam.ScreenToWorldPoint(
+                new Vector3(Input.mousePosition.x, Input.mousePosition.y, TargetCam.transform.forward.z * (TargetCam.nearClipPlane + 0.001f))), Quaternion.identity);
+
+            DestroyObject(tmpObj, 0.3f);
+        }
+
+        if (Input.touchCount > 0)
+        {
+            foreach (Touch t in Input.touches)
+            {
+                if (t.phase == TouchPhase.Began)
+                {
+                    GameObject tmpObj = Instantiate(ClickPrefab, TargetCam.ScreenToWorldPoint(
+                        new Vector3(t.position.x, t.position.y, TargetCam.transform.forward.z * TargetCam.nearClipPlane + 0.001f)), Quaternion.identity);
+                    DestroyObject(tmpObj, 0.3f);
+                }
             }
         }
     }

@@ -1,12 +1,204 @@
 fileFormatVersion: 2
 guid: ef4dd344f239bae40b7f4c3681c32098
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: 6725209725524002220
+    second: FireBall02_0
+  - first:
+      213: 6663784342858414518
+    second: FireBall02_1
+  - first:
+      213: 9127234952662813252
+    second: FireBall02_2
+  - first:
+      213: 4637291440883504699
+    second: FireBall02_3
+  - first:
+      213: -5268653872641585830
+    second: FireBall02_4
+  - first:
+      213: 6477661956401104866
+    second: FireBall02_5
+  - first:
+      213: -1869140130076376764
+    second: FireBall02_6
+  - first:
+      213: -2810613071574889005
+    second: FireBall02_7
+  - first:
+      213: -2172508710355356576
+    second: FireBall02_8
+  - first:
+      213: -3710036983919190732
+    second: FireBall02_9
+  - first:
+      213: 5747925410525112725
+    second: FireBall02_10
+  - first:
+      213: -5181073365836499261
+    second: FireBall02_11
+  - first:
+      213: 316606497482870100
+    second: FireBall02_12
+  - first:
+      213: 8344373437685937926
+    second: FireBall02_13
+  - first:
+      213: 2191031340831155588
+    second: FireBall02_14
+  - first:
+      213: -127263694997718253
+    second: FireBall02_15
+  - first:
+      213: 9103002890824956829
+    second: FireBall02_16
+  - first:
+      213: 6411587713560467593
+    second: FireBall02_17
+  - first:
+      213: -7058846313638059538
+    second: FireBall02_18
+  - first:
+      213: -2727425375511742515
+    second: FireBall02_19
+  - first:
+      213: -7066373327754887769
+    second: FireBall02_20
+  - first:
+      213: -6432735578015212830
+    second: FireBall02_21
+  - first:
+      213: -4453696746321376888
+    second: FireBall02_22
+  - first:
+      213: -8838369846280324104
+    second: FireBall02_23
+  - first:
+      213: -2181169241276403904
+    second: FireBall02_24
+  - first:
+      213: 415214288973034905
+    second: FireBall02_25
+  - first:
+      213: 6566910516108434649
+    second: FireBall02_26
+  - first:
+      213: -5753885746435196362
+    second: FireBall02_27
+  - first:
+      213: 7700388927194324752
+    second: FireBall02_28
+  - first:
+      213: 6541954098707972020
+    second: FireBall02_29
+  - first:
+      213: 179624481168990114
+    second: FireBall02_30
+  - first:
+      213: -2102994164263607545
+    second: FireBall02_31
+  - first:
+      213: 8622872139694612040
+    second: FireBall02_32
+  - first:
+      213: 858790079907058860
+    second: FireBall02_33
+  - first:
+      213: 2589228500694517498
+    second: FireBall02_34
+  - first:
+      213: -6118050179323427411
+    second: FireBall02_35
+  - first:
+      213: 2723691816646788901
+    second: FireBall02_36
+  - first:
+      213: 8589543614221740829
+    second: FireBall02_37
+  - first:
+      213: 3214631165514919292
+    second: FireBall02_38
+  - first:
+      213: 1114507103172057311
+    second: FireBall02_39
+  - first:
+      213: -7116004937535446921
+    second: FireBall02_40
+  - first:
+      213: -7122341703816103655
+    second: FireBall02_41
+  - first:
+      213: -6050551417928938185
+    second: FireBall02_42
+  - first:
+      213: 1704264060425102231
+    second: FireBall02_43
+  - first:
+      213: -5540606293171213959
+    second: FireBall02_44
+  - first:
+      213: 8289431737899834567
+    second: FireBall02_45
+  - first:
+      213: -4622458262985212975
+    second: FireBall02_46
+  - first:
+      213: -60089886098116828
+    second: FireBall02_47
+  - first:
+      213: 5761166145783128907
+    second: FireBall02_48
+  - first:
+      213: 6448741477072968530
+    second: FireBall02_49
+  - first:
+      213: 6475429787543173959
+    second: FireBall02_50
+  - first:
+      213: 2447056790064931398
+    second: FireBall02_51
+  - first:
+      213: 7289016280392670886
+    second: FireBall02_52
+  - first:
+      213: 3862573125068846123
+    second: FireBall02_53
+  - first:
+      213: -7320917630336899582
+    second: FireBall02_54
+  - first:
+      213: -1653522518389180086
+    second: FireBall02_55
+  - first:
+      213: -2525193093682111645
+    second: FireBall02_56
+  - first:
+      213: 1956234204120472597
+    second: FireBall02_57
+  - first:
+      213: 6358030557056481856
+    second: FireBall02_58
+  - first:
+      213: 4160471574801200114
+    second: FireBall02_59
+  - first:
+      213: 1587806261833073152
+    second: FireBall02_60
+  - first:
+      213: 8480503040420307292
+    second: FireBall02_61
+  - first:
+      213: 5224443486759812371
+    second: FireBall02_62
+  - first:
+      213: -6261268918707627715
+    second: FireBall02_63
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -35,13 +227,13 @@ TextureImporter:
     filterMode: -1
     aniso: -1
     mipBias: -100
-    wrapU: -1
-    wrapV: -1
+    wrapU: 1
+    wrapV: 1
     wrapW: -1
-  nPOTScale: 1
+  nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 0
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -50,9 +242,9 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
-  alphaIsTransparency: 0
+  alphaIsTransparency: 1
   spriteTessellationDetail: -1
-  textureType: 0
+  textureType: 8
   textureShape: 1
   singleChannelComponent: 0
   maxTextureSizeSet: 0
@@ -73,13 +265,1381 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: FireBall02_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2488.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca54cd91d9eb45d50800000000000000
+      internalID: 6725209725524002220
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_1
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 2488.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b9b2e7bd848a7c50800000000000000
+      internalID: 6663784342858414518
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_2
+      rect:
+        serializedVersion: 2
+        x: 710
+        y: 2488.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 44a0ffec4d37aae70800000000000000
+      internalID: 9127234952662813252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_3
+      rect:
+        serializedVersion: 2
+        x: 1065
+        y: 2488.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b3612ddfef7fa5040800000000000000
+      internalID: 4637291440883504699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_4
+      rect:
+        serializedVersion: 2
+        x: 1420
+        y: 2488.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a5d46b4a73bf1e6b0800000000000000
+      internalID: -5268653872641585830
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_5
+      rect:
+        serializedVersion: 2
+        x: 1775
+        y: 2488.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2e7895eaa3745e950800000000000000
+      internalID: 6477661956401104866
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_6
+      rect:
+        serializedVersion: 2
+        x: 2130
+        y: 2488.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 441ce5f64fa7f06e0800000000000000
+      internalID: -1869140130076376764
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_7
+      rect:
+        serializedVersion: 2
+        x: 2485
+        y: 2488.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3dd85bb7d42bef8d0800000000000000
+      internalID: -2810613071574889005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2133.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 064b3df96d2b9d1e0800000000000000
+      internalID: -2172508710355356576
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_9
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 2133.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43d5fed050d438cc0800000000000000
+      internalID: -3710036983919190732
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_10
+      rect:
+        serializedVersion: 2
+        x: 710
+        y: 2133.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5996ac105bbb4cf40800000000000000
+      internalID: 5747925410525112725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_11
+      rect:
+        serializedVersion: 2
+        x: 1065
+        y: 2133.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c6f31a69312918b0800000000000000
+      internalID: -5181073365836499261
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_12
+      rect:
+        serializedVersion: 2
+        x: 1420
+        y: 2133.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45d0c089eefc46400800000000000000
+      internalID: 316606497482870100
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_13
+      rect:
+        serializedVersion: 2
+        x: 1775
+        y: 2133.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 607b9726e6b2dc370800000000000000
+      internalID: 8344373437685937926
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_14
+      rect:
+        serializedVersion: 2
+        x: 2130
+        y: 2133.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4852df9556b186e10800000000000000
+      internalID: 2191031340831155588
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_15
+      rect:
+        serializedVersion: 2
+        x: 2485
+        y: 2133.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31b7bdaf75edb3ef0800000000000000
+      internalID: -127263694997718253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1778.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d9bb9f046ec545e70800000000000000
+      internalID: 9103002890824956829
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_17
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 1778.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 988d7013e098af850800000000000000
+      internalID: 6411587713560467593
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_18
+      rect:
+        serializedVersion: 2
+        x: 710
+        y: 1778.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee127875da0f90e90800000000000000
+      internalID: -7058846313638059538
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_19
+      rect:
+        serializedVersion: 2
+        x: 1065
+        y: 1778.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dc77c3d421d362ad0800000000000000
+      internalID: -2727425375511742515
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_20
+      rect:
+        serializedVersion: 2
+        x: 1420
+        y: 1778.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7adffdcc5e23fed90800000000000000
+      internalID: -7066373327754887769
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_21
+      rect:
+        serializedVersion: 2
+        x: 1775
+        y: 1778.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ead26ae2155ab6a0800000000000000
+      internalID: -6432735578015212830
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_22
+      rect:
+        serializedVersion: 2
+        x: 2130
+        y: 1778.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 889833ae76a4132c0800000000000000
+      internalID: -4453696746321376888
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_23
+      rect:
+        serializedVersion: 2
+        x: 2485
+        y: 1778.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8fbffe6d37dc75580800000000000000
+      internalID: -8838369846280324104
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_24
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1423.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04f26b2a12eeab1e0800000000000000
+      internalID: -2181169241276403904
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_25
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 1423.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99577e7223323c500800000000000000
+      internalID: 415214288973034905
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_26
+      rect:
+        serializedVersion: 2
+        x: 710
+        y: 1423.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9dc9b68425a522b50800000000000000
+      internalID: 6566910516108434649
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_27
+      rect:
+        serializedVersion: 2
+        x: 1065
+        y: 1423.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 63afb8526671620b0800000000000000
+      internalID: -5753885746435196362
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_28
+      rect:
+        serializedVersion: 2
+        x: 1420
+        y: 1423.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 01fd4cd4ee64dda60800000000000000
+      internalID: 7700388927194324752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_29
+      rect:
+        serializedVersion: 2
+        x: 1775
+        y: 1423.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4bf366e8790b9ca50800000000000000
+      internalID: 6541954098707972020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_30
+      rect:
+        serializedVersion: 2
+        x: 2130
+        y: 1423.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2af9a0193872e7200800000000000000
+      internalID: 179624481168990114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_31
+      rect:
+        serializedVersion: 2
+        x: 2485
+        y: 1423.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 703295223f9a0d2e0800000000000000
+      internalID: -2102994164263607545
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_32
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1068.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 84e1c1e66889aa770800000000000000
+      internalID: 8622872139694612040
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_33
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 1068.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca45d7117090beb00800000000000000
+      internalID: 858790079907058860
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_34
+      rect:
+        serializedVersion: 2
+        x: 710
+        y: 1068.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: af6c6326a99cee320800000000000000
+      internalID: 2589228500694517498
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_35
+      rect:
+        serializedVersion: 2
+        x: 1065
+        y: 1068.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da58967d6c1581ba0800000000000000
+      internalID: -6118050179323427411
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_36
+      rect:
+        serializedVersion: 2
+        x: 1420
+        y: 1068.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 527ced8c64f7cc520800000000000000
+      internalID: 2723691816646788901
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_37
+      rect:
+        serializedVersion: 2
+        x: 1775
+        y: 1068.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d1b69646860343770800000000000000
+      internalID: 8589543614221740829
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_38
+      rect:
+        serializedVersion: 2
+        x: 2130
+        y: 1068.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c7daa60630aac9c20800000000000000
+      internalID: 3214631165514919292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_39
+      rect:
+        serializedVersion: 2
+        x: 2485
+        y: 1068.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fd858303e46877f00800000000000000
+      internalID: 1114507103172057311
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_40
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 713.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7702646263fde3d90800000000000000
+      internalID: -7116004937535446921
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_41
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 713.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9193717c4fb582d90800000000000000
+      internalID: -7122341703816103655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_42
+      rect:
+        serializedVersion: 2
+        x: 710
+        y: 713.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 73d0c17ea8f180ca0800000000000000
+      internalID: -6050551417928938185
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_43
+      rect:
+        serializedVersion: 2
+        x: 1065
+        y: 713.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7936a152223c6a710800000000000000
+      internalID: 1704264060425102231
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_44
+      rect:
+        serializedVersion: 2
+        x: 1420
+        y: 713.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9796c378eefcb13b0800000000000000
+      internalID: -5540606293171213959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_45
+      rect:
+        serializedVersion: 2
+        x: 1775
+        y: 713.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7cc5e5f0f3af90370800000000000000
+      internalID: 8289431737899834567
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_46
+      rect:
+        serializedVersion: 2
+        x: 2130
+        y: 713.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1db72bd53bab9dfb0800000000000000
+      internalID: -4622458262985212975
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_47
+      rect:
+        serializedVersion: 2
+        x: 2485
+        y: 713.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 42f278421948a2ff0800000000000000
+      internalID: -60089886098116828
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_48
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 358.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b43e86be516c3ff40800000000000000
+      internalID: 5761166145783128907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_49
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 358.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 25b134dd4388e7950800000000000000
+      internalID: 6448741477072968530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_50
+      rect:
+        serializedVersion: 2
+        x: 710
+        y: 358.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74b7e7e55195dd950800000000000000
+      internalID: 6475429787543173959
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_51
+      rect:
+        serializedVersion: 2
+        x: 1065
+        y: 358.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 642270d7f21b5f120800000000000000
+      internalID: 2447056790064931398
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_52
+      rect:
+        serializedVersion: 2
+        x: 1420
+        y: 358.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6ae18da20b9c72560800000000000000
+      internalID: 7289016280392670886
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_53
+      rect:
+        serializedVersion: 2
+        x: 1775
+        y: 358.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b24f2bedacd9a9530800000000000000
+      internalID: 3862573125068846123
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_54
+      rect:
+        serializedVersion: 2
+        x: 2130
+        y: 358.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 206efddf330e66a90800000000000000
+      internalID: -7320917630336899582
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_55
+      rect:
+        serializedVersion: 2
+        x: 2485
+        y: 358.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a49bd4fb7028d09e0800000000000000
+      internalID: -1653522518389180086
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_56
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 3.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 36bdec5a246b4fcd0800000000000000
+      internalID: -2525193093682111645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_57
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 3.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 51cd112e4a0f52b10800000000000000
+      internalID: 1956234204120472597
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_58
+      rect:
+        serializedVersion: 2
+        x: 710
+        y: 3.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 04a3e68fa134c3850800000000000000
+      internalID: 6358030557056481856
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_59
+      rect:
+        serializedVersion: 2
+        x: 1065
+        y: 3.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f3b22aaad6fcb930800000000000000
+      internalID: 4160471574801200114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_60
+      rect:
+        serializedVersion: 2
+        x: 1420
+        y: 3.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00283b0f165090610800000000000000
+      internalID: 1587806261833073152
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_61
+      rect:
+        serializedVersion: 2
+        x: 1775
+        y: 3.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c516fd8659cc0b570800000000000000
+      internalID: 8480503040420307292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_62
+      rect:
+        serializedVersion: 2
+        x: 2130
+        y: 3.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 31dfb61cba3f08840800000000000000
+      internalID: 5224443486759812371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: FireBall02_63
+      rect:
+        serializedVersion: 2
+        x: 2485
+        y: 3.5
+        width: 355.5
+        height: 355.5
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d39dc3197118b19a0800000000000000
+      internalID: -6261268918707627715
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: b012155747b7f0340952c52d390ff323
     internalID: 0
     vertices: []
     indices: 

@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: TestingMaterial
-  m_Shader: {fileID: -6465566751694194690, guid: d24b0110c40cdaa4c97b4797a8320702, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: c49964d66e031d14592c60560779e187, type: 3}
   m_ShaderKeywords: BOOLEAN_6C4164AC_ON ETC1_EXTERNAL_ALPHA
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -31,41 +31,11 @@ Material:
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs:
-    - Texture2D_49806898:
-        m_Texture: {fileID: 2800000, guid: 54a6bd4dfafda4443b9dbe895a6f46eb, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - Texture2D_AFB6D86A:
-        m_Texture: {fileID: 2800000, guid: 101a9e33bf80c9a488682f5ac74d4c85, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - Texture2D_B8ECD829:
-        m_Texture: {fileID: 2800000, guid: 101a9e33bf80c9a488682f5ac74d4c85, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+    m_TexEnvs: []
     m_Floats:
-    - Boolean_1DA818E5: 0
-    - Boolean_672AF353: 0
-    - Vector1_14846F4B: 0.1
-    - Vector1_15E33F46: 7.58
-    - Vector1_385439FF: 0
-    - Vector1_392A8B98: 0
-    - Vector1_3D61353C: 1
-    - Vector1_4665307F: 0.5
-    - Vector1_60B37CD: -0.12
-    - Vector1_63F25FF5: 0
-    - Vector1_6AC2525E: 0
-    - Vector1_6D8932D2: 0
-    - Vector1_802121AD: 0
-    - Vector1_834422ED: 1.5
-    - Vector1_9854DC7D: 0
-    - Vector1_A6C04B02: 0
-    - Vector1_B2ACA528: -0.13
-    - Vector1_E06BA422: 0
-    - Vector1_E7E7FB25: 0
-    - Vector1_F1709531: 0
+    - Vector1_416AF29D: 0.01
+    - Vector1_5AAB5B61: 100
+    - Vector1_BA84848C: 0.1
     m_Colors:
-    - Color_4578C774: {r: 1, g: 0.74056596, b: 0.74056596, a: 0}
-    - Color_9F0460B1: {r: 1, g: 0.1273585, b: 0.1273585, a: 1}
+    - Color_F96D4F09: {r: 1, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

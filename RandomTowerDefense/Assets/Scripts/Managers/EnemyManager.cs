@@ -6,6 +6,7 @@ public class EnemyManager : MonoBehaviour
 {
     [SerializeField] private List<AnimationCurve> SpawnRateCurves;
 
+    [Header("MonsterAsset")]
     public GameObject MetalonGreen;
     public GameObject MetalonPurple;
     public GameObject MetalonRed;
@@ -34,12 +35,18 @@ public class EnemyManager : MonoBehaviour
     public GameObject Mushroom;
     public GameObject Slime;
 
+    [Header("MonsterVFX")]
+    public GameObject DieEffect;
+    public GameObject DropEffect;
+
     Dictionary<string, GameObject> allMonsterList;
+    public List<GameObject> allAliveMonsters;
 
     // Start is called before the first frame update
     void Start()
     {
         allMonsterList = new Dictionary<string, GameObject>();
+        allAliveMonsters = new List<GameObject>();
 
         //Bonus
         allMonsterList.Add("MetalonGreen", MetalonGreen);
@@ -82,13 +89,28 @@ public class EnemyManager : MonoBehaviour
         
     }
 
-    public void SpawnMonster(string monsterName)
+    public void SpawnMonster(string monsterName,Vector3 SpawnPoint)
     {
-
+        if (allMonsterList.ContainsKey(monsterName))
+        {
+            GameObject monster = GameObject.Instantiate(allMonsterList[monsterName]);
+            monster.transform.position = SpawnPoint;
+            monster.GetComponent<EnemyAI>().init(DieEffect,DropEffect);
+            allAliveMonsters.Add(monster);
+        }
     }
 
-    public void SpawnBonusBoss(string bossID) { 
-    
+    public void SpawnBonusBoss(int bossID, Vector3 SpawnPoint) {
+        switch (bossID) {
+            case 0:
+                SpawnMonster("MetalonGreen", SpawnPoint);
+                break;
+            case 1:
+                SpawnMonster("MetalonPurple", SpawnPoint);
+                break;
+            case 2:
+                SpawnMonster("MetalonRed", SpawnPoint);
+                break;
+        }
     }
-
 }

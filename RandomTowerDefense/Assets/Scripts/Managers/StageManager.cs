@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class StageManager : MonoBehaviour
 {
+    public Vector3 SpawnPoint;
     // Start is called before the first frame update
     void Start()
     {

@@ -89,7 +89,7 @@ public static class StageInfo
     static List<int> ExtraEnmNum;
     static List<string> ExtraEnmType;
 
-    static void Init()
+    public static void Init()
     {
         stageInfo = new Dictionary<string, StageAttr>();
         stageInfo.Add("Easy", new StageAttr(5, 24, EasyEnmNum, EasyEnmType));//6*4

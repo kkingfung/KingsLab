@@ -24,7 +24,7 @@ public class EnemyAttr {
 {
     //Remark: Money Carried is now Amended to WaveId except bosses/bonus
     static Dictionary<string, EnemyAttr> enemyInfo;
-    static void Init()
+    public static void Init()
     {
         enemyInfo = new Dictionary<string, EnemyAttr>();
 

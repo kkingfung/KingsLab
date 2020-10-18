@@ -76,6 +76,12 @@ public class InGameOperation : ISceneChange
     {
         base.Start();
         base.SceneIn();
+        StageInfo.Init();
+        TowerInfo.Init();
+        EnemyInfo.Init();
+        SkillInfo.Init();
+        SkillStack.init();
+        Upgrades.init();
 
         IslandNow = PlayerPrefs.GetInt("IslandNow");
         MainCam.transform.position = MainCamStayPt[0];
@@ -222,6 +228,5 @@ public class InGameOperation : ISceneChange
         //if (GyroscopeManager.RightShake)
 
     }
-
 
 }

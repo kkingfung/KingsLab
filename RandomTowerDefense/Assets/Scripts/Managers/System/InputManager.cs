@@ -19,7 +19,8 @@ public class MyMobileInput
 public class InputManager : MonoBehaviour
 {
     readonly float tapStayTime = 2f;
-    readonly float dragDiff = 5.0f;
+    readonly float tapDoubleTime = 0.5f;
+    readonly float dragDiff = 5.0f;//cooperate with Scene Script(toDrag)
 
     public GameObject ClickPrefab;
     //TouchButton
@@ -39,7 +40,10 @@ public class InputManager : MonoBehaviour
     //Common Variables
     PlayerManager playerManager;
     CameraManager cameraManager;
-    float timeRecord;
+    InGameOperation sceneManager;
+
+    float DragTimeRecord;
+    float TapTimeRecord;
 
     public Camera refCamL;
     public Camera refCamP;
@@ -61,6 +65,7 @@ public class InputManager : MonoBehaviour
         useTouch = isAndroid || isiOS;
         playerManager = FindObjectOfType<PlayerManager>();
         cameraManager = FindObjectOfType<CameraManager>();
+        sceneManager = FindObjectOfType<InGameOperation>();
     }
 
     void Update()
@@ -97,12 +102,74 @@ public class InputManager : MonoBehaviour
         }
     }
 
+    void ArenaActions(int TouchCount) {
+        //For Arena Scene/Screen Only
+        if (sceneManager.currScreenShown != 0) return;
+            for (int touchId = 0; touchId < Math.Min(TouchCount, mobileInput.maxTouch); ++touchId)
+            {
+                Touch touch = Input.GetTouch(touchId);
+                mobileInput.TouchInfo[touchId] = touch;
+                mobileInput.isTouch[touchId] = true;
+                switch (touch.phase)
+                {
+                    case TouchPhase.Began:
+                        if (touchId == 0)
+                        {
+                            DragTimeRecord = Time.time;
+                            if (playerManager && playerManager.isSkillActive == false)
+                            {
+                                BeginDrag();
+                                playerManager.CheckStock(posDragging);
+                            }
+                        }
+                        break;
+                    case TouchPhase.Moved:
+                        if (touchId == 0 && Time.time - DragTimeRecord > tapStayTime)
+                            playerManager.CheckStock(posDragging);
+                        break;
+                    case TouchPhase.Ended:
+                        if (touchId == 0)
+                        {
+                            if (playerManager && playerManager.isSkillActive == false && isDragging)
+                                playerManager.UseStock(posDragging);
+                            if (Time.time - DragTimeRecord < tapStayTime)
+                            {
+                                playerManager.RaycastTest(LayerMask.NameToLayer("Arena"), Time.time - TapTimeRecord < tapDoubleTime);
+                                TapTimeRecord = Time.time;
+                            }
+
+                        }
+                        if (isDragging && touchId == 0)
+                        {
+                            if (touch.position.x - posDragging.x > dragDiff)
+                            {
+                                FindObjectOfType<ISceneChange>().toDrag = 2;
+                                isDragging = false;
+                            }
+                            if (touch.position.x - posDragging.x < -dragDiff)
+                            {
+                                FindObjectOfType<ISceneChange>().toDrag = 1;
+                                isDragging = false;
+                            }
+                        }
+                        break;
+                    case TouchPhase.Stationary:
+                        if (touchId == 0 && Time.time - DragTimeRecord > tapStayTime)
+                        {
+                            playerManager.CheckStock(posDragging);
+                        }
+                        break;
+                }
+            }
+    }
+
     void UpdateTouchInfo()
     {
         int TouchCount = Input.touchCount;
         if (TouchCount == 0)
         {
             isDragging = false;
+            TapTimeRecord = 0f;
             return;
         }
 
@@ -110,57 +177,11 @@ public class InputManager : MonoBehaviour
         mobileInput.isTouch[0] = false;
         mobileInput.isTouch[1] = false;
 
-        for (int touchId = 0; touchId < Math.Min(TouchCount, mobileInput.maxTouch); ++touchId)
-        {
-            Touch touch = Input.GetTouch(touchId);
-            mobileInput.TouchInfo[touchId] = touch;
-            mobileInput.isTouch[touchId] = true;
-            if (Time.time - timeRecord > tapStayTime)
-            {
-                playerManager.isSkillActive = true;
-            }
+        if (TouchCount == 2 && 
+            (Input.GetTouch(0).phase == TouchPhase.Moved || Input.GetTouch(0).phase == TouchPhase.Moved)) 
+            HandleZoom();
 
-            switch (touch.phase)
-            {
-                //TODO: Use Skills / Sell Tower
-                case TouchPhase.Began:
-                    if (touchId == 0)
-                    {
-                        timeRecord = Time.time;
-                        if (playerManager && playerManager.isSkillActive == false)
-                        {
-                            BeginDrag();
-                            playerManager.CheckStock(posDragging);
-                        }
-                    }
-                    break;
-                case TouchPhase.Moved:
-                    if (TouchCount == 2) HandleZoom();
-                    break;
-                case TouchPhase.Ended:
-                    if (touchId == 0)
-                    {
-                        if (playerManager && playerManager.isSkillActive==false && isDragging)
-                            playerManager.UseStock(posDragging);
-                    }
-                    if (isDragging && touchId == 0)
-                    {
-                        if (touch.position.x - posDragging.x > dragDiff)
-                        {
-                            FindObjectOfType<ISceneChange>().toDrag = 2;
-                            isDragging = false;
-                        }
-                        if (touch.position.x - posDragging.x < -dragDiff)
-                        {
-                            FindObjectOfType<ISceneChange>().toDrag = 1;
-                            isDragging = false;
-                        }
-                    }
-                    break;
-                case TouchPhase.Stationary:
-                    break;
-            }
-        }
+        if (sceneManager) ArenaActions(TouchCount);
     }
 
     public void BeginDrag() { //For Specified Screen Area (Button)
@@ -223,7 +244,7 @@ public class InputManager : MonoBehaviour
         return mobileInput.isTouch[0] || Input.GetMouseButton(0);
     }
 
-    private void RaycastTest() {
+    private RaycastHit RaycastTest() {
         Ray ray = new Ray();
         RaycastHit hit = new RaycastHit();
 
@@ -269,6 +290,8 @@ public class InputManager : MonoBehaviour
                     hit.transform.GetComponent<RaycastFunction>().ActionFunc();
             }
         }
+
+            return hit;
     }
 
     private void ClickEffect(Camera TargetCam)
@@ -295,4 +318,8 @@ public class InputManager : MonoBehaviour
             }
         }
     }
+
+    public bool GetUseTouch() { return useTouch; }
+    public bool GetDraggingStatus() { return isDragging; }
+    public Vector2 GetDragPos() { return posDragging; }
 }

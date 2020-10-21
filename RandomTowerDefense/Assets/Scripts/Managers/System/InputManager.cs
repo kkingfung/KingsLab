@@ -28,29 +28,30 @@ public class InputManager : MonoBehaviour
 
     //Input Test
     public LBM LBMTest;
+    public bool ApplyClickEfc;
 
     //Mobile Input
-    bool isAndroid;
-    bool isiOS;
-    MyMobileInput mobileInput;
-    bool useTouch;
-    bool isDragging;
-    Vector2 posDragging;
+    private bool isAndroid;
+    private bool isiOS;
+    private MyMobileInput mobileInput;
+    private bool useTouch;
+    private bool isDragging;
+    private Vector2 posDragging;
 
     //Common Variables
-    PlayerManager playerManager;
-    CameraManager cameraManager;
-    InGameOperation sceneManager;
+    private PlayerManager playerManager;
+    private CameraManager cameraManager;
+    private InGameOperation sceneManager;
 
-    float DragTimeRecord;
-    float TapTimeRecord;
+    private float DragTimeRecord;
+    private float TapTimeRecord;
 
     public Camera refCamL;
     public Camera refCamP;
     public Camera refCamLSub;
     public Camera refCamPSub;
 
-    void Awake()
+    private void Awake()
     {
         mobileInput = new MyMobileInput();
 
@@ -59,7 +60,7 @@ public class InputManager : MonoBehaviour
         isiOS = (Application.platform == RuntimePlatform.IPhonePlayer);
     }
 
-    void Start()
+    private void Start()
     {
         isDragging = false;
         useTouch = isAndroid || isiOS;
@@ -68,7 +69,7 @@ public class InputManager : MonoBehaviour
         sceneManager = FindObjectOfType<InGameOperation>();
     }
 
-    void Update()
+    private void Update()
     {
         if (useTouch) UpdateTouchInfo();
         else UpdateMouseInfo();
@@ -76,7 +77,7 @@ public class InputManager : MonoBehaviour
         if (Buttons.Count > 0) RaycastTest();
 
         //ClickEffect
-        if (ClickPrefab != null)
+        if (ApplyClickEfc && ClickPrefab != null)
         {
             if (refCamL != null)
                 ClickEffect((Screen.width > Screen.height) ? refCamL : refCamP);
@@ -85,7 +86,7 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    void UpdateMouseInfo()
+    private void UpdateMouseInfo()
     {
         if (isDragging)
         {
@@ -102,7 +103,7 @@ public class InputManager : MonoBehaviour
         }
     }
 
-    void ArenaActions(int TouchCount) {
+    private void ArenaActions(int TouchCount) {
         //For Arena Scene/Screen Only
         if (sceneManager.currScreenShown != 0) return;
             for (int touchId = 0; touchId < Math.Min(TouchCount, mobileInput.maxTouch); ++touchId)
@@ -163,7 +164,7 @@ public class InputManager : MonoBehaviour
             }
     }
 
-    void UpdateTouchInfo()
+    private void UpdateTouchInfo()
     {
         int TouchCount = Input.touchCount;
         if (TouchCount == 0)
@@ -209,7 +210,7 @@ public class InputManager : MonoBehaviour
         */
     }
 
-    void HandleZoom()
+    private void HandleZoom()
     {
         if (cameraManager == null) return;
 
@@ -228,7 +229,7 @@ public class InputManager : MonoBehaviour
         cameraManager.Zoom(zoomFactor);
     }
 
-    void LBMTesting()
+    private void LBMTesting()
     {
         if (LBMTest == null) return;
         

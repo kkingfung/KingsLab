@@ -338,7 +338,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EffectID: 1
   uiID: 0
-  magnitude: 0.05
+  magnitude: -5
   targetCam: {fileID: 1005906875}
 --- !u!114 &19928504
 MonoBehaviour:
@@ -356,7 +356,7 @@ MonoBehaviour:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
+  m_Maskable: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -2641,11 +2641,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1474983810379810517, guid: c22e7bbcf840b88428114918aac756b6, type: 3}
       propertyPath: m_LocalScale.x
-      value: 15
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 1474983810379810517, guid: c22e7bbcf840b88428114918aac756b6, type: 3}
       propertyPath: m_LocalScale.y
-      value: 15
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 1474983810379810517, guid: c22e7bbcf840b88428114918aac756b6, type: 3}
       propertyPath: m_LocalScale.z
@@ -3151,7 +3151,7 @@ GameObject:
   - component: {fileID: 249314061}
   - component: {fileID: 249314063}
   - component: {fileID: 249314062}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: StageHeader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4181,15 +4181,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1474983810379810517, guid: c22e7bbcf840b88428114918aac756b6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.3
+      value: -25
       objectReference: {fileID: 0}
     - target: {fileID: 1474983810379810517, guid: c22e7bbcf840b88428114918aac756b6, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 103
+      value: 84
       objectReference: {fileID: 0}
     - target: {fileID: 1474983810379810517, guid: c22e7bbcf840b88428114918aac756b6, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 24.1
+      value: 24
       objectReference: {fileID: 0}
     - target: {fileID: 1474983810379810517, guid: c22e7bbcf840b88428114918aac756b6, type: 3}
       propertyPath: m_LocalRotation.x
@@ -4467,7 +4467,7 @@ GameObject:
   - component: {fileID: 366202344}
   - component: {fileID: 366202346}
   - component: {fileID: 366202345}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: StageHeader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5407,7 +5407,7 @@ GameObject:
   - component: {fileID: 429212408}
   m_Layer: 0
   m_Name: LandscapeCamera
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5443,7 +5443,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4160757527
+    m_Bits: 2013273879
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -5462,12 +5462,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 429212404}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1713982451}
-  m_Father: {fileID: 1937956742}
+  m_Father: {fileID: 571444099}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &429212408
@@ -6493,7 +6493,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EffectID: 2
   uiID: 0
-  magnitude: -0.05
+  magnitude: -5
   targetCam: {fileID: 1005906875}
 --- !u!114 &489073559
 MonoBehaviour:
@@ -7711,7 +7711,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -313, y: -632}
+  m_AnchoredPosition: {x: -313.00836, y: -631.99896}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &566025349
@@ -7722,6 +7722,38 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 566025347}
   m_CullTransparentMesh: 0
+--- !u!1 &571444098
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 571444099}
+  m_Layer: 0
+  m_Name: CameraGyro
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &571444099
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 571444098}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 429212407}
+  - {fileID: 731968213}
+  m_Father: {fileID: 1937956742}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &574309225
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9826,7 +9858,7 @@ GameObject:
   - component: {fileID: 721195781}
   - component: {fileID: 721195780}
   - component: {fileID: 721195779}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: LandscapeMainCanva
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9913,7 +9945,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 1
-  m_Camera: {fileID: 429212406}
+  m_Camera: {fileID: 1713982453}
   m_PlaneDistance: 3
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -10181,7 +10213,7 @@ GameObject:
   - component: {fileID: 727606493}
   - component: {fileID: 727606492}
   - component: {fileID: 727606491}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: PortraitMainCanva
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10268,7 +10300,7 @@ Canvas:
   m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 1
-  m_Camera: {fileID: 731968216}
+  m_Camera: {fileID: 1005906875}
   m_PlaneDistance: 3
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -10292,7 +10324,7 @@ GameObject:
   - component: {fileID: 731968214}
   m_Layer: 0
   m_Name: PortraitCamera
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -10304,12 +10336,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 731968212}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1005906873}
-  m_Father: {fileID: 1937956742}
+  m_Father: {fileID: 571444099}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &731968214
@@ -10375,7 +10407,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4160757527
+    m_Bits: 2013273879
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -10778,11 +10810,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1474983810379810517, guid: c22e7bbcf840b88428114918aac756b6, type: 3}
       propertyPath: m_LocalScale.x
-      value: 15
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 1474983810379810517, guid: c22e7bbcf840b88428114918aac756b6, type: 3}
       propertyPath: m_LocalScale.y
-      value: 15
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 1474983810379810518, guid: c22e7bbcf840b88428114918aac756b6, type: 3}
       propertyPath: m_Name
@@ -10989,7 +11021,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 322, y: -632}
+  m_AnchoredPosition: {x: 321.98328, y: -631.99896}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &779913714
@@ -11509,8 +11541,24 @@ MonoBehaviour:
   - {fileID: 2069350121}
   - {fileID: 1525673113}
   - {fileID: 996946552}
-  ArmyLvTextObj: []
-  SkillLvTextObj: []
+  ArmyLvTextObj:
+  - {fileID: 264465561}
+  - {fileID: 2140212881}
+  - {fileID: 727095733}
+  - {fileID: 1338003709}
+  - {fileID: 513305500}
+  - {fileID: 543692481}
+  - {fileID: 1301357604}
+  - {fileID: 1896640239}
+  SkillLvTextObj:
+  - {fileID: 913107410}
+  - {fileID: 1414329114}
+  - {fileID: 1220883124}
+  - {fileID: 1744522512}
+  - {fileID: 542176713}
+  - {fileID: 1568404442}
+  - {fileID: 953156594}
+  - {fileID: 1917808544}
 --- !u!1 &852833804
 GameObject:
   m_ObjectHideFlags: 0
@@ -11817,7 +11865,7 @@ RectTransform:
   m_GameObject: {fileID: 888498136}
   m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 3, y: 4, z: 1}
   m_Children:
   - {fileID: 442031540}
   - {fileID: 514163820}
@@ -11827,7 +11875,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 362, y: 54}
+  m_AnchoredPosition: {x: 362, y: 268}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &888498138
@@ -12086,7 +12134,7 @@ GameObject:
   - component: {fileID: 910488405}
   - component: {fileID: 910488407}
   - component: {fileID: 910488406}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: CurrentGold
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13165,6 +13213,7 @@ MonoBehaviour:
   - {fileID: 354907750}
   - {fileID: 290946449}
   LBMTest: {fileID: 0}
+  ApplyClickEfc: 0
   refCamL: {fileID: 429212406}
   refCamP: {fileID: 731968216}
   refCamLSub: {fileID: 0}
@@ -13456,7 +13505,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EffectID: 1
   uiID: 0
-  magnitude: 0.05
+  magnitude: -5
   targetCam: {fileID: 1713982453}
 --- !u!114 &1003141011
 MonoBehaviour:
@@ -13588,7 +13637,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 32
+    m_Bits: 2147483680
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -16595,7 +16644,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -39.4, y: -638.50024}
+  m_AnchoredPosition: {x: -39.399994, y: -638.4992}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1247679143
@@ -17489,7 +17538,7 @@ GameObject:
   - component: {fileID: 1313482886}
   - component: {fileID: 1313482888}
   - component: {fileID: 1313482887}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: CurrentGold
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17881,7 +17930,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -17900,7 +17949,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EffectID: 1
   uiID: 0
-  magnitude: -0.05
+  magnitude: 5
   targetCam: {fileID: 1005906875}
 --- !u!114 &1337027581
 MonoBehaviour:
@@ -20909,7 +20958,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EffectID: 2
   uiID: 0
-  magnitude: -0.05
+  magnitude: -5
   targetCam: {fileID: 1713982453}
 --- !u!114 &1536610724
 MonoBehaviour:
@@ -21306,7 +21355,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EffectID: 2
   uiID: 0
-  magnitude: 0.05
+  magnitude: 5
   targetCam: {fileID: 1713982453}
 --- !u!114 &1560242231
 MonoBehaviour:
@@ -21796,7 +21845,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1595376753}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_Children:
@@ -21807,7 +21856,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -321, y: 531}
+  m_AnchoredPosition: {x: -320.99167, y: 531.00104}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1595376755
@@ -22636,15 +22685,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2835452017367073263, guid: a227860a96fd37b4d94a7ad2f38bf0db, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 79.2
+      value: -20
       objectReference: {fileID: 0}
     - target: {fileID: 2835452017367073263, guid: a227860a96fd37b4d94a7ad2f38bf0db, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.2
+      value: -82
       objectReference: {fileID: 0}
     - target: {fileID: 2835452017367073263, guid: a227860a96fd37b4d94a7ad2f38bf0db, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 2835452017367073263, guid: a227860a96fd37b4d94a7ad2f38bf0db, type: 3}
       propertyPath: m_LocalRotation.x
@@ -23069,7 +23118,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 32
+    m_Bits: 2147483680
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -24440,7 +24489,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EffectID: 2
   uiID: 0
-  magnitude: 0.05
+  magnitude: 5
   targetCam: {fileID: 1005906875}
 --- !u!114 &1796032692
 MonoBehaviour:
@@ -25888,7 +25937,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -25907,7 +25956,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EffectID: 1
   uiID: 0
-  magnitude: -0.05
+  magnitude: 5
   targetCam: {fileID: 1713982453}
 --- !u!114 &1918738922
 MonoBehaviour:
@@ -26275,7 +26324,7 @@ GameObject:
   - component: {fileID: 1937956744}
   m_Layer: 0
   m_Name: CameraGp
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -26287,15 +26336,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1937956741}
-  m_LocalRotation: {x: -0.258819, y: 0, z: 0, w: 0.9659259}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 52.65, y: 40.4, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 429212407}
-  - {fileID: 731968213}
+  - {fileID: 571444099}
   m_Father: {fileID: 0}
   m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: -30, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!81 &1937956743
 AudioListener:
   m_ObjectHideFlags: 0
@@ -27088,7 +27136,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1474983810379810517, guid: c22e7bbcf840b88428114918aac756b6, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.7
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 1474983810379810517, guid: c22e7bbcf840b88428114918aac756b6, type: 3}
       propertyPath: m_LocalPosition.y
@@ -28543,8 +28591,14 @@ MonoBehaviour:
   - {fileID: 1005906875}
   PortraitCam_Sub: []
   GyroCamGp:
+  - {fileID: 571444098}
+  ZoomCamGp:
   - {fileID: 1937956745}
-  zoomSlider: []
+  - {fileID: 429212406}
+  - {fileID: 731968216}
+  zoomSlider:
+  - {fileID: 1716604233}
+  - {fileID: 888498138}
   isOpening: 0
   isGyroEnabled: 0
 --- !u!4 &912783845409816689

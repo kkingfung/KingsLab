@@ -98,7 +98,7 @@ public class InGameOperation : ISceneChange
 
         IslandNow = PlayerPrefs.GetInt("IslandNow");
         MainCam.transform.position = MainCamStayPt[0];
-        MainCam.transform.localEulerAngles=MainCamRotationAngle[0];
+        MainCam.transform.rotation = Quaternion.Euler(MainCamRotationAngle[0]);
 
         DarkenCam.SetActive(false);
 
@@ -148,7 +148,6 @@ public class InGameOperation : ISceneChange
     private void Update()
     {
         base.Update();
-
         //Change Scene
         if (isSceneFinished && ((LandscapeFade && LandscapeFade.isReady) || (PortraitFade && PortraitFade.isReady)))
         {

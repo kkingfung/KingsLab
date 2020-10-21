@@ -77,7 +77,7 @@ public class StoreManager : MonoBehaviour
             for (int i = 0; i < PriceTextObj.Count; ++i)
         {
            if(i % MaxItemPerCategory!=0)
-                        PriceTextObj[i].GetComponent<Text>().text = "CD" + bonusBossCooldown[i % MaxItemPerCategory - 1].ToString();
+                        PriceTextObj[i].GetComponent<TextMesh>().text = "CD" + bonusBossCooldown[i % MaxItemPerCategory - 1].ToString();
         }
     }
 
@@ -89,17 +89,17 @@ public class StoreManager : MonoBehaviour
                 switch ((i % MaxItemPerCategory) % MaxStoreCategories)
                 {
                     case 0:
-                        PriceTextObj[i].GetComponent<Text>().text =
+                        PriceTextObj[i].GetComponent<TextMesh>().text =
                         ItemPrice[Upgrades.StoreItems.Army1 + i][Upgrades.GetLevel(Upgrades.StoreItems.Army1 + i)].ToString() + "G"; break;
                     case 1:
                         if (i % MaxItemPerCategory == 0)
                         {
-                            PriceTextObj[i].GetComponent<Text>().text =
+                            PriceTextObj[i].GetComponent<TextMesh>().text =
                             ItemPrice[Upgrades.StoreItems.CastleHP + i][Upgrades.GetLevel(Upgrades.StoreItems.CastleHP + i)].ToString() + "G";
                         }
                         else
                         {
-                            PriceTextObj[i].GetComponent<Text>().text = "CD" + bonusBossCooldown[i % MaxItemPerCategory - 1].ToString();
+                            PriceTextObj[i].GetComponent<TextMesh>().text = "CD" + bonusBossCooldown[i % MaxItemPerCategory - 1].ToString();
                         }
                         break;
                     case 2:

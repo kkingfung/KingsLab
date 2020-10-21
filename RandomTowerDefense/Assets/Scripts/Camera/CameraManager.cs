@@ -15,7 +15,8 @@ public class CameraManager : MonoBehaviour
     public List<Camera> PortraitCam_Main;
     public List<Camera> PortraitCam_Sub;
 
-    public List<Camera> GyroCamGp;
+    public List<GameObject> GyroCamGp;
+    public List<Camera> ZoomCamGp;
 
     public List<Slider> zoomSlider;
 
@@ -25,24 +26,16 @@ public class CameraManager : MonoBehaviour
     public bool isGyroEnabled;
 
     GyroscopeManager GyroscopeManager;
-    Vector3[] baseRotation;
     ISceneChange SceneManager;
 
     private void OnEnable()
     {
         isGyroEnabled = false;
-        baseRotation = new Vector3[GyroCamGp.Count];
         SceneManager = FindObjectOfType<ISceneChange>();
-
-        for (int i = 0; i < GyroCamGp.Count; ++i) 
-        {
-            baseRotation[i] = GyroCamGp[i].transform.localEulerAngles;
-        }
 
         foreach (Slider i in zoomSlider)
             i.value = PlayerPrefs.GetFloat("zoomRate");
 
-        Zoom(PlayerPrefs.GetFloat("zoomRate"));
     }
 
     // Use this for initialization
@@ -51,17 +44,19 @@ public class CameraManager : MonoBehaviour
         isOpening = true;
 
         GyroscopeManager = FindObjectOfType<GyroscopeManager>();
-        //GyroOperation
+        //ZoomOperation
         if (GyroCamGp.Count > 0)
         {
             if (GyroscopeManager && GyroscopeManager.isFunctioning)
             {
-                for (int i = 0; i < GyroCamGp.Count; ++i)
+                for (int i = 0; i < ZoomCamGp.Count; ++i)
                 {
-                    GyroCamGp[i].fieldOfView = defaultFOV;
+                    ZoomCamGp[i].fieldOfView = defaultFOV;
                 }
             }
         }
+
+        Zoom(PlayerPrefs.GetFloat("zoomRate"));
     }
 
     // Update is called once per frame
@@ -92,16 +87,16 @@ public class CameraManager : MonoBehaviour
             {
                 for (int i = 0; i < GyroCamGp.Count; ++i)
                 {
-                    GyroCamGp[i].transform.eulerAngles = baseRotation[i] + GyroscopeManager.CurrGyroRotation();
+                    GyroCamGp[i].transform.localEulerAngles = GyroscopeManager.CurrGyroRotation();
                 }
             }
         }
     }
 
     public void Zoom(float zoomRate) {
-        if (GyroCamGp.Count > 0)
+        if (ZoomCamGp.Count > 0)
         {
-            foreach (Camera i in GyroCamGp)
+            foreach (Camera i in ZoomCamGp)
             {
                 i.fieldOfView = Mathf.Clamp(defaultFOV - zoomRate * (defaultFOV - minFOV), minFOV, defaultFOV);
             }

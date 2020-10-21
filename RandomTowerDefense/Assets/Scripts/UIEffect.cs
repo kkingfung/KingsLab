@@ -9,28 +9,30 @@ public class UIEffect : MonoBehaviour
     public int uiID = 0;//For any purposes
     public float magnitude = 0;
     public Camera targetCam = null;
-    Text text;
-    Slider slider;
-    Image image;
-    TextMesh textMesh;
-    SpriteRenderer spr;
 
-    Vector3 oriPos;
-    Vector3 oriRot;
-    Vector3 oriScale;
-    Color oriColour;
+    private Text text;
+    private Slider slider;
+    private Image image;
+    private TextMesh textMesh;
+    private SpriteRenderer spr;
 
-    float alpha;
+    private Vector3 oriPos;
+    private Vector3 oriPosRect;
+    private Vector3 oriRot;
+    private Vector3 oriScale;
+    private Color oriColour;
 
-    string fullText;
-    int textCnt;
+    private float alpha;
 
-    bool Orientation;
+    private string fullText;
+    private int textCnt;
 
-    StageSelectOperation sceneManager;
+    private bool Orientation;
+
+    private StageSelectOperation sceneManager;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         text = this.GetComponent<Text>();
         slider = this.GetComponentInParent<Slider>();
@@ -43,7 +45,9 @@ public class UIEffect : MonoBehaviour
         
         sceneManager = FindObjectOfType<StageSelectOperation>();
 
-        oriPos = this.transform.position;
+        oriPos = this.transform.localPosition;
+        if(this.GetComponent<RectTransform>())
+        oriPosRect = this.GetComponent<RectTransform>().localPosition;
         oriRot = this.transform.localEulerAngles;
         oriScale = this.transform.localScale;
         alpha = 0f;
@@ -54,22 +58,17 @@ public class UIEffect : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (Orientation != (Screen.width > Screen.height)) {
-            oriPos = this.transform.position;
-            Orientation = !Orientation;
-        }
-
             switch (EffectID) {
             case 0://for Title Scene Instruction
                 if (text) text.color =new Color (text.color.r, text.color.g, text.color.b,Mathf.Sin(Time.time*8.0f));
                 break;
             case 1://for Selection Scene Arrow Horizontal
-                this.transform.position = oriPos + Mathf.Sin(Time.time) *magnitude* targetCam.transform.up;   
+                this.GetComponent<RectTransform>().localPosition = oriPosRect + Mathf.Sin(Time.time) * magnitude * targetCam.transform.up;   
                 break;
             case 2://for Selection Scene Arrow Vertical
-                this.transform.position = oriPos + Mathf.Sin(Time.time) * magnitude * targetCam.transform.right;
+                this.GetComponent<RectTransform>().localPosition = oriPosRect + Mathf.Sin(Time.time) * magnitude * targetCam.transform.right;
                 break;
             case 3://for Option Canva Gyro
                 if (slider) this.transform.localEulerAngles = new Vector3(

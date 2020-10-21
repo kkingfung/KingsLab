@@ -9,7 +9,6 @@ using UnityEngine.Rendering;
 
 public class StageSelectOperation : ISceneChange
 {
-    const int IslandNum = 4;
     const float bloomInt_Default = 1.5f;
     const float bloomInt_Max = 60.0f;
 
@@ -231,10 +230,10 @@ public class StageSelectOperation : ISceneChange
         switch(toDrag){
             case 0: default: break;
             case 1:
-                IslandNext = Mathf.Clamp(IslandNow - 1, 0, IslandEnabled);
+                IslandNext = Mathf.Clamp(IslandNow + 1, 0, IslandEnabled-1);
                 break;
             case 2:
-                IslandNext = Mathf.Clamp(IslandNow + 1, 0, IslandEnabled);
+                IslandNext = Mathf.Clamp(IslandNow - 1, 0, IslandEnabled-1);
                 break;
         }
 

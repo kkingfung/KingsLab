@@ -69,13 +69,13 @@ public static class StageInfo
         Enum_resource
     }
 
-    static readonly int[] stageSizeFactor = { 36, 72, 108, 144 };//6*6 + 9*8 + 12*9 + 16*9
-    static readonly int[] waveNumFactor = { 30, 35, 50, 51 };
-    static readonly float[] enmNumFactor = { 0.5f, 1f, 2f, 4f, 8f };
-    static readonly float[] enmSpeedFactor = { 0.5f, 1f,1.5f, 2f, 4f };
-    static readonly int[] hpMaxFactor = { 1, 5, 10, 30 };
-    static readonly float[] spawnSpeedFactor = { 4f, 2f, 1.5f, 1f, 0.5f };
-    static readonly float[] resourceFactor = { 1.25f, 1f, 0.75f, 0.5f };
+    public static readonly int[] stageSizeFactor = { 36, 72, 108, 144 };//6*6 + 9*8 + 12*9 + 16*9
+    public static readonly int[] waveNumFactor = { 30, 35, 50, 51 };
+    public static readonly float[] enmNumFactor = { 0.5f, 1f, 2f, 4f, 8f };
+    public static readonly float[] enmSpeedFactor = { 0.5f, 1f,1.5f, 2f, 4f };
+    public static readonly int[] hpMaxFactor = { 1, 5, 10, 30 };
+    public static readonly float[] spawnSpeedFactor = { 4f, 2f, 1.5f, 1f, 0.5f };
+    public static readonly float[] resourceFactor = { 1.25f, 1f, 0.75f, 0.5f };
 
 
     static public float stageSizeEx =0;
@@ -238,10 +238,10 @@ public static class StageInfo
         stageInfo["Extra"] = new StageAttr((int)waveNumEx, (int)stageSizeEx, ExtraEnmNum.ToArray(), ExtraEnmType.ToArray());
     }
 
-    public static StageAttr GetStageInfo(string enmName)
+    public static StageAttr GetStageInfo(string stgName)
     {
-        if (stageInfo.ContainsKey(enmName))
-            return stageInfo[enmName];
+        if (stageInfo.ContainsKey(stgName))
+            return stageInfo[stgName];
         return null;
     }
 

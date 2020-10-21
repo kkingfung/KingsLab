@@ -30,14 +30,13 @@ public class CameraManager : MonoBehaviour
 
     private void OnEnable()
     {
-        isOpening = true;
         isGyroEnabled = false;
         baseRotation = new Vector3[GyroCamGp.Count];
         SceneManager = FindObjectOfType<ISceneChange>();
 
         for (int i = 0; i < GyroCamGp.Count; ++i) 
         {
-            baseRotation[i] = GyroCamGp[i].transform.eulerAngles;
+            baseRotation[i] = GyroCamGp[i].transform.localEulerAngles;
         }
 
         foreach (Slider i in zoomSlider)
@@ -49,6 +48,8 @@ public class CameraManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        isOpening = true;
+
         GyroscopeManager = FindObjectOfType<GyroscopeManager>();
         //GyroOperation
         if (GyroCamGp.Count > 0)
@@ -120,12 +121,12 @@ public class CameraManager : MonoBehaviour
     private IEnumerator RotateMainCamera(float targetAngle) 
     {
         int frame = 0;
-        float angleChgsbyFrame = (targetAngle - this.transform.eulerAngles.x) / rotateFrame;
+        float angleChgsbyFrame = (targetAngle - this.transform.localEulerAngles.x) / rotateFrame;
 
         while (frame < rotateFrame)
         {
-            this.transform.eulerAngles = new Vector3(this.transform.eulerAngles.x+ angleChgsbyFrame,
-                this.transform.eulerAngles.y, this.transform.eulerAngles.z);
+            this.transform.localEulerAngles = new Vector3(this.transform.localEulerAngles.x+ angleChgsbyFrame,
+                this.transform.localEulerAngles.y, this.transform.localEulerAngles.z);
             frame ++;
             yield return new WaitForSeconds(0f);
         }

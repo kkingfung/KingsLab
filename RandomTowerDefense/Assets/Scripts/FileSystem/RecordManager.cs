@@ -46,11 +46,11 @@ public class RecordManager : MonoBehaviour
     void updateUI() {
         for (int i = 0; i < NumofStage; i++)
         {
-            AllRecords[i].Records[0].text = "1." + stageRecords[i].record1.name.Substring(0, 5).ToUpper() + "        " + stageRecords[i].record1.score.ToString("000000");
-            AllRecords[i].Records[1].text = "2." + stageRecords[i].record2.name.Substring(0, 5).ToUpper() + "        " + stageRecords[i].record2.score.ToString("000000");
-            AllRecords[i].Records[2].text = "3." + stageRecords[i].record3.name.Substring(0, 5).ToUpper() + "        " + stageRecords[i].record3.score.ToString("000000");
-            AllRecords[i].Records[3].text = "4." + stageRecords[i].record4.name.Substring(0, 5).ToUpper() + "        " + stageRecords[i].record4.score.ToString("000000");
-            AllRecords[i].Records[4].text = "5." + stageRecords[i].record5.name.Substring(0, 5).ToUpper() + "        " + stageRecords[i].record5.score.ToString("000000");
+            AllRecords[i].Records[0].text = "1." + stageRecords[i].record1.name.Substring(0, 5).ToUpper() + "   " + stageRecords[i].record1.score.ToString("000000");
+            AllRecords[i].Records[1].text = "2." + stageRecords[i].record2.name.Substring(0, 5).ToUpper() + "   " + stageRecords[i].record2.score.ToString("000000");
+            AllRecords[i].Records[2].text = "3." + stageRecords[i].record3.name.Substring(0, 5).ToUpper() + "   " + stageRecords[i].record3.score.ToString("000000");
+            AllRecords[i].Records[3].text = "4." + stageRecords[i].record4.name.Substring(0, 5).ToUpper() + "   " + stageRecords[i].record4.score.ToString("000000");
+            AllRecords[i].Records[4].text = "5." + stageRecords[i].record5.name.Substring(0, 5).ToUpper() + "   " + stageRecords[i].record5.score.ToString("000000");
         }
     }
 }

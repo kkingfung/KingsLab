@@ -25,12 +25,12 @@ public class StockOperator : MonoBehaviour
     private IEnumerator StartAnimation()
     {
         int frame = 30;
-        float rotateChgsbyFrame = (Rotation * 360f - this.transform.eulerAngles.z) / frame;
+        float rotateChgsbyFrame = (Rotation * 360f - this.transform.localEulerAngles.z) / frame;
         float scaleChgsbyFrame = (TargetScale.x - this.transform.localScale.x) / frame;
         while (frame-- > 0)
         {
-            this.transform.eulerAngles = new Vector3(this.transform.eulerAngles.x,
-                this.transform.eulerAngles.y, this.transform.eulerAngles.z+ rotateChgsbyFrame);
+            this.transform.localEulerAngles = new Vector3(this.transform.localEulerAngles.x,
+                this.transform.localEulerAngles.y, this.transform.localEulerAngles.z+ rotateChgsbyFrame);
             this.transform.localScale = new Vector3(this.transform.localScale.x + scaleChgsbyFrame,
     this.transform.localScale.y + scaleChgsbyFrame, this.transform.localScale.z + scaleChgsbyFrame);
             yield return new WaitForSeconds(0f);

@@ -7,6 +7,8 @@ public class UIEffect : MonoBehaviour
 {
     public int EffectID = 0;
     public int uiID = 0;//For any purposes
+    public float magnitude = 0;
+    public Camera targetCam = null;
     Text text;
     Slider slider;
     Image image;
@@ -42,7 +44,7 @@ public class UIEffect : MonoBehaviour
         sceneManager = FindObjectOfType<StageSelectOperation>();
 
         oriPos = this.transform.position;
-        oriRot = this.transform.eulerAngles;
+        oriRot = this.transform.localEulerAngles;
         oriScale = this.transform.localScale;
         alpha = 0f;
         textCnt = 0;
@@ -63,11 +65,11 @@ public class UIEffect : MonoBehaviour
             case 0://for Title Scene Instruction
                 if (text) text.color =new Color (text.color.r, text.color.g, text.color.b,Mathf.Sin(Time.time*8.0f));
                 break;
-            case 1://for Selection Scene Arrow
-                this.transform.position = oriPos + Mathf.Sin(Time.time) * new Vector3(1, 0, 0);
+            case 1://for Selection Scene Arrow Horizontal
+                this.transform.position = oriPos + Mathf.Sin(Time.time) *magnitude* targetCam.transform.up;   
                 break;
-            case 2://for Selection Scene Arrow
-                this.transform.position = oriPos - Mathf.Sin(Time.time) * new Vector3(1, 0, 0);
+            case 2://for Selection Scene Arrow Vertical
+                this.transform.position = oriPos + Mathf.Sin(Time.time) * magnitude * targetCam.transform.right;
                 break;
             case 3://for Option Canva Gyro
                 if (slider) this.transform.localEulerAngles = new Vector3(

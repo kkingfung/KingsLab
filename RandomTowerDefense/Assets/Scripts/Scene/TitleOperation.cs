@@ -128,6 +128,14 @@ public class TitleOperation: ISceneChange
     void Update()
     {
         base.Update();
+
+        foreach (Button i in StartButton)
+            i.interactable = !showCredit && !isOption && !isWaiting;
+        foreach (Button i in OptionButton)
+            i.interactable = !showCredit && !isWaiting;
+        foreach (Button i in CreditButton)
+            i.interactable = !isOption && !isWaiting;
+
         if (isWaiting) return;
         //Change Scene
         if (isSceneFinished && ((LandscapeFade && LandscapeFade.isReady) || (PortraitFade && PortraitFade.isReady)))
@@ -159,21 +167,22 @@ public class TitleOperation: ISceneChange
 
         DarkenCam.SetActive(isOption);
         DarkenCamSub.SetActive(showCredit);
-
-            foreach (Button i in StartButton)
-                i.interactable = !showCredit && !isOption;
-            foreach (Button i in OptionButton)
-                i.interactable = !showCredit;
-            foreach (Button i in CreditButton)
-                i.interactable = !isOption;
     }
 
+    private void LateUpdate()
+    {
+        if (isOption) {
+            RightCam.GetComponent<Camera>().enabled = false;
+            BottomCam.GetComponent<Camera>().enabled = false;
+        }
+    }
     #region CommonOperation
     public void MoveToStageSelection()
     {
         if (Time.time - TimeRecord < TimeWait) return;
         StartCoroutine(PetrifyAnimation());
         TimeRecord = Time.time;
+        isWaiting = true;
     }
 
     public void OptionStatus() 
@@ -220,6 +229,7 @@ public class TitleOperation: ISceneChange
         }
         SetNextScene("StageSelection");
         SceneOut();
+        isWaiting = false;
         isSceneFinished = true;
     }
     #endregion

@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: TestingMaterial
-  m_Shader: {fileID: -6465566751694194690, guid: c49964d66e031d14592c60560779e187, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 1162077d3ab70e54d9682ae7fb34680a, type: 3}
   m_ShaderKeywords: BOOLEAN_6C4164AC_ON ETC1_EXTERNAL_ALPHA
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -33,9 +33,14 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Floats:
+    - Vector1_2C193EEA: 9.92
     - Vector1_416AF29D: 0.01
     - Vector1_5AAB5B61: 100
+    - Vector1_6528D416: 0.61
+    - Vector1_707FD082: 12.63
+    - Vector1_8529B1F4: 3.75
     - Vector1_BA84848C: 0.1
     m_Colors:
     - Color_F96D4F09: {r: 1, g: 0, b: 0, a: 0}
+    - Vector4_11DF4BD3: {r: 0.25, g: 1, b: 1.09, a: 1}
   m_BuildTextureStacks: []

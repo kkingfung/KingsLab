@@ -7,16 +7,17 @@ using UnityEngine.VFX;
 
 public class Tower : MonoBehaviour
 {
-    private readonly int[] MaxLevel = { 10, 30, 50, 70, 100 };
+    private readonly int[] MaxLevel = { 10, 30, 50, 70 };
 
     public TowerAttr attr;
     public int Level;
     public int rank;
-    public int type;
+    public TowerInfo.TowerInfoID type;
 
     bool isBuilding;
     GameObject CurrTarget;
     GameObject AtkVFX;
+    GameObject AuraVFX;
     GameObject LevelUpVFX;
 
     EnemyManager enemyManager;
@@ -58,21 +59,131 @@ public class Tower : MonoBehaviour
         CurrTarget.GetComponent<EnemyAI>().Damaged(attr.damage);
     }
 
-    public void newTower(GameObject AtkVFX, GameObject LevelUpVFX, GameObject AuraVFX, int type,int lv=1,int rank=1) {
-        this.AtkVFX = AtkVFX;
-        this.LevelUpVFX = LevelUpVFX;
+    public void newTower(GameObject AtkVFX, GameObject LevelUpVFX, GameObject AuraVFX, TowerInfo.TowerInfoID type,int lv=1,int rank=1) {
         this.type = type;
         this.Level = lv;
         this.rank = rank;
-        GameObject.Instantiate(AuraVFX, this.transform);
+        this.AtkVFX=GameObject.Instantiate(AtkVFX, this.transform);
+        this.AuraVFX = GameObject.Instantiate(AuraVFX, this.transform);
+        this.LevelUpVFX=GameObject.Instantiate(LevelUpVFX, this.transform);
         isBuilding = true;
+
+        switch (type) {
+            case TowerInfo.TowerInfoID.Enum_TowerNightmare:
+                this.LevelUpVFX.GetComponent<VisualEffect>().SetVector4("MainColor",new Vector4(1,1,0,1));
+                break;
+            case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
+                this.LevelUpVFX.GetComponent<VisualEffect>().SetVector4("MainColor", new Vector4(0, 1, 0, 1));
+                break;
+            case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
+                this.LevelUpVFX.GetComponent<VisualEffect>().SetVector4("MainColor", new Vector4(0, 0, 1, 1));
+                break;
+            case TowerInfo.TowerInfoID.Enum_TowerUsurper:
+                this.LevelUpVFX.GetComponent<VisualEffect>().SetVector4("MainColor", new Vector4(1, 0, 0, 1));
+                break;
+        }
+    }
+
+    public void LevelUp(int chg=1) {
+        SetLevel(Level+chg);
     }
 
     public void SetLevel(int lv) {
         Level = lv;
-        GameObject.Instantiate(LevelUpVFX,this.transform);
+        this.LevelUpVFX.GetComponent<VisualEffect>().SetFloat("SpawnRate", Level);
     }
+
     public bool CheckMaxLevel() {
         return Level == MaxLevel[rank - 1];
     }
 }
+
+
+////data coming from the PlaceableData
+//private float speed;
+
+//private Animator animator;
+//private NavMeshAgent navMeshAgent;
+
+//private void Awake()
+//{
+//    pType = Placeable.PlaceableType.Unit;
+
+//    //find references to components
+//    animator = GetComponent<Animator>();
+//    navMeshAgent = GetComponent<NavMeshAgent>(); //will be disabled until Activate is called
+//    audioSource = GetComponent<AudioSource>();
+//}
+
+////called by GameManager when this Unit is played on the play field
+//public void Activate(Faction pFaction, PlaceableData pData)
+//{
+//    faction = pFaction;
+//    hitPoints = pData.hitPoints;
+//    targetType = pData.targetType;
+//    attackRange = pData.attackRange;
+//    attackRatio = pData.attackRatio;
+//    speed = pData.speed;
+//    damage = pData.damagePerAttack;
+//    attackAudioClip = pData.attackClip;
+//    dieAudioClip = pData.dieClip;
+//    //TODO: add more as necessary
+
+//    navMeshAgent.speed = speed;
+//    animator.SetFloat("MoveSpeed", speed); //will act as multiplier to the speed of the run animation clip
+
+//    state = States.Idle;
+//    navMeshAgent.enabled = true;
+//}
+
+//public override void SetTarget(ThinkingPlaceable t)
+//{
+//    base.SetTarget(t);
+//}
+
+////Unit moves towards the target
+//public override void Seek()
+//{
+//    if (target == null)
+//        return;
+
+//    base.Seek();
+
+//    navMeshAgent.SetDestination(target.transform.position);
+//    navMeshAgent.isStopped = false;
+//    animator.SetBool("IsMoving", true);
+//}
+
+////Unit has gotten to its target. This function puts it in "attack mode", but doesn't delive any damage (see DealBlow)
+//public override void StartAttack()
+//{
+//    base.StartAttack();
+
+//    navMeshAgent.isStopped = true;
+//    animator.SetBool("IsMoving", false);
+//}
+
+////Starts the attack animation, and is repeated according to the Unit's attackRatio
+//public override void DealBlow()
+//{
+//    base.DealBlow();
+
+//    animator.SetTrigger("Attack");
+//    transform.forward = (target.transform.position - transform.position).normalized; //turn towards the target
+//}
+
+//public override void Stop()
+//{
+//    base.Stop();
+
+//    navMeshAgent.isStopped = true;
+//    animator.SetBool("IsMoving", false);
+//}
+
+//protected override void Die()
+//{
+//    base.Die();
+
+//    navMeshAgent.enabled = false;
+//    animator.SetTrigger("IsDead");
+//}

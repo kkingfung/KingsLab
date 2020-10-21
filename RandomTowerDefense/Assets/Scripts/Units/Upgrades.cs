@@ -13,7 +13,7 @@ static public class Upgrades
        Army3,//TerrorBringer
        Army4,//Usurper
 
-       MoneyCollector = 30,
+       CastleHP = 30,
        BonusBoss1,//Green Metalon
        BonusBoss2,//Purple Metalon
        BonusBoss3,//Red Metalon
@@ -36,7 +36,7 @@ static public class Upgrades
         StoreLevel.Add(StoreItems.Army3, 0);
         StoreLevel.Add(StoreItems.Army4, 0);
 
-        StoreLevel.Add(StoreItems.MoneyCollector, 0);
+        StoreLevel.Add(StoreItems.CastleHP, 0);
         //StoreLevel.Add(StoreItems.BonusBoss1, 0);
         //StoreLevel.Add(StoreItems.BonusBoss2, 0);
         //StoreLevel.Add(StoreItems.BonusBoss3, 0);

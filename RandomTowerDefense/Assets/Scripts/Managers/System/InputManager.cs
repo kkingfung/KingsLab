@@ -287,7 +287,9 @@ public class InputManager : MonoBehaviour
             if (Physics.Raycast(ray, out hit) && Buttons.Contains(hit.transform.gameObject))
             {
                 if (hit.transform.GetComponent<RaycastFunction>())
+                {
                     hit.transform.GetComponent<RaycastFunction>().ActionFunc();
+                }
             }
         }
 
@@ -297,12 +299,13 @@ public class InputManager : MonoBehaviour
     private void ClickEffect(Camera TargetCam)
     {
         if (TargetCam == null) return;
-        if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButton(0) || Input.GetMouseButton(1))
         {
             GameObject tmpObj = Instantiate(ClickPrefab, TargetCam.ScreenToWorldPoint(
-                new Vector3(Input.mousePosition.x, Input.mousePosition.y, TargetCam.transform.forward.z * (TargetCam.nearClipPlane + 0.001f))), Quaternion.identity);
+                new Vector3(Input.mousePosition.x, Input.mousePosition.y, TargetCam.transform.forward.z)),
+                TargetCam.transform.rotation);
 
-            DestroyObject(tmpObj, 0.3f);
+            DestroyObject(tmpObj, 0.5f);
         }
 
         if (Input.touchCount > 0)
@@ -312,8 +315,8 @@ public class InputManager : MonoBehaviour
                 if (t.phase == TouchPhase.Began)
                 {
                     GameObject tmpObj = Instantiate(ClickPrefab, TargetCam.ScreenToWorldPoint(
-                        new Vector3(t.position.x, t.position.y, TargetCam.transform.forward.z * TargetCam.nearClipPlane + 0.001f)), Quaternion.identity);
-                    DestroyObject(tmpObj, 0.3f);
+                        new Vector3(t.position.x, t.position.y, TargetCam.transform.forward.z)), TargetCam.transform.rotation);
+                    DestroyObject(tmpObj, 0.5f);
                 }
             }
         }

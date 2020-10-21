@@ -41,6 +41,6 @@ public class CanvaManager : MonoBehaviour
         foreach (GameObject i in LandscapeCanva_Opt)
             i.SetActive(isOption && (SceneManager.OrientationLand));
         foreach (GameObject i in PortraitCanva_Opt)
-            i.SetActive(isOption && (SceneManager.OrientationLand));
+            i.SetActive(isOption && (!SceneManager.OrientationLand));
     }
 }

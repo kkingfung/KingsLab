@@ -19,9 +19,14 @@ public class InGameOperation : ISceneChange
     public GameObject MainCam;
     public List<Vector3> MainCamStayPt;
     public List<Vector3> MainCamRotationAngle;
+    public GameObject StoreGp;//MainWith MainCam
 
     [Header("OtherCamera Settings")]
     public GameObject DarkenCam;
+
+    [Header("UI Settings")]
+    public List<Text> UIIslandName;
+    public List<Text> UICurrentGold;
 
     [Header("Button Settings")]
     public List<Button> OptionButton;
@@ -41,50 +46,61 @@ public class InGameOperation : ISceneChange
     public GameObject LandscapeFadeImg;
     public GameObject PortraitFadeImg;
 
-    FadeEffect LandscapeFade;
-    FadeEffect PortraitFade;
+    private FadeEffect LandscapeFade;
+    private FadeEffect PortraitFade;
 
     public bool isDebugging;//For ingame Debugger
     public bool isTutorial;//For 1st Stage Only
     //public VolumeProfile volumeProfile; // For Spare
 
-    int IslandNow = 0;//For changing colour of Sea/Sky
-    int IslandEnabled = 0;//Check when win
+    private int IslandNow = 0;//For changing colour of Sea/Sky
+    private int IslandEnabled = 0;//Check when win
 
     [HideInInspector]
     public int currScreenShown = 0;//0:Main, 1:Top-Left, 2:Top, 3:Top-Right
+    private int nextScreenShown = 0;
+    private bool isScreenChanging = false;
 
     //Manager
-    AudioManager AudioManager;
-    //CameraManager CameraManager;
-    CanvaManager CanvaManager;
-    //InputManager InputManager;
-    GyroscopeManager GyroscopeManager;
+    private AudioManager AudioManager;
+    //private CameraManager CameraManager;
+    private CanvaManager CanvaManager;
+    //private InputManager InputManager;
+    private GyroscopeManager GyroscopeManager;
+    private ResourceManager resourceManager;
+    private WaveManager waveManager;
+    private TimeManager timeManager;
 
-    TouchScreenKeyboard keyboard;//For RecordBroad if top 5
-    bool CancelKeybroad = false;
+    private TouchScreenKeyboard keyboard;//For RecordBroad if top 5
+    private bool CancelKeybroad = false;
 
     //Prevent DoubleHit
-    float TimeRecord = 0;
-    const float TimeWait = 0.5f;
+    private float TimeRecord = 0;
+    private const float TimeWait = 0.5f;
 
     //CameraOperation
-    const int maxRecFrame = 20;
+    private const int maxRecFrame = 20;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        base.Start();
-        base.SceneIn();
         StageInfo.Init();
         TowerInfo.Init();
         EnemyInfo.Init();
         SkillInfo.Init();
         SkillStack.init();
         Upgrades.init();
+    }
+    // Start is called before the first frame update
+    private void Start()
+    {
+        base.Start();
+        base.SceneIn();
 
         IslandNow = PlayerPrefs.GetInt("IslandNow");
         MainCam.transform.position = MainCamStayPt[0];
+        MainCam.transform.localEulerAngles=MainCamRotationAngle[0];
+
+        DarkenCam.SetActive(false);
 
         LandscapeFade = LandscapeFadeImg.GetComponent<FadeEffect>();
         PortraitFade = PortraitFadeImg.GetComponent<FadeEffect>();
@@ -94,6 +110,9 @@ public class InGameOperation : ISceneChange
         //CameraManager = FindObjectOfType<CameraManager>();
         CanvaManager = FindObjectOfType<CanvaManager>();
         GyroscopeManager = FindObjectOfType<GyroscopeManager>();
+        waveManager = FindObjectOfType<WaveManager>();
+        resourceManager = FindObjectOfType<ResourceManager>();
+        timeManager = FindObjectOfType<TimeManager>();
 
         AudioManager.PlayAudio("bgm_Battle",true);
 
@@ -112,10 +131,21 @@ public class InGameOperation : ISceneChange
             foreach (SpriteRenderer i in PetrifySpr)
                 i.material.SetFloat("_Progress", 0);
         }
+
+        foreach (Text i in UIIslandName)
+        {
+            switch (IslandNow) {
+                case 0: i.text = "ヒジリカ島"; break;
+                case 1: i.text = "テンシュキ島"; break;
+                case 2: i.text = "ニモハサ島"; break;
+                case 3: i.text = "ギイシカ島"; break;
+            }
+        }
+         
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         base.Update();
 
@@ -130,6 +160,11 @@ public class InGameOperation : ISceneChange
             i.interactable = !isOption;
 
         ArrowOperation();
+
+        foreach (Text i in UICurrentGold)
+        {
+            i.text = resourceManager.GetCurrMaterial().ToString()+"G";
+        }
     }
 
     #region CommonOperation
@@ -179,6 +214,8 @@ public class InGameOperation : ISceneChange
         CanvaManager.isOption = isOption;
         GyroscopeManager.isFunctioning = !isOption;
         TimeRecord = Time.time;
+        timeManager.TimeControl();
+        DarkenCam.SetActive(isOption);
     }
 
     private IEnumerator PetrifyAnimation(int sceneID)
@@ -215,18 +252,68 @@ public class InGameOperation : ISceneChange
     }
     #endregion
 
+    #region CameraOperation
     public void ChangeScreenShownByButton(int chgValue)
     {
+        //DownArrow:0,LeftArrow:1,UpArrow:2 ,RightArrow:3
+        isScreenChanging = true;
+        switch (chgValue) {
+            case 0:
+                if (currScreenShown == 0) return;
+                nextScreenShown = 0;
+                break;
+            case 1:
+                if (currScreenShown == 2 || currScreenShown == 3) nextScreenShown = currScreenShown - 1;
+                else return;
+                break;
+            case 2:
+                if (currScreenShown==0) nextScreenShown =2;
+                else return;
+                break;
+            case 3:
+                if (currScreenShown == 1 || currScreenShown == 2) nextScreenShown = currScreenShown + 1;
+                else return;
+                break;
+        }
+
+        StartCoroutine(ChangeScreenShown());
 
     }
 
     private void ChangeScreenShownByGyro()
     {
+        if (isScreenChanging) return;
         //Gyroscope Operation
-        //if (GyroscopeManager.LeftShake)
-
-        //if (GyroscopeManager.RightShake)
-
+        if (GyroscopeManager.LeftShake) 
+            ChangeScreenShownByButton(1);
+        if (GyroscopeManager.RightShake) 
+            ChangeScreenShownByButton(3);
+        if (GyroscopeManager.VerticalShake)
+            ChangeScreenShownByButton(currScreenShown==0 ?2:0);
     }
 
+    private IEnumerator ChangeScreenShown() {
+            Vector3 spd;
+            int frame;
+
+            spd = MainCamStayPt[nextScreenShown] - MainCamStayPt[currScreenShown];
+            spd /= maxRecFrame;
+            frame = 0;
+
+            while (frame < maxRecFrame)
+            {
+                frame++;
+                MainCam.transform.localEulerAngles += spd;
+                yield return new WaitForSeconds(0f);
+            }
+        currScreenShown = nextScreenShown;
+        isScreenChanging = false;
+    }
+
+    #endregion
+
+    #region GameProcessing
+    public int GetCurrIsland() { return IslandNow; }
+
+    #endregion
 }

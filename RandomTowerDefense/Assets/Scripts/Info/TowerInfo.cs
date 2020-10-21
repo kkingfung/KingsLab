@@ -19,6 +19,15 @@ public class TowerAttr
 public static class TowerInfo
 {
     static Dictionary<string, TowerAttr> towerInfo;
+
+    public enum TowerInfoID
+    {
+        Enum_TowerNightmare = 0,
+        Enum_TowerSoulEater,
+        Enum_TowerTerrorBringer,
+        Enum_TowerUsurper
+    }
+
     public static void Init()
     {
         towerInfo = new Dictionary<string, TowerAttr>();

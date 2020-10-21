@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ISceneChange : MonoBehaviour
 {
+    protected readonly int IslandNum = 4;
+    
     [Header("Gyro Settings")]
     public List<GameObject> LandscapeObjs;
     public List<GameObject> PortraitObjs;
@@ -79,4 +81,6 @@ public class ISceneChange : MonoBehaviour
     }
 
     public bool GetOptionStatus() { return isOption; }
+
+    public int GetTotalIslandNum() { return IslandNum; }
 }

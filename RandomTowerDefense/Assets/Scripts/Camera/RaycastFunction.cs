@@ -23,12 +23,12 @@ public class RaycastFunction : MonoBehaviour
         GameScene_LeftArrow,
         GameScene_RightArrow,
 
-        GameScene_StoreArmy1 = 20, //SoulEater
-        GameScene_StoreArmy2,//Nightmare
+        GameScene_StoreArmy1 = 20, //Nightmare
+        GameScene_StoreArmy2,//SoulEater
         GameScene_StoreArmy3,//TerrorBringer
         GameScene_StoreArmy4,//Usurper
 
-        GameScene_StoreMoneyCollector = 30,
+        GameScene_StoreCastleHP = 30,
         GameScene_StoreBonusBoss1,//Green Metalon
         GameScene_StoreBonusBoss2,//Purple Metalon
         GameScene_StoreBonusBoss3,//Red Metalon
@@ -50,7 +50,6 @@ public class RaycastFunction : MonoBehaviour
     public void ActionFunc()
     {
         if (SelectionSceneManager == null) return;
-
         switch ((ActionTypeID)ActionID)
         {
             //For Stage Selection Scene
@@ -97,8 +96,8 @@ public class RaycastFunction : MonoBehaviour
                 break;
 
             //For Game Scene (Store Top)
-            case ActionTypeID.GameScene_StoreMoneyCollector:
-                storeManager.raycastAction(Upgrades.StoreItems.MoneyCollector, InfoID);
+            case ActionTypeID.GameScene_StoreCastleHP:
+                storeManager.raycastAction(Upgrades.StoreItems.CastleHP, InfoID);
                 break;
             case ActionTypeID.GameScene_StoreBonusBoss1:
                 storeManager.raycastAction(Upgrades.StoreItems.BonusBoss1, InfoID);

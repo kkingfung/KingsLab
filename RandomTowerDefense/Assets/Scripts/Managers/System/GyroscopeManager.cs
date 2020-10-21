@@ -35,6 +35,10 @@ public class GyroscopeManager : MonoBehaviour
     {
         Gyro = Input.gyro;
         Gyro.enabled = true;
+
+        //For Locking Screen Orientation (Spare)
+        //Screen.orientation = ScreenOrientation.LandscapeLeft;
+        //Portrait//PortraitUpsideDown//LandscapeRight//AutoRotation
     }
 
     private void Start()
@@ -58,11 +62,13 @@ public class GyroscopeManager : MonoBehaviour
                 {
                     if (Input.deviceOrientation == DeviceOrientation.Portrait || Input.deviceOrientation == DeviceOrientation.PortraitUpsideDown)
                     {
-                        i.transform.eulerAngles = new Vector3(i.transform.eulerAngles.x,i.transform.eulerAngles.y, currRotation.y - ReferenceCenter.y);
+                        i.transform.localEulerAngles = new Vector3(i.transform.localEulerAngles.x,
+                            i.transform.localEulerAngles.y, currRotation.y - ReferenceCenter.y);
                     }
                     else
                     {
-                        i.transform.eulerAngles = new Vector3(i.transform.eulerAngles.x,i.transform.eulerAngles.y, currRotation.x - ReferenceCenter.x);
+                        i.transform.localEulerAngles = new Vector3(i.transform.localEulerAngles.x,
+                            i.transform.localEulerAngles.y, currRotation.x - ReferenceCenter.x);
                     }
                 }    
             }

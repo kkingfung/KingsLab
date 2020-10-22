@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class StockOperator : MonoBehaviour
 {
-    private readonly Vector3 TargetScale = new Vector3(5, 5, 5);
-    private readonly int Rotation = 5;
+    private readonly Vector3 TargetScale = new Vector3(1, 1, 1);
+    private readonly int Rotation = 2;
 
     InputManager inputManager;
 
@@ -19,7 +19,6 @@ public class StockOperator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (inputManager && inputManager.GetDraggingStatus() == false) Destroy(this.gameObject);   
     }
 
     private IEnumerator StartAnimation()

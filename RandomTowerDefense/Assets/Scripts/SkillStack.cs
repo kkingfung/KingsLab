@@ -6,10 +6,10 @@ static public class SkillStack
 {
     static public readonly int maxStackNum = 4;
 
-    static int currStackNum;
-    static int[] stackDetail = { 0, 0, 0, 0 };
+    static private int currStackNum;
+    static private int[] stackDetail = { 0, 0, 0, 0 };
 
-    static Material[] stackMaterials;
+    static private Material[] stackMaterials;
 
     static public void init()
     {
@@ -21,7 +21,7 @@ static public class SkillStack
     }
 
     static public bool AddStock(Upgrades.StoreItems itemID) {
-        if (currStackNum == maxStackNum)
+        if (CheckFullStocks())
             return false;
 
         int emptySlot = -1;
@@ -76,5 +76,10 @@ static public class SkillStack
     static public int GetStock(int StockID)
     {
         return stackDetail[StockID];
+    }
+
+    static public bool CheckFullStocks()
+    {
+        return currStackNum>=maxStackNum;
     }
 }

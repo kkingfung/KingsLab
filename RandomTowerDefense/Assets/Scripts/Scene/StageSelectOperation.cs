@@ -130,15 +130,16 @@ public class StageSelectOperation : ISceneChange
     void Update()
     {
         base.Update();
+
+        foreach (Button i in OptionButton)
+            i.interactable = !isOption && !isSceneFinished;
+
         //Change Scene
         if (isSceneFinished && ((LandscapeFade && LandscapeFade.isReady) || (PortraitFade && PortraitFade.isReady)))
         {
             SceneManager.LoadScene("LoadingScene");
             return;
         }
-
-        foreach (Button i in OptionButton)
-            i.interactable = !isOption;
 
         ArrowOperation();
 

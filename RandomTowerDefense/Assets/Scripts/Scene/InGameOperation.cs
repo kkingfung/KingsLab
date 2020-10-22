@@ -141,13 +141,18 @@ public class InGameOperation : ISceneChange
                 case 3: i.text = "ギイシカ島"; break;
             }
         }
-         
+
+        toDrag = -1;
     }
 
     // Update is called once per frame
     private void Update()
     {
         base.Update();
+
+        foreach (Button i in OptionButton)
+            i.interactable = !isOption && !isSceneFinished;
+
         //Change Scene
         if (isSceneFinished && ((LandscapeFade && LandscapeFade.isReady) || (PortraitFade && PortraitFade.isReady)))
         {
@@ -155,10 +160,9 @@ public class InGameOperation : ISceneChange
             return;
         }
 
-        foreach (Button i in OptionButton)
-            i.interactable = !isOption;
-
         ArrowOperation();
+        ChangeScreenShownByGyro();
+        ChangeScreenShownByDrag();
 
         foreach (Text i in UICurrentGold)
         {
@@ -243,7 +247,7 @@ public class InGameOperation : ISceneChange
             yield return new WaitForSeconds(0f);
         }
 
-        SetNextScene(sceneID==0?"GameScene":"LoadingScene");
+        SetNextScene(sceneID==0?"GameScene": "StageSelection");
 
         PlayerPrefs.SetInt("IslandNow", IslandNow);
         SceneOut();
@@ -255,7 +259,6 @@ public class InGameOperation : ISceneChange
     public void ChangeScreenShownByButton(int chgValue)
     {
         //DownArrow:0,LeftArrow:1,UpArrow:2 ,RightArrow:3
-        isScreenChanging = true;
         switch (chgValue) {
             case 0:
                 if (currScreenShown == 0) return;
@@ -274,9 +277,11 @@ public class InGameOperation : ISceneChange
                 else return;
                 break;
         }
-
-        StartCoroutine(ChangeScreenShown());
-
+        if (nextScreenShown != currScreenShown)
+        {
+            isScreenChanging = true;
+            StartCoroutine(ChangeScreenShown());
+        }
     }
 
     private void ChangeScreenShownByGyro()
@@ -291,17 +296,41 @@ public class InGameOperation : ISceneChange
             ChangeScreenShownByButton(currScreenShown==0 ?2:0);
     }
 
+    private void ChangeScreenShownByDrag()
+    {
+        if (isScreenChanging) return;
+
+        //Touch Operation
+        switch (toDrag)
+        {
+            default: break;
+            case 0:
+            case 1:
+            case 2:
+            case 3:
+                ChangeScreenShownByButton(toDrag);break;
+        }
+
+        toDrag = -1;
+    }
+
     private IEnumerator ChangeScreenShown() {
             Vector3 spd;
-            int frame;
+            int frame = maxRecFrame;
+        spd = MainCamRotationAngle[nextScreenShown] - MainCam.transform.localEulerAngles;
 
-            spd = MainCamStayPt[nextScreenShown] - MainCamStayPt[currScreenShown];
-            spd /= maxRecFrame;
-            frame = 0;
+        while (spd.x > 180f) spd.x -= 360f;
+        while (spd.y > 180f) spd.y -= 360f;
+        while (spd.z > 180f) spd.z -= 360f;
 
-            while (frame < maxRecFrame)
+        while (spd.x < -180f) spd.x += 360f;
+        while (spd.y < -180f) spd.y += 360f;
+        while (spd.z < -180f) spd.z += 360f;
+
+        spd /= maxRecFrame;
+
+            while (frame-->0 )
             {
-                frame++;
                 MainCam.transform.localEulerAngles += spd;
                 yield return new WaitForSeconds(0f);
             }

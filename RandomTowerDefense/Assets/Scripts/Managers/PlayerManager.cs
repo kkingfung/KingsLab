@@ -19,6 +19,7 @@ public class PlayerManager : MonoBehaviour
     public Camera refCamP;
 
     [Header("Skill Settings")]
+    public float StockOperatorDepth;
     public GameObject FireSkillPrefab;
     public GameObject IceSkillPrefab;
     public GameObject MindSkillPrefab;
@@ -29,10 +30,13 @@ public class PlayerManager : MonoBehaviour
 
     [Header("Stock Settings")]
     public GameObject StockOperatorPrefab;
+    private Vector2 StockPos;
 
-    bool isChecking;
+    [HideInInspector]
+    public bool isChecking;
 
     GameObject CurrentSkill;
+    GameObject StockOperator;
 
     EnemyManager enemyManager;
     StageManager stageManager;
@@ -48,10 +52,15 @@ public class PlayerManager : MonoBehaviour
 
     public void CheckStock(Vector2 DragPos) 
     {
-        if (isChecking) return;
+        if (StockOperator!=null) return;
         if (isSkillActive) return;
 
         isChecking = true;
+
+        Camera targetCam= (Screen.width > Screen.height)? refCamL: refCamP;
+
+        StockOperator = Instantiate(StockOperatorPrefab,targetCam.ScreenToWorldPoint(new Vector3(DragPos.x, DragPos.y,StockOperatorDepth)),targetCam.transform.rotation);
+        StockPos = DragPos;
     }
 
     public void UseStock(Vector2 DragPos)
@@ -59,29 +68,38 @@ public class PlayerManager : MonoBehaviour
         if (!isChecking) return;
         if (isSkillActive) return;
 
-        if (Input.touchCount > 0 && (Input.touches[0].position - DragPos).sqrMagnitude < CancelDist * CancelDist) {
-            isChecking = false;
+        isChecking = false;
+        if (StockOperator) { Destroy(StockOperator); StockOperator = null; }
+
+        if ((StockPos - DragPos).sqrMagnitude < CancelDist * CancelDist) {
             return; 
         }
 
         int StockSelected = -1;
         //Check Action to be taken by DragPos && current mouse/touch
-        float AngleCalculation = Mathf.Rad2Deg * Mathf.Acos(Vector2.Dot(Input.touches[0].position - DragPos, Vector2.up));
-        if (AngleCalculation > 72f * -2f && AngleCalculation <= 72f * -1f)
-            StockSelected = 0;
-        else if (AngleCalculation > 72f * -1f && AngleCalculation <= 0f)
-            StockSelected = 1;
-        else if (AngleCalculation > 0f && AngleCalculation <= 72f)
+        float AngleCalculation;
+        if (Input.touchCount > 0)
+            AngleCalculation = (-90f + Mathf.Rad2Deg * Mathf.Atan2(Input.touches[0].position.y - DragPos.y, Input.touches[0].position.x - DragPos.x));
+        else
+            AngleCalculation = (-90f + Mathf.Rad2Deg * Mathf.Atan2(Input.mousePosition.y - DragPos.y, Input.mousePosition.x - DragPos.x));
+        while (AngleCalculation < 0) AngleCalculation += 360f;
+
+        if (AngleCalculation >= 18f && AngleCalculation < 90f)
             StockSelected = 2;
-        else if (AngleCalculation > 72f && AngleCalculation <= 72f * 2f)
-            StockSelected = 3;
-        else isSelling=true;
+        else if (AngleCalculation >= 90f && AngleCalculation < 162f)
+            StockSelected = 1;
+        else if (AngleCalculation >= 162f && AngleCalculation < 234f)
+            isSelling = true;
+        else if (AngleCalculation >= 234f && AngleCalculation < 306f)
+            StockSelected = 4;
+        else StockSelected = 3;
         //Raycast test ground and camera ray
         Vector3 hitPosition = RaycastTest(LayerMask.NameToLayer("Arena"),false);
         if (isSelling) return;
 
-            //For non-sale
-        switch (SkillStack.UseStock(StockSelected)) {
+        //For non-sale
+        switch (SkillStack.UseStock(StockSelected))
+        {
             case (int)Upgrades.StoreItems.BonusBoss1:
                 enemyManager.SpawnBonusBoss(0, stageManager.SpawnPoint);
                 break;
@@ -92,7 +110,7 @@ public class PlayerManager : MonoBehaviour
                 enemyManager.SpawnBonusBoss(2, stageManager.SpawnPoint);
                 break;
             case (int)Upgrades.StoreItems.MagicMeteor:
-                CurrentSkill=GameObject.Instantiate(FireSkillPrefab, hitPosition,Quaternion.identity);
+                CurrentSkill = GameObject.Instantiate(FireSkillPrefab, hitPosition, Quaternion.identity);
                 isSkillActive = true;
                 break;
             case (int)Upgrades.StoreItems.MagicBlizzard:
@@ -106,6 +124,8 @@ public class PlayerManager : MonoBehaviour
             case (int)Upgrades.StoreItems.MagicPetrification:
                 CurrentSkill = GameObject.Instantiate(MindSkillPrefab, hitPosition, Quaternion.identity);
                 isSkillActive = true;
+                break;
+            default:
                 break;
         }
     }

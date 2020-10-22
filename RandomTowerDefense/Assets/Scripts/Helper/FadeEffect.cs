@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class FadeEffect : MonoBehaviour
 {
-    float Threshold = 0.0f;
-    float FadeRate = 0.02f;
+     private float Threshold = 0.0f;
+    private readonly float FadeRate = 0.02f;
 
     Material FadeMat;
     public bool isReady { get; private set;}
@@ -16,6 +16,7 @@ public class FadeEffect : MonoBehaviour
         if (FadeMat == null && GetComponent<MeshRenderer>()) FadeMat = GetComponent<MeshRenderer>().material;
         if (FadeMat == null && GetComponent<RawImage>()) FadeMat = GetComponent<RawImage>().material;
         if (FadeMat == null && GetComponent<SpriteRenderer>()) FadeMat = GetComponent<SpriteRenderer>().material;
+        if (FadeMat == null && GetComponent<Image>()) FadeMat = GetComponent<Image>().material;
         FadeMat.SetFloat("_FadeThreshold", 1f);
         PlayerPrefs.SetFloat("_FadeThreshold", 1f);
     }
@@ -42,6 +43,7 @@ public class FadeEffect : MonoBehaviour
         if (FadeMat == null && GetComponent<MeshRenderer>()) FadeMat = GetComponent<MeshRenderer>().material;
         if (FadeMat == null && GetComponent<RawImage>()) FadeMat = GetComponent<RawImage>().material;
         if (FadeMat == null && GetComponent<SpriteRenderer>()) FadeMat = GetComponent<SpriteRenderer>().material;
+        if (FadeMat == null && GetComponent<Image>()) FadeMat = GetComponent<Image>().material;
 
         while (Threshold > 0f) {
             FadeMat.SetFloat("_FadeThreshold", Threshold);
@@ -58,6 +60,7 @@ public class FadeEffect : MonoBehaviour
         if (FadeMat == null && GetComponent<MeshRenderer>()) FadeMat = GetComponent<MeshRenderer>().material;
         if (FadeMat == null && GetComponent<RawImage>()) FadeMat = GetComponent<RawImage>().material;
         if (FadeMat == null && GetComponent<SpriteRenderer>()) FadeMat = GetComponent<SpriteRenderer>().material;
+        if (FadeMat == null && GetComponent<Image>()) FadeMat = GetComponent<Image>().material;
 
         while (Threshold < 1f)
         {

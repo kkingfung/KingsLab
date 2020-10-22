@@ -14,7 +14,7 @@ public class SkyboxManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        stageID = 3;//= PlayerPrefs.GetInt("StageID");
+        stageID =  PlayerPrefs.GetInt("StageID");
         timeManager = FindObjectOfType<TimeManager>();
         RenderSettings.skybox = skyboxMat[stageID];
     }

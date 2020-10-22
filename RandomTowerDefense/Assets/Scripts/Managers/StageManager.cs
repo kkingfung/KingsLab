@@ -17,8 +17,11 @@ public class StageManager : MonoBehaviour
     public List<GameObject> GameClearCanva;
     public List<GameObject> GameOverCanva;
 
-    private int result = 0;
+    public Material CoveringMateral;
+    private readonly float FadeRate = 0.02f;
 
+    private int result = 0;
+    private bool isReady = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,10 +34,11 @@ public class StageManager : MonoBehaviour
             i.SetActive(false);
 
         int CurrIsland = sceneManager.GetCurrIsland();
-        if (CurrIsland == sceneManager.GetTotalIslandNum() - 1)
-            MaxCastleHP = (int)PlayerPrefs.GetFloat("hpMax");
+        if (CurrIsland == sceneManager.GetTotalIslandNum() - 1) 
+            MaxCastleHP = (int)PlayerPrefs.GetFloat("hpMaxDir");
         else
-            MaxCastleHP = StageInfo.hpMaxFactor[sceneManager.GetCurrIsland()];
+            MaxCastleHP = (int)PlayerPrefs.GetFloat("hpMax");
+
         CurrCastleHP = MaxCastleHP;
         foreach (TextMesh i in CastleHPText)
         {
@@ -45,8 +49,11 @@ public class StageManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        if (result != 0) {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            Damaged(1);
+        }
+        if (result != 0 && isReady) {
             sceneManager.DarkenCam.SetActive(true);
             if (Screen.width > Screen.height)
             {
@@ -87,7 +94,6 @@ public class StageManager : MonoBehaviour
 
     public void Damaged(int Val=1)
     {
-        Debug.Log(2);
         CurrCastleHP -= Val;
         foreach (TextMesh i in CastleHPText)
         {
@@ -95,7 +101,9 @@ public class StageManager : MonoBehaviour
         }
 
         if (CurrCastleHP <= 0) {
-            result = -1; 
+            result = -1;
+            isReady = false;
+            StartCoroutine(FadeInRoutine());
         }
     }
     public bool SetWin() {
@@ -104,5 +112,34 @@ public class StageManager : MonoBehaviour
 
         result = 1;
         return true;
+    }
+    public int GetMaxHP() { return MaxCastleHP; }
+    public int GetCurrHP() { return CurrCastleHP; }
+
+    private IEnumerator FadeOutRoutine()
+    {
+        float Threshold = 0f;
+        while (Threshold < 1f)
+        {
+            CoveringMateral.SetFloat("_FadeThreshold", Threshold);
+            Threshold += FadeRate;
+            yield return new WaitForSeconds(0f);
+        }
+        CoveringMateral.SetFloat("_FadeThreshold", Threshold);
+    }
+
+    private IEnumerator FadeInRoutine()
+    {
+        float Threshold = 1f;
+        while (Threshold > 0f)
+        {
+            CoveringMateral.SetFloat("_FadeThreshold", Threshold);
+            Threshold -= FadeRate;
+            yield return new WaitForSeconds(0f);
+        }
+        CoveringMateral.SetFloat("_FadeThreshold", Threshold);
+        isReady = true;
+
+        StartCoroutine(FadeOutRoutine());
     }
 }

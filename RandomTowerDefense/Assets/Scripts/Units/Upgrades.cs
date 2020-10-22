@@ -37,9 +37,9 @@ static public class Upgrades
         StoreLevel.Add(StoreItems.Army4, 0);
 
         StoreLevel.Add(StoreItems.CastleHP, 0);
-        //StoreLevel.Add(StoreItems.BonusBoss1, 0);
-        //StoreLevel.Add(StoreItems.BonusBoss2, 0);
-        //StoreLevel.Add(StoreItems.BonusBoss3, 0);
+        StoreLevel.Add(StoreItems.BonusBoss1, 0);
+        StoreLevel.Add(StoreItems.BonusBoss2, 0);
+        StoreLevel.Add(StoreItems.BonusBoss3, 0);
 
         StoreLevel.Add(StoreItems.MagicMeteor, 0);
         StoreLevel.Add(StoreItems.MagicBlizzard, 0);
@@ -57,7 +57,36 @@ static public class Upgrades
         if (StoreLevel.ContainsKey(itemID) == false) return false;
         if (StoreLevel[itemID] + lvUP > MaxLevel) return false;
 
-        StoreLevel[itemID] += lvUP;
+        //Checking StockItems
+        switch (itemID)
+        {
+            case Upgrades.StoreItems.CastleHP:
+                GameObject.FindObjectOfType<StageManager>().Damaged(-1);
+                break;
+            case Upgrades.StoreItems.BonusBoss1: 
+            case Upgrades.StoreItems.BonusBoss2:
+            case Upgrades.StoreItems.BonusBoss3:
+                SkillStack.AddStock(itemID);
+                GameObject.FindObjectOfType<StoreManager>().SetBossCD((int)(itemID- Upgrades.StoreItems.BonusBoss1));
+                break;
+            case Upgrades.StoreItems.Army1:
+            case Upgrades.StoreItems.Army2:
+            case Upgrades.StoreItems.Army3:
+            case Upgrades.StoreItems.Army4:
+                StoreLevel[itemID] += lvUP;
+                break;
+            case Upgrades.StoreItems.MagicMeteor:
+            case Upgrades.StoreItems.MagicBlizzard:
+            case Upgrades.StoreItems.MagicSummon:
+            case Upgrades.StoreItems.MagicPetrification:
+                SkillStack.AddStock(itemID);
+                break;
+        }
         return true;
+    }
+
+    static public bool CheckTopLevel(StoreItems itemID)
+    {
+        return StoreLevel[itemID] < MaxLevel;
     }
 }

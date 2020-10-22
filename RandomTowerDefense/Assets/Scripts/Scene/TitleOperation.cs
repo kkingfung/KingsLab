@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.VFX;
 
 public class TitleOperation: ISceneChange
 {
@@ -32,28 +33,29 @@ public class TitleOperation: ISceneChange
 
     [Header("Other Settings")]
     public List<GameObject> TitleImg;
+    public List<GameObject> TitleEffectImg;
     public GameObject BoidSpawn;
     public GameObject LandscapeFadeImg;
     public GameObject PortraitFadeImg;
 
-    FadeEffect LandscapeFade;
-    FadeEffect PortraitFade;
+    private FadeEffect LandscapeFade;
+    private FadeEffect PortraitFade;
 
     //Manager
-    AudioManager AudioManager;
-    CameraManager CameraManager;
-    CanvaManager CanvaManager;
-    InputManager InputManager;
-    GyroscopeManager GyroscopeManager;
+    private AudioManager AudioManager;
+    private CameraManager CameraManager;
+    private CanvaManager CanvaManager;
+    private InputManager InputManager;
+    private GyroscopeManager GyroscopeManager;
 
-    bool isOpening;
-    bool isWaiting;
-    bool showCredit;
-    float TimeRecord = 0;
-    const float TimeWait = 0.2f;
+    private bool isOpening;
+    private bool isWaiting;
+    private bool showCredit;
+    private float TimeRecord = 0;
+    private const float TimeWait = 0.2f;
 
     //CameraAnimation
-    const float targetCamAngle = -45f;
+    private const float targetCamAngle = -45f;
 
     enum RecordCameraState
     {
@@ -63,24 +65,46 @@ public class TitleOperation: ISceneChange
         Exit
     };
 
-    int currentRecStatusRightCam;
-    int nextRecStatusRightCam;
-    RecordCameraState rightCamState;
+    private int currentRecStatusRightCam;
+    private int nextRecStatusRightCam;
+    private RecordCameraState rightCamState;
 
-    int currentRecStatusBottomCam;
-    int nextRecStatusBottomCam;
-    RecordCameraState bottomCamState;
+    private int currentRecStatusBottomCam;
+    private int nextRecStatusBottomCam;
+    private RecordCameraState bottomCamState;
 
-    const int maxRecStatus = 4;
-    const int maxRecFrame = 20;
-    const int maxRecWaitFrame = 120;
+    private const int maxRecStatus = 4;
+    private const int maxRecFrame = 20;
+    private const int maxRecWaitFrame = 120;
 
     private void OnEnable()
     {
         BoidSpawn.SetActive(true);
     }
+    private void Awake()
+    {
+        PlayerPrefs.SetInt("StageID", 0);
+
+        PlayerPrefs.SetFloat("zoomRate",0f);
+
+        PlayerPrefs.SetFloat("waveNum", 1);
+        PlayerPrefs.SetFloat("stageSize", 1);
+        PlayerPrefs.SetFloat("enmNum", 1);
+        PlayerPrefs.SetFloat("enmSpeed", 1);
+        PlayerPrefs.SetFloat("spawnSpeed", 1);
+        PlayerPrefs.SetFloat("hpMax", 5);
+        PlayerPrefs.SetFloat("resource", 1);
+
+        PlayerPrefs.SetFloat("waveNumDir", 1);
+        PlayerPrefs.SetFloat("stageSizeDir", 1);
+        PlayerPrefs.SetFloat("enmNumDir", 1);
+        PlayerPrefs.SetFloat("enmSpeedDir", 1);
+        PlayerPrefs.SetFloat("spawnSpeedDir", 1);
+        PlayerPrefs.SetFloat("hpMaxDir", 5);
+        PlayerPrefs.SetFloat("resourceDir", 1);
+    }
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         base.Start();
         isOpening = true;
@@ -122,6 +146,11 @@ public class TitleOperation: ISceneChange
             foreach (SpriteRenderer i in PetrifySpr)
                 i.material.SetFloat("_Progress", 0);
         }
+
+        foreach (GameObject i in TitleEffectImg)
+        {
+            i.GetComponent<VisualEffect>().Stop();
+        }
     }
 
     // Update is called once per frame
@@ -136,7 +165,6 @@ public class TitleOperation: ISceneChange
         foreach (Button i in CreditButton)
             i.interactable = !isOption && !isWaiting;
 
-        if (isWaiting) return;
         //Change Scene
         if (isSceneFinished && ((LandscapeFade && LandscapeFade.isReady) || (PortraitFade && PortraitFade.isReady)))
         {
@@ -144,10 +172,14 @@ public class TitleOperation: ISceneChange
             return;
         }
 
-        if (isSceneFinished) return;
+        if (isSceneFinished || isWaiting) return;
 
         if (isOpening && InputManager.GetAnyInput()) {
             isWaiting = true;
+            foreach (GameObject i in TitleEffectImg)
+            {
+                i.GetComponent<VisualEffect>().Play();
+            }
             StartCoroutine(PreparationToMain());
         }
 
@@ -229,7 +261,6 @@ public class TitleOperation: ISceneChange
         }
         SetNextScene("StageSelection");
         SceneOut();
-        isWaiting = false;
         isSceneFinished = true;
     }
     #endregion
@@ -358,8 +389,8 @@ public class TitleOperation: ISceneChange
         StartCoroutine(UpperEggAnimation(Upper[1], 0.4f));
 
         GameObject[] Lower = GameObject.FindGameObjectsWithTag("LowerEgg");
-        StartCoroutine(LowerEggAnimation(Lower[0], -0.4f));
-        StartCoroutine(LowerEggAnimation(Lower[1], -0.15f));
+        StartCoroutine(LowerEggAnimation(Lower[0], -0.5f));
+        StartCoroutine(LowerEggAnimation(Lower[1], -0.2f));
 
         isOpening = false;
 
@@ -393,13 +424,13 @@ public class TitleOperation: ISceneChange
     private IEnumerator PreparationToMain()
     {
         int frame = 20;
-        
+
         while (frame-- > 0)
         {
             foreach (GameObject i in TitleImg)
             {
                 if (i.GetComponent<RawImage>())
-                    i.GetComponent<RawImage>().color = new Color(1, 1, 1, frame / 20f);
+                    i.GetComponent<RawImage>().color = new Color(frame / 40f, frame / 40f, frame / 40f, frame / 40f);
                 if (i.GetComponent<Text>())
                     i.GetComponent<Text>().color = new Color(1, 1, 1, frame / 20f);
             }

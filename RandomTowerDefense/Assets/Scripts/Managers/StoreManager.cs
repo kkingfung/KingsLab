@@ -5,14 +5,20 @@ using UnityEngine.UI;
 
 public class StoreManager : MonoBehaviour
 {
-    private readonly int MaxStoreCategories = 3;
     private readonly int MaxItemPerCategory = 4;
     private readonly int[] cdCounter = {60,180,300 };
+    private readonly Color OriColor = new Color(1, 0.675f, 0, 1 );
     private Dictionary<Upgrades.StoreItems, int[]> ItemPrice;
 
-    public List<GameObject> PriceTextObj;
-    public List<GameObject> ArmyLvTextObj;
-    public List<GameObject> SkillLvTextObj;
+    public List<TextMesh> ArmyLvTextObj;
+    public List<TextMesh> ArmyPriceTextObj;
+
+    public List<TextMesh> TowerHPTextObj;
+    public List<TextMesh> TowerPriceTextObj;
+    public List<TextMesh> MonsterCDTextObj;
+
+    public List<TextMesh> SkillPriceTextObj;
+    public List<TextMesh> SkillLvTextObj;
 
     InGameOperation sceneManager;
     StageManager stageManager;
@@ -28,7 +34,7 @@ public class StoreManager : MonoBehaviour
     readonly int[] PriceForArmy3 =  { 20, 50, 100, 200, 500, 800, 1000, 1200, 1500, 2000 };
     readonly int[] PriceForArmy4 = { 20, 50, 100, 200, 500, 800, 1000, 1200, 1500, 2000 };
 
-    readonly int[] PriceForCastleHP = { 10, 20, 30, 50, 100, 200, 300, 500, 750, 1000 };
+    readonly int[] PriceForCastleHP = { 50, 50, 50, 50, 50, 50, 50, 50, 50, 50 };
     readonly int[] PriceForBonusBoss1 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     readonly int[] PriceForBonusBoss2 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     readonly int[] PriceForBonusBoss3 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -61,8 +67,6 @@ public class StoreManager : MonoBehaviour
         ItemPrice.Add(Upgrades.StoreItems.MagicBlizzard, PriceForMagicBlizzard);
         ItemPrice.Add(Upgrades.StoreItems.MagicSummon, PriceForMagicSummon);
         ItemPrice.Add(Upgrades.StoreItems.MagicPetrification, PriceForMagicPetrification);
-
-        UpdateAllItemsLvShown();
     }
 
     private void Update()
@@ -73,40 +77,82 @@ public class StoreManager : MonoBehaviour
             }
         }
 
-        if (sceneManager.currScreenShown== (int)InGameOperation.ScreenShownID.SSIDTop)
-            for (int i = 0; i < PriceTextObj.Count; ++i)
-        {
-           if(i % MaxItemPerCategory!=0)
-                        PriceTextObj[i].GetComponent<TextMesh>().text = "CD" + bonusBossCooldown[i % MaxItemPerCategory - 1].ToString();
-        }
+        UpdatePrice();
     }
 
     private void UpdatePrice() {
-        if (sceneManager.currScreenShown != 0)
+
+        int fullitemID = (sceneManager.currScreenShown + 1) * Upgrades.MaxItemPerSlot;
+
+        switch (sceneManager.currScreenShown)
         {
-            for (int i = 0; i < PriceTextObj.Count; ++i)
-            {
-                switch ((i % MaxItemPerCategory) % MaxStoreCategories)
+            case (int)InGameOperation.ScreenShownID.SSIDTop:
+                //Tower Items
+                for (int i = 0; i < TowerPriceTextObj.Count; ++i)
                 {
-                    case 0:
-                        PriceTextObj[i].GetComponent<TextMesh>().text =
-                        ItemPrice[Upgrades.StoreItems.Army1 + i][Upgrades.GetLevel(Upgrades.StoreItems.Army1 + i)].ToString() + "G"; break;
-                    case 1:
-                        if (i % MaxItemPerCategory == 0)
-                        {
-                            PriceTextObj[i].GetComponent<TextMesh>().text =
-                            ItemPrice[Upgrades.StoreItems.CastleHP + i][Upgrades.GetLevel(Upgrades.StoreItems.CastleHP + i)].ToString() + "G";
-                        }
-                        else
-                        {
-                            PriceTextObj[i].GetComponent<TextMesh>().text = "CD" + bonusBossCooldown[i % MaxItemPerCategory - 1].ToString();
-                        }
-                        break;
-                    case 2:
-                        PriceTextObj[i].GetComponent<Text>().text =
-                        ItemPrice[Upgrades.StoreItems.MagicMeteor + i][Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor + i)].ToString() + "G"; break;
+                    //Currently all same price
+                    int price = ItemPrice[Upgrades.StoreItems.CastleHP][0];
+                    TowerPriceTextObj[i].text = price.ToString() + "G";
+                    TowerPriceTextObj[i].color = (price > resourceManager.GetCurrMaterial()) ? new Color(1, 0, 0, 1) : OriColor;
+
                 }
-            }
+                for (int i = 0; i < TowerHPTextObj.Count; ++i)
+                    TowerHPTextObj[i].text = stageManager.GetCurrHP().ToString() + "/" + stageManager.GetMaxHP().ToString();
+                //Bonus Boss Items
+                for (int i = 0; i < MonsterCDTextObj.Count; ++i)
+                {
+                    int cd = bonusBossCooldown[i % bonusBossCooldown.Length];
+                    MonsterCDTextObj[i].text = "CD" + cd.ToString();
+                    MonsterCDTextObj[i].color = (cd > 0 || SkillStack.CheckFullStocks()) ? new Color(1, 0, 0, 1) : OriColor;
+                }
+                break;
+            case (int)InGameOperation.ScreenShownID.SSIDTopLeft:
+                for (int i = 0; i < ArmyPriceTextObj.Count; ++i) {
+                    Upgrades.StoreItems itemID = Upgrades.StoreItems.Army1 + i % MaxItemPerCategory;
+                    int price = ItemPrice[itemID][Upgrades.GetLevel(itemID)];
+                    if (Upgrades.CheckTopLevel(itemID))
+                    {
+                        ArmyPriceTextObj[i].text = price.ToString() + "G";
+                        ArmyPriceTextObj[i].color = (price > resourceManager.GetCurrMaterial()) ? new Color(1, 0, 0, 1) : OriColor;
+                    }
+                    else 
+                    {
+                        ArmyPriceTextObj[i].text = "-";
+                        ArmyPriceTextObj[i].color= new Color(0, 0, 0, 1) ;
+                    }
+                }
+ 
+                for (int i = 0; i < ArmyLvTextObj.Count; ++i)
+                {
+                    switch (i % MaxItemPerCategory)
+                    {
+                        case 0: ArmyLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army1).ToString(); break;
+                        case 1: ArmyLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army2).ToString(); break;
+                        case 2: ArmyLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army3).ToString(); break;
+                        case 3: ArmyLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army4).ToString(); break;
+                    }
+                }
+                break;
+            case (int)InGameOperation.ScreenShownID.SSIDTopRight:
+                for (int i = 0; i < SkillPriceTextObj.Count; ++i)
+                {
+                    Upgrades.StoreItems itemID = Upgrades.StoreItems.MagicMeteor + i % MaxItemPerCategory;
+                    int price = ItemPrice[itemID][Upgrades.GetLevel(itemID)];
+                    SkillPriceTextObj[i].text = price.ToString() + "G";
+                    SkillPriceTextObj[i].color = (price > resourceManager.GetCurrMaterial() || SkillStack.CheckFullStocks()) ? new Color(1, 0, 0, 1) : OriColor;
+                }
+
+                for (int i = 0; i < SkillLvTextObj.Count; ++i)
+                {
+                    switch (i % MaxItemPerCategory)
+                    {
+                        case 0: SkillLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor).ToString(); break;
+                        case 1: SkillLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard).ToString(); break;
+                        case 2: SkillLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification).ToString(); break;
+                        case 3: SkillLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicSummon).ToString(); break;
+                    }
+                }
+                break;
         }
     } 
     public int GetPrice(int itemID) {
@@ -127,14 +173,17 @@ public class StoreManager : MonoBehaviour
                 return bonusBossCooldown[2];
         }
 
+        if (Upgrades.GetLevel(itemID)+1 >= ItemPrice[itemID].Length) {
+            return -1;
+        }
         return ItemPrice[itemID][Upgrades.GetLevel(itemID) + 1];
     }
 
-    public int GetPreviousCost(int itemID) {
-        return GetPreviousCost((Upgrades.StoreItems)(itemID + (sceneManager.currScreenShown + 1) * Upgrades.MaxItemPerSlot), pendToKart[itemID]);
+    public int GetCost(int itemID) {
+        return GetCost((Upgrades.StoreItems)(itemID + (sceneManager.currScreenShown + 1) * Upgrades.MaxItemPerSlot), pendToKart[itemID]);
     }
 
-    public int GetPreviousCost(Upgrades.StoreItems itemID,int additionLv)
+    public int GetCost(Upgrades.StoreItems itemID,int additionLv)
     {
         if (ItemPrice.ContainsKey(itemID) == false) return 0;
         return ItemPrice[itemID][Upgrades.GetLevel(itemID)+ additionLv];
@@ -147,9 +196,6 @@ public class StoreManager : MonoBehaviour
         Upgrades.AddLevel(FullitemID,pendToKart[itemID]);
 
         resourceManager.ChangeMaterial(-1 * costToKart[itemID]);
-
-        UpdatePrice();
-        UpdateAllItemsLvShown();
 
         pendToKart[itemID] = 0;
         costToKart[itemID] = 0;
@@ -174,48 +220,24 @@ public class StoreManager : MonoBehaviour
     public bool ItemPendingAdd(int itemID)
     {
         Upgrades.StoreItems fullitemID = (Upgrades.StoreItems)(itemID + (sceneManager.currScreenShown + 1) * Upgrades.MaxItemPerSlot);
-        
-        //Checking StockItems
-        bool isBonusBoss = false;
 
-        switch (fullitemID) {
-            case Upgrades.StoreItems.CastleHP:
-                break;
-            case Upgrades.StoreItems.BonusBoss1:
-                isBonusBoss = GetBossCD(0) == 0; break;
-            case Upgrades.StoreItems.BonusBoss2:
-                isBonusBoss = GetBossCD(1) == 0; break;
-            case Upgrades.StoreItems.BonusBoss3:
-                isBonusBoss = GetBossCD(2) == 0; break;
-            case Upgrades.StoreItems.MagicMeteor:
-                if (GetPreviousCost(Upgrades.StoreItems.MagicMeteor, 0) <= resourceManager.GetCurrMaterial())
-                    return SkillStack.AddStock(fullitemID);
-                break;
-            case Upgrades.StoreItems.MagicBlizzard:
-                if (GetPreviousCost(Upgrades.StoreItems.MagicBlizzard, 0) <= resourceManager.GetCurrMaterial())
-                    return SkillStack.AddStock(fullitemID);
-                break;
-            case Upgrades.StoreItems.MagicSummon:
-                if (GetPreviousCost(Upgrades.StoreItems.MagicSummon, 0) <= resourceManager.GetCurrMaterial())
-                    return SkillStack.AddStock(fullitemID);
-                break;
-            case Upgrades.StoreItems.MagicPetrification:
-                if (GetPreviousCost(Upgrades.StoreItems.MagicPetrification, 0) <= resourceManager.GetCurrMaterial())
-                    return SkillStack.AddStock(fullitemID);
-                break;
-        }
-
-        if (isBonusBoss) {
-            if (SkillStack.AddStock(fullitemID)){
-                bonusBossCooldown[itemID - 1] = cdCounter[itemID - 1];
-                return true;
-            }
-        }
-
-        //For Non-StockItems
-        int price = CheckItemAdd(fullitemID);
+        int price = CheckEnoughResource(fullitemID);
         if (price > 0)
         {
+            switch (fullitemID)
+            {
+                case Upgrades.StoreItems.BonusBoss1:
+                case Upgrades.StoreItems.BonusBoss2:
+                case Upgrades.StoreItems.BonusBoss3:
+                case Upgrades.StoreItems.MagicBlizzard:
+                case Upgrades.StoreItems.MagicMeteor:
+                case Upgrades.StoreItems.MagicPetrification:
+                case Upgrades.StoreItems.MagicSummon:
+                    if (SkillStack.CheckFullStocks()) 
+                        return false;
+                    break;
+            }
+
             pendToKart[itemID]++;
             costToKart[itemID] += price;
             return true;
@@ -223,11 +245,11 @@ public class StoreManager : MonoBehaviour
         return false;
     }
 
-    public int CheckItemAdd(Upgrades.StoreItems itemID)
+    public int CheckEnoughResource(Upgrades.StoreItems itemID)
     {
         int totalCosttoPurchase = CosttoPurchaseCalculation();
         int price = GetPrice(itemID);
-
+        if (price < 0) return -1;
         if (resourceManager.GetCurrMaterial() - totalCosttoPurchase > price)
             return price;
         return -1;
@@ -238,11 +260,16 @@ public class StoreManager : MonoBehaviour
         if (pendToKart[itemID] < 0) return false;
 
         pendToKart[itemID]--;
-        costToKart[itemID] -= GetPreviousCost(itemID);
+        costToKart[itemID] -= GetCost(itemID);
         return true;
     }
 
-    private int GetBossCD(int bossID) {
+    public void SetBossCD(int bossID)
+    {
+        bonusBossCooldown[bossID] = cdCounter[bossID];
+    }
+
+    public int GetBossCD(int bossID) {
         return bonusBossCooldown[bossID];
     }
 
@@ -267,30 +294,5 @@ public class StoreManager : MonoBehaviour
 
     public void raycastAction(Upgrades.StoreItems fullitemID,int infoID) { //-1 :subtract 0:purchase 1:add
         raycastAction((int)fullitemID% Upgrades.MaxItemPerSlot, infoID);
-    }
-
-    public void UpdateAllItemsLvShown()
-    {
-        for (int i = 0; i < ArmyLvTextObj.Count; ++i) {
-            switch (i % MaxItemPerCategory) {
-                case 0: ArmyLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army1).ToString(); break;
-                case 1: ArmyLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army2).ToString(); break;
-                case 2: ArmyLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army3).ToString(); break;
-                case 3: ArmyLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army4).ToString(); break;
-            }
-        
-        }
-
-        for (int i = 0; i < SkillLvTextObj.Count; ++i)
-        {
-            switch (i % MaxItemPerCategory)
-            {
-                case 0: SkillLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor).ToString(); break;
-                case 1: SkillLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard).ToString(); break;
-                case 2: SkillLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification).ToString(); break;
-                case 3: SkillLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicSummon).ToString(); break;
-            }
-
-        }
     }
 }

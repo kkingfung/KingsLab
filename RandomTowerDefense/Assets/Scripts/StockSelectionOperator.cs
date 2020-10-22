@@ -15,8 +15,10 @@ public class StockSelectionOperator : MonoBehaviour
     void Update()
     {
         if (isTouch && Input.touchCount > 0)
-            transform.eulerAngles = new Vector3(0, 0, Mathf.Rad2Deg*Mathf.Acos(Vector2.Dot(Input.touches[0].position - DragRefPos, Vector2.up)));
+            transform.localEulerAngles = new Vector3(0, 0, 
+                (-90f+ Mathf.Rad2Deg * Mathf.Atan2(Input.touches[0].position.y-DragRefPos.y, Input.touches[0].position.x - DragRefPos.x)));
         if (!isTouch)
-            transform.eulerAngles = new Vector3(0, 0, Mathf.Rad2Deg * Mathf.Acos(Vector2.Dot(new Vector2(Input.mousePosition.x, Input.mousePosition.y) - DragRefPos, Vector2.up)));
+            transform.localEulerAngles = new Vector3(0, 0,
+                (-90f + Mathf.Rad2Deg * Mathf.Atan2(Input.mousePosition.y - DragRefPos.y, Input.mousePosition.x - DragRefPos.x)));
     }
 }

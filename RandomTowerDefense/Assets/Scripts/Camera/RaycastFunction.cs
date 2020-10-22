@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Experimental.TerrainAPI;
 
 public class RaycastFunction : MonoBehaviour
@@ -8,10 +9,10 @@ public class RaycastFunction : MonoBehaviour
     public int ActionID;
     public int InfoID;
 
-    StageSelectOperation SelectionSceneManager;
-    InGameOperation GameSceneManager;
+    private StageSelectOperation SelectionSceneManager;
+    private InGameOperation GameSceneManager;
 
-    StoreManager storeManager;
+    private StoreManager storeManager;
 
     private enum ActionTypeID {
         StageSelection_Keybroad=0,
@@ -49,7 +50,8 @@ public class RaycastFunction : MonoBehaviour
 
     public void ActionFunc()
     {
-        if (SelectionSceneManager == null) return;
+        if (SelectionSceneManager == null && GameSceneManager==null) return;
+
         switch ((ActionTypeID)ActionID)
         {
             //For Stage Selection Scene
@@ -123,6 +125,31 @@ public class RaycastFunction : MonoBehaviour
                 storeManager.raycastAction(Upgrades.StoreItems.MagicPetrification, InfoID);
                 break;
 
+        }
+        StartCoroutine(ColorRoutine());
+    }
+
+    private IEnumerator ColorRoutine()
+    {
+        Color color=new Color();
+        if (GetComponent<MeshRenderer>()) color = GetComponent<MeshRenderer>().material.color;
+        if (GetComponent<RawImage>()) color = GetComponent<RawImage>().color;
+        if (GetComponent<SpriteRenderer>()) color = GetComponent<SpriteRenderer>().color;
+        Color oriColor = new Color(color.r, color.g, color.b, color.a);
+        color.r = 0; color.g = 0; color.b = 0;
+        int reqFrame = 10;
+        float chgSpdr = (oriColor.r - color.r) / reqFrame;
+        float chgSpdb = (oriColor.b - color.b) / reqFrame;
+        float chgSpdg = (oriColor.g - color.g) / reqFrame;
+        while (reqFrame-->0)
+        {
+            color.r += chgSpdr;
+            color.b += chgSpdb;
+            color.g += chgSpdg;
+            if (GetComponent<MeshRenderer>())  GetComponent<MeshRenderer>().material.color= color;
+            if (GetComponent<RawImage>())  GetComponent<RawImage>().color = color;
+            if (GetComponent<SpriteRenderer>()) GetComponent<SpriteRenderer>().color = color;
+            yield return new WaitForSeconds(0f);
         }
     }
 }

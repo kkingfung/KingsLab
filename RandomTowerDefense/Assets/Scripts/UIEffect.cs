@@ -62,7 +62,7 @@ public class UIEffect : MonoBehaviour
     {
             switch (EffectID) {
             case 0://for Title Scene Instruction
-                if (text) text.color =new Color (text.color.r, text.color.g, text.color.b,Mathf.Sin(Time.time*8.0f));
+                if (text) text.color =new Color (text.color.r, text.color.g, text.color.b,Mathf.Abs(Mathf.Sin(Time.time* magnitude)));
                 break;
             case 1://for Selection Scene Arrow Horizontal
                 this.GetComponent<RectTransform>().localPosition = oriPosRect + Mathf.Sin(Time.time) * magnitude * targetCam.transform.up;   

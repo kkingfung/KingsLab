@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkyboxManager : MonoBehaviour
+public class EnvironmentManager : MonoBehaviour
 {
     public List<Material> skyboxMat;
+    public List<GameObject> terrainObj;
     int stageID;
     float shaderInput;
     int maxSkyboxCubemap = 3;
@@ -14,9 +15,14 @@ public class SkyboxManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        stageID =  PlayerPrefs.GetInt("StageID");
+        stageID =  PlayerPrefs.GetInt("IslandNow");
         timeManager = FindObjectOfType<TimeManager>();
         RenderSettings.skybox = skyboxMat[stageID];
+
+        for(int i=0;i< terrainObj.Count;++i) {
+            if (i == stageID) terrainObj[i].SetActive(true);
+            else terrainObj[i].SetActive(false);
+        }
     }
 
     // Update is called once per frame

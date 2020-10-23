@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Newtonsoft.Json.Converters;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -42,6 +43,7 @@ public class TowerManager : MonoBehaviour
 
     PlayerManager playerManager;
     ResourceManager resourceManager;
+    FilledMapGenerator filledMapGenerator;
 
     // Start is called before the first frame update
     void Start()
@@ -53,6 +55,7 @@ public class TowerManager : MonoBehaviour
 
         playerManager = FindObjectOfType<PlayerManager>();
         resourceManager = FindObjectOfType<ResourceManager>();
+        filledMapGenerator = FindObjectOfType<FilledMapGenerator>();
     }
 
     // Update is called once per frame
@@ -61,9 +64,17 @@ public class TowerManager : MonoBehaviour
         
     }
 
-    public void BuildTower(Vector3 location, int rank = 1)
+    public void BuildTower(GameObject pillar, int rank = 1)
+    {
+        if (rank == 1 && filledMapGenerator.ChkPillarStatusEmpty(pillar) == false) return;
+
+        Vector3 location = pillar.transform.position + Vector3.up * filledMapGenerator.UpdatePillarStatus(pillar);
+        BuildTower(location, rank);
+    }
+        public void BuildTower(Vector3 location, int rank = 1)
     {
         GameObject tower;
+        
         if (resourceManager.ChkAndBuild(rank) == false)
         {
             return;

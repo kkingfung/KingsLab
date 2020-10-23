@@ -25,6 +25,9 @@ public class StageAttr
 
 public static class StageInfo
 {
+    static readonly int MaxMapDepth = 20;
+    static readonly int MinMapDepth = 6;
+
     static Dictionary<string, StageAttr> stageInfo;
 
     //Default Stage Info
@@ -109,25 +112,26 @@ public static class StageInfo
         switch ((StageInfoID)infoID)
         {
             case StageInfoID.Enum_waveNum:
-                PlayerPrefs.SetFloat("waveNumDir", input);
+                PlayerPrefs.SetFloat("waveNum", (input> MaxMapDepth* MaxMapDepth) ? MaxMapDepth * MaxMapDepth : 
+                    (input< MinMapDepth * MinMapDepth ? MinMapDepth * MinMapDepth : input));
                 break;
             case StageInfoID.Enum_stageSize:
-                PlayerPrefs.SetFloat("stageSizeDir", input);
+                PlayerPrefs.SetFloat("stageSize", input);
                 break;
             case StageInfoID.Enum_enmNum:
-                PlayerPrefs.SetFloat("enmNumDir", input);
+                PlayerPrefs.SetFloat("enmNum", input);
                 break;
             case StageInfoID.Enum_enmSpeed:
-                PlayerPrefs.SetFloat("enmSpeedDir", input);
+                PlayerPrefs.SetFloat("enmSpeed", input);
                 break;
             case StageInfoID.Enum_spawnSpeed:
-                PlayerPrefs.SetFloat("spawnSpeedDir", input);
+                PlayerPrefs.SetFloat("spawnSpeed", input);
                 break;
             case StageInfoID.Enum_hpMax:
-                PlayerPrefs.SetFloat("hpMaxDir", input);
+                PlayerPrefs.SetFloat("hpMax", input);
                 break;
             case StageInfoID.Enum_resource:
-                PlayerPrefs.SetFloat("resourceDir", input);
+                PlayerPrefs.SetFloat("resource", input);
                 break;
         }
     }

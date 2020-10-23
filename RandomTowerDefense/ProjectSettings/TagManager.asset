@@ -23,10 +23,10 @@ TagManager:
   - RecordBroad
   - Arena
   - Tower
-  - 
-  - 
-  - 
-  - 
+  - Enemy
+  - Castle
+  - Ground
+  - Pillar
   - 
   - 
   - 

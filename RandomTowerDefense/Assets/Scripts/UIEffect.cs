@@ -64,10 +64,10 @@ public class UIEffect : MonoBehaviour
             case 0://for Title Scene Instruction
                 if (text) text.color =new Color (text.color.r, text.color.g, text.color.b,Mathf.Abs(Mathf.Sin(Time.time* magnitude)));
                 break;
-            case 1://for Selection Scene Arrow Horizontal
+            case 1://for Selection Scene Arrow Vertical
                 this.GetComponent<RectTransform>().localPosition = oriPosRect + Mathf.Sin(Time.time) * magnitude * targetCam.transform.up;   
                 break;
-            case 2://for Selection Scene Arrow Vertical
+            case 2://for Selection Scene Arrow Horizontal
                 this.GetComponent<RectTransform>().localPosition = oriPosRect + Mathf.Sin(Time.time) * magnitude * targetCam.transform.right;
                 break;
             case 3://for Option Canva Gyro

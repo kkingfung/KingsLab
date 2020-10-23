@@ -9,7 +9,7 @@ public class StockSelectionOperator : MonoBehaviour
     private void Start()
     {
         isTouch = FindObjectOfType<InputManager>().GetUseTouch();
-        DragRefPos = FindObjectOfType<InputManager>().GetDragPos();
+        DragRefPos = FindObjectOfType<PlayerManager>().GetDragPos();
     }
     // Update is called once per frame
     void Update()

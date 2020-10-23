@@ -3,17 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class FilledMapGenerator : MonoBehaviour {
-	
+	private Coord[] FixedFreeSpace;
+
 	public Map[] maps;
 	public int mapIndex;
-	
+	public bool Randomize;
 	public Transform tilePrefab;
 	public Transform obstaclePrefab;
 	public Transform mapFloor;
 	public Transform navmeshFloor;
 	public Transform navmeshMaskPrefab;
 	public Vector2 maxMapSize;
-	
+
+	public GameObject FakeParentCam;
+	private Vector3 RelativePosition;
+	private bool FollowFakeParent=false;
+
 	[Range(0,1)]
 	public float outlinePercent;
 	
@@ -22,16 +27,34 @@ public class FilledMapGenerator : MonoBehaviour {
 	Queue<Coord> shuffledTileCoords;
 	Queue<Coord> shuffledOpenTileCoords;
 	Transform[,] tileMap;
-	
+	List<Pillar> PillarList;
+
 	Map currentMap;
 
-	void OnNewWave(int waveNumber) {
-		mapIndex = waveNumber - 1;
+	private void Start() {
+		PillarList = new List<Pillar>();
+	}
+	public void followParentCam(bool toFollow) {
+		FollowFakeParent = toFollow;
+		RelativePosition = this.transform.position - FakeParentCam.transform.position;
+	}
+	private void Update()
+	{
+		if (FollowFakeParent) {
+			this.transform.position = RelativePosition + FakeParentCam.transform.position;
+		}
+	}
+
+	public void OnNewStage(int stageNumber) {
+		mapIndex = stageNumber;
 		GenerateMap ();
 	}
 
 	public void GenerateMap() {
 		currentMap = maps[mapIndex];
+
+		if (Randomize)
+			currentMap.seed = Random.Range(int.MinValue, int.MaxValue);
 		tileMap = new Transform[currentMap.mapSize.x,currentMap.mapSize.y];
 		System.Random prng = new System.Random (currentMap.seed);
 
@@ -42,6 +65,25 @@ public class FilledMapGenerator : MonoBehaviour {
 				allTileCoords.Add(new Coord(x,y));
 			}
 		}
+
+		//Space for Castle and TP
+		StageManager stageManager = FindObjectOfType<StageManager>();
+		if (stageManager.SpawnPoint.Length >= 4)
+		{
+			stageManager.SpawnPoint[0] = new Coord(0, 0);
+			stageManager.SpawnPoint[1] = new Coord(currentMap.mapSize.x - 1, 0);
+			stageManager.SpawnPoint[2] = new Coord(0, currentMap.mapSize.y - 1);
+			stageManager.SpawnPoint[3] = new Coord(currentMap.mapSize.x - 1, currentMap.mapSize.y - 1);
+
+			//Remove for Confirmed Open Space
+			foreach (Coord i in stageManager.SpawnPoint)
+				allTileCoords.Remove(i);
+
+			allTileCoords.Remove(new Coord(0, 1));
+			allTileCoords.Remove(new Coord(1, 1));
+			allTileCoords.Remove(new Coord(1, 0));
+		}
+
 		shuffledTileCoords = new Queue<Coord> (Utility.ShuffleArray (allTileCoords.ToArray (), currentMap.seed));
 
 		// Create map holder object
@@ -83,6 +125,7 @@ public class FilledMapGenerator : MonoBehaviour {
 				Transform newObstacle = Instantiate(obstaclePrefab, this.transform.position+obstaclePosition + Vector3.up * obstacleHeight/2, Quaternion.identity) as Transform;
 				newObstacle.parent = mapHolder;
 				newObstacle.localScale = new Vector3((1 - outlinePercent) * tileSize, obstacleHeight, (1 - outlinePercent) * tileSize);
+				PillarList.Add(new Pillar(newObstacle.gameObject, randomCoord.x, randomCoord.y, obstacleHeight));
 
 				Renderer obstacleRenderer = newObstacle.GetComponent<Renderer>();
 				Material obstacleMaterial = new Material(obstacleRenderer.sharedMaterial);
@@ -152,7 +195,12 @@ public class FilledMapGenerator : MonoBehaviour {
 		int targetAccessibleTileCount = (int)(currentMap.mapSize.x * currentMap.mapSize.y - currentObstacleCount);
 		return targetAccessibleTileCount == accessibleTileCount;
 	}
-	
+
+	public Vector3 CoordToPosition(Coord coord)
+	{
+		return CoordToPosition(coord.x,coord.y);
+	}
+
 	Vector3 CoordToPosition(int x, int y) {
 		return new Vector3 (-currentMap.mapSize.x / 2f + 0.5f + x, 0, -currentMap.mapSize.y / 2f + 0.5f + y) * tileSize;
 	}
@@ -177,26 +225,32 @@ public class FilledMapGenerator : MonoBehaviour {
 		return tileMap[randomCoord.x,randomCoord.y];
 	}
 	
-	[System.Serializable]
-	public struct Coord {
-		public int x;
-		public int y;
-		
-		public Coord(int _x, int _y) {
-			x = _x;
-			y = _y;
-		}
-		
-		public static bool operator ==(Coord c1, Coord c2) {
-			return c1.x == c2.x && c1.y == c2.y;
-		}
-		
-		public static bool operator !=(Coord c1, Coord c2) {
-			return !(c1 == c2);
-		}
-		
+	public void CustomizeMapAndCreate(int width,int depth) {
+		maps[3].mapSize=new Coord(width,depth);
+		OnNewStage(3);
 	}
-	
+
+	public float UpdatePillarStatus(GameObject targetPillar) {
+		foreach (Pillar i in PillarList)
+		{
+			if (i.obj != targetPillar) continue;
+			i.state = 1;
+			return i.height;
+		}
+		return 0;
+	}
+
+	public bool ChkPillarStatusEmpty(GameObject targetPillar) {
+		Debug.Log(0);
+		foreach (Pillar i in PillarList) {
+			Debug.Log(1);
+			if (i.obj == null) continue;
+			if (i.obj != targetPillar) continue;
+			return (i.state == 0);
+		}
+		return false;
+	}
+
 	[System.Serializable]
 	public class Map {
 		
@@ -215,5 +269,46 @@ public class FilledMapGenerator : MonoBehaviour {
 			}
 		}
 		
+	}
+}
+
+[System.Serializable]
+public struct Coord
+{
+	public int x;
+	public int y;
+
+	public Coord(int _x, int _y)
+	{
+		x = _x;
+		y = _y;
+	}
+
+	public static bool operator ==(Coord c1, Coord c2)
+	{
+		return c1.x == c2.x && c1.y == c2.y;
+	}
+
+	public static bool operator !=(Coord c1, Coord c2)
+	{
+		return !(c1 == c2);
+	}
+
+}
+
+
+public class Pillar
+{
+	public GameObject obj;
+	public Coord mapSize;
+	public int state;//0: Empty 1: Occupied
+	public float height;
+	public Pillar(GameObject obj, int _x, int _y,float height, int state = 0)
+	{
+		this.obj = obj;
+		mapSize.x = _x;
+		mapSize.y = _y;
+		this.state = state;
+		this.height = height;
 	}
 }

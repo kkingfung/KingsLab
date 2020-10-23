@@ -9,7 +9,8 @@ public class MyMobileInput
     public Touch[] TouchInfo; //0:first finger 1:second fingers
     public bool[] isTouch; //0:one finger 1:two fingers
 
-    public MyMobileInput() {
+    public MyMobileInput()
+    {
         TouchInfo = new Touch[2];
         isTouch = new bool[2];
     }
@@ -18,7 +19,7 @@ public class MyMobileInput
 [System.Serializable]
 public class InputManager : MonoBehaviour
 {
-    readonly float tapStayTime = 0.5f;
+    readonly float tapStayTime = 1.2f;
     readonly float tapDoubleTime = 1f;
     readonly float dragDiff = 5.0f;//cooperate with Scene Script(toDrag)
 
@@ -91,27 +92,29 @@ public class InputManager : MonoBehaviour
         //For Arena Scene/Screen Only
         if (sceneManager.currScreenShown != 0) return;
 
-        if (Input.GetMouseButtonDown(0)) {
+        if (Input.GetMouseButtonDown(0))
+        {
             DragTimeRecord = Time.time;
         }
         if (Input.GetMouseButtonUp(0))
         {
-            if (playerManager && playerManager.isSkillActive == false && isDragging)
-                playerManager.UseStock(posDragging);
-           
+            if (playerManager && playerManager.isSkillActive == false && playerManager.isChecking)
+                playerManager.UseStock(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
+
             if (Time.time - DragTimeRecord < tapStayTime)
             {
-                playerManager.RaycastTest(LayerMask.NameToLayer("Arena"), Time.time - TapTimeRecord < tapDoubleTime);
-                TapTimeRecord = Time.time;
+                playerManager.RaycastTest(Time.time - TapTimeRecord < tapDoubleTime);
+
             }
-            DragTimeRecord = -1;
+            DragTimeRecord = 0;
+            TapTimeRecord = Time.time;
         }
 
         if (Input.GetMouseButton(0))
         {
             if (Time.time - DragTimeRecord > tapStayTime)
             {
-                playerManager.CheckStock(posDragging);
+                playerManager.CheckStock(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
             }
 
         }
@@ -120,25 +123,25 @@ public class InputManager : MonoBehaviour
     {
         if (isDragging)
         {
-            if (!playerManager.isChecking)
+            #region ScreenOperation
+            if (FindObjectOfType<StageSelectOperation>() != null)
             {
-                #region ScreenOperation
-                if (FindObjectOfType<StageSelectOperation>() != null)
+                if (Input.mousePosition.x - posDragging.x > dragDiff)
                 {
-                    if (Input.mousePosition.x - posDragging.x > dragDiff)
-                    {
-                        FindObjectOfType<ISceneChange>().toDrag = 2;
-                        isDragging = false;
-                    }
-                    if (Input.mousePosition.x - posDragging.x < -dragDiff)
-                    {
-                        FindObjectOfType<ISceneChange>().toDrag = 1;
-                        isDragging = false;
-                    }
+                    FindObjectOfType<ISceneChange>().toDrag = 2;
+                    isDragging = false;
                 }
-
-                if (FindObjectOfType<InGameOperation>() != null)
+                if (Input.mousePosition.x - posDragging.x < -dragDiff)
                 {
+                    FindObjectOfType<ISceneChange>().toDrag = 1;
+                    isDragging = false;
+                }
+            }
+            if (FindObjectOfType<InGameOperation>() != null)
+            {
+                if (playerManager && !playerManager.StockCheckExist() && playerManager.isChecking == false)
+                {
+
                     if (Input.mousePosition.x - posDragging.x > dragDiff)
                     {
                         FindObjectOfType<ISceneChange>().toDrag = 1;
@@ -160,14 +163,17 @@ public class InputManager : MonoBehaviour
                         isDragging = false;
                     }
                 }
-                #endregion
+                else isDragging = false;
             }
+
+            #endregion
         }
         if (sceneManager)
             ArenaActionsByMouse();
     }
 
-    private void ArenaActionsByTouch(int TouchCount) {
+    private void ArenaActionsByTouch(int TouchCount)
+    {
         //For Arena Scene/Screen Only
         if (sceneManager.currScreenShown != 0) return;
         for (int touchId = 0; touchId < Math.Min(TouchCount, mobileInput.maxTouch); ++touchId)
@@ -179,38 +185,74 @@ public class InputManager : MonoBehaviour
             switch (touch.phase)
             {
                 case TouchPhase.Began:
-                    DragTimeRecord = Time.time; break;
+                    DragTimeRecord = Time.time;
+                    break;
                 case TouchPhase.Moved:
                     if (Time.time - DragTimeRecord > tapStayTime)
-                        playerManager.CheckStock(posDragging);
+                        playerManager.CheckStock(touch.position);
                     break;
                 case TouchPhase.Ended:
-                    if (playerManager && playerManager.isSkillActive == false && isDragging)
-                        playerManager.UseStock(posDragging);
+                    if (playerManager && playerManager.isSkillActive == false && playerManager.isChecking)
+                        playerManager.UseStock(touch.position);
                     if (Time.time - DragTimeRecord < tapStayTime)
                     {
-                        playerManager.RaycastTest(LayerMask.NameToLayer("Arena"), Time.time - TapTimeRecord < tapDoubleTime);
-                        TapTimeRecord = Time.time;
+                        playerManager.RaycastTest( Time.time - TapTimeRecord < tapDoubleTime);
+                        DragTimeRecord = 0;
                     }
+                    TapTimeRecord = Time.time;
 
                     if (isDragging)
                     {
-                        if (touch.position.x - posDragging.x > dragDiff)
+                        #region ScreenOperation
+                        if (FindObjectOfType<StageSelectOperation>() != null)
                         {
-                            FindObjectOfType<ISceneChange>().toDrag = 2;
-                            isDragging = false;
+                            if (touch.position.x - posDragging.x > dragDiff)
+                            {
+                                FindObjectOfType<ISceneChange>().toDrag = 2;
+                                isDragging = false;
+                            }
+                            if (touch.position.x - posDragging.x < -dragDiff)
+                            {
+                                FindObjectOfType<ISceneChange>().toDrag = 1;
+                                isDragging = false;
+                            }
                         }
-                        if (touch.position.x - posDragging.x < -dragDiff)
+                        if (FindObjectOfType<InGameOperation>() != null)
                         {
-                            FindObjectOfType<ISceneChange>().toDrag = 1;
-                            isDragging = false;
+                            if (playerManager && !playerManager.StockCheckExist() && playerManager.isChecking==false)
+                            {
+
+                                if (touch.position.x - posDragging.x > dragDiff)
+                                {
+                                    FindObjectOfType<ISceneChange>().toDrag = 1;
+                                    isDragging = false;
+                                }
+                                if (touch.position.x - posDragging.x < -dragDiff)
+                                {
+                                    FindObjectOfType<ISceneChange>().toDrag = 3;
+                                    isDragging = false;
+                                }
+                                if (touch.position.y - posDragging.y > dragDiff)
+                                {
+                                    FindObjectOfType<ISceneChange>().toDrag = 0;
+                                    isDragging = false;
+                                }
+                                if (touch.position.y - posDragging.y < -dragDiff)
+                                {
+                                    FindObjectOfType<ISceneChange>().toDrag = 2;
+                                    isDragging = false;
+                                }
+                            }
+                            else isDragging = false;
                         }
+
+                        #endregion
                     }
                     break;
                 case TouchPhase.Stationary:
                     if (Time.time - DragTimeRecord > tapStayTime)
                     {
-                        playerManager.CheckStock(posDragging);
+                        playerManager.CheckStock(touch.position);
                     }
                     break;
             }
@@ -232,22 +274,21 @@ public class InputManager : MonoBehaviour
         mobileInput.isTouch[0] = false;
         mobileInput.isTouch[1] = false;
 
-        if (TouchCount == 2 && 
-            (Input.GetTouch(0).phase == TouchPhase.Moved || Input.GetTouch(0).phase == TouchPhase.Moved)) 
+        if (TouchCount == 2 &&
+            (Input.GetTouch(0).phase == TouchPhase.Moved || Input.GetTouch(0).phase == TouchPhase.Moved))
             HandleZoom();
 
-        if (sceneManager) 
+        if (sceneManager)
             ArenaActionsByTouch(TouchCount);
     }
 
-    public void BeginDrag() { //For Specified Screen Area (Button)
+    public void BeginDrag()
+    { //For Specified Screen Area (Button)
         isDragging = true;
-        if (Input.touchCount>0)
-        posDragging = Input.touches[0].position;
-        else 
-        posDragging = Input.mousePosition;
-
-
+        if (Input.touchCount > 0)
+            posDragging = Input.touches[0].position;
+        else
+            posDragging = Input.mousePosition;
     }
 
     public void EndDrag() //For Spare
@@ -289,20 +330,23 @@ public class InputManager : MonoBehaviour
     private void LBMTesting()
     {
         if (LBMTest == null) return;
-        
-        if (useTouch) {
+
+        if (useTouch)
+        {
             LBMTest.Interaction(mobileInput.isTouch[0], !mobileInput.isTouch[0], mobileInput.TouchInfo[0].position, true);
             LBMTest.Interaction(mobileInput.isTouch[1], !mobileInput.isTouch[1], mobileInput.TouchInfo[1].position, true);
         }
-        else 
-            LBMTest.Interaction(Input.GetMouseButton(0), !Input.GetMouseButton(0),Input.mousePosition,true);
+        else
+            LBMTest.Interaction(Input.GetMouseButton(0), !Input.GetMouseButton(0), Input.mousePosition, true);
     }
 
-    public bool GetAnyInput() {
+    public bool GetAnyInput()
+    {
         return mobileInput.isTouch[0] || Input.GetMouseButton(0);
     }
 
-    private RaycastHit RaycastTest() {
+    private RaycastHit RaycastTest()
+    {
         Ray ray = new Ray();
         RaycastHit hit = new RaycastHit();
 
@@ -321,10 +365,10 @@ public class InputManager : MonoBehaviour
 
                 if (Input.GetTouch(t.fingerId).phase == TouchPhase.Began)
                 {
-                    if (Physics.Raycast(ray, out hit, 1000, LayerMask.NameToLayer("ButtonLayer"))
-                    &&  Buttons.Contains(hit.transform.gameObject))
+                    if (Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("ButtonLayer"))
+                    && Buttons.Contains(hit.transform.gameObject))
                     {
-                        if(hit.transform.GetComponent<RaycastFunction>())
+                        if (hit.transform.GetComponent<RaycastFunction>())
                             hit.transform.GetComponent<RaycastFunction>().ActionFunc();
                         break;
                     }
@@ -351,7 +395,7 @@ public class InputManager : MonoBehaviour
             }
         }
 
-            return hit;
+        return hit;
     }
 
     private void ClickEffect(Camera TargetCam)

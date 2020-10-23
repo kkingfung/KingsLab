@@ -88,20 +88,12 @@ public class TitleOperation: ISceneChange
         PlayerPrefs.SetFloat("zoomRate",0f);
 
         PlayerPrefs.SetFloat("waveNum", 1);
-        PlayerPrefs.SetFloat("stageSize", 1);
+        PlayerPrefs.SetFloat("stageSize", 400);
         PlayerPrefs.SetFloat("enmNum", 1);
         PlayerPrefs.SetFloat("enmSpeed", 1);
         PlayerPrefs.SetFloat("spawnSpeed", 1);
         PlayerPrefs.SetFloat("hpMax", 5);
         PlayerPrefs.SetFloat("resource", 1);
-
-        PlayerPrefs.SetFloat("waveNumDir", 1);
-        PlayerPrefs.SetFloat("stageSizeDir", 1);
-        PlayerPrefs.SetFloat("enmNumDir", 1);
-        PlayerPrefs.SetFloat("enmSpeedDir", 1);
-        PlayerPrefs.SetFloat("spawnSpeedDir", 1);
-        PlayerPrefs.SetFloat("hpMaxDir", 5);
-        PlayerPrefs.SetFloat("resourceDir", 1);
     }
     // Start is called before the first frame update
     private void Start()

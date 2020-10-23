@@ -47,23 +47,51 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maps:
   - mapSize:
-      x: 9
-      y: 8
-    obstaclePercent: 0.58
-    seed: 0
-    minObstacleHeight: 1.5
-    maxObstacleHeight: 1.5
+      x: 6
+      y: 6
+    obstaclePercent: 1
+    seed: 2
+    minObstacleHeight: 0.1
+    maxObstacleHeight: 0.6
     foregroundColour: {r: 0.4117647, g: 0, b: 0, a: 0}
     backgroundColour: {r: 0.9098039, g: 0.05882353, b: 0.25490198, a: 0}
-  mapIndex: 0
+  - mapSize:
+      x: 9
+      y: 8
+    obstaclePercent: 1
+    seed: 3
+    minObstacleHeight: 0.1
+    maxObstacleHeight: 0.6
+    foregroundColour: {r: 0.4117647, g: 0, b: 0, a: 0}
+    backgroundColour: {r: 0.9098039, g: 0.05882353, b: 0.25490198, a: 0}
+  - mapSize:
+      x: 12
+      y: 9
+    obstaclePercent: 1
+    seed: 4
+    minObstacleHeight: 0.1
+    maxObstacleHeight: 0.6
+    foregroundColour: {r: 0.4117647, g: 0, b: 0, a: 0}
+    backgroundColour: {r: 0.9098039, g: 0.05882353, b: 0.25490198, a: 0}
+  - mapSize:
+      x: 16
+      y: 9
+    obstaclePercent: 1
+    seed: 0
+    minObstacleHeight: 0.1
+    maxObstacleHeight: 0.6
+    foregroundColour: {r: 0.4117647, g: 0, b: 0, a: 0}
+    backgroundColour: {r: 0.9098039, g: 0.05882353, b: 0.25490198, a: 0}
+  mapIndex: 3
   tilePrefab: {fileID: 455618, guid: 384e7e5f5469c564faa50e3158b0c328, type: 3}
   obstaclePrefab: {fileID: 461822, guid: 3711498930f5d204ab5979e800272acc, type: 3}
   mapFloor: {fileID: 2786186500453849820}
   navmeshFloor: {fileID: 2786186499764198953}
   navmeshMaskPrefab: {fileID: 404898, guid: 2819726a480fa46419aec4f76b1268e7, type: 3}
-  maxMapSize: {x: 25, y: 20.1}
-  outlinePercent: 0.1
-  tileSize: 1.57
+  maxMapSize: {x: 20, y: 20}
+  FakeParentCam: {fileID: 0}
+  outlinePercent: 0
+  tileSize: 1
 --- !u!1 &2786186499764198952
 GameObject:
   m_ObjectHideFlags: 0
@@ -91,7 +119,7 @@ Transform:
   m_GameObject: {fileID: 2786186499764198952}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: -0.2, z: -0}
-  m_LocalScale: {x: 39.25, y: 31.557001, z: 0}
+  m_LocalScale: {x: 60, y: 50, z: 0}
   m_Children: []
   m_Father: {fileID: 2786186499629642721}
   m_RootOrder: 1
@@ -112,7 +140,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2786186499764198952}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_MotionVectors: 1
@@ -123,7 +151,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b8724dffa3024984c91406a3684d6761, type: 2}
+  - {fileID: 2100000, guid: bfaf1e74c34b2a64a9b013853a0b12a7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -173,7 +201,7 @@ Transform:
   m_GameObject: {fileID: 2786186500453849823}
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: -0.1, z: 0}
-  m_LocalScale: {x: 14.13, y: 12.56, z: 0}
+  m_LocalScale: {x: 45, y: 40, z: 0}
   m_Children: []
   m_Father: {fileID: 2786186499629642721}
   m_RootOrder: 0
@@ -194,7 +222,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2786186500453849823}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_MotionVectors: 1
@@ -205,7 +233,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a04a6998b715ced4ea069ad1213964d7, type: 2}
+  - {fileID: 2100000, guid: 01377584c22b84f819ecac7f4047c921, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

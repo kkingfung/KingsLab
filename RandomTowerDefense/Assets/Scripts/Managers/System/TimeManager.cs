@@ -10,12 +10,27 @@ public class TimeManager : MonoBehaviour
 	public float timeFactor = 0.05f;
 	public float timeLength = 2f;
 
-	bool isControl = false;
+	private float OriTimeScale;
+	private float OriFixedTimeScale;
+	private bool isControl = false;
+	void Start() {
+		Time.timeScale = 3.0f;
+		OriTimeScale = Time.timeScale;
+		OriFixedTimeScale = Time.fixedDeltaTime;
+	}
 	void Update()
 	{
 		if (isControl) return;
-		Time.timeScale += (1f / timeLength) * Time.unscaledDeltaTime;
-		Time.timeScale = Mathf.Clamp(Time.timeScale, 0f, 3f);
+		if (Time.timeScale < OriTimeScale)
+		{
+			Time.timeScale += (1f / timeLength) * Time.unscaledDeltaTime;
+			Time.timeScale = Mathf.Clamp(Time.timeScale, 0f, OriTimeScale);
+		}
+		if (Time.fixedDeltaTime < OriFixedTimeScale)
+		{
+			Time.fixedDeltaTime += (1f / timeLength) * Time.unscaledDeltaTime;
+			Time.fixedDeltaTime = Mathf.Clamp(Time.fixedDeltaTime, 0f, OriFixedTimeScale);
+		}
 	}
 
 	public void AdjustTime()
@@ -27,6 +42,9 @@ public class TimeManager : MonoBehaviour
 	public void TimeControl() 
 	{
 		isControl = !isControl;
+		if (isControl) {
+			AdjustTime();
+		}
 	}
 
 }

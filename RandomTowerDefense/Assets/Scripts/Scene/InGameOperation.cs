@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Rendering;
+using UnityEditor.ShaderGraph.Internal;
 
 public class InGameOperation : ISceneChange
 {
@@ -43,6 +44,7 @@ public class InGameOperation : ISceneChange
     public List<SpriteRenderer> PetrifySpr;
 
     [Header("Other Settings")]
+    public Material FloorMat;
     public GameObject LandscapeFadeImg;
     public GameObject PortraitFadeImg;
 
@@ -76,7 +78,7 @@ public class InGameOperation : ISceneChange
 
     //Prevent DoubleHit
     private float TimeRecord = 0;
-    private const float TimeWait = 0.5f;
+    private const float TimeWait = 0.01f;
 
     //CameraOperation
     private const int maxRecFrame = 20;
@@ -97,6 +99,7 @@ public class InGameOperation : ISceneChange
         base.SceneIn();
 
         IslandNow = PlayerPrefs.GetInt("IslandNow");
+        FloorMat.SetFloat("ShapesSides",3+ IslandNow);
         MainCam.transform.position = MainCamStayPt[0];
         MainCam.transform.rotation = Quaternion.Euler(MainCamRotationAngle[0]);
 
@@ -135,14 +138,24 @@ public class InGameOperation : ISceneChange
         foreach (Text i in UIIslandName)
         {
             switch (IslandNow) {
-                case 0: i.text = "ヒジリカ島"; break;
-                case 1: i.text = "テンシュキ島"; break;
-                case 2: i.text = "ニモハサ島"; break;
-                case 3: i.text = "ギイシカ島"; break;
+                case 0: i.text = "ヒジリカ島";
+                    FloorMat.SetColor("_Color",new Color(0.34f,1f,0f));
+                    break;
+                case 1: i.text = "テンシュキ島";
+                    FloorMat.SetColor("_Color", new Color(0.82f, 0.47f, 1f));
+                    break;
+                case 2: i.text = "ニモハサ島";
+                    FloorMat.SetColor("_Color", new Color(1f, 0.2f, 0f));
+                    break;
+                case 3: i.text = "ギイシカ島";
+                    FloorMat.SetColor("_Color", new Color(1f, 0.7f, 0f));
+                    break;
             }
         }
 
         toDrag = -1;
+        isOption = false;
+ 
     }
 
     // Update is called once per frame

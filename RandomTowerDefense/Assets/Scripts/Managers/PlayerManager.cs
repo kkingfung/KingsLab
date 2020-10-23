@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    private readonly float CancelDist = 5f;
+    private readonly float CancelDist = 20f;
 
     [HideInInspector]
     public bool isSkillActive;
@@ -42,37 +42,52 @@ public class PlayerManager : MonoBehaviour
     StageManager stageManager;
 
     TowerManager towerManager;
+    FilledMapGenerator mapGenerator;
 
     private void Start()
     {
         enemyManager = FindObjectOfType<EnemyManager>();
         stageManager = FindObjectOfType<StageManager>();
         towerManager = FindObjectOfType<TowerManager>();
+        mapGenerator = FindObjectOfType<FilledMapGenerator>();
     }
 
-    public void CheckStock(Vector2 DragPos) 
+    private void Update()
     {
-        if (StockOperator!=null) return;
+    }
+
+    public Vector2 GetDragPos() { return StockPos; }
+    public void CheckStock(Vector2 DragPos)
+    {
+        if (StockOperator != null) return;
         if (isSkillActive) return;
 
         isChecking = true;
 
-        Camera targetCam= (Screen.width > Screen.height)? refCamL: refCamP;
+        Camera targetCam = (Screen.width > Screen.height) ? refCamL : refCamP;
 
-        StockOperator = Instantiate(StockOperatorPrefab,targetCam.ScreenToWorldPoint(new Vector3(DragPos.x, DragPos.y,StockOperatorDepth)),targetCam.transform.rotation);
+        StockOperator = Instantiate(StockOperatorPrefab, targetCam.ScreenToWorldPoint(new Vector3(DragPos.x, DragPos.y, StockOperatorDepth)), targetCam.transform.rotation);
         StockPos = DragPos;
     }
 
     public void UseStock(Vector2 DragPos)
     {
-        if (!isChecking) return;
+        if (StockOperator == null) return;
         if (isSkillActive) return;
 
         isChecking = false;
-        if (StockOperator) { Destroy(StockOperator); StockOperator = null; }
+        Destroy(StockOperator);
+        StockOperator = null;
 
-        if ((StockPos - DragPos).sqrMagnitude < CancelDist * CancelDist) {
-            return; 
+        if (Input.touchCount > 0)
+        {
+            if ((Input.touches[0].position - DragPos).sqrMagnitude < CancelDist * CancelDist)
+                return;
+        }
+        else
+        {
+            if ((new Vector2(Input.mousePosition.x, Input.mousePosition.y) - DragPos).sqrMagnitude < CancelDist * CancelDist)
+                return;
         }
 
         int StockSelected = -1;
@@ -94,20 +109,20 @@ public class PlayerManager : MonoBehaviour
             StockSelected = 4;
         else StockSelected = 3;
         //Raycast test ground and camera ray
-        Vector3 hitPosition = RaycastTest(LayerMask.NameToLayer("Arena"),false);
+        Vector3 hitPosition = RaycastTest(LayerMask.GetMask("Arena"));
         if (isSelling) return;
 
         //For non-sale
         switch (SkillStack.UseStock(StockSelected))
         {
             case (int)Upgrades.StoreItems.BonusBoss1:
-                enemyManager.SpawnBonusBoss(0, stageManager.SpawnPoint);
+                enemyManager.SpawnBonusBoss(0, mapGenerator.CoordToPosition(stageManager.SpawnPoint[Random.Range(1, 3)]));
                 break;
             case (int)Upgrades.StoreItems.BonusBoss2:
-                enemyManager.SpawnBonusBoss(1, stageManager.SpawnPoint);
+                enemyManager.SpawnBonusBoss(1, mapGenerator.CoordToPosition(stageManager.SpawnPoint[Random.Range(1, 3)]));
                 break;
             case (int)Upgrades.StoreItems.BonusBoss3:
-                enemyManager.SpawnBonusBoss(2, stageManager.SpawnPoint);
+                enemyManager.SpawnBonusBoss(2, mapGenerator.CoordToPosition(stageManager.SpawnPoint[Random.Range(1, 3)]));
                 break;
             case (int)Upgrades.StoreItems.MagicMeteor:
                 CurrentSkill = GameObject.Instantiate(FireSkillPrefab, hitPosition, Quaternion.identity);
@@ -130,10 +145,28 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public Vector3 RaycastTest(LayerMask layer,bool isDoubleTap)
+    public Vector3 RaycastTest(int layer)
+    {
+        Ray ray = new Ray();
+        RaycastHit hit = new RaycastHit();
+
+        //Get Ray according to orientation
+        if (Screen.width > Screen.height)
+        {
+            ray = refCamL.ScreenPointToRay(new Vector2(Screen.width * 0.5f, Screen.height * 0.5f));
+        }
+        else
+        {
+            ray = refCamP.ScreenPointToRay(new Vector2(Screen.width * 0.5f, Screen.height * 0.5f));
+        }
+
+        Physics.Raycast(ray, out hit, 1000, layer);
+        return hit.point;
+    }
+
+    public Vector3 RaycastTest( bool isDoubleTap)
     {
         if (isDoubleTap == false && isSelling == false) return new Vector3();
-
         Ray ray = new Ray();
         RaycastHit hit = new RaycastHit();
 
@@ -148,23 +181,26 @@ public class PlayerManager : MonoBehaviour
         }
 
         //TakeAction
-        if (Physics.Raycast(ray, out hit, 1000, layer))
+        if (isSelling && Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("Tower")))
         {
-            if (isSelling && Physics.Raycast(ray, out hit, 1000, LayerMask.NameToLayer("Tower"))) {
-                towerManager.SellTower(hit.transform.gameObject);
-            }
-            else {
-                if (Physics.Raycast(ray, out hit, 1000, LayerMask.NameToLayer("Tower")))
-                {
-                    towerManager.MergeTower(hit.transform.gameObject, hit.point);
-                }
-                else {
-                    towerManager.BuildTower(hit.point);
-                }
-             }
-            return hit.point;
+            towerManager.SellTower(hit.transform.gameObject);
         }
+        else
+        {
+            if (Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("Tower")))
+            {
+                towerManager.MergeTower(hit.transform.gameObject, hit.point);
+            }
+            if (Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("Pillar")))
+            {
+                towerManager.BuildTower(hit.transform.gameObject);
+            }
+        }
+        return hit.point;
+    }
 
-        return new Vector3();
+    public bool StockCheckExist()
+    {
+        return (this.StockOperator != null);
     }
 }

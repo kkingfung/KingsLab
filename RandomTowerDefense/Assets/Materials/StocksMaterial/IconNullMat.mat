@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: IconNullMat
-  m_Shader: {fileID: -6465566751694194690, guid: 5281b6f4cf402f64b99f31e3a19bc48d, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 603b03575f756bd46b5f09b44b92d25a, type: 3}
   m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -29,5 +29,5 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats: []
     m_Colors:
-    - Color_3DFCA447: {r: 1, g: 0, b: 0, a: 1}
+    - Color_3DFCA447: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []

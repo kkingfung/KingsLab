@@ -5,9 +5,13 @@ using UnityEngine.UI;
 
 public class StageManager : MonoBehaviour
 {
-    public Vector3 SpawnPoint;
-    public GameObject EnemySpawnPort;
-    public GameObject Castle;
+    private const int EnemyNum=3;
+
+    [HideInInspector]
+    public Coord[] SpawnPoint;
+
+    public GameObject EnemySpawnPortPrefab;
+    public GameObject CastlePrefab;
 
     private int MaxCastleHP;
     private int CurrCastleHP;
@@ -20,13 +24,23 @@ public class StageManager : MonoBehaviour
     public Material CoveringMateral;
     private readonly float FadeRate = 0.02f;
 
+    private FilledMapGenerator mapGenerator;
+
+    private GameObject[] EnemySpawnPort;
+    private GameObject CastlePointer;
+
     private int result = 0;
     private bool isReady = false;
+    void Awake() {
+        SpawnPoint = new Coord[EnemyNum + 1];
+        EnemySpawnPort = new GameObject[EnemyNum];
+    }
     // Start is called before the first frame update
     void Start()
     {
         sceneManager = FindObjectOfType<InGameOperation>();
-        result = 0;
+        mapGenerator = FindObjectOfType<FilledMapGenerator>();
+           result = 0;
         foreach (GameObject i in GameClearCanva) { 
             i.SetActive(false);
         }
@@ -43,6 +57,24 @@ public class StageManager : MonoBehaviour
         foreach (TextMesh i in CastleHPText)
         {
             i.text = CurrCastleHP.ToString() + "/" + MaxCastleHP.ToString();
+        }
+
+        if (mapGenerator)
+        {
+            if (sceneManager.GetCurrIsland() != 3)
+            {
+                mapGenerator.OnNewStage(sceneManager.GetCurrIsland());
+            }
+            else
+            {
+                float TotalSize = PlayerPrefs.GetFloat("stageSize");
+                TotalSize = Mathf.Sqrt(TotalSize);
+                mapGenerator.CustomizeMapAndCreate((int)(TotalSize + 0.9f), (int)(TotalSize + 0.9f));
+            }
+
+            CastlePointer = Instantiate(CastlePrefab, mapGenerator.CoordToPosition(SpawnPoint[0]) + mapGenerator.transform.position, Quaternion.Euler(0f,90f,0f));
+            for (int i = 0; i < EnemyNum; ++i) 
+            EnemySpawnPort[i] = Instantiate(EnemySpawnPortPrefab, mapGenerator.CoordToPosition(SpawnPoint[i+1]) + mapGenerator.transform.position, Quaternion.identity);
         }
     }
 

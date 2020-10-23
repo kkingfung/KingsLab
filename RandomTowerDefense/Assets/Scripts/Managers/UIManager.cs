@@ -15,7 +15,7 @@ public class UIManager : MonoBehaviour
         GameObject[] allObj = FindObjectsOfType<GameObject>();
         for (int i = 0; i < allObj.Length; i++)
         {
-            if (allObj[i].layer == LayerMask.NameToLayer("UI")) {
+            if (allObj[i].layer == LayerMask.GetMask("UI")) {
                 Renderer renderer = allObj[i].GetComponent<Renderer>();
                 if (renderer) allUI.Add(renderer);
             }

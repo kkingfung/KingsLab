@@ -23,9 +23,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8154680016809560952}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 9.58, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_Children:
   - {fileID: 6248695700669185030}
   - {fileID: 2376471847293808561}
@@ -34,7 +34,7 @@ Transform:
   - {fileID: 2376471846154135342}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1001 &6248695698979482040
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -48,15 +48,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8524539128020536982, guid: 208d02975a45ec44ab3f7e38a85a7ffc, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.77
+      value: 2.62
       objectReference: {fileID: 0}
     - target: {fileID: 8524539128020536982, guid: 208d02975a45ec44ab3f7e38a85a7ffc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -8.18
+      value: 1.4599999
       objectReference: {fileID: 0}
     - target: {fileID: 8524539128020536982, guid: 208d02975a45ec44ab3f7e38a85a7ffc, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.10116339
+      value: 1.03
       objectReference: {fileID: 0}
     - target: {fileID: 8524539128020536982, guid: 208d02975a45ec44ab3f7e38a85a7ffc, type: 3}
       propertyPath: m_LocalRotation.x
@@ -130,15 +130,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8524539128020536982, guid: 208d02975a45ec44ab3f7e38a85a7ffc, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.28
+      value: 0.64
       objectReference: {fileID: 0}
     - target: {fileID: 8524539128020536982, guid: 208d02975a45ec44ab3f7e38a85a7ffc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -8.18
+      value: 1.46
       objectReference: {fileID: 0}
     - target: {fileID: 8524539128020536982, guid: 208d02975a45ec44ab3f7e38a85a7ffc, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.36
+      value: 2.6
       objectReference: {fileID: 0}
     - target: {fileID: 8524539128020536982, guid: 208d02975a45ec44ab3f7e38a85a7ffc, type: 3}
       propertyPath: m_LocalRotation.x
@@ -212,15 +212,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8524539128020536982, guid: 208d02975a45ec44ab3f7e38a85a7ffc, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.53
+      value: -2.43
       objectReference: {fileID: 0}
     - target: {fileID: 8524539128020536982, guid: 208d02975a45ec44ab3f7e38a85a7ffc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -8.18
+      value: 1.4599999
       objectReference: {fileID: 0}
     - target: {fileID: 8524539128020536982, guid: 208d02975a45ec44ab3f7e38a85a7ffc, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.44
+      value: -0.24
       objectReference: {fileID: 0}
     - target: {fileID: 8524539128020536982, guid: 208d02975a45ec44ab3f7e38a85a7ffc, type: 3}
       propertyPath: m_LocalRotation.x
@@ -294,15 +294,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8524539128020536982, guid: 208d02975a45ec44ab3f7e38a85a7ffc, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.26
+      value: -1.02
       objectReference: {fileID: 0}
     - target: {fileID: 8524539128020536982, guid: 208d02975a45ec44ab3f7e38a85a7ffc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -8.18
+      value: 1.4599999
       objectReference: {fileID: 0}
     - target: {fileID: 8524539128020536982, guid: 208d02975a45ec44ab3f7e38a85a7ffc, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.69
+      value: -2.47
       objectReference: {fileID: 0}
     - target: {fileID: 8524539128020536982, guid: 208d02975a45ec44ab3f7e38a85a7ffc, type: 3}
       propertyPath: m_LocalRotation.x
@@ -374,13 +374,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: AngelStatue
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 7a93e07023f417142881f9ebea0e642b, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967294
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 7a93e07023f417142881f9ebea0e642b, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 7a93e07023f417142881f9ebea0e642b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -9.58
+      value: 0.05999981
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 7a93e07023f417142881f9ebea0e642b, type: 3}
       propertyPath: m_LocalPosition.z
@@ -419,9 +423,25 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 7a93e07023f417142881f9ebea0e642b, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2300000, guid: 7a93e07023f417142881f9ebea0e642b, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 80f4036e23b5639458859619b84b2e7c, type: 2}
+    - target: {fileID: 2300000, guid: 7a93e07023f417142881f9ebea0e642b, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 28d7d79ff63bb934fb753967508e6c89, type: 2}
+    - target: {fileID: 2300000, guid: 7a93e07023f417142881f9ebea0e642b, type: 3}
+      propertyPath: m_StitchLightmapSeams
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2300000, guid: 7a93e07023f417142881f9ebea0e642b, type: 3}
+      propertyPath: m_DynamicOccludee
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a93e07023f417142881f9ebea0e642b, type: 3}
 --- !u!4 &6248695700669185030 stripped

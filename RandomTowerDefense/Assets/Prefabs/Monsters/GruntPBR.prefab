@@ -255,7 +255,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5304911586177118974}
   - component: {fileID: 4754822569803728767}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: GruntPBR
   m_TagString: Untagged
   m_Icon: {fileID: 0}

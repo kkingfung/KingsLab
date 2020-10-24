@@ -20,7 +20,7 @@ public class MyMobileInput
 public class InputManager : MonoBehaviour
 {
     readonly float tapStayTime = 1.2f;
-    readonly float tapDoubleTime = 1f;
+    readonly float tapDoubleTime = 0.8f;
     readonly float dragDiff = 5.0f;//cooperate with Scene Script(toDrag)
 
     public GameObject ClickPrefab;
@@ -45,7 +45,8 @@ public class InputManager : MonoBehaviour
     private InGameOperation sceneManager;
 
     private float DragTimeRecord;
-    private float TapTimeRecord;
+    [HideInInspector]
+    public float TapTimeRecord;
 
     public Camera refCamL;
     public Camera refCamP;
@@ -98,14 +99,10 @@ public class InputManager : MonoBehaviour
         }
         if (Input.GetMouseButtonUp(0))
         {
+            if (playerManager.isChecking==false)
+                playerManager.RaycastTest(Time.time - TapTimeRecord < tapDoubleTime);
             if (playerManager && playerManager.isSkillActive == false && playerManager.isChecking)
                 playerManager.UseStock(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
-
-            if (Time.time - DragTimeRecord < tapStayTime)
-            {
-                playerManager.RaycastTest(Time.time - TapTimeRecord < tapDoubleTime);
-
-            }
             DragTimeRecord = 0;
             TapTimeRecord = Time.time;
         }
@@ -192,13 +189,12 @@ public class InputManager : MonoBehaviour
                         playerManager.CheckStock(touch.position);
                     break;
                 case TouchPhase.Ended:
+                    if (playerManager.isChecking == false)
+                        playerManager.RaycastTest(Time.time - TapTimeRecord < tapDoubleTime);
                     if (playerManager && playerManager.isSkillActive == false && playerManager.isChecking)
                         playerManager.UseStock(touch.position);
-                    if (Time.time - DragTimeRecord < tapStayTime)
-                    {
-                        playerManager.RaycastTest( Time.time - TapTimeRecord < tapDoubleTime);
-                        DragTimeRecord = 0;
-                    }
+
+                    DragTimeRecord = 0;
                     TapTimeRecord = Time.time;
 
                     if (isDragging)
@@ -266,7 +262,6 @@ public class InputManager : MonoBehaviour
         if (TouchCount == 0)
         {
             isDragging = false;
-            TapTimeRecord = 0f;
             return;
         }
 

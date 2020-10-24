@@ -533,7 +533,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4718552058532164}
   - component: {fileID: 95640295303221614}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: FootmanPBR
   m_TagString: Untagged
   m_Icon: {fileID: 0}

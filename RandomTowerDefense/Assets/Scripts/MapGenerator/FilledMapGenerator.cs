@@ -230,20 +230,18 @@ public class FilledMapGenerator : MonoBehaviour {
 		OnNewStage(3);
 	}
 
-	public float UpdatePillarStatus(GameObject targetPillar) {
+	public float UpdatePillarStatus(GameObject targetPillar,int toState=1) {
 		foreach (Pillar i in PillarList)
 		{
 			if (i.obj != targetPillar) continue;
-			i.state = 1;
+			i.state = toState;
 			return i.height;
 		}
 		return 0;
 	}
 
 	public bool ChkPillarStatusEmpty(GameObject targetPillar) {
-		Debug.Log(0);
 		foreach (Pillar i in PillarList) {
-			Debug.Log(1);
 			if (i.obj == null) continue;
 			if (i.obj != targetPillar) continue;
 			return (i.state == 0);

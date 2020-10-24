@@ -8,7 +8,7 @@ public class TimeManager : MonoBehaviour
 	public readonly float daytimeFactor = 120f;
 
 	public float timeFactor = 0.05f;
-	public float timeLength = 2f;
+	public float timeLength = 0.02f;
 
 	private float OriTimeScale;
 	private float OriFixedTimeScale;
@@ -21,16 +21,8 @@ public class TimeManager : MonoBehaviour
 	void Update()
 	{
 		if (isControl) return;
-		if (Time.timeScale < OriTimeScale)
-		{
-			Time.timeScale += (1f / timeLength) * Time.unscaledDeltaTime;
-			Time.timeScale = Mathf.Clamp(Time.timeScale, 0f, OriTimeScale);
-		}
-		if (Time.fixedDeltaTime < OriFixedTimeScale)
-		{
-			Time.fixedDeltaTime += (1f / timeLength) * Time.unscaledDeltaTime;
-			Time.fixedDeltaTime = Mathf.Clamp(Time.fixedDeltaTime, 0f, OriFixedTimeScale);
-		}
+		Time.timeScale = OriTimeScale;
+		Time.fixedDeltaTime = OriFixedTimeScale;
 	}
 
 	public void AdjustTime()

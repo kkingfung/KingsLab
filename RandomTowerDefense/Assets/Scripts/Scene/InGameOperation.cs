@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using UnityEngine.Rendering;
-using UnityEditor.ShaderGraph.Internal;
 
 public class InGameOperation : ISceneChange
 {
@@ -60,14 +58,15 @@ public class InGameOperation : ISceneChange
 
     [HideInInspector]
     public int currScreenShown = 0;//0:Main, 1:Top-Left, 2:Top, 3:Top-Right
-    private int nextScreenShown = 0;
+    [HideInInspector]
+    public int nextScreenShown = 0;
     private bool isScreenChanging = false;
 
     //Manager
     private AudioManager AudioManager;
     //private CameraManager CameraManager;
     private CanvaManager CanvaManager;
-    //private InputManager InputManager;
+    private InputManager InputManager;
     private GyroscopeManager GyroscopeManager;
     private ResourceManager resourceManager;
     private WaveManager waveManager;
@@ -108,7 +107,7 @@ public class InGameOperation : ISceneChange
         LandscapeFade = LandscapeFadeImg.GetComponent<FadeEffect>();
         PortraitFade = PortraitFadeImg.GetComponent<FadeEffect>();
 
-        //InputManager = FindObjectOfType<InputManager>();
+        InputManager = FindObjectOfType<InputManager>();
         AudioManager = FindObjectOfType<AudioManager>();
         //CameraManager = FindObjectOfType<CameraManager>();
         CanvaManager = FindObjectOfType<CanvaManager>();
@@ -231,6 +230,7 @@ public class InGameOperation : ISceneChange
         GyroscopeManager.isFunctioning = !isOption;
         TimeRecord = Time.time;
         timeManager.TimeControl();
+        InputManager.TapTimeRecord = 0;
         DarkenCam.SetActive(isOption);
     }
 

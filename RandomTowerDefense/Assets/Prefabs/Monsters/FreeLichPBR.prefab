@@ -383,7 +383,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4665124114459090}
   - component: {fileID: 95206231959375140}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: FreeLichPBR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -416,7 +416,7 @@ Animator:
   m_GameObject: {fileID: 1500939411536426}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 3dc717adf98c7b043a3e77ed0130d470, type: 3}
-  m_Controller: {fileID: 9100000, guid: 0a15c11dbbde189499421a0ca9e248fa, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

@@ -91,7 +91,7 @@ public class StoreManager : MonoBehaviour
                 for (int i = 0; i < TowerPriceTextObj.Count; ++i)
                 {
                     //Currently all same price
-                    int price = ItemPrice[Upgrades.StoreItems.CastleHP][0];
+                    int price = PriceForCastleHP[0];
                     TowerPriceTextObj[i].text = price.ToString() + "G";
                     TowerPriceTextObj[i].color = (price > resourceManager.GetCurrMaterial()) ? new Color(1, 0, 0, 1) : OriColor;
 

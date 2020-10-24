@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    private readonly float CancelDist = 20f;
+    private readonly float CancelDist = 50f;
 
     [HideInInspector]
     public bool isSkillActive;
@@ -17,6 +17,7 @@ public class PlayerManager : MonoBehaviour
     [Header("Camera Settings")]
     public Camera refCamL;
     public Camera refCamP;
+    public GameObject refGyro;
 
     [Header("Skill Settings")]
     public float StockOperatorDepth;
@@ -38,16 +39,20 @@ public class PlayerManager : MonoBehaviour
     GameObject CurrentSkill;
     GameObject StockOperator;
 
+
+    InGameOperation sceneManager;
     EnemyManager enemyManager;
     StageManager stageManager;
-
+    InputManager inputManager;
     TowerManager towerManager;
     FilledMapGenerator mapGenerator;
 
     private void Start()
     {
+        sceneManager = FindObjectOfType<InGameOperation>();
         enemyManager = FindObjectOfType<EnemyManager>();
         stageManager = FindObjectOfType<StageManager>();
+        inputManager = FindObjectOfType<InputManager>();
         towerManager = FindObjectOfType<TowerManager>();
         mapGenerator = FindObjectOfType<FilledMapGenerator>();
     }
@@ -61,12 +66,13 @@ public class PlayerManager : MonoBehaviour
     {
         if (StockOperator != null) return;
         if (isSkillActive) return;
-
+        if (sceneManager.currScreenShown != 0 || sceneManager.nextScreenShown != 0) return;
         isChecking = true;
 
         Camera targetCam = (Screen.width > Screen.height) ? refCamL : refCamP;
 
-        StockOperator = Instantiate(StockOperatorPrefab, targetCam.ScreenToWorldPoint(new Vector3(DragPos.x, DragPos.y, StockOperatorDepth)), targetCam.transform.rotation);
+        StockOperator = Instantiate(StockOperatorPrefab, targetCam.ScreenToWorldPoint(new Vector3(DragPos.x, DragPos.y, StockOperatorDepth)),
+           targetCam.transform.rotation);
         StockPos = DragPos;
     }
 
@@ -81,12 +87,12 @@ public class PlayerManager : MonoBehaviour
 
         if (Input.touchCount > 0)
         {
-            if ((Input.touches[0].position - DragPos).sqrMagnitude < CancelDist * CancelDist)
+            if ((Input.touches[0].position - StockPos).sqrMagnitude < CancelDist)
                 return;
         }
         else
         {
-            if ((new Vector2(Input.mousePosition.x, Input.mousePosition.y) - DragPos).sqrMagnitude < CancelDist * CancelDist)
+            if ((new Vector2(Input.mousePosition.x, Input.mousePosition.y) - StockPos).sqrMagnitude < CancelDist)
                 return;
         }
 
@@ -94,9 +100,9 @@ public class PlayerManager : MonoBehaviour
         //Check Action to be taken by DragPos && current mouse/touch
         float AngleCalculation;
         if (Input.touchCount > 0)
-            AngleCalculation = (-90f + Mathf.Rad2Deg * Mathf.Atan2(Input.touches[0].position.y - DragPos.y, Input.touches[0].position.x - DragPos.x));
+            AngleCalculation = (-90f + Mathf.Rad2Deg * Mathf.Atan2(Input.touches[0].position.y - StockPos.y, Input.touches[0].position.x - StockPos.x));
         else
-            AngleCalculation = (-90f + Mathf.Rad2Deg * Mathf.Atan2(Input.mousePosition.y - DragPos.y, Input.mousePosition.x - DragPos.x));
+            AngleCalculation = (-90f + Mathf.Rad2Deg * Mathf.Atan2(Input.mousePosition.y - StockPos.y, Input.mousePosition.x - StockPos.x));
         while (AngleCalculation < 0) AngleCalculation += 360f;
 
         if (AngleCalculation >= 18f && AngleCalculation < 90f)
@@ -166,7 +172,17 @@ public class PlayerManager : MonoBehaviour
 
     public Vector3 RaycastTest( bool isDoubleTap)
     {
-        if (isDoubleTap == false && isSelling == false) return new Vector3();
+        if(sceneManager.GetOptionStatus())
+            return new Vector3();
+
+        if (isDoubleTap) { 
+            inputManager.TapTimeRecord = 0;
+        }
+        else
+        {
+                return new Vector3();
+        }
+
         Ray ray = new Ray();
         RaycastHit hit = new RaycastHit();
 
@@ -181,21 +197,24 @@ public class PlayerManager : MonoBehaviour
         }
 
         //TakeAction
-        if (isSelling && Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("Tower")))
-        {
-            towerManager.SellTower(hit.transform.gameObject);
-        }
-        else
-        {
-            if (Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("Tower")))
-            {
-                towerManager.MergeTower(hit.transform.gameObject, hit.point);
+            if (isSelling) {
+                isSelling = false;
+                if (Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("Tower")))
+                {
+                    towerManager.SellTower(hit.transform.gameObject);
+                }
             }
-            if (Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("Pillar")))
+            else
             {
-                towerManager.BuildTower(hit.transform.gameObject);
+                if (Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("Tower")))
+                {
+                    towerManager.MergeTower(hit.transform.gameObject, hit.point);
+                }
+                if (Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("Pillar")))
+                {
+                    towerManager.BuildTower(hit.transform.gameObject);
+                }
             }
-        }
         return hit.point;
     }
 

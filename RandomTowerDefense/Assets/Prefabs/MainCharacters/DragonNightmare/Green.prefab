@@ -1687,7 +1687,8 @@ GameObject:
   - component: {fileID: 491582}
   - component: {fileID: 9589072}
   - component: {fileID: 538415755660007923}
-  m_Layer: 0
+  - component: {fileID: 5314889427067620369}
+  m_Layer: 12
   m_Name: Green
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1744,6 +1745,19 @@ MonoBehaviour:
   Level: 0
   rank: 0
   type: 0
+--- !u!65 &5314889427067620369
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 168864}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 8, y: 1, z: 8}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &169100
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class TowerManager : MonoBehaviour
 {
@@ -85,28 +86,33 @@ public class TowerManager : MonoBehaviour
                 tower = Instantiate(TowerNightmare[rank-1], location, Quaternion.identity);
                 tower.GetComponent<Tower>().newTower(TowerNightmareAtk, TowerLevelUp, TowerNightmareAura,
                     TowerInfo.TowerInfoID.Enum_TowerNightmare, 1, 1);
+                tower.transform.localScale = 0.1f * new Vector3(1,1,1);
                 TowerNightmareList.Add(tower);
                 break;
             case (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater:
                 tower = Instantiate(TowerSoulEater[rank - 1], location, Quaternion.identity);
                 tower.GetComponent<Tower>().newTower(TowerSoulEaterAtk, TowerLevelUp, TowerSoulEaterAura,
                     TowerInfo.TowerInfoID.Enum_TowerSoulEater, 1, 1);
+                tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
                 TowerSoulEaterList.Add(tower);
                 break;
             case (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
                 tower = Instantiate(TowerTerrorBringer[rank - 1], location, Quaternion.identity);
                 tower.GetComponent<Tower>().newTower(TowerTerrorBringerAtk, TowerLevelUp, TowerTerrorBringerAura,
                     TowerInfo.TowerInfoID.Enum_TowerTerrorBringer, 1, 1);
+                tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
                 TowerTerrorBringerList.Add(tower);
                 break;
             case (int)TowerInfo.TowerInfoID.Enum_TowerUsurper:
                 tower = Instantiate(TowerUsurper[rank - 1], location, Quaternion.identity);
                 tower.GetComponent<Tower>().newTower(TowerUsurperAtk, TowerLevelUp, TowerUsurperAura,
                     TowerInfo.TowerInfoID.Enum_TowerUsurper, 1, 1);
+                tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
                 TowerUsurperList.Add(tower);
                 break;
         }
-        GameObject.Instantiate<GameObject>(TowerBuild, location, Quaternion.identity);
+        GameObject temp = Instantiate<GameObject>(TowerBuild, location, Quaternion.identity);
+        Destroy(temp, 5.0f);
     }
 
     public bool MergeTower(GameObject targetedTower, Vector3 spawnPoint)
@@ -119,6 +125,7 @@ public class TowerManager : MonoBehaviour
         else if (TowerUsurperList.Contains(targetedTower)) type = 3;
         else return false;
 
+        Debug.Log(0);
         //count same towers at max level
         List<GameObject> candidateList = new List<GameObject>();
         List<int> candidateID = new List<int>();
@@ -192,19 +199,20 @@ public class TowerManager : MonoBehaviour
                 }
                 break;
         }
-
+        Debug.Log(count);
         if (count < NumReqToMerge - 1) return false;
 
         //Remove Candidates
         foreach (GameObject i in candidateList)
         {
-            GameObject.Instantiate<GameObject>(TowerDisappear, i.transform.position, Quaternion.identity);
-
+            GameObject temp = Instantiate<GameObject>(TowerDisappear, i.transform.position, Quaternion.identity);
+            StartCoroutine(WaitToKillVFX(temp, 5, 10));
             removeTowerFromList(i);
         }
         removeTowerFromList(targetedTower);
 
         //Build 
+        Debug.Log(targetedTower.GetComponent<Tower>().rank + 1);
         BuildTower(targetedTower.transform.position, targetedTower.GetComponent<Tower>().rank + 1);
 
         return true;
@@ -227,16 +235,28 @@ public class TowerManager : MonoBehaviour
                 TowerUsurperList.Remove(targetedTower);
                 break;
         }
-        Destroy(targetedTower);
+        targetedTower.GetComponent<Tower>().Destroy();
     }
 
     public void SellTower(GameObject targetedTower)
     {
         if (resourceManager.SellTower(targetedTower))
         {
-            GameObject.Instantiate(TowerSell, targetedTower.transform.position, Quaternion.identity);
+            filledMapGenerator.UpdatePillarStatus(targetedTower,0);
+            GameObject temp = Instantiate(TowerSell, targetedTower.transform.position, Quaternion.identity);
+            Destroy(temp,10.0f);
             removeTowerFromList(targetedTower);
         }
-        playerManager.isSelling = false;
     }
+    private IEnumerator WaitToKillVFX(GameObject targetVFX, int waittime, int killtime)
+    {
+        int frame = waittime;
+        while (frame-- > 0)
+        {
+            yield return new WaitForSeconds(0f);
+        }
+        targetVFX.GetComponent<VisualEffect>().Stop();
+        Destroy(targetVFX,killtime);
+    }
+
 }

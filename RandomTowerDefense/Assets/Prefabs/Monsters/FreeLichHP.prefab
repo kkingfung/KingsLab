@@ -796,7 +796,7 @@ GameObject:
   m_Component:
   - component: {fileID: 400048}
   - component: {fileID: 9500000}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: FreeLichHP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -829,7 +829,7 @@ Animator:
   m_GameObject: {fileID: 100048}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 3dc717adf98c7b043a3e77ed0130d470, type: 3}
-  m_Controller: {fileID: 9100000, guid: 0a15c11dbbde189499421a0ca9e248fa, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

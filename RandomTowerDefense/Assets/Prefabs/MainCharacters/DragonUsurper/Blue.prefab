@@ -3870,7 +3870,8 @@ GameObject:
   - component: {fileID: 480080}
   - component: {fileID: 9535974}
   - component: {fileID: 4296413222493457813}
-  m_Layer: 0
+  - component: {fileID: 1837496509823676411}
+  m_Layer: 12
   m_Name: Blue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3927,6 +3928,19 @@ MonoBehaviour:
   Level: 0
   rank: 0
   type: 3
+--- !u!65 &1837496509823676411
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 194904}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 8, y: 1, z: 8}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &196352
 GameObject:
   m_ObjectHideFlags: 0

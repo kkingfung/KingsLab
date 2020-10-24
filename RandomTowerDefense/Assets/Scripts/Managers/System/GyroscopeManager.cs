@@ -70,7 +70,7 @@ public class GyroscopeManager : MonoBehaviour
                         i.transform.localEulerAngles = new Vector3(i.transform.localEulerAngles.x,
                             i.transform.localEulerAngles.y, currRotation.x - ReferenceCenter.x);
                     }
-                }    
+                }
             }
         }
     }

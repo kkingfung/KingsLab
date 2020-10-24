@@ -1498,7 +1498,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3056742052323797375}
   - component: {fileID: 3056742052316628637}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Polygonal Metalon Red
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -6,24 +6,27 @@ using UnityEngine.VFX;
 
 public class Tower : MonoBehaviour
 {
-    private readonly int[] MaxLevel = { 10, 30, 50, 70 };
+    //private readonly int[] MaxLevel = { 10, 30, 50, 70 };
+    private readonly int[] MaxLevel = { 1, 1, 1, 1 };
 
     public TowerAttr attr;
     public int Level;
     public int rank;
     public TowerInfo.TowerInfoID type;
 
-    bool isBuilding;
     GameObject CurrTarget;
     GameObject AtkVFX;
     GameObject AuraVFX;
     GameObject LevelUpVFX;
 
+    GameObject AtkVFXPrefab;
+    GameObject AuraVFXPrefab;
+    GameObject LevelUpVFXPrefab;
+
     EnemyManager enemyManager;
 
     private void Start()
     {
-        isBuilding = true;
         enemyManager = FindObjectOfType<EnemyManager>();
     }
 
@@ -31,7 +34,7 @@ public class Tower : MonoBehaviour
     void Update()
     {
         if (CurrTarget == null) CurrTarget = detectEnemy();
-        if (CurrTarget != null && isBuilding==false) Attack();
+        if (CurrTarget != null) Attack();
     }
 
     public GameObject detectEnemy() {
@@ -52,20 +55,36 @@ public class Tower : MonoBehaviour
 
     public void Attack()
     {
-        GameObject atk = Instantiate(AtkVFX, this.transform);
-        atk.GetComponent<VisualEffect>().SetVector3("TargetEnm", CurrTarget.transform.position);
+        this.AtkVFX = GameObject.Instantiate(AtkVFX, this.transform.position
+           + new Vector3(0, 0, (type == TowerInfo.TowerInfoID.Enum_TowerNightmare || type == TowerInfo.TowerInfoID.Enum_TowerUsurper) ? 8 : 0), Quaternion.identity, this.transform);
+        this.AtkVFX.GetComponent<VisualEffect>().SetVector3("TargetEnm", CurrTarget.transform.position);
 
         CurrTarget.GetComponent<EnemyAI>().Damaged(attr.damage);
+        StartCoroutine(WaitToKillVFX(this.AtkVFX, 3,5));
+    }
+
+    public void Destroy() {
+        if(AtkVFX)
+            StartCoroutine(WaitToKillVFX(AtkVFX, 3, 2));
+        if (AuraVFX)
+            StartCoroutine(WaitToKillVFX(AuraVFX, 3, 2));
+        if (LevelUpVFX)
+            StartCoroutine(WaitToKillVFX(LevelUpVFX, 3, 2));
+        Destroy(this.gameObject,4);
     }
 
     public void newTower(GameObject AtkVFX, GameObject LevelUpVFX, GameObject AuraVFX, TowerInfo.TowerInfoID type,int lv=1,int rank=1) {
         this.type = type;
         this.Level = lv;
         this.rank = rank;
-        this.AtkVFX=GameObject.Instantiate(AtkVFX, this.transform);
-        this.AuraVFX = GameObject.Instantiate(AuraVFX, this.transform);
-        this.LevelUpVFX=GameObject.Instantiate(LevelUpVFX, this.transform);
-        isBuilding = true;
+        AtkVFXPrefab= AtkVFX;
+        AuraVFXPrefab= AuraVFX;
+        LevelUpVFXPrefab= LevelUpVFX;
+        //this.AtkVFX=GameObject.Instantiate(AtkVFX, this.transform.position
+        //    + new Vector3(0, (type == TowerInfo.TowerInfoID.Enum_TowerNightmare || type == TowerInfo.TowerInfoID.Enum_TowerUsurper) ? 1.55f : 0
+        //    , (type == TowerInfo.TowerInfoID.Enum_TowerNightmare || type == TowerInfo.TowerInfoID.Enum_TowerUsurper)?8:0), Quaternion.identity,this.transform);
+        this.AuraVFX = GameObject.Instantiate(AuraVFX, this.transform.position, Quaternion.Euler(90f,0,0));
+        this.LevelUpVFX=GameObject.Instantiate(LevelUpVFX, this.transform.position,Quaternion.identity);
 
         switch (type) {
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
@@ -94,6 +113,17 @@ public class Tower : MonoBehaviour
 
     public bool CheckMaxLevel() {
         return Level == MaxLevel[rank - 1];
+    }
+
+    private IEnumerator WaitToKillVFX(GameObject targetVFX, int waittime, int killtime)
+    {
+        int frame = waittime;
+        while (frame-- > 0)
+        {
+            yield return new WaitForSeconds(0f);
+        }
+        targetVFX.GetComponent<VisualEffect>().Stop();
+        Destroy(targetVFX, killtime);
     }
 }
 

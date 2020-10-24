@@ -224,7 +224,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4788319935855200}
   - component: {fileID: 111495423891279680}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: StoneMonster
   m_TagString: Untagged
   m_Icon: {fileID: 0}

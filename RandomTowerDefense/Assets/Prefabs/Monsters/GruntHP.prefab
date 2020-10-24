@@ -828,7 +828,7 @@ GameObject:
   m_Component:
   - component: {fileID: 400050}
   - component: {fileID: 9500000}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: GruntHP
   m_TagString: Untagged
   m_Icon: {fileID: 0}

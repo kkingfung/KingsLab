@@ -4056,6 +4056,7 @@ MonoBehaviour:
   Buttons: []
   LBMTest: {fileID: 0}
   ApplyClickEfc: 0
+  TapTimeRecord: 0
   refCamL: {fileID: 1225335766}
   refCamP: {fileID: 654067875}
   refCamLSub: {fileID: 912783844648849575}

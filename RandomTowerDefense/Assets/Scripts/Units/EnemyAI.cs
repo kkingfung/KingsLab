@@ -5,17 +5,24 @@ using UnityEngine.VFX;
 
 public class EnemyAI : MonoBehaviour
 {
-    EnemyAttr attr;
-    GameObject DieEffect;
-    GameObject DropEffect;
+    private EnemyAttr attr;
+    private GameObject DieEffect;
+    private GameObject DropEffect;
 
-    Vector3 oriScale;
-    int DamagedCount = 0;
+    private Vector3 oriScale;
+    private int DamagedCount = 0;
+
+    private Animator animator;
+    private Collider collider;
 
     // Start is called before the first frame update
     void Start()
     {
         oriScale = transform.localScale;
+        animator = GetComponent<Animator>();
+        if(animator==null) animator = GetComponentInChildren<Animator>();
+        collider  = GetComponent<Collider>();
+        if (collider == null) collider = GetComponentInChildren<Collider>();
     }
 
     // Update is called once per frame
@@ -34,20 +41,26 @@ public class EnemyAI : MonoBehaviour
         this.DropEffect = DropEffect;
     }
 
-    public void Damaged(int dmg)
+    public void Damaged(float dmg)
     {
         attr.health -= dmg;
         transform.localScale = oriScale*0.5f;
         DamagedCount = 1;
 
         if (attr.health <= 0) {
-            GameObject.Instantiate(DieEffect,this.transform.position,Quaternion.identity);
-
-            GameObject vfx=Instantiate(DropEffect, this.transform.position, Quaternion.identity);
+            GameObject vfx = Instantiate(DropEffect, this.transform.position, Quaternion.identity);
             vfx.GetComponent<VisualEffect>().SetFloat("SpawnCount", attr.money);
-
-            FindObjectOfType<EnemyManager>().allAliveMonsters.Remove(this.gameObject);
+            animator.SetTrigger("Dead");
+            Die();
         }
+    }
+
+    public void Die()
+    {
+        Destroy(collider);
+        GameObject.Instantiate(DieEffect, this.transform.position, Quaternion.identity);
+        FindObjectOfType<EnemyManager>().allAliveMonsters.Remove(this.gameObject);
+        Destroy(this, 5);
     }
 }
 

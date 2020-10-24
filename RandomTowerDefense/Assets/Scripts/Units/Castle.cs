@@ -1,19 +1,54 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Defender : MonoBehaviour
+public class Castle : MonoBehaviour
 {
+    public int MaxCastleHP;
+    public int CurrCastleHP;
+
+    private GameObject obj;
+    private InGameOperation sceneManager;
+    private StageManager stageManager;
+
+    private Collider collider;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        sceneManager = FindObjectOfType<InGameOperation>();
+        stageManager = FindObjectOfType<StageManager>();
+
+        collider
+            = GetComponent<Collider>();
+
+        int CurrIsland = sceneManager.GetCurrIsland();
+            MaxCastleHP = (int)PlayerPrefs.GetFloat("hpMax");
+
+        CurrCastleHP = MaxCastleHP;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == LayerMask.GetMask("Enemy"))
+        {
+            stageManager.Damaged();
+            other.gameObject.GetComponent<EnemyAI>().Die();
+        }
+    }
+
+    public bool Damaged(int Val = 1)
+    {
+        CurrCastleHP -= Val;
+        return CurrCastleHP <= 0;
+    }
+
+    public void SetObj(GameObject obj) {
+        this.obj = obj;
     }
 }
 

@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class TowerAttr
 {
-    public int damage;
+    public float damage;
     public int frameWait;
     public float areaSq;
 
-    public TowerAttr(float areaSq, int damage = 1, int frameWait = 0)
+    public TowerAttr(float areaSq, float damage = 1, int frameWait = 0)
     {
         this.damage = damage;
         this.frameWait = frameWait;
@@ -18,7 +18,7 @@ public class TowerAttr
 
 public static class TowerInfo
 {
-    static Dictionary<string, TowerAttr> towerInfo;
+    static Dictionary<TowerInfoID, TowerAttr> towerInfo;
 
     public enum TowerInfoID
     {
@@ -30,12 +30,12 @@ public static class TowerInfo
 
     public static void Init()
     {
-        towerInfo = new Dictionary<string, TowerAttr>();
+        towerInfo = new Dictionary<TowerInfoID, TowerAttr>();
 
-        towerInfo.Add("TowerNightmare", new TowerAttr(70, 80, 30));
-        towerInfo.Add("TowerSoulEater", new TowerAttr(50, 20, 10));
-        towerInfo.Add("TowerTerrorBringer", new TowerAttr(100, 150, 45));
-        towerInfo.Add("TowerUsurper", new TowerAttr(30, 30, 5));
+        towerInfo.Add(TowerInfoID.Enum_TowerNightmare, new TowerAttr(80, 80, 150));
+        towerInfo.Add(TowerInfoID.Enum_TowerSoulEater, new TowerAttr(60, 20, 50));
+        towerInfo.Add(TowerInfoID.Enum_TowerTerrorBringer, new TowerAttr(120, 150, 220));
+        towerInfo.Add(TowerInfoID.Enum_TowerUsurper, new TowerAttr(40, 30, 25));
     }
 
     static void Release()
@@ -43,10 +43,12 @@ public static class TowerInfo
         towerInfo.Clear();
     }
 
-    public static TowerAttr GetTowerInfo(string towerName)
+    public static TowerAttr GetTowerInfo(TowerInfoID towerType)
     {
-        if (towerInfo.ContainsKey(towerName))
-            return towerInfo[towerName];
+        if (towerInfo.ContainsKey(towerType))
+        {
+            return towerInfo[towerType];
+        }
         return null;
     }
 }

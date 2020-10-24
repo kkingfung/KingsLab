@@ -14,40 +14,61 @@ public class Tower : MonoBehaviour
     public int rank;
     public TowerInfo.TowerInfoID type;
 
-    GameObject CurrTarget;
-    GameObject AtkVFX;
-    GameObject AuraVFX;
-    GameObject LevelUpVFX;
+    private int AttackCounter;
 
-    GameObject AtkVFXPrefab;
-    GameObject AuraVFXPrefab;
-    GameObject LevelUpVFXPrefab;
+    private GameObject CurrTarget;
+    private List<GameObject> AtkVFX;
+    private GameObject AuraVFX;
+    private GameObject LevelUpVFX;
 
-    EnemyManager enemyManager;
+    private GameObject AtkVFXPrefab;
+    private GameObject AuraVFXPrefab;
+    private GameObject LevelUpVFXPrefab;
+
+    private EnemyManager enemyManager;
+    public GameObject pillar;
+
+    //Testing
+    GameObject testobj;
+
+    private Animator animator;
 
     private void Start()
     {
         enemyManager = FindObjectOfType<EnemyManager>();
+        testobj = GameObject.FindGameObjectWithTag("DebugTag");
+        AttackCounter = 0;
+        AtkVFX = new List<GameObject>();
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (AttackCounter > 0) AttackCounter--;
+
         if (CurrTarget == null) CurrTarget = detectEnemy();
-        if (CurrTarget != null) Attack();
+        if (CurrTarget != null && AttackCounter <= 0) Attack();
     }
 
-    public GameObject detectEnemy() {
-        GameObject nearestMonster=null;
-        float dist = -1;
+    public GameObject detectEnemy()
+    {
+        GameObject nearestMonster = null;
+        float dist = float.MaxValue;
         foreach (GameObject i in enemyManager.allAliveMonsters)
         {
             float tempDist = (i.transform.position - this.transform.position).sqrMagnitude;
             if (tempDist > attr.areaSq) continue;
-            if (tempDist < dist) {
+            if (tempDist < dist)
+            {
                 dist = tempDist;
                 nearestMonster = i;
             }
+        }
+
+        if ((testobj.transform.position - this.transform.position).sqrMagnitude <= attr.areaSq)
+        {
+            nearestMonster = testobj;
         }
 
         return nearestMonster;
@@ -55,40 +76,78 @@ public class Tower : MonoBehaviour
 
     public void Attack()
     {
-        this.AtkVFX = GameObject.Instantiate(AtkVFX, this.transform.position
-           + new Vector3(0, 0, (type == TowerInfo.TowerInfoID.Enum_TowerNightmare || type == TowerInfo.TowerInfoID.Enum_TowerUsurper) ? 8 : 0), Quaternion.identity, this.transform);
-        this.AtkVFX.GetComponent<VisualEffect>().SetVector3("TargetEnm", CurrTarget.transform.position);
+        if ((CurrTarget.transform.position - this.transform.position).sqrMagnitude > attr.areaSq)
+        {
+            CurrTarget = null;
+            return;
+        }
 
-        CurrTarget.GetComponent<EnemyAI>().Damaged(attr.damage);
-        StartCoroutine(WaitToKillVFX(this.AtkVFX, 3,5));
+        float posAdj = 0;
+        switch (type)
+        {
+            case TowerInfo.TowerInfoID.Enum_TowerNightmare:
+                posAdj = 0.2f; break;
+            case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
+                posAdj = -0.2f; break;
+            case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
+                posAdj = 0.0f; break;
+            case TowerInfo.TowerInfoID.Enum_TowerUsurper:
+                posAdj = 1f; break;
+        }
+
+        this.AtkVFX.Add(GameObject.Instantiate(AtkVFXPrefab, this.transform.position
+          + this.transform.forward * posAdj,
+           this.transform.rotation));
+
+        if (type == TowerInfo.TowerInfoID.Enum_TowerNightmare || type == TowerInfo.TowerInfoID.Enum_TowerTerrorBringer)
+            this.AtkVFX[AtkVFX.Count - 1].GetComponent<VisualEffect>().SetVector3("TargetPos", CurrTarget.transform.position);
+
+        this.transform.localEulerAngles = new Vector3(0,
+            (90f + Mathf.Rad2Deg * Mathf.Atan2(this.transform.position.z - CurrTarget.transform.position.z, CurrTarget.transform.position.x - this.transform.position.x)), 0);
+        EnemyAI enm = CurrTarget.GetComponent<EnemyAI>();
+        if (enm) CurrTarget.GetComponent<EnemyAI>().Damaged(attr.damage);
+
+        StartCoroutine(WaitToKillVFX(this.AtkVFX[AtkVFX.Count - 1], 500, 0));
+
+        AttackCounter = attr.frameWait;
+        animator.SetTrigger("Detected");
+        animator.SetInteger("ActionID", UnityEngine.Random.Range(0, 2));
     }
 
-    public void Destroy() {
-        if(AtkVFX)
-            StartCoroutine(WaitToKillVFX(AtkVFX, 3, 2));
+    public void Destroy()
+    {
+        GameObject.FindObjectOfType<FilledMapGenerator>().UpdatePillarStatus(pillar, 0);
+        foreach (GameObject i in AtkVFX)
+        {
+            AtkVFX.Remove(i);
+            Destroy(i);
+        }
         if (AuraVFX)
-            StartCoroutine(WaitToKillVFX(AuraVFX, 3, 2));
+            Destroy(AuraVFX);
         if (LevelUpVFX)
-            StartCoroutine(WaitToKillVFX(LevelUpVFX, 3, 2));
-        Destroy(this.gameObject,4);
+            Destroy(LevelUpVFX);
+        Destroy(this.gameObject, 2);
     }
 
-    public void newTower(GameObject AtkVFX, GameObject LevelUpVFX, GameObject AuraVFX, TowerInfo.TowerInfoID type,int lv=1,int rank=1) {
+    public void newTower(GameObject pillar, GameObject AtkVFX, GameObject LevelUpVFX, GameObject AuraVFX, TowerInfo.TowerInfoID type, int lv = 1, int rank = 1)
+    {
         this.type = type;
         this.Level = lv;
         this.rank = rank;
-        AtkVFXPrefab= AtkVFX;
-        AuraVFXPrefab= AuraVFX;
-        LevelUpVFXPrefab= LevelUpVFX;
+        this.pillar = pillar;
+        AtkVFXPrefab = AtkVFX;
+        AuraVFXPrefab = AuraVFX;
+        LevelUpVFXPrefab = LevelUpVFX;
         //this.AtkVFX=GameObject.Instantiate(AtkVFX, this.transform.position
         //    + new Vector3(0, (type == TowerInfo.TowerInfoID.Enum_TowerNightmare || type == TowerInfo.TowerInfoID.Enum_TowerUsurper) ? 1.55f : 0
         //    , (type == TowerInfo.TowerInfoID.Enum_TowerNightmare || type == TowerInfo.TowerInfoID.Enum_TowerUsurper)?8:0), Quaternion.identity,this.transform);
-        this.AuraVFX = GameObject.Instantiate(AuraVFX, this.transform.position, Quaternion.Euler(90f,0,0));
-        this.LevelUpVFX=GameObject.Instantiate(LevelUpVFX, this.transform.position,Quaternion.identity);
+        this.AuraVFX = GameObject.Instantiate(AuraVFXPrefab, this.transform.position, Quaternion.Euler(90f, 0, 0));
+        this.LevelUpVFX = GameObject.Instantiate(LevelUpVFXPrefab, this.transform.position, Quaternion.identity);
 
-        switch (type) {
+        switch (type)
+        {
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
-                this.LevelUpVFX.GetComponent<VisualEffect>().SetVector4("MainColor",new Vector4(1,1,0,1));
+                this.LevelUpVFX.GetComponent<VisualEffect>().SetVector4("MainColor", new Vector4(1, 1, 0, 1));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
                 this.LevelUpVFX.GetComponent<VisualEffect>().SetVector4("MainColor", new Vector4(0, 1, 0, 1));
@@ -100,18 +159,54 @@ public class Tower : MonoBehaviour
                 this.LevelUpVFX.GetComponent<VisualEffect>().SetVector4("MainColor", new Vector4(1, 0, 0, 1));
                 break;
         }
+
+        UpdateAttr();
     }
 
-    public void LevelUp(int chg=1) {
-        SetLevel(Level+chg);
+    public void LevelUp(int chg = 1)
+    {
+        SetLevel(Level + chg);
     }
 
-    public void SetLevel(int lv) {
+    public void SetLevel(int lv)
+    {
         Level = lv;
         this.LevelUpVFX.GetComponent<VisualEffect>().SetFloat("SpawnRate", Level);
+        UpdateAttr();
     }
 
-    public bool CheckMaxLevel() {
+    private void UpdateAttr()
+    {
+        attr = TowerInfo.GetTowerInfo(type);
+
+        attr = new TowerAttr(attr.areaSq * (0.2f * rank + 0.001f * Level),
+            attr.damage * (1f * rank + 0.01f * Level),
+            (int)((float)attr.frameWait * (1f - (0.1f * rank))));
+
+        switch (type)
+        {
+            case TowerInfo.TowerInfoID.Enum_TowerNightmare:
+                attr.areaSq = attr.areaSq
+                    * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
+                break;
+            case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
+                attr.areaSq = attr.areaSq
+                      * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
+
+                break;
+            case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
+                attr.damage = attr.damage
+                    * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
+                break;
+            case TowerInfo.TowerInfoID.Enum_TowerUsurper:
+                attr.frameWait = (int)((float)attr.frameWait
+                    * (1 - (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army4))));
+                break;
+        }
+    }
+
+    public bool CheckMaxLevel()
+    {
         return Level == MaxLevel[rank - 1];
     }
 
@@ -126,93 +221,3 @@ public class Tower : MonoBehaviour
         Destroy(targetVFX, killtime);
     }
 }
-
-
-////data coming from the PlaceableData
-//private float speed;
-
-//private Animator animator;
-//private NavMeshAgent navMeshAgent;
-
-//private void Awake()
-//{
-//    pType = Placeable.PlaceableType.Unit;
-
-//    //find references to components
-//    animator = GetComponent<Animator>();
-//    navMeshAgent = GetComponent<NavMeshAgent>(); //will be disabled until Activate is called
-//    audioSource = GetComponent<AudioSource>();
-//}
-
-////called by GameManager when this Unit is played on the play field
-//public void Activate(Faction pFaction, PlaceableData pData)
-//{
-//    faction = pFaction;
-//    hitPoints = pData.hitPoints;
-//    targetType = pData.targetType;
-//    attackRange = pData.attackRange;
-//    attackRatio = pData.attackRatio;
-//    speed = pData.speed;
-//    damage = pData.damagePerAttack;
-//    attackAudioClip = pData.attackClip;
-//    dieAudioClip = pData.dieClip;
-//    //TODO: add more as necessary
-
-//    navMeshAgent.speed = speed;
-//    animator.SetFloat("MoveSpeed", speed); //will act as multiplier to the speed of the run animation clip
-
-//    state = States.Idle;
-//    navMeshAgent.enabled = true;
-//}
-
-//public override void SetTarget(ThinkingPlaceable t)
-//{
-//    base.SetTarget(t);
-//}
-
-////Unit moves towards the target
-//public override void Seek()
-//{
-//    if (target == null)
-//        return;
-
-//    base.Seek();
-
-//    navMeshAgent.SetDestination(target.transform.position);
-//    navMeshAgent.isStopped = false;
-//    animator.SetBool("IsMoving", true);
-//}
-
-////Unit has gotten to its target. This function puts it in "attack mode", but doesn't delive any damage (see DealBlow)
-//public override void StartAttack()
-//{
-//    base.StartAttack();
-
-//    navMeshAgent.isStopped = true;
-//    animator.SetBool("IsMoving", false);
-//}
-
-////Starts the attack animation, and is repeated according to the Unit's attackRatio
-//public override void DealBlow()
-//{
-//    base.DealBlow();
-
-//    animator.SetTrigger("Attack");
-//    transform.forward = (target.transform.position - transform.position).normalized; //turn towards the target
-//}
-
-//public override void Stop()
-//{
-//    base.Stop();
-
-//    navMeshAgent.isStopped = true;
-//    animator.SetBool("IsMoving", false);
-//}
-
-//protected override void Die()
-//{
-//    base.Die();
-
-//    navMeshAgent.enabled = false;
-//    animator.SetTrigger("IsDead");
-//}

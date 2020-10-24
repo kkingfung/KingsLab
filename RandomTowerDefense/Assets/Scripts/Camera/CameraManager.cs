@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class CameraManager : MonoBehaviour
 {
     readonly float defaultFOV = 60f;
-    readonly float minFOV = 30f;
+    readonly float minFOV = 15f;
     readonly int rotateFrame = 60;
 
     public List<Camera> LandscapeCam_Main;

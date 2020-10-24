@@ -23,10 +23,14 @@ public class BonusChecker : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!AllMonstersByRankBonus[0]) AllMonstersByRankBonus[0] = MonseterList_Type(towerManager.TowerNightmareList);
-        if (!AllMonstersByRankBonus[1]) AllMonstersByRankBonus[1] = MonseterList_Type(towerManager.TowerSoulEaterList);
-        if (!AllMonstersByRankBonus[2]) AllMonstersByRankBonus[2] = MonseterList_Type(towerManager.TowerTerrorBringerList);
-        if (!AllMonstersByRankBonus[3]) AllMonstersByRankBonus[3] = MonseterList_Type(towerManager.TowerUsurperList);
+        if (!AllMonstersByRankBonus[(int)TowerInfo.TowerInfoID.Enum_TowerNightmare]) 
+            AllMonstersByRankBonus[(int)TowerInfo.TowerInfoID.Enum_TowerNightmare] = MonseterList_Type(towerManager.TowerNightmareList);
+        if (!AllMonstersByRankBonus[(int)TowerInfo.TowerInfoID.Enum_TowerSoulEater])
+            AllMonstersByRankBonus[(int)TowerInfo.TowerInfoID.Enum_TowerSoulEater] = MonseterList_Type(towerManager.TowerSoulEaterList);
+        if (!AllMonstersByRankBonus[(int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer])
+            AllMonstersByRankBonus[(int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer] = MonseterList_Type(towerManager.TowerTerrorBringerList);
+        if (!AllMonstersByRankBonus[(int)TowerInfo.TowerInfoID.Enum_TowerUsurper]) 
+            AllMonstersByRankBonus[(int)TowerInfo.TowerInfoID.Enum_TowerUsurper] = MonseterList_Type(towerManager.TowerUsurperList);
 
         for (int i = 0; i < AllRanksByMonsterBonus.Length; ++i)
         {

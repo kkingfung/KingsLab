@@ -70,9 +70,9 @@ public class TowerManager : MonoBehaviour
         if (rank == 1 && filledMapGenerator.ChkPillarStatusEmpty(pillar) == false) return;
 
         Vector3 location = pillar.transform.position + Vector3.up * filledMapGenerator.UpdatePillarStatus(pillar);
-        BuildTower(location, rank);
+        BuildTower(pillar,location, rank);
     }
-        public void BuildTower(Vector3 location, int rank = 1)
+        public void BuildTower(GameObject pillar, Vector3 location, int rank = 1)
     {
         GameObject tower;
         
@@ -84,29 +84,29 @@ public class TowerManager : MonoBehaviour
         {
             case (int)TowerInfo.TowerInfoID.Enum_TowerNightmare:
                 tower = Instantiate(TowerNightmare[rank-1], location, Quaternion.identity);
-                tower.GetComponent<Tower>().newTower(TowerNightmareAtk, TowerLevelUp, TowerNightmareAura,
-                    TowerInfo.TowerInfoID.Enum_TowerNightmare, 1, 1);
+                tower.GetComponent<Tower>().newTower(pillar,TowerNightmareAtk, TowerLevelUp, TowerNightmareAura,
+                    TowerInfo.TowerInfoID.Enum_TowerNightmare, 1, rank);
                 tower.transform.localScale = 0.1f * new Vector3(1,1,1);
                 TowerNightmareList.Add(tower);
                 break;
             case (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater:
                 tower = Instantiate(TowerSoulEater[rank - 1], location, Quaternion.identity);
-                tower.GetComponent<Tower>().newTower(TowerSoulEaterAtk, TowerLevelUp, TowerSoulEaterAura,
-                    TowerInfo.TowerInfoID.Enum_TowerSoulEater, 1, 1);
+                tower.GetComponent<Tower>().newTower(pillar, TowerSoulEaterAtk, TowerLevelUp, TowerSoulEaterAura,
+                    TowerInfo.TowerInfoID.Enum_TowerSoulEater, 1, rank);
                 tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
                 TowerSoulEaterList.Add(tower);
                 break;
             case (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
                 tower = Instantiate(TowerTerrorBringer[rank - 1], location, Quaternion.identity);
-                tower.GetComponent<Tower>().newTower(TowerTerrorBringerAtk, TowerLevelUp, TowerTerrorBringerAura,
-                    TowerInfo.TowerInfoID.Enum_TowerTerrorBringer, 1, 1);
+                tower.GetComponent<Tower>().newTower(pillar, TowerTerrorBringerAtk, TowerLevelUp, TowerTerrorBringerAura,
+                    TowerInfo.TowerInfoID.Enum_TowerTerrorBringer, 1, rank);
                 tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
                 TowerTerrorBringerList.Add(tower);
                 break;
             case (int)TowerInfo.TowerInfoID.Enum_TowerUsurper:
                 tower = Instantiate(TowerUsurper[rank - 1], location, Quaternion.identity);
-                tower.GetComponent<Tower>().newTower(TowerUsurperAtk, TowerLevelUp, TowerUsurperAura,
-                    TowerInfo.TowerInfoID.Enum_TowerUsurper, 1, 1);
+                tower.GetComponent<Tower>().newTower(pillar, TowerUsurperAtk, TowerLevelUp, TowerUsurperAura,
+                    TowerInfo.TowerInfoID.Enum_TowerUsurper, 1, rank);
                 tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
                 TowerUsurperList.Add(tower);
                 break;
@@ -118,17 +118,15 @@ public class TowerManager : MonoBehaviour
     public bool MergeTower(GameObject targetedTower, Vector3 spawnPoint)
     {
         //Check Type
-        int type;
-        if (TowerNightmareList.Contains(targetedTower)) type = 0;
-        else if (TowerSoulEaterList.Contains(targetedTower)) type = 1;
-        else if (TowerTerrorBringerList.Contains(targetedTower)) type = 2;
-        else if (TowerUsurperList.Contains(targetedTower)) type = 3;
+        TowerInfo.TowerInfoID type;
+        if (TowerNightmareList.Contains(targetedTower)) type = TowerInfo.TowerInfoID.Enum_TowerNightmare;
+        else if (TowerSoulEaterList.Contains(targetedTower)) type = TowerInfo.TowerInfoID.Enum_TowerSoulEater;
+        else if (TowerTerrorBringerList.Contains(targetedTower)) type = TowerInfo.TowerInfoID.Enum_TowerTerrorBringer;
+        else if (TowerUsurperList.Contains(targetedTower)) type = TowerInfo.TowerInfoID.Enum_TowerUsurper;
         else return false;
 
-        Debug.Log(0);
         //count same towers at max level
         List<GameObject> candidateList = new List<GameObject>();
-        List<int> candidateID = new List<int>();
         List<GameObject> tempList;
         int count = 0;
         //Find Candidates
@@ -137,83 +135,105 @@ public class TowerManager : MonoBehaviour
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
                 tempList = new List<GameObject>(TowerNightmareList);
                 tempList.Remove(targetedTower);
-                while (count < NumReqToMerge-1 && tempList.Count > 0)
+                while (tempList.Count > 0)
                 {
                     int randNum = Random.Range(0, tempList.Count);
                     GameObject chkTarget = tempList[randNum];
-                    if (chkTarget.GetComponent<Tower>().CheckMaxLevel())
+                    tempList.Remove(chkTarget);
+                    if (chkTarget.GetComponent<Tower>().rank!= targetedTower.GetComponent<Tower>().rank)
+                        continue;
+                    else if (chkTarget.GetComponent<Tower>().CheckMaxLevel())
                     {
                         candidateList.Add(chkTarget);
                         count++;
-
                     }
-                    tempList.Remove(chkTarget);
                 }
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
                 tempList = new List<GameObject>(TowerSoulEaterList);
                 tempList.Remove(targetedTower);
-                while (count < NumReqToMerge - 1 && tempList.Count > 0)
+                while (tempList.Count > 0)
                 {
                     int randNum = Random.Range(0, tempList.Count);
                     GameObject chkTarget = tempList[randNum];
-                    if (chkTarget.GetComponent<Tower>().CheckMaxLevel())
+                    tempList.Remove(chkTarget);
+                    if (chkTarget.GetComponent<Tower>().rank != targetedTower.GetComponent<Tower>().rank)
+                        continue;
+                    else if (chkTarget.GetComponent<Tower>().CheckMaxLevel())
                     {
                         candidateList.Add(chkTarget);
                         count++;
-
                     }
-                    tempList.Remove(chkTarget);
                 }
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
                 tempList = new List<GameObject>(TowerTerrorBringerList);
                 tempList.Remove(targetedTower);
-                while (count < NumReqToMerge - 1 && tempList.Count > 0)
+                while (tempList.Count > 0)
                 {
                     int randNum = Random.Range(0, tempList.Count);
                     GameObject chkTarget = tempList[randNum];
-                    if (chkTarget.GetComponent<Tower>().CheckMaxLevel())
+                    tempList.Remove(chkTarget);
+                    if (chkTarget.GetComponent<Tower>().rank != targetedTower.GetComponent<Tower>().rank)
+                        continue;
+                    else if (chkTarget.GetComponent<Tower>().CheckMaxLevel())
                     {
                         candidateList.Add(chkTarget);
                         count++;
-
                     }
-                    tempList.Remove(chkTarget);
                 }
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
                 tempList = new List<GameObject>(TowerUsurperList);
                 tempList.Remove(targetedTower);
-                while (count < NumReqToMerge - 1 && tempList.Count > 0)
+                while (tempList.Count > 0)
                 {
                     int randNum = Random.Range(0, tempList.Count);
                     GameObject chkTarget = tempList[randNum];
-                    if (chkTarget.GetComponent<Tower>().CheckMaxLevel())
+                    tempList.Remove(chkTarget);
+                    if (chkTarget.GetComponent<Tower>().rank != targetedTower.GetComponent<Tower>().rank)
+                        continue;
+                    else if (chkTarget.GetComponent<Tower>().CheckMaxLevel())
                     {
                         candidateList.Add(chkTarget);
                         count++;
-
                     }
-                    tempList.Remove(chkTarget);
                 }
                 break;
         }
-        Debug.Log(count);
+
         if (count < NumReqToMerge - 1) return false;
 
+        count = NumReqToMerge-1;
         //Remove Candidates
-        foreach (GameObject i in candidateList)
-        {
-            GameObject temp = Instantiate<GameObject>(TowerDisappear, i.transform.position, Quaternion.identity);
+        while (count-- > 0) {
+            int randCandidate = Random.Range(0, candidateList.Count);
+            GameObject candidate = candidateList[randCandidate];
+            candidateList.Remove(candidate);
+            GameObject temp = Instantiate<GameObject>(TowerDisappear, candidate.transform.position, Quaternion.identity);
+            switch (candidate.GetComponent<Tower>().type)
+            {
+                case TowerInfo.TowerInfoID.Enum_TowerNightmare:
+                    temp.GetComponent<VisualEffect>().SetVector4("MainColor", new Vector4(1, 1, 0, 1));
+                    break;
+                case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
+                    temp.GetComponent<VisualEffect>().SetVector4("MainColor", new Vector4(0, 1, 0, 1));
+                    break;
+                case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
+                    temp.GetComponent<VisualEffect>().SetVector4("MainColor", new Vector4(0, 0, 1, 1));
+                    break;
+                case TowerInfo.TowerInfoID.Enum_TowerUsurper:
+                    temp.GetComponent<VisualEffect>().SetVector4("MainColor", new Vector4(1, 0, 0, 1));
+                    break;
+            }
+            temp.GetComponent<VisualEffect>().SetVector3("TargetLocation", targetedTower.transform.position);
             StartCoroutine(WaitToKillVFX(temp, 5, 10));
-            removeTowerFromList(i);
+            removeTowerFromList(candidate);
         }
         removeTowerFromList(targetedTower);
 
         //Build 
-        Debug.Log(targetedTower.GetComponent<Tower>().rank + 1);
-        BuildTower(targetedTower.transform.position, targetedTower.GetComponent<Tower>().rank + 1);
+        BuildTower(targetedTower.GetComponent<Tower>().pillar,targetedTower.transform.position, targetedTower.GetComponent<Tower>().rank + 1);
 
         return true;
     }

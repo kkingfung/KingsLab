@@ -106,6 +106,11 @@ public class UIEffect : MonoBehaviour
                     image.color = new Color(image.color.r, image.color.g, image.color.b, 0);
                 }
                 break;
+            case 10://for Game Scene Wave Num
+                if (text && text.color.a > 0) {
+                    text.color = new Color(text.color.r, text.color.g, text.color.b, text.color.a- magnitude);
+                }
+                break;
         }
     }
 }

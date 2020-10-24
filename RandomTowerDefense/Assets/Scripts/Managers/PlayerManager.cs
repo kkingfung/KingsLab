@@ -210,7 +210,7 @@ public class PlayerManager : MonoBehaviour
                 {
                     towerManager.MergeTower(hit.transform.gameObject, hit.point);
                 }
-                if (Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("Pillar")))
+                else if (Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("Pillar")))
                 {
                     towerManager.BuildTower(hit.transform.gameObject);
                 }

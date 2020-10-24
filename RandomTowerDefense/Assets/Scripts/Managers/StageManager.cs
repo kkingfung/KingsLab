@@ -13,9 +13,7 @@ public class StageManager : MonoBehaviour
     public GameObject EnemySpawnPortPrefab;
     public GameObject CastlePrefab;
 
-    private int MaxCastleHP;
-    private int CurrCastleHP;
-    public List<TextMesh> CastleHPText;
+    private Castle castle;
 
     private InGameOperation sceneManager;
     public List<GameObject> GameClearCanva;
@@ -40,24 +38,14 @@ public class StageManager : MonoBehaviour
     {
         sceneManager = FindObjectOfType<InGameOperation>();
         mapGenerator = FindObjectOfType<FilledMapGenerator>();
+        castle = new Castle();
+
            result = 0;
         foreach (GameObject i in GameClearCanva) { 
             i.SetActive(false);
         }
         foreach (GameObject i in GameOverCanva)
             i.SetActive(false);
-
-        int CurrIsland = sceneManager.GetCurrIsland();
-        if (CurrIsland == sceneManager.GetTotalIslandNum() - 1) 
-            MaxCastleHP = (int)PlayerPrefs.GetFloat("hpMaxDir");
-        else
-            MaxCastleHP = (int)PlayerPrefs.GetFloat("hpMax");
-
-        CurrCastleHP = MaxCastleHP;
-        foreach (TextMesh i in CastleHPText)
-        {
-            i.text = CurrCastleHP.ToString() + "/" + MaxCastleHP.ToString();
-        }
 
         if (mapGenerator)
         {
@@ -73,6 +61,7 @@ public class StageManager : MonoBehaviour
             }
 
             CastlePointer = Instantiate(CastlePrefab, mapGenerator.CoordToPosition(SpawnPoint[0]) + mapGenerator.transform.position, Quaternion.Euler(0f,90f,0f));
+            castle.SetObj(CastlePointer);
             for (int i = 0; i < EnemyNum; ++i) 
             EnemySpawnPort[i] = Instantiate(EnemySpawnPortPrefab, mapGenerator.CoordToPosition(SpawnPoint[i+1]) + mapGenerator.transform.position, Quaternion.identity);
         }
@@ -126,18 +115,14 @@ public class StageManager : MonoBehaviour
 
     public void Damaged(int Val=1)
     {
-        CurrCastleHP -= Val;
-        foreach (TextMesh i in CastleHPText)
+        if (castle.Damaged(Val)) 
         {
-            i.text = CurrCastleHP.ToString()+"/"+MaxCastleHP.ToString();
-        }
-
-        if (CurrCastleHP <= 0) {
             result = -1;
             isReady = false;
             StartCoroutine(FadeInRoutine());
         }
     }
+
     public bool SetWin() {
         if (result == -1)
             return false;
@@ -145,8 +130,8 @@ public class StageManager : MonoBehaviour
         result = 1;
         return true;
     }
-    public int GetMaxHP() { return MaxCastleHP; }
-    public int GetCurrHP() { return CurrCastleHP; }
+    public int GetMaxHP() { return castle.MaxCastleHP; }
+    public int GetCurrHP() { return castle.CurrCastleHP; }
 
     private IEnumerator FadeOutRoutine()
     {

@@ -8,7 +8,9 @@ public class Castle : MonoBehaviour
     private GameObject obj;
     private InGameOperation sceneManager;
     private StageManager stageManager;
+    private AudioManager audioManager;
 
+    private AudioSource audio;
     private Collider collider;
 
     // Start is called before the first frame update
@@ -16,6 +18,8 @@ public class Castle : MonoBehaviour
     {
         sceneManager = FindObjectOfType<InGameOperation>();
         stageManager = FindObjectOfType<StageManager>();
+        audioManager = FindObjectOfType<AudioManager>();
+        audio = GetComponent<AudioSource>();
 
         collider
             = GetComponent<Collider>();
@@ -44,7 +48,12 @@ public class Castle : MonoBehaviour
     public bool Damaged(int Val = 1)
     {
         CurrCastleHP -= Val;
-        return CurrCastleHP <= 0;
+        if(Val>0)  
+        {
+            audio.clip = audioManager.GetAudio("se_Hitted");
+            audio.Play();
+        }
+            return CurrCastleHP <= 0;
     }
 
     public void SetObj(GameObject obj) {

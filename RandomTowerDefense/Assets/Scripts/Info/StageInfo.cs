@@ -248,6 +248,10 @@ public static class StageInfo
             return stageInfo[stgName];
         return null;
     }
+    public static int GetStageNum()
+    {
+        return stageInfo.Count;
+    }
 
     static int GetRandom()
     {

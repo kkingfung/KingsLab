@@ -98,6 +98,7 @@ public class InGameOperation : ISceneChange
         base.SceneIn();
 
         IslandNow = PlayerPrefs.GetInt("IslandNow");
+        IslandEnabled = PlayerPrefs.GetInt("IslandEnabled");
         FloorMat.SetFloat("ShapesSides",3+ IslandNow);
         MainCam.transform.position = MainCamStayPt[0];
         MainCam.transform.rotation = Quaternion.Euler(MainCamRotationAngle[0]);
@@ -231,7 +232,9 @@ public class InGameOperation : ISceneChange
         TimeRecord = Time.time;
         timeManager.TimeControl();
         InputManager.TapTimeRecord = 0;
+        InputManager.isDragging = false;
         DarkenCam.SetActive(isOption);
+        GameObject.FindObjectOfType<AudioManager>().PlayAudio("se_Button");
     }
 
     private IEnumerator PetrifyAnimation(int sceneID)
@@ -355,6 +358,7 @@ public class InGameOperation : ISceneChange
 
     #region GameProcessing
     public int GetCurrIsland() { return IslandNow; }
+    public int GetEnabledIsland() { return IslandEnabled; }
 
     #endregion
 }

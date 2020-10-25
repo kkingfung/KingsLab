@@ -26,8 +26,10 @@ public class Tower : MonoBehaviour
     private GameObject LevelUpVFXPrefab;
 
     private EnemyManager enemyManager;
+    private AudioManager audioManager;
     public GameObject pillar;
 
+    private AudioSource audio;
     //Testing
     GameObject testobj;
 
@@ -36,10 +38,13 @@ public class Tower : MonoBehaviour
     private void Start()
     {
         enemyManager = FindObjectOfType<EnemyManager>();
+        audioManager = FindObjectOfType<AudioManager>();
         testobj = GameObject.FindGameObjectWithTag("DebugTag");
+
         AttackCounter = 0;
         AtkVFX = new List<GameObject>();
         animator = GetComponent<Animator>();
+        audio = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -86,12 +91,20 @@ public class Tower : MonoBehaviour
         switch (type)
         {
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
+                audio.clip = audioManager.GetAudio("se_Lighting");
+                audio.Play();
                 posAdj = 0.2f; break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
+                audio.clip = audioManager.GetAudio("se_Snail");
+                audio.Play();
                 posAdj = -0.2f; break;
             case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
+                audio.clip = audioManager.GetAudio("se_Shot");
+                audio.Play();
                 posAdj = 0.0f; break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
+                audio.clip = audioManager.GetAudio("se_MagicFire");
+                audio.Play();
                 posAdj = 1f; break;
         }
 
@@ -179,8 +192,8 @@ public class Tower : MonoBehaviour
     {
         attr = TowerInfo.GetTowerInfo(type);
 
-        attr = new TowerAttr(attr.areaSq * (0.2f * rank + 0.001f * Level),
-            attr.damage * (1f * rank + 0.01f * Level),
+        attr = new TowerAttr(attr.areaSq * (0.2f * rank + 0.005f * Level),
+            attr.damage * (1f * rank + 0.05f * Level),
             (int)((float)attr.frameWait * (1f - (0.1f * rank))));
 
         switch (type)

@@ -87,7 +87,7 @@ public class StockOperator : MonoBehaviour
     {
         int frame = 30;
         float rotateChgsbyFrame = (Rotation * 360f - this.transform.localEulerAngles.z) / frame;
-        float scaleChgsbyFrame = (TargetScale.x *(1-PlayerPrefs.GetFloat("zoomRate")*0.8f+0.2f) - this.transform.localScale.x) / frame;
+        float scaleChgsbyFrame = (TargetScale.x *(1-PlayerPrefs.GetFloat("zoomRate")*0.7f)*2f - this.transform.localScale.x) / frame;
         while (frame-- > 0)
         {
             this.transform.localEulerAngles = new Vector3(this.transform.localEulerAngles.x,

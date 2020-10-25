@@ -60,20 +60,20 @@ public class AudioManager : MonoBehaviour
         bgmList.Add("bgm_Title", bgmSource[i++]);
 
         i = 0;
-        seList.Add("se_Katana", seSource[i++]);
-        seList.Add("se_LongDist", seSource[i++]);
-        seList.Add("se_Punch", seSource[i++]);
+        seList.Add("se_Lighting", seSource[i++]);
+        seList.Add("se_Shot", seSource[i++]);
+        seList.Add("se_Snail", seSource[i++]);
 
-        seList.Add("se_MagicBuff", seSource[i++]);
         seList.Add("se_MagicFire", seSource[i++]);
-        seList.Add("se_MagicGolem", seSource[i++]);
-        seList.Add("se_MagicIce1", seSource[i++]);
-        seList.Add("se_MagicIce2", seSource[i++]);
-        seList.Add("se_MagicTornado", seSource[i++]);
+        seList.Add("se_MagicBlizzard", seSource[i++]);
+        seList.Add("se_MagicPetrification", seSource[i++]);
+        seList.Add("se_MagicSummon", seSource[i++]);
 
         seList.Add("se_Button", seSource[i++]);
         seList.Add("se_Clear", seSource[i++]);
         seList.Add("se_Lose", seSource[i++]);
+
+        seList.Add("se_Hitted", seSource[i++]);
     }
 
     void Record()
@@ -116,6 +116,19 @@ public class AudioManager : MonoBehaviour
             audioSource[1].Play();
         }
     }
+
+    public AudioClip GetAudio(string clipname)
+    {
+        if (bgmList.ContainsKey(clipname))
+        {
+            return bgmList[clipname];
+        }
+        else
+        {
+            return seList[clipname];
+        }
+    }
+
     public void PlayReverseAudio(string clipname, bool isLoop = false)
     {
         if (bgmList.ContainsKey(clipname))

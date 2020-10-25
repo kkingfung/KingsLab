@@ -207,6 +207,7 @@ public class TitleOperation: ISceneChange
         StartCoroutine(PetrifyAnimation());
         TimeRecord = Time.time;
         isWaiting = true;
+        AudioManager.PlayAudio("se_Button");
     }
 
     public void OptionStatus() 
@@ -216,6 +217,7 @@ public class TitleOperation: ISceneChange
         CanvaManager.isOption = isOption;
         GyroscopeManager.isFunctioning = !isOption;
         TimeRecord = Time.time;
+        AudioManager.PlayAudio("se_Button");
     }
 
     public void EnableCredit() 
@@ -225,6 +227,7 @@ public class TitleOperation: ISceneChange
         nextRecStatusRightCam = 0;
         nextRecStatusBottomCam = 0;
         TimeRecord = Time.time;
+        if(showCredit) AudioManager.PlayAudio("se_Button");
     }
     private IEnumerator PetrifyAnimation()
     {

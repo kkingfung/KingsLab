@@ -13,6 +13,7 @@ public class RaycastFunction : MonoBehaviour
     private InGameOperation GameSceneManager;
 
     private StoreManager storeManager;
+    private AudioManager audioManager;
 
     private enum ActionTypeID {
         StageSelection_Keybroad=0,
@@ -46,6 +47,7 @@ public class RaycastFunction : MonoBehaviour
         GameSceneManager = FindObjectOfType<InGameOperation>();
 
         storeManager = FindObjectOfType<StoreManager>();
+        audioManager = FindObjectOfType<AudioManager>();
     }
 
     public void ActionFunc()
@@ -60,69 +62,87 @@ public class RaycastFunction : MonoBehaviour
                 break;
             case ActionTypeID.StageSelection_PreviousStage:
                 SelectionSceneManager.StageInfoChgSubtract(InfoID);
+                audioManager.PlayAudio("se_Button");
                 break;
             case ActionTypeID.StageSelection_NextStage:
                 SelectionSceneManager.StageInfoChgAdd(InfoID);
+                audioManager.PlayAudio("se_Button");
                 break;
 
             //For Game Scene (Screen to See)
             case ActionTypeID.GameScene_UpArrow:
                 GameSceneManager.currScreenShown = (int)InGameOperation.ScreenShownID.SSIDTop;
+                audioManager.PlayAudio("se_Button");
                 break;
             case ActionTypeID.GameScene_DownArrow:
                 GameSceneManager.currScreenShown = (int)InGameOperation.ScreenShownID.SSIDArena;
+                audioManager.PlayAudio("se_Button");
                 break;
             case ActionTypeID.GameScene_LeftArrow:
                 GameSceneManager.currScreenShown = 
                     (GameSceneManager.currScreenShown == (int)InGameOperation.ScreenShownID.SSIDTopRight) ?
                     (int)InGameOperation.ScreenShownID.SSIDTop : (int)InGameOperation.ScreenShownID.SSIDTopLeft;
+                audioManager.PlayAudio("se_Button");
                 break;
             case ActionTypeID.GameScene_RightArrow:
                 GameSceneManager.currScreenShown =
                 (GameSceneManager.currScreenShown == (int)InGameOperation.ScreenShownID.SSIDTopLeft) ?
                 (int)InGameOperation.ScreenShownID.SSIDTop : (int)InGameOperation.ScreenShownID.SSIDTopRight;
+                audioManager.PlayAudio("se_Button");
                 break;
 
             //For Game Scene (Store Left)
             case ActionTypeID.GameScene_StoreArmy1:
                 storeManager.raycastAction(Upgrades.StoreItems.Army1,InfoID);
+                audioManager.PlayAudio("se_Button");
                 break;
             case ActionTypeID.GameScene_StoreArmy2:
                 storeManager.raycastAction(Upgrades.StoreItems.Army2, InfoID);
+                audioManager.PlayAudio("se_Button");
                 break;
             case ActionTypeID.GameScene_StoreArmy3:
                 storeManager.raycastAction(Upgrades.StoreItems.Army3, InfoID);
+                audioManager.PlayAudio("se_Button");
                 break;
             case ActionTypeID.GameScene_StoreArmy4:
                 storeManager.raycastAction(Upgrades.StoreItems.Army4, InfoID);
+                audioManager.PlayAudio("se_Button");
                 break;
 
             //For Game Scene (Store Top)
             case ActionTypeID.GameScene_StoreCastleHP:
                 storeManager.raycastAction(Upgrades.StoreItems.CastleHP, InfoID);
+                audioManager.PlayAudio("se_Button");
                 break;
             case ActionTypeID.GameScene_StoreBonusBoss1:
                 storeManager.raycastAction(Upgrades.StoreItems.BonusBoss1, InfoID);
+                audioManager.PlayAudio("se_Button");
                 break;
             case ActionTypeID.GameScene_StoreBonusBoss2:
                 storeManager.raycastAction(Upgrades.StoreItems.BonusBoss2, InfoID);
+                audioManager.PlayAudio("se_Button");
                 break;
             case ActionTypeID.GameScene_StoreBonusBoss3:
                 storeManager.raycastAction(Upgrades.StoreItems.BonusBoss3, InfoID);
+                audioManager.PlayAudio("se_Button");
                 break;
 
             //For Game Scene (Store Right)
             case ActionTypeID.GameScene_StoreMagicMeteor:
                 storeManager.raycastAction(Upgrades.StoreItems.MagicMeteor, InfoID);
+                audioManager.PlayAudio("se_Button");
                 break;
             case ActionTypeID.GameScene_StoreMagicBlizzard:
                 storeManager.raycastAction(Upgrades.StoreItems.MagicBlizzard, InfoID);
+                audioManager.PlayAudio("se_Button");
                 break;
             case ActionTypeID.GameScene_StoreMagicSummon:
                 storeManager.raycastAction(Upgrades.StoreItems.MagicSummon, InfoID);
+                audioManager.PlayAudio("se_Button");
                 break;
             case ActionTypeID.GameScene_StoreMagicPetrification:
                 storeManager.raycastAction(Upgrades.StoreItems.MagicPetrification, InfoID);
+                audioManager.PlayAudio("se_Button");
                 break;
 
         }

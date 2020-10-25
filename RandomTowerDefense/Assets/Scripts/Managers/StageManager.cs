@@ -16,6 +16,7 @@ public class StageManager : MonoBehaviour
     private Castle castle;
 
     private InGameOperation sceneManager;
+    private AudioManager audioManager;
     public List<GameObject> GameClearCanva;
     public List<GameObject> GameOverCanva;
 
@@ -38,6 +39,7 @@ public class StageManager : MonoBehaviour
     {
         sceneManager = FindObjectOfType<InGameOperation>();
         mapGenerator = FindObjectOfType<FilledMapGenerator>();
+        audioManager = FindObjectOfType<AudioManager>();
         castle = new Castle();
 
            result = 0;
@@ -115,10 +117,11 @@ public class StageManager : MonoBehaviour
 
     public void Damaged(int Val=1)
     {
-        if (castle.Damaged(Val)) 
+        if (castle.Damaged(Val) && result==0) 
         {
             result = -1;
             isReady = false;
+            audioManager.PlayAudio("se_Lose");
             StartCoroutine(FadeInRoutine());
         }
     }
@@ -128,6 +131,9 @@ public class StageManager : MonoBehaviour
             return false;
 
         result = 1;
+        if (sceneManager.GetEnabledIsland() == sceneManager.GetCurrIsland() && sceneManager.GetEnabledIsland()<StageInfo.GetStageNum()-1)
+            PlayerPrefs.SetInt("IslandEnabled", sceneManager.GetCurrIsland()+1);
+        audioManager.PlayAudio("se_Clear");
         return true;
     }
     public int GetMaxHP() { return castle.MaxCastleHP; }

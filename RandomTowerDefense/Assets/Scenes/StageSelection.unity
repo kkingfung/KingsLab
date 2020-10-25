@@ -13826,18 +13826,17 @@ MonoBehaviour:
   - {fileID: 8300000, guid: e4cda9335a06344478f36972e7196201, type: 3}
   - {fileID: 8300000, guid: 9244aa0b6c7a13e4a9d53e00cd54fb15, type: 3}
   seSource:
-  - {fileID: 8300000, guid: 1f9b4ecd9ca51ca40bf4131175e244e1, type: 3}
   - {fileID: 8300000, guid: db9eb1dc1b25d6b419f8f930ba493e5a, type: 3}
   - {fileID: 8300000, guid: 0f5ae574a505f0442931d572b2c8d523, type: 3}
-  - {fileID: 8300000, guid: 4f4365e71e6941a44a9e05f80fb2c939, type: 3}
+  - {fileID: 8300000, guid: 1f9b4ecd9ca51ca40bf4131175e244e1, type: 3}
+  - {fileID: 8300000, guid: 17f7c8a4ef0278e49a0d8f8818ffc5e9, type: 3}
   - {fileID: 8300000, guid: e4490ebc2dbccf942b112df27f2f3731, type: 3}
   - {fileID: 8300000, guid: c0e5a754e44d8aa4493033179d4750d5, type: 3}
-  - {fileID: 8300000, guid: 17f7c8a4ef0278e49a0d8f8818ffc5e9, type: 3}
-  - {fileID: 8300000, guid: e7f8982e54e90d04a8781a18c6d7ee1b, type: 3}
-  - {fileID: 8300000, guid: f671a49447174a04e88b77e11feac0f0, type: 3}
+  - {fileID: 8300000, guid: 4f4365e71e6941a44a9e05f80fb2c939, type: 3}
   - {fileID: 8300000, guid: 6a70944204b255e41a88e7beda6e88de, type: 3}
   - {fileID: 8300000, guid: 41a74988531851a408523cd5a58b0919, type: 3}
   - {fileID: 8300000, guid: 4f18dab3ed856f34b9e305d360bdd929, type: 3}
+  - {fileID: 8300000, guid: 80316f48d1e58be46acca69f1874ee77, type: 3}
   bgmUI:
   - {fileID: 1912351343}
   - {fileID: 2050933797}
@@ -17196,6 +17195,7 @@ MonoBehaviour:
   - {fileID: 458357438}
   LBMTest: {fileID: 0}
   ApplyClickEfc: 0
+  TapTimeRecord: 0
   refCamL: {fileID: 1566493579}
   refCamP: {fileID: 894084725}
   refCamLSub: {fileID: 0}

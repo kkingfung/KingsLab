@@ -162,6 +162,7 @@ public class StageSelectOperation : ISceneChange
         if (Time.time - TimeRecord < TimeWait) return;
         StartCoroutine(PetrifyAnimation());
         TimeRecord = Time.time;
+        GameObject.FindObjectOfType<AudioManager>().PlayAudio("se_Button");
     }
 
     public void OptionStatus()
@@ -171,6 +172,7 @@ public class StageSelectOperation : ISceneChange
         CanvaManager.isOption = isOption;
         GyroscopeManager.isFunctioning = !isOption;
         TimeRecord = Time.time;
+        AudioManager.PlayAudio("se_Button");
     }
 
     private IEnumerator PetrifyAnimation()

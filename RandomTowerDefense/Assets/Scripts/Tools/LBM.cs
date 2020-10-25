@@ -175,7 +175,7 @@ public class LBM : MonoBehaviour {
 		else if (isDragging && isButtonUp)
 		{
 			Graphics.Blit(null, rtMask, initMat);
-			isDragging = false;
+			isDragging = false; 
 		}
 	}
 }

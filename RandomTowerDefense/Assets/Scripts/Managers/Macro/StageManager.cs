@@ -15,6 +15,7 @@ public class StageManager : MonoBehaviour
 
     private InGameOperation sceneManager;
     private AudioManager audioManager;
+    private ScoreCalculation scoreCalculation;
     public List<GameObject> GameClearCanva;
     public List<GameObject> GameOverCanva;
 
@@ -38,6 +39,7 @@ public class StageManager : MonoBehaviour
         sceneManager = FindObjectOfType<InGameOperation>();
         mapGenerator = FindObjectOfType<FilledMapGenerator>();
         audioManager = FindObjectOfType<AudioManager>();
+        scoreCalculation = FindObjectOfType<ScoreCalculation>();
 
            result = 0;
         foreach (GameObject i in GameClearCanva) { 
@@ -118,6 +120,7 @@ public class StageManager : MonoBehaviour
             result = -1;
             isReady = false;
             audioManager.PlayAudio("se_Lose");
+            scoreCalculation.CalculationScore();
             StartCoroutine(FadeInRoutine());
         }
     }
@@ -127,13 +130,15 @@ public class StageManager : MonoBehaviour
             return false;
 
         result = 1;
+
+        scoreCalculation.CalculationScore();
         if (sceneManager.GetEnabledIsland() == sceneManager.GetCurrIsland() && sceneManager.GetEnabledIsland()<StageInfo.GetStageNum()-1)
             PlayerPrefs.SetInt("IslandEnabled", sceneManager.GetCurrIsland()+1);
         audioManager.PlayAudio("se_Clear");
         return true;
     }
     public int GetMaxHP() { return CastlePointer.GetComponent<Castle>().MaxCastleHP; }
-    public int GetCurrHP() {  return CastlePointer.GetComponent<Castle>().CurrCastleHP; }
+    public int GetCurrHP() {  return Mathf.Max(0,CastlePointer.GetComponent<Castle>().CurrCastleHP); }
 
     private IEnumerator FadeOutRoutine()
     {
@@ -161,4 +166,6 @@ public class StageManager : MonoBehaviour
 
         StartCoroutine(FadeOutRoutine());
     }
+
+    public int GetResult() { return result; }
 }

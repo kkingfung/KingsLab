@@ -37,10 +37,13 @@ public class RecordManager : MonoBehaviour
         stageRecords.Clear();
     }
 
-
-    void RecordComparison(int stageID, string name, int score) {
+    public int RecordComparison(int stageID, string name, int score) {
         stageRecords[stageID]=stageRecords[stageID].InsertObject(stageID, name, score);
-        updateUI();
+        int rank = PlayerPrefs.GetInt("PlayerRank");
+        if (AllRecords.Count > 0)
+            updateUI();
+
+        return rank;
     }
 
     void updateUI() {
@@ -52,6 +55,18 @@ public class RecordManager : MonoBehaviour
             AllRecords[i].Records[3].text = "4." + stageRecords[i].record4.name.Substring(0, 5).ToUpper() + "   " + stageRecords[i].record4.score.ToString("000000");
             AllRecords[i].Records[4].text = "5." + stageRecords[i].record5.name.Substring(0, 5).ToUpper() + "   " + stageRecords[i].record5.score.ToString("000000");
         }
+    }
+
+    public void UpdateRecordName(int rank,string name) {
+        int currIsland = GameObject.FindObjectOfType<InGameOperation>().GetCurrIsland();
+        switch (rank) {
+            case 1: stageRecords[currIsland].record1.name = name; break;
+            case 2: stageRecords[currIsland].record2.name = name; break;
+            case 3: stageRecords[currIsland].record3.name = name; break;
+            case 4: stageRecords[currIsland].record4.name = name; break;
+            case 5: stageRecords[currIsland].record5.name = name; break;
+        }
+            SaveSystem.SaveObject("Record" + currIsland.ToString(), stageRecords[currIsland], true);
     }
 }
 

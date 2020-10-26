@@ -60,12 +60,12 @@ static public class Upgrades
         //Checking StockItems
         switch (itemID)
         {
-            case Upgrades.StoreItems.CastleHP:
+            case StoreItems.CastleHP:
                 GameObject.FindObjectOfType<StageManager>().Damaged(-1);
                 break;
-            case Upgrades.StoreItems.BonusBoss1: 
-            case Upgrades.StoreItems.BonusBoss2:
-            case Upgrades.StoreItems.BonusBoss3:
+            case StoreItems.BonusBoss1: 
+            case StoreItems.BonusBoss2:
+            case StoreItems.BonusBoss3:
                 SkillStack.AddStock(itemID);
                 GameObject.FindObjectOfType<StoreManager>().SetBossCD((int)(itemID- Upgrades.StoreItems.BonusBoss1));
                 break;
@@ -75,10 +75,10 @@ static public class Upgrades
             case Upgrades.StoreItems.Army4:
                 StoreLevel[itemID] += lvUP;
                 break;
-            case Upgrades.StoreItems.MagicMeteor:
-            case Upgrades.StoreItems.MagicBlizzard:
-            case Upgrades.StoreItems.MagicSummon:
-            case Upgrades.StoreItems.MagicPetrification:
+            case StoreItems.MagicMeteor:
+            case StoreItems.MagicBlizzard:
+            case StoreItems.MagicSummon:
+            case StoreItems.MagicPetrification:
                 SkillStack.AddStock(itemID);
                 break;
         }
@@ -88,5 +88,13 @@ static public class Upgrades
     static public bool CheckTopLevel(StoreItems itemID)
     {
         return StoreLevel[itemID] < MaxLevel;
+    }
+
+    static public int allLevel() 
+    { 
+    int totalLv = 0;
+        totalLv += GetLevel(StoreItems.Army1) + GetLevel(StoreItems.Army2) + GetLevel(StoreItems.Army3) + GetLevel(StoreItems.Army4);
+        totalLv += GetLevel(StoreItems.MagicMeteor) + GetLevel(StoreItems.MagicBlizzard) + GetLevel(StoreItems.MagicSummon) + GetLevel(StoreItems.MagicPetrification);
+        return totalLv;
     }
 }

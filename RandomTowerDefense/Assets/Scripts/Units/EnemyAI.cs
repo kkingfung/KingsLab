@@ -63,8 +63,8 @@ public class EnemyAI : MonoBehaviour
         Destroy(this, 5);
     }
 
-    public void Petrified() { }
-    public void Slowed() { }
+    public void Petrified(int petrifyTimer) { }
+    public void Slowed(int slowTimer) { }
 }
 
 ////data coming from the PlaceableData

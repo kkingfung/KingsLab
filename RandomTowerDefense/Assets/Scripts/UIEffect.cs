@@ -111,6 +111,17 @@ public class UIEffect : MonoBehaviour
                     text.color = new Color(text.color.r, text.color.g, text.color.b, text.color.a- magnitude);
                 }
                 break;
+            case 11://for Game Scene Score Information
+                if (text == null) break;
+                textCnt =  Mathf.Min(textCnt + 1, fullText.Length);
+                text.text = fullText.Substring(0, textCnt);
+                break;
         }
+    }
+
+    public void ResetForScoreShow()
+    {
+        textCnt = 0;
+        if (text) fullText = text.text;
     }
 }

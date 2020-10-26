@@ -37,8 +37,8 @@ public class RaycastFunction : MonoBehaviour
 
         GameScene_StoreMagicMeteor = 40,//Fire
         GameScene_StoreMagicBlizzard,//Ice
-        GameScene_StoreMagicSummon,//Metal
         GameScene_StoreMagicPetrification,//Mind
+        GameScene_StoreMagicSummon,//Metal
     }
 
     private void Start()

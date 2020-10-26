@@ -19,8 +19,8 @@ public class MyMobileInput
 [System.Serializable]
 public class InputManager : MonoBehaviour
 {
-    readonly float tapStayTime = 1.2f;
-    readonly float tapDoubleTime = 0.8f;
+    readonly float tapStayTime = 0.4f;
+    readonly float tapDoubleTime = 0.25f;
     readonly float dragDiff = 40.0f;//cooperate with Scene Script(toDrag)
 
     public GameObject ClickPrefab;
@@ -110,7 +110,7 @@ public class InputManager : MonoBehaviour
 
         if (Input.GetMouseButton(0))
         {
-            if (Time.time - DragTimeRecord > tapStayTime)
+            if (Time.time - DragTimeRecord > tapStayTime/ Time.timeScale)
             {
                 if (isDragging)
                 {
@@ -188,7 +188,7 @@ public class InputManager : MonoBehaviour
                     DragTimeRecord = Time.time;
                     break;
                 case TouchPhase.Moved:
-                    if (Time.time - DragTimeRecord > tapStayTime && isDragging)
+                    if (Time.time - DragTimeRecord > tapStayTime / Time.timeScale && isDragging)
                         playerManager.CheckStock(touch.position);
                     break;
                 case TouchPhase.Ended:
@@ -249,7 +249,7 @@ public class InputManager : MonoBehaviour
                     }
                     break;
                 case TouchPhase.Stationary:
-                    if (Time.time - DragTimeRecord > tapStayTime && isDragging)
+                    if (Time.time - DragTimeRecord > tapStayTime / Time.timeScale && isDragging)
                     {
                         playerManager.CheckStock(touch.position);
                     }

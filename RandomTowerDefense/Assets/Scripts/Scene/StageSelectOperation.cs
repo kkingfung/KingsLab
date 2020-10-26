@@ -9,8 +9,8 @@ using UnityEngine.Rendering;
 
 public class StageSelectOperation : ISceneChange
 {
-    const float bloomInt_Default = 1.5f;
-    const float bloomInt_Max = 60.0f;
+    private readonly float bloomInt_Default = 1.5f;
+    private readonly float bloomInt_Max = 60.0f;
 
     //Camera Start/Stay/End Point
     [Header("MainCamera Settings")]
@@ -44,35 +44,35 @@ public class StageSelectOperation : ISceneChange
     public GameObject LandscapeFadeImg;
     public GameObject PortraitFadeImg;
 
-    FadeEffect LandscapeFade;
-    FadeEffect PortraitFade;
+    private FadeEffect LandscapeFade;
+    private FadeEffect PortraitFade;
 
     public bool isDebugging;
     public VolumeProfile volumeProfile;
 
-    int IslandNow = 0;
-    int IslandNext = 0;
-    int IslandEnabled = 0;
+    private int IslandNow = 0;
+    private int IslandNext = 0;
+    private int IslandEnabled = 0;
 
     //Manager
-    AudioManager AudioManager;
-    //CameraManager CameraManager;
-    CanvaManager CanvaManager;
-    //InputManager InputManager;
-    GyroscopeManager GyroscopeManager;
+    private AudioManager AudioManager;
+    //private CameraManager CameraManager;
+    private CanvaManager CanvaManager;
+    //private InputManager InputManager;
+    private GyroscopeManager GyroscopeManager;
 
-    TouchScreenKeyboard keyboard;
-    bool CancelKeybroad=false;
+    private TouchScreenKeyboard keyboard;
+    private bool CancelKeybroad =false;
 
     //Prevent DoubleHit
-    float TimeRecord = 0;
-    const float TimeWait = 0.5f;
+    private float TimeRecord = 0;
+    private const float TimeWait = 0.5f;
 
     //CameraOperation
-    const int maxRecFrame = 20;
+    private readonly int maxRecFrame = 20;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         base.Start();
         base.SceneIn();
@@ -127,7 +127,7 @@ public class StageSelectOperation : ISceneChange
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         base.Update();
 

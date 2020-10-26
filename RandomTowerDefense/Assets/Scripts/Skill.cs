@@ -1,55 +1,185 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class Skill : MonoBehaviour
 {
     private Upgrades.StoreItems ActionID;
     private SkillAttr attr;
 
+    private bool Actioned;
+    private Vector3 ActivePos;
+
+    private PlayerManager playerManager;//For Raycasting target Position
+
+    private EnemyManager enemyManager;//For Homing position;
+    private GameObject targetEnm;
+
+    private AudioManager audioManager;
+    private AudioSource audioSource;
+
+    private int temp;//for any purpose
+
+    //Testing
+    //GameObject testobj;
+
     // Start is called before the first frame update
     void Start()
     {
+        Actioned = false;
+        ActivePos = transform.position;
 
+        playerManager = FindObjectOfType<PlayerManager>();
+        enemyManager = FindObjectOfType<EnemyManager>();
+        audioManager = FindObjectOfType<AudioManager>();
+        audioSource = GetComponent<AudioSource>();
+
+        //testobj = GameObject.FindGameObjectWithTag("DebugTag");
+
+        switch (ActionID)
+        {
+            case Upgrades.StoreItems.MagicMeteor:
+                this.transform.position = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
+                audioSource.PlayOneShot(audioManager.GetAudio("se_MagicFire"));
+                break;
+            case Upgrades.StoreItems.MagicBlizzard:
+                this.transform.position = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
+                audioSource.clip = audioManager.GetAudio("se_MagicBlizzard");
+                audioSource.loop = true;
+                audioSource.Play();
+                break;
+            case Upgrades.StoreItems.MagicPetrification:
+                this.transform.position = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
+                foreach (GameObject i in enemyManager.allAliveMonsters)
+                {
+                    i.GetComponent<EnemyAI>().Petrified(attr.frameWait);
+                }
+                audioSource.PlayOneShot(audioManager.GetAudio("se_MagicPetrification"));
+                break;
+            case Upgrades.StoreItems.MagicSummon:
+                this.transform.position = Camera.main.transform.position;
+                Vector3 targetPos = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
+                if (enemyManager.allAliveMonsters.Count > 0)
+                {
+                    GameObject nearestMonster = null;
+                    float dist = float.MaxValue;
+                    foreach (GameObject i in enemyManager.allAliveMonsters)
+                    {
+                        float tempDist = (i.transform.position - targetPos).sqrMagnitude;
+                        if (tempDist < dist)
+                        {
+                            dist = tempDist;
+                            nearestMonster = i;
+                        }
+                    }
+                }
+                else targetEnm = null;
+
+               //if (testobj) targetEnm = testobj;
+                
+                this.GetComponent<VisualEffect>().SetVector3("TargetLocation", targetEnm.transform.position-this.transform.position);
+                audioSource.PlayOneShot(audioManager.GetAudio("se_MagicSummon"));
+
+                break;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        switch (ActionID) {
+        switch (ActionID)
+        {
             case Upgrades.StoreItems.MagicMeteor:
+                if (Actioned == false && attr.frameWait-- < 0)
+                {
+                    Vector2 skillPos = new Vector2(this.transform.position.x, this.transform.position.z);
+                    foreach (GameObject i in enemyManager.allAliveMonsters)
+                    {
+                        Vector2 enmPos = new Vector2(i.transform.position.x, i.transform.position.z);
+                        if ((enmPos - skillPos).sqrMagnitude <= attr.area * attr.area)
+                        {
+                            i.GetComponent<EnemyAI>().Damaged(attr.damage);
+                        }
+                    }
+
+                    if (!Actioned)
+                    {
+                        Destroy(this.gameObject);
+                        Actioned = true;
+                    }
+                }
                 break;
             case Upgrades.StoreItems.MagicBlizzard:
+                if (Actioned == false)
+                {
+                    this.transform.position = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
+
+                    if (attr.frameWait-- < 0)
+                    {
+                        Vector2 skillPos = new Vector2(this.transform.position.x, this.transform.position.z);
+                        foreach (GameObject i in enemyManager.allAliveMonsters)
+                        {
+                            Vector2 enmPos = new Vector2(i.transform.position.x, i.transform.position.z);
+                            if ((enmPos - skillPos).sqrMagnitude <= attr.area * attr.area)
+                            {
+                                i.GetComponent<EnemyAI>().Damaged(attr.damage);
+                                i.GetComponent<EnemyAI>().Slowed(attr.cycleTime);
+                            }
+                        }
+                        attr.frameWait = temp;
+                    }
+
+                    if (!Actioned && attr.activeTime-- < 0)
+                    {
+                        Destroy(this.gameObject);
+                        Actioned = true;
+                    }
+                }
                 break;
             case Upgrades.StoreItems.MagicPetrification:
+                if (Actioned == false && attr.frameWait-- < 0)
+                {
+                    if (!Actioned)
+                    {
+                        Destroy(this.gameObject);
+                        Actioned = true;
+                    }
+                }
                 break;
             case Upgrades.StoreItems.MagicSummon:
+                if (Actioned == false && attr.frameWait-- < 0)
+                {  
+                    if (targetEnm != null)
+                    {
+                        if(targetEnm.GetComponent<EnemyAI>())
+                        targetEnm.GetComponent<EnemyAI>().Damaged(attr.damage);
+                    }
+                    if (!Actioned)
+                    {
+                        Destroy(this.gameObject);
+                        Actioned = true;
+                    }
+                }
                 break;
         }
     }
 
-    public void init(Upgrades.StoreItems ActionID, SkillAttr attr) {
+    public void init(Upgrades.StoreItems ActionID, SkillAttr attr)
+    {
         this.ActionID = ActionID;
-        this.attr = attr;
+        this.attr = new SkillAttr(attr);
     }
 
-    private void DamageEnemy(Collider other)
+    public void SetTemp(int val)
     {
-        if (other.gameObject.layer == LayerMask.GetMask("Enemy"))
+        temp = val;
+        switch (ActionID)
         {
-            switch (ActionID)
-            {
-                case Upgrades.StoreItems.MagicMeteor:
-                    break;
-                case Upgrades.StoreItems.MagicBlizzard:
-                    break;
-                case Upgrades.StoreItems.MagicPetrification:
-                    break;
-                case Upgrades.StoreItems.MagicSummon:
-                    break;
-            }
-            other.gameObject.GetComponent<EnemyAI>().Damaged(1);
+            case Upgrades.StoreItems.MagicPetrification:
+                this.GetComponent<VisualEffect>().SetFloat("Radius", temp);
+                this.GetComponent<VisualEffect>().SetFloat("Rotation",((temp*10)/(float)attr.activeTime)*60f);
+                break;
         }
     }
-
 }

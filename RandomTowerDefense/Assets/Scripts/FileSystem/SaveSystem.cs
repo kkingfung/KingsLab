@@ -164,6 +164,13 @@ public class SaveObject
 
         recordHolder = recordHolder.OrderByDescending(x => x.score).ToList();
 
+        for (int i = recordHolder.Count; i>0;--i) {
+            if (recordHolder[i-1].name == name && recordHolder[i-1].score == score) {
+                PlayerPrefs.SetInt("PlayerRank",i);
+                break;
+            }
+        }
+
         record1 = recordHolder[0];
         record2 = recordHolder[1];
         record3 = recordHolder[2];
@@ -171,6 +178,7 @@ public class SaveObject
         record5 = recordHolder[4];
 
         recordHolder.Clear();
+
         return this;
     }
 }

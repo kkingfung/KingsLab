@@ -38,6 +38,7 @@ static public class SkillStack
 
         int selectedItem = stackDetail[StockID];
         stackDetail[StockID] = 0;
+        currStackNum--;
         return selectedItem;
     }
 

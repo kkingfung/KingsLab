@@ -71,6 +71,7 @@ public class InGameOperation : ISceneChange
     private ResourceManager resourceManager;
     private WaveManager waveManager;
     private TimeManager timeManager;
+    private ScoreCalculation scoreCalculation;
 
     private TouchScreenKeyboard keyboard;//For RecordBroad if top 5
     private bool CancelKeybroad = false;
@@ -116,6 +117,7 @@ public class InGameOperation : ISceneChange
         waveManager = FindObjectOfType<WaveManager>();
         resourceManager = FindObjectOfType<ResourceManager>();
         timeManager = FindObjectOfType<TimeManager>();
+        scoreCalculation = FindObjectOfType<ScoreCalculation>();
 
         AudioManager.PlayAudio("bgm_Battle",true);
 
@@ -219,6 +221,7 @@ public class InGameOperation : ISceneChange
     public void MoveToStage(int SceneID)
     {
         if (Time.time - TimeRecord < TimeWait) return;
+        if (scoreCalculation.Inputting) return;
         StartCoroutine(PetrifyAnimation(SceneID));
         TimeRecord = Time.time;
     }
@@ -347,6 +350,7 @@ public class InGameOperation : ISceneChange
 
             while (frame-->0 )
             {
+            InputManager.isDragging = false;
                 MainCam.transform.localEulerAngles += spd;
                 yield return new WaitForSeconds(0f);
             }

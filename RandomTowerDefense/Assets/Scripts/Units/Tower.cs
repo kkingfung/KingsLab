@@ -31,7 +31,7 @@ public class Tower : MonoBehaviour
 
     private AudioSource audio;
     //Testing
-    GameObject testobj;
+    //GameObject testobj;
 
     private Animator animator;
 
@@ -39,7 +39,7 @@ public class Tower : MonoBehaviour
     {
         enemyManager = FindObjectOfType<EnemyManager>();
         audioManager = FindObjectOfType<AudioManager>();
-        testobj = GameObject.FindGameObjectWithTag("DebugTag");
+        //testobj = GameObject.FindGameObjectWithTag("DebugTag");
 
         AttackCounter = 0;
         AtkVFX = new List<GameObject>();
@@ -71,10 +71,10 @@ public class Tower : MonoBehaviour
             }
         }
 
-        if ((testobj.transform.position - this.transform.position).sqrMagnitude <= attr.areaSq)
-        {
-            nearestMonster = testobj;
-        }
+        //if ((testobj.transform.position - this.transform.position).sqrMagnitude <= attr.areaSq)
+        //{
+        //    nearestMonster = testobj;
+        //}
 
         return nearestMonster;
     }
@@ -91,20 +91,16 @@ public class Tower : MonoBehaviour
         switch (type)
         {
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
-                audio.clip = audioManager.GetAudio("se_Lighting");
-                audio.Play();
+                audio.PlayOneShot(audioManager.GetAudio("se_Lighting"));
                 posAdj = 0.2f; break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-                audio.clip = audioManager.GetAudio("se_Snail");
-                audio.Play();
+                audio.PlayOneShot(audioManager.GetAudio("se_Snail"));
                 posAdj = -0.2f; break;
             case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
-                audio.clip = audioManager.GetAudio("se_Shot");
-                audio.Play();
+                audio.PlayOneShot(audioManager.GetAudio("se_Shot"));
                 posAdj = 0.0f; break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                audio.clip = audioManager.GetAudio("se_MagicFire");
-                audio.Play();
+                audio.PlayOneShot(audioManager.GetAudio("se_MagicFire"));
                 posAdj = 1f; break;
         }
 

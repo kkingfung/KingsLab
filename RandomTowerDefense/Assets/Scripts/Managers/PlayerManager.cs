@@ -135,7 +135,7 @@ public class PlayerManager : MonoBehaviour
                 isSkillActive = true;
                 break;
             case (int)Upgrades.StoreItems.MagicPetrification:
-                CurrentSkill = skillManager.Petrification(hitPosition);
+                CurrentSkill = skillManager.PetrificationSkill(hitPosition);
                 isSkillActive = true;
                 break;
             default:

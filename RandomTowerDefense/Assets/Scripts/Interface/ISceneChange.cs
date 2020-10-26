@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ISceneChange : MonoBehaviour
 {
-    protected readonly int IslandNum = 4;
+    public readonly int IslandNum = 4;
     
     [Header("Gyro Settings")]
     public List<GameObject> LandscapeObjs;

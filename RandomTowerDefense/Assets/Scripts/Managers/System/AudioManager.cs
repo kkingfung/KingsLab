@@ -110,10 +110,7 @@ public class AudioManager : MonoBehaviour
             audioSource[0].Play();
         }
         else {
-            audioSource[1].pitch = 1;
-            audioSource[1].clip = seList[clipname];
-            audioSource[1].loop = isLoop;
-            audioSource[1].Play();
+            audioSource[1].PlayOneShot(seList[clipname]);
         }
     }
 

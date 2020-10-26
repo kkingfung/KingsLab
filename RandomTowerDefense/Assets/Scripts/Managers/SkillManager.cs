@@ -17,7 +17,7 @@ public class SkillManager : MonoBehaviour
 
     public Camera MainCamera;
 
-    private GameObject Skill;
+    //private GameObject Skill;
     private GameObject SkillAura;
 
     private Dictionary<Upgrades.StoreItems, int> SkillUpgrader;
@@ -64,9 +64,9 @@ public class SkillManager : MonoBehaviour
         StartCoroutine(BlizzardSkillCoroutine(attr));
         return SkillAura;
     }
-    public GameObject Petrification(Vector3 hitPos)
+    public GameObject PetrificationSkill(Vector3 hitPos)
     {
-        GameObject SkillPointer = Instantiate(PetrificationSkPrefab, hitPos, Quaternion.identity);
+        //GameObject SkillPointer = Instantiate(PetrificationSkPrefab, hitPos, Quaternion.identity);
 
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillPetrification");
         //attr.area = attr.area;
@@ -74,19 +74,19 @@ public class SkillManager : MonoBehaviour
         attr.cycleTime = (int)(attr.cycleTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification) * 0.2f));
 
         StartCoroutine(PetrificationCoroutine(attr));
-        return SkillPointer;
+        return null;
     }
     public GameObject SummonSkill(Vector3 hitPos)
     {
-        GameObject SkillPointer = Instantiate(SummonSkPrefab, MainCamera.transform.position, Quaternion.identity);
-
+        //GameObject SkillPointer = Instantiate(SummonSkPrefab, MainCamera.transform.position, Quaternion.identity);
+        
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillMinions");
         //attr.area = attr.area;
         //attr.damage = attr.damage;
         attr.cycleTime = (int)(attr.cycleTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicSummon) * 0.2f));
 
         StartCoroutine(SummonSkillCoroutine(attr));
-        return SkillPointer;
+        return null;
     }
 
     public void SkillEnd() {
@@ -97,13 +97,8 @@ public class SkillManager : MonoBehaviour
     {
         int frame = attr.activeTime;
 
-        int frameWait = attr.frameWait;
-        while (frameWait-- > 0)
-        {
-            yield return new WaitForSeconds(0f);
-        }
-
         int frameToNext = 0;
+
         while (frame-- > 0)
         {
             if (frameToNext++ > attr.cycleTime) {
@@ -122,15 +117,9 @@ public class SkillManager : MonoBehaviour
     {
         int frame = attr.activeTime;
 
-        int frameWait = attr.frameWait;
-        while (frameWait-- > 0)
-        {
-            yield return new WaitForSeconds(0f);
-        }
-
         GameObject skillObj = Instantiate(BlizzardSkPrefab);
         skillObj.GetComponent<Skill>().init(Upgrades.StoreItems.MagicBlizzard, attr);
-
+        skillObj.GetComponent<Skill>().SetTemp(attr.frameWait);
         while (frame-- > 0)
         {
             yield return new WaitForSeconds(0f);
@@ -143,14 +132,14 @@ public class SkillManager : MonoBehaviour
     private IEnumerator PetrificationCoroutine(SkillAttr attr)
     {
         int frame = attr.activeTime;
-
         int frameToNext = 0;
         while (frame-- > 0)
         {
-            if (frameToNext++ > attr.cycleTime)
+            if (frameToNext++> attr.cycleTime)
             {
                 GameObject skillObj = Instantiate(PetrificationSkPrefab);
                 skillObj.GetComponent<Skill>().init(Upgrades.StoreItems.MagicPetrification, attr);
+                skillObj.GetComponent<Skill>().SetTemp((attr.activeTime- frame)/10);
                 frameToNext = 0;
             }
             yield return new WaitForSeconds(0f);
@@ -162,10 +151,12 @@ public class SkillManager : MonoBehaviour
     {
         int frame = attr.activeTime;
         int frameToNext = 0;
+
         while (frame-- > 0)
         {
             if (frameToNext++ > attr.cycleTime)
             {
+               
                 GameObject skillObj = Instantiate(SummonSkPrefab);
                 skillObj.GetComponent<Skill>().init(Upgrades.StoreItems.MagicSummon, attr);
                 frameToNext = 0;

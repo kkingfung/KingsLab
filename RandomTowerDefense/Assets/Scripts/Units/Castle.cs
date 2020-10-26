@@ -4,14 +4,13 @@ public class Castle : MonoBehaviour
 {
     public int MaxCastleHP;
     public int CurrCastleHP;
-
+    public GameObject Shield;
     private GameObject obj;
     private InGameOperation sceneManager;
     private StageManager stageManager;
     private AudioManager audioManager;
 
     private AudioSource audio;
-    private Collider collider;
 
     // Start is called before the first frame update
     void Start()
@@ -21,19 +20,14 @@ public class Castle : MonoBehaviour
         audioManager = FindObjectOfType<AudioManager>();
         audio = GetComponent<AudioSource>();
 
-        collider
-            = GetComponent<Collider>();
-
-        int CurrIsland = sceneManager.GetCurrIsland();
             MaxCastleHP = (int)PlayerPrefs.GetFloat("hpMax");
-
         CurrCastleHP = MaxCastleHP;
     }
 
     // Update is called once per frame
     private void Update()
     {
-
+            Shield.SetActive(CurrCastleHP > 1);
     }
 
     private void OnTriggerEnter(Collider other)

@@ -19,17 +19,8 @@ public class PlayerManager : MonoBehaviour
     public Camera refCamP;
     public GameObject refGyro;
 
-    [Header("Skill Settings")]
-    public float StockOperatorDepth;
-    public GameObject FireSkillPrefab;
-    public GameObject IceSkillPrefab;
-    public GameObject MindSkillPrefab;
-    public GameObject SummonSkillPrefab;
-
-    public GameObject FireSkillAura;
-    public GameObject IceSkillAura;
-
     [Header("Stock Settings")]
+    public float StockOperatorDepth;
     public GameObject StockOperatorPrefab;
     private Vector2 StockPos;
 
@@ -46,6 +37,7 @@ public class PlayerManager : MonoBehaviour
     InputManager inputManager;
     TowerManager towerManager;
     FilledMapGenerator mapGenerator;
+    SkillManager skillManager;
 
     private void Start()
     {
@@ -54,6 +46,7 @@ public class PlayerManager : MonoBehaviour
         stageManager = FindObjectOfType<StageManager>();
         inputManager = FindObjectOfType<InputManager>();
         towerManager = FindObjectOfType<TowerManager>();
+        skillManager = FindObjectOfType<SkillManager>();
         mapGenerator = FindObjectOfType<FilledMapGenerator>();
     }
 
@@ -105,14 +98,14 @@ public class PlayerManager : MonoBehaviour
         while (AngleCalculation < 0) AngleCalculation += 360f;
 
         if (AngleCalculation >= 18f && AngleCalculation < 90f)
-            StockSelected = 2;
-        else if (AngleCalculation >= 90f && AngleCalculation < 162f)
             StockSelected = 1;
+        else if (AngleCalculation >= 90f && AngleCalculation < 162f)
+            StockSelected = 0;
         else if (AngleCalculation >= 162f && AngleCalculation < 234f)
             isSelling = true;
         else if (AngleCalculation >= 234f && AngleCalculation < 306f)
-            StockSelected = 4;
-        else StockSelected = 3;
+            StockSelected = 3;
+        else StockSelected = 2;
         //Raycast test ground and camera ray
         Vector3 hitPosition = RaycastTest(LayerMask.GetMask("Arena"));
         if (isSelling) return;
@@ -130,19 +123,19 @@ public class PlayerManager : MonoBehaviour
                 enemyManager.SpawnBonusBoss(2, mapGenerator.CoordToPosition(stageManager.SpawnPoint[Random.Range(1, 3)]));
                 break;
             case (int)Upgrades.StoreItems.MagicMeteor:
-                CurrentSkill = GameObject.Instantiate(FireSkillPrefab, hitPosition, Quaternion.identity);
+                CurrentSkill = skillManager.MeteorSkill(hitPosition);
                 isSkillActive = true;
                 break;
             case (int)Upgrades.StoreItems.MagicBlizzard:
-                CurrentSkill = GameObject.Instantiate(IceSkillPrefab, hitPosition, Quaternion.identity);
+                CurrentSkill = skillManager.BlizzardSkill(hitPosition);
                 isSkillActive = true;
                 break;
             case (int)Upgrades.StoreItems.MagicSummon:
-                CurrentSkill = GameObject.Instantiate(SummonSkillPrefab, hitPosition, Quaternion.identity);
+                CurrentSkill = skillManager.SummonSkill(hitPosition);
                 isSkillActive = true;
                 break;
             case (int)Upgrades.StoreItems.MagicPetrification:
-                CurrentSkill = GameObject.Instantiate(MindSkillPrefab, hitPosition, Quaternion.identity);
+                CurrentSkill = skillManager.Petrification(hitPosition);
                 isSkillActive = true;
                 break;
             default:

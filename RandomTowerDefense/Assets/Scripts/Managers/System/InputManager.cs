@@ -21,7 +21,7 @@ public class InputManager : MonoBehaviour
 {
     readonly float tapStayTime = 1.2f;
     readonly float tapDoubleTime = 0.8f;
-    readonly float dragDiff = 20.0f;//cooperate with Scene Script(toDrag)
+    readonly float dragDiff = 40.0f;//cooperate with Scene Script(toDrag)
 
     public GameObject ClickPrefab;
     //TouchButton
@@ -293,9 +293,10 @@ public class InputManager : MonoBehaviour
     public void EndDrag() //For Spare
     {
         if(playerManager.isChecking==false && sceneManager.currScreenShown==0 )
-            if((useTouch && Input.touchCount>0 && (Input.touches[0].position - posDragging).magnitude < 100)
-                ||(!useTouch&& (new Vector2(Input.mousePosition.x, Input.mousePosition.y) - posDragging).magnitude < 100))
-        { 
+            if((useTouch && Input.touchCount>0 && (Input.touches[0].position - posDragging).magnitude < dragDiff)
+                ||(!useTouch&& (new Vector2(Input.mousePosition.x, Input.mousePosition.y) - posDragging).magnitude < dragDiff))
+        {
+
         isDragging = false;
         }
         

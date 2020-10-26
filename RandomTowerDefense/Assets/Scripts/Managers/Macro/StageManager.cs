@@ -13,8 +13,6 @@ public class StageManager : MonoBehaviour
     public GameObject EnemySpawnPortPrefab;
     public GameObject CastlePrefab;
 
-    private Castle castle;
-
     private InGameOperation sceneManager;
     private AudioManager audioManager;
     public List<GameObject> GameClearCanva;
@@ -40,7 +38,6 @@ public class StageManager : MonoBehaviour
         sceneManager = FindObjectOfType<InGameOperation>();
         mapGenerator = FindObjectOfType<FilledMapGenerator>();
         audioManager = FindObjectOfType<AudioManager>();
-        castle = new Castle();
 
            result = 0;
         foreach (GameObject i in GameClearCanva) { 
@@ -63,7 +60,6 @@ public class StageManager : MonoBehaviour
             }
 
             CastlePointer = Instantiate(CastlePrefab, mapGenerator.CoordToPosition(SpawnPoint[0]) + mapGenerator.transform.position, Quaternion.Euler(0f,90f,0f));
-            castle.SetObj(CastlePointer);
             for (int i = 0; i < EnemyNum; ++i) 
             EnemySpawnPort[i] = Instantiate(EnemySpawnPortPrefab, mapGenerator.CoordToPosition(SpawnPoint[i+1]) + mapGenerator.transform.position, Quaternion.identity);
         }
@@ -117,7 +113,7 @@ public class StageManager : MonoBehaviour
 
     public void Damaged(int Val=1)
     {
-        if (castle.Damaged(Val) && result==0) 
+        if (CastlePointer.GetComponent<Castle>().Damaged(Val) && result==0) 
         {
             result = -1;
             isReady = false;
@@ -136,8 +132,8 @@ public class StageManager : MonoBehaviour
         audioManager.PlayAudio("se_Clear");
         return true;
     }
-    public int GetMaxHP() { return castle.MaxCastleHP; }
-    public int GetCurrHP() { return castle.CurrCastleHP; }
+    public int GetMaxHP() { return CastlePointer.GetComponent<Castle>().MaxCastleHP; }
+    public int GetCurrHP() {  return CastlePointer.GetComponent<Castle>().CurrCastleHP; }
 
     private IEnumerator FadeOutRoutine()
     {

@@ -16,7 +16,7 @@ public class EnemyAI : MonoBehaviour
     private Collider collider;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         oriScale = transform.localScale;
         animator = GetComponent<Animator>();
@@ -26,7 +26,7 @@ public class EnemyAI : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (DamagedCount > 0) { DamagedCount--;
             if(DamagedCount == 0)
@@ -62,6 +62,9 @@ public class EnemyAI : MonoBehaviour
         FindObjectOfType<EnemyManager>().allAliveMonsters.Remove(this.gameObject);
         Destroy(this, 5);
     }
+
+    public void Petrified() { }
+    public void Slowed() { }
 }
 
 ////data coming from the PlaceableData

@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class SkillAttr
 {
-    public int area;
-    public int damage;
-    public int flameWait;
-    public float activeTime;
+    public float area;
+    public float damage;
+    public int cycleTime; // time to spawn
+    public int frameWait; // Frame to ApplyDmg/ApplyEffect(buff time)
+    public int activeTime;
 
-    public SkillAttr(int area, int damage, int flameWait, float activeTime)
+    public SkillAttr(float area, float damage, int cycleTime, int activeTime, int frameWait)
     {
         this.area = area;
         this.damage = damage;
-        this.flameWait = flameWait;
+        this.frameWait = frameWait;
         this.activeTime = activeTime;
+        this.cycleTime = cycleTime;
     }
 }
 
@@ -25,10 +27,11 @@ public static class SkillInfo
     {
         skillInfo = new Dictionary<string, SkillAttr>();
 
-        skillInfo.Add("SkillMeteor", new SkillAttr(5, 80, 30,600));
-        skillInfo.Add("SkillBlizzard", new SkillAttr(30, 1,0, 600));
-        skillInfo.Add("SkillMinions", new SkillAttr(1, 5,0, 200));
-        skillInfo.Add("SkillPetrification", new SkillAttr(1000, 0,-1, 1));
+        //Wait time Refer to ParticleSystem Lifetime
+        skillInfo.Add("SkillMeteor", new SkillAttr(5, 80, 30,200,3));
+        skillInfo.Add("SkillBlizzard", new SkillAttr(30, 1,300, 300,5));
+        skillInfo.Add("SkillMinions", new SkillAttr(1, 5,5, 240,30));
+        skillInfo.Add("SkillPetrification", new SkillAttr(1000, 0,20, 100,2));
     }
     static void Release()
     {

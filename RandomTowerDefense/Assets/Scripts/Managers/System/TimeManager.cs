@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [SerializeField]
 public class TimeManager : MonoBehaviour
@@ -10,13 +11,23 @@ public class TimeManager : MonoBehaviour
 	public float timeFactor = 0.05f;
 	public float timeLength = 0.02f;
 
+	public List<Text> text;
+
 	private float OriTimeScale;
 	private float OriFixedTimeScale;
+
+	private int[] timeScaleFactor = { 1, 2, 3 };
+	private int timeScaleId;
+
 	private bool isControl = false;
 	void Start() {
-		Time.timeScale = 3.0f;
+		timeScaleId = 0;
+		Time.timeScale = 1.0f;
 		OriTimeScale = Time.timeScale;
 		OriFixedTimeScale = Time.fixedDeltaTime;
+
+		foreach (Text i in text)
+			i.text = "X" + (int)Time.timeScale;
 	}
 	void Update()
 	{
@@ -39,4 +50,12 @@ public class TimeManager : MonoBehaviour
 		}
 	}
 
+	public void SetTimeScale() {
+		timeScaleId++;
+		timeScaleId %= timeScaleFactor.Length;
+		Time.timeScale = timeScaleFactor[timeScaleId];
+		OriTimeScale = Time.timeScale;
+		foreach(Text i in text)
+		i.text = "X" + (int)Time.timeScale;
+	}
 }

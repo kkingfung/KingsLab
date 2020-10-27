@@ -6,11 +6,11 @@ public class SkillAttr
 {
     public float area;
     public float damage;
-    public int cycleTime; // time to spawn
-    public int frameWait; // Frame to ApplyDmg/ApplyEffect(buff time)
-    public int activeTime;
+    public float cycleTime; // time to spawn
+    public float frameWait; // Frame to ApplyDmg/ApplyEffect(buff time)
+    public float activeTime;
 
-    public SkillAttr(float area, float damage, int cycleTime, int frameWait, int activeTime)
+    public SkillAttr(float area, float damage, float cycleTime, float frameWait, float activeTime)
     {
         this.area = area;
         this.damage = damage;
@@ -37,10 +37,10 @@ public static class SkillInfo
         skillInfo = new Dictionary<string, SkillAttr>();
 
         //Wait time Refer to ParticleSystem Lifetime
-        skillInfo.Add("SkillMeteor", new SkillAttr(5, 80, 150,150,900));
-        skillInfo.Add("SkillBlizzard", new SkillAttr(30, 10,300, 200,800));
-        skillInfo.Add("SkillMinions", new SkillAttr(1, 1,5, 90,240));
-        skillInfo.Add("SkillPetrification", new SkillAttr(1000, 0,10,120,250));
+        skillInfo.Add("SkillMeteor", new SkillAttr(5, 80, 2.5f,2.5f,15));
+        skillInfo.Add("SkillBlizzard", new SkillAttr(30, 10,5, 4,15));
+        skillInfo.Add("SkillMinions", new SkillAttr(1, 1,0.1f, 3f,10));
+        skillInfo.Add("SkillPetrification", new SkillAttr(1000, 0,0.5f,2,3));
     }
     static void Release()
     {

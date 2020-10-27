@@ -6,12 +6,12 @@ public class EnemyAttr {
     public float health;
     public float speed;
     public int damage;
-    public int frameWait;
+    public float frameWait;
     public int money;
 
     const float healthBase=10;
 
-    public EnemyAttr(int money, float health, float speed, int damage = 1, int frameWait=0) {
+    public EnemyAttr(int money, float health, float speed, int damage = 1, float frameWait =0) {
         this.health = healthBase*health;
         this.speed =  speed;
         this.damage =  damage;

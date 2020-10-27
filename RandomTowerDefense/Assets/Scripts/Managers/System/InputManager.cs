@@ -39,6 +39,7 @@ public class InputManager : MonoBehaviour
     [HideInInspector]
     public bool isDragging;
     private Vector2 posDragging;
+    private Vector2 posTap;
 
     //Common Variables
     private PlayerManager playerManager;
@@ -74,10 +75,12 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
+        if (Buttons.Count > 0)  RaycastTest();
+
         if (useTouch) UpdateTouchInfo();
         else UpdateMouseInfo();
         if (LBMTest) LBMTesting(); //Only for Loading Scene
-        if (Buttons.Count > 0) RaycastTest();
+
 
         //ClickEffect
         if (ApplyClickEfc && ClickPrefab != null)
@@ -100,8 +103,10 @@ public class InputManager : MonoBehaviour
         }
         if (Input.GetMouseButtonUp(0))
         {
-            if (playerManager.isChecking==false)
+            if (playerManager.isChecking == false && isDragging == false)
+            {
                 playerManager.RaycastTest(Time.time - TapTimeRecord < tapDoubleTime);
+            }
             if (playerManager && playerManager.isSkillActive == false && playerManager.isChecking)
                 playerManager.UseStock(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
             DragTimeRecord = float.MaxValue;
@@ -122,6 +127,10 @@ public class InputManager : MonoBehaviour
     }
     private void UpdateMouseInfo()
     {
+        if (Input.GetMouseButtonDown(0))
+        {
+            posTap = Input.mousePosition;
+        }
         if (isDragging && Input.GetMouseButtonUp(0))
         {
             #region ScreenOperation
@@ -142,26 +151,35 @@ public class InputManager : MonoBehaviour
             {
                 if (playerManager && !playerManager.StockCheckExist() && playerManager.isChecking == false)
                 {
-                    if (Input.mousePosition.x - posDragging.x > dragDiff)
+                    float tempDiffX = Input.mousePosition.x - posDragging.x;
+                    float tempDiffY = Input.mousePosition.y - posDragging.y;
+                    if (tempDiffX * tempDiffX > tempDiffY * tempDiffY)
                     {
-                        FindObjectOfType<ISceneChange>().toDrag = 1;
-                        isDragging = false;
+                        if (tempDiffX > dragDiff)
+                        {
+                            FindObjectOfType<ISceneChange>().toDrag = 1;
+                            isDragging = false;
+                        }
+                        else if (tempDiffX < -dragDiff)
+                        {
+                            FindObjectOfType<ISceneChange>().toDrag = 3;
+                            isDragging = false;
+                        }
                     }
-                    if (Input.mousePosition.x - posDragging.x < -dragDiff)
+                    else 
                     {
-                        FindObjectOfType<ISceneChange>().toDrag = 3;
-                        isDragging = false; 
+                        if (tempDiffY > dragDiff)
+                        {
+                            FindObjectOfType<ISceneChange>().toDrag = 0;
+                            isDragging = false;
+                        }
+                        else if (tempDiffY < -dragDiff)
+                        {
+                            FindObjectOfType<ISceneChange>().toDrag = 2;
+                            isDragging = false;
+                        }
                     }
-                    if (Input.mousePosition.y - posDragging.y > dragDiff)
-                    {
-                        FindObjectOfType<ISceneChange>().toDrag = 0;
-                        isDragging = false; 
-                    }
-                    if (Input.mousePosition.y - posDragging.y < -dragDiff)
-                    {
-                        FindObjectOfType<ISceneChange>().toDrag = 2;
-                        isDragging = false; 
-                    }
+  
                 }
             }
 
@@ -192,7 +210,7 @@ public class InputManager : MonoBehaviour
                         playerManager.CheckStock(touch.position);
                     break;
                 case TouchPhase.Ended:
-                    if (playerManager.isChecking == false)
+                    if (playerManager.isChecking == false && isDragging==false)
                         playerManager.RaycastTest(Time.time - TapTimeRecord < tapDoubleTime);
                     if (playerManager && playerManager.isSkillActive == false && playerManager.isChecking)
                         playerManager.UseStock(touch.position);
@@ -218,28 +236,36 @@ public class InputManager : MonoBehaviour
                         }
                         if (FindObjectOfType<InGameOperation>() != null)
                         {
+
                             if (playerManager && !playerManager.StockCheckExist() && playerManager.isChecking==false)
                             {
-
-                                if (touch.position.x - posDragging.x > dragDiff)
+                                float tempDiffX = touch.position.x - posDragging.x;
+                                float tempDiffY = touch.position.y - posDragging.y;
+                                if (tempDiffX * tempDiffX > tempDiffY * tempDiffY)
                                 {
-                                    FindObjectOfType<ISceneChange>().toDrag = 1;
-                                    isDragging = false;
+                                    if (tempDiffX > dragDiff)
+                                    {
+                                        FindObjectOfType<ISceneChange>().toDrag = 1;
+                                        isDragging = false;
+                                    }
+                                    else if (tempDiffX < -dragDiff)
+                                    {
+                                        FindObjectOfType<ISceneChange>().toDrag = 3;
+                                        isDragging = false;
+                                    }
                                 }
-                                if (touch.position.x - posDragging.x < -dragDiff)
+                                else
                                 {
-                                    FindObjectOfType<ISceneChange>().toDrag = 3;
-                                    isDragging = false;
-                                }
-                                if (touch.position.y - posDragging.y > dragDiff)
-                                {
-                                    FindObjectOfType<ISceneChange>().toDrag = 0;
-                                    isDragging = false;
-                                }
-                                if (touch.position.y - posDragging.y < -dragDiff)
-                                {
-                                    FindObjectOfType<ISceneChange>().toDrag = 2;
-                                    isDragging = false;
+                                    if (tempDiffY > dragDiff)
+                                    {
+                                        FindObjectOfType<ISceneChange>().toDrag = 0;
+                                        isDragging = false;
+                                    }
+                                    else if (tempDiffY < -dragDiff)
+                                    {
+                                        FindObjectOfType<ISceneChange>().toDrag = 2;
+                                        isDragging = false;
+                                    }
                                 }
                             }
                             else isDragging = false;
@@ -271,6 +297,11 @@ public class InputManager : MonoBehaviour
         //reset Boolean
         mobileInput.isTouch[0] = false;
         mobileInput.isTouch[1] = false;
+
+        if (TouchCount>0)
+        {
+            posTap = Input.touches[0].position;
+        }
 
         if (TouchCount == 2 &&
             (Input.GetTouch(0).phase == TouchPhase.Moved || Input.GetTouch(0).phase == TouchPhase.Moved))
@@ -354,7 +385,9 @@ public class InputManager : MonoBehaviour
     private RaycastHit RaycastTest()
     {
         Ray ray = new Ray();
+        Ray ray2 = new Ray();
         RaycastHit hit = new RaycastHit();
+        RaycastHit hit2 = new RaycastHit();
 
         if (Input.touchCount > 0)
         {
@@ -363,18 +396,21 @@ public class InputManager : MonoBehaviour
                 if (Screen.width > Screen.height)
                 {
                     ray = refCamL.ScreenPointToRay(Input.GetTouch(t.fingerId).position);
+                    ray2 = refCamL.ScreenPointToRay(posTap);
                 }
                 else
                 {
                     ray = refCamP.ScreenPointToRay(Input.GetTouch(t.fingerId).position);
+                    ray2 = refCamP.ScreenPointToRay(posTap);
                 }
 
                 if (Input.GetTouch(t.fingerId).phase == TouchPhase.Ended)
                 {
-                    if (Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("ButtonLayer"))
+                    if ((Physics.Raycast(ray2, out hit2, 1000, LayerMask.GetMask("ButtonLayer")) && 
+                        Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("ButtonLayer")))
                     && Buttons.Contains(hit.transform.gameObject))
                     {
-                        if (hit.transform.GetComponent<RaycastFunction>())
+                        if (hit.transform== hit2.transform && hit.transform.GetComponent<RaycastFunction>())
                             hit.transform.GetComponent<RaycastFunction>().ActionFunc();
                         break;
                     }
@@ -386,15 +422,17 @@ public class InputManager : MonoBehaviour
             if (Screen.width > Screen.height)
             {
                 ray = refCamL.ScreenPointToRay(Input.mousePosition);
+                ray2 = refCamL.ScreenPointToRay(posTap);
             }
             else
             {
                 ray = refCamP.ScreenPointToRay(Input.mousePosition);
+                ray2 = refCamP.ScreenPointToRay(posTap);
             }
 
-            if (Physics.Raycast(ray, out hit) && Buttons.Contains(hit.transform.gameObject))
+            if ((Physics.Raycast(ray2, out hit2)&& Physics.Raycast(ray, out hit)) && Buttons.Contains(hit.transform.gameObject))
             {
-                if (hit.transform.GetComponent<RaycastFunction>())
+                if (hit.transform == hit2.transform && hit.transform.GetComponent<RaycastFunction>())
                 {
                     hit.transform.GetComponent<RaycastFunction>().ActionFunc();
                 }

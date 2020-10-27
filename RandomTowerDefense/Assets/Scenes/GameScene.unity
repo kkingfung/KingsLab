@@ -19200,10 +19200,10 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 06bbefa267836de4aac05a2887ec5ee9, type: 2}
   - {fileID: 2100000, guid: 28fd8fe645a832f49ac13a62b1335652, type: 2}
   terrainObj:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1483661424}
+  - {fileID: 169369339}
+  - {fileID: 2088484277}
+  - {fileID: 510384375}
 --- !u!4 &329465646
 Transform:
   m_ObjectHideFlags: 0
@@ -62309,7 +62309,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!135 &1078608127
 SphereCollider:
   m_ObjectHideFlags: 0

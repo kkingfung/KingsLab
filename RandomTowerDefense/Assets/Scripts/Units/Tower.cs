@@ -14,7 +14,7 @@ public class Tower : MonoBehaviour
     public int rank;
     public TowerInfo.TowerInfoID type;
 
-    private int AttackCounter;
+    private float AttackCounter;
 
     private GameObject CurrTarget;
     private List<GameObject> AtkVFX;
@@ -50,7 +50,7 @@ public class Tower : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (AttackCounter > 0) AttackCounter--;
+        if (AttackCounter > 0) AttackCounter -= Time.deltaTime;
 
         if (CurrTarget == null) CurrTarget = detectEnemy();
         if (CurrTarget != null && AttackCounter <= 0) Attack();
@@ -190,7 +190,7 @@ public class Tower : MonoBehaviour
 
         attr = new TowerAttr(attr.areaSq * (0.2f * rank + 0.005f * Level),
             attr.damage * (1f * rank + 0.05f * Level),
-            (int)((float)attr.frameWait * (1f - (0.1f * rank))));
+            attr.frameWait * (1f - (0.1f * rank)));
 
         switch (type)
         {
@@ -208,8 +208,8 @@ public class Tower : MonoBehaviour
                     * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                attr.frameWait = (int)((float)attr.frameWait
-                    * (1 - (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army4))));
+                attr.frameWait = attr.frameWait
+                    * (1 - (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
                 break;
         }
     }

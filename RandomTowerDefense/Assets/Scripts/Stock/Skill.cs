@@ -19,10 +19,10 @@ public class Skill : MonoBehaviour
     private AudioManager audioManager;
     private AudioSource audioSource;
 
-    private int temp;//for any purpose
+    private float temp;//for any purpose
 
     //Testing
-    //GameObject testobj;
+    GameObject testobj;
 
     // Start is called before the first frame update
     void Start()
@@ -35,7 +35,7 @@ public class Skill : MonoBehaviour
         audioManager = FindObjectOfType<AudioManager>();
         audioSource = GetComponent<AudioSource>();
 
-        //testobj = GameObject.FindGameObjectWithTag("DebugTag");
+        testobj = GameObject.FindGameObjectWithTag("DebugTag");
 
         switch (ActionID)
         {
@@ -76,7 +76,7 @@ public class Skill : MonoBehaviour
                 }
                 else targetEnm = null;
 
-               //if (testobj) targetEnm = testobj;
+               if (testobj) targetEnm = testobj;
                 
                 this.GetComponent<VisualEffect>().SetVector3("TargetLocation", targetEnm.transform.position-this.transform.position);
                 audioSource.PlayOneShot(audioManager.GetAudio("se_MagicSummon"));
@@ -91,7 +91,8 @@ public class Skill : MonoBehaviour
         switch (ActionID)
         {
             case Upgrades.StoreItems.MagicMeteor:
-                if (Actioned == false && attr.frameWait-- < 0)
+                attr.frameWait -= Time.deltaTime;
+                if (Actioned == false && attr.frameWait < 0)
                 {
                     Vector2 skillPos = new Vector2(this.transform.position.x, this.transform.position.z);
                     foreach (GameObject i in enemyManager.allAliveMonsters)
@@ -114,8 +115,8 @@ public class Skill : MonoBehaviour
                 if (Actioned == false)
                 {
                     this.transform.position = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
-
-                    if (attr.frameWait-- < 0)
+                    attr.frameWait -= Time.deltaTime;
+                        if (attr.frameWait < 0)
                     {
                         Vector2 skillPos = new Vector2(this.transform.position.x, this.transform.position.z);
                         foreach (GameObject i in enemyManager.allAliveMonsters)
@@ -129,8 +130,8 @@ public class Skill : MonoBehaviour
                         }
                         attr.frameWait = temp;
                     }
-
-                    if (!Actioned && attr.activeTime-- < 0)
+                    attr.activeTime -= Time.deltaTime;
+                    if (!Actioned && attr.activeTime < 0)
                     {
                         Destroy(this.gameObject);
                         Actioned = true;
@@ -138,7 +139,8 @@ public class Skill : MonoBehaviour
                 }
                 break;
             case Upgrades.StoreItems.MagicPetrification:
-                if (Actioned == false && attr.frameWait-- < 0)
+                attr.frameWait -= Time.deltaTime;
+                if (Actioned == false && attr.frameWait < 0)
                 {
                     if (!Actioned)
                     {
@@ -148,7 +150,8 @@ public class Skill : MonoBehaviour
                 }
                 break;
             case Upgrades.StoreItems.MagicSummon:
-                if (Actioned == false && attr.frameWait-- < 0)
+                attr.frameWait -= Time.deltaTime;
+                if (Actioned == false && attr.frameWait < 0)
                 {  
                     if (targetEnm != null)
                     {
@@ -171,14 +174,14 @@ public class Skill : MonoBehaviour
         this.attr = new SkillAttr(attr);
     }
 
-    public void SetTemp(int val)
+    public void SetTemp(float val)
     {
         temp = val;
         switch (ActionID)
         {
             case Upgrades.StoreItems.MagicPetrification:
-                this.GetComponent<VisualEffect>().SetFloat("Radius", temp);
-                this.GetComponent<VisualEffect>().SetFloat("Rotation",((temp*10)/(float)attr.activeTime)*60f);
+                this.GetComponent<VisualEffect>().SetFloat("Radius", temp*1.5f);
+                this.GetComponent<VisualEffect>().SetFloat("Rotation",temp/attr.activeTime*30.0f);
                 break;
         }
     }

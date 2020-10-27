@@ -5,10 +5,10 @@ using UnityEngine;
 public class TowerAttr
 {
     public float damage;
-    public int frameWait;
+    public float frameWait;
     public float areaSq;
 
-    public TowerAttr(float areaSq, float damage = 1, int frameWait = 0)
+    public TowerAttr(float areaSq, float damage = 1, float frameWait = 0)
     {
         this.damage = damage;
         this.frameWait = frameWait;

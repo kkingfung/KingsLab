@@ -71,21 +71,21 @@ public class RaycastFunction : MonoBehaviour
 
             //For Game Scene (Screen to See)
             case ActionTypeID.GameScene_UpArrow:
-                GameSceneManager.currScreenShown = (int)InGameOperation.ScreenShownID.SSIDTop;
+                GameSceneManager.nextScreenShown = (int)InGameOperation.ScreenShownID.SSIDTop;
                 audioManager.PlayAudio("se_Button");
                 break;
             case ActionTypeID.GameScene_DownArrow:
-                GameSceneManager.currScreenShown = (int)InGameOperation.ScreenShownID.SSIDArena;
+                GameSceneManager.nextScreenShown = (int)InGameOperation.ScreenShownID.SSIDArena;
                 audioManager.PlayAudio("se_Button");
                 break;
             case ActionTypeID.GameScene_LeftArrow:
-                GameSceneManager.currScreenShown = 
+                GameSceneManager.nextScreenShown = 
                     (GameSceneManager.currScreenShown == (int)InGameOperation.ScreenShownID.SSIDTopRight) ?
                     (int)InGameOperation.ScreenShownID.SSIDTop : (int)InGameOperation.ScreenShownID.SSIDTopLeft;
                 audioManager.PlayAudio("se_Button");
                 break;
             case ActionTypeID.GameScene_RightArrow:
-                GameSceneManager.currScreenShown =
+                GameSceneManager.nextScreenShown =
                 (GameSceneManager.currScreenShown == (int)InGameOperation.ScreenShownID.SSIDTopLeft) ?
                 (int)InGameOperation.ScreenShownID.SSIDTop : (int)InGameOperation.ScreenShownID.SSIDTopRight;
                 audioManager.PlayAudio("se_Button");
@@ -155,14 +155,15 @@ public class RaycastFunction : MonoBehaviour
         if (GetComponent<MeshRenderer>()) color = GetComponent<MeshRenderer>().material.color;
         if (GetComponent<RawImage>()) color = GetComponent<RawImage>().color;
         if (GetComponent<SpriteRenderer>()) color = GetComponent<SpriteRenderer>().color;
-        Color oriColor = new Color(color.r, color.g, color.b, color.a);
+        Color oriColor = new Color(1,1,1,1);
         color.r = 0; color.g = 0; color.b = 0;
-        int reqFrame = 10;
-        float chgSpdr = (oriColor.r - color.r) / reqFrame;
-        float chgSpdb = (oriColor.b - color.b) / reqFrame;
-        float chgSpdg = (oriColor.g - color.g) / reqFrame;
-        while (reqFrame-->0)
+        float reqFrame =0.2f;
+        float chgSpdr = (oriColor.r - color.r) / (reqFrame*60);
+        float chgSpdb = (oriColor.b - color.b) / (reqFrame*60);
+        float chgSpdg = (oriColor.g - color.g) / (reqFrame*60);
+        while (reqFrame>0)
         {
+            reqFrame -= Time.deltaTime;
             color.r += chgSpdr;
             color.b += chgSpdb;
             color.g += chgSpdg;
@@ -171,5 +172,9 @@ public class RaycastFunction : MonoBehaviour
             if (GetComponent<SpriteRenderer>()) GetComponent<SpriteRenderer>().color = color;
             yield return new WaitForSeconds(0f);
         }
+        if (GetComponent<MeshRenderer>()) GetComponent<MeshRenderer>().material.color = oriColor;
+        if (GetComponent<RawImage>()) GetComponent<RawImage>().color = oriColor;
+        if (GetComponent<SpriteRenderer>()) GetComponent<SpriteRenderer>().color = oriColor;
+
     }
 }

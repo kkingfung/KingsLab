@@ -71,7 +71,7 @@ public class SkillManager : MonoBehaviour
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillPetrification");
         //attr.area = attr.area;
         //attr.damage = attr.damage;
-        attr.cycleTime = (int)(attr.cycleTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification) * 0.2f));
+        attr.cycleTime = attr.cycleTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification) * 0.2f);
 
         StartCoroutine(PetrificationCoroutine(attr));
         return null;
@@ -83,7 +83,7 @@ public class SkillManager : MonoBehaviour
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillMinions");
         //attr.area = attr.area;
         //attr.damage = attr.damage;
-        attr.cycleTime = (int)(attr.cycleTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicSummon) * 0.2f));
+        attr.cycleTime = attr.cycleTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicSummon) * 0.2f);
 
         StartCoroutine(SummonSkillCoroutine(attr));
         return null;
@@ -95,16 +95,16 @@ public class SkillManager : MonoBehaviour
 
     private IEnumerator MeteorSkillCoroutine(SkillAttr attr)
     {
-        int frame = attr.activeTime;
+        float frame = attr.activeTime + Time.time;
 
-        int frameToNext = 0;
+        float frameToNext = Time.time;
 
-        while (frame-- > 0)
+        while (frame-Time.time > 0)
         {
-            if (frameToNext++ > attr.cycleTime) {
+            if (Time.time-frameToNext > attr.cycleTime) {
                 GameObject skillObj = Instantiate(MeteorSkPrefab);
                 skillObj.GetComponent<Skill>().init(Upgrades.StoreItems.MagicMeteor, attr);
-                frameToNext = 0;
+                frameToNext = Time.time;
             }
             yield return new WaitForSeconds(0f);
         }
@@ -115,12 +115,12 @@ public class SkillManager : MonoBehaviour
 
     private IEnumerator BlizzardSkillCoroutine(SkillAttr attr)
     {
-        int frame = attr.activeTime;
+        float frame = attr.activeTime + Time.time;
 
         GameObject skillObj = Instantiate(BlizzardSkPrefab);
         skillObj.GetComponent<Skill>().init(Upgrades.StoreItems.MagicBlizzard, attr);
         skillObj.GetComponent<Skill>().SetTemp(attr.frameWait);
-        while (frame-- > 0)
+        while (frame - Time.time > 0)
         {
             yield return new WaitForSeconds(0f);
         }
@@ -131,16 +131,18 @@ public class SkillManager : MonoBehaviour
 
     private IEnumerator PetrificationCoroutine(SkillAttr attr)
     {
-        int frame = attr.activeTime;
-        int frameToNext = 0;
-        while (frame-- > 0)
+        float frame = attr.activeTime + Time.time;
+        float record = Time.time;
+        float frameToNext = Time.time;
+
+        while (frame - Time.time > 0)
         {
-            if (frameToNext++> attr.cycleTime)
+            if (Time.time - frameToNext > attr.cycleTime)
             {
                 GameObject skillObj = Instantiate(PetrificationSkPrefab);
                 skillObj.GetComponent<Skill>().init(Upgrades.StoreItems.MagicPetrification, attr);
-                skillObj.GetComponent<Skill>().SetTemp((attr.activeTime- frame)/10);
-                frameToNext = 0;
+                skillObj.GetComponent<Skill>().SetTemp((Time.time - record) / attr.activeTime *10);
+                frameToNext = Time.time;
             }
             yield return new WaitForSeconds(0f);
         }
@@ -149,17 +151,17 @@ public class SkillManager : MonoBehaviour
 
     private IEnumerator SummonSkillCoroutine(SkillAttr attr)
     {
-        int frame = attr.activeTime;
-        int frameToNext = 0;
+        float frame = attr.activeTime + Time.time;
+        float frameToNext = Time.time;
 
-        while (frame-- > 0)
+        while (frame - Time.time > 0)
         {
-            if (frameToNext++ > attr.cycleTime)
+            if (Time.time - frameToNext > attr.cycleTime)
             {
                
                 GameObject skillObj = Instantiate(SummonSkPrefab);
                 skillObj.GetComponent<Skill>().init(Upgrades.StoreItems.MagicSummon, attr);
-                frameToNext = 0;
+                frameToNext = Time.time;
             }
             yield return new WaitForSeconds(0f);
         }

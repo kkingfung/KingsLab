@@ -369,7 +369,7 @@ public class InputManager : MonoBehaviour
                     ray = refCamP.ScreenPointToRay(Input.GetTouch(t.fingerId).position);
                 }
 
-                if (Input.GetTouch(t.fingerId).phase == TouchPhase.Began)
+                if (Input.GetTouch(t.fingerId).phase == TouchPhase.Ended)
                 {
                     if (Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("ButtonLayer"))
                     && Buttons.Contains(hit.transform.gameObject))
@@ -381,7 +381,7 @@ public class InputManager : MonoBehaviour
                 }
             }
         }
-        else if (Input.GetMouseButtonDown(0))
+        else if (Input.GetMouseButtonUp(0))
         {
             if (Screen.width > Screen.height)
             {

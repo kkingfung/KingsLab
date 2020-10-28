@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
+using Unity.Entities;
 
 public class EnemyAI : MonoBehaviour
 {

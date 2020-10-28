@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class StageManager : MonoBehaviour
 {
-    private const int EnemyNum=3;
+    private const int EnemySpawnPtNum=3;
 
     [HideInInspector]
     public Coord[] SpawnPoint;
@@ -30,8 +30,8 @@ public class StageManager : MonoBehaviour
     private int result = 0;
     private bool isReady = false;
     void Awake() {
-        SpawnPoint = new Coord[EnemyNum + 1];
-        EnemySpawnPort = new GameObject[EnemyNum];
+        SpawnPoint = new Coord[EnemySpawnPtNum + 1];
+        EnemySpawnPort = new GameObject[EnemySpawnPtNum];
     }
     // Start is called before the first frame update
     void Start()
@@ -62,8 +62,14 @@ public class StageManager : MonoBehaviour
             }
 
             CastlePointer = Instantiate(CastlePrefab, mapGenerator.CoordToPosition(SpawnPoint[0]) + mapGenerator.transform.position, Quaternion.Euler(0f,90f,0f));
-            for (int i = 0; i < EnemyNum; ++i) 
-            EnemySpawnPort[i] = Instantiate(EnemySpawnPortPrefab, mapGenerator.CoordToPosition(SpawnPoint[i+1]) + mapGenerator.transform.position, Quaternion.identity);
+            for (int i = 0; i < EnemySpawnPtNum; ++i)
+            {
+                Vector3 pos = mapGenerator.CoordToPosition(SpawnPoint[i + 1]) + mapGenerator.transform.position;
+                EnemySpawnPort[i] = Instantiate(EnemySpawnPortPrefab, pos, Quaternion.identity);
+                PlayerPrefs.SetFloat("SpawnPointx" + i, pos.x);
+                PlayerPrefs.SetFloat("SpawnPointy" + i, pos.y);
+                PlayerPrefs.SetFloat("SpawnPointz" + i, pos.z);
+            }
         }
     }
 

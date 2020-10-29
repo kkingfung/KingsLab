@@ -20,7 +20,7 @@ static public class Upgrades
 
        MagicMeteor = 40,//Fire
        MagicBlizzard,//Ice
-       MagicSummon,//Metal
+       MagicMinions,//Metal
        MagicPetrification,//Mind
     }
 
@@ -43,7 +43,7 @@ static public class Upgrades
 
         StoreLevel.Add(StoreItems.MagicMeteor, 0);
         StoreLevel.Add(StoreItems.MagicBlizzard, 0);
-        StoreLevel.Add(StoreItems.MagicSummon, 0);
+        StoreLevel.Add(StoreItems.MagicMinions, 0);
         StoreLevel.Add(StoreItems.MagicPetrification, 0);
     }
 
@@ -77,7 +77,7 @@ static public class Upgrades
                 break;
             case StoreItems.MagicMeteor:
             case StoreItems.MagicBlizzard:
-            case StoreItems.MagicSummon:
+            case StoreItems.MagicMinions:
             case StoreItems.MagicPetrification:
                 SkillStack.AddStock(itemID);
                 break;
@@ -94,7 +94,7 @@ static public class Upgrades
     { 
     int totalLv = 0;
         totalLv += GetLevel(StoreItems.Army1) + GetLevel(StoreItems.Army2) + GetLevel(StoreItems.Army3) + GetLevel(StoreItems.Army4);
-        totalLv += GetLevel(StoreItems.MagicMeteor) + GetLevel(StoreItems.MagicBlizzard) + GetLevel(StoreItems.MagicSummon) + GetLevel(StoreItems.MagicPetrification);
+        totalLv += GetLevel(StoreItems.MagicMeteor) + GetLevel(StoreItems.MagicBlizzard) + GetLevel(StoreItems.MagicMinions) + GetLevel(StoreItems.MagicPetrification);
         return totalLv;
     }
 }

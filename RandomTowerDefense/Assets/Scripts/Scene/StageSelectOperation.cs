@@ -71,6 +71,11 @@ public class StageSelectOperation : ISceneChange
     //CameraOperation
     private readonly int maxRecFrame = 20;
 
+    private void OnDestroy()
+    {
+        PlayerPrefs.Save();
+    }
+
     // Start is called before the first frame update
     private void Start()
     {

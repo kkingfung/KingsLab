@@ -41,7 +41,7 @@ public class StoreManager : MonoBehaviour
 
     readonly int[] PriceForMagicMeteor = { 5, 10, 20, 30, 50, 70, 100, 120, 150, 200 };
     readonly int[] PriceForMagicBlizzard = { 5, 10, 20, 30, 50, 70, 100, 120, 150, 200 };
-    readonly int[] PriceForMagicSummon = { 5, 10, 20, 30, 50, 70, 100, 120, 150, 200 };
+    readonly int[] PriceForMagicMinions = { 5, 10, 20, 30, 50, 70, 100, 120, 150, 200 };
     readonly int[] PriceForMagicPetrification = { 5, 10, 20, 30, 50, 70, 100, 120, 150, 200 };
 
     // Start is called before the first frame update
@@ -65,7 +65,7 @@ public class StoreManager : MonoBehaviour
 
         ItemPrice.Add(Upgrades.StoreItems.MagicMeteor, PriceForMagicMeteor);
         ItemPrice.Add(Upgrades.StoreItems.MagicBlizzard, PriceForMagicBlizzard);
-        ItemPrice.Add(Upgrades.StoreItems.MagicSummon, PriceForMagicSummon);
+        ItemPrice.Add(Upgrades.StoreItems.MagicMinions, PriceForMagicMinions);
         ItemPrice.Add(Upgrades.StoreItems.MagicPetrification, PriceForMagicPetrification);
     }
 
@@ -149,7 +149,7 @@ public class StoreManager : MonoBehaviour
                         case 0: SkillLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor).ToString(); break;
                         case 1: SkillLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard).ToString(); break;
                         case 2: SkillLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification).ToString(); break;
-                        case 3: SkillLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicSummon).ToString(); break;
+                        case 3: SkillLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions).ToString(); break;
                     }
                 }
                 break;
@@ -232,7 +232,7 @@ public class StoreManager : MonoBehaviour
                 case Upgrades.StoreItems.MagicBlizzard:
                 case Upgrades.StoreItems.MagicMeteor:
                 case Upgrades.StoreItems.MagicPetrification:
-                case Upgrades.StoreItems.MagicSummon:
+                case Upgrades.StoreItems.MagicMinions:
                     if (SkillStack.CheckFullStocks()) 
                         return false;
                     break;

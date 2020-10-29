@@ -38,7 +38,7 @@ public class RaycastFunction : MonoBehaviour
         GameScene_StoreMagicMeteor = 40,//Fire
         GameScene_StoreMagicBlizzard,//Ice
         GameScene_StoreMagicPetrification,//Mind
-        GameScene_StoreMagicSummon,//Metal
+        GameScene_StoreMagicMinions,//Metal
     }
 
     private void Start()
@@ -136,8 +136,8 @@ public class RaycastFunction : MonoBehaviour
                 storeManager.raycastAction(Upgrades.StoreItems.MagicBlizzard, InfoID);
                 audioManager.PlayAudio("se_Button");
                 break;
-            case ActionTypeID.GameScene_StoreMagicSummon:
-                storeManager.raycastAction(Upgrades.StoreItems.MagicSummon, InfoID);
+            case ActionTypeID.GameScene_StoreMagicMinions:
+                storeManager.raycastAction(Upgrades.StoreItems.MagicMinions, InfoID);
                 audioManager.PlayAudio("se_Button");
                 break;
             case ActionTypeID.GameScene_StoreMagicPetrification:

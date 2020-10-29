@@ -83,6 +83,10 @@ public class InGameOperation : ISceneChange
     //CameraOperation
     private const int maxRecFrame = 20;
 
+    private void OnDestroy()
+    {
+        PlayerPrefs.Save();
+    }
     private void Awake()
     {
         StageInfo.Init();

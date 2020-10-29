@@ -19,7 +19,7 @@ public class StockOperator : MonoBehaviour
     public Sprite SprMeteor;
     public Sprite SprBlizzard;
     public Sprite SprPetrification;
-    public Sprite SprSummon;
+    public Sprite SprMinions;
 
     public Material MatNull;
     public Material MatBoss1;
@@ -29,7 +29,7 @@ public class StockOperator : MonoBehaviour
     public Material MatMeteor;
     public Material MatBlizzard;
     public Material MatPetrification;
-    public Material MatSummon;
+    public Material MatMinions;
 
     // Start is called before the first frame update
     void Start()
@@ -69,9 +69,9 @@ public class StockOperator : MonoBehaviour
                     StockSlot[i].GetComponent<SpriteRenderer>().sprite = SprPetrification;
                     StockSlot[i].GetComponent<SpriteRenderer>().material = MatPetrification;
                     break;
-                case (int)Upgrades.StoreItems.MagicSummon: 
-                    StockSlot[i].GetComponent<SpriteRenderer>().sprite = SprSummon;
-                    StockSlot[i].GetComponent<SpriteRenderer>().material = MatSummon;
+                case (int)Upgrades.StoreItems.MagicMinions: 
+                    StockSlot[i].GetComponent<SpriteRenderer>().sprite = SprMinions;
+                    StockSlot[i].GetComponent<SpriteRenderer>().material = MatMinions;
                     break;
             }
         }

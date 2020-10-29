@@ -268,6 +268,15 @@ public class FilledMapGenerator : MonoBehaviour {
 		}
 		
 	}
+
+	public int CurrMapX() { return currentMap.mapSize.x; }
+	public int CurrMapY() { return currentMap.mapSize.y; }
+
+	public bool GetMapWalkable(int x, int y) {
+		if (shuffledOpenTileCoords.Contains(new Coord(x, y))) 
+			return true;
+		return false;
+	}
 }
 
 [System.Serializable]

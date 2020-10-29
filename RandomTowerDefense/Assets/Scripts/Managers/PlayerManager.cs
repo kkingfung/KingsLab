@@ -130,8 +130,8 @@ public class PlayerManager : MonoBehaviour
                 CurrentSkill = skillManager.BlizzardSkill(hitPosition);
                 isSkillActive = true;
                 break;
-            case (int)Upgrades.StoreItems.MagicSummon:
-                CurrentSkill = skillManager.SummonSkill(hitPosition);
+            case (int)Upgrades.StoreItems.MagicMinions:
+                CurrentSkill = skillManager.MinionsSkill(hitPosition);
                 isSkillActive = true;
                 break;
             case (int)Upgrades.StoreItems.MagicPetrification:

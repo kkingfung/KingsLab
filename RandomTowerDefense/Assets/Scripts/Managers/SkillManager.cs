@@ -8,7 +8,7 @@ public class SkillManager : MonoBehaviour
     public GameObject MeteorSkPrefab;
     public GameObject BlizzardSkPrefab;
     public GameObject PetrificationSkPrefab;
-    public GameObject SummonSkPrefab;
+    public GameObject MinionsSkPrefab;
 
     public GameObject FireFieldSkAura;
     public GameObject BlizzardFieldSkAura;
@@ -76,14 +76,14 @@ public class SkillManager : MonoBehaviour
         StartCoroutine(PetrificationCoroutine(attr));
         return null;
     }
-    public GameObject SummonSkill(Vector3 hitPos)
+    public GameObject MinionsSkill(Vector3 hitPos)
     {
         //GameObject SkillPointer = Instantiate(SummonSkPrefab, MainCamera.transform.position, Quaternion.identity);
         
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillMinions");
         //attr.area = attr.area;
         //attr.damage = attr.damage;
-        attr.cycleTime = attr.cycleTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicSummon) * 0.2f);
+        attr.cycleTime = attr.cycleTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * 0.2f);
 
         StartCoroutine(SummonSkillCoroutine(attr));
         return null;
@@ -159,8 +159,8 @@ public class SkillManager : MonoBehaviour
             if (Time.time - frameToNext > attr.cycleTime)
             {
                
-                GameObject skillObj = Instantiate(SummonSkPrefab);
-                skillObj.GetComponent<Skill>().init(Upgrades.StoreItems.MagicSummon, attr);
+                GameObject skillObj = Instantiate(MinionsSkPrefab);
+                skillObj.GetComponent<Skill>().init(Upgrades.StoreItems.MagicMinions, attr);
                 frameToNext = Time.time;
             }
             yield return new WaitForSeconds(0f);

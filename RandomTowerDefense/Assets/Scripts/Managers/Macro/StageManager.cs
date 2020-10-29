@@ -61,6 +61,7 @@ public class StageManager : MonoBehaviour
                 mapGenerator.CustomizeMapAndCreate((int)(TotalSize + 0.9f), (int)(TotalSize + 0.9f));
             }
 
+            //Fixed CastleMapPos
             CastlePointer = Instantiate(CastlePrefab, mapGenerator.CoordToPosition(SpawnPoint[0]) + mapGenerator.transform.position, Quaternion.Euler(0f,90f,0f));
             for (int i = 0; i < EnemySpawnPtNum; ++i)
             {

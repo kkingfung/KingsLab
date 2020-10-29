@@ -13,11 +13,13 @@ public class Attackbehaviour : MonoBehaviour, IConvertGameObjectToEntity
 		manager.AddComponent(entity, typeof(Hybrid));
 		Area earea = new Area { Value = PlayerPrefs.GetFloat("EntityArea") };
 		manager.AddComponentData(entity, earea);
-		Damage edamage = new Damage { Value = PlayerPrefs.GetFloat("EntityDamage") };
+		Damage edamage = new Damage { Value = PlayerPrefs.GetInt("EntityDamage") };
 		manager.AddComponentData(entity, edamage);
 		WaitingFrame ewait = new WaitingFrame { Value = PlayerPrefs.GetFloat("EntityWaitTime") };
 		manager.AddComponentData(entity, ewait);
 		ActiveTime eactive = new ActiveTime { Value = PlayerPrefs.GetFloat("EntityActiveTime") };
+		manager.AddComponentData(entity, eactive);
+		ActionTime eaction = new ActionTime { Value = PlayerPrefs.GetFloat("EntityActionTime") };
 		manager.AddComponentData(entity, eactive);
 	}
 

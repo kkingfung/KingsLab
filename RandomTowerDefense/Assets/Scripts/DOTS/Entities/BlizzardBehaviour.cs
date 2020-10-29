@@ -18,6 +18,8 @@ public class BlizzardBehaviour : MonoBehaviour, IConvertGameObjectToEntity
 	public static NativeArray<float> skArea;
 	public static NativeArray<float> skDamage;
 
+	public static NativeArray<float> skAction;
+
 	public static NativeArray<float> skExp;
 	public static NativeArray<int> skLevel;
 
@@ -33,6 +35,7 @@ public class BlizzardBehaviour : MonoBehaviour, IConvertGameObjectToEntity
 		skWait = new NativeArray<float>(TotalNum, Allocator.Persistent);
 		skActive = new NativeArray<float>(TotalNum, Allocator.Persistent);
 		skCycle = new NativeArray<float>(TotalNum, Allocator.Persistent);
+		skAction = new NativeArray<float>(TotalNum, Allocator.Persistent);
 
 		skExp = new NativeArray<float>(TotalNum, Allocator.Persistent);
 		skLevel = new NativeArray<int>(TotalNum, Allocator.Persistent);
@@ -48,14 +51,14 @@ public class BlizzardBehaviour : MonoBehaviour, IConvertGameObjectToEntity
 	public void Convert(Entity entity, EntityManager manager, GameObjectConversionSystem conversionSystem)
 	{
 		var archeType = manager.CreateArchetype(typeof(Hybrid), typeof(SkillTag), typeof(BlizzardTag),
-			typeof(ActiveTime), typeof(WaitingFrame), typeof(CycleTime), typeof(Area),
+			typeof(ActiveTime), typeof(WaitingFrame), typeof(CycleTime), typeof(Area), typeof(ActionTime),
 			typeof(Damage), typeof(Exp), typeof(Level), typeof(Target), typeof(ObjID));
 		var instance = new NativeArray<Entity>(TotalNum, Allocator.Temp);
 		manager.CreateEntity(archeType, instance);
 		instance.Dispose();
 	}
 
-	public static void ChgData(int id, float damage, float area, float active,
+	public static void ChgData(int id, float damage, float area, float active, float action,
 		float wait, float cycle, float exp, int level, float3 targetpos, int targetid)
 	{
 		EntityManager manager = World.DefaultGameObjectInjectionWorld.EntityManager;
@@ -63,6 +66,7 @@ public class BlizzardBehaviour : MonoBehaviour, IConvertGameObjectToEntity
 		BlizzardBehaviour.skWait[id] = wait;
 		BlizzardBehaviour.skActive[id] = active;
 		BlizzardBehaviour.skCycle[id] = cycle;
+		BlizzardBehaviour.skAction[id] = action;
 		BlizzardBehaviour.skArea[id] = area;
 		BlizzardBehaviour.skDamage[id] = damage;
 		BlizzardBehaviour.skExp[id] = exp;
@@ -77,6 +81,7 @@ public class BlizzardBehaviour : MonoBehaviour, IConvertGameObjectToEntity
 		skWait.Dispose();
 		skActive.Dispose();
 		skCycle.Dispose();
+		skAction.Dispose();
 		skArea.Dispose();
 		skDamage.Dispose();
 		skExp.Dispose();

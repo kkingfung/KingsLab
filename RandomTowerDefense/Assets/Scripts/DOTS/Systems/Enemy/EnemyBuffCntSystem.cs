@@ -20,7 +20,7 @@ public class EnemyBuffCntSystem : JobComponentSystem
         {
             if(buffTime.Value > 0) buffTime.Value -= deltaTime;
 
-            if (slowRate.Value < 1) slowRate.Value += 0.2f* deltaTime;
+            else if (slowRate.Value < 1) slowRate.Value += 0.2f* deltaTime;
 
         }).Schedule(inputDeps);
     }

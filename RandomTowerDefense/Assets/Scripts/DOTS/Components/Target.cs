@@ -6,5 +6,4 @@ public struct Target : IComponentData
 {
     public Entity targetEntity;
     public float3 targetPos;
-    public int targetId;
 }

@@ -5,13 +5,13 @@ using Unity.Mathematics;
 using Unity.Jobs;
 
 [DisableAutoCreation]
-public class PathFollowSystem : JobComponentSystem {
+public class EnemyPathFollowSystem : JobComponentSystem {
 
     protected override JobHandle OnUpdate(JobHandle inputDeps) {
         float deltaTime = Time.DeltaTime;
 
-        return Entities.WithAll<EnemyTag>().ForEach((Entity entity, DynamicBuffer<PathPosition> pathPositionBuffer, ref Translation translation, ref Speed speed, ref SlowRate slow, ref PathFollow pathFollow) => {
-            if (pathFollow.pathIndex >= 0) {
+        return Entities.WithAll<EnemyTag>().ForEach((Entity entity, DynamicBuffer<PathPosition> pathPositionBuffer, ref Translation translation, ref Health health, ref Speed speed, ref SlowRate slow, ref PathFollow pathFollow) => {
+            if (health.Value > 0 && pathFollow.pathIndex >= 0) {
                 // Has path to follow
                 PathPosition pathPosition = pathPositionBuffer[pathFollow.pathIndex];
 
@@ -36,7 +36,7 @@ public class PathFollowSystem : JobComponentSystem {
 
 }
 
-[UpdateAfter(typeof(PathFollowSystem))]
+[UpdateAfter(typeof(EnemyPathFollowSystem))]
 [DisableAutoCreation]
 public class PathFollowGetNewPathSystem : JobComponentSystem {
     private EndSimulationEntityCommandBufferSystem endSimulationEntityCommandBufferSystem;

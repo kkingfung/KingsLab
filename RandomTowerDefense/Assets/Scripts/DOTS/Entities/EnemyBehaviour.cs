@@ -23,9 +23,6 @@ public class EnemyBehaviour : MonoBehaviour, IConvertGameObjectToEntity
 
 	public static NativeArray<int> enmId;
 
-	public static NativeArray<float3> enmTargetPos;
-	public static NativeArray<int> enmTargetID;
-
 	private void Awake()
 	{
 		Instance = this;
@@ -42,18 +39,19 @@ public class EnemyBehaviour : MonoBehaviour, IConvertGameObjectToEntity
 		enmId = new NativeArray<int>(TotalNum, Allocator.Persistent);
 		for (int i = 0; i < enmId.Length; ++i)
 			enmId[i] = i;
-
-		enmTargetPos = new NativeArray<float3>(TotalNum, Allocator.Persistent);
-		enmTargetID = new NativeArray<int>(TotalNum, Allocator.Persistent);
 	}
 
 	public void Convert(Entity entity, EntityManager manager, GameObjectConversionSystem conversionSystem)
 	{
 		var archeType = manager.CreateArchetype(typeof(Hybrid), typeof(EnemyTag), typeof(PathFollow), typeof(Health), typeof(Money)
 			, typeof(Speed), typeof(Damage), typeof(WaitingFrame), typeof(SlowRate), typeof(BuffTime)
-			, typeof(Area), typeof(Target), typeof(ObjID));
+			, typeof(Area),  typeof(ObjID));
 		var instance = new NativeArray<Entity>(TotalNum, Allocator.Temp);
 		manager.CreateEntity(archeType, instance);
+
+		QuadrantEntity quadrant = new QuadrantEntity { typeEnum = QuadrantEntity.TypeEnum.EnemyTag };
+		manager.AddComponentData(entity, quadrant);
+
 		instance.Dispose();
 	}
 	public static void ChgData(int id,float health, float damage, float speed, float wait, 
@@ -69,8 +67,6 @@ public class EnemyBehaviour : MonoBehaviour, IConvertGameObjectToEntity
 		EnemyBehaviour.enmSlowRate[id] = slowrate;
 		EnemyBehaviour.enmBuffTime[id] = bufftime;
 		EnemyBehaviour.enmId[id] = id;
-		EnemyBehaviour.enmTargetPos[id] = targetpos;
-		EnemyBehaviour.enmTargetID[id] = targetid;
 	}
 
 	private void OnDestroy()
@@ -83,7 +79,5 @@ public class EnemyBehaviour : MonoBehaviour, IConvertGameObjectToEntity
 		enmSlowRate.Dispose();
 		enmBuffTime.Dispose();
 		enmId.Dispose();
-		enmTargetPos.Dispose();
-		enmTargetID.Dispose();
 	}
 }

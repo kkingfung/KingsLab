@@ -20,13 +20,30 @@ public class TimedDestroySystem : JobComponentSystem
 		
 		float deltaTime = Time.DeltaTime;
 
-		return Entities.WithAll<SkillTag>().ForEach((Entity entity, int entityInQueryIndex, ref ActiveTime activeTime) =>
+		JobHandle job = Entities.WithAll<AttackTag>().ForEach((Entity entity, int entityInQueryIndex, ref ActionTime actionTime) =>
 		{
-			activeTime.Value -= deltaTime;
-			if (activeTime.Value <= 0f)
+			actionTime.Value -= deltaTime;
+			if (actionTime.Value <= 0f)
+				ecbc.DestroyEntity(entityInQueryIndex, entity);
+
+		}).Schedule(inputDeps);
+
+		job = Entities.WithAll<SkillTag>().ForEach((Entity entity, int entityInQueryIndex, ref ActionTime actionTime) =>
+		{
+			actionTime.Value -= deltaTime;
+			if (actionTime.Value <= 0f)
 				ecbc.DestroyEntity(entityInQueryIndex,entity);
 
 		}).Schedule(inputDeps);
+
+		job = Entities.WithAll<PlayerTag>().ForEach((Entity entity, int entityInQueryIndex, ref ActiveTime activeTime) =>
+		{
+			if (activeTime.Value <= 0f)
+				ecbc.DestroyEntity(entityInQueryIndex, entity);
+
+		}).Schedule(inputDeps);
+
+		return job;
 	}
 }
 

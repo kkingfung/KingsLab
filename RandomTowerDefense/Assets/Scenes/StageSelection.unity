@@ -377,6 +377,7 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!212 &12103134
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2039,6 +2040,7 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!114 &232726010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2671,6 +2673,7 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!212 &280270132
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2833,6 +2836,7 @@ MonoBehaviour:
   uiID: 3
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!212 &288811094
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3506,6 +3510,7 @@ MonoBehaviour:
   uiID: 0
   magnitude: 5
   targetCam: {fileID: 1699173587}
+  LandscapeOrientation: 0
 --- !u!1 &383562970
 GameObject:
   m_ObjectHideFlags: 0
@@ -3615,6 +3620,7 @@ MonoBehaviour:
   uiID: 2
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!212 &384675298
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3765,6 +3771,7 @@ MonoBehaviour:
   uiID: 1
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!1001 &414254781
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4344,6 +4351,7 @@ MonoBehaviour:
   uiID: 1
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!102 &430987667
 TextMesh:
   serializedVersion: 3
@@ -7068,6 +7076,7 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!1001 &680843740
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7892,6 +7901,7 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!1 &794839711
 GameObject:
   m_ObjectHideFlags: 0
@@ -8189,6 +8199,7 @@ MonoBehaviour:
   uiID: 2
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!212 &816165875
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8468,6 +8479,7 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!4 &840366594 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1859729075847220568, guid: d0a0bad0f2561674f85b5a72c1eb19b0, type: 3}
@@ -9238,6 +9250,7 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!212 &905382598
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -9368,6 +9381,7 @@ MonoBehaviour:
   uiID: 1
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!212 &920273674
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -9564,6 +9578,7 @@ MonoBehaviour:
   uiID: 0
   magnitude: -5
   targetCam: {fileID: 1699173587}
+  LandscapeOrientation: 0
 --- !u!1 &943041114
 GameObject:
   m_ObjectHideFlags: 0
@@ -10192,6 +10207,7 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!212 &1001692078
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -11340,6 +11356,7 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!1 &1097685550
 GameObject:
   m_ObjectHideFlags: 0
@@ -12345,6 +12362,7 @@ MonoBehaviour:
   uiID: 3
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!212 &1156077010
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -12688,6 +12706,7 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!212 &1177939999
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -12788,6 +12807,7 @@ MonoBehaviour:
   uiID: 3
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!212 &1191045015
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -12993,6 +13013,7 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!1 &1211613938
 GameObject:
   m_ObjectHideFlags: 0
@@ -15485,6 +15506,7 @@ MonoBehaviour:
   uiID: 3
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!212 &1519262941
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -15646,6 +15668,7 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!212 &1524147353
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -15929,6 +15952,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1547367669}
   - component: {fileID: 1547367668}
+  - component: {fileID: 1547367670}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -16004,13 +16028,29 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1547367667}
-  m_LocalRotation: {x: 0.23915753, y: 0.058974214, z: 0.34123206, w: 0.9071309}
-  m_LocalPosition: {x: 149, y: 335, z: -617}
+  m_LocalRotation: {x: 0.3614415, y: 0.8863018, z: -0.27735686, w: 0.08307993}
+  m_LocalPosition: {x: 318, y: 392, z: 235}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 26
-  m_LocalEulerAnglesHint: {x: 23.182, y: 17.094, z: 44.76}
+  m_LocalEulerAnglesHint: {x: 33.484, y: 183.659, z: 45.473}
+--- !u!123 &1547367670
+LensFlare:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1547367667}
+  m_Enabled: 1
+  m_Flare: {fileID: 12100000, guid: 2319970aeb25f3a4fa244b829d771a3c, type: 2}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Brightness: 1
+  m_FadeSpeed: 0.05
+  m_IgnoreLayers:
+    serializedVersion: 2
+    m_Bits: 6
+  m_Directional: 1
 --- !u!1 &1557100522
 GameObject:
   m_ObjectHideFlags: 0
@@ -18578,6 +18618,7 @@ MonoBehaviour:
   uiID: 2
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!102 &1828834983
 TextMesh:
   serializedVersion: 3
@@ -18695,6 +18736,7 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!102 &1844636914
 TextMesh:
   serializedVersion: 3
@@ -19607,6 +19649,7 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!212 &1891938411
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -20351,6 +20394,7 @@ MonoBehaviour:
   uiID: 0
   magnitude: -5
   targetCam: {fileID: 1699173587}
+  LandscapeOrientation: 0
 --- !u!1 &1937483254
 GameObject:
   m_ObjectHideFlags: 0
@@ -20690,7 +20734,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1957035690
 Transform:
   m_ObjectHideFlags: 0
@@ -20712,7 +20756,7 @@ VFXRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1957035689}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -21226,6 +21270,7 @@ MonoBehaviour:
   uiID: 3
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!212 &2038746474
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -21754,6 +21799,7 @@ MonoBehaviour:
   uiID: 0
   magnitude: 5
   targetCam: {fileID: 1699173587}
+  LandscapeOrientation: 0
 --- !u!1 &2084402140
 GameObject:
   m_ObjectHideFlags: 0
@@ -21853,6 +21899,7 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!1 &2086256299
 GameObject:
   m_ObjectHideFlags: 0

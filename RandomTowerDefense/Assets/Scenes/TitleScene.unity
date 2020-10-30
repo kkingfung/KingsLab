@@ -3770,6 +3770,7 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!1001 &614504334
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4055,6 +4056,7 @@ MonoBehaviour:
   Buttons: []
   LBMTest: {fileID: 0}
   ApplyClickEfc: 0
+  isDragging: 0
   TapTimeRecord: 0
   refCamL: {fileID: 1225335766}
   refCamP: {fileID: 654067875}
@@ -5279,6 +5281,7 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!1 &946681067
 GameObject:
   m_ObjectHideFlags: 0
@@ -5819,6 +5822,7 @@ MonoBehaviour:
   uiID: 0
   magnitude: 2
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!1001 &1070881528
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7060,6 +7064,7 @@ GameObject:
   - component: {fileID: 1216493094}
   - component: {fileID: 1216493098}
   - component: {fileID: 1216493099}
+  - component: {fileID: 1216493100}
   m_Layer: 0
   m_Name: CameraManager
   m_TagString: MainCamera
@@ -7218,6 +7223,22 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: 10fc4df2da32a41aaa32d77bc913491c, type: 2}
+--- !u!123 &1216493100
+LensFlare:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1216493093}
+  m_Enabled: 1
+  m_Flare: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Brightness: 1
+  m_FadeSpeed: 3
+  m_IgnoreLayers:
+    serializedVersion: 2
+    m_Bits: 6
+  m_Directional: 0
 --- !u!1 &1225335764
 GameObject:
   m_ObjectHideFlags: 0
@@ -10238,6 +10259,7 @@ MonoBehaviour:
   uiID: 0
   magnitude: 2
   targetCam: {fileID: 0}
+  LandscapeOrientation: 0
 --- !u!114 &1578533422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10829,6 +10851,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1698325102}
   - component: {fileID: 1698325101}
+  - component: {fileID: 1698325103}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -10911,6 +10934,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 34
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+--- !u!123 &1698325103
+LensFlare:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1698325100}
+  m_Enabled: 1
+  m_Flare: {fileID: 12100000, guid: 2319970aeb25f3a4fa244b829d771a3c, type: 2}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Brightness: 1
+  m_FadeSpeed: 0.05
+  m_IgnoreLayers:
+    serializedVersion: 2
+    m_Bits: 6
+  m_Directional: 1
 --- !u!1 &1709115085
 GameObject:
   m_ObjectHideFlags: 0

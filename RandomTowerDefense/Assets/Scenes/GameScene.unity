@@ -11903,34 +11903,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b2fa49aaab972445b09ec6317a73fd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TowerNightmare:
-  - {fileID: 168864, guid: 281a986484325de459dc1b3709335bc5, type: 3}
-  - {fileID: 100720, guid: 8252519d2c6fd014bb5f75765a8c4fda, type: 3}
-  - {fileID: 193776, guid: edd34a89cfe571f4ca766dcca2459bbe, type: 3}
-  - {fileID: 132742, guid: a3e7850e56f7e2d4a8cb9e150f10c835, type: 3}
-  TowerSoulEater:
-  - {fileID: 170346, guid: 88e480c990c9d6a458b5fc85fe1da2aa, type: 3}
-  - {fileID: 130964, guid: c644a2181ac22e740968a7ece97e8f36, type: 3}
-  - {fileID: 130416, guid: 70f277dcf2cdfdd4db7ee0ca76e07767, type: 3}
-  - {fileID: 174418, guid: 36c38a65d57de7d4a9a582f9ee857701, type: 3}
-  TowerTerrorBringer:
-  - {fileID: 135744, guid: 4e7d7ecd1eafb1746a1fcb020505943c, type: 3}
-  - {fileID: 196076, guid: 20a769104331d8b48ac7d1ea0d49cdf3, type: 3}
-  - {fileID: 101568, guid: 59c100dd669d88f46b60555886d4dae7, type: 3}
-  - {fileID: 109776, guid: 8e302007cba46d94b970c6a0955b9628, type: 3}
-  TowerUsurper:
-  - {fileID: 132738, guid: aeb4794909bc89d43b72ad784903e0f5, type: 3}
-  - {fileID: 194904, guid: 445a5c29e7f715947b713a753f242af0, type: 3}
-  - {fileID: 139696, guid: eb58e8f2831a51f45a44a261e6710cdd, type: 3}
-  - {fileID: 116688, guid: 09ade59177310454ba3c93ae4b7dc125, type: 3}
   TowerBuild: {fileID: 6818472943143042842, guid: 7212a9fa4a9ae294488522f0aad48ab3, type: 3}
   TowerLevelUp: {fileID: 5514956255849604199, guid: 8a76143def8f20443befc76422d95658, type: 3}
   TowerDisappear: {fileID: 8111480042943765323, guid: 126a5b0cb0e9b5348b80f6c2471dbe7a, type: 3}
   TowerSell: {fileID: 627794165011626319, guid: 31c22293ad8a7784697ff30996951f87, type: 3}
-  TowerNightmareAtk: {fileID: 2383834399702557901, guid: 75b408135789c8e4486ecb158339ac18, type: 3}
-  TowerSoulEaterAtk: {fileID: 4337726207909226343, guid: b5bf1474c7ebd1246a04309432a090c1, type: 3}
-  TowerTerrorBringerAtk: {fileID: 8509487837594905982, guid: 107c87972e78c004cb761f0fd9a564be, type: 3}
-  TowerUsurperAtk: {fileID: 5352133900012854208, guid: 07e181fb0789cdb4abc58cd76c45b9d8, type: 3}
   TowerNightmareAura: {fileID: 1023260270545061703, guid: 74c41ed14ec657a41a553b017585f3c9, type: 3}
   TowerSoulEaterAura: {fileID: 3005076821723679740, guid: a92f0a1eaa6c17b4aa6638cdc37eb3a5, type: 3}
   TowerTerrorBringerAura: {fileID: 591614086710081014, guid: cee60b09ee191ed4e90265e980961eae, type: 3}
@@ -19377,10 +19353,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f082633925869b140b03780fc5780b25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MeteorSkPrefab: {fileID: 8520643828673592283, guid: a8a0c87d89e10c543973812efe3ff426, type: 3}
-  BlizzardSkPrefab: {fileID: 3466139010921764684, guid: 3f94676e2913eb24aa64140859db0348, type: 3}
-  PetrificationSkPrefab: {fileID: 3022822471140076849, guid: c9b77c2581f62464194cdc839486c04b, type: 3}
-  MinionsSkPrefab: {fileID: 0}
   FireFieldSkAura: {fileID: 2613307369970436578, guid: fb4a247c0bb5bed4997c39b9d016680a, type: 3}
   BlizzardFieldSkAura: {fileID: 3415766801582997989, guid: 282d8dfb9f75ffb49911e326e0648724, type: 3}
   MainCamera: {fileID: 1937956745}
@@ -60640,31 +60612,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  MetalonGreen: {fileID: 0}
-  MetalonPurple: {fileID: 0}
-  MetalonRed: {fileID: 0}
-  AttackBot: {fileID: 0}
-  RobotSphere: {fileID: 0}
-  Dragon: {fileID: 0}
-  Bull: {fileID: 0}
-  StoneMonster: {fileID: 0}
-  FreeLichS: {fileID: 0}
-  FreeLich: {fileID: 0}
-  GolemS: {fileID: 0}
-  Golem: {fileID: 0}
-  SkeletonArmed: {fileID: 0}
-  SpiderGhost: {fileID: 0}
-  Skeleton: {fileID: 0}
-  GruntS: {fileID: 0}
-  FootmanS: {fileID: 0}
-  Grunt: {fileID: 0}
-  Footman: {fileID: 0}
-  TurtleShell: {fileID: 0}
-  Mushroom: {fileID: 0}
-  Slime: {fileID: 0}
   DieEffect: {fileID: 0}
   DropEffect: {fileID: 0}
-  allAliveMonsters: []
 --- !u!4 &1054287607
 Transform:
   m_ObjectHideFlags: 0
@@ -89220,6 +89169,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1547367669}
   - component: {fileID: 1547367668}
+  - component: {fileID: 1547367670}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -89295,13 +89245,29 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1547367667}
-  m_LocalRotation: {x: -0.5889069, y: 0.28056765, z: 0.17016439, w: -0.7385896}
-  m_LocalPosition: {x: 29.6, y: 35, z: 16.7}
+  m_LocalRotation: {x: 0.43283406, y: 0.80894256, z: -0.1422021, w: 0.37154445}
+  m_LocalPosition: {x: 21.2, y: 52.7, z: 74.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 18
-  m_LocalEulerAnglesHint: {x: 50.754, y: -436.383, z: -66.875}
+  m_LocalEulerAnglesHint: {x: 33.484, y: 145.031, z: 45.473}
+--- !u!123 &1547367670
+LensFlare:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1547367667}
+  m_Enabled: 1
+  m_Flare: {fileID: 12100000, guid: 2319970aeb25f3a4fa244b829d771a3c, type: 2}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_Brightness: 1
+  m_FadeSpeed: 3
+  m_IgnoreLayers:
+    serializedVersion: 2
+    m_Bits: 6
+  m_Directional: 1
 --- !u!1 &1547932069
 GameObject:
   m_ObjectHideFlags: 0
@@ -121402,7 +121368,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SpawnPoint: []
   EnemySpawnPortPrefab: {fileID: 6343252433316444853, guid: a272d45cc95d4454480f144feae2acfe, type: 3}
-  CastlePrefab: {fileID: 8154680016809560952, guid: c37f4e872a9371c4faa910628e5b4a9d, type: 3}
   GameClearCanva:
   - {fileID: 1277699560}
   - {fileID: 949713426}
@@ -121410,6 +121375,7 @@ MonoBehaviour:
   - {fileID: 825238788}
   - {fileID: 404831017}
   CoveringMateral: {fileID: 2100000, guid: 6e40b78e2ad03b74eb060f2e3073d30e, type: 2}
+  CastleEntityID: 0
 --- !u!4 &2137340202
 Transform:
   m_ObjectHideFlags: 0

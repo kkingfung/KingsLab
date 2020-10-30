@@ -5,14 +5,16 @@ using UnityEngine;
 public class TowerAttr
 {
     public float damage;
-    public float frameWait;
-    public float areaSq;
+    public float waitTime;
+    public float lifetime;
+    public float radius;
 
-    public TowerAttr(float areaSq, float damage = 1, float frameWait = 0)
+    public TowerAttr(float radius, float damage, float waitTime, float lifetime=5)
     {
         this.damage = damage;
-        this.frameWait = frameWait;
-        this.areaSq = areaSq;
+        this.waitTime = waitTime;
+        this.radius = radius;
+        this.lifetime = lifetime;
     }
 }
 
@@ -32,10 +34,10 @@ public static class TowerInfo
     {
         towerInfo = new Dictionary<TowerInfoID, TowerAttr>();
 
-        towerInfo.Add(TowerInfoID.Enum_TowerNightmare, new TowerAttr(80, 80, 150));
-        towerInfo.Add(TowerInfoID.Enum_TowerSoulEater, new TowerAttr(60, 20, 50));
-        towerInfo.Add(TowerInfoID.Enum_TowerTerrorBringer, new TowerAttr(120, 150, 220));
-        towerInfo.Add(TowerInfoID.Enum_TowerUsurper, new TowerAttr(40, 30, 25));
+        towerInfo.Add(TowerInfoID.Enum_TowerNightmare, new TowerAttr(300, 20, 2.0f, 5));
+        towerInfo.Add(TowerInfoID.Enum_TowerSoulEater, new TowerAttr(150, 8, 0.5f, 5));
+        towerInfo.Add(TowerInfoID.Enum_TowerTerrorBringer, new TowerAttr(500, 20, 3.0f, 5));
+        towerInfo.Add(TowerInfoID.Enum_TowerUsurper, new TowerAttr(100, 5, 0.2f, 5));
     }
 
     static void Release()

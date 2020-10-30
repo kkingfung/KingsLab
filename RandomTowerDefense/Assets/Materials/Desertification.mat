@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Desertification
-  m_Shader: {fileID: -6465566751694194690, guid: 94fd526ff2ce6f34fafe15c1f7236d8b, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 90e8c45a35f40324096458ce33fa6ca0, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -19,6 +19,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Texture2D_101201D1:
+        m_Texture: {fileID: 2800000, guid: 607d064242915a040b685a36ec2dfafd, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - Texture2D_144F9586:
         m_Texture: {fileID: 2800000, guid: 0f625c9ed25ed7c479d59c9a7e72177b, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -27,7 +31,19 @@ Material:
         m_Texture: {fileID: 2800000, guid: dd1ad706663683546b665fd5b0286bbd, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - Texture2D_219E7577:
+        m_Texture: {fileID: 2800000, guid: f45c3bd09301cc64783afc31dfca026b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_7C151282:
+        m_Texture: {fileID: 2800000, guid: f45c3bd09301cc64783afc31dfca026b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - Texture2D_A5D9F322:
+        m_Texture: {fileID: 2800000, guid: f3c3358a1a369dd4182febc73f602885, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_C23BDBD4:
         m_Texture: {fileID: 2800000, guid: f3c3358a1a369dd4182febc73f602885, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -35,9 +51,20 @@ Material:
         m_Texture: {fileID: 2800000, guid: 18abd5f4e9c11924a95611d5a0813704, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_7EBB2B0_Out_0:
+        m_Texture: {fileID: 2800000, guid: 101a9e33bf80c9a488682f5ac74d4c85, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
     - Vector1_1053584E: 1
-    - _Progress: 0.723
+    - Vector1_1FE216E6: 7
+    - Vector1_39B7CC45: 0
+    - Vector1_4759EF39: 0
+    - Vector1_C81187EE: 10
+    - Vector1_F29EBC87: 0
+    - _Progress: 1
     m_Colors:
+    - Color_B6204C24: {r: 1, g: 1, b: 1, a: 0}
+    - Color_B9A3D235: {r: 0.46226418, g: 0.46226418, b: 0.46226418, a: 0}
     - Color_E1A7676C: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

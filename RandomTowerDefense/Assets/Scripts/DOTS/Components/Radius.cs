@@ -2,7 +2,7 @@
 using Unity.Entities;
 
 [Serializable]
-public struct Damage : IComponentData
+public struct Radius : IComponentData
 {
     public float Value;
 }

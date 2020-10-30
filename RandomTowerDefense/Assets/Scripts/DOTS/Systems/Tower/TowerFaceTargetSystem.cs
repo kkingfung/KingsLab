@@ -9,19 +9,22 @@ public class TowerFaceTargetSystem : ComponentSystem
 {
     protected override void OnUpdate()
     {
-        Entities.ForEach((Entity unitEntity, ref Target hasTarget, ref Translation translation, ref Rotation rotation, ref Area radius) => {
+        Entities.ForEach((Entity unitEntity, ref Target hasTarget, ref Translation translation, ref Rotation rotation, ref WaitingTime wait, ref Radius radius) => {
             if (World.DefaultGameObjectInjectionWorld.EntityManager.Exists(hasTarget.targetEntity))
             {
-                Translation targetTranslation = World.DefaultGameObjectInjectionWorld.EntityManager.GetComponentData<Translation>(hasTarget.targetEntity);
-
-                rotation.Value = Quaternion.Euler(0,90f + Mathf.Rad2Deg * Mathf.Atan2(translation.Value.z - targetTranslation.Value.z,
-                    targetTranslation.Value.x - translation.Value.x), 0);
-
-                if (math.distance(translation.Value, targetTranslation.Value) > radius.Value)
+                if (wait.Value <= 0)
                 {
-                    // Close to target, destroy it
-                    //PostUpdateCommands.DestroyEntity(hasTarget.targetEntity);
-                    PostUpdateCommands.RemoveComponent(unitEntity, typeof(Target));
+                    Translation targetTranslation = World.DefaultGameObjectInjectionWorld.EntityManager.GetComponentData<Translation>(hasTarget.targetEntity);
+
+                    rotation.Value = Quaternion.Euler(0, 90f + Mathf.Rad2Deg * Mathf.Atan2(translation.Value.z - targetTranslation.Value.z,
+                        targetTranslation.Value.x - translation.Value.x), 0);
+
+                    if (math.distance(translation.Value, targetTranslation.Value) > radius.Value)
+                    {
+                        // far to target, destroy it
+                        //PostUpdateCommands.DestroyEntity(hasTarget.targetEntity);
+                        PostUpdateCommands.RemoveComponent(unitEntity, typeof(Target));
+                    }
                 }
             }
             else

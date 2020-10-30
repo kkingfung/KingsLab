@@ -5,13 +5,12 @@ using UnityEngine.UI;
 
 public class StageManager : MonoBehaviour
 {
-    private const int EnemySpawnPtNum=3;
+    private const int EnemySpawnPtNum = 3;
 
     [HideInInspector]
     public Coord[] SpawnPoint;
 
     public GameObject EnemySpawnPortPrefab;
-    public GameObject CastlePrefab;
 
     private InGameOperation sceneManager;
     private AudioManager audioManager;
@@ -25,11 +24,15 @@ public class StageManager : MonoBehaviour
     private FilledMapGenerator mapGenerator;
 
     private GameObject[] EnemySpawnPort;
-    private GameObject CastlePointer;
+    [HideInInspector]
+    public int CastleEntityID;
+    private CastleSpawner castleSpawner;
 
     private int result = 0;
     private bool isReady = false;
-    void Awake() {
+
+    void Awake()
+    {
         SpawnPoint = new Coord[EnemySpawnPtNum + 1];
         EnemySpawnPort = new GameObject[EnemySpawnPtNum];
     }
@@ -40,9 +43,11 @@ public class StageManager : MonoBehaviour
         mapGenerator = FindObjectOfType<FilledMapGenerator>();
         audioManager = FindObjectOfType<AudioManager>();
         scoreCalculation = FindObjectOfType<ScoreCalculation>();
+        castleSpawner = FindObjectOfType<CastleSpawner>();
 
-           result = 0;
-        foreach (GameObject i in GameClearCanva) { 
+        result = 0;
+        foreach (GameObject i in GameClearCanva)
+        {
             i.SetActive(false);
         }
         foreach (GameObject i in GameOverCanva)
@@ -62,7 +67,9 @@ public class StageManager : MonoBehaviour
             }
 
             //Fixed CastleMapPos
-            CastlePointer = Instantiate(CastlePrefab, mapGenerator.CoordToPosition(SpawnPoint[0]) + mapGenerator.transform.position, Quaternion.Euler(0f,90f,0f));
+            int[] entityID = castleSpawner.Spawn(mapGenerator.CoordToPosition(SpawnPoint[0]) + mapGenerator.transform.position, Quaternion.Euler(0f, 90f, 0f),
+                (int)PlayerPrefs.GetFloat("hpMax"), 1);
+            CastleEntityID = entityID[0];
             for (int i = 0; i < EnemySpawnPtNum; ++i)
             {
                 Vector3 pos = mapGenerator.CoordToPosition(SpawnPoint[i + 1]) + mapGenerator.transform.position;
@@ -77,11 +84,9 @@ public class StageManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        CheckLose();
+        if (result != 0 && isReady)
         {
-            Damaged(1);
-        }
-        if (result != 0 && isReady) {
             sceneManager.DarkenCam.SetActive(true);
             if (Screen.width > Screen.height)
             {
@@ -100,7 +105,8 @@ public class StageManager : MonoBehaviour
                     GameClearCanva[1].SetActive(false);
                 }
             }
-            else {
+            else
+            {
                 if (result > 0)
                 {
                     GameOverCanva[0].SetActive(false);
@@ -120,9 +126,9 @@ public class StageManager : MonoBehaviour
         }
     }
 
-    public void Damaged(int Val=1)
+    public void CheckLose()
     {
-        if (CastlePointer.GetComponent<Castle>().Damaged(Val) && result==0) 
+        if (GetCurrHP() <= 0 && result == 0)
         {
             result = -1;
             isReady = false;
@@ -132,20 +138,21 @@ public class StageManager : MonoBehaviour
         }
     }
 
-    public bool SetWin() {
+    public bool SetWin()
+    {
         if (result == -1)
             return false;
 
         result = 1;
 
         scoreCalculation.CalculationScore();
-        if (sceneManager.GetEnabledIsland() == sceneManager.GetCurrIsland() && sceneManager.GetEnabledIsland()<StageInfo.GetStageNum()-1)
-            PlayerPrefs.SetInt("IslandEnabled", sceneManager.GetCurrIsland()+1);
+        if (sceneManager.GetEnabledIsland() == sceneManager.GetCurrIsland() && sceneManager.GetEnabledIsland() < StageInfo.GetStageNum() - 1)
+            PlayerPrefs.SetInt("IslandEnabled", sceneManager.GetCurrIsland() + 1);
         audioManager.PlayAudio("se_Clear");
         return true;
     }
-    public int GetMaxHP() { return CastlePointer.GetComponent<Castle>().MaxCastleHP; }
-    public int GetCurrHP() {  return Mathf.Max(0,CastlePointer.GetComponent<Castle>().CurrCastleHP); }
+    public int GetMaxHP() { return castleSpawner.GameObjects[CastleEntityID].GetComponent<Castle>().MaxCastleHP; }
+    public int GetCurrHP() { return Mathf.Max(0, castleSpawner.castleHPArray[0]); }
 
     private IEnumerator FadeOutRoutine()
     {
@@ -175,4 +182,16 @@ public class StageManager : MonoBehaviour
     }
 
     public int GetResult() { return result; }
+
+    public Vector3[] GetPortalPosition()
+    {
+        Vector3[] pos = new Vector3[EnemySpawnPort.Length];
+
+        for (int i = 0; i < EnemySpawnPort.Length; ++i)
+        {
+            pos[i] = EnemySpawnPort[i].transform.position;
+        }
+
+        return pos;
+    }
 }

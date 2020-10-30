@@ -1,9 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Entities;
+using Unity.Collections;
 
 public class ISceneChange : MonoBehaviour
 {
+    protected struct LatiosSceneChangeDummyTag : IComponentData { }
+
     public readonly int IslandNum = 4;
     
     [Header("Gyro Settings")]
@@ -40,6 +44,8 @@ public class ISceneChange : MonoBehaviour
                 FadeOutDelegate += i.FadeOut;
             }
         }
+        EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+        entityManager.DestroyEntity(entityManager.GetAllEntities(Allocator.Temp));
     }
     protected void OnDisable()
     {

@@ -10,14 +10,14 @@ public class EnemyPathFollowSystem : JobComponentSystem {
     protected override JobHandle OnUpdate(JobHandle inputDeps) {
         float deltaTime = Time.DeltaTime;
 
-        return Entities.WithAll<EnemyTag>().ForEach((Entity entity, DynamicBuffer<PathPosition> pathPositionBuffer, ref Translation translation, ref Health health, ref Speed speed, ref SlowRate slow, ref PathFollow pathFollow) => {
+        return Entities.WithAll<EnemyTag>().ForEach((Entity entity, DynamicBuffer<PathPosition> pathPositionBuffer, ref Translation translation, ref Health health, ref Speed speed, ref SlowRate slow, ref PetrifyAmt petrifyAmt, ref PathFollow pathFollow) => {
             if (health.Value > 0 && pathFollow.pathIndex >= 0) {
                 // Has path to follow
                 PathPosition pathPosition = pathPositionBuffer[pathFollow.pathIndex];
 
                 float3 targetPosition = new float3(pathPosition.position.x, pathPosition.position.y, 0);
                 float3 moveDir = math.normalizesafe(targetPosition - translation.Value);
-                float moveSpeed = speed.Value*(1-slow.Value);
+                float moveSpeed = speed.Value*(1-slow.Value)*(1- petrifyAmt.Value);
 
                 translation.Value += moveDir * moveSpeed * deltaTime;
                 

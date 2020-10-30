@@ -27,7 +27,8 @@ public class UIEffect : MonoBehaviour
     private string fullText;
     private int textCnt;
 
-    private bool Orientation;
+    [HideInInspector]
+    public bool LandscapeOrientation;
 
     private StageSelectOperation selectionSceneManager;
     private InGameOperation gameSceneManager;
@@ -54,7 +55,7 @@ public class UIEffect : MonoBehaviour
         alpha = 0f;
         textCnt = 0;
         if (textMesh) fullText = textMesh.text;
-        Orientation = Screen.width > Screen.height;
+        LandscapeOrientation = Screen.width > Screen.height;
 
     }
 

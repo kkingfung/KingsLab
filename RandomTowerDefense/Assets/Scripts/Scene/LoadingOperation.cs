@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Unity.Entities;
 
 public class LoadingOperation : ISceneChange
 {
+
     [HideInInspector]
     public string nextScene;
     public List<GameObject> RandomObjs;
     public List<GameObject> LoadingIcon;
-
 
     float Progress;
 

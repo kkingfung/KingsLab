@@ -331,7 +331,8 @@ public class InGameOperation : ISceneChange
             case 1:
             case 2:
             case 3:
-                ChangeScreenShownByButton(toDrag);break;
+                ChangeScreenShownByButton(toDrag);
+                break;
         }
 
         toDrag = -1;

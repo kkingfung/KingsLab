@@ -2,42 +2,48 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
+using Unity.Entities;
+using Unity.Transforms;
+using UnityEngine.Rendering;
 
 public class Skill : MonoBehaviour
 {
-    private Upgrades.StoreItems ActionID;
+    private Upgrades.StoreItems actionID;
     private SkillAttr attr;
 
-    private bool Actioned;
-    private Vector3 ActivePos;
+    private bool ActionEnded;
+    private int entityID;
 
     private PlayerManager playerManager;//For Raycasting target Position
 
-    private EnemyManager enemyManager;//For Homing position;
     private GameObject targetEnm;
 
     private AudioManager audioManager;
     private AudioSource audioSource;
 
+    private EnemySpawner enemySpawner;
+
     private float temp;//for any purpose
 
-    //Testing
-    GameObject testobj;
+    GameObject defaultTarget;
+
+    private SkillSpawner skillSpawner;
 
     // Start is called before the first frame update
     void Start()
     {
-        Actioned = false;
-        ActivePos = transform.position;
+        ActionEnded = false;
 
         playerManager = FindObjectOfType<PlayerManager>();
-        enemyManager = FindObjectOfType<EnemyManager>();
+        enemySpawner = FindObjectOfType<EnemySpawner>();
         audioManager = FindObjectOfType<AudioManager>();
         audioSource = GetComponent<AudioSource>();
+        skillSpawner = FindObjectOfType<SkillSpawner>();
 
-        testobj = GameObject.FindGameObjectWithTag("DebugTag");
+        //Testing
+        defaultTarget = GameObject.FindGameObjectWithTag("DefaultTag");
 
-        switch (ActionID)
+        switch (actionID)
         {
             case Upgrades.StoreItems.MagicMeteor:
                 this.transform.position = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
@@ -51,20 +57,17 @@ public class Skill : MonoBehaviour
                 break;
             case Upgrades.StoreItems.MagicPetrification:
                 this.transform.position = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
-                foreach (GameObject i in enemyManager.allAliveMonsters)
-                {
-                    i.GetComponent<EnemyAI>().Petrified(attr.frameWait);
-                }
                 audioSource.PlayOneShot(audioManager.GetAudio("se_MagicPetrification"));
                 break;
             case Upgrades.StoreItems.MagicMinions:
                 this.transform.position = Camera.main.transform.position;
                 Vector3 targetPos = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
-                if (enemyManager.allAliveMonsters.Count > 0)
+                List<GameObject> allAliveMonsters = enemySpawner.AllAliveMonstersList();
+                if (allAliveMonsters.Count > 0)
                 {
                     GameObject nearestMonster = null;
                     float dist = float.MaxValue;
-                    foreach (GameObject i in enemyManager.allAliveMonsters)
+                    foreach (GameObject i in allAliveMonsters)
                     {
                         float tempDist = (i.transform.position - targetPos).sqrMagnitude;
                         if (tempDist < dist)
@@ -73,10 +76,11 @@ public class Skill : MonoBehaviour
                             nearestMonster = i;
                         }
                     }
+                    targetEnm = nearestMonster;
                 }
                 else targetEnm = null;
 
-               if (testobj) targetEnm = testobj;
+               if (targetEnm==null && defaultTarget) targetEnm = defaultTarget;
                 
                 this.GetComponent<VisualEffect>().SetVector3("TargetLocation", targetEnm.transform.position-this.transform.position);
                 audioSource.PlayOneShot(audioManager.GetAudio("se_MagicSummon"));
@@ -88,100 +92,67 @@ public class Skill : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        switch (ActionID)
+        switch (actionID)
         {
             case Upgrades.StoreItems.MagicMeteor:
-                attr.frameWait -= Time.deltaTime;
-                if (Actioned == false && attr.frameWait < 0)
+            case Upgrades.StoreItems.MagicPetrification:
+            case Upgrades.StoreItems.MagicMinions:
+                attr.waitTime -= Time.deltaTime;
+                if (ActionEnded == false && attr.waitTime < 0)
                 {
-                    Vector2 skillPos = new Vector2(this.transform.position.x, this.transform.position.z);
-                    foreach (GameObject i in enemyManager.allAliveMonsters)
-                    {
-                        Vector2 enmPos = new Vector2(i.transform.position.x, i.transform.position.z);
-                        if ((enmPos - skillPos).sqrMagnitude <= attr.area * attr.area)
-                        {
-                            i.GetComponent<EnemyAI>().Damaged(attr.damage);
-                        }
-                    }
-
-                    if (!Actioned)
+                    if (!ActionEnded)
                     {
                         Destroy(this.gameObject);
-                        Actioned = true;
+                        ActionEnded = true;
                     }
                 }
                 break;
             case Upgrades.StoreItems.MagicBlizzard:
-                if (Actioned == false)
+                if (ActionEnded == false)
                 {
                     this.transform.position = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
-                    attr.frameWait -= Time.deltaTime;
-                        if (attr.frameWait < 0)
+                    EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+                    entityManager.SetComponentData(skillSpawner.Entities[entityID], new Translation
                     {
-                        Vector2 skillPos = new Vector2(this.transform.position.x, this.transform.position.z);
-                        foreach (GameObject i in enemyManager.allAliveMonsters)
-                        {
-                            Vector2 enmPos = new Vector2(i.transform.position.x, i.transform.position.z);
-                            if ((enmPos - skillPos).sqrMagnitude <= attr.area * attr.area)
-                            {
-                                i.GetComponent<EnemyAI>().Damaged(attr.damage);
-                                i.GetComponent<EnemyAI>().Slowed(attr.cycleTime);
-                            }
-                        }
-                        attr.frameWait = temp;
-                    }
-                    attr.activeTime -= Time.deltaTime;
-                    if (!Actioned && attr.activeTime < 0)
+                        Value = this.transform.position
+                    });
+
+                    attr.lifeTime -= Time.deltaTime;
+                    if (!ActionEnded && attr.lifeTime < 0)
                     {
                         Destroy(this.gameObject);
-                        Actioned = true;
-                    }
-                }
-                break;
-            case Upgrades.StoreItems.MagicPetrification:
-                attr.frameWait -= Time.deltaTime;
-                if (Actioned == false && attr.frameWait < 0)
-                {
-                    if (!Actioned)
-                    {
-                        Destroy(this.gameObject);
-                        Actioned = true;
-                    }
-                }
-                break;
-            case Upgrades.StoreItems.MagicMinions:
-                attr.frameWait -= Time.deltaTime;
-                if (Actioned == false && attr.frameWait < 0)
-                {  
-                    if (targetEnm != null)
-                    {
-                        if(targetEnm.GetComponent<EnemyAI>())
-                        targetEnm.GetComponent<EnemyAI>().Damaged(attr.damage);
-                    }
-                    if (!Actioned)
-                    {
-                        Destroy(this.gameObject);
-                        Actioned = true;
+                        ActionEnded = true;
                     }
                 }
                 break;
         }
     }
 
-    public void init(Upgrades.StoreItems ActionID, SkillAttr attr)
+    public void Init(Upgrades.StoreItems actionID, SkillAttr attr,int entityID)
     {
-        this.ActionID = ActionID;
+        this.actionID = actionID;
         this.attr = new SkillAttr(attr);
+        this.entityID = entityID;
+
+        switch (actionID)
+        {
+            case Upgrades.StoreItems.MagicMinions:
+                EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+                entityManager.SetComponentData(skillSpawner.Entities[entityID], new Translation
+                {
+                    Value = targetEnm.transform.position
+                });
+                break;
+        }
     }
 
-    public void SetTemp(float val)
+    public void SetConstantForVFX(float val)
     {
-        temp = val;
-        switch (ActionID)
+        switch (actionID)
         {
             case Upgrades.StoreItems.MagicPetrification:
-                this.GetComponent<VisualEffect>().SetFloat("Radius", temp*1.5f);
-                this.GetComponent<VisualEffect>().SetFloat("Rotation",temp/attr.activeTime*30.0f);
+                this.GetComponent<VisualEffect>().SetFloat("Radius", val * 1.5f);
+                this.GetComponent<VisualEffect>().SetFloat("Rotation", val / attr.lifeTime*30.0f);
                 break;
         }
     }

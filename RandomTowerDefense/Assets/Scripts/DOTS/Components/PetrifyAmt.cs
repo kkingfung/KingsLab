@@ -2,8 +2,9 @@
 using Unity.Entities;
 
 [Serializable]
-public struct Damage : IComponentData
+public struct PetrifyAmt : IComponentData
 {
     public float Value;
 }
+
 

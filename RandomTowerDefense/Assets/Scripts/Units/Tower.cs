@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
+using Unity.Mathematics;
+using Unity.Entities;
 
 public class Tower : MonoBehaviour
 {
@@ -16,77 +18,48 @@ public class Tower : MonoBehaviour
 
     private float AttackCounter;
 
-    private GameObject CurrTarget;
     private List<GameObject> AtkVFX;
     private GameObject AuraVFX;
     private GameObject LevelUpVFX;
 
-    private GameObject AtkVFXPrefab;
     private GameObject AuraVFXPrefab;
     private GameObject LevelUpVFXPrefab;
 
-    private EnemyManager enemyManager;
     private AudioManager audioManager;
     public GameObject pillar;
 
     private AudioSource audio;
+
     //Testing
-    //GameObject testobj;
+    //GameObject defaultTarget;
 
     private Animator animator;
 
+    private int entityID;
+    private TowerSpawner towerSpawner;
+    private AttackSpawner attackSpawner;
     private void Start()
     {
-        enemyManager = FindObjectOfType<EnemyManager>();
         audioManager = FindObjectOfType<AudioManager>();
-        //testobj = GameObject.FindGameObjectWithTag("DebugTag");
-
+        towerSpawner = FindObjectOfType<TowerSpawner>();
         AttackCounter = 0;
+        entityID = -1;
         AtkVFX = new List<GameObject>();
         animator = GetComponent<Animator>();
         audio = GetComponent<AudioSource>();
+
+        //defaultTarget = GameObject.FindGameObjectWithTag("DefaultTag");
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (AttackCounter > 0) AttackCounter -= Time.deltaTime;
-
-        if (CurrTarget == null) CurrTarget = detectEnemy();
-        if (CurrTarget != null && AttackCounter <= 0) Attack();
-    }
-
-    public GameObject detectEnemy()
-    {
-        GameObject nearestMonster = null;
-        float dist = float.MaxValue;
-        foreach (GameObject i in enemyManager.allAliveMonsters)
-        {
-            float tempDist = (i.transform.position - this.transform.position).sqrMagnitude;
-            if (tempDist > attr.areaSq) continue;
-            if (tempDist < dist)
-            {
-                dist = tempDist;
-                nearestMonster = i;
-            }
-        }
-
-        //if ((testobj.transform.position - this.transform.position).sqrMagnitude <= attr.areaSq)
-        //{
-        //    nearestMonster = testobj;
-        //}
-
-        return nearestMonster;
+        if (AttackCounter <= 0 && towerSpawner.hastargetArray[entityID]) 
+            Attack();
     }
 
     public void Attack()
     {
-        if ((CurrTarget.transform.position - this.transform.position).sqrMagnitude > attr.areaSq)
-        {
-            CurrTarget = null;
-            return;
-        }
-
         float posAdj = 0;
         switch (type)
         {
@@ -103,29 +76,39 @@ public class Tower : MonoBehaviour
                 audio.PlayOneShot(audioManager.GetAudio("se_MagicFire"));
                 posAdj = 1f; break;
         }
+        int[] entityID=attackSpawner.Spawn((int)type, this.transform.position
+          + this.transform.forward * posAdj, this.transform.rotation, attr.damage, attr.radius,
+          attr.waitTime, 1.0f, 0.2f);
 
-        this.AtkVFX.Add(GameObject.Instantiate(AtkVFXPrefab, this.transform.position
-          + this.transform.forward * posAdj,
-           this.transform.rotation));
-
+        this.AtkVFX.Add(attackSpawner.GameObjects[entityID[0]]);
         if (type == TowerInfo.TowerInfoID.Enum_TowerNightmare || type == TowerInfo.TowerInfoID.Enum_TowerTerrorBringer)
-            this.AtkVFX[AtkVFX.Count - 1].GetComponent<VisualEffect>().SetVector3("TargetPos", CurrTarget.transform.position);
+            this.AtkVFX[AtkVFX.Count - 1].GetComponent<VisualEffect>().SetVector3("TargetPos", towerSpawner.targetArray[this.entityID]);
 
         this.transform.localEulerAngles = new Vector3(0,
-            (90f + Mathf.Rad2Deg * Mathf.Atan2(this.transform.position.z - CurrTarget.transform.position.z, CurrTarget.transform.position.x - this.transform.position.x)), 0);
-        EnemyAI enm = CurrTarget.GetComponent<EnemyAI>();
-        if (enm) CurrTarget.GetComponent<EnemyAI>().Damaged(attr.damage);
+            (90f + Mathf.Rad2Deg * Mathf.Atan2(this.transform.position.z - towerSpawner.targetArray[this.entityID].z,
+            towerSpawner.targetArray[this.entityID].x - this.transform.position.x)), 0);
 
-        StartCoroutine(WaitToKillVFX(this.AtkVFX[AtkVFX.Count - 1], 500, 0));
+        StartCoroutine(WaitToKillVFX(this.AtkVFX[AtkVFX.Count - 1], 8, 0));
 
-        AttackCounter = attr.frameWait;
+        AttackCounter = attr.waitTime;
         animator.SetTrigger("Detected");
         animator.SetInteger("ActionID", UnityEngine.Random.Range(0, 2));
     }
 
+    /// <summary>
+    /// ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// </summary>
     public void Destroy()
     {
+        //AlsoDestroy Entity
         GameObject.FindObjectOfType<FilledMapGenerator>().UpdatePillarStatus(pillar, 0);
+
+        EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+        entityManager.SetComponentData(towerSpawner.Entities[this.entityID], new Lifetime
+        {
+            Value = -1
+        });
+
         foreach (GameObject i in AtkVFX)
         {
             AtkVFX.Remove(i);
@@ -138,18 +121,15 @@ public class Tower : MonoBehaviour
         Destroy(this.gameObject, 2);
     }
 
-    public void newTower(GameObject pillar, GameObject AtkVFX, GameObject LevelUpVFX, GameObject AuraVFX, TowerInfo.TowerInfoID type, int lv = 1, int rank = 1)
+    public void newTower(int entityID,GameObject pillar, GameObject LevelUpVFX, GameObject AuraVFX, TowerInfo.TowerInfoID type, int lv = 1, int rank = 1)
     {
         this.type = type;
         this.Level = lv;
         this.rank = rank;
         this.pillar = pillar;
-        AtkVFXPrefab = AtkVFX;
+        this.entityID = entityID;
         AuraVFXPrefab = AuraVFX;
         LevelUpVFXPrefab = LevelUpVFX;
-        //this.AtkVFX=GameObject.Instantiate(AtkVFX, this.transform.position
-        //    + new Vector3(0, (type == TowerInfo.TowerInfoID.Enum_TowerNightmare || type == TowerInfo.TowerInfoID.Enum_TowerUsurper) ? 1.55f : 0
-        //    , (type == TowerInfo.TowerInfoID.Enum_TowerNightmare || type == TowerInfo.TowerInfoID.Enum_TowerUsurper)?8:0), Quaternion.identity,this.transform);
         this.AuraVFX = GameObject.Instantiate(AuraVFXPrefab, this.transform.position, Quaternion.Euler(90f, 0, 0));
         this.LevelUpVFX = GameObject.Instantiate(LevelUpVFXPrefab, this.transform.position, Quaternion.identity);
 
@@ -188,18 +168,18 @@ public class Tower : MonoBehaviour
     {
         attr = TowerInfo.GetTowerInfo(type);
 
-        attr = new TowerAttr(attr.areaSq * (0.2f * rank + 0.005f * Level),
+        attr = new TowerAttr(attr.radius * (0.2f * rank + 0.005f * Level),
             attr.damage * (1f * rank + 0.05f * Level),
-            attr.frameWait * (1f - (0.1f * rank)));
+            attr.waitTime * (1f - (0.1f * rank)));
 
         switch (type)
         {
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
-                attr.areaSq = attr.areaSq
+                attr.radius = attr.radius
                     * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-                attr.areaSq = attr.areaSq
+                attr.radius = attr.radius
                       * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
 
                 break;
@@ -208,10 +188,26 @@ public class Tower : MonoBehaviour
                     * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                attr.frameWait = attr.frameWait
+                attr.waitTime = attr.waitTime
                     * (1 - (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
                 break;
         }
+
+        EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+
+        entityManager.SetComponentData(towerSpawner.Entities[this.entityID], new Radius
+        {
+            Value = attr.radius
+        });
+        entityManager.SetComponentData(towerSpawner.Entities[this.entityID], new Damage
+        {
+            Value = attr.damage
+        });
+        entityManager.SetComponentData(towerSpawner.Entities[this.entityID], new WaitingTime
+        {
+            Value = attr.waitTime
+        });
+
     }
 
     public bool CheckMaxLevel()
@@ -221,9 +217,10 @@ public class Tower : MonoBehaviour
 
     private IEnumerator WaitToKillVFX(GameObject targetVFX, int waittime, int killtime)
     {
-        int frame = waittime;
-        while (frame-- > 0)
+        float timer = waittime;
+        while (timer-- > 0)
         {
+            timer -= Time.deltaTime;
             yield return new WaitForSeconds(0f);
         }
         targetVFX.GetComponent<VisualEffect>().Stop();

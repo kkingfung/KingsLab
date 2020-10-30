@@ -30,7 +30,6 @@ public class PlayerManager : MonoBehaviour
     GameObject CurrentSkill;
     GameObject StockOperator;
 
-
     InGameOperation sceneManager;
     EnemyManager enemyManager;
     StageManager stageManager;

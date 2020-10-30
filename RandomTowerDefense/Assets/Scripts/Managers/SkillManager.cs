@@ -1,15 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class SkillManager : MonoBehaviour
 {
     [Header("Skill Settings")]
-    public GameObject MeteorSkPrefab;
-    public GameObject BlizzardSkPrefab;
-    public GameObject PetrificationSkPrefab;
-    public GameObject MinionsSkPrefab;
-
     public GameObject FireFieldSkAura;
     public GameObject BlizzardFieldSkAura;
 
@@ -21,15 +17,22 @@ public class SkillManager : MonoBehaviour
     private GameObject SkillAura;
 
     private Dictionary<Upgrades.StoreItems, int> SkillUpgrader;
-    private readonly int[] SkillRequirement= { 5,15,30,50,75,100,130,170,210,250};
+
+    //Total Cast Number * Constant for each Magic 
+    private readonly int[] SkillRequirement = { 5, 15, 30, 50, 75, 100, 130, 170, 210, 250 };
+    private readonly int[] SkillExp = { 5, 10, 15, 19, 23, 26, 29, 31, 34, 35 };
+
+    private SkillSpawner skillSpawner;
 
     void Start()
     {
         playerManager = FindObjectOfType<PlayerManager>();
+        skillSpawner = FindObjectOfType<SkillSpawner>();
     }
 
     public void GainExp(Upgrades.StoreItems itemID,int exp) {
         SkillUpgrader[itemID] += exp;
+        SkillUpgrade(itemID);
     }
 
     void SkillUpgrade(Upgrades.StoreItems itemID) {
@@ -57,7 +60,7 @@ public class SkillManager : MonoBehaviour
         SkillAura = Instantiate(BlizzardFieldSkAura, hitPos, Quaternion.identity);
 
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillBlizzard");
-        attr.area = attr.area * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * 0.2f);
+        attr.radius = attr.radius * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * 0.2f);
         //attr.damage = attr.damage;
         //attr.cycleTime = attr.cycleTime;
 
@@ -65,9 +68,7 @@ public class SkillManager : MonoBehaviour
         return SkillAura;
     }
     public GameObject PetrificationSkill(Vector3 hitPos)
-    {
-        //GameObject SkillPointer = Instantiate(PetrificationSkPrefab, hitPos, Quaternion.identity);
-
+    { 
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillPetrification");
         //attr.area = attr.area;
         //attr.damage = attr.damage;
@@ -78,14 +79,12 @@ public class SkillManager : MonoBehaviour
     }
     public GameObject MinionsSkill(Vector3 hitPos)
     {
-        //GameObject SkillPointer = Instantiate(SummonSkPrefab, MainCamera.transform.position, Quaternion.identity);
-        
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillMinions");
         //attr.area = attr.area;
         //attr.damage = attr.damage;
         attr.cycleTime = attr.cycleTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * 0.2f);
 
-        StartCoroutine(SummonSkillCoroutine(attr));
+        StartCoroutine(MinionsSkillCoroutine(attr));
         return null;
     }
 
@@ -95,43 +94,53 @@ public class SkillManager : MonoBehaviour
 
     private IEnumerator MeteorSkillCoroutine(SkillAttr attr)
     {
-        float frame = attr.activeTime + Time.time;
+        float frame = attr.lifeTime + Time.time;
 
         float frameToNext = Time.time;
 
         while (frame-Time.time > 0)
         {
             if (Time.time-frameToNext > attr.cycleTime) {
-                GameObject skillObj = Instantiate(MeteorSkPrefab);
-                skillObj.GetComponent<Skill>().init(Upgrades.StoreItems.MagicMeteor, attr);
+                int[] entityID = skillSpawner.Spawn(0,this.transform.position, new float3(),
+                    attr.damage,attr.radius,attr.waitTime,attr.lifeTime,attr.waitTime);
+                skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
+                    .Init(Upgrades.StoreItems.MagicMeteor, attr,entityID[0]);
+
                 frameToNext = Time.time;
             }
             yield return new WaitForSeconds(0f);
         }
 
+        GainExp(Upgrades.StoreItems.MagicMeteor,
+            SkillExp[Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor)]);
         Destroy(SkillAura);
         SkillEnd();
     }
 
     private IEnumerator BlizzardSkillCoroutine(SkillAttr attr)
     {
-        float frame = attr.activeTime + Time.time;
+        float frame = attr.lifeTime + Time.time;
 
-        GameObject skillObj = Instantiate(BlizzardSkPrefab);
-        skillObj.GetComponent<Skill>().init(Upgrades.StoreItems.MagicBlizzard, attr);
-        skillObj.GetComponent<Skill>().SetTemp(attr.frameWait);
+        int[] entityID = skillSpawner.Spawn(1, this.transform.position, new float3(),
+            attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime);
+        skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
+            .Init(Upgrades.StoreItems.MagicBlizzard, attr, entityID[0]);
+        skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
+            .SetConstantForVFX(attr.waitTime);
+
         while (frame - Time.time > 0)
         {
             yield return new WaitForSeconds(0f);
         }
-
+        GainExp(Upgrades.StoreItems.MagicBlizzard,
+            SkillExp[Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard)]);
         Destroy(SkillAura);
         SkillEnd();
     }
 
     private IEnumerator PetrificationCoroutine(SkillAttr attr)
     {
-        float frame = attr.activeTime + Time.time;
+        float frame = attr.lifeTime + Time.time;
         float record = Time.time;
         float frameToNext = Time.time;
 
@@ -139,32 +148,42 @@ public class SkillManager : MonoBehaviour
         {
             if (Time.time - frameToNext > attr.cycleTime)
             {
-                GameObject skillObj = Instantiate(PetrificationSkPrefab);
-                skillObj.GetComponent<Skill>().init(Upgrades.StoreItems.MagicPetrification, attr);
-                skillObj.GetComponent<Skill>().SetTemp((Time.time - record) / attr.activeTime *10);
+                int[] entityID = skillSpawner.Spawn(2, this.transform.position, new float3(),
+                    attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime);
+                skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
+                    .Init(Upgrades.StoreItems.MagicPetrification, attr, entityID[0]);
+                skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
+                    .SetConstantForVFX((Time.time - record) / attr.lifeTime * 10);
+
                 frameToNext = Time.time;
             }
             yield return new WaitForSeconds(0f);
         }
+        GainExp(Upgrades.StoreItems.MagicPetrification,
+            SkillExp[Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification)]);
         SkillEnd();
     }
 
-    private IEnumerator SummonSkillCoroutine(SkillAttr attr)
+    private IEnumerator MinionsSkillCoroutine(SkillAttr attr)
     {
-        float frame = attr.activeTime + Time.time;
+        float frame = attr.lifeTime + Time.time;
         float frameToNext = Time.time;
 
         while (frame - Time.time > 0)
         {
             if (Time.time - frameToNext > attr.cycleTime)
             {
-               
-                GameObject skillObj = Instantiate(MinionsSkPrefab);
-                skillObj.GetComponent<Skill>().init(Upgrades.StoreItems.MagicMinions, attr);
+                int[] entityID = skillSpawner.Spawn(3, this.transform.position,new float3(),
+                    attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime);
+                skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
+                    .Init(Upgrades.StoreItems.MagicMinions, attr, entityID[0]);
+
                 frameToNext = Time.time;
             }
             yield return new WaitForSeconds(0f);
         }
+        GainExp(Upgrades.StoreItems.MagicMinions,
+            SkillExp[Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions)]);
         SkillEnd();
     }
 }

@@ -11,21 +11,22 @@ public class TowerManager : MonoBehaviour
     private readonly int NumTowerType = 4;
 
     [Header("Tower Settings")]
-    public List<GameObject> TowerNightmare;
-    public List<GameObject> TowerSoulEater;
-    public List<GameObject> TowerTerrorBringer;
-    public List<GameObject> TowerUsurper;
+    //ToTowerSpawner
+    //public List<GameObject> TowerNightmare;
+    //public List<GameObject> TowerSoulEater;
+    //public List<GameObject> TowerTerrorBringer;
+    //public List<GameObject> TowerUsurper;
 
     public GameObject TowerBuild;
     public GameObject TowerLevelUp;
     public GameObject TowerDisappear;
     public GameObject TowerSell;
 
-    [Header("TowerAtk Settings")]
-    public GameObject TowerNightmareAtk;
-    public GameObject TowerSoulEaterAtk;
-    public GameObject TowerTerrorBringerAtk;
-    public GameObject TowerUsurperAtk;
+    //[Header("TowerAtk Settings")]
+    //public GameObject TowerNightmareAtk;
+    //public GameObject TowerSoulEaterAtk;
+    //public GameObject TowerTerrorBringerAtk;
+    //public GameObject TowerUsurperAtk;
 
     [Header("TowerAura Settings")]
     public GameObject TowerNightmareAura;
@@ -42,9 +43,10 @@ public class TowerManager : MonoBehaviour
     [HideInInspector]
     public List<GameObject> TowerUsurperList;
 
-    PlayerManager playerManager;
-    ResourceManager resourceManager;
-    FilledMapGenerator filledMapGenerator;
+    private ResourceManager resourceManager;
+    private FilledMapGenerator filledMapGenerator;
+
+    private TowerSpawner towerSpawner;
 
     // Start is called before the first frame update
     void Start()
@@ -54,9 +56,9 @@ public class TowerManager : MonoBehaviour
         TowerTerrorBringerList = new List<GameObject>();
         TowerUsurperList = new List<GameObject>();
 
-        playerManager = FindObjectOfType<PlayerManager>();
         resourceManager = FindObjectOfType<ResourceManager>();
         filledMapGenerator = FindObjectOfType<FilledMapGenerator>();
+        towerSpawner = FindObjectOfType<TowerSpawner>();
     }
 
     // Update is called once per frame
@@ -75,7 +77,7 @@ public class TowerManager : MonoBehaviour
         public void BuildTower(GameObject pillar, Vector3 location, int rank = 1)
     {
         GameObject tower;
-        
+        int[] entityIDList;
         if (resourceManager.ChkAndBuild(rank) == false)
         {
             return;
@@ -83,29 +85,37 @@ public class TowerManager : MonoBehaviour
         switch (UnityEngine.Random.Range(0, NumTowerType))
         {
             case (int)TowerInfo.TowerInfoID.Enum_TowerNightmare:
-                tower = Instantiate(TowerNightmare[rank-1], location, Quaternion.identity);
-                tower.GetComponent<Tower>().newTower(pillar,TowerNightmareAtk, TowerLevelUp, TowerNightmareAura,
+                entityIDList=towerSpawner.Spawn(rank-1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerNightmare,
+                    location,new Unity.Mathematics.float3(), 0, float.MaxValue, float.MaxValue);
+                tower = towerSpawner.GameObjects[entityIDList[0]];
+                tower.GetComponent<Tower>().newTower(entityIDList[0],pillar, TowerLevelUp, TowerNightmareAura,
                     TowerInfo.TowerInfoID.Enum_TowerNightmare, 1, rank);
                 tower.transform.localScale = 0.1f * new Vector3(1,1,1);
                 TowerNightmareList.Add(tower);
                 break;
             case (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-                tower = Instantiate(TowerSoulEater[rank - 1], location, Quaternion.identity);
-                tower.GetComponent<Tower>().newTower(pillar, TowerSoulEaterAtk, TowerLevelUp, TowerSoulEaterAura,
+                entityIDList = towerSpawner.Spawn(rank-1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater,
+                    location, new Unity.Mathematics.float3(), 0, float.MaxValue, float.MaxValue);
+                tower = towerSpawner.GameObjects[entityIDList[0]];
+                tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerSoulEaterAura,
                     TowerInfo.TowerInfoID.Enum_TowerSoulEater, 1, rank);
                 tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
                 TowerSoulEaterList.Add(tower);
                 break;
             case (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
-                tower = Instantiate(TowerTerrorBringer[rank - 1], location, Quaternion.identity);
-                tower.GetComponent<Tower>().newTower(pillar, TowerTerrorBringerAtk, TowerLevelUp, TowerTerrorBringerAura,
+                entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer,
+                     location, new Unity.Mathematics.float3(), 0, float.MaxValue, float.MaxValue);
+                tower = towerSpawner.GameObjects[entityIDList[0]];
+                tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerTerrorBringerAura,
                     TowerInfo.TowerInfoID.Enum_TowerTerrorBringer, 1, rank);
                 tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
                 TowerTerrorBringerList.Add(tower);
                 break;
             case (int)TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                tower = Instantiate(TowerUsurper[rank - 1], location, Quaternion.identity);
-                tower.GetComponent<Tower>().newTower(pillar, TowerUsurperAtk, TowerLevelUp, TowerUsurperAura,
+                entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerUsurper,
+                    location, new Unity.Mathematics.float3(), 0, float.MaxValue, float.MaxValue);
+                tower = towerSpawner.GameObjects[entityIDList[0]];
+                tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerUsurperAura,
                     TowerInfo.TowerInfoID.Enum_TowerUsurper, 1, rank);
                 tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
                 TowerUsurperList.Add(tower);

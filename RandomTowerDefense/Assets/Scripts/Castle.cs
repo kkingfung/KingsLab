@@ -1,16 +1,18 @@
 ﻿using UnityEngine;
+using Unity.Entities;
 
 public class Castle : MonoBehaviour
 {
     public int MaxCastleHP;
     public int CurrCastleHP;
     public GameObject Shield;
-    private GameObject obj;
+
     private InGameOperation sceneManager;
     private StageManager stageManager;
     private AudioManager audioManager;
+    private AudioSource audioSource;
 
-    private AudioSource audio;
+    private CastleSpawner castleSpawner;
 
     // Start is called before the first frame update
     void Start()
@@ -18,39 +20,41 @@ public class Castle : MonoBehaviour
         sceneManager = FindObjectOfType<InGameOperation>();
         stageManager = FindObjectOfType<StageManager>();
         audioManager = FindObjectOfType<AudioManager>();
-        audio = GetComponent<AudioSource>();
+        castleSpawner = FindObjectOfType<CastleSpawner>();
+        audioSource = GetComponent<AudioSource>();
 
-            MaxCastleHP = (int)PlayerPrefs.GetFloat("hpMax");
+        MaxCastleHP = (int)PlayerPrefs.GetFloat("hpMax");
         CurrCastleHP = MaxCastleHP;
     }
 
     // Update is called once per frame
     private void Update()
     {
-            Shield.SetActive(CurrCastleHP > 1);
+        int PreviousCastleHP = CurrCastleHP;
+        CurrCastleHP = GetCastleHpFromEntity();
+        if (PreviousCastleHP > CurrCastleHP)
+            audioSource.PlayOneShot(audioManager.GetAudio("se_Hitted"));
+        Shield.SetActive(MaxCastleHP > 1);
     }
 
-    private void OnTriggerEnter(Collider other)
+    public bool AddedHealth(int Val = 1)
     {
-        if (other.gameObject.layer == LayerMask.GetMask("Enemy"))
-        {
-            stageManager.Damaged();
-            other.gameObject.GetComponent<EnemyAI>().Die();
-        }
+        if (CurrCastleHP > 0)
+            SetCastleHpToEntity(CurrCastleHP + 1);
+        return CurrCastleHP <= 0;
     }
 
-    public bool Damaged(int Val = 1)
+    public void SetCastleHpToEntity(int hp)
     {
-        CurrCastleHP -= Val;
-        if(Val>0)  
+        EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+        entityManager.SetComponentData(castleSpawner.Entities[0], new Health
         {
-            audio.clip = audioManager.GetAudio("se_Hitted");
-            audio.Play();
-        }
-            return CurrCastleHP <= 0;
+            Value = hp
+        });
     }
-
-    public void SetObj(GameObject obj) {
-        this.obj = obj;
+    public int GetCastleHpFromEntity() {
+        if (castleSpawner.castleHPArray.Length > 0)
+            return castleSpawner.castleHPArray[0];
+        return -1;
     }
 }

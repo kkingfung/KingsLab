@@ -8,8 +8,6 @@ public class StockOperator : MonoBehaviour
     private readonly Vector3 TargetScale = new Vector3(0.3f, 0.3f, 0.3f);
     private readonly int Rotation = 1;
 
-    InputManager inputManager;
-
     public List<GameObject> StockSlot;
 
     public Sprite SprBoss1;
@@ -34,7 +32,6 @@ public class StockOperator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        inputManager = FindObjectOfType<InputManager>();
         StartCoroutine(StartAnimation());
 
         for (int i = 0; i < StockSlot.Count; ++i)

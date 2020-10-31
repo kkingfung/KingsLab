@@ -88,7 +88,7 @@ public class StageSelectOperation : ISceneChange
         RightCam.transform.position = RightCamStayPt[IslandNow];
         BottomCam.transform.position = BottomCamStayPt[IslandNow];
 
-        if (isDebugging) IslandEnabled = IslandNum;
+        if (isDebugging) IslandEnabled = StageInfo.IslandNum;
         else IslandEnabled = PlayerPrefs.GetInt("IslandEnabled");
 
         GameObject[] ClearMarks = GameObject.FindGameObjectsWithTag("ClearMark");

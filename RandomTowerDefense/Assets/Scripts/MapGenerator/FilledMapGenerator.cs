@@ -31,8 +31,12 @@ public class FilledMapGenerator : MonoBehaviour {
 
 	Map currentMap;
 
+	private InGameOperation sceneManager;
+
 	private void Start() {
 		PillarList = new List<Pillar>();
+
+		sceneManager = FindObjectOfType<InGameOperation>();
 	}
 	public void followParentCam(bool toFollow) {
 		FollowFakeParent = toFollow;
@@ -53,6 +57,12 @@ public class FilledMapGenerator : MonoBehaviour {
 	public void GenerateMap() {
 		currentMap = maps[mapIndex];
 
+		if (sceneManager && (sceneManager.GetCurrIsland() == StageInfo.IslandNum - 1))
+		{
+			currentMap.mapSize.x = (int)(16f / 25f * StageInfo.stageSizeEx);
+			currentMap.mapSize.y = (int)(9f / 25f * StageInfo.stageSizeEx);
+		}
+		
 		if (Randomize)
 			currentMap.seed = Random.Range(int.MinValue, int.MaxValue);
 		tileMap = new Transform[currentMap.mapSize.x,currentMap.mapSize.y];

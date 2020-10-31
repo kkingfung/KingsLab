@@ -146,7 +146,7 @@ public class StageManager : MonoBehaviour
         result = 1;
 
         scoreCalculation.CalculationScore();
-        if (sceneManager.GetEnabledIsland() == sceneManager.GetCurrIsland() && sceneManager.GetEnabledIsland() < StageInfo.GetStageNum() - 1)
+        if (sceneManager.GetEnabledIsland() == sceneManager.GetCurrIsland() && sceneManager.GetEnabledIsland() < StageInfo.IslandNum - 1)
             PlayerPrefs.SetInt("IslandEnabled", sceneManager.GetCurrIsland() + 1);
         audioManager.PlayAudio("se_Clear");
         return true;

@@ -55,7 +55,7 @@ public class ScoreCalculation : MonoBehaviour
 
         //Clear
         if (result > 0) {
-            score += 2000 + 50 * currIsland;
+            score += 5000 + 500 * currIsland;
             scoreStr += score+"\n";
         }
 
@@ -77,7 +77,7 @@ public class ScoreCalculation : MonoBehaviour
 
 
         //Remark: Special Function for extra mode
-        if (currIsland != sceneManager.IslandNum - 1 && result==-1) {
+        if (currIsland != StageInfo.IslandNum - 1 && result==-1) {
             scoreStr += "-" + score + "\n";
             score = 0;
         }

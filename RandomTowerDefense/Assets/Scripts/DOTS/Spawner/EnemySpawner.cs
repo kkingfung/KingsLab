@@ -73,7 +73,6 @@ public class EnemySpawner : MonoBehaviour
             Destroy(gameObject);
 
         allMonsterList = new Dictionary<string, GameObject>();
-   
 
         //Bonus
         allMonsterList.Add("MetalonGreen", MetalonGreen);

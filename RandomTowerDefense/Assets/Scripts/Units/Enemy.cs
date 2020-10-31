@@ -6,7 +6,6 @@ using Unity.Entities;
 
 public class Enemy : MonoBehaviour
 {
-    private EnemyAttr attr;
     private GameObject DieEffect;
     private GameObject DropEffect;
 
@@ -17,12 +16,13 @@ public class Enemy : MonoBehaviour
 
     private int entityID=-1;
     private EnemySpawner enemySpawner;
-
+    private ResourceManager resourceManager;
     // Start is called before the first frame update
     private void Start()
     {
         oriScale = transform.localScale;
         enemySpawner = FindObjectOfType<EnemySpawner>();
+        resourceManager = FindObjectOfType<ResourceManager>();
         animator = GetComponent<Animator>();
         HealthRecord = 1;
         if (animator==null) animator = GetComponentInChildren<Animator>();
@@ -61,8 +61,10 @@ public class Enemy : MonoBehaviour
         DamagedCount = 2;
 
         if (currHP <= 0) {
+            resourceManager.ChangeMaterial(enemySpawner.moneyArray[entityID]);
             GameObject vfx = Instantiate(DropEffect, this.transform.position, Quaternion.identity);
-            vfx.GetComponent<VisualEffect>().SetFloat("SpawnCount", attr.money);
+            vfx.GetComponent<VisualEffect>().SetFloat("SpawnCount", enemySpawner.moneyArray[entityID]);
+
             animator.SetTrigger("Dead");
             Die();
         }

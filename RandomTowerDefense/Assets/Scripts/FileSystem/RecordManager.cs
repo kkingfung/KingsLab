@@ -10,7 +10,6 @@ public class UIRecordList {
 }
 public class RecordManager : MonoBehaviour
 {
-    const int NumofStage = 4;
     public List<UIRecordList> AllRecords;
 
     List<SaveObject> stageRecords;
@@ -20,7 +19,7 @@ public class RecordManager : MonoBehaviour
         stageRecords = new List<SaveObject>();
         stageRecords.Clear();
 
-        for (int i = 0; i < NumofStage; i++)
+        for (int i = 0; i < StageInfo.IslandNum; i++)
         {
             stageRecords.Add(SaveSystem.LoadObject<SaveObject>("Record" + i.ToString()));
         }
@@ -30,7 +29,7 @@ public class RecordManager : MonoBehaviour
 
     private void OnDisable()
     {
-        for (int i = 0; i < NumofStage; i++)
+        for (int i = 0; i < StageInfo.IslandNum; i++)
         {
             SaveSystem.SaveObject("Record" + i.ToString(), stageRecords[i],true);
         }
@@ -47,7 +46,7 @@ public class RecordManager : MonoBehaviour
     }
 
     void updateUI() {
-        for (int i = 0; i < NumofStage; i++)
+        for (int i = 0; i < StageInfo.IslandNum; i++)
         {
             AllRecords[i].Records[0].text = "1." + stageRecords[i].record1.name.Substring(0, 5).ToUpper() + "   " + stageRecords[i].record1.score.ToString("000000");
             AllRecords[i].Records[1].text = "2." + stageRecords[i].record2.name.Substring(0, 5).ToUpper() + "   " + stageRecords[i].record2.score.ToString("000000");

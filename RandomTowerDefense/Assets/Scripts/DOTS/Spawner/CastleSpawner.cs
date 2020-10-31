@@ -30,6 +30,8 @@ public class CastleSpawner : MonoBehaviour
     private int[] castleHP;
     private float[] radius;
 
+    private InGameOperation sceneManager;
+
     void Awake()
     {
         if (Instance == null)
@@ -67,6 +69,8 @@ public class CastleSpawner : MonoBehaviour
         TransformAccessArray = new TransformAccessArray(transforms);
         castleHPArray = new NativeArray<int>(count, Allocator.Persistent);
         radiusArray = new NativeArray<float>(count, Allocator.Persistent);
+
+        sceneManager = FindObjectOfType<InGameOperation>();
     }
 
     public int[] Spawn(float3 Position, Quaternion Rotation, int castleHP, float radius,
@@ -77,17 +81,24 @@ public class CastleSpawner : MonoBehaviour
         for (int i = 0; i < count && spawnCnt < num; i++)
         {
             if (GameObjects[i] != null) continue;
+
+            int HpCal = castleHP;
+            if (sceneManager && (sceneManager.GetCurrIsland() == StageInfo.IslandNum - 1))
+            {
+                HpCal = StageInfo.hpMaxEx;
+            }
+
             GameObjects[i] = Instantiate(PrefabObject[prefabID], transform);
             GameObjects[i].transform.position = Position;
             GameObjects[i].transform.rotation = Rotation;
             transforms[i] = GameObjects[i].transform;
-            castleHPArray[i] = castleHP;
+            castleHPArray[i] = HpCal;
             radiusArray[i] = radius;
 
             //AddtoEntities
             EntityManager.SetComponentData(Entities[i], new Health
             {
-                Value = castleHP,
+                Value = HpCal,
             });
             EntityManager.SetComponentData(Entities[i], new Radius
             {

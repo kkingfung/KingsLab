@@ -7,8 +7,6 @@ using Unity.Collections;
 public class ISceneChange : MonoBehaviour
 {
     protected struct LatiosSceneChangeDummyTag : IComponentData { }
-
-    public readonly int IslandNum = 4;
     
     [Header("Gyro Settings")]
     public List<GameObject> LandscapeObjs;
@@ -88,5 +86,4 @@ public class ISceneChange : MonoBehaviour
 
     public bool GetOptionStatus() { return isOption; }
 
-    public int GetTotalIslandNum() { return IslandNum; }
 }

@@ -171,7 +171,7 @@ public class EnemySpawner : MonoBehaviour
 
             GameObjects[i] = Instantiate(allMonsterList[Name], transform);
             GameObjects[i].transform.position = Position;
-            GameObjects[i].transform.rotation = Quaternion.Euler(Rotation);
+            GameObjects[i].transform.localRotation = Quaternion.Euler(Rotation);
             transforms[i] = GameObjects[i].transform;
             healthArray[i] = health;
             moneyArray[i] = money;

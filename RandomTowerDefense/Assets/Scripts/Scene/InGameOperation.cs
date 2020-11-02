@@ -50,7 +50,7 @@ public class InGameOperation : ISceneChange
     private FadeEffect PortraitFade;
 
     public bool isDebugging;//For ingame Debugger
-    public bool isTutorial;//For 1st Stage Only
+    private bool isTutorial;//For 1st Stage Only
     //public VolumeProfile volumeProfile; // For Spare
 
     private int IslandNow = 0;//For changing colour of Sea/Sky
@@ -71,6 +71,7 @@ public class InGameOperation : ISceneChange
     private ResourceManager resourceManager;
     private WaveManager waveManager;
     private TimeManager timeManager;
+    private TutorialManager tutorialManager;
     private ScoreCalculation scoreCalculation;
 
     private TouchScreenKeyboard keyboard;//For RecordBroad if top 5
@@ -122,6 +123,10 @@ public class InGameOperation : ISceneChange
         resourceManager = FindObjectOfType<ResourceManager>();
         timeManager = FindObjectOfType<TimeManager>();
         scoreCalculation = FindObjectOfType<ScoreCalculation>();
+        tutorialManager = FindObjectOfType<TutorialManager>();
+
+        isTutorial = IslandNow == 0;
+        if (tutorialManager) tutorialManager.enabled=isTutorial;
 
         AudioManager.PlayAudio("bgm_Battle",true);
 
@@ -167,6 +172,19 @@ public class InGameOperation : ISceneChange
     // Update is called once per frame
     private void Update()
     {
+        if (isTutorial && tutorialManager.WaitingResponds)
+        {
+            if (timeManager.GetControl() == false)
+            {
+                timeManager.timeFactor = 0;
+                timeManager.TimeControl();
+            }
+            return;
+        }
+        else {
+            timeManager.timeFactor = 0.05f;
+        }
+
         base.Update();
 
         foreach (Button i in OptionButton)
@@ -233,6 +251,7 @@ public class InGameOperation : ISceneChange
     public void OptionStatus()
     {
         if (Time.time - TimeRecord < TimeWait) return;
+        if (timeManager.timeFactor == 0) return;
         isOption = !isOption;
         CanvaManager.isOption = isOption;
         GyroscopeManager.isFunctioning = !isOption;
@@ -369,5 +388,6 @@ public class InGameOperation : ISceneChange
     public int GetCurrIsland() { return IslandNow; }
     public int GetEnabledIsland() { return IslandEnabled; }
 
+    public bool CheckIfTutorial() { return isTutorial; }
     #endregion
 }

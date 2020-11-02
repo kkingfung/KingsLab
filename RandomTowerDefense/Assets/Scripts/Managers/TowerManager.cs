@@ -45,7 +45,8 @@ public class TowerManager : MonoBehaviour
 
     private ResourceManager resourceManager;
     private FilledMapGenerator filledMapGenerator;
-
+    private InGameOperation sceneManager;
+    private TutorialManager tutorialManager;
     private TowerSpawner towerSpawner;
 
     // Start is called before the first frame update
@@ -58,7 +59,9 @@ public class TowerManager : MonoBehaviour
 
         resourceManager = FindObjectOfType<ResourceManager>();
         filledMapGenerator = FindObjectOfType<FilledMapGenerator>();
+        sceneManager = FindObjectOfType<InGameOperation>();
         towerSpawner = FindObjectOfType<TowerSpawner>();
+        tutorialManager = FindObjectOfType<TutorialManager>();
     }
 
     // Update is called once per frame
@@ -82,44 +85,83 @@ public class TowerManager : MonoBehaviour
         {
             return;
         }
-        switch (UnityEngine.Random.Range(0, NumTowerType))
+
+        //if (sceneManager.CheckIfTutorial() && tutorialManager && tutorialManager.FreeToBuild == false)
+        //{
+        //    if (towerSpawner.GameObjects.Length > 0)
+        //    {
+        //        int type = (int)towerSpawner.GameObjects[0].GetComponent<Tower>().type;
+        //        entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * type,
+        //               location, new Unity.Mathematics.float3(), 0, float.MaxValue, float.MaxValue);
+        //        tower = towerSpawner.GameObjects[entityIDList[0]];
+        //        tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
+
+        //        switch (type)
+        //        {
+        //            case (int)TowerInfo.TowerInfoID.Enum_TowerNightmare:
+        //                tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerNightmareAura,
+        //                    TowerInfo.TowerInfoID.Enum_TowerNightmare, 1, rank);
+        //                TowerNightmareList.Add(tower);
+        //                break;
+        //            case (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater:
+        //                tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerSoulEaterAura,
+        //                     TowerInfo.TowerInfoID.Enum_TowerSoulEater, 1, rank);
+        //                TowerSoulEaterList.Add(tower);
+        //                break;
+        //            case (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
+        //                tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerTerrorBringerAura,
+        //                       TowerInfo.TowerInfoID.Enum_TowerTerrorBringer, 1, rank);
+        //                TowerTerrorBringerList.Add(tower);
+        //                break;
+        //            case (int)TowerInfo.TowerInfoID.Enum_TowerUsurper:
+        //                tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerUsurperAura,
+        //                    TowerInfo.TowerInfoID.Enum_TowerUsurper, 1, rank);
+        //                TowerUsurperList.Add(tower);
+        //                break;
+        //        }
+        //    }
+        //}
+        //else
         {
-            case (int)TowerInfo.TowerInfoID.Enum_TowerNightmare:
-                entityIDList=towerSpawner.Spawn(rank-1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerNightmare,
-                    location,new Unity.Mathematics.float3(), 0, float.MaxValue, float.MaxValue);
-                tower = towerSpawner.GameObjects[entityIDList[0]];
-                tower.GetComponent<Tower>().newTower(entityIDList[0],pillar, TowerLevelUp, TowerNightmareAura,
-                    TowerInfo.TowerInfoID.Enum_TowerNightmare, 1, rank);
-                tower.transform.localScale = 0.1f * new Vector3(1,1,1);
-                TowerNightmareList.Add(tower);
-                break;
-            case (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-                entityIDList = towerSpawner.Spawn(rank-1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater,
-                    location, new Unity.Mathematics.float3(), 0, float.MaxValue, float.MaxValue);
-                tower = towerSpawner.GameObjects[entityIDList[0]];
-                tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerSoulEaterAura,
-                    TowerInfo.TowerInfoID.Enum_TowerSoulEater, 1, rank);
-                tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
-                TowerSoulEaterList.Add(tower);
-                break;
-            case (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
-                entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer,
-                     location, new Unity.Mathematics.float3(), 0, float.MaxValue, float.MaxValue);
-                tower = towerSpawner.GameObjects[entityIDList[0]];
-                tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerTerrorBringerAura,
-                    TowerInfo.TowerInfoID.Enum_TowerTerrorBringer, 1, rank);
-                tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
-                TowerTerrorBringerList.Add(tower);
-                break;
-            case (int)TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerUsurper,
-                    location, new Unity.Mathematics.float3(), 0, float.MaxValue, float.MaxValue);
-                tower = towerSpawner.GameObjects[entityIDList[0]];
-                tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerUsurperAura,
-                    TowerInfo.TowerInfoID.Enum_TowerUsurper, 1, rank);
-                tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
-                TowerUsurperList.Add(tower);
-                break;
+            switch (UnityEngine.Random.Range(0, NumTowerType))
+            {
+                case (int)TowerInfo.TowerInfoID.Enum_TowerNightmare:
+                    entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerNightmare,
+                        location, new Unity.Mathematics.float3(), 0, float.MaxValue, float.MaxValue);
+                    tower = towerSpawner.GameObjects[entityIDList[0]];
+                    tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerNightmareAura,
+                        TowerInfo.TowerInfoID.Enum_TowerNightmare, 1, rank);
+                    tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
+                    TowerNightmareList.Add(tower);
+                    break;
+                case (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater:
+                    entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater,
+                        location, new Unity.Mathematics.float3(), 0, float.MaxValue, float.MaxValue);
+                    tower = towerSpawner.GameObjects[entityIDList[0]];
+                    tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerSoulEaterAura,
+                        TowerInfo.TowerInfoID.Enum_TowerSoulEater, 1, rank);
+                    tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
+                    TowerSoulEaterList.Add(tower);
+                    break;
+                case (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
+                    entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer,
+                         location, new Unity.Mathematics.float3(), 0, float.MaxValue, float.MaxValue);
+                    tower = towerSpawner.GameObjects[entityIDList[0]];
+                    tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerTerrorBringerAura,
+                        TowerInfo.TowerInfoID.Enum_TowerTerrorBringer, 1, rank);
+                    tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
+                    TowerTerrorBringerList.Add(tower);
+                    break;
+                case (int)TowerInfo.TowerInfoID.Enum_TowerUsurper:
+                    entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerUsurper,
+                        location, new Unity.Mathematics.float3(), 0, float.MaxValue, float.MaxValue);
+                    tower = towerSpawner.GameObjects[entityIDList[0]];
+                    tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerUsurperAura,
+                        TowerInfo.TowerInfoID.Enum_TowerUsurper, 1, rank);
+                    tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
+                    TowerUsurperList.Add(tower);
+                    break;
+            }
         }
         GameObject temp = Instantiate<GameObject>(TowerBuild, location, Quaternion.identity);
         Destroy(temp, 5.0f);

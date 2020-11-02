@@ -58,4 +58,5 @@ public class TimeManager : MonoBehaviour
 		foreach(Text i in text)
 		i.text = "X" + (int)Time.timeScale;
 	}
+	public bool GetControl() { return isControl; }
 }

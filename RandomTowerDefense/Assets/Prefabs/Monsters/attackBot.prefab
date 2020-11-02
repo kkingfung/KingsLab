@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 33633732727845416}
   - component: {fileID: 23654722802838402}
   - component: {fileID: 95317293637602026}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: botBody
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62,6 +62,8 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 6cb2f2d7bf0bf4e1d981a3419e0b5dcb, type: 2}
+  - {fileID: 2100000, guid: e2379e139b3ab4243b27f2dd7ce6bb2d, type: 2}
+  - {fileID: 2100000, guid: 82547d57c6b55e94592d56ffe9db3428, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -113,7 +115,7 @@ GameObject:
   - component: {fileID: 4296539525321194}
   - component: {fileID: 33924321633885568}
   - component: {fileID: 23065892312727830}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: guns
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -162,6 +164,8 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 1c676d2b7a4de48b8b7da6716d468ee2, type: 2}
+  - {fileID: 2100000, guid: e2379e139b3ab4243b27f2dd7ce6bb2d, type: 2}
+  - {fileID: 2100000, guid: 82547d57c6b55e94592d56ffe9db3428, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -194,7 +198,7 @@ GameObject:
   - component: {fileID: 4126566260578504}
   - component: {fileID: 33135804756954226}
   - component: {fileID: 23053902317650816}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: axle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -243,6 +247,8 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 2e84afe977524458fbd50df05c172348, type: 2}
+  - {fileID: 2100000, guid: e2379e139b3ab4243b27f2dd7ce6bb2d, type: 2}
+  - {fileID: 2100000, guid: 82547d57c6b55e94592d56ffe9db3428, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -275,7 +281,7 @@ GameObject:
   - component: {fileID: 4435395708517888}
   - component: {fileID: 33189378453675402}
   - component: {fileID: 23522658637875138}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: leftWheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -324,6 +330,8 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 43062f191c7c9423b96996d3de02071e, type: 2}
+  - {fileID: 2100000, guid: e2379e139b3ab4243b27f2dd7ce6bb2d, type: 2}
+  - {fileID: 2100000, guid: 82547d57c6b55e94592d56ffe9db3428, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -399,7 +407,7 @@ BoxCollider:
   m_GameObject: {fileID: 1928244954057134}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 2, y: 2, z: 2}
   m_Center: {x: 0, y: 1, z: 0}
@@ -414,7 +422,7 @@ GameObject:
   - component: {fileID: 4905688991736352}
   - component: {fileID: 33338831048554316}
   - component: {fileID: 23250401777361964}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: rightWheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -463,6 +471,8 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 43062f191c7c9423b96996d3de02071e, type: 2}
+  - {fileID: 2100000, guid: e2379e139b3ab4243b27f2dd7ce6bb2d, type: 2}
+  - {fileID: 2100000, guid: 82547d57c6b55e94592d56ffe9db3428, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

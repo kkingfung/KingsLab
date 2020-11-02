@@ -77,7 +77,7 @@ public class Tower : MonoBehaviour
                 posAdj = 1f; break;
         }
         int[] entityID=attackSpawner.Spawn((int)type, this.transform.position
-          + this.transform.forward * posAdj, this.transform.rotation, attr.damage, attr.radius,
+          + this.transform.forward * posAdj, this.transform.localRotation, attr.damage, attr.radius,
           attr.waitTime, 1.0f, 0.2f);
 
         this.AtkVFX.Add(attackSpawner.GameObjects[entityID[0]]);

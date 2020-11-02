@@ -6,6 +6,7 @@ public class Castle : MonoBehaviour
     public int MaxCastleHP;
     public int CurrCastleHP;
     public GameObject Shield;
+    public TextMesh HPText;
 
     private InGameOperation sceneManager;
     private StageManager stageManager;
@@ -32,6 +33,7 @@ public class Castle : MonoBehaviour
     {
         int PreviousCastleHP = CurrCastleHP;
         CurrCastleHP = GetCastleHpFromEntity();
+        HPText.text = CurrCastleHP.ToString();
         if (PreviousCastleHP > CurrCastleHP)
             audioSource.PlayOneShot(audioManager.GetAudio("se_Hitted"));
         Shield.SetActive(MaxCastleHP > 1);

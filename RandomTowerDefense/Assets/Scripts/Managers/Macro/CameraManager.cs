@@ -87,7 +87,7 @@ public class CameraManager : MonoBehaviour
             {
                 for (int i = 0; i < GyroCamGp.Count; ++i)
                 {
-                    GyroCamGp[i].transform.localEulerAngles = GyroscopeManager.CurrGyroRotation();
+                    GyroCamGp[i].transform.rotation = Quaternion.Euler(GyroscopeManager.CurrGyroRotation());
                 }
             }
         }

@@ -90,7 +90,7 @@ public class CastleSpawner : MonoBehaviour
 
             GameObjects[i] = Instantiate(PrefabObject[prefabID], transform);
             GameObjects[i].transform.position = Position;
-            GameObjects[i].transform.rotation = Rotation;
+            GameObjects[i].transform.localRotation = Rotation;
             transforms[i] = GameObjects[i].transform;
             castleHPArray[i] = HpCal;
             radiusArray[i] = radius;

@@ -16,17 +16,17 @@ public class CanvaManager : MonoBehaviour
     [HideInInspector]
     public bool isOption;
 
-    ISceneChange SceneManager;
+    private ISceneChange SceneManager;
 
     // Use this for initialization
-    void Start()
+    private void Start()
     {
         isOpening = true;
         SceneManager = FindObjectOfType<ISceneChange>();
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         foreach (GameObject i in LandscapeCanva_Main)
             i.SetActive(isOpening && (SceneManager.OrientationLand));

@@ -75,7 +75,7 @@ BoxCollider:
   m_GameObject: {fileID: 1382258774799692}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0.5, z: 0}
@@ -88,7 +88,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4394660107652072}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Dummy001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,7 +118,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4179035465635902}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Bone003
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -150,7 +150,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4110470248468810}
   - component: {fileID: 137209656802228900}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: MushroomMon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -191,6 +191,8 @@ SkinnedMeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 454cace436225a047a0236e67b95f9e7, type: 2}
+  - {fileID: 2100000, guid: e2379e139b3ab4243b27f2dd7ce6bb2d, type: 2}
+  - {fileID: 2100000, guid: 82547d57c6b55e94592d56ffe9db3428, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -235,7 +237,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4431334866412094}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Bone002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -266,7 +268,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4627633284843166}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Bone001
   m_TagString: Untagged
   m_Icon: {fileID: 0}

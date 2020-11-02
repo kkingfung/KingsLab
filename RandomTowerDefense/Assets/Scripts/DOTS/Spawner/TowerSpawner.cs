@@ -88,7 +88,7 @@ public class TowerSpawner : MonoBehaviour
 
             GameObjects[i] = Instantiate(PrefabObject[prefabID], transform);
             GameObjects[i].transform.position = Position;
-            GameObjects[i].transform.rotation = Quaternion.Euler(Rotation);
+            GameObjects[i].transform.localRotation = Quaternion.Euler(Rotation);
             transforms[i] = GameObjects[i].transform;
             waitArray[i] = wait;
             lifetimeArray[i] = lifetime;

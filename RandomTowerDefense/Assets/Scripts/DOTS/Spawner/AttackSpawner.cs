@@ -86,7 +86,7 @@ public class AttackSpawner : MonoBehaviour
             if (GameObjects[i] != null) continue;
             GameObjects[i] = Instantiate(PrefabObject[prefabID], transform);
             GameObjects[i].transform.position = Position;
-            GameObjects[i].transform.rotation = Rotation;
+            GameObjects[i].transform.localRotation = Rotation;
             transforms[i] = GameObjects[i].transform;
             damageArray[i] = damage;
             radiusArray[i] = radius;

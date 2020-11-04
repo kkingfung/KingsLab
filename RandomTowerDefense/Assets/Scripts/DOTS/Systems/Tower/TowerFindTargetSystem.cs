@@ -29,11 +29,11 @@ public class TowerFindTargetSystem : JobComponentSystem
 
         public void Execute(Entity entity, int index, ref Translation translation)
         {
-            targetArray[index] = new EntityWithPosition
-            {
-                entity = entity,
-                position = translation.Value
-            };
+                targetArray[index] = new EntityWithPosition
+                {
+                    entity = entity,
+                    position = translation.Value
+                };
         }
     }
 

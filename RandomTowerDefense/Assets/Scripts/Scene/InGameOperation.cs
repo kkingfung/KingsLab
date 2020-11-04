@@ -74,9 +74,6 @@ public class InGameOperation : ISceneChange
     private TutorialManager tutorialManager;
     private ScoreCalculation scoreCalculation;
 
-    private TouchScreenKeyboard keyboard;//For RecordBroad if top 5
-    private bool CancelKeybroad = false;
-
     //Prevent DoubleHit
     private float TimeRecord = 0;
     private const float TimeWait = 0.01f;
@@ -125,8 +122,11 @@ public class InGameOperation : ISceneChange
         scoreCalculation = FindObjectOfType<ScoreCalculation>();
         tutorialManager = FindObjectOfType<TutorialManager>();
 
-        isTutorial = IslandNow == 0;
-        if (tutorialManager) tutorialManager.enabled=isTutorial;
+        isTutorial = (IslandNow == 0);
+        if (tutorialManager && isTutorial == false) 
+        {
+            tutorialManager.SetTutorialStage(TutorialManager.TutorialStageID.TutorialProgress_FreeBattle);
+        }
 
         AudioManager.PlayAudio("bgm_Battle",true);
 

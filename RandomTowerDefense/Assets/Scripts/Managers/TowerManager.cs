@@ -182,7 +182,7 @@ public class TowerManager : MonoBehaviour
         List<GameObject> tempList;
         int count = 0;
         //Find Candidates
-        switch (targetedTower.GetComponent<Tower>().type)
+        switch (type)
         {
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
                 tempList = new List<GameObject>(TowerNightmareList);

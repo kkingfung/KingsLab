@@ -9,7 +9,7 @@ using UnityEngine.Rendering;
 
 public class StageSelectOperation : ISceneChange
 {
-    private readonly float bloomInt_Default = 1.5f;
+    private readonly float bloomInt_Default = 0.25f;
     private readonly float bloomInt_Max = 60.0f;
 
     //Camera Start/Stay/End Point
@@ -321,7 +321,7 @@ public class StageSelectOperation : ISceneChange
     {
         CancelKeybroad = true;
         float result = StageInfo.SaveDataInPrefs(infoID, chg);
-        StageCustomText[infoID].text = result.ToString();
+        StageCustomText[infoID].text = (result==999)? "∞" : result.ToString();
     }
 
     public void StageInfoChgAdd(int infoID)

@@ -133,6 +133,7 @@ public class StageManager : MonoBehaviour
             result = -1;
             isReady = false;
             audioManager.PlayAudio("se_Lose");
+            castleSpawner.GameObjects[CastleEntityID].GetComponent<MeshDestroy>().DestroyMesh();
             scoreCalculation.CalculationScore();
             StartCoroutine(FadeInRoutine());
         }

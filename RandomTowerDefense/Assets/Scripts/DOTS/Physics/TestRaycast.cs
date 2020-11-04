@@ -39,7 +39,7 @@ public class TestRaycast : MonoBehaviour {
         if (Input.GetMouseButtonDown(0)) {
             UnityEngine.Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            float rayDistance = 100f;
+            //float rayDistance = 100f;
             //Debug.Log(Raycast(ray.origin, ray.direction * rayDistance));
         }
     }

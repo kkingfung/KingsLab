@@ -10,7 +10,7 @@ public class ScoreCalculation : MonoBehaviour
     public List<Text> NameObj;
 
     private int rank;
-    private string name;
+    private string playerName;
     private int score;
     private string scoreStr;
 
@@ -30,18 +30,19 @@ public class ScoreCalculation : MonoBehaviour
     private void Start()
     {
         Inputting = false;
-        name = "AAAAA";
+        playerName = "AAAAA";
         rank = 99;
         sceneManager = FindObjectOfType<InGameOperation>();
         recordManager = FindObjectOfType<RecordManager>();
         stageManager = FindObjectOfType<StageManager>();
+        resourceManager = FindObjectOfType<ResourceManager>();
     }
     private void LateUpdate()
     {
         foreach (Text i in RankObj)
             i.text = rank+ ".";
         foreach (Text i in NameObj)
-            i.text = name;
+            i.text = playerName;
     }
 
     public void CalculationScore() {
@@ -126,7 +127,7 @@ public class ScoreCalculation : MonoBehaviour
             keyboard = null;
         }
 
-        recordManager.UpdateRecordName(rank, name);
+        recordManager.UpdateRecordName(rank, playerName);
         Inputting = false;
     }
 }

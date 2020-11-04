@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class TutorialManager : MonoBehaviour
 {
-    enum TutorialStageID {
+    public enum TutorialStageID {
         TutorialProgress_Info = 0,
         TutorialProgress_FirstWave,
         TutorialProgress_StoreSkill,
@@ -71,6 +72,7 @@ public class TutorialManager : MonoBehaviour
                 break;
             case TutorialStageID.TutorialProgress_FreeBattle:
                 WaitingResponds = false;
+
                 foreach (Text i in InstructionText_Landscape)
                     Destroy(i.gameObject);
                 foreach (GameObject i in InstructionSprite_Landscape)
@@ -80,7 +82,7 @@ public class TutorialManager : MonoBehaviour
                 foreach (GameObject i in InstructionSprite_Protrait)
                     Destroy(i);
                 Destroy(this);
-                break;
+                return;
         }
         FixedUpdateText();
         UpdateActiveness();
@@ -339,5 +341,10 @@ public class TutorialManager : MonoBehaviour
                 }
                 break;
         }
+    }
+
+    public void SetTutorialStage(TutorialStageID stage)
+    {
+        tutorialStage = stage;
     }
 }

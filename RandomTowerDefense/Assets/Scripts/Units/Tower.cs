@@ -28,7 +28,7 @@ public class Tower : MonoBehaviour
     private AudioManager audioManager;
     public GameObject pillar;
 
-    private AudioSource audio;
+    private AudioSource audioSource;
 
     //Testing
     //GameObject defaultTarget;
@@ -42,11 +42,12 @@ public class Tower : MonoBehaviour
     {
         audioManager = FindObjectOfType<AudioManager>();
         towerSpawner = FindObjectOfType<TowerSpawner>();
+        attackSpawner = FindObjectOfType<AttackSpawner>();
         AttackCounter = 0;
         entityID = -1;
         AtkVFX = new List<GameObject>();
         animator = GetComponent<Animator>();
-        audio = GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
 
         //defaultTarget = GameObject.FindGameObjectWithTag("DefaultTag");
     }
@@ -64,16 +65,16 @@ public class Tower : MonoBehaviour
         switch (type)
         {
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
-                audio.PlayOneShot(audioManager.GetAudio("se_Lighting"));
+                audioSource.PlayOneShot(audioManager.GetAudio("se_Lighting"));
                 posAdj = 0.2f; break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-                audio.PlayOneShot(audioManager.GetAudio("se_Snail"));
+                audioSource.PlayOneShot(audioManager.GetAudio("se_Snail"));
                 posAdj = -0.2f; break;
             case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
-                audio.PlayOneShot(audioManager.GetAudio("se_Shot"));
+                audioSource.PlayOneShot(audioManager.GetAudio("se_Shot"));
                 posAdj = 0.0f; break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                audio.PlayOneShot(audioManager.GetAudio("se_MagicFire"));
+                audioSource.PlayOneShot(audioManager.GetAudio("se_MagicFire"));
                 posAdj = 1f; break;
         }
         int[] entityID=attackSpawner.Spawn((int)type, this.transform.position

@@ -28,6 +28,11 @@ public class SkillManager : MonoBehaviour
     {
         playerManager = FindObjectOfType<PlayerManager>();
         skillSpawner = FindObjectOfType<SkillSpawner>();
+        SkillUpgrader = new Dictionary<Upgrades.StoreItems, int>();
+        SkillUpgrader.Add(Upgrades.StoreItems.MagicMeteor, 0);
+        SkillUpgrader.Add(Upgrades.StoreItems.MagicBlizzard, 0);
+        SkillUpgrader.Add(Upgrades.StoreItems.MagicMinions, 0);
+        SkillUpgrader.Add(Upgrades.StoreItems.MagicPetrification, 0);
     }
 
     public void GainExp(Upgrades.StoreItems itemID,int exp) {
@@ -51,6 +56,7 @@ public class SkillManager : MonoBehaviour
        // attr.area = attr.area;
         attr.damage = attr.damage * (1+Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor) *0.2f);
         //attr.cycleTime = attr.cycleTime;
+        GainExp(Upgrades.StoreItems.MagicMeteor, 5);
 
         StartCoroutine(MeteorSkillCoroutine(attr));
         return SkillAura;
@@ -63,6 +69,7 @@ public class SkillManager : MonoBehaviour
         attr.radius = attr.radius * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * 0.2f);
         //attr.damage = attr.damage;
         //attr.cycleTime = attr.cycleTime;
+        GainExp(Upgrades.StoreItems.MagicBlizzard, 5);
 
         StartCoroutine(BlizzardSkillCoroutine(attr));
         return SkillAura;
@@ -73,6 +80,7 @@ public class SkillManager : MonoBehaviour
         //attr.area = attr.area;
         //attr.damage = attr.damage;
         attr.cycleTime = attr.cycleTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification) * 0.2f);
+        GainExp(Upgrades.StoreItems.MagicPetrification, 5);
 
         StartCoroutine(PetrificationCoroutine(attr));
         return null;
@@ -83,6 +91,7 @@ public class SkillManager : MonoBehaviour
         //attr.area = attr.area;
         //attr.damage = attr.damage;
         attr.cycleTime = attr.cycleTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * 0.2f);
+        GainExp(Upgrades.StoreItems.MagicMinions, 5);
 
         StartCoroutine(MinionsSkillCoroutine(attr));
         return null;

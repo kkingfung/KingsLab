@@ -451,7 +451,7 @@ public class InputManager : MonoBehaviour
                 new Vector3(Input.mousePosition.x, Input.mousePosition.y, TargetCam.transform.forward.z)),
                 TargetCam.transform.rotation);
 
-            DestroyObject(tmpObj, 0.5f);
+            Destroy(tmpObj, 0.5f);
         }
 
         if (Input.touchCount > 0)
@@ -462,7 +462,7 @@ public class InputManager : MonoBehaviour
                 {
                     GameObject tmpObj = Instantiate(ClickPrefab, TargetCam.ScreenToWorldPoint(
                         new Vector3(t.position.x, t.position.y, TargetCam.transform.forward.z)), TargetCam.transform.rotation);
-                    DestroyObject(tmpObj, 0.5f);
+                    Destroy(tmpObj, 0.5f);
                 }
             }
         }

@@ -36,7 +36,8 @@ namespace UnityMeshSimplifier
     {
         public  static int RandAdj(int x, int y, int range)
         {
-            UnityEngine.Random.seed = y + (x << 4) + (x << 1) + (y >> 2);
+            UnityEngine.Random.InitState(y + (x << 4) + (x << 1) + (y >> 2));
+
             return ((int)UnityEngine.Random.value & (range - 1));
         }
 

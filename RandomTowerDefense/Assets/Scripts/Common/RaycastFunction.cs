@@ -15,6 +15,7 @@ public class RaycastFunction : MonoBehaviour
     private StoreManager storeManager;
     private AudioManager audioManager;
 
+    private Color oriColor;
     private enum ActionTypeID {
         StageSelection_Keybroad=0,
         StageSelection_PreviousStage,
@@ -48,6 +49,10 @@ public class RaycastFunction : MonoBehaviour
 
         storeManager = FindObjectOfType<StoreManager>();
         audioManager = FindObjectOfType<AudioManager>();
+
+        if (GetComponent<MeshRenderer>()) oriColor = GetComponent<MeshRenderer>().material.color;
+        if (GetComponent<RawImage>()) oriColor = GetComponent<RawImage>().color;
+        if (GetComponent<SpriteRenderer>()) oriColor = GetComponent<SpriteRenderer>().color;
     }
 
     public void ActionFunc()
@@ -155,7 +160,6 @@ public class RaycastFunction : MonoBehaviour
         if (GetComponent<MeshRenderer>()) color = GetComponent<MeshRenderer>().material.color;
         if (GetComponent<RawImage>()) color = GetComponent<RawImage>().color;
         if (GetComponent<SpriteRenderer>()) color = GetComponent<SpriteRenderer>().color;
-        Color oriColor = new Color(1,1,1,1);
         color.r = 0; color.g = 0; color.b = 0;
         float reqFrame =0.2f;
         float chgSpdr = (oriColor.r - color.r) / (reqFrame*60);

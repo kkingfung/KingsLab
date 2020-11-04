@@ -2,13 +2,13 @@
 using System.Collections;
 
 public class LBM : MonoBehaviour {
-	[SerializeField] Shader initShader;
-	[SerializeField] Shader compShader;
-	[SerializeField] Shader stepShader;
-	[SerializeField] Shader copyShader;
-	[SerializeField] Shader bounceBackShader;
-	[SerializeField] Shader showShader;
-	[SerializeField] Shader paintShader;
+	[SerializeField] Shader initShader = null;
+	[SerializeField] Shader compShader= null;
+	[SerializeField] Shader stepShader= null;
+	[SerializeField] Shader copyShader = null;
+	[SerializeField] Shader bounceBackShader = null;
+	[SerializeField] Shader showShader = null;
+	[SerializeField] Shader paintShader = null;
 
 	Material initMat;
 	Material compMat;

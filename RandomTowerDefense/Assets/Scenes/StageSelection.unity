@@ -377,7 +377,9 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!212 &12103134
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -565,7 +567,7 @@ GameObject:
   - component: {fileID: 74016333}
   - component: {fileID: 74016335}
   - component: {fileID: 74016334}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: TerrainBase1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2040,7 +2042,9 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!114 &232726010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2673,7 +2677,9 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!212 &280270132
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2836,7 +2842,9 @@ MonoBehaviour:
   uiID: 3
   magnitude: 0
   targetCam: {fileID: 0}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!212 &288811094
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2966,7 +2974,8 @@ GameObject:
   - component: {fileID: 293907870}
   - component: {fileID: 293907869}
   - component: {fileID: 293907868}
-  m_Layer: 0
+  - component: {fileID: 293907872}
+  m_Layer: 4
   m_Name: OceanPlane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2982,7 +2991,7 @@ MeshCollider:
   m_GameObject: {fileID: 293907867}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
@@ -3050,6 +3059,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &293907872
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 293907867}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 10, y: 100, z: 10}
+  m_Center: {x: 0, y: -50, z: 0}
 --- !u!1 &299381922
 GameObject:
   m_ObjectHideFlags: 0
@@ -3510,7 +3532,9 @@ MonoBehaviour:
   uiID: 0
   magnitude: 5
   targetCam: {fileID: 1699173587}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!1 &383562970
 GameObject:
   m_ObjectHideFlags: 0
@@ -3620,7 +3644,9 @@ MonoBehaviour:
   uiID: 2
   magnitude: 0
   targetCam: {fileID: 0}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!212 &384675298
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3771,7 +3797,9 @@ MonoBehaviour:
   uiID: 1
   magnitude: 0
   targetCam: {fileID: 0}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!1001 &414254781
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4095,7 +4123,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4026533687
+    m_Bits: 4026664759
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -4136,8 +4164,10 @@ MonoBehaviour:
   m_RenderShadows: 1
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
-  m_CameraType: 1
+  m_CameraType: 0
   m_Cameras:
+  - {fileID: 1566493579}
+  - {fileID: 456298313}
   - {fileID: 1699173587}
   m_RendererIndex: -1
   m_VolumeLayerMask:
@@ -4221,11 +4251,11 @@ MonoBehaviour:
   m_RenderShadows: 1
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
-  m_CameraType: 1
+  m_CameraType: 0
   m_Cameras:
+  - {fileID: 894084725}
   - {fileID: 456298313}
   - {fileID: 1699173587}
-  - {fileID: 0}
   m_RendererIndex: -1
   m_VolumeLayerMask:
     serializedVersion: 2
@@ -4236,7 +4266,7 @@ MonoBehaviour:
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0
-  m_ClearDepth: 1
+  m_ClearDepth: 0
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
@@ -4271,7 +4301,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4026533687
+    m_Bits: 4026664759
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -4351,7 +4381,9 @@ MonoBehaviour:
   uiID: 1
   magnitude: 0
   targetCam: {fileID: 0}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!102 &430987667
 TextMesh:
   serializedVersion: 3
@@ -4566,8 +4598,6 @@ MonoBehaviour:
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
   m_Cameras:
-  - {fileID: 429212406}
-  - {fileID: 430722522}
   - {fileID: 894084725}
   - {fileID: 1566493579}
   - {fileID: 456298313}
@@ -4593,7 +4623,7 @@ Camera:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 434716293}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_ClearFlags: 1
   m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
@@ -7076,7 +7106,9 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!1001 &680843740
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7901,7 +7933,9 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!1 &794839711
 GameObject:
   m_ObjectHideFlags: 0
@@ -8199,7 +8233,9 @@ MonoBehaviour:
   uiID: 2
   magnitude: 0
   targetCam: {fileID: 0}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!212 &816165875
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8479,7 +8515,9 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!4 &840366594 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1859729075847220568, guid: d0a0bad0f2561674f85b5a72c1eb19b0, type: 3}
@@ -9250,7 +9288,9 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!212 &905382598
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -9381,7 +9421,9 @@ MonoBehaviour:
   uiID: 1
   magnitude: 0
   targetCam: {fileID: 0}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!212 &920273674
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -9578,7 +9620,9 @@ MonoBehaviour:
   uiID: 0
   magnitude: -5
   targetCam: {fileID: 1699173587}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!1 &943041114
 GameObject:
   m_ObjectHideFlags: 0
@@ -10207,7 +10251,9 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!212 &1001692078
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -10781,7 +10827,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1070683192}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 350, y: -53.1, z: -71.9}
+  m_LocalPosition: {x: 348.3, y: -53.1, z: -71.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1440418455}
@@ -11356,7 +11402,9 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!1 &1097685550
 GameObject:
   m_ObjectHideFlags: 0
@@ -12362,7 +12410,9 @@ MonoBehaviour:
   uiID: 3
   magnitude: 0
   targetCam: {fileID: 0}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!212 &1156077010
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -12706,7 +12756,9 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!212 &1177939999
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -12807,7 +12859,9 @@ MonoBehaviour:
   uiID: 3
   magnitude: 0
   targetCam: {fileID: 0}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!212 &1191045015
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -13013,7 +13067,9 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!1 &1211613938
 GameObject:
   m_ObjectHideFlags: 0
@@ -13052,7 +13108,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1211613938}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 150, y: -53.1, z: -58.2}
+  m_LocalPosition: {x: 146.6, y: -53.1, z: -58.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 74016333}
@@ -13366,7 +13422,7 @@ GameObject:
   - component: {fileID: 1287778813}
   - component: {fileID: 1287778815}
   - component: {fileID: 1287778814}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: TerrainBase0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15040,7 +15096,7 @@ GameObject:
   - component: {fileID: 1440418455}
   - component: {fileID: 1440418457}
   - component: {fileID: 1440418456}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: TerrainBase2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15506,7 +15562,9 @@ MonoBehaviour:
   uiID: 3
   magnitude: 0
   targetCam: {fileID: 0}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!212 &1519262941
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -15668,7 +15726,9 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!212 &1524147353
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -16089,7 +16149,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1557100522}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 550, y: -53.1, z: -62}
+  m_LocalPosition: {x: 547.5, y: -53.1, z: -62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1860645479}
@@ -18618,7 +18678,9 @@ MonoBehaviour:
   uiID: 2
   magnitude: 0
   targetCam: {fileID: 0}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!102 &1828834983
 TextMesh:
   serializedVersion: 3
@@ -18736,7 +18798,9 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!102 &1844636914
 TextMesh:
   serializedVersion: 3
@@ -19118,7 +19182,7 @@ GameObject:
   - component: {fileID: 1860645479}
   - component: {fileID: 1860645481}
   - component: {fileID: 1860645480}
-  m_Layer: 0
+  m_Layer: 17
   m_Name: TerrainBase3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19544,9 +19608,8 @@ TextMesh:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1891750445}
   m_Text: "\n\u6226\u5834\u30B5\u30A4\u30BA\uFF1A\n\u6575\u306E\u8ECD\u56E3\u6570
-    (\u500D)\uFF1A\n\u6575\u8ECD\u56E3\u306E\u898F\u6A21 (\u500D)\uFF1A\n\u6575\u306E\u5F37\u3055
-    (\u500D)\uFF1A\n\n\u8010\u4E45\u529B\r\uFF1A\n\u6E96\u5099\u6642\u9593 (\u500D)\uFF1A\n\u8CC7\u6E90\u56DE\u53CE\u7387
-    (\u500D)\uFF1A"
+    \uFF1A\n\u6575\u8ECD\u56E3\u306E\u898F\u6A21 \uFF1A\n\u6575\u306E\u5F37\u3055\uFF1A\n\n\u8010\u4E45\u529B\r\uFF1A\n\u6E96\u5099\u6642\u9593
+    \uFF1A\n\u8CC7\u6E90\u56DE\u53CE\u7387 \uFF1A"
   m_OffsetZ: 0
   m_CharacterSize: 40
   m_LineSpacing: 1
@@ -19649,7 +19712,9 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!212 &1891938411
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -20394,7 +20459,9 @@ MonoBehaviour:
   uiID: 0
   magnitude: -5
   targetCam: {fileID: 1699173587}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!1 &1937483254
 GameObject:
   m_ObjectHideFlags: 0
@@ -21270,7 +21337,9 @@ MonoBehaviour:
   uiID: 3
   magnitude: 0
   targetCam: {fileID: 0}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!212 &2038746474
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -21799,7 +21868,9 @@ MonoBehaviour:
   uiID: 0
   magnitude: 5
   targetCam: {fileID: 1699173587}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!1 &2084402140
 GameObject:
   m_ObjectHideFlags: 0
@@ -21899,7 +21970,9 @@ MonoBehaviour:
   uiID: 0
   magnitude: 0
   targetCam: {fileID: 0}
+  subCam: {fileID: 0}
   LandscapeOrientation: 0
+  relatedObjs: []
 --- !u!1 &2086256299
 GameObject:
   m_ObjectHideFlags: 0

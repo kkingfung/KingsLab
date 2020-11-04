@@ -24,7 +24,7 @@ public class LoadingOperation : ISceneChange
         Progress = 0;
      
         if (RandomObjs.Count == 0) return;
-        Random.seed = Time.frameCount;
+        Random.InitState(Time.frameCount);
         int RndNum = Random.Range(0,RandomObjs.Count-1);
         foreach (GameObject i in RandomObjs) {
             i.SetActive(false);

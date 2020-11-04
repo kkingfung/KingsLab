@@ -9,6 +9,7 @@ public class UIEffect : MonoBehaviour
     public int uiID = 0;//For any purposes
     public float magnitude = 0;
     public Camera targetCam = null;
+    public Camera subCam = null;
 
     private Text text;
     private Slider slider;
@@ -29,6 +30,8 @@ public class UIEffect : MonoBehaviour
 
     [HideInInspector]
     public bool LandscapeOrientation;
+
+    public List<GameObject> relatedObjs;
 
     private StageSelectOperation selectionSceneManager;
     private InGameOperation gameSceneManager;
@@ -63,6 +66,62 @@ public class UIEffect : MonoBehaviour
     private void Update()
     {
             switch (EffectID) {
+            case -1://for Title Scene Record
+                RaycastHit hit;
+                Ray ray;
+
+                //Get Ray according to orientation
+                if (Screen.width > Screen.height)
+                {
+                    if (Input.touchCount > 0)
+                        ray = targetCam.ScreenPointToRay(Input.GetTouch(0).position);
+                    else 
+                        ray = targetCam.ScreenPointToRay(Input.mousePosition);
+                }
+                else
+                {
+                    if (Input.touchCount > 0)
+                        ray = targetCam.ScreenPointToRay(Input.GetTouch(0).position);
+                    else
+                        ray = subCam.ScreenPointToRay(Input.mousePosition);
+                }
+
+                float temp;
+                if ((Input.touchCount > 0 || (Input.mousePosition.x > 0 && Input.mousePosition.y > 0 && 
+                    Input.mousePosition.x < Screen.width && Input.mousePosition.y < Screen.height)) &&
+                        Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("RecordBroad")))
+                {
+                    int count = 0;
+                    foreach (GameObject i in relatedObjs) 
+                    {
+                        TextMesh textMesh = i.GetComponent<TextMesh>();
+                        SpriteRenderer spr = i.GetComponent<SpriteRenderer>();
+                        if (textMesh)
+                            textMesh.color = new Color(textMesh.color.r, textMesh.color.g, textMesh.color.b, 1f);
+                        if (spr)
+                            spr.color = new Color(spr.color.r, spr.color.g, spr.color.b, 1f);
+                    }
+                }
+                else 
+                {
+                    foreach (GameObject i in relatedObjs)
+                    {
+                        TextMesh textMesh = i.GetComponent<TextMesh>();
+                        SpriteRenderer spr = i.GetComponent<SpriteRenderer>();
+                        if (textMesh)
+                        {
+                            temp = Mathf.Max(0.0f, textMesh.color.a - 0.02f);
+                            textMesh.color = new Color(textMesh.color.r, textMesh.color.g, textMesh.color.b, temp);
+                        }
+                        if (spr)
+                        {
+                            temp = Mathf.Max(0.0f, spr.color.a - 0.02f);
+                            spr.color = new Color(spr.color.r, spr.color.g, spr.color.b, temp);
+                        }
+                    }
+                }
+                Debug.Log(1);
+                break;
             case 0://for Title Scene Instruction
                 if (text) text.color =new Color (text.color.r, text.color.g, text.color.b,Mathf.Abs(Mathf.Sin(Time.time* magnitude)));
                 break;

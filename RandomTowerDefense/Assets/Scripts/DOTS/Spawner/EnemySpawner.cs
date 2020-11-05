@@ -42,7 +42,7 @@ public class EnemySpawner : MonoBehaviour
     public GameObject Slime;
 
     public Dictionary<string, GameObject> allMonsterList;
-    private EntityManager EntityManager => World.DefaultGameObjectInjectionWorld.EntityManager;
+    private EntityManager EntityManager;
 
     //Array
     [HideInInspector]
@@ -117,25 +117,36 @@ public class EnemySpawner : MonoBehaviour
             TransformAccessArray.Dispose();
 
         //Disposing Array
-        healthArray.Dispose();
-        moneyArray.Dispose();
-        damageArray.Dispose();
-        radiusArray.Dispose();
-        speedArray.Dispose();
-        slowArray.Dispose();
-        petrifyArray.Dispose();
-        buffArray.Dispose();
-        lifetimeArray.Dispose();
+        if (healthArray.IsCreated)
+            healthArray.Dispose();
+        if (moneyArray.IsCreated)
+            moneyArray.Dispose();
+        if (damageArray.IsCreated)
+            damageArray.Dispose();
+        if (radiusArray.IsCreated)
+            radiusArray.Dispose();
+        if (speedArray.IsCreated)
+            speedArray.Dispose();
+        if (slowArray.IsCreated)
+            slowArray.Dispose();
+        if (petrifyArray.IsCreated)
+            petrifyArray.Dispose();
+        if (buffArray.IsCreated)
+            buffArray.Dispose();
+        if (lifetimeArray.IsCreated)
+            lifetimeArray.Dispose();
     }
     void Start()
     {
+        EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+
         //Prepare input
         GameObjects = new GameObject[count];
         transforms = new Transform[count];
 
         Entities = new NativeArray<Entity>(count, Allocator.Persistent);
         var archetype = EntityManager.CreateArchetype(
-            typeof(EnemyTag), typeof(Health), typeof(Damage),
+             typeof(Health), typeof(Damage),
             typeof(Speed), typeof(Radius), typeof(PetrifyAmt),
             typeof(Lifetime), typeof(SlowRate), typeof(BuffTime),
             ComponentType.ReadOnly<Translation>(),
@@ -159,15 +170,10 @@ public class EnemySpawner : MonoBehaviour
     {
         int spawnCnt = 0;
         int[] spawnIndexList = new int[num];
+
         for (int i = 0; i < count && spawnCnt < num; i++)
         {
             if (GameObjects[i] != null) continue;
-            float slow = new float();
-            slow = 0;
-            float petrifyAmt = new float();
-            petrifyAmt = 0;
-            float buff = new float();
-            buff = 0;
 
             GameObjects[i] = Instantiate(allMonsterList[Name], transform);
             GameObjects[i].transform.position = Position;
@@ -178,9 +184,9 @@ public class EnemySpawner : MonoBehaviour
             damageArray[i] = damage;
             radiusArray[i] = radius;
             speedArray[i] = speed;
-            slowArray[i] = slow;
-            petrifyArray[i] = petrifyAmt;
-            buffArray[i] = buff;
+            slowArray[i] = 0;
+            petrifyArray[i] = 0;
+            buffArray[i] = 0;
             lifetimeArray[i] = lifetime;
 
             //AddtoEntities
@@ -206,15 +212,15 @@ public class EnemySpawner : MonoBehaviour
             });
             EntityManager.SetComponentData(Entities[i], new PetrifyAmt
             {
-                Value = petrifyAmt,
+                Value = 0,
             });
             EntityManager.SetComponentData(Entities[i], new SlowRate
             {
-                Value = slow,
+                Value = 0,
             });
             EntityManager.SetComponentData(Entities[i], new BuffTime
             {
-                Value = buff,
+                Value = 0,
             });
             EntityManager.SetComponentData(Entities[i], new Money
             {
@@ -230,12 +236,14 @@ public class EnemySpawner : MonoBehaviour
             {
                 Index = i,
             });
-            spawnCnt++;
-            spawnIndexList[i] = i;
+
+            if (EntityManager.HasComponent<EnemyTag>(Entities[i]) == false)
+                EntityManager.AddComponent<EnemyTag>(Entities[i]);
+            spawnIndexList[spawnCnt++] = i;
         }
 
-        //Change Whenever Spawned
-        TransformAccessArray = new TransformAccessArray(transforms);
+        //Change Whenever Spawned (Not Needed?)
+        //TransformAccessArray = new TransformAccessArray(transforms);
         return spawnIndexList;
     }
 

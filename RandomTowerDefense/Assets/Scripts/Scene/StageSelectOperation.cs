@@ -79,7 +79,6 @@ public class StageSelectOperation : ISceneChange
     // Start is called before the first frame update
     private void Start()
     {
-        base.Start();
         base.SceneIn();
 
         IslandNow = PlayerPrefs.GetInt("IslandNow");

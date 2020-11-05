@@ -87,21 +87,23 @@ public class InGameOperation : ISceneChange
     }
     private void Awake()
     {
+        base.Awake();
         StageInfo.Init();
         TowerInfo.Init();
         EnemyInfo.Init();
         SkillInfo.Init();
         SkillStack.init();
         Upgrades.init();
+
+        IslandNow = PlayerPrefs.GetInt("IslandNow");
+        IslandEnabled = PlayerPrefs.GetInt("IslandEnabled");
+        isTutorial = (IslandNow == 0);
     }
     // Start is called before the first frame update
     private void Start()
     {
-        base.Start();
         base.SceneIn();
 
-        IslandNow = PlayerPrefs.GetInt("IslandNow");
-        IslandEnabled = PlayerPrefs.GetInt("IslandEnabled");
         FloorMat.SetFloat("ShapesSides",3+ IslandNow);
         MainCam.transform.position = MainCamStayPt[0];
         MainCam.transform.rotation = Quaternion.Euler(MainCamRotationAngle[0]);
@@ -122,7 +124,6 @@ public class InGameOperation : ISceneChange
         scoreCalculation = FindObjectOfType<ScoreCalculation>();
         tutorialManager = FindObjectOfType<TutorialManager>();
 
-        isTutorial = (IslandNow == 0);
         if (tutorialManager && isTutorial == false) 
         {
             tutorialManager.SetTutorialStage(TutorialManager.TutorialStageID.TutorialProgress_FreeBattle);
@@ -166,26 +167,40 @@ public class InGameOperation : ISceneChange
 
         toDrag = -1;
         isOption = false;
- 
+
     }
 
     // Update is called once per frame
     private void Update()
     {
-        if (isTutorial && tutorialManager.WaitingResponds)
+        base.Update();
+
+        ArrowOperation();
+        ChangeScreenShownByGyro();
+        ChangeScreenShownByDrag();
+
+        if (tutorialManager && isTutorial)
         {
-            if (timeManager.GetControl() == false)
+            if (tutorialManager.WaitingResponds)
             {
-                timeManager.timeFactor = 0;
-                timeManager.TimeControl();
+                if (timeManager.GetControl() == false)
+                {
+                    timeManager.timeFactor = 0;
+                    timeManager.TimeControl();
+                }
+            }
+            else 
+            {
+                if (timeManager.GetControl() != false)
+                {
+                    timeManager.TimeControl();
+                }
             }
             return;
         }
         else {
             timeManager.timeFactor = 0.05f;
         }
-
-        base.Update();
 
         foreach (Button i in OptionButton)
             i.interactable = !isOption && !isSceneFinished;
@@ -197,9 +212,6 @@ public class InGameOperation : ISceneChange
             return;
         }
 
-        ArrowOperation();
-        ChangeScreenShownByGyro();
-        ChangeScreenShownByDrag();
 
         foreach (Text i in UICurrentGold)
         {

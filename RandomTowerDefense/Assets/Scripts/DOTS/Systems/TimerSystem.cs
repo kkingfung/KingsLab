@@ -21,6 +21,7 @@ public class TimerSystem : JobComponentSystem
 			if (action.Value > 0) action.Value -= deltaTime;
 			wait.Value -= deltaTime;
 		}).Schedule(inputDeps);
+		job.Complete();
 
 		job = Entities.WithAll<SkillTag>().ForEach((Entity entity, int entityInQueryIndex, ref WaitingTime wait, ref ActionTime action) =>
 		{
@@ -28,11 +29,12 @@ public class TimerSystem : JobComponentSystem
 			if (wait.Value < 0) wait.Value = 0.2f;
 			wait.Value -= deltaTime;
 		}).Schedule(inputDeps);
-
+		job.Complete();
 		job = Entities.WithAll<PlayerTag>().ForEach((Entity entity, int entityInQueryIndex, ref WaitingTime wait) =>
 		{
 			wait.Value -= deltaTime;
 		}).Schedule(inputDeps);
+		//job.Complete();
 
 		return job;
 	}

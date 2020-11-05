@@ -33,7 +33,7 @@ public class WaveManager : MonoBehaviour
         TotalWaveNum = CurrAttr.waveNum;
         CurrentWaveNum = 0;
         fireworkcounter = 0;
-        WaveChg();
+        //WaveChg();
         WaveTimer = Time.time;
     }
 
@@ -68,14 +68,14 @@ public class WaveManager : MonoBehaviour
                     i.Stop();
             }
         }
-        if (stageManager.GetResult()==0) {
-            if (Time.time - WaveTimer> CurrAttr.waveWaitTime) {
-                WaveChg();
-                WaveTimer = Time.time;
-            }
-            if (enemySpawner.AllAliveMonstersList().Count <= 0)
-                WaveTimer -= Time.deltaTime * 2.0f;
-        }
+        //if (stageManager.GetResult()==0) {
+        //    if (Time.time - WaveTimer> CurrAttr.waveWaitTime) {
+        //        WaveChg();
+        //        WaveTimer = Time.time;
+        //    }
+        //    if (enemySpawner.AllAliveMonstersList().Count <= 0)
+        //        WaveTimer -= Time.deltaTime * 2.0f;
+        //}
     }
 
     private IEnumerator SpawnWave(WaveAttr wave)

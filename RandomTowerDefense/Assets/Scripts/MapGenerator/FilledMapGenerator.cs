@@ -34,8 +34,6 @@ public class FilledMapGenerator : MonoBehaviour {
 	private InGameOperation sceneManager;
 
 	private void Start() {
-		PillarList = new List<Pillar>();
-
 		sceneManager = FindObjectOfType<InGameOperation>();
 	}
 	public void followParentCam(bool toFollow) {
@@ -55,6 +53,7 @@ public class FilledMapGenerator : MonoBehaviour {
 	}
 
 	public void GenerateMap() {
+		PillarList = new List<Pillar>();
 		currentMap = maps[mapIndex];
 
 		if (sceneManager && (sceneManager.GetCurrIsland() == StageInfo.IslandNum - 1))

@@ -8,12 +8,14 @@ using Unity.Entities;
 
 public class Tower : MonoBehaviour
 {
-    //private readonly int[] MaxLevel = { 10, 30, 50, 70 };
-    private readonly int[] MaxLevel = { 1, 1, 1, 1 };
+    private readonly int[] MaxLevel = { 10, 30, 50, 70 };
+    //private readonly int[] MaxLevel = { 1, 1, 1, 1 };
 
     public TowerAttr attr;
     public int Level;
     public int rank;
+    public int exp;
+
     public TowerInfo.TowerInfoID type;
 
     private float AttackCounter;
@@ -38,7 +40,10 @@ public class Tower : MonoBehaviour
     private int entityID;
     private TowerSpawner towerSpawner;
     private AttackSpawner attackSpawner;
-    private void Start()
+
+    private EntityManager entityManager;
+
+    private void Awake()
     {
         audioManager = FindObjectOfType<AudioManager>();
         towerSpawner = FindObjectOfType<TowerSpawner>();
@@ -49,6 +54,7 @@ public class Tower : MonoBehaviour
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
 
+        entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         //defaultTarget = GameObject.FindGameObjectWithTag("DefaultTag");
     }
 
@@ -92,6 +98,7 @@ public class Tower : MonoBehaviour
         StartCoroutine(WaitToKillVFX(this.AtkVFX[AtkVFX.Count - 1], 8, 0));
 
         AttackCounter = attr.waitTime;
+        GainExp(5);
         animator.SetTrigger("Detected");
         animator.SetInteger("ActionID", UnityEngine.Random.Range(0, 2));
     }
@@ -103,8 +110,6 @@ public class Tower : MonoBehaviour
     {
         //AlsoDestroy Entity
         GameObject.FindObjectOfType<FilledMapGenerator>().UpdatePillarStatus(pillar, 0);
-
-        EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         entityManager.SetComponentData(towerSpawner.Entities[this.entityID], new Lifetime
         {
             Value = -1
@@ -150,7 +155,18 @@ public class Tower : MonoBehaviour
                 break;
         }
 
+        exp = 0;
         UpdateAttr();
+    }
+
+    public void GainExp(int exp)
+    {
+        this.exp += exp;
+        if (this.exp > 25 * Level * (1 + Level))
+        {
+            LevelUp();
+            this.exp = 0;
+        }
     }
 
     public void LevelUp(int chg = 1)
@@ -194,8 +210,6 @@ public class Tower : MonoBehaviour
                 break;
         }
 
-        EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-
         entityManager.SetComponentData(towerSpawner.Entities[this.entityID], new Radius
         {
             Value = attr.radius
@@ -211,9 +225,10 @@ public class Tower : MonoBehaviour
 
     }
 
-    public bool CheckMaxLevel()
+    public bool CheckLevel()
     {
-        return Level == MaxLevel[rank - 1];
+        return true;
+        //return Level == MaxLevel[rank - 1];
     }
 
     private IEnumerator WaitToKillVFX(GameObject targetVFX, int waittime, int killtime)

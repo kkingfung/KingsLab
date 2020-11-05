@@ -82,7 +82,7 @@ public class StockOperator : MonoBehaviour
 
     private IEnumerator StartAnimation()
     {
-        int frame = 30;
+        int frame = 20;
         float rotateChgsbyFrame = (Rotation * 360f - this.transform.localEulerAngles.z) / frame;
         float scaleChgsbyFrame = (TargetScale.x *(1-PlayerPrefs.GetFloat("zoomRate")*0.7f)*2f - this.transform.localScale.x) / frame;
         while (frame-- > 0)

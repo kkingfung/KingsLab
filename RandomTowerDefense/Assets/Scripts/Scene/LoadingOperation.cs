@@ -17,7 +17,6 @@ public class LoadingOperation : ISceneChange
     // Start is called before the first frame update
     private void Start()
     {
-        base.Start();
         base.SceneIn();
 
         nextScene = PlayerPrefs.GetString("nextScene");

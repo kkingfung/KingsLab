@@ -9,7 +9,7 @@ public class TowerFaceTargetSystem : ComponentSystem
 {
     protected override void OnUpdate()
     {
-        Entities.ForEach((Entity unitEntity, ref Target hasTarget, ref Translation translation, ref Rotation rotation, ref WaitingTime wait, ref Radius radius) => {
+        Entities.WithAll<PlayerTag>().ForEach((Entity unitEntity, ref Target hasTarget, ref Translation translation, ref Rotation rotation, ref WaitingTime wait, ref Radius radius) => {
             if (World.DefaultGameObjectInjectionWorld.EntityManager.Exists(hasTarget.targetEntity))
             {
                 if (wait.Value <= 0)

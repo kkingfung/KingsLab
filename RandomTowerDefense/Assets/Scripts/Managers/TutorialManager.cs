@@ -33,6 +33,7 @@ public class TutorialManager : MonoBehaviour
     private InGameOperation SceneManager;
     private TowerSpawner towerSpawner;
     private EnemySpawner enemySpawner;
+    private SkillSpawner skillSpawner;
 
     // Start is called before the first frame update
     void Start()
@@ -47,7 +48,10 @@ public class TutorialManager : MonoBehaviour
         SceneManager = FindObjectOfType<InGameOperation>();
         towerSpawner = FindObjectOfType<TowerSpawner>();
         enemySpawner = FindObjectOfType<EnemySpawner>();
-        if (SceneManager.CheckIfTutorial() == false) Destroy(this);
+        skillSpawner = FindObjectOfType<SkillSpawner>();
+        if (SceneManager.CheckIfTutorial() == false) {
+            DestroyAllRelated();
+        }
     }
 
     // Update is called once per frame
@@ -72,16 +76,7 @@ public class TutorialManager : MonoBehaviour
                 break;
             case TutorialStageID.TutorialProgress_FreeBattle:
                 WaitingResponds = false;
-
-                foreach (Text i in InstructionText_Landscape)
-                    Destroy(i.gameObject);
-                foreach (GameObject i in InstructionSprite_Landscape)
-                    Destroy(i);
-                foreach (Text i in InstructionText_Protrait)
-                    Destroy(i.gameObject);
-                foreach (GameObject i in InstructionSprite_Protrait)
-                    Destroy(i);
-                Destroy(this);
+                DestroyAllRelated();
                 return;
         }
         FixedUpdateText();
@@ -168,18 +163,18 @@ public class TutorialManager : MonoBehaviour
                 }
                 break;
             case 6:
+                WaitingResponds = false;
                 if (((Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))) 
-                    && towerSpawner.GameObjects.Length>0)
+                    && towerSpawner.GameObjects[0]!=null)
                 {
                     ChangeText("それは新人の部隊だぞ");
                     StageProgress++;
                 }
                 break;
             case 7:
-                if (((Input.GetMouseButtonUp(0) ||
-                    (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended)))
-                    && towerSpawner.GameObjects.Length > 0)
+                if (Input.GetMouseButtonUp(0) ||
+                    (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
                     ChangeText("同じ種類を3つ集まるだぞ");
                     StageProgress++;
@@ -189,7 +184,7 @@ public class TutorialManager : MonoBehaviour
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
-                    ChangeText("そしてもう一回狙って2回押すと");
+                    ChangeText("そしてもう一回狙って\n2回押すと");
                     StageProgress++;
                 }
                 break;
@@ -226,12 +221,12 @@ public class TutorialManager : MonoBehaviour
         switch (StageProgress)
         {
             case 0:
-                if (enemySpawner.GameObjects.Length > 0)
+                if (enemySpawner.GameObjects[0]!=null)
                     StageProgress++;
                 break;
             case 1:
-                if (enemySpawner.GameObjects.Length <= 0) {
-                    ChangeText("悪くない。褒めてやるだぞ。\n感謝するだぞ");
+                if (enemySpawner.AllAliveMonstersList().Count <= 0) {
+                    ChangeText("悪くない\n褒めてやるだぞ");
                     StageProgress = 0;
                     tutorialStage++;
                 }
@@ -252,40 +247,6 @@ public class TutorialManager : MonoBehaviour
                 }
                 break;
             case 1:
-                if ((Input.GetMouseButtonUp(0) ||
-                    (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
-                    && SceneManager.currScreenShown==2)
-                {
-                    ChangeText("これは基地通信だぞ、\n追加ミッションを要求");
-                    StageProgress++;
-                }
-                break;
-            case 2:
-                if (Input.GetMouseButtonUp(0) ||
-                    (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
-                {
-                    ChangeText("先のお金で、兵士の訓練、\n道具の購入もできるだぞ");
-                    StageProgress++;
-                }
-                break;
-            case 3:
-                if (Input.GetMouseButtonUp(0) ||
-                    (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
-                {
-                    ChangeText("けど、今回は私の道具を貸してやるだぞ");
-                    SkillStack.AddStock(Upgrades.StoreItems.MagicMeteor);
-                    StageProgress++;
-                }
-                break;
-            case 4:
-                if (Input.GetMouseButtonUp(0) ||
-                    (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
-                {
-                    ChangeText("早く戦場に戻るだぞ");
-                    StageProgress++;
-                }
-                break;
-            case 5:
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
@@ -293,10 +254,67 @@ public class TutorialManager : MonoBehaviour
                     StageProgress++;
                 }
                 break;
+            case 2:
+                WaitingResponds = false;
+                if (SceneManager.currScreenShown==2)
+                {
+                    ChangeText("これは基地通信だぞ、\n追加ミッションを要求");
+                    StageProgress++;
+                }
+                break;
+            case 3:
+                if (Input.GetMouseButtonUp(0) ||
+                    (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
+                {
+                    ChangeText("お金で、兵士の訓練、\n道具の購入もできるだぞ");
+                    StageProgress++;
+                }
+                break;
+            case 4:
+                if (Input.GetMouseButtonUp(0) ||
+                    (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
+                {
+                    ChangeText("けど、今回は私の道具を\n貸してやるだぞ");
+                    SkillStack.AddStock(Upgrades.StoreItems.MagicMeteor);
+                    StageProgress++;
+                }
+                break;
+            case 5:
+                if (Input.GetMouseButtonUp(0) ||
+                    (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
+                {
+                    ChangeText("早く戦場に戻るだぞ");
+                    StageProgress++;
+                }
+                break;
             case 6:
+                if (Input.GetMouseButtonUp(0) ||
+                    (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
+                {
+                    ChangeText("");
+                    StageProgress++;
+                }
+                break;
+            case 7:
+                WaitingResponds = false;
                 if (SceneManager.currScreenShown == 0)
                 {
                     ChangeText("道具の使用は長押しながら、\nアイテムを選ぶだぞ");
+                    StageProgress++;
+                }
+                break;
+            case 8:
+                if (Input.GetMouseButtonUp(0) ||
+                    (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
+                {
+                    ChangeText("");
+                    StageProgress++;
+                }
+                break;
+            case 9:
+                WaitingResponds = false;
+                if (skillSpawner.GameObjects[0] != null)
+                {
                     StageProgress = 0;
                     tutorialStage++;
                 }
@@ -346,5 +364,17 @@ public class TutorialManager : MonoBehaviour
     public void SetTutorialStage(TutorialStageID stage)
     {
         tutorialStage = stage;
+    }
+
+    private void DestroyAllRelated() {
+        foreach (Text i in InstructionText_Landscape)
+            Destroy(i.gameObject);
+        foreach (GameObject i in InstructionSprite_Landscape)
+            Destroy(i);
+        foreach (Text i in InstructionText_Protrait)
+            Destroy(i.gameObject);
+        foreach (GameObject i in InstructionSprite_Protrait)
+            Destroy(i);
+        Destroy(this);
     }
 }

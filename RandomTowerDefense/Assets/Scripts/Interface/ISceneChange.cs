@@ -28,7 +28,7 @@ public class ISceneChange : MonoBehaviour
     public bool OrientationLand;
     public bool OrientationLock;
 
-    protected void Start()
+    protected void Awake()
     {
         isSceneFinished = false;
         toDrag = 0;
@@ -71,9 +71,10 @@ public class ISceneChange : MonoBehaviour
 
     protected void Update()
     {
-        if(!OrientationLock)
-        OrientationLand = Screen.width > Screen.height;
-
+        if (!OrientationLock)
+        {
+            OrientationLand = Screen.width > Screen.height;
+        }
         foreach (GameObject i in LandscapeObjs)
             i.SetActive(OrientationLand);
         foreach (GameObject i in PortraitObjs)

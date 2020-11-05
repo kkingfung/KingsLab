@@ -12,7 +12,7 @@ public class CastleSpawner : MonoBehaviour
     public static CastleSpawner Instance { get; private set; }
     public List<GameObject> PrefabObject;
 
-    EntityManager EntityManager => World.DefaultGameObjectInjectionWorld.EntityManager;
+    private EntityManager EntityManager;
 
     //Array
     [HideInInspector]
@@ -27,10 +27,7 @@ public class CastleSpawner : MonoBehaviour
 
     //For input
     private Transform[] transforms;
-    private int[] castleHP;
-    private float[] radius;
 
-    private InGameOperation sceneManager;
 
     void Awake()
     {
@@ -48,29 +45,29 @@ public class CastleSpawner : MonoBehaviour
             TransformAccessArray.Dispose();
 
         //Disposing Array
-        castleHPArray.Dispose();
-        radiusArray.Dispose();
+        if (castleHPArray.IsCreated)
+            castleHPArray.Dispose();
+        if (radiusArray.IsCreated)
+            radiusArray.Dispose();
     }
     void Start()
     {
+
+        EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+
         //Prepare input
         GameObjects = new GameObject[count];
         transforms = new Transform[count];
-        castleHP = new int[count];
-        radius = new float[count];
 
         Entities = new NativeArray<Entity>(count, Allocator.Persistent);
         var archetype = EntityManager.CreateArchetype(
-            typeof(CastleTag), typeof(Health), typeof(Radius),
+             typeof(Health), typeof(Radius),
             ComponentType.ReadOnly<Translation>(),
             ComponentType.ReadOnly<Hybrid>());
         EntityManager.CreateEntity(archetype, Entities);
-
         TransformAccessArray = new TransformAccessArray(transforms);
         castleHPArray = new NativeArray<int>(count, Allocator.Persistent);
         radiusArray = new NativeArray<float>(count, Allocator.Persistent);
-
-        sceneManager = FindObjectOfType<InGameOperation>();
     }
 
     public int[] Spawn(float3 Position, Quaternion Rotation, int castleHP, float radius,
@@ -82,44 +79,40 @@ public class CastleSpawner : MonoBehaviour
         {
             if (GameObjects[i] != null) continue;
 
-            int HpCal = castleHP;
-            if (sceneManager && (sceneManager.GetCurrIsland() == StageInfo.IslandNum - 1))
-            {
-                HpCal = StageInfo.hpMaxEx;
-            }
-
             GameObjects[i] = Instantiate(PrefabObject[prefabID], transform);
             GameObjects[i].transform.position = Position;
             GameObjects[i].transform.localRotation = Rotation;
             transforms[i] = GameObjects[i].transform;
-            castleHPArray[i] = HpCal;
+            castleHPArray[i] = castleHP;
             radiusArray[i] = radius;
 
             //AddtoEntities
             EntityManager.SetComponentData(Entities[i], new Health
             {
-                Value = HpCal,
+                Value = castleHP,
             });
             EntityManager.SetComponentData(Entities[i], new Radius
             {
                 Value = radius,
             });
-
             EntityManager.SetComponentData(Entities[i], new Translation
             {
                 Value = Position,
             });
-
             EntityManager.SetComponentData(Entities[i], new Hybrid
             {
                 Index = i,
             });
-            spawnCnt++;
-            spawnIndexList[i] = i;
+
+            if (EntityManager.HasComponent<CastleTag>(Entities[i]) == false)
+                EntityManager.AddComponent<CastleTag>(Entities[i]);
+
+            spawnIndexList[spawnCnt++] = i;
+
         }
 
-        //Change Whenever Spawned
-        TransformAccessArray = new TransformAccessArray(transforms);
+        //Change Whenever Spawned (Not Needed?)
+        //TransformAccessArray = new TransformAccessArray(transforms);
         return spawnIndexList;
     }
 

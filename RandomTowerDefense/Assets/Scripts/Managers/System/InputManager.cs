@@ -19,8 +19,8 @@ public class MyMobileInput
 [System.Serializable]
 public class InputManager : MonoBehaviour
 {
-    readonly float tapStayTime = 0.4f;
-    readonly float tapDoubleTime = 0.25f;
+    readonly float tapStayTime = 0.3f;
+    readonly float tapDoubleTime = 0.2f;
     readonly float dragDiff = 40.0f;//cooperate with Scene Script(toDrag)
 
     public GameObject ClickPrefab;
@@ -75,7 +75,7 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
-        if (Buttons.Count > 0)  RaycastTest();
+        if (Buttons.Count > 0) { RaycastTest(); }
 
         if (useTouch) UpdateTouchInfo();
         else UpdateMouseInfo();
@@ -103,19 +103,19 @@ public class InputManager : MonoBehaviour
         }
         if (Input.GetMouseButtonUp(0))
         {
-            if (playerManager.isChecking == false && isDragging == false)
+            isDragging = false;
+            if (playerManager.isChecking == false)
             {
-                playerManager.RaycastTest(Time.time - TapTimeRecord < tapDoubleTime);
+                playerManager.RaycastTest(Time.time - TapTimeRecord < tapDoubleTime*Time.timeScale);
             }
             if (playerManager && playerManager.isSkillActive == false && playerManager.isChecking)
                 playerManager.UseStock(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
-            DragTimeRecord = float.MaxValue;
             TapTimeRecord = Time.time;
         }
 
         if (Input.GetMouseButton(0))
         {
-            if (Time.time - DragTimeRecord > tapStayTime/ Time.timeScale)
+            if (Time.time - DragTimeRecord > tapStayTime* Time.timeScale)
             {
                 if (isDragging)
                 {
@@ -206,12 +206,15 @@ public class InputManager : MonoBehaviour
                     DragTimeRecord = Time.time;
                     break;
                 case TouchPhase.Moved:
-                    if (Time.time - DragTimeRecord > tapStayTime / Time.timeScale && isDragging)
+                    if (Time.time - DragTimeRecord > tapStayTime * Time.timeScale && isDragging)
                         playerManager.CheckStock(touch.position);
                     break;
                 case TouchPhase.Ended:
-                    if (playerManager.isChecking == false && isDragging==false)
-                        playerManager.RaycastTest(Time.time - TapTimeRecord < tapDoubleTime);
+                    isDragging = false;
+                    if (playerManager.isChecking == false)
+                    {
+                        playerManager.RaycastTest(Time.time - TapTimeRecord < tapDoubleTime * Time.timeScale);
+                    }
                     if (playerManager && playerManager.isSkillActive == false && playerManager.isChecking)
                         playerManager.UseStock(touch.position);
 
@@ -275,7 +278,7 @@ public class InputManager : MonoBehaviour
                     }
                     break;
                 case TouchPhase.Stationary:
-                    if (Time.time - DragTimeRecord > tapStayTime / Time.timeScale && isDragging)
+                    if (Time.time - DragTimeRecord > tapStayTime * Time.timeScale && isDragging)
                     {
                         playerManager.CheckStock(touch.position);
                     }
@@ -313,12 +316,20 @@ public class InputManager : MonoBehaviour
 
     public void BeginDrag()
     { //For Specified Screen Area (Button)
+        float PreviousRecord = DragTimeRecord;
+        if ((Input.touchCount > 0 && Input.touches[0].phase== TouchPhase.Began)
+            ||Input.GetMouseButtonDown(0))
+        {
+            DragTimeRecord = Time.time;
+            if (Input.touchCount > 0)
+                posDragging = Input.touches[0].position;
+            else
+                posDragging = Input.mousePosition;
+        }
+        if (DragTimeRecord - PreviousRecord < tapStayTime*Time.timeScale) {
+            return;
+        }
         isDragging = true;
-        DragTimeRecord = Time.time;
-        if (Input.touchCount > 0)
-            posDragging = Input.touches[0].position;
-        else
-            posDragging = Input.mousePosition;
     }
 
     public void EndDrag() //For Spare
@@ -403,7 +414,7 @@ public class InputManager : MonoBehaviour
                     ray = refCamP.ScreenPointToRay(Input.GetTouch(t.fingerId).position);
                     ray2 = refCamP.ScreenPointToRay(posTap);
                 }
-
+              
                 if (Input.GetTouch(t.fingerId).phase == TouchPhase.Ended)
                 {
                     if ((Physics.Raycast(ray2, out hit2, 1000, LayerMask.GetMask("ButtonLayer")) && 
@@ -429,11 +440,10 @@ public class InputManager : MonoBehaviour
                 ray = refCamP.ScreenPointToRay(Input.mousePosition);
                 ray2 = refCamP.ScreenPointToRay(posTap);
             }
-
             if ((Physics.Raycast(ray2, out hit2)&& Physics.Raycast(ray, out hit)) && Buttons.Contains(hit.transform.gameObject))
             {
                 if (hit.transform == hit2.transform && hit.transform.GetComponent<RaycastFunction>())
-                {
+                { 
                     hit.transform.GetComponent<RaycastFunction>().ActionFunc();
                 }
             }

@@ -44,7 +44,7 @@ public class SkillManager : MonoBehaviour
         int currExp = SkillUpgrader[itemID];
         if (currExp > SkillRequirement[Upgrades.GetLevel(itemID)]) {
             Upgrades.AddLevel(itemID, 1);
-            currExp = 0;
+            SkillUpgrader[itemID] = 0;
         }
     }
 
@@ -131,7 +131,8 @@ public class SkillManager : MonoBehaviour
         float frame = attr.lifeTime + Time.time;
 
         int[] entityID = skillSpawner.Spawn(1, this.transform.position, new float3(),
-            attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime);
+            attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime,
+            attr.slowRate, attr.buffTime);
         skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
             .Init(Upgrades.StoreItems.MagicBlizzard, attr, entityID[0]);
         skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
@@ -158,7 +159,8 @@ public class SkillManager : MonoBehaviour
             if (Time.time - frameToNext > attr.cycleTime)
             {
                 int[] entityID = skillSpawner.Spawn(2, this.transform.position, new float3(),
-                    attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime);
+                    attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime,
+                    attr.slowRate, attr.buffTime);
                 skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
                     .Init(Upgrades.StoreItems.MagicPetrification, attr, entityID[0]);
                 skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()

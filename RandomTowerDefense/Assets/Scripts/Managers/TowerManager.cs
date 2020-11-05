@@ -86,42 +86,46 @@ public class TowerManager : MonoBehaviour
             return;
         }
 
-        //if (sceneManager.CheckIfTutorial() && tutorialManager && tutorialManager.FreeToBuild == false)
-        //{
-        //    if (towerSpawner.GameObjects.Length > 0)
-        //    {
-        //        int type = (int)towerSpawner.GameObjects[0].GetComponent<Tower>().type;
-        //        entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * type,
-        //               location, new Unity.Mathematics.float3(), 0, float.MaxValue, float.MaxValue);
-        //        tower = towerSpawner.GameObjects[entityIDList[0]];
-        //        tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
+        #region SpareCodeForTutorial
+        /*
+        if (sceneManager.CheckIfTutorial() && tutorialManager && tutorialManager.FreeToBuild == false)
+        {
+            if (towerSpawner.GameObjects.Length > 0)
+            {
+                int type = (int)towerSpawner.GameObjects[0].GetComponent<Tower>().type;
+                entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * type,
+                       location, new Unity.Mathematics.float3(), 0, float.MaxValue, float.MaxValue);
+                tower = towerSpawner.GameObjects[entityIDList[0]];
+                tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
 
-        //        switch (type)
-        //        {
-        //            case (int)TowerInfo.TowerInfoID.Enum_TowerNightmare:
-        //                tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerNightmareAura,
-        //                    TowerInfo.TowerInfoID.Enum_TowerNightmare, 1, rank);
-        //                TowerNightmareList.Add(tower);
-        //                break;
-        //            case (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-        //                tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerSoulEaterAura,
-        //                     TowerInfo.TowerInfoID.Enum_TowerSoulEater, 1, rank);
-        //                TowerSoulEaterList.Add(tower);
-        //                break;
-        //            case (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
-        //                tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerTerrorBringerAura,
-        //                       TowerInfo.TowerInfoID.Enum_TowerTerrorBringer, 1, rank);
-        //                TowerTerrorBringerList.Add(tower);
-        //                break;
-        //            case (int)TowerInfo.TowerInfoID.Enum_TowerUsurper:
-        //                tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerUsurperAura,
-        //                    TowerInfo.TowerInfoID.Enum_TowerUsurper, 1, rank);
-        //                TowerUsurperList.Add(tower);
-        //                break;
-        //        }
-        //    }
-        //}
-        //else
+                switch (type)
+                {
+                    case (int)TowerInfo.TowerInfoID.Enum_TowerNightmare:
+                        tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerNightmareAura,
+                            TowerInfo.TowerInfoID.Enum_TowerNightmare, 1, rank);
+                        TowerNightmareList.Add(tower);
+                        break;
+                    case (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater:
+                        tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerSoulEaterAura,
+                             TowerInfo.TowerInfoID.Enum_TowerSoulEater, 1, rank);
+                        TowerSoulEaterList.Add(tower);
+                        break;
+                    case (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
+                        tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerTerrorBringerAura,
+                               TowerInfo.TowerInfoID.Enum_TowerTerrorBringer, 1, rank);
+                        TowerTerrorBringerList.Add(tower);
+                        break;
+                    case (int)TowerInfo.TowerInfoID.Enum_TowerUsurper:
+                        tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerUsurperAura,
+                            TowerInfo.TowerInfoID.Enum_TowerUsurper, 1, rank);
+                        TowerUsurperList.Add(tower);
+                        break;
+                }
+            }
+        }
+        else
+        */
+        #endregion
         {
             switch (UnityEngine.Random.Range(0, NumTowerType))
             {
@@ -194,7 +198,7 @@ public class TowerManager : MonoBehaviour
                     tempList.Remove(chkTarget);
                     if (chkTarget.GetComponent<Tower>().rank!= targetedTower.GetComponent<Tower>().rank)
                         continue;
-                    else if (chkTarget.GetComponent<Tower>().CheckMaxLevel())
+                    else if (chkTarget.GetComponent<Tower>().CheckLevel())
                     {
                         candidateList.Add(chkTarget);
                         count++;
@@ -211,7 +215,7 @@ public class TowerManager : MonoBehaviour
                     tempList.Remove(chkTarget);
                     if (chkTarget.GetComponent<Tower>().rank != targetedTower.GetComponent<Tower>().rank)
                         continue;
-                    else if (chkTarget.GetComponent<Tower>().CheckMaxLevel())
+                    else if (chkTarget.GetComponent<Tower>().CheckLevel())
                     {
                         candidateList.Add(chkTarget);
                         count++;
@@ -228,7 +232,7 @@ public class TowerManager : MonoBehaviour
                     tempList.Remove(chkTarget);
                     if (chkTarget.GetComponent<Tower>().rank != targetedTower.GetComponent<Tower>().rank)
                         continue;
-                    else if (chkTarget.GetComponent<Tower>().CheckMaxLevel())
+                    else if (chkTarget.GetComponent<Tower>().CheckLevel())
                     {
                         candidateList.Add(chkTarget);
                         count++;
@@ -245,7 +249,7 @@ public class TowerManager : MonoBehaviour
                     tempList.Remove(chkTarget);
                     if (chkTarget.GetComponent<Tower>().rank != targetedTower.GetComponent<Tower>().rank)
                         continue;
-                    else if (chkTarget.GetComponent<Tower>().CheckMaxLevel())
+                    else if (chkTarget.GetComponent<Tower>().CheckLevel())
                     {
                         candidateList.Add(chkTarget);
                         count++;

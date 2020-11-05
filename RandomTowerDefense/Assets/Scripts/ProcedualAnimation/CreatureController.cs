@@ -166,7 +166,7 @@ public class CreatureController : MonoBehaviour {
     }
 
     private void UpdateTargetPosition() {
-        WaitingTimer = Random.Range(3,10);
+        WaitingTimer = Random.Range(2,5);
         WaitingRecord = Time.time;
         Vector3 dir = new Vector3(Random.Range(-50f, 50f), 0, Random.Range(-50f, 50f));
         TargetPosition = TargetLocation+ dir;

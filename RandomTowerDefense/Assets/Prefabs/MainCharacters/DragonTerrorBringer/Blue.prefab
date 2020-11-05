@@ -2714,6 +2714,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Level: 0
   rank: 0
+  exp: 0
   type: 2
   pillar: {fileID: 0}
 --- !u!65 &-4252547892695803826

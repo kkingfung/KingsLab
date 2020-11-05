@@ -75,6 +75,8 @@ public class StoreManager : MonoBehaviour
             if (bonusBossCooldown[i] > 0) {
                 bonusBossCooldown[i]--;
             }
+            if (sceneManager.CheckIfTutorial())
+                bonusBossCooldown[i] = 99;
         }
 
         UpdatePrice();
@@ -82,7 +84,7 @@ public class StoreManager : MonoBehaviour
 
     private void UpdatePrice() {
 
-        int fullitemID = (sceneManager.currScreenShown + 1) * Upgrades.MaxItemPerSlot;
+        //int fullitemID = (sceneManager.currScreenShown + 1) * Upgrades.MaxItemPerSlot;
 
         switch (sceneManager.currScreenShown)
         {
@@ -166,11 +168,11 @@ public class StoreManager : MonoBehaviour
         switch (itemID)
         {
             case Upgrades.StoreItems.BonusBoss1:
-                return bonusBossCooldown[0];
+                return bonusBossCooldown[0] > 0 ? -1 : 0;
             case Upgrades.StoreItems.BonusBoss2:
-                return bonusBossCooldown[1];
+                return bonusBossCooldown[1] > 0 ? -1 : 0;
             case Upgrades.StoreItems.BonusBoss3:
-                return bonusBossCooldown[2];
+                return bonusBossCooldown[2] > 0 ? -1 : 0;
         }
 
         if (Upgrades.GetLevel(itemID)+1 >= ItemPrice[itemID].Length) {
@@ -222,7 +224,7 @@ public class StoreManager : MonoBehaviour
         Upgrades.StoreItems fullitemID = (Upgrades.StoreItems)(itemID + (sceneManager.currScreenShown + 1) * Upgrades.MaxItemPerSlot);
 
         int price = CheckEnoughResource(fullitemID);
-        if (price > 0)
+        if (price >= 0)
         {
             switch (fullitemID)
             {
@@ -250,6 +252,7 @@ public class StoreManager : MonoBehaviour
         int totalCosttoPurchase = CosttoPurchaseCalculation();
         int price = GetPrice(itemID);
         if (price < 0) return -1;
+        if (price == 0) return 0;
         if (resourceManager.GetCurrMaterial() - totalCosttoPurchase > price)
             return price;
         return -1;
@@ -275,7 +278,7 @@ public class StoreManager : MonoBehaviour
 
     public void raycastAction(int itemID, int infoID)
     {
-        ItemPendingAdd(itemID);
+        if(ItemPendingAdd(itemID))
         ItemSold(itemID);
 
         //-1 :subtract 0:purchase 1:add

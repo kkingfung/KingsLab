@@ -1,6 +1,7 @@
 ﻿using Unity.Entities;
 using Unity.Transforms;
 using Unity.Jobs;
+using UnityEngine;
 
 [UpdateInGroup(typeof(InitializationSystemGroup))]
 public class RemoveDeadSystem : JobComponentSystem
@@ -22,7 +23,8 @@ public class RemoveDeadSystem : JobComponentSystem
 		{
 			if (health.Value <= 0)
 			{
-					ecbc.DestroyEntity(entityInQueryIndex, entity);
+				ecbc.RemoveComponent<EnemyTag>(entityInQueryIndex, entity);
+				//ecbc.DestroyEntity(entityInQueryIndex, entity);
 			}
 		}).Run();
 

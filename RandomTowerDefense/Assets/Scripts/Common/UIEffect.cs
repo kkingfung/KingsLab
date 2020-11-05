@@ -91,7 +91,6 @@ public class UIEffect : MonoBehaviour
                     Input.mousePosition.x < Screen.width && Input.mousePosition.y < Screen.height)) &&
                         Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("RecordBroad")))
                 {
-                    int count = 0;
                     foreach (GameObject i in relatedObjs) 
                     {
                         TextMesh textMesh = i.GetComponent<TextMesh>();
@@ -120,7 +119,6 @@ public class UIEffect : MonoBehaviour
                         }
                     }
                 }
-                Debug.Log(1);
                 break;
             case 0://for Title Scene Instruction
                 if (text) text.color =new Color (text.color.r, text.color.g, text.color.b,Mathf.Abs(Mathf.Sin(Time.time* magnitude)));

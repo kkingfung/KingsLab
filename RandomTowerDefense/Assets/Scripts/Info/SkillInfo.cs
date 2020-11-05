@@ -45,7 +45,7 @@ public static class SkillInfo
         skillInfo.Add("SkillMinions", new SkillAttr(1, 1,0.1f, 3f,10, 0, 0));
 
         skillInfo.Add("SkillBlizzard", new SkillAttr(30, 10, 5, 4, 15, 0.01f, 3.0f));
-        skillInfo.Add("SkillPetrification", new SkillAttr(1000, 0,0.5f,2,3, 1, 0.02f));
+        skillInfo.Add("SkillPetrification", new SkillAttr(1000, 0,0.2f,2,5, 1, 0.02f));
     }
     static void Release()
     {

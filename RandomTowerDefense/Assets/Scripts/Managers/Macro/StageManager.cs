@@ -67,16 +67,14 @@ public class StageManager : MonoBehaviour
             }
 
             //Fixed CastleMapPos
-            int[] entityID = castleSpawner.Spawn(mapGenerator.CoordToPosition(SpawnPoint[0]) + mapGenerator.transform.position, Quaternion.Euler(0f, 90f, 0f),
-                (int)PlayerPrefs.GetFloat("hpMax"), 1);
+            int[] entityID = castleSpawner.Spawn(mapGenerator.CoordToPosition(SpawnPoint[0]) + mapGenerator.transform.position, 
+                Quaternion.Euler(0f, 90f, 0f), (int)PlayerPrefs.GetFloat("hpMax"), 1);
             CastleEntityID = entityID[0];
             for (int i = 0; i < EnemySpawnPtNum; ++i)
             {
                 Vector3 pos = mapGenerator.CoordToPosition(SpawnPoint[i + 1]) + mapGenerator.transform.position;
                 EnemySpawnPort[i] = Instantiate(EnemySpawnPortPrefab, pos, Quaternion.identity);
-                PlayerPrefs.SetFloat("SpawnPointx" + i, pos.x);
-                PlayerPrefs.SetFloat("SpawnPointy" + i, pos.y);
-                PlayerPrefs.SetFloat("SpawnPointz" + i, pos.z);
+
             }
         }
     }

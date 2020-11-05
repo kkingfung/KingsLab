@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class TimedDestroySystem : JobComponentSystem
 {
-	private EntityManager entityManager;
+	//private EntityManager entityManager;
 	private EndSimulationEntityCommandBufferSystem endSimulationEcbSystem;
 	protected override void OnCreate()
 	{
-		entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+		//entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 		endSimulationEcbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
 	}
 
@@ -24,24 +24,35 @@ public class TimedDestroySystem : JobComponentSystem
 		{
 			activeTime.Value -= deltaTime;
 			if (activeTime.Value <= 0f)
-				ecbc.DestroyEntity(entityInQueryIndex, entity);
+			{
+				ecbc.RemoveComponent<AttackTag>(entityInQueryIndex, entity);
+				//ecbc.DestroyEntity(entityInQueryIndex, entity);
+			}
 
 		}).Schedule(inputDeps);
+		job.Complete();
 
 		job = Entities.WithAll<SkillTag>().ForEach((Entity entity, int entityInQueryIndex, ref Lifetime activeTime) =>
 		{
 			activeTime.Value -= deltaTime;
 			if (activeTime.Value <= 0f)
-				ecbc.DestroyEntity(entityInQueryIndex,entity);
+			{
+				ecbc.RemoveComponent<SkillTag>(entityInQueryIndex, entity);
+				//ecbc.DestroyEntity(entityInQueryIndex, entity);
+			}
 
 		}).Schedule(inputDeps);
+		job.Complete();
 
 		job = Entities.WithAll<PlayerTag>().ForEach((Entity entity, int entityInQueryIndex, ref Lifetime activeTime) =>
 		{
 			if (activeTime.Value <= 0f)
-				ecbc.DestroyEntity(entityInQueryIndex, entity);
-
+			{
+				ecbc.RemoveComponent<PlayerTag>(entityInQueryIndex,entity);
+				//ecbc.DestroyEntity(entityInQueryIndex, entity);
+			}
 		}).Schedule(inputDeps);
+		job.Complete();
 
 		job = Entities.WithAll<EnemyTag>().ForEach((Entity entity, int entityInQueryIndex, ref Health health, ref Lifetime activeTime) =>
 		{
@@ -49,12 +60,16 @@ public class TimedDestroySystem : JobComponentSystem
 			{
 				activeTime.Value -= deltaTime;
 				if (activeTime.Value <= 0f)
-					ecbc.DestroyEntity(entityInQueryIndex, entity);
+				{ 
+					ecbc.RemoveComponent<EnemyTag>(entityInQueryIndex, entity);
+					//ecbc.DestroyEntity(entityInQueryIndex, entity);
+				}
 			}
 
 		}).Schedule(inputDeps);
+		job.Complete();
 
-		return job;
+		return inputDeps;
 	}
 }
 

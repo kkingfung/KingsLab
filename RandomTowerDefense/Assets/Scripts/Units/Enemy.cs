@@ -18,7 +18,7 @@ public class Enemy : MonoBehaviour
     private EnemySpawner enemySpawner;
     private ResourceManager resourceManager;
     // Start is called before the first frame update
-    private void Start()
+    private void Awake()
     {
         oriScale = transform.localScale;
         enemySpawner = FindObjectOfType<EnemySpawner>();

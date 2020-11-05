@@ -12,7 +12,7 @@ public class TowerSpawner : MonoBehaviour
     public static TowerSpawner Instance { get; private set; }
     public List<GameObject> PrefabObject;
 
-    EntityManager EntityManager => World.DefaultGameObjectInjectionWorld.EntityManager;
+    private EntityManager EntityManager;
 
     //Array
     [HideInInspector]
@@ -47,24 +47,33 @@ public class TowerSpawner : MonoBehaviour
             TransformAccessArray.Dispose();
 
         //Disposing Array
-        waitArray.Dispose();
-        lifetimeArray.Dispose();
-        radiusArray.Dispose();
-        targetArray.Dispose();
-        hastargetArray.Dispose();
+        if (waitArray.IsCreated)
+            waitArray.Dispose();
+        if (lifetimeArray.IsCreated)
+            lifetimeArray.Dispose();
+        if (radiusArray.IsCreated)
+            radiusArray.Dispose();
+        if (targetArray.IsCreated)
+            targetArray.Dispose();
+        if (hastargetArray.IsCreated)
+            hastargetArray.Dispose();
     }
     void Start()
     {
+        EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+
         //Prepare input
         GameObjects = new GameObject[count];
         transforms = new Transform[count];
 
         Entities = new NativeArray<Entity>(count, Allocator.Persistent);
         var archetype = EntityManager.CreateArchetype(
-            typeof(PlayerTag), typeof(WaitingTime), typeof(Lifetime), typeof(Radius),
+             typeof(WaitingTime), typeof(Lifetime), typeof(Radius),
+              typeof(TargetPos), typeof(TargetFound), typeof(Damage),
             ComponentType.ReadOnly<Translation>(),
             ComponentType.ReadOnly<Hybrid>());
         EntityManager.CreateEntity(archetype, Entities);
+
 
         TransformAccessArray = new TransformAccessArray(transforms);
         waitArray = new NativeArray<float>(count, Allocator.Persistent);
@@ -82,9 +91,6 @@ public class TowerSpawner : MonoBehaviour
         for (int i = 0; i < count && spawnCnt < num; i++)
         {
             if (GameObjects[i] != null) continue;
-            bool hastarget = new bool();
-            hastarget = false;
-            float3 targetpos = new float3(Position);
 
             GameObjects[i] = Instantiate(PrefabObject[prefabID], transform);
             GameObjects[i].transform.position = Position;
@@ -93,9 +99,8 @@ public class TowerSpawner : MonoBehaviour
             waitArray[i] = wait;
             lifetimeArray[i] = lifetime;
             radiusArray[i] = radius;
-            hastargetArray[i] = hastarget;
-            targetArray[i] = targetpos;
-
+            hastargetArray[i] = false;
+            targetArray[i] = Position;
 
             //AddtoEntities
             EntityManager.SetComponentData(Entities[i], new WaitingTime
@@ -112,11 +117,11 @@ public class TowerSpawner : MonoBehaviour
             });
             EntityManager.SetComponentData(Entities[i], new TargetPos
             {
-                Value = targetpos,
+                Value = Position,
             });
             EntityManager.SetComponentData(Entities[i], new TargetFound
             {
-                Value = hastarget,
+                Value = false,
             });
 
             EntityManager.SetComponentData(Entities[i], new Translation
@@ -128,13 +133,14 @@ public class TowerSpawner : MonoBehaviour
             {
                 Index = i,
             });
+            if (EntityManager.HasComponent<PlayerTag>(Entities[i]) == false)
+                EntityManager.AddComponent<PlayerTag>(Entities[i]);
 
-            spawnCnt++;
-            spawnIndexList[i] = i;
+            spawnIndexList[spawnCnt++] = i;
         }
 
-        //Change Whenever Spawned
-        TransformAccessArray = new TransformAccessArray(transforms);
+        //Change Whenever Spawned (Not Needed?)
+        //TransformAccessArray = new TransformAccessArray(transforms);
         return spawnIndexList;
     }
 }

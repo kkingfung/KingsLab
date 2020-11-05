@@ -12,7 +12,7 @@ public class AttackSpawner : MonoBehaviour
     public static AttackSpawner Instance { get; private set; }
     public List<GameObject> PrefabObject;
 
-    EntityManager EntityManager => World.DefaultGameObjectInjectionWorld.EntityManager;
+    private EntityManager EntityManager;
 
     //Array
     [HideInInspector]
@@ -47,22 +47,28 @@ public class AttackSpawner : MonoBehaviour
             TransformAccessArray.Dispose();
 
         //Disposing Array
-        damageArray.Dispose();
-        radiusArray.Dispose();
-        waitArray.Dispose();
-        lifetimeArray.Dispose();
-        actionArray.Dispose();
-
+        if (damageArray.IsCreated)
+            damageArray.Dispose();
+        if (radiusArray.IsCreated)
+            radiusArray.Dispose();
+        if (waitArray.IsCreated) 
+            waitArray.Dispose();
+        if (lifetimeArray.IsCreated) 
+            lifetimeArray.Dispose();
+        if (actionArray.IsCreated) 
+            actionArray.Dispose();
     }
     void Start()
     {
+        EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+
         //Prepare input
         GameObjects = new GameObject[count];
         transforms = new Transform[count];
 
         Entities = new NativeArray<Entity>(count, Allocator.Persistent);
         var archetype = EntityManager.CreateArchetype(
-            typeof(AttackTag), typeof(Radius), typeof(Damage),
+             typeof(Radius), typeof(Damage),
              typeof(WaitingTime), typeof(Lifetime), typeof(ActionTime),
             ComponentType.ReadOnly<Translation>(),
             ComponentType.ReadOnly<Hybrid>());
@@ -93,7 +99,7 @@ public class AttackSpawner : MonoBehaviour
             waitArray[i] = wait;
             lifetimeArray[i] = lifetime;
             actionArray[i] = action;
-
+           
             //AddtoEntities
             EntityManager.SetComponentData(Entities[i], new Damage
             {
@@ -125,12 +131,15 @@ public class AttackSpawner : MonoBehaviour
             {
                 Index = i,
             });
-            spawnCnt++;
-            spawnIndexList[i] = i;
+
+            if (EntityManager.HasComponent<AttackTag>(Entities[i]) == false)
+                EntityManager.AddComponent<AttackTag>(Entities[i]);
+
+            spawnIndexList[spawnCnt++] = i;
         }
 
-        //Change Whenever Spawned
-        TransformAccessArray = new TransformAccessArray(transforms);
+        //Change Whenever Spawned (Not Needed?)
+        //TransformAccessArray = new TransformAccessArray(transforms);
         return spawnIndexList;
     }
 }

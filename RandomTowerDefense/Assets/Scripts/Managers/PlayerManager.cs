@@ -161,20 +161,21 @@ public class PlayerManager : MonoBehaviour
         return hit.point;
     }
 
-    public Vector3 RaycastTest( bool isDoubleTap)
+    public Vector3 RaycastTest(bool isDoubleTap)
     {
-        if(sceneManager.GetOptionStatus())
+        if (sceneManager.GetOptionStatus())
             return new Vector3();
 
-        if (isDoubleTap) { 
+        if (isDoubleTap)
+        {
             inputManager.TapTimeRecord = 0;
         }
         else
         {
-                return new Vector3();
+            return new Vector3();
         }
 
-        Ray ray = new Ray();
+        Ray ray;
         RaycastHit hit = new RaycastHit();
 
         //Get Ray according to orientation
@@ -188,24 +189,25 @@ public class PlayerManager : MonoBehaviour
         }
 
         //TakeAction
-            if (isSelling) {
-                isSelling = false;
-                if (Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("Tower")))
-                {
-                    towerManager.SellTower(hit.transform.gameObject);
-                }
-            }
-            else
+        if (isSelling)
+        {
+            isSelling = false;
+            if (Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("Tower")))
             {
-                if (Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("Tower")))
-                {
-                    towerManager.MergeTower(hit.transform.gameObject, hit.point);
-                }
-                else if (Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("Pillar")))
-                {
-                    towerManager.BuildTower(hit.transform.gameObject);
-                }
+                towerManager.SellTower(hit.transform.gameObject);
             }
+        }
+        else
+        {
+            if (Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("Tower")))
+            {
+                towerManager.MergeTower(hit.transform.gameObject, hit.point);
+            }
+            else if (Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("Pillar")))
+            {
+                towerManager.BuildTower(hit.transform.gameObject);
+            }
+        }
         return hit.point;
     }
 

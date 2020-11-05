@@ -25,7 +25,8 @@ public class CollisionSystem : JobComponentSystem
 	{
 		castleGroup = GetEntityQuery(typeof(Health), typeof(Radius), 
 			ComponentType.ReadOnly<Translation>(),ComponentType.ReadOnly<PlayerTag>());
-		enemyGroup = GetEntityQuery(typeof(Health), typeof(Radius), typeof(Damage), typeof(SlowRate), typeof(PetrifyAmt), typeof(BuffTime), typeof(WaitingTime),
+		enemyGroup = GetEntityQuery(typeof(Health), typeof(Radius), typeof(Damage), typeof(SlowRate),
+			typeof(PetrifyAmt), typeof(BuffTime), typeof(WaitingTime),
 			ComponentType.ReadOnly<Translation>(), ComponentType.ReadOnly<EnemyTag>());
 
 		MeteorGroup = GetEntityQuery(typeof(Radius), typeof(Damage),  typeof(ActionTime), typeof(WaitingTime),
@@ -49,12 +50,11 @@ public class CollisionSystem : JobComponentSystem
 		var healthType = GetComponentTypeHandle<Health>(false);
 		var radiusType = GetComponentTypeHandle<Radius>(true);
 
-		var damageType = GetComponentTypeHandle<Damage>(true);
-
-		var waitType = GetComponentTypeHandle<WaitingTime>(true);
-		var cycleType = GetComponentTypeHandle<CycleTime>(true);
-		var activeType = GetComponentTypeHandle<Lifetime>(true);
-		var actionType = GetComponentTypeHandle<ActionTime>(true);
+		//var damageType = GetComponentTypeHandle<Damage>(true);
+		//var waitType = GetComponentTypeHandle<WaitingTime>(true);
+		//var cycleType = GetComponentTypeHandle<CycleTime>(true);
+		//var activeType = GetComponentTypeHandle<Lifetime>(true);
+		//var actionType = GetComponentTypeHandle<ActionTime>(true);
 		
 		var slowType = GetComponentTypeHandle<SlowRate>(false);
 		var petrifyType = GetComponentTypeHandle<PetrifyAmt>(false);
@@ -74,6 +74,7 @@ public class CollisionSystem : JobComponentSystem
 			targetHealth = enemyGroup.ToComponentDataArray<Health>(Allocator.TempJob)
 		};
 		jobHandle = jobCvE.Schedule(castleGroup, inputDependencies);
+		jobHandle.Complete();
 
 		//enemy by castle
 		var jobEvC = new CollisionJobEvC()
@@ -85,6 +86,7 @@ public class CollisionSystem : JobComponentSystem
 			targetTrans = castleGroup.ToComponentDataArray<Translation>(Allocator.TempJob)
 		};
 		jobHandle = jobEvC.Schedule(enemyGroup, inputDependencies);
+		jobHandle.Complete();
 
 		//For GameOver
 		//if (Settings.IsPlayerDead())
@@ -104,6 +106,7 @@ public class CollisionSystem : JobComponentSystem
 			targetWait = AttackGroup.ToComponentDataArray<WaitingTime>(Allocator.TempJob)
 		};
 		jobHandle = jobEvA.Schedule(enemyGroup, inputDependencies);
+		jobHandle.Complete();
 
 		//enemy by meteor
 		var JobEvSM1 = new CollisionJobEvSM()
@@ -119,6 +122,7 @@ public class CollisionSystem : JobComponentSystem
 			targetWait = MeteorGroup.ToComponentDataArray<WaitingTime>(Allocator.TempJob)
 		};
 		jobHandle = JobEvSM1.Schedule(enemyGroup, inputDependencies);
+		jobHandle.Complete();
 
 		//enemy by minions
 		var JobEvSM2 = new CollisionJobEvSM()
@@ -134,6 +138,7 @@ public class CollisionSystem : JobComponentSystem
 			targetWait = MinionsGroup.ToComponentDataArray<WaitingTime>(Allocator.TempJob)
 		};
 		jobHandle = JobEvSM2.Schedule(enemyGroup, inputDependencies);
+		jobHandle.Complete();
 
 		//enemy by blizzard
 		var jobEvSB = new CollisionJobEvSB()
@@ -153,6 +158,7 @@ public class CollisionSystem : JobComponentSystem
 			targetBuff = BlizzardGroup.ToComponentDataArray<BuffTime>(Allocator.TempJob)
 		};
 		jobHandle = jobEvSB.Schedule(enemyGroup, inputDependencies);
+		jobHandle.Complete();
 
 		//enemy by petrification
 		var jobEvSP = new CollisionJobEvSP()
@@ -161,7 +167,7 @@ public class CollisionSystem : JobComponentSystem
 			buffType = buffType,
 			healthType = healthType,
 			targetAction = PetrificationGroup.ToComponentDataArray<ActionTime>(Allocator.TempJob),
-			targetPetrify = PetrificationGroup.ToComponentDataArray<PetrifyAmt>(Allocator.TempJob),
+			targetPetrify = PetrificationGroup.ToComponentDataArray<SlowRate>(Allocator.TempJob),
 			targetBuff = PetrificationGroup.ToComponentDataArray<BuffTime>(Allocator.TempJob),
 		};
 		jobHandle = jobEvSP.Schedule(enemyGroup, inputDependencies);
@@ -474,7 +480,7 @@ public class CollisionSystem : JobComponentSystem
 		[DeallocateOnJobCompletion]
 		public NativeArray<ActionTime> targetAction;
 		[DeallocateOnJobCompletion]
-		public NativeArray<PetrifyAmt> targetPetrify;
+		public NativeArray<SlowRate> targetPetrify;
 		[DeallocateOnJobCompletion]
 		public NativeArray<BuffTime> targetBuff;
 

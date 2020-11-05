@@ -12,7 +12,7 @@ public class SkillSpawner : MonoBehaviour
     public static SkillSpawner Instance { get; private set; }
     public List<GameObject> PrefabObject;
 
-    EntityManager EntityManager => World.DefaultGameObjectInjectionWorld.EntityManager;
+    private EntityManager EntityManager;
 
     //Array
     [HideInInspector]
@@ -49,23 +49,32 @@ public class SkillSpawner : MonoBehaviour
             TransformAccessArray.Dispose();
 
         //Disposing Array
-        damageArray.Dispose();
-        radiusArray.Dispose();
-        waitArray.Dispose();
-        lifetimeArray.Dispose();
-        actionArray.Dispose();
-        slowArray.Dispose();
-        buffArray.Dispose();
+        if (damageArray.IsCreated)
+            damageArray.Dispose();
+        if (radiusArray.IsCreated)
+            radiusArray.Dispose();
+        if (waitArray.IsCreated)
+            waitArray.Dispose();
+        if (lifetimeArray.IsCreated)
+            lifetimeArray.Dispose();
+        if (actionArray.IsCreated)
+            actionArray.Dispose();
+        if (slowArray.IsCreated)
+            slowArray.Dispose();
+        if (buffArray.IsCreated)
+            buffArray.Dispose();
     }
     void Start()
     {
+        EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+
         //Prepare input
         GameObjects = new GameObject[count];
         transforms = new Transform[count];
 
         Entities = new NativeArray<Entity>(count, Allocator.Persistent);
         var archetype = EntityManager.CreateArchetype(
-            typeof(SkillTag), typeof(Damage), typeof(Radius),
+            typeof(Damage), typeof(Radius),
             typeof(WaitingTime), typeof(ActionTime),
             typeof(Lifetime), typeof(SlowRate), typeof(BuffTime),
             ComponentType.ReadOnly<Translation>(),
@@ -134,18 +143,31 @@ public class SkillSpawner : MonoBehaviour
                 Value = buff,
             });
 
+            if (EntityManager.HasComponent<MeteorTag>(Entities[i]))
+                EntityManager.RemoveComponent(Entities[i], typeof(MeteorTag));
+            if (EntityManager.HasComponent<BlizzardTag>(Entities[i]))
+                EntityManager.RemoveComponent(Entities[i], typeof(BlizzardTag));
+            if (EntityManager.HasComponent<PetrificationTag>(Entities[i]))
+                EntityManager.RemoveComponent(Entities[i], typeof(PetrificationTag));
+            if (EntityManager.HasComponent<MinionsTag>(Entities[i]))
+                EntityManager.RemoveComponent(Entities[i], typeof(MinionsTag));
+
             switch (prefabID) {
                 case 0:
-                    EntityManager.AddComponent(Entities[i],typeof(MeteorTag));
+                    if (EntityManager.HasComponent<MeteorTag>(Entities[i]) == false)
+                        EntityManager.AddComponent(Entities[i], typeof(MeteorTag));
                     break;
                 case 1:
-                    EntityManager.AddComponent(Entities[i], typeof(BlizzardTag));
+                    if (EntityManager.HasComponent<BlizzardTag>(Entities[i]) == false)
+                        EntityManager.AddComponent(Entities[i], typeof(BlizzardTag));
                     break;
                 case 2:
-                    EntityManager.AddComponent(Entities[i], typeof(PetrificationTag));
+                    if (EntityManager.HasComponent<PetrificationTag>(Entities[i]) == false)
+                        EntityManager.AddComponent(Entities[i], typeof(PetrificationTag));
                     break;
                 case 3:
-                    EntityManager.AddComponent(Entities[i], typeof(MinionsTag));
+                    if (EntityManager.HasComponent<MinionsTag>(Entities[i]) == false)
+                        EntityManager.AddComponent(Entities[i], typeof(MinionsTag));
                     break;
             }
 
@@ -158,12 +180,14 @@ public class SkillSpawner : MonoBehaviour
             {
                 Index = i,
             });
-            spawnCnt++;
-            spawnIndexList[i] = i;
+
+            if (EntityManager.HasComponent<SkillTag>(Entities[i]) == false)
+                EntityManager.AddComponent<SkillTag>(Entities[i]);
+            spawnIndexList[spawnCnt++] = i;
         }
 
-        //Change Whenever Spawned
-        TransformAccessArray = new TransformAccessArray(transforms);
+        //Change Whenever Spawned (Not Needed?)
+        //TransformAccessArray = new TransformAccessArray(transforms);
         return spawnIndexList;
     }
 }

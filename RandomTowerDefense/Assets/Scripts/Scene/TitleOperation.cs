@@ -83,6 +83,8 @@ public class TitleOperation: ISceneChange
     }
     private void Awake()
     {
+        base.Awake();
+
         PlayerPrefs.SetInt("StageID", 0);
 
         PlayerPrefs.SetFloat("zoomRate",0f);
@@ -98,7 +100,6 @@ public class TitleOperation: ISceneChange
     // Start is called before the first frame update
     private void Start()
     {
-        base.Start();
         isOpening = true;
         isOption = false;
         showCredit = false;
@@ -232,7 +233,7 @@ public class TitleOperation: ISceneChange
     private IEnumerator PetrifyAnimation()
     {
         float progress = 0f;
-        int frame = 60;
+        int frame = 15;
         float rate = 1 / (float)frame;
         while (frame-- > 0)
         {

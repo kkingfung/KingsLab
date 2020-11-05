@@ -25,8 +25,6 @@ public class Skill : MonoBehaviour
 
     private float temp;//for any purpose
 
-    GameObject defaultTarget;
-
     private SkillSpawner skillSpawner;
 
     // Start is called before the first frame update
@@ -39,9 +37,6 @@ public class Skill : MonoBehaviour
         audioManager = FindObjectOfType<AudioManager>();
         audioSource = GetComponent<AudioSource>();
         skillSpawner = FindObjectOfType<SkillSpawner>();
-
-        //Testing
-        defaultTarget = GameObject.FindGameObjectWithTag("DefaultTag");
 
         switch (actionID)
         {
@@ -80,8 +75,6 @@ public class Skill : MonoBehaviour
                 }
                 else targetEnm = null;
 
-               if (targetEnm==null && defaultTarget) targetEnm = defaultTarget;
-                
                 this.GetComponent<VisualEffect>().SetVector3("TargetLocation", targetEnm.transform.position-this.transform.position);
                 audioSource.PlayOneShot(audioManager.GetAudio("se_MagicSummon"));
 

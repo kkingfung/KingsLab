@@ -280,7 +280,6 @@ public static class StageInfo
 
     private static WaveAttr[] PrepareHardStageInfo(int waveNum)
     {
-        Debug.Log(waveNum);
         WaveAttr[] waveArray = new WaveAttr[waveNum];
         List<EnmDetail> detail = new List<EnmDetail>();
         detail.Add(new EnmDetail(0, 5, 1, "Slime"));
@@ -331,7 +330,6 @@ public static class StageInfo
 
     private static WaveAttr[] PrepareCustomStageInfo(int waveNum)
     {
-        Debug.Log(waveNum);
         WaveAttr[] waveArray = new WaveAttr[waveNum];
 
         List<EnmDetail> detail = new List<EnmDetail>();

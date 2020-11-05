@@ -25,6 +25,7 @@ public class GyroscopeManager : MonoBehaviour
     public bool VerticalShake = false;
 
     Vector3 ReferenceCenter;
+    Vector3 oriRotation;
     Vector3 lastRotation;
     Vector3 currRotation;
     float timeRecord;
@@ -47,8 +48,9 @@ public class GyroscopeManager : MonoBehaviour
         foreach (Slider i in senseSlider)
             i.value = sensitivity;
         timeRecord = Time.time;
-        currRotation = GyroToUnity(Input.gyro.attitude).eulerAngles;
-        ResetReference();
+        oriRotation = transform.localEulerAngles;
+        currRotation = oriRotation;
+        ReferenceCenter = currRotation;
     }
 
     private void Update()
@@ -123,11 +125,9 @@ public class GyroscopeManager : MonoBehaviour
 
     public Vector3 CurrGyroRotation() 
     {
-        Vector3 rot = (currRotation - ReferenceCenter)*(sensitivity+0.5f);
-        Mathf.Clamp(rot.x, -45.0f, 45.0f);
-        Mathf.Clamp(rot.y, -45.0f, 45.0f);
-
-        rot.z = 0;
+        Vector3 rot = (currRotation - ReferenceCenter)*(sensitivity+0.5f)+ oriRotation;
+        if (rot.x - oriRotation.x > 30) rot.x = oriRotation.x+30;
+        if (rot.x - oriRotation.x <-30) rot.x = oriRotation.x-30;
         return rot;
     }
 }

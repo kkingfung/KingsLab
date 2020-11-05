@@ -8,7 +8,7 @@ using UnityEngine.Jobs;
 
 public class SkillSpawner : MonoBehaviour
 {
-    private readonly int count = 30;
+    private readonly int count = 300;
     public static SkillSpawner Instance { get; private set; }
     public List<GameObject> PrefabObject;
 

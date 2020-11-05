@@ -16,7 +16,6 @@ static public class SkillStack
     static public bool AddStock(Upgrades.StoreItems itemID) {
         if (CheckFullStocks())
             return false;
-
         int emptySlot = -1;
         for (int i = 0; i < maxStackNum; ++i)
         {

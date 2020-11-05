@@ -195,7 +195,7 @@ public class StoreManager : MonoBehaviour
     public void ItemSold(int itemID)
     {
         Upgrades.StoreItems FullitemID = (Upgrades.StoreItems)(itemID + (sceneManager.currScreenShown + 1) * Upgrades.MaxItemPerSlot);
-        Upgrades.AddLevel(FullitemID,pendToKart[itemID]);
+        Upgrades.StoreUpgrade(FullitemID,pendToKart[itemID]);
 
         resourceManager.ChangeMaterial(-1 * costToKart[itemID]);
 

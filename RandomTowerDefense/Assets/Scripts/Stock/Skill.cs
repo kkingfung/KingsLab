@@ -27,9 +27,15 @@ public class Skill : MonoBehaviour
 
     private SkillSpawner skillSpawner;
 
+    private GameObject defaultTarget;
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
+        if (skillSpawner == null)
+            MyStart();
+    }
+
+    private void MyStart() {
         ActionEnded = false;
 
         playerManager = FindObjectOfType<PlayerManager>();
@@ -55,35 +61,16 @@ public class Skill : MonoBehaviour
                 audioSource.PlayOneShot(audioManager.GetAudio("se_MagicPetrification"));
                 break;
             case Upgrades.StoreItems.MagicMinions:
-                this.transform.position = Camera.main.transform.position;
-                Vector3 targetPos = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
-                List<GameObject> allAliveMonsters = enemySpawner.AllAliveMonstersList();
-                if (allAliveMonsters.Count > 0)
-                {
-                    GameObject nearestMonster = null;
-                    float dist = float.MaxValue;
-                    foreach (GameObject i in allAliveMonsters)
-                    {
-                        float tempDist = (i.transform.position - targetPos).sqrMagnitude;
-                        if (tempDist < dist)
-                        {
-                            dist = tempDist;
-                            nearestMonster = i;
-                        }
-                    }
-                    targetEnm = nearestMonster;
-                }
-                else targetEnm = null;
-
-                this.GetComponent<VisualEffect>().SetVector3("TargetLocation", targetEnm.transform.position-this.transform.position);
+                findEnm();
+                this.GetComponent<VisualEffect>().SetVector3("TargetLocation",
+                    targetEnm.transform.position - this.transform.position);
                 audioSource.PlayOneShot(audioManager.GetAudio("se_MagicSummon"));
 
                 break;
         }
     }
-
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         switch (actionID)
         {
@@ -121,11 +108,13 @@ public class Skill : MonoBehaviour
         }
     }
 
-    public void Init(Upgrades.StoreItems actionID, SkillAttr attr,int entityID)
+    public void Init(Upgrades.StoreItems actionID, SkillAttr attr, int entityID)
     {
         this.actionID = actionID;
         this.attr = new SkillAttr(attr);
         this.entityID = entityID;
+        if (skillSpawner == null)
+            MyStart();
 
         switch (actionID)
         {
@@ -145,8 +134,35 @@ public class Skill : MonoBehaviour
         {
             case Upgrades.StoreItems.MagicPetrification:
                 this.GetComponent<VisualEffect>().SetFloat("Radius", val * 1.5f);
-                this.GetComponent<VisualEffect>().SetFloat("Rotation", val / attr.lifeTime*30.0f);
+                this.GetComponent<VisualEffect>().SetFloat("Rotation", val / attr.lifeTime * 30.0f);
                 break;
         }
+    }
+
+    private void findEnm()
+    {
+        if (targetEnm != null) return;
+        if (defaultTarget == null)
+            defaultTarget = GameObject.FindGameObjectWithTag("DebugTag");
+
+        this.transform.position = Camera.main.transform.position;
+        Vector3 targetPos = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
+        List<GameObject> allAliveMonsters = enemySpawner.AllAliveMonstersList();
+        if (allAliveMonsters.Count > 0)
+        {
+            GameObject nearestMonster = null;
+            float dist = float.MaxValue;
+            foreach (GameObject i in allAliveMonsters)
+            {
+                float tempDist = (i.transform.position - targetPos).sqrMagnitude;
+                if (tempDist < dist)
+                {
+                    dist = tempDist;
+                    nearestMonster = i;
+                }
+            }
+            targetEnm = nearestMonster;
+        }
+        else targetEnm = defaultTarget;
     }
 }

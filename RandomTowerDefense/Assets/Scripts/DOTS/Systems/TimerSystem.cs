@@ -30,6 +30,7 @@ public class TimerSystem : JobComponentSystem
 			wait.Value -= deltaTime;
 		}).Schedule(inputDeps);
 		job.Complete();
+
 		job = Entities.WithAll<PlayerTag>().ForEach((Entity entity, int entityInQueryIndex, ref WaitingTime wait) =>
 		{
 			wait.Value -= deltaTime;

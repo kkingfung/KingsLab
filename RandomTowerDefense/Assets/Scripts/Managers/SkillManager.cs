@@ -43,8 +43,8 @@ public class SkillManager : MonoBehaviour
     void SkillUpgrade(Upgrades.StoreItems itemID) {
         int currExp = SkillUpgrader[itemID];
         if (currExp > SkillRequirement[Upgrades.GetLevel(itemID)]) {
-            Upgrades.AddLevel(itemID, 1);
-            SkillUpgrader[itemID] = 0;
+            if (Upgrades.AddSkillLevel(itemID, 1))
+                SkillUpgrader[itemID] = 0;
         }
     }
 
@@ -184,8 +184,10 @@ public class SkillManager : MonoBehaviour
         {
             if (Time.time - frameToNext > attr.cycleTime)
             {
+          
                 int[] entityID = skillSpawner.Spawn(3, this.transform.position,new float3(),
                     attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime);
+                
                 skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
                     .Init(Upgrades.StoreItems.MagicMinions, attr, entityID[0]);
 

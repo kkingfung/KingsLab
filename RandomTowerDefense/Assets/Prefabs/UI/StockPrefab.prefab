@@ -139,7 +139,7 @@ MonoBehaviour:
   SprMeteor: {fileID: 21300000, guid: 49f174a478de3e34b811a4ff3b2d365d, type: 3}
   SprBlizzard: {fileID: 21300000, guid: d1ca8ea1907458e4c8ccf774583aa88c, type: 3}
   SprPetrification: {fileID: 21300000, guid: 08ea3d06ba19d6b41aed92f53074b620, type: 3}
-  SprSummon: {fileID: 21300000, guid: 444baec8ce1821c4d95da2b07ff3e31a, type: 3}
+  SprMinions: {fileID: 21300000, guid: 444baec8ce1821c4d95da2b07ff3e31a, type: 3}
   MatNull: {fileID: 2100000, guid: e4f4438f4a231fc43984600a38a35477, type: 2}
   MatBoss1: {fileID: 2100000, guid: 1f93fdb08a37a064d848cee1d0deb964, type: 2}
   MatBoss2: {fileID: 2100000, guid: 7ecb112e552fe874bb43a70d3f541072, type: 2}
@@ -147,7 +147,7 @@ MonoBehaviour:
   MatMeteor: {fileID: 2100000, guid: d0f1c2dc8d8d00e458b2111edb5b80f1, type: 2}
   MatBlizzard: {fileID: 2100000, guid: c42ffc6c6d5570f4eb10290074745622, type: 2}
   MatPetrification: {fileID: 2100000, guid: 01b938d8ac308014f9843f9cf67f4049, type: 2}
-  MatSummon: {fileID: 2100000, guid: 7163bdfd2ad8b4a4f8cec5138b5f813d, type: 2}
+  MatMinions: {fileID: 2100000, guid: 7163bdfd2ad8b4a4f8cec5138b5f813d, type: 2}
 --- !u!1 &2251862560759888182
 GameObject:
   m_ObjectHideFlags: 0

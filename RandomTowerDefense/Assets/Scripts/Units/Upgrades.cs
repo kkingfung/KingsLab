@@ -52,7 +52,15 @@ static public class Upgrades
         return StoreLevel[itemID];
     }
 
-    static public bool AddLevel(StoreItems itemID,int lvUP)
+    static public bool AddSkillLevel(StoreItems itemID, int lvUP)
+    {
+        if (StoreLevel.ContainsKey(itemID) == false) return false;
+        if (StoreLevel[itemID] + lvUP > MaxLevel) return false;
+        StoreLevel[itemID] += lvUP;
+        return true;
+    }
+
+        static public bool StoreUpgrade(StoreItems itemID,int lvUP)
     {
         if (StoreLevel.ContainsKey(itemID) == false) return false;
         if (StoreLevel[itemID] + lvUP > MaxLevel) return false;

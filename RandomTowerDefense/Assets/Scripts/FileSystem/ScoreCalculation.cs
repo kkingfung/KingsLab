@@ -31,7 +31,7 @@ public class ScoreCalculation : MonoBehaviour
     {
         Inputting = false;
         playerName = "AAAAA";
-        rank = 99;
+        rank = 0;
         sceneManager = FindObjectOfType<InGameOperation>();
         recordManager = FindObjectOfType<RecordManager>();
         stageManager = FindObjectOfType<StageManager>();
@@ -40,13 +40,14 @@ public class ScoreCalculation : MonoBehaviour
     private void LateUpdate()
     {
         foreach (Text i in RankObj)
-            i.text = rank+ ".";
+            i.text = rank == 0 ? "" : rank + ".";
+
         foreach (Text i in NameObj)
-            i.text = playerName;
+            i.text = rank == 0 ? "" : playerName;
     }
 
-    public void CalculationScore() {
-
+    public void CalculationScore() 
+    {
         score = 0;
         scoreStr = "";
 
@@ -76,7 +77,6 @@ public class ScoreCalculation : MonoBehaviour
         score += scoreChg;
         scoreStr += "+" + scoreChg + "\n";
 
-
         //Remark: Special Function for extra mode
         if (currIsland != StageInfo.IslandNum - 1 && result==-1) {
             scoreStr += "-" + score + "\n";
@@ -85,14 +85,15 @@ public class ScoreCalculation : MonoBehaviour
 
         scoreStr += "=" + score;
 
-        if (score <= 0) return;
-        rank=recordManager.RecordComparison(currIsland, "ZYXWV", score);
-
         foreach (Text i in ScoreObj)
         {
-                i.text = scoreStr;
-                i.gameObject.GetComponent<UIEffect>().ResetForScoreShow();
+            i.text = scoreStr;
+            i.gameObject.GetComponent<UIEffect>().ResetForScoreShow();
         }
+
+        if (score <= 0) return;
+        rank=recordManager.RecordComparison(currIsland, "ZYXWV", score);
+        Debug.Log(rank);
     }
 
     public void TouchKeybroad(int infoID)

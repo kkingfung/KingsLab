@@ -101,14 +101,8 @@ public class CameraManager : MonoBehaviour
                 {
                     for (int i = 0; i < GyroCamGp.Count; ++i)
                     {
-                        Quaternion OriRot = GyroCamGp[i].transform.rotation;
                         GyroCamGp[i].transform.Rotate(new Vector3(Input.GetAxis("Vertical") * Time.deltaTime * -50f,
                             0, 0), Space.Self);
-                        float AngleX = GyroCamGp[i].transform.localEulerAngles.x;
-                        if (AngleX > 180) AngleX = 360 - AngleX;
-                        if (Mathf.Abs(AngleX) > 30)
-                            GyroCamGp[i].transform.rotation = OriRot;
-
                         GyroCamGp[i].transform.Rotate(new Vector3(0,
                             Input.GetAxis("Horizontal") * Time.deltaTime * 50f, 0), Space.World);
                         //GyroCamGp[i].transform.rotation = Quaternion.Euler(GyroscopeManager.CurrGyroRotation());

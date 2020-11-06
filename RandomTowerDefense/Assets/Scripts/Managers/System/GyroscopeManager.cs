@@ -84,7 +84,7 @@ public class GyroscopeManager : MonoBehaviour
         PlayerPrefs.SetFloat("Gyro", sensitivity);
     }
 
-    void GyroModify()
+    public void GyroModify()
     {
         currRotation = GyroToUnity(Input.gyro.attitude).eulerAngles;
         //Reset Shake
@@ -126,8 +126,6 @@ public class GyroscopeManager : MonoBehaviour
     public Vector3 CurrGyroRotation() 
     {
         Vector3 rot = (currRotation - ReferenceCenter)*(sensitivity+0.5f)+ oriRotation;
-        if (rot.x - oriRotation.x > 30) rot.x = oriRotation.x+30;
-        if (rot.x - oriRotation.x <-30) rot.x = oriRotation.x-30;
         return rot;
     }
 }

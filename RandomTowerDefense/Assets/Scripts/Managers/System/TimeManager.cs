@@ -20,7 +20,10 @@ public class TimeManager : MonoBehaviour
 	private int timeScaleId;
 
 	private bool isControl = false;
-	void Start() {
+
+	private InGameOperation sceneManager;
+	void Start()
+	{
 		timeScaleId = 0;
 		Time.timeScale = 1.0f;
 		OriTimeScale = Time.timeScale;
@@ -28,6 +31,8 @@ public class TimeManager : MonoBehaviour
 
 		foreach (Text i in text)
 			i.text = "X" + (int)Time.timeScale;
+
+		sceneManager = FindObjectOfType<InGameOperation>();
 	}
 	void Update()
 	{
@@ -42,21 +47,28 @@ public class TimeManager : MonoBehaviour
 		Time.fixedDeltaTime = Time.timeScale * .02f;
 	}
 
-	public void TimeControl() 
+	public void TimeControl()
 	{
 		isControl = !isControl;
-		if (isControl) {
+		if (isControl)
+		{
 			AdjustTime();
 		}
 	}
 
-	public void SetTimeScale() {
-		timeScaleId++;
+	public void ChgTimeScale(int chg = 1)
+	{
+		if (sceneManager && sceneManager.GetOptionStatus()) return;
+		SetTimeScale(timeScaleId + chg);
+	}
+	public void SetTimeScale(int target)
+	{
+		timeScaleId = target;
 		timeScaleId %= timeScaleFactor.Length;
 		Time.timeScale = timeScaleFactor[timeScaleId];
 		OriTimeScale = Time.timeScale;
-		foreach(Text i in text)
-		i.text = "X" + (int)Time.timeScale;
+		foreach (Text i in text)
+			i.text = "X" + (int)Time.timeScale;
 	}
 	public bool GetControl() { return isControl; }
 }

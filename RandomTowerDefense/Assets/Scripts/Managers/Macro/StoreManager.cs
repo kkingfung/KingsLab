@@ -29,20 +29,20 @@ public class StoreManager : MonoBehaviour
 
     int[] bonusBossCooldown = { 0, 0, 0};
 
-    readonly int[] PriceForArmy1 = { 20, 50, 100, 200, 500, 800, 1000, 1200, 1500, 2000 };
-    readonly int[] PriceForArmy2 = { 20, 50, 100, 200, 500, 800, 1000, 1200, 1500, 2000 };
-    readonly int[] PriceForArmy3 =  { 20, 50, 100, 200, 500, 800, 1000, 1200, 1500, 2000 };
-    readonly int[] PriceForArmy4 = { 20, 50, 100, 200, 500, 800, 1000, 1200, 1500, 2000 };
+    readonly int[] PriceForArmy1 = { 100, 150, 210, 270, 330, 390, 440, 500, 570, 650 };
+    readonly int[] PriceForArmy2 = { 100, 150, 210, 270, 330, 390, 440, 500, 570, 650 };
+    readonly int[] PriceForArmy3 = { 100, 150, 210, 270, 330, 390, 440, 500, 570, 650 };
+    readonly int[] PriceForArmy4 = { 100, 150, 210, 270, 330, 390, 440, 500, 570, 650 };
 
     readonly int[] PriceForCastleHP = { 50, 50, 50, 50, 50, 50, 50, 50, 50, 50 };
     readonly int[] PriceForBonusBoss1 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     readonly int[] PriceForBonusBoss2 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     readonly int[] PriceForBonusBoss3 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-    readonly int[] PriceForMagicMeteor = { 5, 10, 20, 30, 50, 70, 100, 120, 150, 200 };
-    readonly int[] PriceForMagicBlizzard = { 5, 10, 20, 30, 50, 70, 100, 120, 150, 200 };
-    readonly int[] PriceForMagicMinions = { 5, 10, 20, 30, 50, 70, 100, 120, 150, 200 };
-    readonly int[] PriceForMagicPetrification = { 5, 10, 20, 30, 50, 70, 100, 120, 150, 200 };
+    readonly int[] PriceForMagicMeteor = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 };
+    readonly int[] PriceForMagicBlizzard = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100 };
+    readonly int[] PriceForMagicMinions = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100 };
+    readonly int[] PriceForMagicPetrification = { 10, 20, 30, 50, 60, 70, 80, 90, 100 };
 
     // Start is called before the first frame update
     private void Start()
@@ -178,7 +178,7 @@ public class StoreManager : MonoBehaviour
         if (Upgrades.GetLevel(itemID)+1 >= ItemPrice[itemID].Length) {
             return -1;
         }
-        return ItemPrice[itemID][Upgrades.GetLevel(itemID) + 1];
+        return ItemPrice[itemID][Upgrades.GetLevel(itemID)];
     }
 
     public int GetCost(int itemID) {

@@ -136,7 +136,12 @@ public class StageSelectOperation : ISceneChange
         base.Update();
 
         foreach (Button i in OptionButton)
+        {
             i.interactable = !isOption && !isSceneFinished;
+        }
+
+        OptionButton[0].interactable = !isSceneFinished;
+        OptionButton[1].interactable = !isSceneFinished;
 
         //Change Scene
         if (isSceneFinished && ((LandscapeFade && LandscapeFade.isReady) || (PortraitFade && PortraitFade.isReady)))
@@ -174,7 +179,6 @@ public class StageSelectOperation : ISceneChange
         if (Time.time - TimeRecord < TimeWait) return;
         isOption = !isOption;
         CanvaManager.isOption = isOption;
-        GyroscopeManager.isFunctioning = !isOption;
         TimeRecord = Time.time;
         AudioManager.PlayAudio("se_Button");
     }

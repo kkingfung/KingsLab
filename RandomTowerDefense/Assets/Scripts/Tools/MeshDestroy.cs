@@ -55,6 +55,7 @@ public class MeshDestroy : MonoBehaviour
         for (var i = 0; i < parts.Count; i++)
         {
             parts[i].MakeGameobject(this);
+            if (parts[i].GameObject == null) continue;
             parts[i].GameObject.GetComponent<Rigidbody>().AddForceAtPosition(parts[i].Bounds.center * ExplodeForce, transform.position);
         }
 
@@ -259,7 +260,7 @@ public class MeshDestroy : MonoBehaviour
 
             var mesh = new Mesh();
             mesh.name = original.GetComponent<MeshFilter>().mesh.name;
-
+    
             mesh.vertices = Vertices;
             mesh.normals = Normals;
             mesh.uv = UV;
@@ -273,8 +274,8 @@ public class MeshDestroy : MonoBehaviour
             var filter = GameObject.AddComponent<MeshFilter>();
             filter.mesh = mesh;
 
-            var collider = GameObject.AddComponent<MeshCollider>();
-            collider.convex = true;
+                var collider = GameObject.AddComponent<MeshCollider>();
+                    collider.convex = true;
 
             var rigidbody = GameObject.AddComponent<Rigidbody>();
             var meshDestroy = GameObject.AddComponent<MeshDestroy>();

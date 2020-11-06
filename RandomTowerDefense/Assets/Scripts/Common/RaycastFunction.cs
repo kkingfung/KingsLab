@@ -10,7 +10,7 @@ public class RaycastFunction : MonoBehaviour
     public int InfoID;
 
     private StageSelectOperation SelectionSceneManager;
-    private InGameOperation GameSceneManager;
+    private InGameOperation sceneManager;
 
     private StoreManager storeManager;
     private AudioManager audioManager;
@@ -45,7 +45,7 @@ public class RaycastFunction : MonoBehaviour
     private void Start()
     {
         SelectionSceneManager = FindObjectOfType<StageSelectOperation>();
-        GameSceneManager = FindObjectOfType<InGameOperation>();
+        sceneManager = FindObjectOfType<InGameOperation>();
 
         storeManager = FindObjectOfType<StoreManager>();
         audioManager = FindObjectOfType<AudioManager>();
@@ -57,7 +57,9 @@ public class RaycastFunction : MonoBehaviour
 
     public void ActionFunc()
     {
-        if (SelectionSceneManager == null && GameSceneManager==null) return;
+        if (SelectionSceneManager == null && sceneManager==null) return;
+
+        if (sceneManager.GetOptionStatus()) return;
 
         switch ((ActionTypeID)ActionID)
         {
@@ -76,22 +78,22 @@ public class RaycastFunction : MonoBehaviour
 
             //For Game Scene (Screen to See)
             case ActionTypeID.GameScene_UpArrow:
-                GameSceneManager.nextScreenShown = (int)InGameOperation.ScreenShownID.SSIDTop;
+                sceneManager.nextScreenShown = (int)InGameOperation.ScreenShownID.SSIDTop;
                 audioManager.PlayAudio("se_Button");
                 break;
             case ActionTypeID.GameScene_DownArrow:
-                GameSceneManager.nextScreenShown = (int)InGameOperation.ScreenShownID.SSIDArena;
+                sceneManager.nextScreenShown = (int)InGameOperation.ScreenShownID.SSIDArena;
                 audioManager.PlayAudio("se_Button");
                 break;
             case ActionTypeID.GameScene_LeftArrow:
-                GameSceneManager.nextScreenShown = 
-                    (GameSceneManager.currScreenShown == (int)InGameOperation.ScreenShownID.SSIDTopRight) ?
+                sceneManager.nextScreenShown = 
+                    (sceneManager.currScreenShown == (int)InGameOperation.ScreenShownID.SSIDTopRight) ?
                     (int)InGameOperation.ScreenShownID.SSIDTop : (int)InGameOperation.ScreenShownID.SSIDTopLeft;
                 audioManager.PlayAudio("se_Button");
                 break;
             case ActionTypeID.GameScene_RightArrow:
-                GameSceneManager.nextScreenShown =
-                (GameSceneManager.currScreenShown == (int)InGameOperation.ScreenShownID.SSIDTopLeft) ?
+                sceneManager.nextScreenShown =
+                (sceneManager.currScreenShown == (int)InGameOperation.ScreenShownID.SSIDTopLeft) ?
                 (int)InGameOperation.ScreenShownID.SSIDTop : (int)InGameOperation.ScreenShownID.SSIDTopRight;
                 audioManager.PlayAudio("se_Button");
                 break;

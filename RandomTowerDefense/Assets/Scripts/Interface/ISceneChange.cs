@@ -86,5 +86,6 @@ public class ISceneChange : MonoBehaviour
     }
 
     public bool GetOptionStatus() { return isOption; }
+    public void SetOptionStatus(bool enabled) { isOption = enabled; }
 
 }

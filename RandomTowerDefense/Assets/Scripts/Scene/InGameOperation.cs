@@ -40,6 +40,7 @@ public class InGameOperation : ISceneChange
     public List<Image> PetrifyImgs;
     public List<RawImage> PetrifyRImgs;
     public List<SpriteRenderer> PetrifySpr;
+    public List<Material> PetrifyMat;
 
     [Header("Other Settings")]
     public Material FloorMat;
@@ -64,12 +65,12 @@ public class InGameOperation : ISceneChange
 
     //Manager
     private AudioManager AudioManager;
-    //private CameraManager CameraManager;
+    private CameraManager CameraManager;
     private CanvaManager CanvaManager;
     private InputManager InputManager;
     private GyroscopeManager GyroscopeManager;
     private ResourceManager resourceManager;
-    private WaveManager waveManager;
+    //private WaveManager waveManager;
     private TimeManager timeManager;
     private TutorialManager tutorialManager;
     private ScoreCalculation scoreCalculation;
@@ -77,6 +78,7 @@ public class InGameOperation : ISceneChange
     //Prevent DoubleHit
     private float TimeRecord = 0;
     private const float TimeWait = 0.01f;
+    private bool WaitSceneChg;
 
     //CameraOperation
     private const int maxRecFrame = 20;
@@ -98,6 +100,7 @@ public class InGameOperation : ISceneChange
         IslandNow = PlayerPrefs.GetInt("IslandNow");
         IslandEnabled = PlayerPrefs.GetInt("IslandEnabled");
         isTutorial = (IslandNow == 0);
+        WaitSceneChg = false;
     }
     // Start is called before the first frame update
     private void Start()
@@ -115,10 +118,10 @@ public class InGameOperation : ISceneChange
 
         InputManager = FindObjectOfType<InputManager>();
         AudioManager = FindObjectOfType<AudioManager>();
-        //CameraManager = FindObjectOfType<CameraManager>();
+        CameraManager = FindObjectOfType<CameraManager>();
         CanvaManager = FindObjectOfType<CanvaManager>();
         GyroscopeManager = FindObjectOfType<GyroscopeManager>();
-        waveManager = FindObjectOfType<WaveManager>();
+        //waveManager = FindObjectOfType<WaveManager>();
         resourceManager = FindObjectOfType<ResourceManager>();
         timeManager = FindObjectOfType<TimeManager>();
         scoreCalculation = FindObjectOfType<ScoreCalculation>();
@@ -130,6 +133,10 @@ public class InGameOperation : ISceneChange
         }
 
         AudioManager.PlayAudio("bgm_Battle",true);
+
+        foreach (Material mat in PetrifyMat) {
+            mat.SetFloat("_Progress", 0);
+        }
 
         if (PetrifyImgs.Count > 0)
         {
@@ -175,9 +182,12 @@ public class InGameOperation : ISceneChange
     {
         base.Update();
 
-        ArrowOperation();
-        ChangeScreenShownByGyro();
-        ChangeScreenShownByDrag();
+        if (!isOption)
+        {
+            ArrowOperation();
+            ChangeScreenShownByGyro();
+            ChangeScreenShownByDrag();
+        }
 
         if (tutorialManager && isTutorial)
         {
@@ -203,7 +213,7 @@ public class InGameOperation : ISceneChange
         }
 
         foreach (Button i in OptionButton)
-            i.interactable = !isOption && !isSceneFinished;
+            i.interactable = !isSceneFinished;
 
         //Change Scene
         if (isSceneFinished && ((LandscapeFade && LandscapeFade.isReady) || (PortraitFade && PortraitFade.isReady)))
@@ -254,8 +264,10 @@ public class InGameOperation : ISceneChange
 
     public void MoveToStage(int SceneID)
     {
+        if (WaitSceneChg) return;
         if (Time.time - TimeRecord < TimeWait) return;
         if (scoreCalculation.Inputting) return;
+        WaitSceneChg = true;
         StartCoroutine(PetrifyAnimation(SceneID));
         TimeRecord = Time.time;
     }
@@ -266,7 +278,6 @@ public class InGameOperation : ISceneChange
         if (timeManager.timeFactor == 0) return;
         isOption = !isOption;
         CanvaManager.isOption = isOption;
-        GyroscopeManager.isFunctioning = !isOption;
         TimeRecord = Time.time;
         timeManager.TimeControl();
         InputManager.TapTimeRecord = 0;
@@ -278,7 +289,7 @@ public class InGameOperation : ISceneChange
     private IEnumerator PetrifyAnimation(int sceneID)
     {
         float progress = 0f;
-        int frame = 60;
+        int frame = 20;
         float rate = 1 / (float)frame;
         while (frame-- > 0)
         {
@@ -312,6 +323,7 @@ public class InGameOperation : ISceneChange
     #region CameraOperation
     public void ChangeScreenShownByButton(int chgValue)
     {
+        if (isOption) return;
         //DownArrow:0,LeftArrow:1,UpArrow:2 ,RightArrow:3
         switch (chgValue) {
             case 0:
@@ -331,6 +343,13 @@ public class InGameOperation : ISceneChange
                 else return;
                 break;
         }
+        foreach (GameObject i in CameraManager.GyroCamGp)
+        {
+            i.transform.localEulerAngles = new Vector3();
+        }
+        GyroscopeManager.GyroModify();
+        GyroscopeManager.ResetReference();
+
         if (nextScreenShown != currScreenShown)
         {
             isScreenChanging = true;

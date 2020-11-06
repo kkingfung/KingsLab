@@ -10,7 +10,7 @@ public class Castle : MonoBehaviour
 
     private AudioManager audioManager;
     private AudioSource audioSource;
-
+    private StageManager stageManager;
     private CastleSpawner castleSpawner;
 
     // Start is called before the first frame update
@@ -19,6 +19,7 @@ public class Castle : MonoBehaviour
         audioManager = FindObjectOfType<AudioManager>();
         castleSpawner = FindObjectOfType<CastleSpawner>();
         audioSource = GetComponent<AudioSource>();
+        stageManager = FindObjectOfType<StageManager>();
 
         MaxCastleHP = (int)PlayerPrefs.GetFloat("hpMax");
         CurrCastleHP = MaxCastleHP;
@@ -30,7 +31,7 @@ public class Castle : MonoBehaviour
         int PreviousCastleHP = CurrCastleHP;
         CurrCastleHP = GetCastleHpFromEntity();
 
-        HPText.text = CurrCastleHP.ToString();
+        HPText.text = CurrCastleHP < 0 ? "0" : CurrCastleHP.ToString();
         if (PreviousCastleHP > CurrCastleHP)
             audioSource.PlayOneShot(audioManager.GetAudio("se_Hitted"));
         Shield.SetActive(CurrCastleHP > 1);
@@ -38,14 +39,17 @@ public class Castle : MonoBehaviour
 
     public bool AddedHealth(int Val = 1)
     {
+        castleSpawner.castleHPArray[0] = CurrCastleHP + Val;
+        if(CurrCastleHP + Val<=0)
+            stageManager.CheckLose();
         if (CurrCastleHP > 0)
-            SetCastleHpToEntity(CurrCastleHP + 1);
+            SetCastleHpToEntity(CurrCastleHP + Val);
+                 
         return CurrCastleHP <= 0;
     }
 
     public void SetCastleHpToEntity(int hp)
     {
-        castleSpawner.castleHPArray[0] = hp;
         EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         entityManager.SetComponentData(castleSpawner.Entities[0], new Health
         {

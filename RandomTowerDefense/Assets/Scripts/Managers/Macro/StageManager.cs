@@ -14,6 +14,7 @@ public class StageManager : MonoBehaviour
 
     private InGameOperation sceneManager;
     private AudioManager audioManager;
+    private TimeManager timeManager;
     private ScoreCalculation scoreCalculation;
     public List<GameObject> GameClearCanva;
     public List<GameObject> GameOverCanva;
@@ -42,6 +43,7 @@ public class StageManager : MonoBehaviour
         sceneManager = FindObjectOfType<InGameOperation>();
         mapGenerator = FindObjectOfType<FilledMapGenerator>();
         audioManager = FindObjectOfType<AudioManager>();
+        timeManager = FindObjectOfType<TimeManager>();
         scoreCalculation = FindObjectOfType<ScoreCalculation>();
         castleSpawner = FindObjectOfType<CastleSpawner>();
 
@@ -82,7 +84,6 @@ public class StageManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CheckLose();
         if (result != 0 && isReady)
         {
             sceneManager.DarkenCam.SetActive(true);
@@ -130,8 +131,12 @@ public class StageManager : MonoBehaviour
         {
             result = -1;
             isReady = false;
+            sceneManager.SetOptionStatus(false);
             audioManager.PlayAudio("se_Lose");
-            castleSpawner.GameObjects[CastleEntityID].GetComponent<MeshDestroy>().DestroyMesh();
+            timeManager.SetTimeScale(0);
+            MeshDestroy[] castleDestroy = castleSpawner.GameObjects[CastleEntityID].GetComponentsInChildren<MeshDestroy>();
+            foreach(MeshDestroy i in castleDestroy)
+                i.DestroyMesh();
             scoreCalculation.CalculationScore();
             StartCoroutine(FadeInRoutine());
         }
@@ -192,5 +197,10 @@ public class StageManager : MonoBehaviour
         }
 
         return pos;
+    }
+
+    public void AddedHealth(int Val = 1)
+    {
+        castleSpawner.GameObjects[0].GetComponent<Castle>().AddedHealth(Val);
     }
 }

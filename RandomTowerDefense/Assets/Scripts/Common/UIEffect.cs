@@ -58,6 +58,7 @@ public class UIEffect : MonoBehaviour
         alpha = 0f;
         textCnt = 0;
         if (textMesh) fullText = textMesh.text;
+        else if(text) fullText = text.text;
         LandscapeOrientation = Screen.width > Screen.height;
 
     }

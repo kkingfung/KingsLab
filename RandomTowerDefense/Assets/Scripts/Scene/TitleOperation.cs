@@ -30,6 +30,7 @@ public class TitleOperation: ISceneChange
     public List<Image> PetrifyImgs;
     public List<RawImage> PetrifyRImgs;
     public List<SpriteRenderer> PetrifySpr;
+    public List<Material> PetrifyMat;
 
     [Header("Other Settings")]
     public List<GameObject> TitleImg;
@@ -79,7 +80,8 @@ public class TitleOperation: ISceneChange
 
     private void OnEnable()
     {
-        BoidSpawn.SetActive(true);
+        //BoidSpawn.SetActive(true);
+        Time.timeScale = 1;
     }
     private void Awake()
     {
@@ -123,6 +125,10 @@ public class TitleOperation: ISceneChange
         AudioManager.PlayAudio("bgm_Opening");
         PlayerPrefs.SetFloat("zoomRate", 0f);
 
+        foreach (Material mat in PetrifyMat)
+        {
+            mat.SetFloat("_Progress", 0);
+        }
 
         if (PetrifyImgs.Count > 0)
         {

@@ -35,11 +35,13 @@ public class StageSelectOperation : ISceneChange
     public List<Image> PetrifyImgs;
     public List<RawImage> PetrifyRImgs;
     public List<SpriteRenderer> PetrifySpr;
-
+    public List<Material> PetrifyMat;
     [Header("Other Settings")]
     public List<TextMesh> StageCustomText;
     public List<TextMesh> StageCustomTextDirect;
     public List<VisualEffect> SceneChgPS;
+
+    public List<GameObject> Terrains;
 
     public GameObject LandscapeFadeImg;
     public GameObject PortraitFadeImg;
@@ -69,7 +71,7 @@ public class StageSelectOperation : ISceneChange
     private const float TimeWait = 0.5f;
 
     //CameraOperation
-    private readonly int maxRecFrame = 20;
+    private readonly float maxIslandChgTime = 0.2f;
 
     private void OnDestroy()
     {
@@ -108,11 +110,16 @@ public class StageSelectOperation : ISceneChange
 
         AudioManager.PlayAudio("bgm_Title");
 
-        UnityEngine.Rendering.Universal.Bloom bloom;
-        volumeProfile.TryGet<UnityEngine.Rendering.Universal.Bloom>(out bloom);
-        bloom.intensity.value = bloomInt_Max;
+        //UnityEngine.Rendering.Universal.Bloom bloom;
+        //volumeProfile.TryGet<UnityEngine.Rendering.Universal.Bloom>(out bloom);
+        //bloom.intensity.value = bloomInt_Max;
 
-        StartCoroutine("SceneChgAnimation");
+       // StartCoroutine("SceneChgAnimation");
+
+        foreach (Material mat in PetrifyMat)
+        {
+            mat.SetFloat("_Progress", 0);
+        }
 
         if (PetrifyImgs.Count>0) {
             foreach (Image i in PetrifyImgs)
@@ -148,6 +155,11 @@ public class StageSelectOperation : ISceneChange
         {
             SceneManager.LoadScene("GameScene");
             return;
+        }
+
+        for (int i = 0; i < Terrains.Count;++i)
+        {
+            Terrains[i].SetActive(i== IslandNow || i== IslandNext);
         }
 
         ArrowOperation();
@@ -225,9 +237,15 @@ public class StageSelectOperation : ISceneChange
     {
         //Gyroscope Operation
         if (GyroscopeManager.LeftShake)
+        {
             IslandNext = Mathf.Clamp(IslandNow - 1, 0, IslandEnabled);
+            GyroscopeManager.ResetReference();
+        }
         if (GyroscopeManager.RightShake)
+        {
             IslandNext = Mathf.Clamp(IslandNow + 1, 0, IslandEnabled);
+            GyroscopeManager.ResetReference();
+        }
     }
 
     public void ChangeIsland()
@@ -264,58 +282,67 @@ public class StageSelectOperation : ISceneChange
     private IEnumerator RecMainCamOperation()
     {
         Vector3 spd;
-        int frame;
+        float timer = 0;
 
         MainCam.transform.position = MainCamStayPt[IslandNow];
 
         spd = MainCamStayPt[IslandNext] - MainCamStayPt[IslandNow];
-        spd /= maxRecFrame;
-        frame = 0;
+        spd /= maxIslandChgTime;
 
-        while (frame < maxRecFrame)
+        while (timer < maxIslandChgTime &&
+            ((MainCam.transform.position + spd * Time.deltaTime - MainCamStayPt[IslandNext]).sqrMagnitude <
+            (MainCam.transform.position - MainCamStayPt[IslandNext]).sqrMagnitude))
         {
-            frame++;
-            MainCam.transform.position += spd;
+            timer += Time.deltaTime;
+            if (timer > maxIslandChgTime) timer = maxIslandChgTime;
+            MainCam.transform.position = MainCamStayPt[IslandNow] + spd * timer;
             yield return new WaitForSeconds(0f);
         }
-      IslandNow = IslandNext;
+        MainCam.transform.position = MainCamStayPt[IslandNext];
+        IslandNow = IslandNext;
     }
 
     private IEnumerator RecRightCamOperation()
     {
         Vector3 spd;
-        int frame;
+        float timer = 0;
 
         RightCam.transform.position = RightCamStayPt[IslandNow];
 
         spd = RightCamStayPt[IslandNext] - RightCamStayPt[IslandNow];
-        spd /= maxRecFrame;
-        frame = 0;
+        spd /= maxIslandChgTime;
 
-        while (frame < maxRecFrame)
+        while (timer < maxIslandChgTime &&
+            ((RightCam.transform.position + spd* Time.deltaTime - RightCamStayPt[IslandNext]).sqrMagnitude <
+            (RightCam.transform.position - RightCamStayPt[IslandNext]).sqrMagnitude))
         {
-            frame++;
-            RightCam.transform.position += spd;
+            timer += Time.deltaTime;
+            if (timer > maxIslandChgTime) timer = maxIslandChgTime;
+            RightCam.transform.position = RightCamStayPt[IslandNow] + spd * timer;
             yield return new WaitForSeconds(0f);
         }
+        RightCam.transform.position = RightCamStayPt[IslandNext];
     }
     private IEnumerator RecBottomCamOperation()
     {
         Vector3 spd;
-        int frame;
+        float timer = 0;
 
         BottomCam.transform.position = BottomCamStayPt[IslandNow];
 
         spd = BottomCamStayPt[IslandNext] - BottomCamStayPt[IslandNow];
-        spd /= maxRecFrame;
-        frame = 0;
+        spd /= maxIslandChgTime;
 
-        while (frame < maxRecFrame)
+        while (timer < maxIslandChgTime &&
+            ((BottomCam.transform.position + spd * Time.deltaTime - BottomCamStayPt[IslandNext]).sqrMagnitude <
+            (BottomCam.transform.position - BottomCamStayPt[IslandNext]).sqrMagnitude))
         {
-            frame++;
-            BottomCam.transform.position += spd;
+            timer += Time.deltaTime;
+            if (timer > maxIslandChgTime) timer = maxIslandChgTime;
+            BottomCam.transform.position = BottomCamStayPt[IslandNow]+ spd * timer;
             yield return new WaitForSeconds(0f);
         }
+        BottomCam.transform.position = BottomCamStayPt[IslandNext];
     }
     #endregion
 

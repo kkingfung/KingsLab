@@ -81,7 +81,7 @@ public class InGameOperation : ISceneChange
     private bool WaitSceneChg;
 
     //CameraOperation
-    private const int maxRecFrame = 20;
+    private readonly float maxCamPosChgTime = 0.5f;
 
     private void OnDestroy()
     {
@@ -390,7 +390,9 @@ public class InGameOperation : ISceneChange
 
     private IEnumerator ChangeScreenShown() {
             Vector3 spd;
-            int frame = maxRecFrame;
+        float timer = 0;
+        Vector3 ori = MainCam.transform.localEulerAngles;
+        Vector3 tar = MainCamRotationAngle[nextScreenShown];
         spd = MainCamRotationAngle[nextScreenShown] - MainCam.transform.localEulerAngles;
 
         while (spd.x > 180f) spd.x -= 360f;
@@ -401,14 +403,18 @@ public class InGameOperation : ISceneChange
         while (spd.y < -180f) spd.y += 360f;
         while (spd.z < -180f) spd.z += 360f;
 
-        spd /= maxRecFrame;
+        spd /= maxCamPosChgTime;
 
-            while (frame-->0 )
-            {
+        while (timer < maxCamPosChgTime)
+        {
             InputManager.isDragging = false;
-                MainCam.transform.localEulerAngles += spd;
-                yield return new WaitForSeconds(0f);
-            }
+            timer += Time.deltaTime;
+            if (timer > maxCamPosChgTime) timer = maxCamPosChgTime;
+            MainCam.transform.localEulerAngles = ori + spd * timer;
+            yield return new WaitForSeconds(0f);
+        }
+        MainCam.transform.localEulerAngles = MainCamRotationAngle[nextScreenShown];
+
         currScreenShown = nextScreenShown;
         isScreenChanging = false;
     }

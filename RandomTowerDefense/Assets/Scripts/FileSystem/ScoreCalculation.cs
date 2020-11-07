@@ -78,9 +78,13 @@ public class ScoreCalculation : MonoBehaviour
         scoreStr += "+" + scoreChg + "\n";
 
         //Remark: Special Function for extra mode
-        if (currIsland != StageInfo.IslandNum - 1 && result==-1) {
+        if (currIsland != StageInfo.IslandNum - 1 && result == -1)
+        {
             scoreStr += "-" + score + "\n";
             score = 0;
+        }
+        else {
+            scoreStr += "-" + 0 + "\n";
         }
 
         scoreStr += "=" + score;
@@ -93,7 +97,6 @@ public class ScoreCalculation : MonoBehaviour
 
         if (score <= 0) return;
         rank=recordManager.RecordComparison(currIsland, "ZYXWV", score);
-        Debug.Log(rank);
     }
 
     public void TouchKeybroad(int infoID)

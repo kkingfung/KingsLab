@@ -93,8 +93,10 @@ public class CameraManager : MonoBehaviour
                 {
                     for (int i = 0; i < GyroCamGp.Count; ++i)
                     {
-                        GyroCamGp[i].transform.localEulerAngles = GyroscopeManager.CurrGyroRotation();
-                        //GyroCamGp[i].transform.rotation = Quaternion.Euler(GyroscopeManager.CurrGyroRotation());
+                        GyroCamGp[i].transform.Rotate(new Vector3(GyroscopeManager.GetLocalPitch(),
+                            0, 0), Space.Self);
+                        GyroCamGp[i].transform.Rotate(new Vector3(0,
+                            GyroscopeManager.GetWorldYaw(),0), Space.World);
                     }
                 }
                 else
@@ -105,7 +107,6 @@ public class CameraManager : MonoBehaviour
                             0, 0), Space.Self);
                         GyroCamGp[i].transform.Rotate(new Vector3(0,
                             Input.GetAxis("Horizontal") * Time.deltaTime * 50f, 0), Space.World);
-                        //GyroCamGp[i].transform.rotation = Quaternion.Euler(GyroscopeManager.CurrGyroRotation());
                     }
                 }
             }
@@ -145,5 +146,11 @@ public class CameraManager : MonoBehaviour
             yield return new WaitForSeconds(0f);
         }
     }
-
+    public void ResetGyroCam()
+    {
+        for (int i = 0; i < GyroCamGp.Count; ++i)
+        {
+            GyroCamGp[i].transform.localEulerAngles = new Vector3();
+        }
+    }
 }

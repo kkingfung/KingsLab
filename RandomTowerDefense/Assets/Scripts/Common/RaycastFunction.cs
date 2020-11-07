@@ -59,8 +59,8 @@ public class RaycastFunction : MonoBehaviour
     {
         if (SelectionSceneManager == null && sceneManager==null) return;
 
-        if (sceneManager.GetOptionStatus()) return;
-
+        if (sceneManager&&sceneManager.GetOptionStatus()) return;
+        if (SelectionSceneManager && SelectionSceneManager.GetOptionStatus()) return;
         switch ((ActionTypeID)ActionID)
         {
             //For Stage Selection Scene

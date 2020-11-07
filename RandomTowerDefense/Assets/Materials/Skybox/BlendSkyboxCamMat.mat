@@ -34,5 +34,5 @@ Material:
     m_Floats:
     - SkyboxFactor: 1.0036017
     m_Colors:
-    - Vector2_4E1F3EAB: {r: 0, g: 400, b: 0, a: 0}
+    - Vector2_4E1F3EAB: {r: 0, g: 420, b: 0, a: 0}
   m_BuildTextureStacks: []

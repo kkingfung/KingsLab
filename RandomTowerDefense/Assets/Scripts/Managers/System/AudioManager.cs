@@ -25,6 +25,11 @@ public class AudioManager : MonoBehaviour
         PlayerPrefs.SetInt("BGM", enabledBGM ? 1 : 0);
         foreach (Toggle i in bgmUI)
             i.isOn = enabledBGM;
+
+        if (enabledBGM)
+            audioSource[0].Play();
+        else
+            audioSource[0].Stop();
     }
 
     public void EnableSE(bool enable)
@@ -33,6 +38,12 @@ public class AudioManager : MonoBehaviour
         PlayerPrefs.SetInt("SE", enabledSE ? 1 : 0);
         foreach (Toggle i in seUI)
             i.isOn = enabledSE;
+
+
+        if (enabledSE)
+            audioSource[1].Play();
+        else
+            audioSource[1].Stop();
     }
 
     private void OnEnable()
@@ -107,10 +118,12 @@ public class AudioManager : MonoBehaviour
             audioSource[0].pitch = 1;
             audioSource[0].clip = bgmList[clipname];
             audioSource[0].loop = isLoop;
-            audioSource[0].Play();
+            if (enabledBGM)
+                audioSource[0].Play();
         }
         else {
-            audioSource[1].PlayOneShot(seList[clipname]);
+            if (enabledSE)
+                audioSource[1].PlayOneShot(seList[clipname]);
         }
     }
 

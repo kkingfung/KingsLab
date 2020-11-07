@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028377, g: 0.22571409, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: c3d9bbf11c13df94495bae8aeb64ac6b, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -212,7 +212,7 @@ Transform:
   m_GameObject: {fileID: 8330927}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -179.396, y: 0, z: 0.847}
-  m_LocalScale: {x: 1.7438288, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 22
@@ -364,7 +364,6 @@ GameObject:
   - component: {fileID: 84682721}
   - component: {fileID: 84682717}
   - component: {fileID: 84682719}
-  - component: {fileID: 84682718}
   m_Layer: 0
   m_Name: LandscapeCamera
   m_TagString: Untagged
@@ -415,23 +414,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &84682718
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 84682716}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isGlobal: 1
-  priority: 0
-  blendDistance: 0
-  weight: 1
-  sharedProfile: {fileID: 11400000, guid: e2cbdb99dc921b444a84fe7681dd284d, type: 2}
 --- !u!114 &84682719
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -679,7 +661,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -830,7 +812,7 @@ MonoBehaviour:
   m_CancelButton: Cancel
   m_InputActionsPerSecond: 10
   m_RepeatDelay: 0.5
-  m_ForceModuleActive: 0
+  m_ForceModuleActive: 1
 --- !u!114 &738644087
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -870,6 +852,10 @@ PrefabInstance:
     - target: {fileID: 7230004028665658217, guid: 0bf10365e57006443bbfcbdec3d57f72, type: 3}
       propertyPath: m_Name
       value: LBMTest
+      objectReference: {fileID: 0}
+    - target: {fileID: 7230004028665658217, guid: 0bf10365e57006443bbfcbdec3d57f72, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7230004028665658223, guid: 0bf10365e57006443bbfcbdec3d57f72, type: 3}
       propertyPath: m_LocalPosition.x
@@ -917,17 +903,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0bf10365e57006443bbfcbdec3d57f72, type: 3}
---- !u!114 &761765316 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7230004028665658216, guid: 0bf10365e57006443bbfcbdec3d57f72, type: 3}
-  m_PrefabInstance: {fileID: 761765315}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46594a45a01a28842ba19b6d18120b48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &903472227 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3076270889337058690, guid: 3505ded4f2b53eb44812431b33b42b7c, type: 3}
@@ -944,7 +919,6 @@ GameObject:
   - component: {fileID: 928445527}
   - component: {fileID: 928445526}
   - component: {fileID: 928445525}
-  - component: {fileID: 928445524}
   m_Layer: 9
   m_Name: PortraitBackground
   m_TagString: Untagged
@@ -952,20 +926,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!64 &928445524
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 928445523}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &928445525
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1023,7 +983,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 928445523}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.2, y: 1.78, z: 9.5}
+  m_LocalPosition: {x: 0.11, y: 1.78, z: 9.5}
   m_LocalScale: {x: 6, y: 6, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1070,7 +1030,6 @@ GameObject:
   - component: {fileID: 1123217639}
   - component: {fileID: 1123217638}
   - component: {fileID: 1123217637}
-  - component: {fileID: 1123217636}
   m_Layer: 9
   m_Name: LandscapeBackground
   m_TagString: Untagged
@@ -1078,20 +1037,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!64 &1123217636
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1123217635}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!23 &1123217637
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1290,7 +1235,7 @@ MonoBehaviour:
   priority: 0
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: 10fc4df2da32a41aaa32d77bc913491c, type: 2}
+  sharedProfile: {fileID: 11400000, guid: e2cbdb99dc921b444a84fe7681dd284d, type: 2}
 --- !u!1 &1292970423
 GameObject:
   m_ObjectHideFlags: 0
@@ -1367,7 +1312,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1628707968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1382,7 +1327,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ClickPrefab: {fileID: 0}
   Buttons: []
-  LBMTest: {fileID: 761765316}
+  LBMTest: {fileID: 0}
+  ApplyClickEfc: 0
+  isDragging: 0
+  TapTimeRecord: 0
   refCamL: {fileID: 0}
   refCamP: {fileID: 0}
   refCamLSub: {fileID: 0}
@@ -1437,6 +1385,7 @@ MonoBehaviour:
   - {fileID: 2071277378}
   PortraitCam_Sub: []
   GyroCamGp: []
+  ZoomCamGp: []
   zoomSlider: []
   isOpening: 0
   isGyroEnabled: 0
@@ -1465,7 +1414,6 @@ GameObject:
   - component: {fileID: 2071277379}
   - component: {fileID: 2071277378}
   - component: {fileID: 2071277380}
-  - component: {fileID: 2071277377}
   m_Layer: 0
   m_Name: PortraitCamera
   m_TagString: Untagged
@@ -1473,23 +1421,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2071277377
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2071277376}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isGlobal: 1
-  priority: 0
-  blendDistance: 0
-  weight: 1
-  sharedProfile: {fileID: 11400000, guid: e2cbdb99dc921b444a84fe7681dd284d, type: 2}
 --- !u!20 &2071277378
 Camera:
   m_ObjectHideFlags: 0
@@ -1541,7 +1472,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2071277376}
   m_LocalRotation: {x: -0.2761924, y: -0, z: -0, w: 0.9611024}
-  m_LocalPosition: {x: 1.07, y: 0, z: -13.41}
+  m_LocalPosition: {x: 2.57, y: 0, z: -13.41}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

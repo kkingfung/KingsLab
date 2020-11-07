@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Ocean
-  m_Shader: {fileID: -6465566751694194690, guid: 864b1c76a4d07c449bd25ea197c4ae15, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 449e1ba85db4bee449731aaaa1122ba5, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -52,12 +52,12 @@ Material:
     - Vector1_B20449F: 0.39
     - Vector1_B50DBDF8: 2.62
     - Vector1_D0EEDF: 42.81
-    - Vector1_DF5D8973: 0.5
+    - Vector1_DF5D8973: 2
     - Vector1_DFE926C2: 0
     - Vector1_E40EBC54: 0
     m_Colors:
     - Color_17ADFB2C: {r: 0.5801887, g: 0.7735849, b: 0.76928717, a: 0.5529412}
     - Color_4B8AE984: {r: 0.34109113, g: 0.48385054, b: 0.6886792, a: 1}
     - Color_A29D43B8: {r: 0.6774653, g: 0.8069361, b: 0.8301887, a: 1}
-    - Vector2_40EB88BE: {r: -5, g: 5, b: 0, a: 0}
+    - Vector2_40EB88BE: {r: 0, g: 550, b: 0, a: 0}
   m_BuildTextureStacks: []

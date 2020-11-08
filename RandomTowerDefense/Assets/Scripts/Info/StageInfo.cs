@@ -56,8 +56,8 @@ public class StageAttr
 public static class StageInfo
 {
     public static readonly int IslandNum = 4;
-    private static readonly int MaxMapDepth = 20;
-    private static readonly int MinMapDepth = 6;
+    public static readonly int MaxMapDepth = 20;
+    public static readonly int MinMapDepth = 6;
 
     private static StageAttr stageInfo;
     public static readonly string[] monsterCat0 = {
@@ -220,9 +220,9 @@ public static class StageInfo
         WaveAttr[] waveArray = new WaveAttr[waveNum];
 
         List<EnmDetail> detail = new List<EnmDetail>();
-        detail.Add(new EnmDetail(0, 5, 0, "Slime"));
+        detail.Add(new EnmDetail(0, 5, 1, "Slime"));
         detail.Add(new EnmDetail(1, 5, 1, "Mushroom"));
-        detail.Add(new EnmDetail(2, 10, 2, "Slime"));
+        detail.Add(new EnmDetail(2, 10, 1, "Slime"));
         detail.Add(new EnmDetail(3, 10, 1, "TurtleShell"));
         detail.Add(new EnmDetail(4, 1, 1, "StoneMonster"));
 

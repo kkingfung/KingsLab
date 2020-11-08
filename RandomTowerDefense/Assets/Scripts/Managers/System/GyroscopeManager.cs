@@ -8,7 +8,7 @@ public class GyroscopeManager : MonoBehaviour
     readonly Vector2 shakeThreshold = new Vector2(5,8); // horizontal,vertical
     readonly float timeInterval = 2f;
 
-    public bool isFunctioning = false;
+    public bool isFunctioning;
     public List<GameObject> gyroDiffUI;
 
     //For Slightly Changes
@@ -23,10 +23,6 @@ public class GyroscopeManager : MonoBehaviour
     public bool RightShake = false;
     [HideInInspector]
     public bool VerticalShake = false;
-
-    private Quaternion ReferenceCenter;
-    private Quaternion RotRecord;
-    private Quaternion CurrRot;
 
     private Gyroscope Gyro;
 
@@ -53,11 +49,10 @@ public class GyroscopeManager : MonoBehaviour
 
     private void Start()
     {
+        isFunctioning = FindObjectOfType<InputManager>().GetUseTouch();
         sensitivity = PlayerPrefs.GetFloat("Gyro");
         foreach (Slider i in senseSlider)
             i.value = sensitivity;
-        ReferenceCenter = Quaternion.identity;
-        RotRecord = transform.rotation;
 
         timeRecord = 0;
 
@@ -201,30 +196,9 @@ public class GyroscopeManager : MonoBehaviour
     }
     public void UpdateGyroYPR() 
     {
-        //Quaternion previousRot = CurrRot;
-        CurrRot = GyroToUnity(Input.gyro.attitude);
-
         pitch = Input.gyro.rotationRateUnbiased.x * Mathf.Rad2Deg*0.05f*sensitivity;
         yaw = Input.gyro.rotationRateUnbiased.y * Mathf.Rad2Deg * 0.05f * sensitivity;
         //roll = Input.gyro.rotationRateUnbiased.z * Mathf.Rad2De*0.05f*sensitivity;
-
-        //Quaternion eliminationOfXY = Quaternion.Inverse(
-        //    Quaternion.FromToRotation(previousRot * Vector3.forward,
-        //                              CurrRot * Vector3.forward));
-        //Quaternion rotationZ = eliminationOfXY * CurrRot;
-        //roll = rotationZ.eulerAngles.z*sensitivity;
-
-        //Quaternion eliminationOfYZ = Quaternion.Inverse(
-        //    Quaternion.FromToRotation(previousRot * Vector3.right,
-        //                      CurrRot * Vector3.right));
-        //Quaternion rotationX = eliminationOfYZ * CurrRot;
-        //pitch = rotationZ.eulerAngles.x * sensitivity;
-
-        //Quaternion eliminationOfXZ = Quaternion.Inverse(
-        //    Quaternion.FromToRotation(previousRot * Vector3.up,
-        //                      CurrRot * Vector3.up));
-        //Quaternion rotationY = eliminationOfXZ * CurrRot;
-        //yaw = rotationZ.eulerAngles.y * sensitivity;
 
         //rollRef += roll;
         yawRef += yaw;

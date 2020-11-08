@@ -58,12 +58,14 @@ public class ScoreCalculation : MonoBehaviour
         //Clear
         if (result > 0) {
             score += 5000 + 500 * currIsland;
+            score += ((currIsland != StageInfo.IslandNum - 1) ? 0 :
+                (StageInfo.MaxMapDepth* StageInfo.MaxMapDepth - (int)StageInfo.stageSizeEx) * 10);
             scoreStr += score+"\n";
         }
 
         //CastleHP
         scoreChg = 20 * stageManager.GetCurrHP();
-        score += scoreChg;
+         score += scoreChg;
         scoreStr += "+" + scoreChg + "\n";
 
 
@@ -74,17 +76,19 @@ public class ScoreCalculation : MonoBehaviour
 
         //Resource
         scoreChg = resourceManager.GetCurrMaterial();
+        scoreChg = (int)(scoreChg*((currIsland != StageInfo.IslandNum - 1) ? 1f :
+                (1f/Mathf.Max(StageInfo.resourceEx,0.5f))));
         score += scoreChg;
         scoreStr += "+" + scoreChg + "\n";
 
         //Remark: Special Function for extra mode
         if (currIsland != StageInfo.IslandNum - 1 && result == -1)
         {
-            scoreStr += "-" + score + "\n";
+            scoreStr += "-" + score+PlayerPrefs.GetFloat("hpMax")*10 + "\n";
             score = 0;
         }
         else {
-            scoreStr += "-" + 0 + "\n";
+            scoreStr += "-" + ((currIsland != StageInfo.IslandNum - 1)?0:StageInfo.hpMaxEx*100).ToString() + "\n";
         }
 
         scoreStr += "=" + score;

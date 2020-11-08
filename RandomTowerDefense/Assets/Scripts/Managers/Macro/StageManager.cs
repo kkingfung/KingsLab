@@ -75,6 +75,7 @@ public class StageManager : MonoBehaviour
             for (int i = 0; i < EnemySpawnPtNum; ++i)
             {
                 Vector3 pos = mapGenerator.CoordToPosition(SpawnPoint[i + 1]) + mapGenerator.transform.position;
+                if (sceneManager.CheckIfTutorial()&& i!=1)  continue;
                 EnemySpawnPort[i] = Instantiate(EnemySpawnPortPrefab, pos, Quaternion.identity);
 
             }

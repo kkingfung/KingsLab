@@ -231,6 +231,7 @@ public class StageSelectOperation : ISceneChange
     public void ChangeIslandByButton(int chgValue)
     {
         IslandNext = Mathf.Clamp(IslandNow + chgValue, 0, IslandEnabled);
+        if(GyroscopeManager) GyroscopeManager.ResetReference();
     }
 
     private void ChangeIslandByGyro()

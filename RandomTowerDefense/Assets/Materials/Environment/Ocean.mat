@@ -60,4 +60,5 @@ Material:
     - Color_4B8AE984: {r: 0.34109113, g: 0.48385054, b: 0.6886792, a: 1}
     - Color_A29D43B8: {r: 0.6774653, g: 0.8069361, b: 0.8301887, a: 1}
     - Vector2_40EB88BE: {r: 0, g: 550, b: 0, a: 0}
+    - Vector2_5140EDA9: {r: 5, g: 5, b: 0, a: 0}
   m_BuildTextureStacks: []

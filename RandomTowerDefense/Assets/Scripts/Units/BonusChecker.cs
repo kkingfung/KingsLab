@@ -58,12 +58,13 @@ public class BonusChecker : MonoBehaviour
     bool MonseterList_Rank(int rank)
     {
         bool result = false;
-        foreach (GameObject i in towerManager.TowerNightmareList) {
+        foreach (GameObject i in towerManager.TowerNightmareList) 
+        {
             if (i.GetComponent<Tower>().rank == rank) {
                 result = true;break;
             }
         }
-        if (result == false) return result;
+        if (result == false) return false;
         result = false;
         foreach (GameObject i in towerManager.TowerSoulEaterList)
         {
@@ -72,7 +73,8 @@ public class BonusChecker : MonoBehaviour
                 result = true; break;
             }
         }
-        if (result == false) return result;
+        if (result == false) return false;
+        result = false;
         foreach (GameObject i in towerManager.TowerTerrorBringerList)
         {
             if (i.GetComponent<Tower>().rank == rank)
@@ -80,7 +82,8 @@ public class BonusChecker : MonoBehaviour
                 result = true; break;
             }
         }
-        if (result == false) return result;
+        if (result == false) return false;
+        result = false;
         foreach (GameObject i in towerManager.TowerUsurperList)
         {
             if (i.GetComponent<Tower>().rank == rank)
@@ -88,7 +91,7 @@ public class BonusChecker : MonoBehaviour
                 result = true; break;
             }
         }
-        if (result == false) return result;
+        if (result == false) return false;
 
         resourceManager.ChangeMaterial(BonusForAllMonstersByRankChk[rank-1]);
         return true;

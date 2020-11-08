@@ -11,7 +11,7 @@ public class FadeEffect : MonoBehaviour
     Material FadeMat;
     public bool isReady { get; private set;}
 
-    private void Start()
+    private void Awake()
     {
         if (FadeMat == null && GetComponent<MeshRenderer>()) FadeMat = GetComponent<MeshRenderer>().material;
         if (FadeMat == null && GetComponent<RawImage>()) FadeMat = GetComponent<RawImage>().material;
@@ -26,6 +26,8 @@ public class FadeEffect : MonoBehaviour
 
     public void FadeIn() {
         Threshold = 0.0f;
+        FadeMat.SetFloat("_FadeThreshold", 0.0f);
+        PlayerPrefs.SetFloat("_FadeThreshold", 0.0f);
         isReady = false;
         if (this.gameObject.activeInHierarchy)
             StartCoroutine(FadeInRoutine());
@@ -33,6 +35,8 @@ public class FadeEffect : MonoBehaviour
     public void FadeOut()
     {
         Threshold = 1.0f;
+        FadeMat.SetFloat("_FadeThreshold", 1f);
+        PlayerPrefs.SetFloat("_FadeThreshold", 1f);
         isReady = false;
         if (this.gameObject.activeInHierarchy)
             StartCoroutine(FadeOutRoutine());

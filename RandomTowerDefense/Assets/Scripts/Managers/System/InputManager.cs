@@ -63,12 +63,13 @@ public class InputManager : MonoBehaviour
         //Checking Platform
         isAndroid = (Application.platform == RuntimePlatform.Android);
         isiOS = (Application.platform == RuntimePlatform.IPhonePlayer);
+        useTouch = isAndroid || isiOS;
     }
 
     private void Start()
     {
         isDragging = false;
-        useTouch = isAndroid || isiOS;
+
         playerManager = FindObjectOfType<PlayerManager>();
         cameraManager = FindObjectOfType<CameraManager>();
         sceneManager = FindObjectOfType<InGameOperation>();

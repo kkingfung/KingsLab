@@ -35,6 +35,7 @@ public class UIEffect : MonoBehaviour
 
     private StageSelectOperation selectionSceneManager;
     private InGameOperation gameSceneManager;
+    private PlayerManager playerManager;
 
     // Start is called before the first frame update
     private void Start()
@@ -50,6 +51,7 @@ public class UIEffect : MonoBehaviour
         
         selectionSceneManager = FindObjectOfType<StageSelectOperation>();
         gameSceneManager= FindObjectOfType<InGameOperation>();
+        playerManager = GameObject.FindObjectOfType<PlayerManager>();
         oriPos = this.transform.localPosition;
         if(this.GetComponent<RectTransform>())
         oriPosRect = this.GetComponent<RectTransform>().localPosition;
@@ -157,7 +159,7 @@ public class UIEffect : MonoBehaviour
                 this.transform.localScale = oriScale - Mathf.Sin(Time.time*12.0f) * new Vector3(0.1f, 0.1f, 0);
                 break;
             case 9://for Game Scene SellingMark
-                if (GameObject.FindObjectOfType<PlayerManager>().isSelling && gameSceneManager.GetOptionStatus()!=true && gameSceneManager.currScreenShown ==0)
+                if (playerManager.isSelling && gameSceneManager.GetOptionStatus()!=true && gameSceneManager.currScreenShown ==0)
                 {
                     image.color = new Color(image.color.r, image.color.g, image.color.b, Mathf.Abs(Mathf.Sin(Time.time * magnitude)));
                 }

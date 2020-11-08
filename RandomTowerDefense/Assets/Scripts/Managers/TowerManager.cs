@@ -85,7 +85,6 @@ public class TowerManager : MonoBehaviour
         {
             return;
         }
-
         #region SpareCodeForTutorial
         /*
         if (sceneManager.CheckIfTutorial() && tutorialManager && tutorialManager.FreeToBuild == false)

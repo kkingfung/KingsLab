@@ -26,7 +26,8 @@ public class ResourceManager : MonoBehaviour
 
     public bool ChkAndBuild(int rank) {
         if (rank > BuildPrice.Length) return false;
-        bool enoughResource = CurrentMaterial > BuildPrice[rank - 1];
+        bool enoughResource = CurrentMaterial >= BuildPrice[rank - 1];
+        if (enoughResource == false) return false;
         CurrentMaterial -= BuildPrice[rank - 1];
         return enoughResource;
     }

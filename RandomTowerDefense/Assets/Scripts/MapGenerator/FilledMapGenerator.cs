@@ -32,9 +32,10 @@ public class FilledMapGenerator : MonoBehaviour {
 	Map currentMap;
 
 	private InGameOperation sceneManager;
-
+	private StageManager stageManager;
 	private void Start() {
 		sceneManager = FindObjectOfType<InGameOperation>();
+		stageManager = FindObjectOfType<StageManager>();
 	}
 	public void followParentCam(bool toFollow) {
 		FollowFakeParent = toFollow;
@@ -76,7 +77,6 @@ public class FilledMapGenerator : MonoBehaviour {
 		}
 
 		//Space for Castle and TP
-		StageManager stageManager = FindObjectOfType<StageManager>();
 		if (stageManager.SpawnPoint.Length >= 4)
 		{
 			stageManager.SpawnPoint[0] = new Coord(0, 0);

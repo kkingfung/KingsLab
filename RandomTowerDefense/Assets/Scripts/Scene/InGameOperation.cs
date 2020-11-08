@@ -283,13 +283,13 @@ public class InGameOperation : ISceneChange
         InputManager.TapTimeRecord = 0;
         InputManager.isDragging = false;
         DarkenCam.SetActive(isOption);
-        GameObject.FindObjectOfType<AudioManager>().PlayAudio("se_Button");
+        AudioManager.PlayAudio("se_Button");
     }
 
     private IEnumerator PetrifyAnimation(int sceneID)
     {
         float progress = 0f;
-        int frame = 20;
+        int frame = 15;
         float rate = 1 / (float)frame;
         while (frame-- > 0)
         {
@@ -342,7 +342,10 @@ public class InGameOperation : ISceneChange
                 if (currScreenShown == 1 || currScreenShown == 2) nextScreenShown = currScreenShown + 1;
                 else return;
                 break;
+            default:
+                return;
         }
+
         foreach (GameObject i in CameraManager.GyroCamGp)
         {
             i.transform.localEulerAngles = new Vector3();

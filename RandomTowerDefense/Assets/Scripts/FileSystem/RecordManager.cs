@@ -13,7 +13,7 @@ public class RecordManager : MonoBehaviour
     public List<UIRecordList> AllRecords;
 
     List<SaveObject> stageRecords;
-
+    private InGameOperation sceneManager;
     private void OnEnable()
     {
         stageRecords = new List<SaveObject>();
@@ -36,6 +36,10 @@ public class RecordManager : MonoBehaviour
         stageRecords.Clear();
     }
 
+    private void Start()
+    {
+        sceneManager = FindObjectOfType<InGameOperation>();
+    }
     public int RecordComparison(int stageID, string name, int score) {
         stageRecords[stageID]=stageRecords[stageID].InsertObject(stageID, name, score);
         int rank = PlayerPrefs.GetInt("PlayerRank");
@@ -57,7 +61,7 @@ public class RecordManager : MonoBehaviour
     }
 
     public void UpdateRecordName(int rank,string name) {
-        int currIsland = GameObject.FindObjectOfType<InGameOperation>().GetCurrIsland();
+        int currIsland = sceneManager.GetCurrIsland();
         switch (rank) {
             case 1: stageRecords[currIsland].record1.name = name; break;
             case 2: stageRecords[currIsland].record2.name = name; break;

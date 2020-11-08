@@ -183,7 +183,7 @@ public class StageSelectOperation : ISceneChange
         if (Time.time - TimeRecord < TimeWait) return;
         StartCoroutine(PetrifyAnimation());
         TimeRecord = Time.time;
-        GameObject.FindObjectOfType<AudioManager>().PlayAudio("se_Button");
+        AudioManager.PlayAudio("se_Button");
     }
 
     public void OptionStatus()
@@ -198,7 +198,7 @@ public class StageSelectOperation : ISceneChange
     private IEnumerator PetrifyAnimation()
     {
         float progress = 0f;
-        int frame = 60;
+        int frame = 15;
         float rate = 1 / (float)frame;
         while (frame-- > 0)
         {
@@ -239,13 +239,11 @@ public class StageSelectOperation : ISceneChange
         //Gyroscope Operation
         if (GyroscopeManager.LeftShake)
         {
-            IslandNext = Mathf.Clamp(IslandNow - 1, 0, IslandEnabled);
-            GyroscopeManager.ResetReference();
+            toDrag = 2;
         }
         if (GyroscopeManager.RightShake)
         {
-            IslandNext = Mathf.Clamp(IslandNow + 1, 0, IslandEnabled);
-            GyroscopeManager.ResetReference();
+            toDrag = 1;
         }
     }
 
@@ -258,7 +256,7 @@ public class StageSelectOperation : ISceneChange
 
         //Touch Operation
         switch(toDrag){
-            case 0: default: break;
+            case 0: default:break;
             case 1:
                 IslandNext = Mathf.Clamp(IslandNow + 1, 0, IslandEnabled-1);
                 break;
@@ -271,6 +269,7 @@ public class StageSelectOperation : ISceneChange
 
         if (IslandNext != IslandNow)
         {
+            GyroscopeManager.ResetReference();
             StartCoroutine("RecMainCamOperation");
             StartCoroutine("RecRightCamOperation");
             StartCoroutine("RecBottomCamOperation");

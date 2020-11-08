@@ -37,6 +37,7 @@ public class GyroscopeManager : MonoBehaviour
     private float timeRecord;
 
     private CameraManager cameraManager;
+    private ISceneChange sceneManager;
     private void Awake()
     {
         Gyro = Input.gyro;
@@ -61,6 +62,7 @@ public class GyroscopeManager : MonoBehaviour
         pitch = 0;
 
         cameraManager = FindObjectOfType<CameraManager>();
+        sceneManager = FindObjectOfType<ISceneChange>();
         ResetReference();
     }
 
@@ -75,21 +77,7 @@ public class GyroscopeManager : MonoBehaviour
             {
                 foreach (GameObject i in gyroDiffUI)
                 {
-                    switch (Input.deviceOrientation)
-                    {
-                        case DeviceOrientation.Portrait:
-                            i.transform.localEulerAngles = new Vector3(0,0, yawRef);
-                            break;
-                        case DeviceOrientation.PortraitUpsideDown:
-                            i.transform.localEulerAngles = new Vector3(0, 0, -yawRef);
-                            break;
-                        case DeviceOrientation.LandscapeLeft:
-                            i.transform.localEulerAngles = new Vector3(0, 0, pitchRef);
-                            break;
-                        case DeviceOrientation.LandscapeRight:
-                            i.transform.localEulerAngles = new Vector3(0, 0, -pitchRef);
-                            break;
-                    }
+                    i.transform.localEulerAngles = new Vector3(0, 0, yawRef);
                 }
             }
         }
@@ -178,7 +166,7 @@ public class GyroscopeManager : MonoBehaviour
 
     public void ResetReference()
     {
-        if (FindObjectOfType<ISceneChange>().GetOptionStatus()) return;
+        if (sceneManager.GetOptionStatus()) return;
         cameraManager.ResetGyroCam();
 
         //rollRef = 0;

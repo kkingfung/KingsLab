@@ -25,7 +25,8 @@ static public class Upgrades
     }
 
     static public Dictionary<StoreItems, int> StoreLevel;
-
+    static private CastleSpawner castleSpawner;
+    static private StoreManager StoreManager;
     // Start is called before the first frame update
     static public void init()
     {
@@ -45,6 +46,9 @@ static public class Upgrades
         StoreLevel.Add(StoreItems.MagicBlizzard, 0);
         StoreLevel.Add(StoreItems.MagicMinions, 0);
         StoreLevel.Add(StoreItems.MagicPetrification, 0);
+
+        castleSpawner=GameObject.FindObjectOfType<CastleSpawner>();
+        StoreManager = GameObject.FindObjectOfType<StoreManager>();
     }
 
     static public int GetLevel(StoreItems itemID) {
@@ -69,13 +73,13 @@ static public class Upgrades
         switch (itemID)
         {
             case StoreItems.CastleHP:
-                GameObject.FindObjectOfType<CastleSpawner>().GameObjects[0].GetComponent<Castle>().AddedHealth();
+                castleSpawner.GameObjects[0].GetComponent<Castle>().AddedHealth();
                 break;
             case StoreItems.BonusBoss1: 
             case StoreItems.BonusBoss2:
             case StoreItems.BonusBoss3:
                 SkillStack.AddStock(itemID);
-                GameObject.FindObjectOfType<StoreManager>().SetBossCD((int)(itemID- Upgrades.StoreItems.BonusBoss1));
+                StoreManager.SetBossCD((int)(itemID- Upgrades.StoreItems.BonusBoss1));
                 break;
             case Upgrades.StoreItems.Army1:
             case Upgrades.StoreItems.Army2:

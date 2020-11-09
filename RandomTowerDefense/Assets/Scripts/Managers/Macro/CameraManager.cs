@@ -35,7 +35,7 @@ public class CameraManager : MonoBehaviour
         SceneManager = FindObjectOfType<ISceneChange>();
 
         foreach (Slider i in zoomSlider)
-            i.value = PlayerPrefs.GetFloat("zoomRate");
+            i.value = PlayerPrefs.GetFloat("zoomRate",0);
 
     }
 
@@ -60,7 +60,7 @@ public class CameraManager : MonoBehaviour
             }
         }
 
-        Zoom(PlayerPrefs.GetFloat("zoomRate"));
+        Zoom(PlayerPrefs.GetFloat("zoomRate",0));
     }
 
     // Update is called once per frame

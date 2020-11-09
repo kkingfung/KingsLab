@@ -63,14 +63,14 @@ public class StageManager : MonoBehaviour
             }
             else
             {
-                float TotalSize = PlayerPrefs.GetFloat("stageSize");
+                float TotalSize = PlayerPrefs.GetFloat("stageSize",100);
                 TotalSize = Mathf.Sqrt(TotalSize);
                 mapGenerator.CustomizeMapAndCreate((int)(TotalSize + 0.9f), (int)(TotalSize + 0.9f));
             }
 
             //Fixed CastleMapPos
             int[] entityID = castleSpawner.Spawn(mapGenerator.CoordToPosition(SpawnPoint[0]) + mapGenerator.transform.position, 
-                Quaternion.Euler(0f, 90f, 0f), (int)PlayerPrefs.GetFloat("hpMax"), 1);
+                Quaternion.Euler(0f, 90f, 0f), (int)PlayerPrefs.GetFloat("hpMax",1), 1);
             CastleEntityID = entityID[0];
             for (int i = 0; i < EnemySpawnPtNum; ++i)
             {

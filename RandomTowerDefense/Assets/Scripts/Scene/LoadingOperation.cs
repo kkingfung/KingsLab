@@ -19,7 +19,7 @@ public class LoadingOperation : ISceneChange
     {
         base.SceneIn();
 
-        nextScene = PlayerPrefs.GetString("nextScene");
+        nextScene = PlayerPrefs.GetString("nextScene","TitleScene");
         Progress = 0;
      
         if (RandomObjs.Count == 0) return;

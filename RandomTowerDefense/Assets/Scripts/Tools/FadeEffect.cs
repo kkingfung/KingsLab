@@ -21,7 +21,7 @@ public class FadeEffect : MonoBehaviour
         PlayerPrefs.SetFloat("_FadeThreshold", 1f);
     }
     private void Update() {
-        FadeMat.SetFloat("_FadeThreshold",PlayerPrefs.GetFloat("_FadeThreshold"));
+        FadeMat.SetFloat("_FadeThreshold",PlayerPrefs.GetFloat("_FadeThreshold",1));
     }
 
     public void FadeIn() {

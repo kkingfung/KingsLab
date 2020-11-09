@@ -24,8 +24,8 @@ public class WaveAttr
 {
     public float enmStartTime;
     public float enmSpawnPeriod;
-    public EnmDetail[] enmDetail;
-    public WaveAttr(float enmStartTime, float enmSpawnPeriod, EnmDetail[] enmDetail)
+    public List<EnmDetail> enmDetail;
+    public WaveAttr(float enmStartTime, float enmSpawnPeriod, List<EnmDetail> enmDetail)
     {
         this.enmStartTime = enmStartTime;
         this.enmSpawnPeriod = enmSpawnPeriod;
@@ -45,7 +45,7 @@ public class StageAttr
     public float waveWaitTime;
     public WaveAttr[] waveDetail;
 
-    public StageAttr(int waveNum, WaveAttr[] waveAttr, float waveTime = 30f)
+    public StageAttr(int waveNum, WaveAttr[] waveAttr, float waveTime = 120f)
     {
         this.waveNum = waveNum;
         this.waveWaitTime = waveTime;
@@ -109,7 +109,7 @@ public static class StageInfo
     public static void Init()
     {
         UpdateCustomizedData();
-        int temp = PlayerPrefs.GetInt("IslandNow");
+        int temp = PlayerPrefs.GetInt("IslandNow",0);
         switch (temp)
         {
             case 0:
@@ -122,8 +122,8 @@ public static class StageInfo
                 stageInfo = new StageAttr(30, PrepareHardStageInfo(30));
                 break;
             case 3:
-                stageInfo = new StageAttr((int)PlayerPrefs.GetFloat("waveNum"),
-                    PrepareCustomStageInfo((int)PlayerPrefs.GetFloat("waveNum")));
+                stageInfo = new StageAttr((int)PlayerPrefs.GetFloat("waveNum",10),
+                    PrepareCustomStageInfo((int)PlayerPrefs.GetFloat("waveNum",10)));
                 break;
         }
     }
@@ -161,37 +161,37 @@ public static class StageInfo
         float tempVal = 0;
         switch ((StageInfoID)infoID) {
             case StageInfoID.Enum_waveNum:
-                tempVal = PlayerPrefs.GetFloat("waveNum");
+                tempVal = PlayerPrefs.GetFloat("waveNum",1);
                 tempVal = (tempVal + chg + waveNumFactor.Length) % waveNumFactor.Length;
                 PlayerPrefs.SetFloat("waveNum", tempVal);
                 return waveNumFactor[(int)tempVal];
             case StageInfoID.Enum_stageSize:
-                tempVal = PlayerPrefs.GetFloat("stageSize");
+                tempVal = PlayerPrefs.GetFloat("stageSize",100);
                 tempVal = (tempVal + chg + stageSizeFactor.Length) % stageSizeFactor.Length;
                 PlayerPrefs.SetFloat("stageSize", tempVal);
                 return stageSizeFactor[(int)tempVal];
             case StageInfoID.Enum_enmNum:
-                tempVal = PlayerPrefs.GetFloat("enmNum");
+                tempVal = PlayerPrefs.GetFloat("enmNum",1);
                 tempVal = (tempVal + chg + enmNumFactor.Length) % enmNumFactor.Length;
                 PlayerPrefs.SetFloat("enmNum", tempVal);
                 return enmNumFactor[(int)tempVal];
             case StageInfoID.Enum_enmSpeed:
-                tempVal = PlayerPrefs.GetFloat("enmSpeed");
+                tempVal = PlayerPrefs.GetFloat("enmSpeed",1);
                 tempVal = (tempVal + chg + enmSpeedFactor.Length) % enmSpeedFactor.Length;
                 PlayerPrefs.SetFloat("enmSpeed", tempVal);
                 return enmSpeedFactor[(int)tempVal];
             case StageInfoID.Enum_spawnSpeed:
-                tempVal = PlayerPrefs.GetFloat("spawnSpeed");
+                tempVal = PlayerPrefs.GetFloat("spawnSpeed",1);
                 tempVal = (tempVal + chg + spawnSpeedFactor.Length) % spawnSpeedFactor.Length;
                 PlayerPrefs.SetFloat("spawnSpeed", tempVal);
                 return spawnSpeedFactor[(int)tempVal];
             case StageInfoID.Enum_hpMax:
-                tempVal = PlayerPrefs.GetFloat("hpMax");
+                tempVal = PlayerPrefs.GetFloat("hpMax",1);
                 tempVal = (tempVal + chg + hpMaxFactor.Length) % hpMaxFactor.Length;
                 PlayerPrefs.SetFloat("hpMax", tempVal);
                 return hpMaxFactor[(int)tempVal];
             case StageInfoID.Enum_resource:
-                tempVal = PlayerPrefs.GetFloat("resource");
+                tempVal = PlayerPrefs.GetFloat("resource",1);
                 tempVal = (tempVal + chg + resourceFactor.Length) % resourceFactor.Length;
                 PlayerPrefs.SetFloat("resource", tempVal);
                 return resourceFactor[(int)tempVal];
@@ -200,13 +200,13 @@ public static class StageInfo
     }
 
     private static void UpdateCustomizedData() {
-        waveNumEx = waveNumFactor[(int)PlayerPrefs.GetFloat("waveNum")];
-        stageSizeEx = stageSizeFactor[(int)PlayerPrefs.GetFloat("stageSize")];
-        enmNumEx = enmNumFactor[(int)PlayerPrefs.GetFloat("enmNum")];
-        enmSpeedEx = enmSpeedFactor[(int)PlayerPrefs.GetFloat("enmSpeed")];
-        spawnSpeedEx = spawnSpeedFactor[(int)PlayerPrefs.GetFloat("spawnSpeed")];
-        hpMaxEx = hpMaxFactor[(int)PlayerPrefs.GetFloat("hpMax")];
-        resourceEx = resourceFactor[(int)PlayerPrefs.GetFloat("resource")];
+        waveNumEx = waveNumFactor[(int)PlayerPrefs.GetFloat("waveNum",1)];
+        stageSizeEx = stageSizeFactor[(int)PlayerPrefs.GetFloat("stageSize",100)];
+        enmNumEx = enmNumFactor[(int)PlayerPrefs.GetFloat("enmNum",1)];
+        enmSpeedEx = enmSpeedFactor[(int)PlayerPrefs.GetFloat("enmSpeed",1)];
+        spawnSpeedEx = spawnSpeedFactor[(int)PlayerPrefs.GetFloat("spawnSpeed",1)];
+        hpMaxEx = hpMaxFactor[(int)PlayerPrefs.GetFloat("hpMax",1)];
+        resourceEx = resourceFactor[(int)PlayerPrefs.GetFloat("resource",1)];
     }
 
     public static StageAttr GetStageInfo()
@@ -220,23 +220,25 @@ public static class StageInfo
         WaveAttr[] waveArray = new WaveAttr[waveNum];
 
         List<EnmDetail> detail = new List<EnmDetail>();
-        detail.Add(new EnmDetail(0, 5, 1, "Slime"));
-        detail.Add(new EnmDetail(1, 5, 1, "Mushroom"));
-        detail.Add(new EnmDetail(2, 10, 1, "Slime"));
-        detail.Add(new EnmDetail(3, 10, 1, "TurtleShell"));
-        detail.Add(new EnmDetail(4, 1, 1, "StoneMonster"));
+        detail.Add(new EnmDetail(1, 5, 1, "Slime"));
+        detail.Add(new EnmDetail(2, 5, 1, "Mushroom"));
+        detail.Add(new EnmDetail(3, 10, 1, "Slime"));
+        detail.Add(new EnmDetail(4, 10, 1, "TurtleShell"));
+        detail.Add(new EnmDetail(5, 1, 1, "StoneMonster"));
 
         int j = 0;
 
         for (int i = 0; i < waveNum; ++i)
         {
             List<EnmDetail> detailPerWave = new List<EnmDetail>();
-            for (; j < detail.Count && detail[j].waveID <= i; ++j)
+            for (; j < detail.Count && detail[j].waveID <= i + 1; ++j)
             {
-                detailPerWave.Add(detail[j]);
-
+                if (detail[j].waveID == i + 1)
+                {
+                    detailPerWave.Add(detail[j]);
+                }
             }
-            waveArray[i] = new WaveAttr(5, 0.5f, detailPerWave.ToArray());
+            waveArray[i] = new WaveAttr(5, 0.5f, detailPerWave);
         }
         return waveArray;
 
@@ -247,33 +249,35 @@ public static class StageInfo
         WaveAttr[] waveArray = new WaveAttr[waveNum];
 
         List<EnmDetail> detail = new List<EnmDetail>();
-        detail.Add(new EnmDetail(0, 5, 1, "Slime"));
-        detail.Add(new EnmDetail(1, 5, 1, "Mushroom"));
-        detail.Add(new EnmDetail(2, 10, 2, "Slime"));
-        detail.Add(new EnmDetail(3, 10, 1, "Mushroom"));
-        detail.Add(new EnmDetail(4, 10, 0, "TurtleShell"));
-        detail.Add(new EnmDetail(5, 10, 1, "Footman"));
-        detail.Add(new EnmDetail(6, 20, 1, "Slime"));
-        detail.Add(new EnmDetail(7, 20, 2, "Grunt"));
-        detail.Add(new EnmDetail(8, 30, 2, "Skeleton"));
-        detail.Add(new EnmDetail(9, 30, 0, "Footman"));
-        detail.Add(new EnmDetail(10, 20, 0, "FootmanS"));
-        detail.Add(new EnmDetail(11, 30, 1, "Skeleton"));
-        detail.Add(new EnmDetail(12, 20, 0, "GruntS"));
-        detail.Add(new EnmDetail(13, 20, 2, "TurtleShell"));
-        detail.Add(new EnmDetail(14, 2, 1, "Bull"));
+        detail.Add(new EnmDetail(1, 5, 1, "Slime"));
+        detail.Add(new EnmDetail(2, 5, 1, "Mushroom"));
+        detail.Add(new EnmDetail(3, 10, 2, "Slime"));
+        detail.Add(new EnmDetail(4, 10, 1, "Mushroom"));
+        detail.Add(new EnmDetail(5, 10, 0, "TurtleShell"));
+        detail.Add(new EnmDetail(6, 10, 1, "Footman"));
+        detail.Add(new EnmDetail(7, 20, 1, "Slime"));
+        detail.Add(new EnmDetail(8, 20, 2, "Grunt"));
+        detail.Add(new EnmDetail(9, 30, 2, "Skeleton"));
+        detail.Add(new EnmDetail(10, 30, 0, "Footman"));
+        detail.Add(new EnmDetail(11, 20, 0, "FootmanS"));
+        detail.Add(new EnmDetail(12, 30, 1, "Skeleton"));
+        detail.Add(new EnmDetail(13, 20, 0, "GruntS"));
+        detail.Add(new EnmDetail(14, 20, 2, "TurtleShell"));
+        detail.Add(new EnmDetail(15, 2, 1, "Bull"));
 
         int j = 0;
 
-        for (int i = 0; i < waveNum; ++i) 
+        for (int i = 0; i < waveNum; ++i)
         {
             List<EnmDetail> detailPerWave = new List<EnmDetail>();
-            for (; j < detail.Count && detail[j].waveID <= i; ++j)
+            for (; j < detail.Count && detail[j].waveID <= i + 1; ++j)
             {
-                detailPerWave.Add(detail[j]);
-
+                if (detail[j].waveID == i + 1)
+                {
+                    detailPerWave.Add(detail[j]);
+                }
             }
-            waveArray[i] = new WaveAttr(5, 0.5f, detailPerWave.ToArray());
+            waveArray[i] = new WaveAttr(5, 0.5f, detailPerWave);
         }
         return waveArray;
     }
@@ -282,48 +286,50 @@ public static class StageInfo
     {
         WaveAttr[] waveArray = new WaveAttr[waveNum];
         List<EnmDetail> detail = new List<EnmDetail>();
-        detail.Add(new EnmDetail(0, 5, 1, "Slime"));
-        detail.Add(new EnmDetail(1, 5, 1, "Mushroom"));
-        detail.Add(new EnmDetail(2, 10, 2, "TurtleShell"));
-        detail.Add(new EnmDetail(3, 10, 2, "Footman"));
-        detail.Add(new EnmDetail(4, 10, 0, "Mushroom"));
-        detail.Add(new EnmDetail(5, 10, 0, "Grunt"));
-        detail.Add(new EnmDetail(6, 20, 1, "Skeleton"));
-        detail.Add(new EnmDetail(7, 20, 2, "Slime"));
-        detail.Add(new EnmDetail(8, 30, 0, "Grunt"));
-        detail.Add(new EnmDetail(9, 30, 0, "TurtleShell"));
-        detail.Add(new EnmDetail(10, 20, 1, "Mushroom"));
-        detail.Add(new EnmDetail(11, 30, 1, "Grunt"));
-        detail.Add(new EnmDetail(12, 20, 2, "Skeleton"));
-        detail.Add(new EnmDetail(13, 20, 2, "Footman"));
-        detail.Add(new EnmDetail(14, 10, 0, "StoneMonster"));
-        detail.Add(new EnmDetail(15, 20, 2, "SpiderGhost"));
-        detail.Add(new EnmDetail(16, 20, 1, "Golem"));
-        detail.Add(new EnmDetail(17, 25, 1, "SkeletonArmed"));
-        detail.Add(new EnmDetail(18, 30, 1, "FreeLich"));
-        detail.Add(new EnmDetail(19, 35, 0, "SpiderGhost"));
-        detail.Add(new EnmDetail(20, 15, 0, "Golem"));
-        detail.Add(new EnmDetail(21, 30, 2, "SkeletonArmed"));
-        detail.Add(new EnmDetail(22, 20, 2, "FreeLich"));
-        detail.Add(new EnmDetail(23, 40, 1, "Slime"));
-        detail.Add(new EnmDetail(24, 10, 1, "Bull"));
-        detail.Add(new EnmDetail(25, 20, 0, "FootmanS"));
-        detail.Add(new EnmDetail(26, 30, 0, "SpiderGhost"));
-        detail.Add(new EnmDetail(27, 20, 2, "GolemS"));
-        detail.Add(new EnmDetail(28, 20, 2, "FreeLichS"));
-        detail.Add(new EnmDetail(29, 1, 1, "Dragon"));
+        detail.Add(new EnmDetail(1, 5, 1, "Slime"));
+        detail.Add(new EnmDetail(2, 5, 1, "Mushroom"));
+        detail.Add(new EnmDetail(3, 10, 2, "TurtleShell"));
+        detail.Add(new EnmDetail(4, 10, 2, "Footman"));
+        detail.Add(new EnmDetail(5, 10, 0, "Mushroom"));
+        detail.Add(new EnmDetail(6, 10, 0, "Grunt"));
+        detail.Add(new EnmDetail(7, 20, 1, "Skeleton"));
+        detail.Add(new EnmDetail(8, 20, 2, "Slime"));
+        detail.Add(new EnmDetail(9, 30, 0, "Grunt"));
+        detail.Add(new EnmDetail(10, 30, 0, "TurtleShell"));
+        detail.Add(new EnmDetail(11, 20, 1, "Mushroom"));
+        detail.Add(new EnmDetail(12, 30, 1, "Grunt"));
+        detail.Add(new EnmDetail(13, 20, 2, "Skeleton"));
+        detail.Add(new EnmDetail(14, 20, 2, "Footman"));
+        detail.Add(new EnmDetail(15, 10, 0, "StoneMonster"));
+        detail.Add(new EnmDetail(16, 20, 2, "SpiderGhost"));
+        detail.Add(new EnmDetail(17, 20, 1, "Golem"));
+        detail.Add(new EnmDetail(18, 25, 1, "SkeletonArmed"));
+        detail.Add(new EnmDetail(19, 30, 1, "FreeLich"));
+        detail.Add(new EnmDetail(20, 35, 0, "SpiderGhost"));
+        detail.Add(new EnmDetail(21, 15, 0, "Golem"));
+        detail.Add(new EnmDetail(22, 30, 2, "SkeletonArmed"));
+        detail.Add(new EnmDetail(23, 20, 2, "FreeLich"));
+        detail.Add(new EnmDetail(24, 40, 1, "Slime"));
+        detail.Add(new EnmDetail(25, 10, 1, "Bull"));
+        detail.Add(new EnmDetail(26, 20, 0, "FootmanS"));
+        detail.Add(new EnmDetail(27, 30, 0, "SpiderGhost"));
+        detail.Add(new EnmDetail(28, 20, 2, "GolemS"));
+        detail.Add(new EnmDetail(29, 20, 2, "FreeLichS"));
+        detail.Add(new EnmDetail(30, 1, 1, "Dragon"));
 
         int j = 0;
 
         for (int i = 0; i < waveNum; ++i)
         {
             List<EnmDetail> detailPerWave = new List<EnmDetail>();
-            for (; j < detail.Count && detail[j].waveID <= i; ++j)
+            for (; j < detail.Count && detail[j].waveID <= i+1; ++j)
             {
-                detailPerWave.Add(detail[j]);
-
+                if (detail[j].waveID == i + 1)
+                {
+                    detailPerWave.Add(detail[j]);
+                }
             }
-            waveArray[i] = new WaveAttr(5, 0.5f, detailPerWave.ToArray());
+            waveArray[i] = new WaveAttr(5, 0.5f, detailPerWave);
         }
         return waveArray;
     }
@@ -333,7 +339,7 @@ public static class StageInfo
         WaveAttr[] waveArray = new WaveAttr[waveNum];
 
         List<EnmDetail> detail = new List<EnmDetail>();
-        for (int k = 0; k < waveNum; k++) {
+        for (int k = 1; k < waveNum; k++) {
             if (k < 10 - 1)
             {
                 detail.Add(new EnmDetail(k, 10 * (int)enmNumEx, Random.Range(0,3), monsterCat0[Random.Range(0,monsterCat0.Length)]));
@@ -382,12 +388,14 @@ public static class StageInfo
         for (int i = 0; i < waveNum; ++i)
         {
             List<EnmDetail> detailPerWave = new List<EnmDetail>();
-            for (; j < detail.Count && detail[j].waveID <= i; ++j)
+            for (; j < detail.Count && detail[j].waveID <= i + 1; ++j)
             {
-                detailPerWave.Add(detail[j]);
-
+                if (detail[j].waveID == i + 1)
+                {
+                    detailPerWave.Add(detail[j]);
+                }
             }
-            waveArray[i] = new WaveAttr(5, 0.5f * spawnSpeedEx, detailPerWave.ToArray());
+            waveArray[i] = new WaveAttr(5, 0.5f, detailPerWave);
         }
         return waveArray;
     }

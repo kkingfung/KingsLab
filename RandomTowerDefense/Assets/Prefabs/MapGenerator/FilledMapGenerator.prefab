@@ -83,6 +83,7 @@ MonoBehaviour:
     foregroundColour: {r: 0.4117647, g: 0, b: 0, a: 0}
     backgroundColour: {r: 0.9098039, g: 0.05882353, b: 0.25490198, a: 0}
   mapIndex: 3
+  Randomize: 0
   tilePrefab: {fileID: 455618, guid: 384e7e5f5469c564faa50e3158b0c328, type: 3}
   obstaclePrefab: {fileID: 461822, guid: 3711498930f5d204ab5979e800272acc, type: 3}
   mapFloor: {fileID: 2786186500453849820}

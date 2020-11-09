@@ -42,7 +42,7 @@ public class RecordManager : MonoBehaviour
     }
     public int RecordComparison(int stageID, string name, int score) {
         stageRecords[stageID]=stageRecords[stageID].InsertObject(stageID, name, score);
-        int rank = PlayerPrefs.GetInt("PlayerRank");
+        int rank = PlayerPrefs.GetInt("PlayerRank",99);
         if (AllRecords.Count > 0)
             updateUI();
 

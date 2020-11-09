@@ -97,8 +97,8 @@ public class InGameOperation : ISceneChange
         SkillStack.init();
         Upgrades.init();
 
-        IslandNow = PlayerPrefs.GetInt("IslandNow");
-        IslandEnabled = PlayerPrefs.GetInt("IslandEnabled");
+        IslandNow = PlayerPrefs.GetInt("IslandNow",0);
+        IslandEnabled = PlayerPrefs.GetInt("IslandEnabled",1);
         isTutorial = (IslandNow == 0);
         WaitSceneChg = false;
     }

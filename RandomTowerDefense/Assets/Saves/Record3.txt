@@ -1,1 +1,1 @@
-{"stageID":3,"record1":{"name":"AAAAA","score":50000},"record2":{"name":"BBBBB","score":10000},"record3":{"name":"CCCCC","score":5000},"record4":{"name":"DDDDD","score":1000},"record5":{"name":"ZYXWV","score":300}}
+{"stageID":3,"record1":{"name":"AAAAA","score":50000},"record2":{"name":"ZYXWV","score":10460},"record3":{"name":"ZYXWV","score":10460},"record4":{"name":"BBBBB","score":10000},"record5":{"name":"CCCCC","score":5000}}

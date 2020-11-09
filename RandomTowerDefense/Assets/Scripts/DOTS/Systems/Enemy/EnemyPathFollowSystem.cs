@@ -10,12 +10,13 @@ public class EnemyPathFollowSystem : JobComponentSystem {
     protected override JobHandle OnUpdate(JobHandle inputDeps) {
         float deltaTime = Time.DeltaTime;
 
-        return Entities.WithAll<EnemyTag>().ForEach((Entity entity, DynamicBuffer<PathPosition> pathPositionBuffer, ref Translation translation, ref Health health, ref Speed speed, ref SlowRate slow, ref PetrifyAmt petrifyAmt, ref PathFollow pathFollow) => {
+        return Entities.WithAll<EnemyTag>().ForEach((Entity entity, DynamicBuffer<PathPosition> pathPositionBuffer,
+            ref Translation translation, ref Health health, ref Speed speed, ref SlowRate slow, ref PetrifyAmt petrifyAmt, 
+            ref PathFollow pathFollow) => {
             if (health.Value > 0 && pathFollow.pathIndex >= 0) {
                 // Has path to follow
                 PathPosition pathPosition = pathPositionBuffer[pathFollow.pathIndex];
-
-                float3 targetPosition = new float3(pathPosition.position.x, pathPosition.position.y, 0);
+                float3 targetPosition = new float3(pathPosition.position.x, translation.Value.y, pathPosition.position.y);
                 float3 moveDir = math.normalizesafe(targetPosition - translation.Value);
                 float moveSpeed = speed.Value*(1-slow.Value)*(1- petrifyAmt.Value);
 
@@ -56,11 +57,11 @@ public class PathFollowGetNewPathSystem : JobComponentSystem {
         JobHandle jobHandle = Entities.WithNone<PathfindingParams>().ForEach((Entity entity, int entityInQueryIndex, in PathFollow pathFollow, in Translation translation) => { 
             if (pathFollow.pathIndex == -1) {
                 
-                GetXY(translation.Value + new float3(1, 1, 0) * cellSize * +.5f, originPosition, cellSize, out int startX, out int startY);
+                GetXY(translation.Value + new float3(1, 0, 1) * cellSize * +.5f, originPosition, cellSize, out int startX, out int startY);
 
                 ValidateGridPosition(ref startX, ref startY, mapWidth, mapHeight);
 
-                //Fixed CastleMapPos
+                //Fixed target position to Castle
                 int endX = 0;
                 int endY = 0;
 

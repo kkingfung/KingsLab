@@ -51,7 +51,7 @@ public class GyroscopeManager : MonoBehaviour
     private void Start()
     {
         isFunctioning = FindObjectOfType<InputManager>().GetUseTouch();
-        sensitivity = PlayerPrefs.GetFloat("Gyro");
+        sensitivity = PlayerPrefs.GetFloat("Gyro",0);
         foreach (Slider i in senseSlider)
             i.value = sensitivity;
 

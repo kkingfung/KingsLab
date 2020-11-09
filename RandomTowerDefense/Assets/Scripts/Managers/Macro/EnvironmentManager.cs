@@ -15,7 +15,7 @@ public class EnvironmentManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        stageID =  PlayerPrefs.GetInt("IslandNow");
+        stageID =  PlayerPrefs.GetInt("IslandNow",0);
         timeManager = FindObjectOfType<TimeManager>();
         RenderSettings.skybox = skyboxMat[stageID];
 

@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
+using System.Linq;
 
 public class FilledMapGenerator : MonoBehaviour {
 	private Coord[] FixedFreeSpace;
@@ -59,12 +61,13 @@ public class FilledMapGenerator : MonoBehaviour {
 
 		if (sceneManager && (sceneManager.GetCurrIsland() == StageInfo.IslandNum - 1))
 		{
-			currentMap.mapSize.x = (int)(16f / 25f * StageInfo.stageSizeEx);
-			currentMap.mapSize.y = (int)(9f / 25f * StageInfo.stageSizeEx);
+			float width = Mathf.Sqrt(StageInfo.stageSizeEx);
+			currentMap.mapSize.x = (int)(width);
+			currentMap.mapSize.y = (int)(StageInfo.stageSizeEx/width);
 		}
 		
 		if (Randomize)
-			currentMap.seed = Random.Range(int.MinValue, int.MaxValue);
+			currentMap.seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
 		tileMap = new Transform[currentMap.mapSize.x,currentMap.mapSize.y];
 		System.Random prng = new System.Random (currentMap.seed);
 
@@ -81,19 +84,19 @@ public class FilledMapGenerator : MonoBehaviour {
 		{
 			stageManager.SpawnPoint[0] = new Coord(0, 0);
 			stageManager.SpawnPoint[1] = new Coord(currentMap.mapSize.x - 1, 0);
-			stageManager.SpawnPoint[2] = new Coord(0, currentMap.mapSize.y - 1);
-			stageManager.SpawnPoint[3] = new Coord(currentMap.mapSize.x - 1, currentMap.mapSize.y - 1);
+			stageManager.SpawnPoint[2] = new Coord(currentMap.mapSize.x - 1, currentMap.mapSize.y - 1);
+			stageManager.SpawnPoint[3] = new Coord(0, currentMap.mapSize.y - 1);
 
 			//Remove for Confirmed Open Space
 			foreach (Coord i in stageManager.SpawnPoint)
 				allTileCoords.Remove(i);
-
-			allTileCoords.Remove(new Coord(0, 1));
-			allTileCoords.Remove(new Coord(1, 1));
-			allTileCoords.Remove(new Coord(1, 0));
 		}
 
 		shuffledTileCoords = new Queue<Coord> (Utility.ShuffleArray (allTileCoords.ToArray (), currentMap.seed));
+
+		allTileCoords.Remove(new Coord(0, 1));
+		allTileCoords.Remove(new Coord(1, 1));
+		allTileCoords.Remove(new Coord(1, 0));
 
 		// Create map holder object
 		string holderName = "Generated Map";
@@ -151,27 +154,31 @@ public class FilledMapGenerator : MonoBehaviour {
 		}
 
 		shuffledOpenTileCoords = new Queue<Coord> (Utility.ShuffleArray (allOpenCoords.ToArray (), currentMap.seed));
+		shuffledOpenTileCoords.Enqueue(new Coord(0, 0));
+		shuffledOpenTileCoords.Enqueue(new Coord(0, 1));
+		shuffledOpenTileCoords.Enqueue(new Coord(1, 1));
+		shuffledOpenTileCoords.Enqueue(new Coord(1, 0));
 
-		// Creating navmesh mask
-		Transform maskLeft = Instantiate (navmeshMaskPrefab, this.transform.position + Vector3.left * (currentMap.mapSize.x + maxMapSize.x) / 4f * tileSize, Quaternion.identity) as Transform;
-		maskLeft.parent = mapHolder;
-		maskLeft.localScale = new Vector3 ((maxMapSize.x - currentMap.mapSize.x) / 2f, 1, currentMap.mapSize.y) * tileSize;
-		
-		Transform maskRight = Instantiate (navmeshMaskPrefab, this.transform.position + Vector3.right * (currentMap.mapSize.x + maxMapSize.x) / 4f * tileSize, Quaternion.identity) as Transform;
-		maskRight.parent = mapHolder;
-		maskRight.localScale = new Vector3 ((maxMapSize.x - currentMap.mapSize.x) / 2f, 1, currentMap.mapSize.y) * tileSize;
-		
-		Transform maskTop = Instantiate (navmeshMaskPrefab, this.transform.position + Vector3.forward * (currentMap.mapSize.y + maxMapSize.y) / 4f * tileSize, Quaternion.identity) as Transform;
-		maskTop.parent = mapHolder;
-		maskTop.localScale = new Vector3 (maxMapSize.x, 1, (maxMapSize.y-currentMap.mapSize.y)/2f) * tileSize;
-	
-		Transform maskBottom = Instantiate (navmeshMaskPrefab, this.transform.position + Vector3.back * (currentMap.mapSize.y + maxMapSize.y) / 4f * tileSize, Quaternion.identity) as Transform;
-		maskBottom.parent = mapHolder;
-		maskBottom.localScale = new Vector3 (maxMapSize.x, 1, (maxMapSize.y-currentMap.mapSize.y)/2f) * tileSize;
-		
-		navmeshFloor.localScale = new Vector3 (maxMapSize.x, maxMapSize.y) * tileSize;
-		mapFloor.localScale =  new Vector3 (currentMap.mapSize.x * tileSize, currentMap.mapSize.y * tileSize);
-	}
+		//// Creating navmesh mask
+		//Transform maskLeft = Instantiate (navmeshMaskPrefab, this.transform.position + Vector3.left * (currentMap.mapSize.x + maxMapSize.x) / 4f * tileSize, Quaternion.identity) as Transform;
+		//maskLeft.parent = mapHolder;
+		//maskLeft.localScale = new Vector3 ((maxMapSize.x - currentMap.mapSize.x) / 2f, 1, currentMap.mapSize.y) * tileSize;
+
+		//Transform maskRight = Instantiate (navmeshMaskPrefab, this.transform.position + Vector3.right * (currentMap.mapSize.x + maxMapSize.x) / 4f * tileSize, Quaternion.identity) as Transform;
+		//maskRight.parent = mapHolder;
+		//maskRight.localScale = new Vector3 ((maxMapSize.x - currentMap.mapSize.x) / 2f, 1, currentMap.mapSize.y) * tileSize;
+
+		//Transform maskTop = Instantiate (navmeshMaskPrefab, this.transform.position + Vector3.forward * (currentMap.mapSize.y + maxMapSize.y) / 4f * tileSize, Quaternion.identity) as Transform;
+		//maskTop.parent = mapHolder;
+		//maskTop.localScale = new Vector3 (maxMapSize.x, 1, (maxMapSize.y-currentMap.mapSize.y)/2f) * tileSize;
+
+		//Transform maskBottom = Instantiate (navmeshMaskPrefab, this.transform.position + Vector3.back * (currentMap.mapSize.y + maxMapSize.y) / 4f * tileSize, Quaternion.identity) as Transform;
+		//maskBottom.parent = mapHolder;
+		//maskBottom.localScale = new Vector3 (maxMapSize.x, 1, (maxMapSize.y-currentMap.mapSize.y)/2f) * tileSize;
+
+		navmeshFloor.localScale = new Vector3(maxMapSize.x, maxMapSize.y) * tileSize;
+        mapFloor.localScale = new Vector3(currentMap.mapSize.x * tileSize, currentMap.mapSize.y * tileSize);
+    }
 	
 	bool MapIsFullyAccessible(bool[,] obstacleMap, int currentObstacleCount) {
 		bool[,] mapFlags = new bool[obstacleMap.GetLength(0),obstacleMap.GetLength(1)];
@@ -215,13 +222,22 @@ public class FilledMapGenerator : MonoBehaviour {
 	}
 
 	public Transform GetTileFromPosition(Vector3 position) {
-		int x = Mathf.RoundToInt(position.x / tileSize + (currentMap.mapSize.x - 1) / 2f);
-		int y = Mathf.RoundToInt(position.z / tileSize + (currentMap.mapSize.y - 1) / 2f);
+		int x = Mathf.RoundToInt((position.x - transform.position.x) / tileSize + (currentMap.mapSize.x - 1) / 2f);
+		int y = Mathf.RoundToInt((position.z - transform.position.z) / tileSize + (currentMap.mapSize.y - 1) / 2f);
 		x = Mathf.Clamp (x, 0, tileMap.GetLength (0) -1);
 		y = Mathf.Clamp (y, 0, tileMap.GetLength (1) -1);
 		return tileMap [x, y];
 	}
-	
+
+	public int2 GetTileIDFromPosition(Vector3 position)
+	{
+		int x = Mathf.RoundToInt((position.x - transform.position.x) / tileSize + (currentMap.mapSize.x - 1) / 2f);
+		int y = Mathf.RoundToInt((position.z - transform.position.z) / tileSize + (currentMap.mapSize.y - 1) / 2f);
+		x = Mathf.Clamp(x, 0, tileMap.GetLength(0) - 1);
+		y = Mathf.Clamp(y, 0, tileMap.GetLength(1) - 1);
+		return new int2(x,y); ;
+	}
+
 	public Coord GetRandomCoord() {
 		Coord randomCoord = shuffledTileCoords.Dequeue ();
 		shuffledTileCoords.Enqueue (randomCoord);
@@ -278,8 +294,12 @@ public class FilledMapGenerator : MonoBehaviour {
 		
 	}
 
-	public int CurrMapX() { return currentMap.mapSize.x; }
-	public int CurrMapY() { return currentMap.mapSize.y; }
+	public int CurrMapX() {
+		return currentMap.mapSize.x;
+	}
+	public int CurrMapY() {
+		return currentMap.mapSize.y;
+	}
 
 	public bool GetMapWalkable(int x, int y) {
 		if (shuffledOpenTileCoords.Contains(new Coord(x, y))) 

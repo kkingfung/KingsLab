@@ -21,7 +21,7 @@ public class Castle : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
         stageManager = FindObjectOfType<StageManager>();
 
-        MaxCastleHP = (int)PlayerPrefs.GetFloat("hpMax");
+        MaxCastleHP = (int)PlayerPrefs.GetFloat("hpMax",1);
         CurrCastleHP = MaxCastleHP;
     }
 

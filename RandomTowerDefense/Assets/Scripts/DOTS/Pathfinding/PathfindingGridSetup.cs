@@ -10,21 +10,32 @@ public class PathfindingGridSetup : MonoBehaviour {
 
     public Grid<GridNode> pathfindingGrid;
 
+    private bool isActived;
     private void Awake() {
         Instance = this;
+        isActived = false;
     }
 
-    private void Start() {
-        mapGenerator = FindObjectOfType<FilledMapGenerator>();
+    private void Update() {
+        if (isActived == false)
+        {
+            mapGenerator = FindObjectOfType<FilledMapGenerator>();
+            pathfindingGrid = new Grid<GridNode>(mapGenerator.CurrMapX(),
+                mapGenerator.CurrMapY(), mapGenerator.tileSize, mapGenerator.transform.position,
+                (Grid<GridNode> grid, int x, int y) => new GridNode(grid, x, y));
 
-        pathfindingGrid = new Grid<GridNode>(mapGenerator.CurrMapX(), mapGenerator.CurrMapY(), mapGenerator.tileSize, Vector3.zero, (Grid<GridNode> grid, int x, int y) => new GridNode(grid, x, y));
+            pathfindingGrid.GetGridObject(2, 0).SetIsWalkable(false);
 
-        pathfindingGrid.GetGridObject(2, 0).SetIsWalkable(false);
-
-        for (int y = 0; y < mapGenerator.CurrMapY(); ++y) {
-            for (int x = 0; x < mapGenerator.CurrMapX(); ++x) {
-                pathfindingGrid.GetGridObject(x, y).SetIsWalkable(mapGenerator.GetMapWalkable(x,y));
+            for (int y = 0; y < mapGenerator.CurrMapY(); ++y)
+            {
+                for (int x = 0; x < mapGenerator.CurrMapX(); ++x)
+                {
+                    pathfindingGrid.GetGridObject(x, y).SetIsWalkable(mapGenerator.GetMapWalkable(x, y));
+                }
             }
+            isActived = true;
         }
     }
+
+
 }

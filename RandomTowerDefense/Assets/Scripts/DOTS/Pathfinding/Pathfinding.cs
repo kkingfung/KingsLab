@@ -27,7 +27,7 @@ public class Pathfinding : ComponentSystem {
         
         NativeArray<PathNode> pathNodeArray = GetPathNodeArray();
 
-        Entities.ForEach((Entity entity, ref PathfindingParams pathfindingParams) => {
+        Entities.WithAll<EnemyTag>().ForEach((Entity entity, ref PathfindingParams pathfindingParams) => {
 
             NativeArray<PathNode> tmpPathNodeArray = new NativeArray<PathNode>(pathNodeArray, Allocator.TempJob);
 
@@ -77,7 +77,6 @@ public class Pathfinding : ComponentSystem {
                 
                 pathNode.isWalkable = grid.GetGridObject(x, y).IsWalkable();
                 pathNode.cameFromNodeIndex = -1;
-
                 pathNodeArray[pathNode.index] = pathNode;
             }
         }
@@ -109,7 +108,7 @@ public class Pathfinding : ComponentSystem {
             PathNode endNode = pathNodeArray[endNodeIndex];
             if (endNode.cameFromNodeIndex == -1) {
                 // Didn't find a path!
-                //Debug.Log("Didn't find a path!");
+                Debug.Log("Didn't find a path!");
                 pathFollowComponentDataFromEntity[entity] = new PathFollow { pathIndex = -1 };
             } else {
                 // Found a path
@@ -155,8 +154,8 @@ public class Pathfinding : ComponentSystem {
             neighbourOffsetArray[7] = new int2(+1, +1); // Right Up
 
             int endNodeIndex = CalculateIndex(endPosition.x, endPosition.y, gridSize.x);
-
             PathNode startNode = pathNodeArray[CalculateIndex(startPosition.x, startPosition.y, gridSize.x)];
+
             startNode.gCost = 0;
             startNode.CalculateFCost();
             pathNodeArray[startNode.index] = startNode;
@@ -331,7 +330,7 @@ public class Pathfinding : ComponentSystem {
         return lowestCostPathNode.index;
     }
 
-    private struct PathNode : IHeapItem<PathNode>
+    public struct PathNode : IHeapItem<PathNode>
     {
         public int x;
         public int y;

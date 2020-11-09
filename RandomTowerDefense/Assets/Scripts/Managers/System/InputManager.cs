@@ -350,7 +350,7 @@ public class InputManager : MonoBehaviour
         float currentMagnitude = (touchZero.position - touchOne.position).magnitude;
 
         float difference = currentMagnitude - prevMagnitude;
-        float zoomFactor = difference * 0.01f + PlayerPrefs.GetFloat("zoomRate");
+        float zoomFactor = difference * 0.01f + PlayerPrefs.GetFloat("zoomRate",0);
         zoomFactor = Mathf.Clamp(zoomFactor, 0.0f, 1.0f);
         cameraManager.Zoom(zoomFactor);
     }

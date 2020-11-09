@@ -65,6 +65,9 @@ public class EnemySpawner : MonoBehaviour
     //For input
     private Transform[] transforms;
 
+    private FilledMapGenerator mapGenerator;
+    private CastleSpawner castleSpawner;
+
     void Awake()
     {
         if (Instance == null)
@@ -139,6 +142,8 @@ public class EnemySpawner : MonoBehaviour
     void Start()
     {
         EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+        castleSpawner = FindObjectOfType<CastleSpawner>();
+        mapGenerator = FindObjectOfType<FilledMapGenerator>();
 
         //Prepare input
         GameObjects = new GameObject[count];
@@ -146,12 +151,16 @@ public class EnemySpawner : MonoBehaviour
 
         Entities = new NativeArray<Entity>(count, Allocator.Persistent);
         var archetype = EntityManager.CreateArchetype(
-             typeof(Health), typeof(Damage),
-            typeof(Speed), typeof(Radius), typeof(PetrifyAmt),
-            typeof(Lifetime), typeof(SlowRate), typeof(BuffTime),
+             typeof(Health), typeof(Damage), typeof(Money),
+            typeof(Speed), typeof(Radius), typeof(PetrifyAmt),  typeof(Lifetime), typeof(SlowRate), 
+            typeof(BuffTime),typeof(PathFollow),
             ComponentType.ReadOnly<Translation>(),
             ComponentType.ReadOnly<Hybrid>());
         EntityManager.CreateEntity(archetype, Entities);
+
+        for (int i = 0; i< count;++i) {
+            EntityManager.AddBuffer<PathPosition>(Entities[i]);
+        }
 
         TransformAccessArray = new TransformAccessArray(transforms);
         healthArray = new NativeArray<float>(count, Allocator.Persistent);
@@ -170,11 +179,9 @@ public class EnemySpawner : MonoBehaviour
     {
         int spawnCnt = 0;
         int[] spawnIndexList = new int[num];
-
         for (int i = 0; i < count && spawnCnt < num; i++)
         {
             if (GameObjects[i] != null) continue;
-
             GameObjects[i] = Instantiate(allMonsterList[Name], transform);
             GameObjects[i].transform.position = Position;
             GameObjects[i].transform.localRotation = Quaternion.Euler(Rotation);
@@ -239,6 +246,17 @@ public class EnemySpawner : MonoBehaviour
 
             if (EntityManager.HasComponent<EnemyTag>(Entities[i]) == false)
                 EntityManager.AddComponent<EnemyTag>(Entities[i]);
+
+            if (EntityManager.HasComponent<PathfindingParams>(Entities[i]) == false)
+            {
+                EntityManager.AddComponentData(Entities[i], new PathfindingParams
+                {
+                    startPosition = mapGenerator.GetTileIDFromPosition(Position),
+                    endPosition = new int2(),
+                });
+            }
+            
+
             spawnIndexList[spawnCnt++] = i;
         }
 

@@ -83,14 +83,14 @@ public class StageSelectOperation : ISceneChange
     {
         base.SceneIn();
 
-        IslandNow = PlayerPrefs.GetInt("IslandNow");
+        IslandNow = PlayerPrefs.GetInt("IslandNow",0);
         IslandNext = IslandNow;
         MainCam.transform.position = MainCamStayPt[IslandNow];
         RightCam.transform.position = RightCamStayPt[IslandNow];
         BottomCam.transform.position = BottomCamStayPt[IslandNow];
 
         if (isDebugging) IslandEnabled = StageInfo.IslandNum;
-        else IslandEnabled = PlayerPrefs.GetInt("IslandEnabled");
+        else IslandEnabled = PlayerPrefs.GetInt("IslandEnabled",1);
 
         GameObject[] ClearMarks = GameObject.FindGameObjectsWithTag("ClearMark");
         for (int i = 0; i < ClearMarks.Length; ++i)
@@ -394,7 +394,8 @@ public class StageSelectOperation : ISceneChange
                         int Input_int;
                         if (int.TryParse(keyboard.text, out Input_int))
                         {
-                            StageCustomText[infoID].text = Input_int.ToString();
+                            if (infoID == 0 && Input_int < 5) Input_int = 5;
+                             StageCustomText[infoID].text = Input_int.ToString();
                             StageInfo.SaveDataInPrefs_DirectInput(infoID, Input_int);
                         }
                         else

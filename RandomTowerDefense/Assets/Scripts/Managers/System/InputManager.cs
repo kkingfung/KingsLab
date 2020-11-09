@@ -22,10 +22,12 @@ public class InputManager : MonoBehaviour
     readonly float tapStayTime = 0.3f;
     readonly float tapDoubleTime = 0.2f;
     readonly float dragDiff = 40.0f;//cooperate with Scene Script(toDrag)
+    readonly float touchTapDiff = 5.0f;//Check Buy Store/Switch Focus
 
     public GameObject ClickPrefab;
     //TouchButton
     public List<GameObject> Buttons;
+    public List<GameObject> ButtonsCenter;
 
     //Input Test
     public LBM LBMTest;
@@ -78,7 +80,7 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
-        if (Buttons.Count > 0) { RaycastTest(); }
+        if (Buttons.Count+ButtonsCenter.Count > 0) { RaycastTest(); }
 
         if (useTouch) UpdateTouchInfo();
         else UpdateMouseInfo();
@@ -377,10 +379,12 @@ public class InputManager : MonoBehaviour
     {
         Ray ray = new Ray();
         Ray ray2 = new Ray();
+        Ray ray3 = new Ray();
         RaycastHit hit = new RaycastHit();
         RaycastHit hit2 = new RaycastHit();
+        RaycastHit hit3 = new RaycastHit();
 
-        if (Input.touchCount > 0)
+        if (useTouch && Input.touchCount > 0)
         {
             foreach (Touch t in Input.touches)
             {
@@ -388,11 +392,13 @@ public class InputManager : MonoBehaviour
                 {
                     ray = refCamL.ScreenPointToRay(Input.GetTouch(t.fingerId).position);
                     ray2 = refCamL.ScreenPointToRay(posTap);
+                    ray3 = refCamL.ScreenPointToRay(new Vector2(Screen.width * 0.5f, Screen.height * 0.5f));
                 }
                 else
                 {
                     ray = refCamP.ScreenPointToRay(Input.GetTouch(t.fingerId).position);
                     ray2 = refCamP.ScreenPointToRay(posTap);
+                    ray3 = refCamP.ScreenPointToRay(new Vector2(Screen.width * 0.5f, Screen.height * 0.5f));
                 }
               
                 if (Input.GetTouch(t.fingerId).phase == TouchPhase.Ended)
@@ -405,10 +411,17 @@ public class InputManager : MonoBehaviour
                             hit.transform.GetComponent<RaycastFunction>().ActionFunc();
                         break;
                     }
+                    if ((Input.GetTouch(t.fingerId).position-posTap).sqrMagnitude<touchTapDiff &&
+                         Physics.Raycast(ray3, out hit3, 1000, LayerMask.GetMask("StoreLayer"))
+                         && ButtonsCenter.Contains(hit3.transform.gameObject))
+                    {
+                        hit3.transform.GetComponent<RaycastFunction>().ActionFunc();
+                        break;
+                    }
                 }
             }
         }
-        else if (Input.GetMouseButtonUp(0))
+        else if (!useTouch && Input.GetMouseButtonUp(0))
         {
             if (Screen.width > Screen.height)
             {
@@ -420,7 +433,7 @@ public class InputManager : MonoBehaviour
                 ray = refCamP.ScreenPointToRay(Input.mousePosition);
                 ray2 = refCamP.ScreenPointToRay(posTap);
             }
-            if ((Physics.Raycast(ray2, out hit2)&& Physics.Raycast(ray, out hit)) && Buttons.Contains(hit.transform.gameObject))
+            if ((Physics.Raycast(ray2, out hit2)&& Physics.Raycast(ray, out hit)) && (Buttons.Contains(hit.transform.gameObject)|| ButtonsCenter.Contains(hit.transform.gameObject)))
             {
                 if (hit.transform == hit2.transform && hit.transform.GetComponent<RaycastFunction>())
                 { 

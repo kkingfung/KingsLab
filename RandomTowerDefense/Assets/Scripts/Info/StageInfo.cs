@@ -163,50 +163,50 @@ public static class StageInfo
             case StageInfoID.Enum_waveNum:
                 tempVal = PlayerPrefs.GetFloat("waveNum",1);
                 tempVal = (tempVal + chg + waveNumFactor.Length) % waveNumFactor.Length;
-                PlayerPrefs.SetFloat("waveNum", tempVal);
+                PlayerPrefs.SetFloat("waveNum", waveNumFactor[(int)tempVal]);
                 return waveNumFactor[(int)tempVal];
             case StageInfoID.Enum_stageSize:
-                tempVal = PlayerPrefs.GetFloat("stageSize",100);
+                tempVal = PlayerPrefs.GetFloat("stageSize",1);
                 tempVal = (tempVal + chg + stageSizeFactor.Length) % stageSizeFactor.Length;
-                PlayerPrefs.SetFloat("stageSize", tempVal);
+                PlayerPrefs.SetFloat("stageSize", stageSizeFactor[(int)tempVal]);
                 return stageSizeFactor[(int)tempVal];
             case StageInfoID.Enum_enmNum:
                 tempVal = PlayerPrefs.GetFloat("enmNum",1);
                 tempVal = (tempVal + chg + enmNumFactor.Length) % enmNumFactor.Length;
-                PlayerPrefs.SetFloat("enmNum", tempVal);
+                PlayerPrefs.SetFloat("enmNum", enmNumFactor[(int)tempVal]);
                 return enmNumFactor[(int)tempVal];
             case StageInfoID.Enum_enmSpeed:
                 tempVal = PlayerPrefs.GetFloat("enmSpeed",1);
                 tempVal = (tempVal + chg + enmSpeedFactor.Length) % enmSpeedFactor.Length;
-                PlayerPrefs.SetFloat("enmSpeed", tempVal);
+                PlayerPrefs.SetFloat("enmSpeed", enmSpeedFactor[(int)tempVal]);
                 return enmSpeedFactor[(int)tempVal];
             case StageInfoID.Enum_spawnSpeed:
                 tempVal = PlayerPrefs.GetFloat("spawnSpeed",1);
                 tempVal = (tempVal + chg + spawnSpeedFactor.Length) % spawnSpeedFactor.Length;
-                PlayerPrefs.SetFloat("spawnSpeed", tempVal);
+                PlayerPrefs.SetFloat("spawnSpeed", spawnSpeedFactor[(int)tempVal]);
                 return spawnSpeedFactor[(int)tempVal];
             case StageInfoID.Enum_hpMax:
                 tempVal = PlayerPrefs.GetFloat("hpMax",1);
                 tempVal = (tempVal + chg + hpMaxFactor.Length) % hpMaxFactor.Length;
-                PlayerPrefs.SetFloat("hpMax", tempVal);
+                PlayerPrefs.SetFloat("hpMax", hpMaxFactor[(int)tempVal]);
                 return hpMaxFactor[(int)tempVal];
             case StageInfoID.Enum_resource:
                 tempVal = PlayerPrefs.GetFloat("resource",1);
                 tempVal = (tempVal + chg + resourceFactor.Length) % resourceFactor.Length;
-                PlayerPrefs.SetFloat("resource", tempVal);
+                PlayerPrefs.SetFloat("resource", resourceFactor[(int)tempVal]);
                 return resourceFactor[(int)tempVal];
         }
         return 0f;
     }
 
     private static void UpdateCustomizedData() {
-        waveNumEx = waveNumFactor[(int)PlayerPrefs.GetFloat("waveNum",1)];
-        stageSizeEx = stageSizeFactor[(int)PlayerPrefs.GetFloat("stageSize",100)];
-        enmNumEx = enmNumFactor[(int)PlayerPrefs.GetFloat("enmNum",1)];
-        enmSpeedEx = enmSpeedFactor[(int)PlayerPrefs.GetFloat("enmSpeed",1)];
-        spawnSpeedEx = spawnSpeedFactor[(int)PlayerPrefs.GetFloat("spawnSpeed",1)];
-        hpMaxEx = hpMaxFactor[(int)PlayerPrefs.GetFloat("hpMax",1)];
-        resourceEx = resourceFactor[(int)PlayerPrefs.GetFloat("resource",1)];
+        waveNumEx = (int)PlayerPrefs.GetFloat("waveNum",1);
+        stageSizeEx = (int)PlayerPrefs.GetFloat("stageSize",100);
+        enmNumEx = (int)PlayerPrefs.GetFloat("enmNum",1);
+        enmSpeedEx = (int)PlayerPrefs.GetFloat("enmSpeed",1);
+        spawnSpeedEx = (int)PlayerPrefs.GetFloat("spawnSpeed",1);
+        hpMaxEx = (int)PlayerPrefs.GetFloat("hpMax",1);
+        resourceEx = (int)PlayerPrefs.GetFloat("resource",1);
     }
 
     public static StageAttr GetStageInfo()
@@ -346,14 +346,14 @@ public static class StageInfo
             }
             else if (k < 30 - 1)
             {
-                detail.Add(new EnmDetail(k, Random.Range(15, 25)* (int)enmNumEx, Random.Range(0, 3), monsterCat0[Random.Range(0, monsterCat1.Length)]));
-                detail.Add(new EnmDetail(k, Random.Range(15, 25) * (int)enmNumEx, Random.Range(0, 3), monsterCat0[Random.Range(0, monsterCat1.Length)]));
+                detail.Add(new EnmDetail(k, Random.Range(15, 25)* (int)enmNumEx, Random.Range(0, 3), monsterCat1[Random.Range(0, monsterCat1.Length)]));
+                detail.Add(new EnmDetail(k, Random.Range(15, 25) * (int)enmNumEx, Random.Range(0, 3), monsterCat1[Random.Range(0, monsterCat1.Length)]));
             }
             else if (k < 50 - 1)
             {
-                detail.Add(new EnmDetail(k, Random.Range(15, 25)* (int)enmNumEx, Random.Range(0, 3), monsterCat0[Random.Range(0, monsterCat2.Length)]));
-                detail.Add(new EnmDetail(k, Random.Range(15, 25)* (int)enmNumEx, Random.Range(0, 3), monsterCat0[Random.Range(0, monsterCat2.Length)]));
-                detail.Add(new EnmDetail(k, Random.Range(15, 25) * (int)enmNumEx, Random.Range(0, 3), monsterCat0[Random.Range(0, monsterCat2.Length)]));
+                detail.Add(new EnmDetail(k, Random.Range(15, 25)* (int)enmNumEx, Random.Range(0, 3), monsterCat2[Random.Range(0, monsterCat2.Length)]));
+                detail.Add(new EnmDetail(k, Random.Range(15, 25)* (int)enmNumEx, Random.Range(0, 3), monsterCat2[Random.Range(0, monsterCat2.Length)]));
+                detail.Add(new EnmDetail(k, Random.Range(15, 25) * (int)enmNumEx, Random.Range(0, 3), monsterCat2[Random.Range(0, monsterCat2.Length)]));
             }
             else
             {
@@ -373,9 +373,9 @@ public static class StageInfo
                             }
                             break;
                         default:
-                            detail.Add(new EnmDetail(k, Random.Range(20, 35)* (int)enmNumEx, Random.Range(0, 3), monsterCat0[Random.Range(0, monsterCat3.Length)]));
-                            detail.Add(new EnmDetail(k, Random.Range(20, 35)* (int)enmNumEx, Random.Range(0, 3), monsterCat0[Random.Range(0, monsterCat3.Length)]));
-                            detail.Add(new EnmDetail(k, Random.Range(20, 35) * (int)enmNumEx, Random.Range(0, 3), monsterCat0[Random.Range(0, monsterCat3.Length)]));
+                            detail.Add(new EnmDetail(k, Random.Range(20, 35)* (int)enmNumEx, Random.Range(0, 3), monsterCat3[Random.Range(0, monsterCat3.Length)]));
+                            detail.Add(new EnmDetail(k, Random.Range(20, 35)* (int)enmNumEx, Random.Range(0, 3), monsterCat3[Random.Range(0, monsterCat3.Length)]));
+                            detail.Add(new EnmDetail(k, Random.Range(20, 35) * (int)enmNumEx, Random.Range(0, 3), monsterCat3[Random.Range(0, monsterCat3.Length)]));
                             break;
                     }
                 

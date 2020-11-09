@@ -10,7 +10,6 @@ public class TitleOperation: ISceneChange
     //Camera Start/Stay/End Point
     [Header("Camera Settings")]
     public GameObject DarkenCam;
-    public GameObject DarkenCamSub;
 
     public GameObject RightCam;
     public List<Vector3> RightCamStartPt;
@@ -75,8 +74,8 @@ public class TitleOperation: ISceneChange
     private RecordCameraState bottomCamState;
 
     private const int maxRecStatus = 4;
-    private const int maxRecFrame = 20;
-    private const int maxRecWaitFrame = 120;
+    private const float maxRecTimer = 0.5f;
+    private const float maxRecWaitTimer = 5;
 
     private void OnEnable()
     {
@@ -92,11 +91,11 @@ public class TitleOperation: ISceneChange
         PlayerPrefs.SetFloat("zoomRate",0f);
 
         PlayerPrefs.SetFloat("waveNum", 1);
-        PlayerPrefs.SetFloat("stageSize", 400);
+        PlayerPrefs.SetFloat("stageSize", 1);
         PlayerPrefs.SetFloat("enmNum", 1);
         PlayerPrefs.SetFloat("enmSpeed", 1);
         PlayerPrefs.SetFloat("spawnSpeed", 1);
-        PlayerPrefs.SetFloat("hpMax", 5);
+        PlayerPrefs.SetFloat("hpMax", 1);
         PlayerPrefs.SetFloat("resource", 1);
     }
     // Start is called before the first frame update
@@ -182,11 +181,8 @@ public class TitleOperation: ISceneChange
             StartCoroutine(PreparationToMain());
         }
 
-        if (showCredit && InputManager.GetAnyInput()) { 
-            showCredit = false; 
-            nextRecStatusRightCam = 1; 
-            nextRecStatusBottomCam = 1;
-            TimeRecord = Time.time;
+        if (showCredit && InputManager.GetAnyInput()) {
+            EnableCredit();
         }
 
         if (!isOpening){
@@ -196,8 +192,7 @@ public class TitleOperation: ISceneChange
                 StartCoroutine(RecBottomCamOperation());
         }
 
-        DarkenCam.SetActive(isOption);
-        DarkenCamSub.SetActive(showCredit);
+        DarkenCam.SetActive(isOption|| showCredit);
     }
 
     private void LateUpdate()
@@ -227,14 +222,22 @@ public class TitleOperation: ISceneChange
         AudioManager.PlayAudio("se_Button");
     }
 
-    public void EnableCredit() 
+    public void EnableCredit()
     {
         if (Time.time - TimeRecord < TimeWait) return;
         showCredit = !showCredit;
-        nextRecStatusRightCam = 0;
-        nextRecStatusBottomCam = 0;
+        if (showCredit)
+        {
+            nextRecStatusRightCam = 0;
+            nextRecStatusBottomCam = 0;
+        }
+        else
+        {
+            nextRecStatusRightCam = 1;
+            nextRecStatusBottomCam = 1;
+        }
         TimeRecord = Time.time;
-        if(showCredit) AudioManager.PlayAudio("se_Button");
+        if (showCredit) AudioManager.PlayAudio("se_Button");
     }
     private IEnumerator PetrifyAnimation()
     {
@@ -271,26 +274,26 @@ public class TitleOperation: ISceneChange
     private IEnumerator RecRightCamOperation()
     {
         Vector3 spd;
-        int frame;
+        float timer = 0;
 
         //StarttoStay
         rightCamState = RecordCameraState.StarttoStay;
         RightCam.transform.position = RightCamStartPt[currentRecStatusRightCam];
 
         spd = RightCamStayPt[currentRecStatusRightCam] - RightCamStartPt[currentRecStatusRightCam];
-        spd /= maxRecFrame;
-        frame = 0;
+        spd /= maxRecTimer;
 
-        while (frame<maxRecFrame)
+        while (timer < maxRecTimer)
         {
-            frame++;
-            RightCam.transform.position += spd;
+            timer += Time.deltaTime;
+            if (timer > maxRecTimer) timer = maxRecTimer;
+            RightCam.transform.position = RightCamStartPt[currentRecStatusRightCam] + spd * timer;
             yield return new WaitForSeconds(0f);
         }
 
         //Stay
         rightCamState = RecordCameraState.Stay;
-        frame = 0;
+        timer = 0;
         if (showCredit)
         {
             while (showCredit && currentRecStatusRightCam == 0)
@@ -298,9 +301,9 @@ public class TitleOperation: ISceneChange
         }
         else
         {
-            while (frame < maxRecWaitFrame && !showCredit)
+            while (timer < maxRecWaitTimer && !showCredit)
             {
-                frame++;
+                timer += Time.deltaTime;
                 yield return new WaitForSeconds(0f);
             }
         }
@@ -308,13 +311,14 @@ public class TitleOperation: ISceneChange
         //StaytoExit
         rightCamState = RecordCameraState.StaytoExit;
         spd = RightCamEndPt[currentRecStatusRightCam] - RightCamStayPt[currentRecStatusRightCam];
-        spd /= maxRecFrame;
-        frame = 0;
+        spd /= maxRecTimer;
+        timer = 0;
 
-        while (frame < maxRecFrame)
+        while (timer < maxRecTimer)
         {
-            frame++;
-            RightCam.transform.position += spd;
+            timer += Time.deltaTime;
+            if (timer > maxRecTimer) timer = maxRecTimer;
+            RightCam.transform.position = RightCamStayPt[currentRecStatusRightCam] + spd * timer;
             yield return new WaitForSeconds(0f);
         }
 
@@ -327,26 +331,26 @@ public class TitleOperation: ISceneChange
     private IEnumerator RecBottomCamOperation()
     {
         Vector3 spd;
-        int frame;
+        float timer = 0;
 
         //StarttoStay
         bottomCamState = RecordCameraState.StarttoStay;
         BottomCam.transform.position = BottomCamStartPt[currentRecStatusBottomCam];
 
         spd = BottomCamStayPt[currentRecStatusBottomCam] - BottomCamStartPt[currentRecStatusBottomCam];
-        spd /= maxRecFrame;
-        frame = 0;
+        spd /= maxRecTimer;
 
-        while (frame < maxRecFrame)
+        while (timer < maxRecTimer)
         {
-            frame++;
-            BottomCam.transform.position += spd;
+            timer += Time.deltaTime;
+            if (timer > maxRecTimer) timer = maxRecTimer;
+            BottomCam.transform.position = BottomCamStartPt[currentRecStatusBottomCam] + spd * timer;
             yield return new WaitForSeconds(0f);
         }
 
         //Stay
         bottomCamState = RecordCameraState.Stay;
-        frame = 0;
+        timer = 0;
         if (showCredit)
         {
             while (showCredit && currentRecStatusBottomCam == 0)
@@ -354,9 +358,9 @@ public class TitleOperation: ISceneChange
         }
         else
         {
-            while (frame < maxRecWaitFrame && !showCredit)
+            while (timer < maxRecWaitTimer && !showCredit)
             {
-                frame++;
+                timer += Time.deltaTime;
                 yield return new WaitForSeconds(0f);
             }
         }
@@ -364,13 +368,14 @@ public class TitleOperation: ISceneChange
         //StaytoExit
         bottomCamState = RecordCameraState.StaytoExit;
         spd = BottomCamEndPt[currentRecStatusBottomCam] - BottomCamStayPt[currentRecStatusBottomCam];
-        spd /= maxRecFrame;
-        frame = 0;
+        spd /= maxRecTimer;
+        timer = 0;
 
-        while (frame < maxRecFrame)
+        while (timer < maxRecTimer)
         {
-            frame++;
-            BottomCam.transform.position += spd;
+            timer += Time.deltaTime;
+            if (timer > maxRecTimer) timer = maxRecTimer;
+            BottomCam.transform.position = BottomCamStayPt[currentRecStatusBottomCam] + spd * timer;
             yield return new WaitForSeconds(0f);
         }
 

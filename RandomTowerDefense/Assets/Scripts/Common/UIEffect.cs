@@ -36,6 +36,7 @@ public class UIEffect : MonoBehaviour
     private StageSelectOperation selectionSceneManager;
     private InGameOperation gameSceneManager;
     private PlayerManager playerManager;
+    private InputManager inputManager;
 
     // Start is called before the first frame update
     private void Start()
@@ -52,6 +53,7 @@ public class UIEffect : MonoBehaviour
         selectionSceneManager = FindObjectOfType<StageSelectOperation>();
         gameSceneManager= FindObjectOfType<InGameOperation>();
         playerManager = GameObject.FindObjectOfType<PlayerManager>();
+        inputManager = GameObject.FindObjectOfType<InputManager>();
         oriPos = this.transform.localPosition;
         if(this.GetComponent<RectTransform>())
         oriPosRect = this.GetComponent<RectTransform>().localPosition;
@@ -71,26 +73,32 @@ public class UIEffect : MonoBehaviour
             switch (EffectID) {
             case -1://for Title Scene Record
                 RaycastHit hit;
-                Ray ray;
+                Ray ray = new Ray() ;
 
                 //Get Ray according to orientation
                 if (Screen.width > Screen.height)
                 {
-                    if (Input.touchCount > 0)
-                        ray = targetCam.ScreenPointToRay(Input.GetTouch(0).position);
-                    else 
-                        ray = targetCam.ScreenPointToRay(Input.mousePosition);
+                    if (inputManager.GetUseTouch())
+                    {
+                        if (Input.touchCount > 0)
+                            ray = targetCam.ScreenPointToRay(Input.GetTouch(0).position);
+                    }
+                    else { ray = targetCam.ScreenPointToRay(Input.mousePosition); }
+
                 }
                 else
                 {
-                    if (Input.touchCount > 0)
-                        ray = targetCam.ScreenPointToRay(Input.GetTouch(0).position);
-                    else
-                        ray = subCam.ScreenPointToRay(Input.mousePosition);
+                    if (inputManager.GetUseTouch())
+                    {
+                        if (Input.touchCount > 0)
+                            ray = subCam.ScreenPointToRay(Input.GetTouch(0).position);
+                    }
+                    else { ray = subCam.ScreenPointToRay(Input.mousePosition); }
                 }
 
                 float temp;
-                if ((Input.touchCount > 0 || (Input.mousePosition.x > 0 && Input.mousePosition.y > 0 && 
+                if (((inputManager.GetUseTouch()&&Input.touchCount > 0) || 
+                    (inputManager.GetUseTouch()==false && Input.mousePosition.x > 0 && Input.mousePosition.y > 0 && 
                     Input.mousePosition.x < Screen.width && Input.mousePosition.y < Screen.height)) &&
                         Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("RecordBroad")))
                 {
@@ -112,12 +120,12 @@ public class UIEffect : MonoBehaviour
                         SpriteRenderer spr = i.GetComponent<SpriteRenderer>();
                         if (textMesh)
                         {
-                            temp = Mathf.Max(0.0f, textMesh.color.a - 0.02f);
+                            temp = Mathf.Max(0.0f, textMesh.color.a - 0.005f);
                             textMesh.color = new Color(textMesh.color.r, textMesh.color.g, textMesh.color.b, temp);
                         }
                         if (spr)
                         {
-                            temp = Mathf.Max(0.0f, spr.color.a - 0.02f);
+                            temp = Mathf.Max(0.0f, spr.color.a - 0.005f);
                             spr.color = new Color(spr.color.r, spr.color.g, spr.color.b, temp);
                         }
                     }

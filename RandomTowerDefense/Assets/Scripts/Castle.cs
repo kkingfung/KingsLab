@@ -32,7 +32,7 @@ public class Castle : MonoBehaviour
         CurrCastleHP = GetCastleHpFromEntity();
 
         HPText.text = CurrCastleHP < 0 ? "0" : CurrCastleHP.ToString();
-        if (PreviousCastleHP > CurrCastleHP)
+        if (PreviousCastleHP > CurrCastleHP && audioManager.enabledSE)
             audioSource.PlayOneShot(audioManager.GetAudio("se_Hitted"));
         Shield.SetActive(CurrCastleHP > 1);
     }

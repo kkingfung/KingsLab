@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class GyroscopeManager : MonoBehaviour
 {
-    readonly Vector2 shakeThreshold = new Vector2(5,8); // horizontal,vertical
+    readonly Vector2 shakeThreshold = new Vector2(5,8); // horizontal
+    readonly Vector2 shakeThresholdV = new Vector2(5, 5); // vertical
     readonly float timeInterval = 2f;
 
     public bool isFunctioning;
@@ -102,7 +103,7 @@ public class GyroscopeManager : MonoBehaviour
         switch (Input.deviceOrientation)
         {
             case DeviceOrientation.Portrait:
-                if (rotRate.x > shakeThreshold.x || rotRate.x < shakeThreshold.x)
+                if (rotRate.x > shakeThresholdV.x || rotRate.x < -shakeThresholdV.x)
                     VerticalShake = true;
                 if (rotRate.y < -shakeThreshold.y)
                     LeftShake = true;
@@ -110,7 +111,7 @@ public class GyroscopeManager : MonoBehaviour
                     RightShake = true;
                 break;
             case DeviceOrientation.PortraitUpsideDown:
-                if (rotRate.x > shakeThreshold.x || rotRate.x < shakeThreshold.x)
+                if (rotRate.x > shakeThresholdV.x || rotRate.x < -shakeThresholdV.x)
                     VerticalShake = true;
                 if (rotRate.y < -shakeThreshold.y)
                     RightShake = true;
@@ -118,7 +119,7 @@ public class GyroscopeManager : MonoBehaviour
                     LeftShake = true;
                 break;
             case DeviceOrientation.LandscapeLeft:
-                if (rotRate.x > shakeThreshold.y || rotRate.x < shakeThreshold.y)
+                if (rotRate.x > shakeThresholdV.y || rotRate.x < -shakeThresholdV.y)
                     VerticalShake = true;
                 if (rotRate.y < -shakeThreshold.x)
                     LeftShake = true;
@@ -126,7 +127,7 @@ public class GyroscopeManager : MonoBehaviour
                     RightShake = true;
                 break;
             case DeviceOrientation.LandscapeRight:
-                if (rotRate.x > shakeThreshold.y || rotRate.x < shakeThreshold.y)
+                if (rotRate.x > shakeThresholdV.y || rotRate.x < -shakeThresholdV.y)
                     VerticalShake = true;
                 if (rotRate.y < -shakeThreshold.x)
                     LeftShake = true;

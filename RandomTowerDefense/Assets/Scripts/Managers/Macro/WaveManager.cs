@@ -41,22 +41,24 @@ public class WaveManager : MonoBehaviour
     public int GetCurrentWaveNum() { return CurrentWaveNum; }
 
     public bool WaveChg() {
-        //CurrentWaveNum++;
+        CurrentWaveNum++;
+
         //fireworkcounter = FireworkMax;
+        //foreach (VisualEffect i in FireWork)
+        //    i.Play();
 
-        ////foreach (VisualEffect i in FireWork)
-        ////    i.Play();
+        if (CurrentWaveNum > TotalWaveNum)
+        {
+            stageManager.SetWin();
+            return true;
+        }
+        foreach (Text i in waveNumUI)
+        {
+            i.text = "WAVE " + CurrentWaveNum;
+            i.color = new Color(i.color.r, i.color.g, i.color.b, 1.0f);
+        }
 
-        //if (CurrentWaveNum > TotalWaveNum) {
-        //    stageManager.SetWin();
-        //    return true;
-        //}
-        //foreach (Text i in waveNumUI) {
-        //    i.text = "WAVE " + CurrentWaveNum;
-        //    i.color=new Color(i.color.r,i.color.g,i.color.b,1.0f);
-        //}
-
-        //StartCoroutine(SpawnWave(CurrAttr.waveDetail[CurrentWaveNum-1]));
+        StartCoroutine(SpawnWave(CurrAttr.waveDetail[CurrentWaveNum - 1]));
         return false;
     }
     // Update is called once per frame

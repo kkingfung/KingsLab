@@ -64,6 +64,7 @@ public class PlayerManager : MonoBehaviour
         Camera targetCam = (Screen.width > Screen.height) ? refCamL : refCamP;
         StockOperator = Instantiate(StockOperatorPrefab, targetCam.ScreenToWorldPoint(new Vector3(DragPos.x, DragPos.y, StockOperatorDepth)),
            targetCam.transform.rotation);
+        StockOperator.transform.parent = targetCam.transform;
         StockPos = DragPos;
     }
 

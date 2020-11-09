@@ -48,24 +48,35 @@ public class Skill : MonoBehaviour
         {
             case Upgrades.StoreItems.MagicMeteor:
                 this.transform.position = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
-                audioSource.PlayOneShot(audioManager.GetAudio("se_MagicFire"));
+                if (audioManager.enabledSE)
+                {
+                    audioSource.PlayOneShot(audioManager.GetAudio("se_MagicFire"));
+                }
                 break;
             case Upgrades.StoreItems.MagicBlizzard:
                 this.transform.position = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
-                audioSource.clip = audioManager.GetAudio("se_MagicBlizzard");
-                audioSource.loop = true;
-                audioSource.Play();
+                if (audioManager.enabledSE)
+                {
+                    audioSource.clip = audioManager.GetAudio("se_MagicBlizzard");
+                    audioSource.loop = true;
+                    audioSource.Play();
+                }
                 break;
             case Upgrades.StoreItems.MagicPetrification:
                 this.transform.position = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
-                audioSource.PlayOneShot(audioManager.GetAudio("se_MagicPetrification"));
+                if (audioManager.enabledSE)
+                {
+                    audioSource.PlayOneShot(audioManager.GetAudio("se_MagicPetrification"));
+                }
                 break;
             case Upgrades.StoreItems.MagicMinions:
                 findEnm();
                 this.GetComponent<VisualEffect>().SetVector3("TargetLocation",
                     targetEnm.transform.position - this.transform.position);
-                audioSource.PlayOneShot(audioManager.GetAudio("se_MagicSummon"));
-
+                if (audioManager.enabledSE)
+                {
+                    audioSource.PlayOneShot(audioManager.GetAudio("se_MagicSummon"));
+                }
                 break;
         }
     }

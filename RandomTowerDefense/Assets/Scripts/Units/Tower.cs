@@ -71,16 +71,28 @@ public class Tower : MonoBehaviour
         switch (type)
         {
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
-                audioSource.PlayOneShot(audioManager.GetAudio("se_Lighting"));
+                if (audioManager.enabledSE)
+                {
+                    audioSource.PlayOneShot(audioManager.GetAudio("se_Lighting"));
+                }
                 posAdj = 0.2f; break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-                audioSource.PlayOneShot(audioManager.GetAudio("se_Snail"));
+                if (audioManager.enabledSE)
+                {
+                    audioSource.PlayOneShot(audioManager.GetAudio("se_Snail"));
+                }
                 posAdj = -0.2f; break;
             case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
-                audioSource.PlayOneShot(audioManager.GetAudio("se_Shot"));
+                if (audioManager.enabledSE)
+                {
+                    audioSource.PlayOneShot(audioManager.GetAudio("se_Shot"));
+                }
                 posAdj = 0.0f; break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                audioSource.PlayOneShot(audioManager.GetAudio("se_MagicFire"));
+                if (audioManager.enabledSE)
+                {
+                    audioSource.PlayOneShot(audioManager.GetAudio("se_MagicFire"));
+                }
                 posAdj = 1f; break;
         }
         int[] entityID=attackSpawner.Spawn((int)type, this.transform.position

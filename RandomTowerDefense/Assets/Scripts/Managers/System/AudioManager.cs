@@ -16,9 +16,9 @@ public class AudioManager : MonoBehaviour
     Dictionary<string, AudioClip> seList;
 
     [HideInInspector]
-    bool enabledBGM;
+    public bool enabledBGM;
     [HideInInspector]
-    bool enabledSE;
+    public bool enabledSE;
 
     public void EnableBGM(bool enable) {
         enabledBGM = enable;
@@ -115,10 +115,10 @@ public class AudioManager : MonoBehaviour
     {
         if (bgmList.ContainsKey(clipname))
         {
-            audioSource[0].pitch = 1;
+            if (enabledBGM == false) return;
+                audioSource[0].pitch = 1;
             audioSource[0].clip = bgmList[clipname];
             audioSource[0].loop = isLoop;
-            if (enabledBGM)
                 audioSource[0].Play();
         }
         else {
@@ -143,6 +143,7 @@ public class AudioManager : MonoBehaviour
     {
         if (bgmList.ContainsKey(clipname))
         {
+            if (enabledBGM==false) return;
             audioSource[0].pitch = -1;
             audioSource[0].clip = bgmList[clipname];
             audioSource[0].loop = isLoop;
@@ -151,6 +152,7 @@ public class AudioManager : MonoBehaviour
         }
         else
         {
+            if (enabledSE == false) return;
             audioSource[1].pitch = -1;
             audioSource[1].clip = seList[clipname];
             audioSource[1].loop = isLoop;

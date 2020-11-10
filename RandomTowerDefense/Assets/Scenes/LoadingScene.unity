@@ -211,8 +211,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8330927}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -179.396, y: 0, z: 0.847}
-  m_LocalScale: {x: 2, y: 1, z: 1}
+  m_LocalPosition: {x: -179.4, y: 0, z: 0.847}
+  m_LocalScale: {x: 1.96, y: 1.05, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 22
@@ -577,8 +577,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 370661664}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -179.396, y: 0, z: 0.847}
-  m_LocalScale: {x: 0.6, y: 1, z: 1}
+  m_LocalPosition: {x: -179.4, y: -0, z: 0.847}
+  m_LocalScale: {x: 0.592, y: 1.025, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 23
@@ -1327,6 +1327,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ClickPrefab: {fileID: 0}
   Buttons: []
+  ButtonsCenter: []
   LBMTest: {fileID: 0}
   ApplyClickEfc: 0
   isDragging: 0

@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
-  m_Sun: {fileID: 0}
+  m_Sun: {fileID: 1698325101}
   m_IndirectSpecularColor: {r: 0.3114543, g: 0.25293177, b: 0.24118826, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
@@ -954,7 +954,7 @@ LightingSettings:
   m_AlbedoBoost: 1
   m_IndirectOutputScale: 1
   m_UsingShadowmask: 1
-  m_BakeBackend: 1
+  m_BakeBackend: 2
   m_LightmapMaxSize: 1024
   m_BakeResolution: 40
   m_Padding: 2
@@ -3717,6 +3717,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ClickPrefab: {fileID: 4650432991836946194, guid: 40b1dc16cbf53a64b928dd91b5454d85, type: 3}
   Buttons: []
+  ButtonsCenter: []
   LBMTest: {fileID: 0}
   ApplyClickEfc: 0
   isDragging: 0
@@ -4154,8 +4155,11 @@ VisualEffect:
       m_Array: []
     m_Vector4f:
       m_Array:
-      - m_Value: {x: 1.440334, y: 2.1026704, z: 2.5235603, w: 0}
+      - m_Value: {x: 3.3691509, y: 3.3318741, z: 1.7004677, w: 0}
         m_Name: FlashColor
+        m_Overridden: 1
+      - m_Value: {x: 2.9960785, y: 1.7484324, z: 0.43921566, w: 1}
+        m_Name: LightningColor
         m_Overridden: 1
     m_Uint:
       m_Array: []

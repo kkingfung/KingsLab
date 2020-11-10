@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SkillManager : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class SkillManager : MonoBehaviour
     public GameObject BlizzardFieldSkAura;
 
     private PlayerManager playerManager;
+    private EnemySpawner enemySpawner;
 
     public Camera MainCamera;
 
@@ -24,15 +26,38 @@ public class SkillManager : MonoBehaviour
 
     private SkillSpawner skillSpawner;
 
+    public float maxActiveTime;
+    public float currActiveTime;
+
+    public List<Slider> SkillActivenessSlider;
+
     void Start()
     {
         playerManager = FindObjectOfType<PlayerManager>();
+        enemySpawner = FindObjectOfType<EnemySpawner>();
         skillSpawner = FindObjectOfType<SkillSpawner>();
         SkillUpgrader = new Dictionary<Upgrades.StoreItems, int>();
         SkillUpgrader.Add(Upgrades.StoreItems.MagicMeteor, 0);
         SkillUpgrader.Add(Upgrades.StoreItems.MagicBlizzard, 0);
         SkillUpgrader.Add(Upgrades.StoreItems.MagicMinions, 0);
         SkillUpgrader.Add(Upgrades.StoreItems.MagicPetrification, 0);
+        maxActiveTime = 1;
+        currActiveTime = 0;
+    }
+
+    private void Update()
+    {
+        foreach (Slider i in SkillActivenessSlider)
+        {
+                i.gameObject.SetActive(currActiveTime != 0);
+        }
+        if (currActiveTime != 0)
+        {
+            foreach (Slider i in SkillActivenessSlider)
+            {
+                i.value = currActiveTime / maxActiveTime;
+            }
+        }
     }
 
     public void GainExp(Upgrades.StoreItems itemID,int exp) {
@@ -107,6 +132,9 @@ public class SkillManager : MonoBehaviour
 
         float frameToNext = Time.time;
 
+        maxActiveTime = attr.lifeTime;
+        currActiveTime = maxActiveTime;
+
         while (frame-Time.time > 0)
         {
             if (Time.time-frameToNext > attr.cycleTime) {
@@ -117,9 +145,12 @@ public class SkillManager : MonoBehaviour
 
                 frameToNext = Time.time;
             }
+
+            currActiveTime =Mathf.Max(0,currActiveTime-Time.deltaTime);
             yield return new WaitForSeconds(0f);
         }
 
+        currActiveTime = 0;
         GainExp(Upgrades.StoreItems.MagicMeteor,
             SkillExp[Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor)]);
         Destroy(SkillAura);
@@ -129,6 +160,8 @@ public class SkillManager : MonoBehaviour
     private IEnumerator BlizzardSkillCoroutine(SkillAttr attr)
     {
         float frame = attr.lifeTime + Time.time;
+        maxActiveTime = attr.lifeTime;
+        currActiveTime = maxActiveTime;
 
         int[] entityID = skillSpawner.Spawn(1, this.transform.position, new float3(),
             attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime,
@@ -140,8 +173,11 @@ public class SkillManager : MonoBehaviour
 
         while (frame - Time.time > 0)
         {
+            currActiveTime = Mathf.Max(0, currActiveTime - Time.deltaTime);
             yield return new WaitForSeconds(0f);
         }
+
+        currActiveTime = 0;
         GainExp(Upgrades.StoreItems.MagicBlizzard,
             SkillExp[Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard)]);
         Destroy(SkillAura);
@@ -153,6 +189,8 @@ public class SkillManager : MonoBehaviour
         float frame = attr.lifeTime + Time.time;
         float record = Time.time;
         float frameToNext = Time.time;
+        maxActiveTime = attr.lifeTime;
+        currActiveTime = maxActiveTime;
 
         while (frame - Time.time > 0)
         {
@@ -168,8 +206,11 @@ public class SkillManager : MonoBehaviour
 
                 frameToNext = Time.time;
             }
+            currActiveTime = Mathf.Max(0, currActiveTime - Time.deltaTime);
             yield return new WaitForSeconds(0f);
         }
+
+        currActiveTime = 0;
         GainExp(Upgrades.StoreItems.MagicPetrification,
             SkillExp[Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification)]);
         SkillEnd();
@@ -179,22 +220,28 @@ public class SkillManager : MonoBehaviour
     {
         float frame = attr.lifeTime + Time.time;
         float frameToNext = Time.time;
+        maxActiveTime = attr.lifeTime;
+        currActiveTime = maxActiveTime;
 
         while (frame - Time.time > 0)
         {
             if (Time.time - frameToNext > attr.cycleTime)
             {
-          
-                int[] entityID = skillSpawner.Spawn(3, this.transform.position,new float3(),
-                    attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime);
-                
-                skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
-                    .Init(Upgrades.StoreItems.MagicMinions, attr, entityID[0]);
+                if (enemySpawner && enemySpawner.AllAliveMonstersList().Count > 0)
+                {
+                    int[] entityID = skillSpawner.Spawn(3, this.transform.position, new float3(),
+                        attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime);
 
+                    skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
+                        .Init(Upgrades.StoreItems.MagicMinions, attr, entityID[0]);
+                }
                 frameToNext = Time.time;
             }
+            currActiveTime = Mathf.Max(0, currActiveTime - Time.deltaTime);
             yield return new WaitForSeconds(0f);
         }
+
+        currActiveTime = 0;
         GainExp(Upgrades.StoreItems.MagicMinions,
             SkillExp[Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions)]);
         SkillEnd();

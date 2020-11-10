@@ -12,6 +12,7 @@ public class Skill : MonoBehaviour
     private SkillAttr attr;
 
     private bool ActionEnded;
+
     private int entityID;
 
     private PlayerManager playerManager;//For Raycasting target Position

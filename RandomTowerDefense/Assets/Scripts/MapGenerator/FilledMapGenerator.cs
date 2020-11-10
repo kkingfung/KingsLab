@@ -80,7 +80,7 @@ public class FilledMapGenerator : MonoBehaviour {
 		}
 
 		//Space for Castle and TP
-		if (stageManager.SpawnPoint.Length >= 4)
+		if (stageManager && stageManager.SpawnPoint.Length >= 4)
 		{
 			stageManager.SpawnPoint[0] = new Coord(0, 0);
 			stageManager.SpawnPoint[1] = new Coord(currentMap.mapSize.x - 1, 0);

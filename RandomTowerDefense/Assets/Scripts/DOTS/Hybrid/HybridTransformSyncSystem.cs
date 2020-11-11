@@ -1,54 +1,96 @@
-﻿using Unity.Burst;
-using Unity.Collections;
-using Unity.Entities;
-using Unity.Jobs;
-using Unity.Transforms;
-using UnityEngine.Jobs;
+﻿//using System.Diagnostics;
 
-[BurstCompile]
-struct TransformSyncJob : IJobParallelForTransform
-{
-    [DeallocateOnJobCompletion]
-    public NativeArray<LocalToWorld> LocalToWorldArray;
+//using Unity.Burst;
+//using Unity.Collections;
+//using Unity.Entities;
+//using Unity.Jobs;
+//using Unity.Transforms;
+//using UnityEngine.Jobs;
 
-    public void Execute(int index, TransformAccess transform)
-    {
-        transform.position = LocalToWorldArray[index].Position;
-        transform.rotation = LocalToWorldArray[index].Rotation;
-    }
-}
+//[BurstCompile]
+//struct TransformSyncJob : IJobParallelForTransform
+//{
+//    [DeallocateOnJobCompletion]
+//    public NativeArray<LocalToWorld> LocalToWorldArray;
 
-[UpdateAfter(typeof(TransformSystemGroup))]
-public class HybridTransformSyncSystem : JobComponentSystem
-{
-    protected override JobHandle OnUpdate(JobHandle inputDeps)
-    {
-        if (HybridSpawner.Instance == null)
-            return inputDeps;
+//    public void Execute(int index, TransformAccess transform)
+//    {
+//        transform.position = LocalToWorldArray[index].Position;
+//        transform.rotation = LocalToWorldArray[index].Rotation;
+//    }
+//}
 
-        var transformAccessArray = HybridSpawner.Instance.TransformAccessArray;
-        var entities = HybridSpawner.Instance.Entities;
-        var localToWorldData = GetComponentDataFromEntity<LocalToWorld>(true);
-        var hybridData = GetComponentDataFromEntity<Hybrid>(true);
-        var localToWorldArray = new NativeArray<LocalToWorld>(entities.Length, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
+//[UpdateAfter(typeof(TransformSystemGroup))]
+//public class HybridTransformSyncSystem : JobComponentSystem
+//{
+//    protected override JobHandle OnUpdate(JobHandle inputDeps)
+//    {
+        //var assignPositionsJobHandle=inputDeps;
 
-        var gatherPositionsJobHandle = Job.WithCode(() =>
-        {
-            for (int i = 0; i < entities.Length; i++)
-            {
-                localToWorldArray[hybridData[entities[i]].Index] = localToWorldData[entities[i]];
-            }
-        })
-           .WithReadOnly(hybridData)
-           .WithReadOnly(localToWorldData)
-           .WithBurst()
-           .Schedule(inputDeps);
+        ////Enemy
+        //if (EnemySpawner.Instance != null)
+        //{
+        //    var transformAccessArray = EnemySpawner.Instance.TransformAccessArray;
+        //    var entities = EnemySpawner.Instance.Entities;
+        //    var localToWorldData = GetComponentDataFromEntity<LocalToWorld>(true);
+        //    var hybridData = GetComponentDataFromEntity<Hybrid>(true);
+        //    var localToWorldArray = new NativeArray<LocalToWorld>(entities.Length, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
+        //    var gatherPositionsJobHandle = Job.WithCode(() =>
+        //    {
+        //        for (int i = 0; i < entities.Length; i++)
+        //        {
+        //            if (EnemySpawner.Instance.GameObjects[i] != null)
+        //            {
+        //                localToWorldArray[hybridData[entities[i]].Index] = localToWorldData[entities[i]];
+        //            }
+        //        }
+        //    })
+        //       .WithReadOnly(hybridData)
+        //       .WithReadOnly(localToWorldData)
+        //       .WithoutBurst()
+        //       .Schedule(inputDeps);
 
-        var assignPositionsJobHandle = new TransformSyncJob
-        {
-            LocalToWorldArray = localToWorldArray,
-        }.Schedule(transformAccessArray, gatherPositionsJobHandle);
+        //    assignPositionsJobHandle = new TransformSyncJob
+        //    {
+        //        LocalToWorldArray = localToWorldArray,
+        //    }.Schedule(transformAccessArray, gatherPositionsJobHandle);
+        //}
 
-        return assignPositionsJobHandle;
-    }
-}
+        ////Tower
+        //if (TowerSpawner.Instance != null)
+        //{
+        //    var transformAccessArray = TowerSpawner.Instance.TransformAccessArray;
+        //    var entities = TowerSpawner.Instance.Entities;
+        //    var localToWorldData = GetComponentDataFromEntity<LocalToWorld>(true);
+        //    var hybridData = GetComponentDataFromEntity<Hybrid>(true);
+        //    var localToWorldArray = new NativeArray<LocalToWorld>(entities.Length, Allocator.TempJob, NativeArrayOptions.UninitializedMemory);
+
+        //    var gatherPositionsJobHandle = Job.WithCode(() =>
+        //    {
+        //        for (int i = 0; i < entities.Length; i++)
+        //        {
+        //            if (TowerSpawner.Instance.GameObjects[i] != null)
+        //                localToWorldArray[hybridData[entities[i]].Index] = localToWorldData[entities[i]];
+        //        }
+        //    })
+        //       .WithReadOnly(hybridData)
+        //       .WithReadOnly(localToWorldData)
+        //       .WithoutBurst()
+        //       .Schedule(inputDeps);
+
+        //    assignPositionsJobHandle = new TransformSyncJob
+        //    {
+        //        LocalToWorldArray = localToWorldArray,
+        //    }.Schedule(transformAccessArray, gatherPositionsJobHandle);
+        //}
+//        return inputDeps;
+//    }
+//}
+
+//EntityManager.AddComponentObject(entity, gameObject.GetComponent<Transform>());
+
+//// Choose which is right for you
+//EntityManager.AddComponentData(entity, new CopyTransformToGameObject());
+
+//// Or
+//EntityManager.AddComponentData(entity, new CopyTransformFromGameObject());

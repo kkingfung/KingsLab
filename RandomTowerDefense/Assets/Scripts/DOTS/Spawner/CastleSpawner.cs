@@ -18,7 +18,6 @@ public class CastleSpawner : MonoBehaviour
     [HideInInspector]
     public TransformAccessArray TransformAccessArray;
     public NativeArray<int> castleHPArray;
-    public NativeArray<float> radiusArray;
 
     //Bridge
     [HideInInspector]
@@ -27,7 +26,6 @@ public class CastleSpawner : MonoBehaviour
 
     //For input
     private Transform[] transforms;
-
 
     void Awake()
     {
@@ -47,8 +45,6 @@ public class CastleSpawner : MonoBehaviour
         //Disposing Array
         if (castleHPArray.IsCreated)
             castleHPArray.Dispose();
-        if (radiusArray.IsCreated)
-            radiusArray.Dispose();
     }
     void Start()
     {
@@ -61,13 +57,27 @@ public class CastleSpawner : MonoBehaviour
 
         Entities = new NativeArray<Entity>(count, Allocator.Persistent);
         var archetype = EntityManager.CreateArchetype(
-             typeof(Health), typeof(Radius),
-            ComponentType.ReadOnly<Translation>(),
-            ComponentType.ReadOnly<Hybrid>());
+             typeof(Health), typeof(Radius), 
+            ComponentType.ReadOnly<CustomTransform>()
+            //ComponentType.ReadOnly<Hybrid>()
+            );
         EntityManager.CreateEntity(archetype, Entities);
         TransformAccessArray = new TransformAccessArray(transforms);
         castleHPArray = new NativeArray<int>(count, Allocator.Persistent);
-        radiusArray = new NativeArray<float>(count, Allocator.Persistent);
+    }
+
+    private void Update()
+    {
+        UpdateArrays();
+    }
+
+    public void UpdateArrays()
+    {
+        for (int i = 0; i < GameObjects.Length; ++i)
+        {
+            if (GameObjects[i] == null) continue;
+            castleHPArray[i] = (int)EntityManager.GetComponentData<Health>(Entities[i]).Value;
+        }
     }
 
     public int[] Spawn(float3 Position, Quaternion Rotation, int castleHP, float radius,
@@ -84,7 +94,6 @@ public class CastleSpawner : MonoBehaviour
             GameObjects[i].transform.localRotation = Rotation;
             transforms[i] = GameObjects[i].transform;
             castleHPArray[i] = castleHP;
-            radiusArray[i] = radius;
 
             //AddtoEntities
             EntityManager.SetComponentData(Entities[i], new Health
@@ -95,14 +104,15 @@ public class CastleSpawner : MonoBehaviour
             {
                 Value = radius,
             });
-            EntityManager.SetComponentData(Entities[i], new Translation
+            EntityManager.SetComponentData(Entities[i], new CustomTransform
             {
-                Value = Position,
+                translation = Position,
+                angle=Rotation.eulerAngles.y
             });
-            EntityManager.SetComponentData(Entities[i], new Hybrid
-            {
-                Index = i,
-            });
+            //EntityManager.SetComponentData(Entities[i], new Hybrid
+            //{
+            //    Index = i,
+            //});
 
             if (EntityManager.HasComponent<CastleTag>(Entities[i]) == false)
                 EntityManager.AddComponent<CastleTag>(Entities[i]);

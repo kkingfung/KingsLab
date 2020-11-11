@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5534731017692750303}
   - component: {fileID: 7343877794144263668}
   - component: {fileID: 1091095270239954492}
+  - component: {fileID: -4589472057840323175}
   m_Layer: 0
   m_Name: VFX_Snails
   m_TagString: Untagged
@@ -127,3 +128,15 @@ VFXRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &-4589472057840323175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4337726207909226343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc86c37caf7b03a40af4512d32b93355, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -70,7 +70,7 @@ public class StageManager : MonoBehaviour
 
             //Fixed CastleMapPos
             int[] entityID = castleSpawner.Spawn(mapGenerator.CoordToPosition(SpawnPoint[0]) + mapGenerator.transform.position, 
-                Quaternion.Euler(0f, 90f, 0f), (int)PlayerPrefs.GetFloat("hpMax",1), 1);
+                Quaternion.Euler(0f, 90f, 0f), (int)PlayerPrefs.GetFloat("hpMax",1), 0);
             CastleEntityID = entityID[0];
             for (int i = 0; i < EnemySpawnPtNum; ++i)
             {

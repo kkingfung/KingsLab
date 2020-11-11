@@ -23,16 +23,16 @@ public class TowerFindTargetSystem : JobComponentSystem
     [RequireComponentTag(typeof(EnemyTag))]
     [BurstCompile]
     // Fill single array with Target Entity and Position
-    private struct FillArrayEntityWithPositionJob : IJobForEachWithEntity<Translation>
+    private struct FillArrayEntityWithPositionJob : IJobForEachWithEntity<CustomTransform>
     {
         public NativeArray<EntityWithPosition> targetArray;
 
-        public void Execute(Entity entity, int index, ref Translation translation)
+        public void Execute(Entity entity, int index, ref CustomTransform transform)
         {
                 targetArray[index] = new EntityWithPosition
                 {
                     entity = entity,
-                    position = translation.Value
+                    position = transform.translation
                 };
         }
     }
@@ -41,17 +41,17 @@ public class TowerFindTargetSystem : JobComponentSystem
     //[ExcludeComponent(typeof(Target))]
     [BurstCompile]
     // Find Closest Enemy
-    private struct FindTargetBurstJob : IJobForEachWithEntity<Translation, Radius, TargetFound,TargetPos>
+    private struct FindTargetBurstJob : IJobForEachWithEntity<CustomTransform, Radius, TargetFound,TargetPos>
     {
 
         [DeallocateOnJobCompletion] [ReadOnly] public NativeArray<EntityWithPosition> targetArray;
         public NativeArray<EntityWithPosition> closestTargetEntityArray;
 
-        public void Execute(Entity entity, int index, [ReadOnly] ref Translation translation, [ReadOnly] ref Radius radius,
+        public void Execute(Entity entity, int index, [ReadOnly] ref CustomTransform transform, [ReadOnly] ref Radius radius,
             ref TargetFound targetfound,  ref TargetPos targetpos)
         {
-            float3 unitPosition = translation.Value;
-            float3 closestTargetPosition = translation.Value;
+            float3 unitPosition = transform.translation;
+            float3 closestTargetPosition = transform.translation;
             Entity closestTargetEntity = Entity.Null;
             float closestTargetDistance = float.MaxValue;
             bool found = targetfound.Value;
@@ -96,13 +96,13 @@ public class TowerFindTargetSystem : JobComponentSystem
     [RequireComponentTag(typeof(PlayerTag))]
     [ExcludeComponent(typeof(Target))]
     // Add Target Component to Entities that have a Closest Target
-    private struct AddComponentJob : IJobForEachWithEntity<Translation>
+    private struct AddComponentJob : IJobForEachWithEntity<CustomTransform>
     {
 
         [DeallocateOnJobCompletion] [ReadOnly] public NativeArray<EntityWithPosition> closestTargetEntityArray;
         public EntityCommandBuffer.ParallelWriter entityCommandBuffer;
 
-        public void Execute(Entity entity, int index, ref Translation translation)
+        public void Execute(Entity entity, int index, ref CustomTransform transform)
         {
             if (closestTargetEntityArray[index].entity != Entity.Null)
             {
@@ -115,19 +115,19 @@ public class TowerFindTargetSystem : JobComponentSystem
     [RequireComponentTag(typeof(PlayerTag))]
     [ExcludeComponent(typeof(Target))]
     [BurstCompile]
-    private struct FindTargetQuadrantSystemJob : IJobForEachWithEntity<Translation, Radius, TargetFound, TargetPos, QuadrantEntity>
+    private struct FindTargetQuadrantSystemJob : IJobForEachWithEntity<CustomTransform, Radius, TargetFound, TargetPos, QuadrantEntity>
     {
 
         [ReadOnly] public NativeMultiHashMap<int, QuadrantData> quadrantMultiHashMap;
         public NativeArray<EntityWithPosition> closestTargetEntityArray;
 
-        public void Execute(Entity entity, int index, [ReadOnly] ref Translation translation, [ReadOnly] ref Radius radius, ref TargetFound targetfound, ref TargetPos targetpos, [ReadOnly] ref QuadrantEntity quadrantEntity)
+        public void Execute(Entity entity, int index, [ReadOnly] ref CustomTransform transform, [ReadOnly] ref Radius radius, ref TargetFound targetfound, ref TargetPos targetpos, [ReadOnly] ref QuadrantEntity quadrantEntity)
         {
-            float3 unitPosition = translation.Value;
+            float3 unitPosition = transform.translation;
             Entity closestTargetEntity = Entity.Null;
             float closestTargetDistance = float.MaxValue;
-            float3 closestTargetPosition = translation.Value;
-            int hashMapKey = QuadrantSystem.GetPositionHashMapKey(translation.Value);
+            float3 closestTargetPosition = transform.translation;
+            int hashMapKey = QuadrantSystem.GetPositionHashMapKey(transform.translation);
             bool found = false;
 
             FindTarget(hashMapKey, unitPosition, radius.Value, ref found,quadrantEntity, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
@@ -196,7 +196,7 @@ public class TowerFindTargetSystem : JobComponentSystem
 
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
-        EntityQuery targetQuery = GetEntityQuery(typeof(Target), ComponentType.ReadOnly<Translation>());
+        EntityQuery targetQuery = GetEntityQuery(typeof(Target), ComponentType.ReadOnly<CustomTransform>());
 
         bool useQuadrantSystem = true;
         if (useQuadrantSystem)

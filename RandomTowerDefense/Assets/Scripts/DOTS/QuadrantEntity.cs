@@ -56,18 +56,18 @@ public class QuadrantSystem : ComponentSystem
     }
 
     [BurstCompile]
-    private struct SetQuadrantDataHashMapJob : IJobForEachWithEntity<Translation, QuadrantEntity>
+    private struct SetQuadrantDataHashMapJob : IJobForEachWithEntity<CustomTransform, QuadrantEntity>
     {
 
         public NativeMultiHashMap<int, QuadrantData>.ParallelWriter quadrantMultiHashMap;
 
-        public void Execute(Entity entity, int index, ref Translation translation, ref QuadrantEntity quadrantEntity)
+        public void Execute(Entity entity, int index, ref CustomTransform transform, ref QuadrantEntity quadrantEntity)
         {
-            int hashMapKey = GetPositionHashMapKey(translation.Value);
+            int hashMapKey = GetPositionHashMapKey(transform.translation);
             quadrantMultiHashMap.Add(hashMapKey, new QuadrantData
             {
                 entity = entity,
-                position = translation.Value,
+                position = transform.translation,
                 quadrantEntity = quadrantEntity
             });
         }
@@ -88,7 +88,7 @@ public class QuadrantSystem : ComponentSystem
 
     protected override void OnUpdate()
     {
-        EntityQuery entityQuery = GetEntityQuery(typeof(Translation), typeof(QuadrantEntity));
+        EntityQuery entityQuery = GetEntityQuery(typeof(CustomTransform), typeof(QuadrantEntity));
 
         quadrantMultiHashMap.Clear();
         if (entityQuery.CalculateEntityCount() > quadrantMultiHashMap.Capacity)

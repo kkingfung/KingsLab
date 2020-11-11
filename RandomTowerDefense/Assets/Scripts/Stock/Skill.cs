@@ -104,9 +104,10 @@ public class Skill : MonoBehaviour
                 {
                     this.transform.position = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
                     EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-                    entityManager.SetComponentData(skillSpawner.Entities[entityID], new Translation
+                    entityManager.SetComponentData(skillSpawner.Entities[entityID], new CustomTransform
                     {
-                        Value = this.transform.position
+                        translation = this.transform.position,
+                        angle=this.transform.localEulerAngles.y
                     });
 
                     attr.lifeTime -= Time.deltaTime;
@@ -132,9 +133,10 @@ public class Skill : MonoBehaviour
         {
             case Upgrades.StoreItems.MagicMinions:
                 EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-                entityManager.SetComponentData(skillSpawner.Entities[entityID], new Translation
+                entityManager.SetComponentData(skillSpawner.Entities[entityID], new CustomTransform
                 {
-                    Value = targetEnm.transform.position
+                    translation = this.transform.position,
+                    angle = this.transform.localEulerAngles.y
                 });
                 break;
         }

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3879281011122506246}
   - component: {fileID: 3726587633617130580}
   - component: {fileID: 4944688338403892599}
+  - component: {fileID: 3179904777479468267}
   m_Layer: 0
   m_Name: VFX_PortalGreen
   m_TagString: Untagged
@@ -108,3 +109,15 @@ VFXRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &3179904777479468267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3005076821723679740}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc86c37caf7b03a40af4512d32b93355, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

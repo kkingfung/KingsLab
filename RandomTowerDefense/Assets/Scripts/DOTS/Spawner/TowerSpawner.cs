@@ -17,9 +17,6 @@ public class TowerSpawner : MonoBehaviour
     //Array
     [HideInInspector]
     public TransformAccessArray TransformAccessArray;
-    public NativeArray<float> waitArray;
-    public NativeArray<float> lifetimeArray;
-    public NativeArray<float> radiusArray;
     public NativeArray<float3> targetArray;
     public NativeArray<bool> hastargetArray;
 
@@ -31,14 +28,14 @@ public class TowerSpawner : MonoBehaviour
     //For input
     private Transform[] transforms;
 
-    void Awake()
+    private void Awake()
     {
         if (Instance == null)
             Instance = this;
         else
             Destroy(gameObject);
     }
-    void OnDisable()
+    private void OnDisable()
     {
         if (Entities.IsCreated)
             Entities.Dispose();
@@ -47,18 +44,12 @@ public class TowerSpawner : MonoBehaviour
             TransformAccessArray.Dispose();
 
         //Disposing Array
-        if (waitArray.IsCreated)
-            waitArray.Dispose();
-        if (lifetimeArray.IsCreated)
-            lifetimeArray.Dispose();
-        if (radiusArray.IsCreated)
-            radiusArray.Dispose();
         if (targetArray.IsCreated)
             targetArray.Dispose();
         if (hastargetArray.IsCreated)
             hastargetArray.Dispose();
     }
-    void Start()
+    private void Start()
     {
         EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
@@ -68,19 +59,40 @@ public class TowerSpawner : MonoBehaviour
 
         Entities = new NativeArray<Entity>(count, Allocator.Persistent);
         var archetype = EntityManager.CreateArchetype(
-             typeof(WaitingTime), typeof(Lifetime), typeof(Radius),
-              typeof(TargetPos), typeof(TargetFound), typeof(Damage),
-            ComponentType.ReadOnly<Translation>(),
-            ComponentType.ReadOnly<Hybrid>());
+             typeof(WaitingTime), typeof(Lifetime), typeof(Radius), typeof(TargetPos),
+               typeof(TargetFound), typeof(Damage), typeof(LocalToWorld),
+            ComponentType.ReadOnly<CustomTransform>()
+            //ComponentType.ReadOnly<Translation>(),
+            //    ComponentType.ReadOnly<RotationEulerXYZ>(),
+            //ComponentType.ReadOnly<Hybrid>()
+            );
         EntityManager.CreateEntity(archetype, Entities);
 
 
         TransformAccessArray = new TransformAccessArray(transforms);
-        waitArray = new NativeArray<float>(count, Allocator.Persistent);
-        lifetimeArray = new NativeArray<float>(count, Allocator.Persistent);
-        radiusArray = new NativeArray<float>(count, Allocator.Persistent);
         targetArray = new NativeArray<float3>(count, Allocator.Persistent);
         hastargetArray = new NativeArray<bool>(count, Allocator.Persistent);
+    }
+
+    private void Update()
+    {
+        for (int i = 0; i < GameObjects.Length; ++i)
+        {
+            if (GameObjects[i] == null) continue;
+            float angle = EntityManager.GetComponentData<CustomTransform>(Entities[i]).angle;
+            GameObjects[i].transform.localEulerAngles = new Vector3(0, angle, 0);
+        }
+
+        UpdateArrays();
+    }
+
+    public void UpdateArrays() {
+        for (int i = 0; i < GameObjects.Length; ++i)
+        {
+            if (GameObjects[i] == null) continue;
+            targetArray[i] = EntityManager.GetComponentData<TargetPos>(Entities[i]).Value;
+            hastargetArray[i] = EntityManager.GetComponentData<TargetFound>(Entities[i]).Value;
+        }
     }
 
     public int[] Spawn(int prefabID, float3 Position, float3 Rotation, float radius,
@@ -94,11 +106,8 @@ public class TowerSpawner : MonoBehaviour
 
             GameObjects[i] = Instantiate(PrefabObject[prefabID], transform);
             GameObjects[i].transform.position = Position;
-            GameObjects[i].transform.localRotation = Quaternion.Euler(Rotation);
+            GameObjects[i].transform.localRotation = Quaternion.identity;
             transforms[i] = GameObjects[i].transform;
-            waitArray[i] = wait;
-            lifetimeArray[i] = lifetime;
-            radiusArray[i] = radius;
             hastargetArray[i] = false;
             targetArray[i] = Position;
 
@@ -124,15 +133,27 @@ public class TowerSpawner : MonoBehaviour
                 Value = false,
             });
 
-            EntityManager.SetComponentData(Entities[i], new Translation
+            EntityManager.SetComponentData(Entities[i], new CustomTransform
             {
-                Value = Position,
+                translation = Position,
+                angle = Rotation.y
             });
 
-            EntityManager.SetComponentData(Entities[i], new Hybrid
-            {
-                Index = i,
-            });
+            //EntityManager.SetComponentData(Entities[i], new RotationEulerXYZ
+            //{
+            //    Value = Rotation,
+            //});
+
+            //EntityManager.SetComponentData(Entities[i], new Translation
+            //{
+            //    Value = Position,
+            //});
+
+            //EntityManager.SetComponentData(Entities[i], new Hybrid
+            //{
+            //    Index = i,
+            //});
+
             if (EntityManager.HasComponent<PlayerTag>(Entities[i]) == false)
                 EntityManager.AddComponent<PlayerTag>(Entities[i]);
 

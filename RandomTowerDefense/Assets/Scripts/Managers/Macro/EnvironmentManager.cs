@@ -4,19 +4,24 @@ using UnityEngine;
 
 public class EnvironmentManager : MonoBehaviour
 {
+    public readonly float daytimeFactor = 30f;
+
     public List<Material> skyboxMat;
     public List<GameObject> terrainObj;
-    int stageID;
-    float shaderInput;
-    int maxSkyboxCubemap = 3;
+    private int stageID;
+    private float shaderInput;
+    private int maxSkyboxCubemap = 3;
 
-    TimeManager timeManager;
-    //RenderSettings.skybox
+    //private TimeManager timeManager;
+    private InGameOperation sceneManager;
+
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        stageID =  PlayerPrefs.GetInt("IslandNow",0);
-        timeManager = FindObjectOfType<TimeManager>();
+        sceneManager = FindObjectOfType<InGameOperation>();
+        stageID = sceneManager?sceneManager.GetCurrIsland():0;
+        shaderInput = Time.time;
+        //timeManager = FindObjectOfType<TimeManager>();
         RenderSettings.skybox = skyboxMat[stageID];
 
         for(int i=0;i< terrainObj.Count;++i) {
@@ -26,10 +31,10 @@ public class EnvironmentManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (stageID == 3) {
-            shaderInput = (Time.time / timeManager.daytimeFactor);
+            shaderInput += Time.deltaTime / daytimeFactor;
             while (shaderInput > maxSkyboxCubemap) shaderInput -= maxSkyboxCubemap;
              skyboxMat[stageID].SetFloat("SkyboxFactor", shaderInput);
         } 

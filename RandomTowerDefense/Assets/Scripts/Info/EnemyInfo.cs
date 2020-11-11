@@ -10,7 +10,7 @@ public class EnemyAttr {
     public float time;
     public int money;
 
-    const float healthBase=10;
+    const float healthBase=1;
 
     public EnemyAttr(int money, float health, float speed, float time = 10,
         int damage = 1, float radius = 1) {
@@ -32,38 +32,38 @@ public class EnemyAttr {
         enemyInfo = new Dictionary<string, EnemyAttr>();
 
         //Bonus
-        enemyInfo.Add("MetalonGreen", new EnemyAttr(50, 100, 30, 0.5f, 5, 1));
-        enemyInfo.Add("MetalonPurple", new EnemyAttr(150, 200, 30, 0.5f, 5, 1));
-        enemyInfo.Add("MetalonRed", new EnemyAttr(300, 500, 30, 0.5f, 5, 1));
+        enemyInfo.Add("MetalonGreen", new EnemyAttr(50, 100, 30, 0.5f, 5, 0.3f));
+        enemyInfo.Add("MetalonPurple", new EnemyAttr(150, 200, 30, 0.5f, 5, 0.3f));
+        enemyInfo.Add("MetalonRed", new EnemyAttr(300, 500, 30, 0.5f, 5, 0.3f));
 
         //Stage 4
-        enemyInfo.Add("AttackBot", new EnemyAttr(150, 300, 15, 0.5f, 5, 1));
-        enemyInfo.Add("RobotSphere", new EnemyAttr(100, 250, 20, 0.5f, 5, 1));
+        enemyInfo.Add("AttackBot", new EnemyAttr(150, 300, 15, 0.5f, 5, 0.3f));
+        enemyInfo.Add("RobotSphere", new EnemyAttr(100, 250, 20, 0.5f, 5, 0.3f));
 
         //Bosses
-        enemyInfo.Add("Dragon", new EnemyAttr(50, 160, 12, 0.5f, 5, 1));
-        enemyInfo.Add("Bull", new EnemyAttr(30, 200, 8, 0.5f, 5, 1));
-        enemyInfo.Add("StoneMonster", new EnemyAttr(15, 60, 3, 0.5f, 5, 1));
+        enemyInfo.Add("Dragon", new EnemyAttr(50, 160, 12, 0.5f, 5, 0.3f));
+        enemyInfo.Add("Bull", new EnemyAttr(30, 200, 8, 0.5f, 5, 0.3f));
+        enemyInfo.Add("StoneMonster", new EnemyAttr(15, 60, 3, 0.5f, 5, 0.3f));
 
         //Stage 3
-        enemyInfo.Add("FreeLichS", new EnemyAttr(5, 150, 7.5f, 0.5f, 1, 1));
-        enemyInfo.Add("FreeLich", new EnemyAttr(3, 80, 6, 0.5f, 1, 1));
-        enemyInfo.Add("GolemS", new EnemyAttr(5, 220, 7.5f, 0.5f, 1, 1));
-        enemyInfo.Add("Golem", new EnemyAttr(3, 180, 6, 0.5f, 1, 1));
-        enemyInfo.Add("SkeletonArmed", new EnemyAttr(3, 120, 9, 0.5f, 1, 1));
-        enemyInfo.Add("SpiderGhost", new EnemyAttr(3, 40, 12, 0.5f, 1, 1));
+        enemyInfo.Add("FreeLichS", new EnemyAttr(5, 150, 7.5f, 0.5f, 1, 0.3f));
+        enemyInfo.Add("FreeLich", new EnemyAttr(3, 80, 6, 0.5f, 1, 0.3f));
+        enemyInfo.Add("GolemS", new EnemyAttr(5, 220, 7.5f, 0.5f, 1, 0.3f));
+        enemyInfo.Add("Golem", new EnemyAttr(3, 180, 6, 0.5f, 1, 0.3f));
+        enemyInfo.Add("SkeletonArmed", new EnemyAttr(3, 120, 9, 0.5f, 1, 0.3f));
+        enemyInfo.Add("SpiderGhost", new EnemyAttr(3, 40, 12, 0.5f, 1, 0.3f));
 
         //Stage 2
-        enemyInfo.Add("Skeleton", new EnemyAttr(3, 60, 9.5f, 0.5f, 1, 1));
-        enemyInfo.Add("GruntS", new EnemyAttr(3, 80, 15, 0.5f, 1, 1));
-        enemyInfo.Add("FootmanS", new EnemyAttr(3, 120, 8, 0.5f, 1, 1));
-        enemyInfo.Add("Grunt", new EnemyAttr(2, 30, 10, 0.5f, 1, 1));
-        enemyInfo.Add("Footman", new EnemyAttr(2, 50, 5, 0.5f, 1, 1));
+        enemyInfo.Add("Skeleton", new EnemyAttr(3, 60, 9.5f, 0.5f, 1, 0.3f));
+        enemyInfo.Add("GruntS", new EnemyAttr(3, 80, 15, 0.5f, 1, 0.3f));
+        enemyInfo.Add("FootmanS", new EnemyAttr(3, 120, 8, 0.5f, 1, 0.3f));
+        enemyInfo.Add("Grunt", new EnemyAttr(2, 30, 10, 0.5f, 1, 0.3f));
+        enemyInfo.Add("Footman", new EnemyAttr(2, 50, 5, 0.5f, 1, 0.3f));
 
         //Stage 1
-        enemyInfo.Add("TurtleShell", new EnemyAttr(1, 30, 2, 0.5f, 1, 1));
-        enemyInfo.Add("Mushroom", new EnemyAttr(1, 10, 5, 0.5f, 1, 1));
-        enemyInfo.Add("Slime", new EnemyAttr(1, 5, 3, 0.5f, 1, 1));
+        enemyInfo.Add("TurtleShell", new EnemyAttr(1, 30, 1.5f, 0.5f, 1, 0.3f));
+        enemyInfo.Add("Mushroom", new EnemyAttr(1, 10, 2, 0.5f, 1, 0.3f));
+        enemyInfo.Add("Slime", new EnemyAttr(1, 5, 1, 0.5f, 1, 0.3f));
     }
 
     static void Release()

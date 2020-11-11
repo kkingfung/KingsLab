@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using Unity.Physics;
 using UnityEditor;
 using UnityEngine;
 
@@ -95,8 +97,11 @@ public static class StageInfo
     public static readonly float[] enmNumFactor = { 0.5f, 1f, 2f, 4f, 8f };
     public static readonly float[] enmSpeedFactor = { 0.5f, 1f,1.5f, 2f, 4f };
     public static readonly int[] hpMaxFactor = { 1, 5, 10, 30 };
-    public static readonly float[] spawnSpeedFactor = { 4f, 2f, 1.5f, 1f, 0.5f };
-    public static readonly float[] resourceFactor = { 1.25f, 1f, 0.75f, 0.5f };
+
+    public static readonly float[] spawnSpeedFactor = { 0.5f, 1f, 1.5f, 2f, 4f };
+    public static readonly float[] resourceFactor = { 0.5f, 0.75f, 1f, 1.25f };
+    //public static readonly float[] spawnSpeedFactor = { 4f, 2f, 1.5f, 1f, 0.5f };
+    //public static readonly float[] resourceFactor = { 1.25f, 1f, 0.75f, 0.5f };
 
     public static float stageSizeEx =0;//Fill Map Generator
     public static float waveNumEx = 0;//StageInfo
@@ -156,43 +161,94 @@ public static class StageInfo
                 break;
         }
     }
+    private static int GetNearestElement(int infoID) {
+        int elementID = 0;
+        float tempVal;
+        switch ((StageInfoID)infoID)
+        {
+            case StageInfoID.Enum_waveNum:
+                tempVal = PlayerPrefs.GetFloat("waveNum", 1);
+                for (; elementID < waveNumFactor.Length; elementID++)
+                {
+                    if (waveNumFactor[elementID] > tempVal) break;
+                }
+                break;
+            case StageInfoID.Enum_stageSize:
+                tempVal = PlayerPrefs.GetFloat("stageSize", 1);
+                for (; elementID < stageSizeFactor.Length; elementID++)
+                {
+                    if (stageSizeFactor[elementID] > tempVal) break;
+                }
+                break;
+            case StageInfoID.Enum_enmNum:
+                tempVal = PlayerPrefs.GetFloat("enmNum", 1);
+                for (; elementID < enmNumFactor.Length; elementID++)
+                {
+                    if (enmNumFactor[elementID] > tempVal) break;
+                }
+                break;
+            case StageInfoID.Enum_enmSpeed:
+                tempVal = PlayerPrefs.GetFloat("enmSpeed", 1);
+                for (; elementID < enmSpeedFactor.Length; elementID++)
+                {
+                    if (enmSpeedFactor[elementID] > tempVal) break;
+                }
+                break;
+            case StageInfoID.Enum_spawnSpeed:
+                tempVal = PlayerPrefs.GetFloat("spawnSpeed", 1);
+                for (; elementID < spawnSpeedFactor.Length; elementID++)
+                {
+                    if (spawnSpeedFactor[elementID] > tempVal) break;
+                }
+                break;
+            case StageInfoID.Enum_hpMax:
+                tempVal = PlayerPrefs.GetFloat("hpMax", 1);
+                for (; elementID < hpMaxFactor.Length; elementID++)
+                {
+                    if (hpMaxFactor[elementID] > tempVal) break;
+                }
+                break;
+            case StageInfoID.Enum_resource:
+                tempVal = PlayerPrefs.GetFloat("resource", 1);
+                for (; elementID < resourceFactor.Length; elementID++)
+                {
+                    if (resourceFactor[elementID] > tempVal) break;
+                }
+                break;
+        }
+        return Mathf.Max(elementID - 1, 0);
+    }
         public static float SaveDataInPrefs(int infoID, int chg)
     {
         float tempVal = 0;
+        int currentID = GetNearestElement(infoID);
         switch ((StageInfoID)infoID) {
             case StageInfoID.Enum_waveNum:
-                tempVal = PlayerPrefs.GetFloat("waveNum",1);
-                tempVal = (tempVal + chg + waveNumFactor.Length) % waveNumFactor.Length;
+                tempVal = (currentID + chg + waveNumFactor.Length) % waveNumFactor.Length;
                 PlayerPrefs.SetFloat("waveNum", waveNumFactor[(int)tempVal]);
                 return waveNumFactor[(int)tempVal];
             case StageInfoID.Enum_stageSize:
-                tempVal = PlayerPrefs.GetFloat("stageSize",1);
-                tempVal = (tempVal + chg + stageSizeFactor.Length) % stageSizeFactor.Length;
+                tempVal = (currentID + chg + stageSizeFactor.Length) % stageSizeFactor.Length;
                 PlayerPrefs.SetFloat("stageSize", stageSizeFactor[(int)tempVal]);
                 return stageSizeFactor[(int)tempVal];
             case StageInfoID.Enum_enmNum:
-                tempVal = PlayerPrefs.GetFloat("enmNum",1);
-                tempVal = (tempVal + chg + enmNumFactor.Length) % enmNumFactor.Length;
+                tempVal = (currentID + chg + enmNumFactor.Length) % enmNumFactor.Length;
                 PlayerPrefs.SetFloat("enmNum", enmNumFactor[(int)tempVal]);
                 return enmNumFactor[(int)tempVal];
             case StageInfoID.Enum_enmSpeed:
-                tempVal = PlayerPrefs.GetFloat("enmSpeed",1);
-                tempVal = (tempVal + chg + enmSpeedFactor.Length) % enmSpeedFactor.Length;
+                tempVal = (currentID + chg + enmSpeedFactor.Length) % enmSpeedFactor.Length;
                 PlayerPrefs.SetFloat("enmSpeed", enmSpeedFactor[(int)tempVal]);
                 return enmSpeedFactor[(int)tempVal];
             case StageInfoID.Enum_spawnSpeed:
-                tempVal = PlayerPrefs.GetFloat("spawnSpeed",1);
-                tempVal = (tempVal + chg + spawnSpeedFactor.Length) % spawnSpeedFactor.Length;
+                tempVal = (currentID + chg + spawnSpeedFactor.Length) % spawnSpeedFactor.Length;
                 PlayerPrefs.SetFloat("spawnSpeed", spawnSpeedFactor[(int)tempVal]);
                 return spawnSpeedFactor[(int)tempVal];
             case StageInfoID.Enum_hpMax:
-                tempVal = PlayerPrefs.GetFloat("hpMax",1);
-                tempVal = (tempVal + chg + hpMaxFactor.Length) % hpMaxFactor.Length;
+                tempVal = (currentID + chg + hpMaxFactor.Length) % hpMaxFactor.Length;
                 PlayerPrefs.SetFloat("hpMax", hpMaxFactor[(int)tempVal]);
                 return hpMaxFactor[(int)tempVal];
             case StageInfoID.Enum_resource:
-                tempVal = PlayerPrefs.GetFloat("resource",1);
-                tempVal = (tempVal + chg + resourceFactor.Length) % resourceFactor.Length;
+                tempVal = (currentID + chg + resourceFactor.Length) % resourceFactor.Length;
                 PlayerPrefs.SetFloat("resource", resourceFactor[(int)tempVal]);
                 return resourceFactor[(int)tempVal];
         }
@@ -339,7 +395,11 @@ public static class StageInfo
         WaveAttr[] waveArray = new WaveAttr[waveNum];
 
         List<EnmDetail> detail = new List<EnmDetail>();
-        for (int k = 1; k < waveNum; k++) {
+        detail.Add(new EnmDetail(1, 1 * (int)enmNumEx, 0, monsterCat0[Random.Range(0, monsterCat0.Length)]));
+        detail.Add(new EnmDetail(1, 1 * (int)enmNumEx, 1, monsterCat0[Random.Range(0, monsterCat0.Length)]));
+        detail.Add(new EnmDetail(1, 1 * (int)enmNumEx, 2, monsterCat0[Random.Range(0, monsterCat0.Length)]));
+
+        for (int k = 2; k < waveNum; k++) {
             if (k < 10 - 1)
             {
                 detail.Add(new EnmDetail(k, 10 * (int)enmNumEx, Random.Range(0,3), monsterCat0[Random.Range(0,monsterCat0.Length)]));
@@ -395,7 +455,7 @@ public static class StageInfo
                     detailPerWave.Add(detail[j]);
                 }
             }
-            waveArray[i] = new WaveAttr(5, 0.5f, detailPerWave);
+            waveArray[i] = new WaveAttr(1, 1f, detailPerWave);
         }
         return waveArray;
     }

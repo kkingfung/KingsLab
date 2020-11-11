@@ -8,7 +8,7 @@ using UnityEngine.Jobs;
 
 public class SkillSpawner : MonoBehaviour
 {
-    private readonly int count = 300;
+    private readonly int count = 50;
     public static SkillSpawner Instance { get; private set; }
     public List<GameObject> PrefabObject;
 
@@ -17,13 +17,7 @@ public class SkillSpawner : MonoBehaviour
     //Array
     [HideInInspector]
     public TransformAccessArray TransformAccessArray;
-    public NativeArray<float> damageArray;
-    public NativeArray<float> radiusArray;
-    public NativeArray<float> waitArray;
     public NativeArray<float> lifetimeArray;
-    public NativeArray<float> actionArray;
-    public NativeArray<float> slowArray;
-    public NativeArray<float> buffArray;
 
     //Bridge
     [HideInInspector]
@@ -49,20 +43,8 @@ public class SkillSpawner : MonoBehaviour
             TransformAccessArray.Dispose();
 
         //Disposing Array
-        if (damageArray.IsCreated)
-            damageArray.Dispose();
-        if (radiusArray.IsCreated)
-            radiusArray.Dispose();
-        if (waitArray.IsCreated)
-            waitArray.Dispose();
         if (lifetimeArray.IsCreated)
             lifetimeArray.Dispose();
-        if (actionArray.IsCreated)
-            actionArray.Dispose();
-        if (slowArray.IsCreated)
-            slowArray.Dispose();
-        if (buffArray.IsCreated)
-            buffArray.Dispose();
     }
     void Start()
     {
@@ -77,19 +59,27 @@ public class SkillSpawner : MonoBehaviour
             typeof(Damage), typeof(Radius),
             typeof(WaitingTime), typeof(ActionTime),
             typeof(Lifetime), typeof(SlowRate), typeof(BuffTime),
-            ComponentType.ReadOnly<Translation>(),
-            ComponentType.ReadOnly<Hybrid>());
+            ComponentType.ReadOnly<CustomTransform>()
+            //ComponentType.ReadOnly<Hybrid>()
+            );
         EntityManager.CreateEntity(archetype, Entities);
 
         TransformAccessArray = new TransformAccessArray(transforms);
-        damageArray = new NativeArray<float>(count, Allocator.Persistent);
-        radiusArray = new NativeArray<float>(count, Allocator.Persistent);
-        waitArray = new NativeArray<float>(count, Allocator.Persistent);
         lifetimeArray = new NativeArray<float>(count, Allocator.Persistent);
-        actionArray = new NativeArray<float>(count, Allocator.Persistent);
-        slowArray = new NativeArray<float>(count, Allocator.Persistent);
-        buffArray = new NativeArray<float>(count, Allocator.Persistent);
     }
+    private void Update() {
+        UpdateArrays();
+    }
+
+    public void UpdateArrays()
+    {
+        for (int i = 0; i < GameObjects.Length; ++i)
+        {
+            if (GameObjects[i] == null) continue;
+            lifetimeArray[i] = EntityManager.GetComponentData<Lifetime>(Entities[i]).Value;
+        }
+    }
+
 
     public int[] Spawn(int prefabID, float3 Position, float3 Rotation, float damage, float radius,
         float wait, float lifetime,
@@ -105,13 +95,7 @@ public class SkillSpawner : MonoBehaviour
             GameObjects[i].transform.position = Position;
             GameObjects[i].transform.localRotation = Quaternion.Euler(Rotation);
             transforms[i] = GameObjects[i].transform;
-            damageArray[i] = damage;
-            radiusArray[i] = radius;
-            waitArray[i] = wait;
             lifetimeArray[i] = lifetime;
-            actionArray[i] = action;
-            slowArray[i] = slow;
-            buffArray[i] = buff;
 
             //AddtoEntities
             EntityManager.SetComponentData(Entities[i], new Damage
@@ -171,15 +155,16 @@ public class SkillSpawner : MonoBehaviour
                     break;
             }
 
-            EntityManager.SetComponentData(Entities[i], new Translation
+            EntityManager.SetComponentData(Entities[i], new CustomTransform
             {
-                Value = Position,
+                translation = Position,
+                angle = Rotation.y
             });
 
-            EntityManager.SetComponentData(Entities[i], new Hybrid
-            {
-                Index = i,
-            });
+            //EntityManager.SetComponentData(Entities[i], new Hybrid
+            //{
+            //    Index = i,
+            //});
 
             if (EntityManager.HasComponent<SkillTag>(Entities[i]) == false)
                 EntityManager.AddComponent<SkillTag>(Entities[i]);

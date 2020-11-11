@@ -17,9 +17,9 @@ public class FilledMapGenerator : MonoBehaviour {
 	public Transform navmeshMaskPrefab;
 	public Vector2 maxMapSize;
 
-	public GameObject FakeParentCam;
-	private Vector3 RelativePosition;
-	private bool FollowFakeParent=false;
+	//public GameObject FakeParentCam;
+	//private Vector3 RelativePosition;
+	//private bool FollowFakeParent=false;
 
 	[Range(0,1)]
 	public float outlinePercent;
@@ -33,21 +33,23 @@ public class FilledMapGenerator : MonoBehaviour {
 
 	Map currentMap;
 
+	[HideInInspector]
+	public Vector3 originPos;
 	private InGameOperation sceneManager;
 	private StageManager stageManager;
 	private void Start() {
 		sceneManager = FindObjectOfType<InGameOperation>();
 		stageManager = FindObjectOfType<StageManager>();
 	}
-	public void followParentCam(bool toFollow) {
-		FollowFakeParent = toFollow;
-		RelativePosition = this.transform.position - FakeParentCam.transform.position;
-	}
+	//public void followParentCam(bool toFollow) {
+	//	FollowFakeParent = toFollow;
+	//	RelativePosition = this.transform.position - FakeParentCam.transform.position;
+	//}
 	private void Update()
 	{
-		if (FollowFakeParent) {
-			this.transform.position = RelativePosition + FakeParentCam.transform.position;
-		}
+		//if (FollowFakeParent) {
+		//	this.transform.position = RelativePosition + FakeParentCam.transform.position;
+		//}
 	}
 
 	public void OnNewStage(int stageNumber) {
@@ -94,9 +96,9 @@ public class FilledMapGenerator : MonoBehaviour {
 
 		shuffledTileCoords = new Queue<Coord> (Utility.ShuffleArray (allTileCoords.ToArray (), currentMap.seed));
 
-		allTileCoords.Remove(new Coord(0, 1));
-		allTileCoords.Remove(new Coord(1, 1));
-		allTileCoords.Remove(new Coord(1, 0));
+		allTileCoords.Remove(new Coord(currentMap.mapSize.x - 1, currentMap.mapSize.y - 1));
+		allTileCoords.Remove(new Coord(currentMap.mapSize.x - 1, 0));
+		allTileCoords.Remove(new Coord(0, currentMap.mapSize.y - 1));
 
 		// Create map holder object
 		string holderName = "Generated Map";
@@ -155,9 +157,10 @@ public class FilledMapGenerator : MonoBehaviour {
 
 		shuffledOpenTileCoords = new Queue<Coord> (Utility.ShuffleArray (allOpenCoords.ToArray (), currentMap.seed));
 		shuffledOpenTileCoords.Enqueue(new Coord(0, 0));
-		shuffledOpenTileCoords.Enqueue(new Coord(0, 1));
-		shuffledOpenTileCoords.Enqueue(new Coord(1, 1));
-		shuffledOpenTileCoords.Enqueue(new Coord(1, 0));
+
+		shuffledOpenTileCoords.Enqueue(new Coord(currentMap.mapSize.x - 1, currentMap.mapSize.y - 1));
+		shuffledOpenTileCoords.Enqueue(new Coord(currentMap.mapSize.x - 1, 0));
+		shuffledOpenTileCoords.Enqueue(new Coord(0, currentMap.mapSize.y - 1));
 
 		//// Creating navmesh mask
 		//Transform maskLeft = Instantiate (navmeshMaskPrefab, this.transform.position + Vector3.left * (currentMap.mapSize.x + maxMapSize.x) / 4f * tileSize, Quaternion.identity) as Transform;
@@ -178,7 +181,9 @@ public class FilledMapGenerator : MonoBehaviour {
 
 		navmeshFloor.localScale = new Vector3(maxMapSize.x, maxMapSize.y) * tileSize;
         mapFloor.localScale = new Vector3(currentMap.mapSize.x * tileSize, currentMap.mapSize.y * tileSize);
-    }
+
+		originPos = this.transform.position + CoordToPosition(0, 0);
+	}
 	
 	bool MapIsFullyAccessible(bool[,] obstacleMap, int currentObstacleCount) {
 		bool[,] mapFlags = new bool[obstacleMap.GetLength(0),obstacleMap.GetLength(1)];

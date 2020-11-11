@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 7175808818242250375}
   - component: {fileID: 4406710493387382921}
   - component: {fileID: 6723161256299394938}
+  - component: {fileID: -7560043655621857851}
   m_Layer: 0
-  m_Name: VFX_LevelUp
+  m_Name: VFX_Build
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -109,3 +110,15 @@ VFXRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &-7560043655621857851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6818472943143042842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc86c37caf7b03a40af4512d32b93355, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

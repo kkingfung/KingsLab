@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8156841107995542704}
   - component: {fileID: 2719334977195939501}
   - component: {fileID: 7747801090113774734}
+  - component: {fileID: -8559808893466892111}
   m_Layer: 0
   m_Name: VFX_Fireworks1
   m_TagString: Untagged
@@ -110,3 +111,15 @@ VFXRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &-8559808893466892111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6639503172890797255}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc86c37caf7b03a40af4512d32b93355, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

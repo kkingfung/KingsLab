@@ -7,10 +7,6 @@ public class EnemyManager : MonoBehaviour
 {
     [SerializeField] private List<AnimationCurve> SpawnRateCurves;
 
-    [Header("MonsterVFX")]
-    public GameObject DieEffect;
-    public GameObject DropEffect;
-
     private EnemySpawner enemySpawner;
     // Start is called before the first frame update
     void Start()
@@ -31,7 +27,6 @@ public class EnemyManager : MonoBehaviour
             EnemyAttr attr = EnemyInfo.GetEnemyInfo(monsterName);
             int[] entityIDList=enemySpawner.Spawn(monsterName, SpawnPoint,new float3(), attr.health,attr.money,
                 attr.damage, attr.radius, attr.speed, attr.time);
-            enemySpawner.GameObjects[entityIDList[0]].GetComponent<Enemy>().Init(DieEffect,DropEffect, entityIDList[0]);
         }
     }
 

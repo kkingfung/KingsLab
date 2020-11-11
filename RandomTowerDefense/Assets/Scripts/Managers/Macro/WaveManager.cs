@@ -7,9 +7,9 @@ using UnityEngine.VFX;
 
 public class WaveManager : MonoBehaviour
 {
-   
-   private readonly int FireworkMax=120;
-   private int TotalWaveNum;
+
+    //private readonly int FireworkMax=120;
+    private int TotalWaveNum;
    private int CurrentWaveNum;
    private float WaveTimer;
 
@@ -18,7 +18,7 @@ public class WaveManager : MonoBehaviour
     public List<VisualEffect> FireWork;
     public  List<Text> waveNumUI;
 
-    private int fireworkcounter;
+    //private int fireworkcounter;
     private InGameOperation sceneManager; 
     private StageManager stageManager;
     private EnemySpawner enemySpawner;
@@ -32,8 +32,8 @@ public class WaveManager : MonoBehaviour
         enemySpawner = FindObjectOfType<EnemySpawner>();
         TotalWaveNum = CurrAttr.waveNum;
         CurrentWaveNum = 0;
-        fireworkcounter = 0;
-        //WaveChg();
+        //fireworkcounter = 0;
+        WaveChg();
         WaveTimer = Time.time;
     }
 
@@ -71,16 +71,16 @@ public class WaveManager : MonoBehaviour
         //    }
         //}
 
-        //if (stageManager.GetResult() == 0)
-        //{
-        //    if (Time.time - WaveTimer > CurrAttr.waveWaitTime)
-        //    {
-        //        WaveChg();
-        //        WaveTimer = Time.time;
-        //    }
-        //    if (enemySpawner.AllAliveMonstersList().Count <= 0)
-        //        WaveTimer -= Time.deltaTime * 2.0f;
-        //}
+        if (stageManager.GetResult() == 0)
+        {
+            if (Time.time - WaveTimer > CurrAttr.waveWaitTime)
+            {
+                WaveChg();
+                WaveTimer = Time.time;
+            }
+            if (enemySpawner.AllAliveMonstersList().Count <= 0)
+                WaveTimer -= Time.deltaTime * 2.0f;
+        }
     }
 
     private IEnumerator SpawnWave(WaveAttr wave)
@@ -109,7 +109,6 @@ public class WaveManager : MonoBehaviour
                         for (int j = wave.enmDetail[i].enmNum; j > 0; --j)
                         {
                             EnemyAttr attr = EnemyInfo.GetEnemyInfo(wave.enmDetail[i].enmType);
-
                             enemySpawner.Spawn(wave.enmDetail[i].enmType,
                                 stageManager.GetPortalPosition()[wave.enmDetail[i].enmPort], new float3(),
                                 (float)(attr.health * (1 + 0.005f * (CurrentWaveNum * CurrentWaveNum))),
@@ -118,6 +117,7 @@ public class WaveManager : MonoBehaviour
                                  (float)(attr.speed * (1 + 0.005f * (CurrentWaveNum * CurrentWaveNum) * (CheckCustomData ? (int)StageInfo.enmSpeedEx : 1))),
                                 attr.time
                                 );
+
                             yield return new WaitForSeconds(wave.enmSpawnPeriod);
                         }
                     }

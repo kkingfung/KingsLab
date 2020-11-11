@@ -17,11 +17,7 @@ public class AttackSpawner : MonoBehaviour
     //Array
     [HideInInspector]
     public TransformAccessArray TransformAccessArray;
-    public NativeArray<float> damageArray;
-    public NativeArray<float> radiusArray;
-    public NativeArray<float> waitArray;
     public NativeArray<float> lifetimeArray;
-    public NativeArray<float> actionArray;
 
     //Bridge
     [HideInInspector]
@@ -30,7 +26,20 @@ public class AttackSpawner : MonoBehaviour
 
     //For input
     private Transform[] transforms;
+    private void Update()
+    {
+        UpdateArrays();
+    }
 
+    public void UpdateArrays()
+    {
+        for (int i = 0; i < GameObjects.Length; ++i)
+        {
+            if (GameObjects[i] == null) continue;
+            lifetimeArray[i] = EntityManager.GetComponentData<Lifetime>(Entities[i]).Value;
+            if (lifetimeArray[i] <= 0) Destroy(GameObjects[i]);
+        }
+    }
     void Awake()
     {
         if (Instance == null)
@@ -47,16 +56,8 @@ public class AttackSpawner : MonoBehaviour
             TransformAccessArray.Dispose();
 
         //Disposing Array
-        if (damageArray.IsCreated)
-            damageArray.Dispose();
-        if (radiusArray.IsCreated)
-            radiusArray.Dispose();
-        if (waitArray.IsCreated) 
-            waitArray.Dispose();
         if (lifetimeArray.IsCreated) 
             lifetimeArray.Dispose();
-        if (actionArray.IsCreated) 
-            actionArray.Dispose();
     }
     void Start()
     {
@@ -70,16 +71,13 @@ public class AttackSpawner : MonoBehaviour
         var archetype = EntityManager.CreateArchetype(
              typeof(Radius), typeof(Damage),
              typeof(WaitingTime), typeof(Lifetime), typeof(ActionTime),
-            ComponentType.ReadOnly<Translation>(),
-            ComponentType.ReadOnly<Hybrid>());
+            ComponentType.ReadOnly<CustomTransform>()
+            //ComponentType.ReadOnly<Hybrid>()
+            );
         EntityManager.CreateEntity(archetype, Entities);
 
         TransformAccessArray = new TransformAccessArray(transforms);
-        damageArray = new NativeArray<float>(count, Allocator.Persistent);
-        radiusArray = new NativeArray<float>(count, Allocator.Persistent);
-        waitArray = new NativeArray<float>(count, Allocator.Persistent);
         lifetimeArray = new NativeArray<float>(count, Allocator.Persistent);
-        actionArray = new NativeArray<float>(count, Allocator.Persistent);
     }
 
     public int[] Spawn(int prefabID, float3 Position, Quaternion Rotation, float damage, 
@@ -94,11 +92,7 @@ public class AttackSpawner : MonoBehaviour
             GameObjects[i].transform.position = Position;
             GameObjects[i].transform.localRotation = Rotation;
             transforms[i] = GameObjects[i].transform;
-            damageArray[i] = damage;
-            radiusArray[i] = radius;
-            waitArray[i] = wait;
             lifetimeArray[i] = lifetime;
-            actionArray[i] = action;
            
             //AddtoEntities
             EntityManager.SetComponentData(Entities[i], new Damage
@@ -122,15 +116,16 @@ public class AttackSpawner : MonoBehaviour
                 Value = action,
             });
 
-            EntityManager.SetComponentData(Entities[i], new Translation
+            EntityManager.SetComponentData(Entities[i], new CustomTransform
             {
-                Value = Position,
+               translation=Position,
+               angle=Rotation.eulerAngles.y
             });
 
-            EntityManager.SetComponentData(Entities[i], new Hybrid
-            {
-                Index = i,
-            });
+            //EntityManager.SetComponentData(Entities[i], new Hybrid
+            //{
+            //    Index = i,
+            //});
 
             if (EntityManager.HasComponent<AttackTag>(Entities[i]) == false)
                 EntityManager.AddComponent<AttackTag>(Entities[i]);

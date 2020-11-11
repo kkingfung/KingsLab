@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2911753425751407706}
   - component: {fileID: 4691453921620940068}
   - component: {fileID: 6040198592512474130}
+  - component: {fileID: -7272417131013947737}
   m_Layer: 0
   m_Name: VFX_FireField
   m_TagString: Untagged
@@ -115,3 +116,15 @@ VFXRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &-7272417131013947737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2613307369970436578}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc86c37caf7b03a40af4512d32b93355, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -10,7 +10,7 @@ using UnityEngine.Rendering;
 public class StageSelectOperation : ISceneChange
 {
     private readonly float bloomInt_Default = 0.25f;
-    private readonly float bloomInt_Max = 60.0f;
+    //private readonly float bloomInt_Max = 60.0f;
 
     //Camera Start/Stay/End Point
     [Header("MainCamera Settings")]

@@ -17,6 +17,8 @@ public class Enemy : MonoBehaviour
     private int entityID=-1;
     private EnemySpawner enemySpawner;
     private ResourceManager resourceManager;
+
+    private bool isDead;
     // Start is called before the first frame update
     private void Awake()
     {
@@ -24,19 +26,28 @@ public class Enemy : MonoBehaviour
         enemySpawner = FindObjectOfType<EnemySpawner>();
         resourceManager = FindObjectOfType<ResourceManager>();
         animator = GetComponent<Animator>();
+
+        if (animator == null) {
+            animator = GetComponentInChildren<Animator>();
+        }
+
         HealthRecord = 1;
+        isDead = false;
         if (animator==null) animator = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
     private void Update()
     {
-        if (entityID >= 0) {
+        if (isDead) return;
+
+        if (entityID >= 0 && HealthRecord>0) {
             float currHP = enemySpawner.healthArray[entityID];
             if (currHP != HealthRecord) {
                 Damaged(currHP);
                 currHP = HealthRecord;
             }
+      
             //CheckingStatus
             Petrified();
             Slowed();
@@ -58,14 +69,15 @@ public class Enemy : MonoBehaviour
     public void Damaged(float currHP)
     {
         transform.localScale = oriScale*0.5f;
-        DamagedCount = 2;
-
+        //DamagedCount = 2;
         if (currHP <= 0) {
+            isDead = true;
             resourceManager.ChangeMaterial(enemySpawner.moneyArray[entityID]);
             GameObject vfx = Instantiate(DropEffect, this.transform.position, Quaternion.identity);
-            vfx.GetComponent<VisualEffect>().SetFloat("SpawnCount", enemySpawner.moneyArray[entityID]);
+            vfx.GetComponent<VisualEffect>().SetInt("SpawnCount", enemySpawner.moneyArray[entityID]);
 
-            animator.SetTrigger("Dead");
+            if (animator)
+                animator.SetTrigger("Dead");
             Die();
         }
     }
@@ -73,7 +85,7 @@ public class Enemy : MonoBehaviour
     public void Die()
     {
         GameObject.Instantiate(DieEffect, this.transform.position, Quaternion.identity);
-        Destroy(this, 5);
+        Destroy(this.gameObject, animator == null ? 0:2) ;
     }
 
     public void Petrified() {

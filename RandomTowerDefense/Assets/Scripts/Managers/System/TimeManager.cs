@@ -6,8 +6,6 @@ using UnityEngine.UI;
 [SerializeField]
 public class TimeManager : MonoBehaviour
 {
-	public readonly float daytimeFactor = 120f;
-
 	public float timeFactor = 0.05f;
 	public float timeLength = 0.02f;
 

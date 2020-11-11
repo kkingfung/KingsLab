@@ -103,9 +103,9 @@ public class Tower : MonoBehaviour
         if (type == TowerInfo.TowerInfoID.Enum_TowerNightmare || type == TowerInfo.TowerInfoID.Enum_TowerTerrorBringer)
             this.AtkVFX[AtkVFX.Count - 1].GetComponent<VisualEffect>().SetVector3("TargetPos", towerSpawner.targetArray[this.entityID]);
 
-        this.transform.localEulerAngles = new Vector3(0,
-            (90f + Mathf.Rad2Deg * Mathf.Atan2(this.transform.position.z - towerSpawner.targetArray[this.entityID].z,
-            towerSpawner.targetArray[this.entityID].x - this.transform.position.x)), 0);
+        //this.transform.localEulerAngles = new Vector3(0,
+        //    (90f + Mathf.Rad2Deg * Mathf.Atan2(this.transform.position.z - towerSpawner.targetArray[this.entityID].z,
+        //    towerSpawner.targetArray[this.entityID].x - this.transform.position.x)), 0);
 
         StartCoroutine(WaitToKillVFX(this.AtkVFX[AtkVFX.Count - 1], 8, 0));
 

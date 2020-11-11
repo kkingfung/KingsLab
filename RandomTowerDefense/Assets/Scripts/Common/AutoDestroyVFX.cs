@@ -11,13 +11,11 @@ public class AutoDestroyVFX : MonoBehaviour
     {
         if (ps)
         {
-            if (ps.<=0)
-            {
-                Destroy(gameObject);
-            }
+           //No ps.isPlaying in VFX
         }
         else {
             ps = GetComponent<VisualEffect>();
+            Destroy(gameObject,5);
         }
     }
 }

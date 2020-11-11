@@ -142,7 +142,8 @@ public class EnemySpawner : MonoBehaviour
         var archetype = EntityManager.CreateArchetype(
              typeof(Health), typeof(Damage), typeof(Money), typeof(Speed),
            typeof(Radius), typeof(PetrifyAmt),  typeof(Lifetime), typeof(SlowRate), 
-            typeof(BuffTime),typeof(PathFollow), typeof(LocalToWorld), 
+            typeof(BuffTime),typeof(PathFollow), typeof(LocalToWorld),
+            typeof(QuadrantEntity),
             ComponentType.ReadOnly<CustomTransform>()
             //ComponentType.ReadOnly<Translation>(),
             //    ComponentType.ReadOnly<RotationEulerXYZ>(),
@@ -246,6 +247,10 @@ public class EnemySpawner : MonoBehaviour
                 angle = Rotation.y
             });
 
+            EntityManager.SetComponentData(Entities[i], new QuadrantEntity 
+            { 
+                typeEnum = QuadrantEntity.TypeEnum.EnemyTag
+            });
             //EntityManager.SetComponentData(Entities[i], new RotationEulerXYZ
             //{
             //    Value = Rotation,

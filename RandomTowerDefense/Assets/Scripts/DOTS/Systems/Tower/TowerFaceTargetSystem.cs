@@ -9,14 +9,12 @@ public class TowerFaceTargetSystem : ComponentSystem
 {
     protected override void OnUpdate()
     {
-        Entities.WithAll<PlayerTag>().ForEach((Entity unitEntity, ref Target hasTarget, ref CustomTransform transform, ref WaitingTime wait, ref Radius radius) => {
-            if (World.DefaultGameObjectInjectionWorld.EntityManager.Exists(hasTarget.targetEntity))
+        Entities.WithAll<PlayerTag>().ForEach((Entity unitEntity, ref TargetFound hasTarget, ref TargetPos targetPos, ref CustomTransform transform, ref WaitingTime wait, ref Radius radius) => {
+            if (hasTarget.Value)
             {
                 if (wait.Value <= 0)
                 {
-                    CustomTransform targetTranslation = World.DefaultGameObjectInjectionWorld.EntityManager.GetComponentData<CustomTransform>(hasTarget.targetEntity);
-
-                    float3 moveDir = math.normalizesafe(targetTranslation.translation - transform.translation);
+                    float3 moveDir = math.normalizesafe(targetPos.Value - transform.translation);
 
                     float2 dirXZ = math.normalizesafe(new float2(moveDir.x, moveDir.z));
                     if (moveDir.x == 0) moveDir.x = 0.0001f;
@@ -26,18 +24,14 @@ public class TowerFaceTargetSystem : ComponentSystem
                         transform.angle *= -1f;
                     //Mathf.Atan(-moveDir.z / moveDir.x) * Mathf.Rad2Deg;
 
-                    if (math.distance(transform.translation, targetTranslation.translation) > radius.Value)
+                    if (math.distancesq(transform.translation, targetPos.Value) > radius.Value*radius.Value)
                     {
                         // far to target, destroy it
                         //PostUpdateCommands.DestroyEntity(hasTarget.targetEntity);
-                        PostUpdateCommands.RemoveComponent(unitEntity, typeof(Target));
+                        //PostUpdateCommands.RemoveComponent(unitEntity, typeof(Target));
+                        hasTarget.Value = false;
                     }
                 }
-            }
-            else
-            {
-                // Target Entity already destroyed
-                PostUpdateCommands.RemoveComponent(unitEntity, typeof(Target));
             }
         });
     }

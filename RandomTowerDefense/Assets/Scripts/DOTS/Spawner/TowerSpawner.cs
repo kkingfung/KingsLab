@@ -60,7 +60,8 @@ public class TowerSpawner : MonoBehaviour
         Entities = new NativeArray<Entity>(count, Allocator.Persistent);
         var archetype = EntityManager.CreateArchetype(
              typeof(WaitingTime), typeof(Lifetime), typeof(Radius), typeof(TargetPos),
-               typeof(TargetFound), typeof(Damage), typeof(LocalToWorld),
+               typeof(TargetFound), typeof(Damage), typeof(LocalToWorld), 
+               typeof(QuadrantEntity),
             ComponentType.ReadOnly<CustomTransform>()
             //ComponentType.ReadOnly<Translation>(),
             //    ComponentType.ReadOnly<RotationEulerXYZ>(),
@@ -137,6 +138,11 @@ public class TowerSpawner : MonoBehaviour
             {
                 translation = Position,
                 angle = Rotation.y
+            });
+
+            EntityManager.SetComponentData(Entities[i], new QuadrantEntity
+            {
+                typeEnum = QuadrantEntity.TypeEnum.PlayerTag
             });
 
             //EntityManager.SetComponentData(Entities[i], new RotationEulerXYZ

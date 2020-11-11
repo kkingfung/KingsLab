@@ -59,31 +59,32 @@ public class TowerFindTargetSystem : JobComponentSystem
             {
                 // Cycling through all target entities
                 EntityWithPosition targetEntityWithPosition = targetArray[i];
-
+                float distSq = math.distancesq(unitPosition, targetEntityWithPosition.position);
                 if (closestTargetEntity == Entity.Null)
                 {
-                    // No target
-                    if (math.distancesq(unitPosition, targetEntityWithPosition.position) < radius.Value * radius.Value)
+                    // No target  
+                    if (distSq < radius.Value * radius.Value*1.5f)
                     {
                         closestTargetEntity = targetEntityWithPosition.entity;
                         closestTargetDistance = math.distancesq(unitPosition, targetEntityWithPosition.position);
                         closestTargetPosition = targetEntityWithPosition.position;
+                        if (distSq < radius.Value * radius.Value) found = true;
                     }
                 }
                 else
                 {
-                    if (math.distancesq(unitPosition, targetEntityWithPosition.position) < closestTargetDistance)
+                    if (distSq < closestTargetDistance)
                     {
                         // This target is closer
                         closestTargetEntity = targetEntityWithPosition.entity;
                         closestTargetDistance = math.distancesq(unitPosition, targetEntityWithPosition.position);
                         closestTargetPosition = targetEntityWithPosition.position;
+                        if (!found && distSq < radius.Value * radius.Value) found = true;
                     }
                 }
             }
             if (closestTargetEntity != Entity.Null)
             {
-                found = true;
                 EntityWithPosition targetDetail = new EntityWithPosition { entity = closestTargetEntity, position = closestTargetPosition };
                 closestTargetEntityArray[index] = targetDetail;
                 targetpos.Value = closestTargetPosition;
@@ -94,26 +95,24 @@ public class TowerFindTargetSystem : JobComponentSystem
     }
 
     [RequireComponentTag(typeof(PlayerTag))]
-    [ExcludeComponent(typeof(Target))]
-    // Add Target Component to Entities that have a Closest Target
+    // Add HasTarget Component to Entities that have a Closest Target
     private struct AddComponentJob : IJobForEachWithEntity<CustomTransform>
     {
 
         [DeallocateOnJobCompletion] [ReadOnly] public NativeArray<EntityWithPosition> closestTargetEntityArray;
         public EntityCommandBuffer.ParallelWriter entityCommandBuffer;
 
-        public void Execute(Entity entity, int index, ref CustomTransform transform)
+        public void Execute(Entity entity, int index, ref CustomTransform transfoem)
         {
             if (closestTargetEntityArray[index].entity != Entity.Null)
             {
-                entityCommandBuffer.AddComponent(index, entity, new Target { targetEntity = closestTargetEntityArray[index].entity,targetPos= closestTargetEntityArray[index].position });
+                entityCommandBuffer.AddComponent(index, entity, new Target { targetEntity = closestTargetEntityArray[index].entity });
             }
         }
-
     }
 
-    [RequireComponentTag(typeof(PlayerTag))]
-    [ExcludeComponent(typeof(Target))]
+
+        [RequireComponentTag(typeof(PlayerTag))]
     [BurstCompile]
     private struct FindTargetQuadrantSystemJob : IJobForEachWithEntity<CustomTransform, Radius, TargetFound, TargetPos, QuadrantEntity>
     {
@@ -156,20 +155,21 @@ public class TowerFindTargetSystem : JobComponentSystem
                 {
                     if (quadrantEntity.typeEnum != quadrantData.quadrantEntity.typeEnum)
                     {
+                        float distSq = math.distancesq(unitPosition, quadrantData.position);
                         if (closestTargetEntity == Entity.Null)
                         {
                             // No target
-                            if (math.distancesq(unitPosition, quadrantData.position) < maxdist)
+                            if (distSq < maxdist* maxdist * 1.5f)
                             {
                                 closestTargetEntity = quadrantData.entity;
                                 closestTargetDistance = math.distancesq(unitPosition, quadrantData.position);
                                 closestTargetPosition = quadrantData.position;
-                                targetfound = true;
+                                if (distSq < maxdist * maxdist) targetfound = true;
                             }
                         }
                         else
                         {
-                            if (math.distancesq(unitPosition, quadrantData.position) < closestTargetDistance)
+                            if (distSq < closestTargetDistance)
                             {
                                 // This target is closer
                                 closestTargetEntity = quadrantData.entity;
@@ -196,12 +196,12 @@ public class TowerFindTargetSystem : JobComponentSystem
 
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
-        EntityQuery targetQuery = GetEntityQuery(typeof(Target), ComponentType.ReadOnly<CustomTransform>());
+        EntityQuery targetQuery = GetEntityQuery(typeof(EnemyTag), ComponentType.ReadOnly<CustomTransform>());
 
         bool useQuadrantSystem = true;
         if (useQuadrantSystem)
         {
-            EntityQuery unitQuery = GetEntityQuery(typeof(PlayerTag), typeof(Radius), ComponentType.Exclude<Target>());
+            EntityQuery unitQuery = GetEntityQuery(typeof(PlayerTag), typeof(Radius)/*, ComponentType.Exclude<Target>()*/);
             NativeArray<EntityWithPosition> closestTargetEntityArray = new NativeArray<EntityWithPosition>(unitQuery.CalculateEntityCount(), Allocator.TempJob);
 
             FindTargetQuadrantSystemJob findTargetQuadrantSystemJob = new FindTargetQuadrantSystemJob
@@ -234,7 +234,7 @@ public class TowerFindTargetSystem : JobComponentSystem
             };
             JobHandle jobHandle = fillArrayEntityWithPositionJob.Schedule(this, inputDeps);
 
-            EntityQuery unitQuery = GetEntityQuery(typeof(PlayerTag), ComponentType.Exclude<Target>());
+            EntityQuery unitQuery = GetEntityQuery(typeof(PlayerTag));
             NativeArray<EntityWithPosition> closestTargetEntityArray = new NativeArray<EntityWithPosition>(unitQuery.CalculateEntityCount(), Allocator.TempJob);
 
             // Find Closest Target

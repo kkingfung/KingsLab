@@ -39,6 +39,15 @@ public class QuadrantSystem : ComponentSystem
     {
         return (int)(math.floor(position.x / quadrantCellSize) + (quadrantYMultiplier * math.floor(position.y / quadrantCellSize)));
     }
+    private static void DebugDrawQuadrant(float3 position)
+    {
+        Vector3 lowerLeft = new Vector3(math.floor(position.x / quadrantCellSize) * quadrantCellSize, math.floor(position.y / quadrantCellSize) * quadrantCellSize);
+        Debug.DrawLine(lowerLeft, lowerLeft + new Vector3(+1, +0) * quadrantCellSize);
+        Debug.DrawLine(lowerLeft, lowerLeft + new Vector3(+0, +1) * quadrantCellSize);
+        Debug.DrawLine(lowerLeft + new Vector3(+1, +0) * quadrantCellSize, lowerLeft + new Vector3(+1, +1) * quadrantCellSize);
+        Debug.DrawLine(lowerLeft + new Vector3(+0, +1) * quadrantCellSize, lowerLeft + new Vector3(+1, +1) * quadrantCellSize);
+        //Debug.Log(GetPositionHashMapKey(position) + " " + position);
+    }
 
     private static int GetEntityCountInHashMap(NativeMultiHashMap<int, QuadrantData> quadrantMultiHashMap, int hashMapKey)
     {
@@ -102,6 +111,8 @@ public class QuadrantSystem : ComponentSystem
         };
         JobHandle jobHandle = JobForEachExtensions.Schedule(setQuadrantDataHashMapJob, entityQuery);
         jobHandle.Complete();
+
+        DebugDrawQuadrant(Camera.main.ScreenToWorldPoint(Input.mousePosition));
     }
 
 }

@@ -8,13 +8,15 @@ public class TowerAttr
     public float waitTime;
     public float lifetime;
     public float radius;
+    public float attackLifetime;
 
-    public TowerAttr(float radius, float damage, float waitTime, float lifetime=5)
+    public TowerAttr(float radius, float damage, float waitTime, float atkLifetime, float lifetime)
     {
         this.damage = damage;
         this.waitTime = waitTime;
         this.radius = radius;
         this.lifetime = lifetime;
+        this.attackLifetime = atkLifetime;
     }
 }
 
@@ -34,10 +36,10 @@ public static class TowerInfo
     {
         towerInfo = new Dictionary<TowerInfoID, TowerAttr>();
 
-        towerInfo.Add(TowerInfoID.Enum_TowerNightmare, new TowerAttr(300, 20, 2.0f, 5));
-        towerInfo.Add(TowerInfoID.Enum_TowerSoulEater, new TowerAttr(150, 8, 0.5f, 5));
-        towerInfo.Add(TowerInfoID.Enum_TowerTerrorBringer, new TowerAttr(500, 20, 3.0f, 5));
-        towerInfo.Add(TowerInfoID.Enum_TowerUsurper, new TowerAttr(100, 5, 0.2f, 5));
+        towerInfo.Add(TowerInfoID.Enum_TowerNightmare, new TowerAttr(20, 20, 2.0f,3, 5));
+        towerInfo.Add(TowerInfoID.Enum_TowerSoulEater, new TowerAttr(10, 8, 0.5f,3, 5));
+        towerInfo.Add(TowerInfoID.Enum_TowerTerrorBringer, new TowerAttr(25, 20, 3.0f,3, 5));
+        towerInfo.Add(TowerInfoID.Enum_TowerUsurper, new TowerAttr(8, 5, 0.2f,1, 5));
     }
 
     static void Release()

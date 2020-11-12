@@ -9,29 +9,21 @@ public class TowerFaceTargetSystem : ComponentSystem
 {
     protected override void OnUpdate()
     {
-        Entities.WithAll<PlayerTag>().ForEach((Entity unitEntity, ref TargetFound hasTarget, ref TargetPos targetPos, ref CustomTransform transform, ref WaitingTime wait, ref Radius radius) => {
-            if (hasTarget.Value)
+        EntityManager entityManager = World.EntityManager;
+        Entities.WithAll<PlayerTag>().ForEach((Entity unitEntity, ref Target target, ref CustomTransform transform, ref WaitingTime wait, ref Radius radius) => 
+        {
+            if (entityManager.Exists(target.targetEntity))
             {
-                if (wait.Value <= 0)
+                if (math.distancesq(transform.translation, target.targetPos) > radius.Value * radius.Value)
                 {
-                    float3 moveDir = math.normalizesafe(targetPos.Value - transform.translation);
-
-                    float2 dirXZ = math.normalizesafe(new float2(moveDir.x, moveDir.z));
-                    if (moveDir.x == 0) moveDir.x = 0.0001f;
-                    bool isFront = Mathf.Acos(Vector2.Dot(new float2(0, 1), dirXZ)) > 0;
-                    transform.angle = 90f+Mathf.Acos(Vector2.Dot(new float2(1, 0), dirXZ)) * Mathf.Rad2Deg;
-                    if (isFront == false)
-                        transform.angle *= -1f;
-                    //Mathf.Atan(-moveDir.z / moveDir.x) * Mathf.Rad2Deg;
-
-                    if (math.distancesq(transform.translation, targetPos.Value) > radius.Value*radius.Value)
-                    {
-                        // far to target, destroy it
-                        //PostUpdateCommands.DestroyEntity(hasTarget.targetEntity);
-                        //PostUpdateCommands.RemoveComponent(unitEntity, typeof(Target));
-                        hasTarget.Value = false;
-                    }
+                    // far to target, destroy it
+                    //PostUpdateCommands.DestroyEntity(hasTarget.targetEntity);
+                    //PostUpdateCommands.RemoveComponent(unitEntity, typeof(Target));
+                    entityManager.RemoveComponent<Target>(unitEntity);
                 }
+            }
+            else {
+                entityManager.RemoveComponent<Target>(unitEntity);
             }
         });
     }

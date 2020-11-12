@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 6434871582627290281}
   - component: {fileID: -2467876674655977805}
   - component: {fileID: 7801435915581075023}
-  - component: {fileID: -2036074201336503661}
   m_Layer: 0
   m_Name: VFX_Petrification
   m_TagString: Untagged
@@ -232,15 +231,3 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &-2036074201336503661
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3022822471140076849}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc86c37caf7b03a40af4512d32b93355, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

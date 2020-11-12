@@ -20,7 +20,7 @@ public class Tower : MonoBehaviour
 
     private float AttackCounter;
 
-    private List<GameObject> AtkVFX;
+    //private List<GameObject> AtkVFX;
     private GameObject AuraVFX;
     private GameObject LevelUpVFX;
 
@@ -50,7 +50,7 @@ public class Tower : MonoBehaviour
         attackSpawner = FindObjectOfType<AttackSpawner>();
         AttackCounter = 0;
         entityID = -1;
-        AtkVFX = new List<GameObject>();
+        //AtkVFX = new List<GameObject>();
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
 
@@ -61,10 +61,16 @@ public class Tower : MonoBehaviour
     void Update()
     {
         if (AttackCounter > 0) AttackCounter -= Time.deltaTime;
-        if (AttackCounter <= 0 && towerSpawner.hastargetArray[entityID]) 
-            Attack();
+        if (AttackCounter <= 0 && towerSpawner.hastargetArray[entityID])
+        {
+            if (entityManager.HasComponent<Target>(towerSpawner.Entities[entityID])) {
+                Target target = entityManager.GetComponentData<Target>(towerSpawner.Entities[entityID]);
+                Vector3 targetPos = target.targetPos;
+                transform.forward = (targetPos - transform.position).normalized;
+                Attack();
+            }
+        }
     }
-
     public void Attack()
     {
         float posAdj = 0;
@@ -97,17 +103,12 @@ public class Tower : MonoBehaviour
         }
         int[] entityID=attackSpawner.Spawn((int)type, this.transform.position
           + this.transform.forward * posAdj, this.transform.localRotation, attr.damage, attr.radius,
-          attr.waitTime, 1.0f, 0.2f);
-
-        this.AtkVFX.Add(attackSpawner.GameObjects[entityID[0]]);
+          attr.waitTime, attr.attackLifetime, 0.2f);
+        //this.AtkVFX.Add(attackSpawner.GameObjects[entityID[0]]);
         if (type == TowerInfo.TowerInfoID.Enum_TowerNightmare || type == TowerInfo.TowerInfoID.Enum_TowerTerrorBringer)
-            this.AtkVFX[AtkVFX.Count - 1].GetComponent<VisualEffect>().SetVector3("TargetPos", towerSpawner.targetArray[this.entityID]);
+            attackSpawner.GameObjects[entityID[0]].GetComponent<VisualEffect>().SetVector3("TargetPos", towerSpawner.targetArray[this.entityID]);
 
-        //this.transform.localEulerAngles = new Vector3(0,
-        //    (90f + Mathf.Rad2Deg * Mathf.Atan2(this.transform.position.z - towerSpawner.targetArray[this.entityID].z,
-        //    towerSpawner.targetArray[this.entityID].x - this.transform.position.x)), 0);
-
-        StartCoroutine(WaitToKillVFX(this.AtkVFX[AtkVFX.Count - 1], 8, 0));
+        //StartCoroutine(WaitToKillVFX(this.AtkVFX[AtkVFX.Count - 1], 8, 0));
 
         AttackCounter = attr.waitTime;
         GainExp(5);
@@ -127,11 +128,11 @@ public class Tower : MonoBehaviour
             Value = -1
         });
 
-        foreach (GameObject i in AtkVFX)
-        {
-            AtkVFX.Remove(i);
-            Destroy(i);
-        }
+        //foreach (GameObject i in AtkVFX)
+        //{
+        //    AtkVFX.Remove(i);
+        //    Destroy(i);
+        //}
         if (AuraVFX)
             Destroy(AuraVFX);
         if (LevelUpVFX)
@@ -199,7 +200,7 @@ public class Tower : MonoBehaviour
 
         attr = new TowerAttr(attr.radius * (0.2f * rank + 0.005f * Level),
             attr.damage * (1f * rank + 0.05f * Level),
-            attr.waitTime * (1f - (0.1f * rank)));
+            attr.waitTime * (1f - (0.1f * rank)),attr.attackLifetime,0.2f);
 
         switch (type)
         {

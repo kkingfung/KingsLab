@@ -14,11 +14,6 @@ public class AttackSpawner : MonoBehaviour
 
     private EntityManager EntityManager;
 
-    //Array
-    [HideInInspector]
-    public TransformAccessArray TransformAccessArray;
-    public NativeArray<float> lifetimeArray;
-
     //Bridge
     [HideInInspector]
     public GameObject[] GameObjects;
@@ -28,18 +23,8 @@ public class AttackSpawner : MonoBehaviour
     private Transform[] transforms;
     private void Update()
     {
-        UpdateArrays();
     }
 
-    public void UpdateArrays()
-    {
-        for (int i = 0; i < GameObjects.Length; ++i)
-        {
-            if (GameObjects[i] == null) continue;
-            lifetimeArray[i] = EntityManager.GetComponentData<Lifetime>(Entities[i]).Value;
-            if (lifetimeArray[i] <= 0) Destroy(GameObjects[i]);
-        }
-    }
     void Awake()
     {
         if (Instance == null)
@@ -51,13 +36,6 @@ public class AttackSpawner : MonoBehaviour
     {
         if (Entities.IsCreated)
             Entities.Dispose();
-
-        if (TransformAccessArray.isCreated)
-            TransformAccessArray.Dispose();
-
-        //Disposing Array
-        if (lifetimeArray.IsCreated) 
-            lifetimeArray.Dispose();
     }
     void Start()
     {
@@ -75,9 +53,6 @@ public class AttackSpawner : MonoBehaviour
             //ComponentType.ReadOnly<Hybrid>()
             );
         EntityManager.CreateEntity(archetype, Entities);
-
-        TransformAccessArray = new TransformAccessArray(transforms);
-        lifetimeArray = new NativeArray<float>(count, Allocator.Persistent);
     }
 
     public int[] Spawn(int prefabID, float3 Position, Quaternion Rotation, float damage, 
@@ -90,9 +65,10 @@ public class AttackSpawner : MonoBehaviour
             if (GameObjects[i] != null) continue;
             GameObjects[i] = Instantiate(PrefabObject[prefabID], transform);
             GameObjects[i].transform.position = Position;
-            GameObjects[i].transform.localRotation = Rotation;
+            AutoDestroyVFX autoDestroy = GameObjects[i].GetComponent<AutoDestroyVFX>();
+            if (autoDestroy) autoDestroy.Timer = lifetime;
+             GameObjects[i].transform.localRotation = Rotation;
             transforms[i] = GameObjects[i].transform;
-            lifetimeArray[i] = lifetime;
            
             //AddtoEntities
             EntityManager.SetComponentData(Entities[i], new Damage

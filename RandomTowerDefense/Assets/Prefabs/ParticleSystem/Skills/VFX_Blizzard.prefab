@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 3466139010921764683}
   - component: {fileID: -6742725636753056280}
   - component: {fileID: -2902608663836481688}
-  - component: {fileID: -87228093337921625}
   m_Layer: 0
   m_Name: VFX_Blizzard
   m_TagString: Untagged
@@ -220,15 +219,3 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &-87228093337921625
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3466139010921764684}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc86c37caf7b03a40af4512d32b93355, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

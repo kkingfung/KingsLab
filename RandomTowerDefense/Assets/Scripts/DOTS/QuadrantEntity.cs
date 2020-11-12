@@ -20,6 +20,11 @@ public struct QuadrantEntity : IComponentData
     }
 }
 
+public struct HasTarget : IComponentData
+{
+    public Entity targetEntity;
+}
+
 public struct QuadrantData
 {
     public Entity entity;
@@ -46,22 +51,6 @@ public class QuadrantSystem : ComponentSystem
         Debug.DrawLine(lowerLeft, lowerLeft + new Vector3(+0, +1) * quadrantCellSize);
         Debug.DrawLine(lowerLeft + new Vector3(+1, +0) * quadrantCellSize, lowerLeft + new Vector3(+1, +1) * quadrantCellSize);
         Debug.DrawLine(lowerLeft + new Vector3(+0, +1) * quadrantCellSize, lowerLeft + new Vector3(+1, +1) * quadrantCellSize);
-        //Debug.Log(GetPositionHashMapKey(position) + " " + position);
-    }
-
-    private static int GetEntityCountInHashMap(NativeMultiHashMap<int, QuadrantData> quadrantMultiHashMap, int hashMapKey)
-    {
-        QuadrantData quadrantData;
-        NativeMultiHashMapIterator<int> nativeMultiHashMapIterator;
-        int count = 0;
-        if (quadrantMultiHashMap.TryGetFirstValue(hashMapKey, out quadrantData, out nativeMultiHashMapIterator))
-        {
-            do
-            {
-                count++;
-            } while (quadrantMultiHashMap.TryGetNextValue(out quadrantData, ref nativeMultiHashMapIterator));
-        }
-        return count;
     }
 
     [BurstCompile]

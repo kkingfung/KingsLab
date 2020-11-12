@@ -328,7 +328,6 @@ public class CollisionSystem : JobComponentSystem
 
 			for (int i = 0; i < chunk.Count; i++)
 			{
-				Debug.Log("CheckingAttack");
 				float damage = 0;
 				Health health = chunkHealths[i];
 				if (health.Value <= 0) continue;

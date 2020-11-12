@@ -25,7 +25,7 @@ public class EnemyPathFollowSystem : JobComponentSystem
 
                     float3 moveDir = math.normalizesafe(targetPosition - transform.translation);
                     float moveSpeed = speed.Value * (1 - slow.Value) * (1 - petrifyAmt.Value);
-                    //UnityEngine.Debug.DrawLine(transform.translation, targetPosition);
+                    Debug.DrawLine(transform.translation, targetPosition);
 
                     transform.translation += moveDir * moveSpeed * deltaTime;
 

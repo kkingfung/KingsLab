@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 7196395963959152801}
   - component: {fileID: 979174638246960139}
   - component: {fileID: 6043995689712408267}
-  - component: {fileID: 6032596131849262446}
   m_Layer: 0
   m_Name: VFX_PortalRed
   m_TagString: Untagged
@@ -109,15 +108,3 @@ VFXRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &6032596131849262446
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 525118464522439101}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc86c37caf7b03a40af4512d32b93355, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

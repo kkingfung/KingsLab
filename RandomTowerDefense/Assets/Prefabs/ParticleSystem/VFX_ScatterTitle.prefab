@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1069754682210027780}
   - component: {fileID: 7323979204779604601}
   - component: {fileID: 1292489222663883657}
-  - component: {fileID: 7565419181606865878}
   m_Layer: 0
   m_Name: VFX_ScatterTitle
   m_TagString: Untagged
@@ -109,15 +108,3 @@ VFXRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &7565419181606865878
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1052650415312627909}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc86c37caf7b03a40af4512d32b93355, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

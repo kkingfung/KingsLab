@@ -32,6 +32,6 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - SkyboxFactor: 0.5893137
+    - SkyboxFactor: 0.33758557
     m_Colors: []
   m_BuildTextureStacks: []

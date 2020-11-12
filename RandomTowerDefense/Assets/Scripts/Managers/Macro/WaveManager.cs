@@ -14,12 +14,14 @@ public class WaveManager : MonoBehaviour
    private float WaveTimer;
 
    private StageAttr CurrAttr;
+    private bool inTutorial;
 
     public List<VisualEffect> FireWork;
     public  List<Text> waveNumUI;
 
     //private int fireworkcounter;
-    private InGameOperation sceneManager; 
+    private InGameOperation sceneManager;
+    private TutorialManager tutorialManager;
     private StageManager stageManager;
     private EnemySpawner enemySpawner;
 
@@ -30,10 +32,19 @@ public class WaveManager : MonoBehaviour
         sceneManager = FindObjectOfType<InGameOperation>();
         stageManager = FindObjectOfType<StageManager>();
         enemySpawner = FindObjectOfType<EnemySpawner>();
+        tutorialManager = FindObjectOfType<TutorialManager>();
         TotalWaveNum = CurrAttr.waveNum;
         CurrentWaveNum = 0;
         //fireworkcounter = 0;
-        WaveChg();
+   
+        if (sceneManager.GetCurrIsland() != 0)
+        {
+            inTutorial = false;
+            WaveChg();
+        }
+        else {
+            inTutorial = true;
+        }
         WaveTimer = Time.time;
     }
 
@@ -71,7 +82,18 @@ public class WaveManager : MonoBehaviour
         //    }
         //}
 
-        if (stageManager.GetResult() == 0)
+        if (inTutorial) {
+            if (tutorialManager && tutorialManager.GetTutorialStage()>= TutorialManager.TutorialStageID.TutorialProgress_FirstWave) 
+            {
+                WaveChg();
+                WaveTimer = Time.time;
+            }
+            else
+            {
+                inTutorial = false;
+            }
+        }
+        else if (stageManager.GetResult() == 0)
         {
             if (Time.time - WaveTimer > CurrAttr.waveWaitTime)
             {

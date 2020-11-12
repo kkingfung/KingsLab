@@ -20,6 +20,7 @@ public class TimeManager : MonoBehaviour
 	private bool isControl = false;
 
 	private InGameOperation sceneManager;
+	private InputManager inputManager;
 	void Start()
 	{
 		timeScaleId = 0;
@@ -31,6 +32,7 @@ public class TimeManager : MonoBehaviour
 			i.text = "X" + (int)Time.timeScale;
 
 		sceneManager = FindObjectOfType<InGameOperation>();
+		inputManager = FindObjectOfType<InputManager>();
 	}
 	void Update()
 	{
@@ -58,6 +60,7 @@ public class TimeManager : MonoBehaviour
 	{
 		if (sceneManager && sceneManager.GetOptionStatus()) return;
 		SetTimeScale(timeScaleId + chg);
+		inputManager.TapTimeRecord = 0;
 	}
 	public void SetTimeScale(int target)
 	{

@@ -18,10 +18,17 @@ public class EnemyBuffCntSystem : JobComponentSystem
 
         return Entities.WithAll<EnemyTag>().ForEach((Entity entity, ref SlowRate slowRate, ref PetrifyAmt petrifyAmt, ref BuffTime buffTime) =>
         {
-            if (buffTime.Value > 0) buffTime.Value -= deltaTime;
-            else {
-                if (slowRate.Value > 0) slowRate.Value = Mathf.Max(slowRate.Value-0.2f * deltaTime,0f);
-                if (petrifyAmt.Value >0) petrifyAmt.Value = Mathf.Max(petrifyAmt.Value - 0.2f * deltaTime, 0f);
+            if (buffTime.Value > 0) {
+                buffTime.Value -= deltaTime;
+            }
+            else
+            {
+                if (slowRate.Value > 0) {
+                    slowRate.Value = Mathf.Max(slowRate.Value - 0.2f * deltaTime, 0f); 
+                }
+                if (petrifyAmt.Value > 0) { 
+                    petrifyAmt.Value = Mathf.Max(petrifyAmt.Value - 0.2f * deltaTime, 0f);
+                }
             }
 
         }).Schedule(inputDeps);

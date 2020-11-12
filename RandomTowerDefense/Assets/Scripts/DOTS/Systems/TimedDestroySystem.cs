@@ -1,4 +1,5 @@
-﻿using Unity.Entities;
+﻿using System.Security.Cryptography;
+using Unity.Entities;
 using Unity.Jobs;
 using Unity.Transforms;
 using UnityEngine;
@@ -37,6 +38,7 @@ public class TimedDestroySystem : JobComponentSystem
 			activeTime.Value -= deltaTime;
 			if (activeTime.Value <= 0f)
 			{
+				Debug.Log(1);
 				ecbc.RemoveComponent<SkillTag>(entityInQueryIndex, entity);
 				//ecbc.DestroyEntity(entityInQueryIndex, entity);
 			}

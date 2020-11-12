@@ -18,15 +18,14 @@ public class TimerSystem : JobComponentSystem
 
 		JobHandle job = Entities.WithAll<AttackTag>().ForEach((Entity entity, int entityInQueryIndex, ref WaitingTime wait, ref ActionTime action) =>
 		{
-			if (action.Value > 0) action.Value -= deltaTime;
+			if (action.Value > 0) 
+				action.Value -= deltaTime;
 			wait.Value -= deltaTime;
 		}).Schedule(inputDeps);
 		job.Complete();
 
 		job = Entities.WithAll<SkillTag>().ForEach((Entity entity, int entityInQueryIndex, ref WaitingTime wait, ref ActionTime action) =>
 		{
-			if (action.Value > 0) action.Value -= deltaTime;
-			if (wait.Value < 0) wait.Value = 0.2f;
 			wait.Value -= deltaTime;
 		}).Schedule(inputDeps);
 		job.Complete();

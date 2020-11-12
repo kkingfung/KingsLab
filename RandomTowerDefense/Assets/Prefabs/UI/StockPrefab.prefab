@@ -129,10 +129,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StockSlot:
-  - {fileID: 4722440546490636502}
-  - {fileID: 4722440548377754879}
-  - {fileID: 4722440547800306749}
-  - {fileID: 4722440547401904837}
+  - {fileID: 4722440546490636488}
+  - {fileID: 4722440548377754865}
+  - {fileID: 4722440547800306751}
+  - {fileID: 4722440547401904839}
   SprBoss1: {fileID: 21300000, guid: 1d10dc6cadf88614999998dd17138399, type: 3}
   SprBoss2: {fileID: 21300000, guid: 8a85f0254e648f44381e0632eff48579, type: 3}
   SprBoss3: {fileID: 21300000, guid: 2648293036f4c414698cb3590112b7d8, type: 3}

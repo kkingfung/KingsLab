@@ -12,20 +12,21 @@ public class Tower : MonoBehaviour
     //private readonly int[] MaxLevel = { 1, 1, 1, 1 };
 
     public TowerAttr attr;
-    public int Level;
+    public int level;
     public int rank;
     public int exp;
 
     public TowerInfo.TowerInfoID type;
 
-    private float AttackCounter;
+    private float atkCounter;
+    private Vector3 atkEntityPos;
 
     //private List<GameObject> AtkVFX;
-    private GameObject AuraVFX;
-    private GameObject LevelUpVFX;
+    private GameObject auraVFX;
+    private GameObject lvupVFX;
 
-    private GameObject AuraVFXPrefab;
-    private GameObject LevelUpVFXPrefab;
+    private GameObject auraVFXPrefab;
+    private GameObject lvupVFXPrefab;
 
     private AudioManager audioManager;
     public GameObject pillar;
@@ -48,7 +49,7 @@ public class Tower : MonoBehaviour
         audioManager = FindObjectOfType<AudioManager>();
         towerSpawner = FindObjectOfType<TowerSpawner>();
         attackSpawner = FindObjectOfType<AttackSpawner>();
-        AttackCounter = 0;
+        atkCounter = 0;
         entityID = -1;
         //AtkVFX = new List<GameObject>();
         animator = GetComponent<Animator>();
@@ -60,13 +61,14 @@ public class Tower : MonoBehaviour
 
     void Update()
     {
-        if (AttackCounter > 0) AttackCounter -= Time.deltaTime;
-        if (AttackCounter <= 0 && towerSpawner.hastargetArray[entityID])
+        if (atkCounter > 0) atkCounter -= Time.deltaTime;
+        if (atkCounter <= 0 && towerSpawner.hastargetArray[entityID])
         {
             if (entityManager.HasComponent<Target>(towerSpawner.Entities[entityID])) {
                 Target target = entityManager.GetComponentData<Target>(towerSpawner.Entities[entityID]);
                 Vector3 targetPos = target.targetPos;
                 transform.forward = (targetPos - transform.position).normalized;
+                atkEntityPos = targetPos;
                 Attack();
             }
         }
@@ -74,6 +76,7 @@ public class Tower : MonoBehaviour
     public void Attack()
     {
         float posAdj = 0;
+
         switch (type)
         {
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
@@ -81,36 +84,44 @@ public class Tower : MonoBehaviour
                 {
                     audioSource.PlayOneShot(audioManager.GetAudio("se_Lighting"));
                 }
-                posAdj = 0.2f; break;
+                posAdj = 0.2f;
+                break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
                 if (audioManager.enabledSE)
                 {
                     audioSource.PlayOneShot(audioManager.GetAudio("se_Snail"));
                 }
-                posAdj = -0.2f; break;
+                posAdj = -0.2f;
+                atkEntityPos = transform.position;
+                break;
             case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
                 if (audioManager.enabledSE)
                 {
                     audioSource.PlayOneShot(audioManager.GetAudio("se_Shot"));
                 }
-                posAdj = 0.0f; break;
+
+                posAdj = 0.0f;
+                break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
                 if (audioManager.enabledSE)
                 {
                     audioSource.PlayOneShot(audioManager.GetAudio("se_MagicFire"));
                 }
-                posAdj = 1f; break;
+                posAdj = 1f;
+                atkEntityPos = transform.position;
+                break;
         }
         int[] entityID=attackSpawner.Spawn((int)type, this.transform.position
-          + this.transform.forward * posAdj, this.transform.localRotation, attr.damage, attr.radius,
-          attr.waitTime, attr.attackLifetime, 0.2f);
+          + this.transform.forward * posAdj, atkEntityPos, this.transform.localRotation,
+          attr.attackSpd*transform.forward, attr.damage, attr.attackRadius,
+          attr.attackWaittime, attr.attackLifetime);
         //this.AtkVFX.Add(attackSpawner.GameObjects[entityID[0]]);
         if (type == TowerInfo.TowerInfoID.Enum_TowerNightmare || type == TowerInfo.TowerInfoID.Enum_TowerTerrorBringer)
             attackSpawner.GameObjects[entityID[0]].GetComponent<VisualEffect>().SetVector3("TargetPos", towerSpawner.targetArray[this.entityID]);
 
         //StartCoroutine(WaitToKillVFX(this.AtkVFX[AtkVFX.Count - 1], 8, 0));
 
-        AttackCounter = attr.waitTime;
+        atkCounter = attr.waitTime;
         GainExp(5);
         animator.SetTrigger("Detected");
         animator.SetInteger("ActionID", UnityEngine.Random.Range(0, 2));
@@ -133,38 +144,38 @@ public class Tower : MonoBehaviour
         //    AtkVFX.Remove(i);
         //    Destroy(i);
         //}
-        if (AuraVFX)
-            Destroy(AuraVFX);
-        if (LevelUpVFX)
-            Destroy(LevelUpVFX);
+        if (auraVFX)
+            Destroy(auraVFX);
+        if (lvupVFX)
+            Destroy(lvupVFX);
         Destroy(this.gameObject, 2);
     }
 
     public void newTower(int entityID,GameObject pillar, GameObject LevelUpVFX, GameObject AuraVFX, TowerInfo.TowerInfoID type, int lv = 1, int rank = 1)
     {
         this.type = type;
-        this.Level = lv;
+        this.level = lv;
         this.rank = rank;
         this.pillar = pillar;
         this.entityID = entityID;
-        AuraVFXPrefab = AuraVFX;
-        LevelUpVFXPrefab = LevelUpVFX;
-        this.AuraVFX = GameObject.Instantiate(AuraVFXPrefab, this.transform.position, Quaternion.Euler(90f, 0, 0));
-        this.LevelUpVFX = GameObject.Instantiate(LevelUpVFXPrefab, this.transform.position, Quaternion.identity);
+        auraVFXPrefab = AuraVFX;
+        lvupVFXPrefab = LevelUpVFX;
+        this.auraVFX = GameObject.Instantiate(auraVFXPrefab, this.transform.position, Quaternion.Euler(90f, 0, 0));
+        this.lvupVFX = GameObject.Instantiate(lvupVFXPrefab, this.transform.position, Quaternion.identity);
 
         switch (type)
         {
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
-                this.LevelUpVFX.GetComponent<VisualEffect>().SetVector4("MainColor", new Vector4(1, 1, 0, 1));
+                this.lvupVFX.GetComponent<VisualEffect>().SetVector4("MainColor", new Vector4(1, 1, 0, 1));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-                this.LevelUpVFX.GetComponent<VisualEffect>().SetVector4("MainColor", new Vector4(0, 1, 0, 1));
+                this.lvupVFX.GetComponent<VisualEffect>().SetVector4("MainColor", new Vector4(0, 1, 0, 1));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
-                this.LevelUpVFX.GetComponent<VisualEffect>().SetVector4("MainColor", new Vector4(0, 0, 1, 1));
+                this.lvupVFX.GetComponent<VisualEffect>().SetVector4("MainColor", new Vector4(0, 0, 1, 1));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                this.LevelUpVFX.GetComponent<VisualEffect>().SetVector4("MainColor", new Vector4(1, 0, 0, 1));
+                this.lvupVFX.GetComponent<VisualEffect>().SetVector4("MainColor", new Vector4(1, 0, 0, 1));
                 break;
         }
 
@@ -175,7 +186,7 @@ public class Tower : MonoBehaviour
     public void GainExp(int exp)
     {
         this.exp += exp;
-        if (this.exp > 25 * Level * (1 + Level))
+        if (this.exp > 25 * level * (1 + level))
         {
             LevelUp();
             this.exp = 0;
@@ -184,13 +195,13 @@ public class Tower : MonoBehaviour
 
     public void LevelUp(int chg = 1)
     {
-        SetLevel(Level + chg);
+        SetLevel(level + chg);
     }
 
     public void SetLevel(int lv)
     {
-        Level = lv;
-        this.LevelUpVFX.GetComponent<VisualEffect>().SetFloat("SpawnRate", Level);
+        level = lv;
+        this.lvupVFX.GetComponent<VisualEffect>().SetFloat("SpawnRate", level);
         UpdateAttr();
     }
 
@@ -198,9 +209,9 @@ public class Tower : MonoBehaviour
     {
         attr = TowerInfo.GetTowerInfo(type);
 
-        attr = new TowerAttr(attr.radius * (0.2f * rank + 0.005f * Level),
-            attr.damage * (1f * rank + 0.05f * Level),
-            attr.waitTime * (1f - (0.1f * rank)),attr.attackLifetime,0.2f);
+        attr = new TowerAttr(attr.radius * (0.2f * rank + 0.005f * level),
+            attr.damage * (1f * rank + 0.05f * level),
+            attr.waitTime * (1f - (0.1f * rank)), attr.attackLifetime, attr.attackWaittime, attr.attackRadius,attr.attackSpd);
 
         switch (type)
         {

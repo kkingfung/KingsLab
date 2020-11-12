@@ -61,7 +61,7 @@ public class TowerSpawner : MonoBehaviour
         var archetype = EntityManager.CreateArchetype(
              typeof(WaitingTime), typeof(Lifetime), typeof(Radius), 
              typeof(Damage), typeof(LocalToWorld),  typeof(QuadrantEntity),
-            ComponentType.ReadOnly<CustomTransform>()
+            ComponentType.ReadOnly<Translation>()
             );
         EntityManager.CreateEntity(archetype, Entities);
 
@@ -124,10 +124,9 @@ public class TowerSpawner : MonoBehaviour
                 Value = radius,
             });
 
-            EntityManager.SetComponentData(Entities[i], new CustomTransform
+            EntityManager.SetComponentData(Entities[i], new Translation
             {
-                translation = Position,
-                angle = Rotation.y
+                Value = Position
             });
 
             EntityManager.SetComponentData(Entities[i], new QuadrantEntity

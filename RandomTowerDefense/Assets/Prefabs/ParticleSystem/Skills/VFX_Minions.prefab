@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5968382889649431122}
   - component: {fileID: 959357357022305414}
   - component: {fileID: -3759666320549566931}
+  - component: {fileID: -3307926257394725140}
   m_Layer: 0
   m_Name: VFX_Minions
   m_TagString: Untagged
@@ -227,3 +228,16 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-3307926257394725140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3846866574106182735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc86c37caf7b03a40af4512d32b93355, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Timer: 2

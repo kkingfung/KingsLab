@@ -7,15 +7,14 @@ public class AutoDestroyVFX : MonoBehaviour
 {
     private VisualEffect ps;
     public float Timer;
-    public void Update()
+
+    private void Start()
     {
-        if (ps)
-        {
+        ps = GetComponent<VisualEffect>();
+    }
+    private void Update()
+    {
             //No ps.isPlaying in VFX
             Destroy(gameObject, Timer);
-        }
-        else {
-            ps = GetComponent<VisualEffect>();
-        }
     }
 }

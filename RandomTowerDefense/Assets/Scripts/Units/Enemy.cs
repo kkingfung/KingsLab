@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 using Unity.Entities;
+using UnityEditor;
 
 public class Enemy : MonoBehaviour
 {
@@ -10,9 +11,13 @@ public class Enemy : MonoBehaviour
     private GameObject DropEffect;
 
     private Vector3 oriScale;
+    private Vector3 prevPos;
     private int DamagedCount = 0;
     private float HealthRecord;
     private Animator animator;
+
+    private float SlowRecord;
+    private float PetrifyRecord;
 
     private int entityID=-1;
     private EnemySpawner enemySpawner;
@@ -32,6 +37,7 @@ public class Enemy : MonoBehaviour
         }
 
         HealthRecord = 1;
+        prevPos = transform.position;
         isDead = false;
         if (animator==null) animator = GetComponentInChildren<Animator>();
     }
@@ -56,7 +62,14 @@ public class Enemy : MonoBehaviour
             if(DamagedCount == 0)
                 transform.localScale = oriScale;
         }
-     
+        if (transform.position != prevPos)
+        {
+            Vector3 direction = transform.position - prevPos;
+            transform.forward = direction;
+            prevPos = transform.position;
+        }
+
+
     }
 
     public void Init(GameObject DieEffect, GameObject DropEffect,int entityID)
@@ -85,34 +98,46 @@ public class Enemy : MonoBehaviour
     public void Die()
     {
         GameObject.Instantiate(DieEffect, this.transform.position, Quaternion.identity);
-        Destroy(this.gameObject, animator == null ? 0:2) ;
+        Destroy(this.gameObject, 2) ;
     }
 
     public void Petrified() {
         float petrifyAmt = enemySpawner.petrifyArray[entityID];
-        MeshRenderer[] meshes = this.GetComponentsInChildren<MeshRenderer>();
+        if (PetrifyRecord == petrifyAmt) return;
+        else PetrifyRecord = petrifyAmt;
+
+        SkinnedMeshRenderer[] meshes = this.GetComponentsInChildren<SkinnedMeshRenderer>();
 
         for (int i = 0; i < meshes.Length; ++i)
         {
             List<Material> mats = new List<Material>();
             meshes[i].GetMaterials(mats);
-            if (mats.Count >= 3)
+            foreach (Material j in mats)
             {
-                    mats[2].SetFloat("_Progress", petrifyAmt);
+                if (j.name== "Desertification (Instance)")
+                { 
+                    j.SetFloat("_Progress", petrifyAmt);
+                }
             }
         }
     }
     public void Slowed() {
         float slow = enemySpawner.slowArray[entityID];
-        MeshRenderer[] meshes = this.GetComponentsInChildren<MeshRenderer>();
+        if (SlowRecord == slow) return;
+        else SlowRecord = slow;
 
+        SkinnedMeshRenderer[] meshes = this.GetComponentsInChildren<SkinnedMeshRenderer>();
         for (int i = 0; i < meshes.Length; ++i)
         {
             List<Material> mats = new List<Material>();
             meshes[i].GetMaterials(mats);
-            if (mats.Count >= 3)
+            foreach (Material j in mats)
             {
-                    mats[1].SetFloat("_Progress", slow);
+                if (j.name == "FreezingMat (Instance)")
+                {
+                    //Debug.Log(slow);
+                    j.SetFloat("_Progress", slow);
+                }
             }
         }
 

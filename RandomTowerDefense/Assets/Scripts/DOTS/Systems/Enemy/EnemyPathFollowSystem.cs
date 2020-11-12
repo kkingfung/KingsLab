@@ -12,7 +12,7 @@ public class EnemyPathFollowSystem : JobComponentSystem
         float deltaTime = Time.DeltaTime;
 
         return Entities.WithAll<EnemyTag>().ForEach((Entity entity, DynamicBuffer<PathPosition> pathPositionBuffer,
-            ref CustomTransform transform, ref Health health, ref Speed speed, ref SlowRate slow, ref PetrifyAmt petrifyAmt,
+            ref Translation transform, ref Health health, ref Speed speed, ref SlowRate slow, ref PetrifyAmt petrifyAmt,
             ref PathFollow pathFollow) => {
                 if (health.Value > 0 && pathFollow.pathIndex >= 0)
                 {
@@ -20,24 +20,24 @@ public class EnemyPathFollowSystem : JobComponentSystem
                     PathPosition pathPosition = pathPositionBuffer[pathFollow.pathIndex];
                     float3 pathActualPos = PathfindingGridSetup.Instance.pathfindingGrid.GetWorldPosition((int)pathPosition.position.x, (int)pathPosition.position.y);
 
-                    float3 targetPosition = new float3(pathActualPos.x, transform.translation.y, pathActualPos.z);
-                    Debug.DrawLine(targetPosition, targetPosition + new float3(0,1,0), Color.green);
+                    float3 targetPosition = new float3(pathActualPos.x, transform.Value.y, pathActualPos.z);
+                   // Debug.DrawLine(targetPosition, targetPosition + new float3(0,1,0), Color.green);
 
-                    float3 moveDir = math.normalizesafe(targetPosition - transform.translation);
+                    float3 moveDir = math.normalizesafe(targetPosition - transform.Value);
                     float moveSpeed = speed.Value * (1 - slow.Value) * (1 - petrifyAmt.Value);
-                    Debug.DrawLine(transform.translation, targetPosition);
+                    //Debug.DrawLine(transform.translation, targetPosition);
 
-                    transform.translation += moveDir * moveSpeed * deltaTime;
+                    transform.Value += moveDir * moveSpeed * deltaTime;
 
-                    float2 dirXZ = math.normalizesafe(new float2(moveDir.x, moveDir.z));
-                    if (moveDir.x == 0) moveDir.x = 0.0001f;
-                    bool isFront = Mathf.Acos(Vector2.Dot(new float2(0, 1),dirXZ))>0;
-                    transform.angle = 90f + Mathf.Acos(Vector2.Dot(new float2(1, 0),dirXZ)) * Mathf.Rad2Deg;
-                    if (isFront == false)
-                        transform.angle *= -1f;
+                    //float2 dirXZ = math.normalizesafe(new float2(moveDir.x, moveDir.z));
+                    //if (moveDir.x == 0) moveDir.x = 0.0001f;
+                    //bool isFront = Mathf.Acos(Vector2.Dot(new float2(0, 1),dirXZ))>0;
+                    //transform.angle = 90f + Mathf.Acos(Vector2.Dot(new float2(1, 0),dirXZ)) * Mathf.Rad2Deg;
+                    //if (isFront == false)
+                    //    transform.angle *= -1f;
                     //Mathf.Atan(-moveDir.z / moveDir.x) * Mathf.Rad2Deg;
 
-                    if (math.distance(transform.translation, targetPosition) < .1f)
+                    if (math.distance(transform.Value, targetPosition) < .1f)
                     {
                         // Next waypoint
                         pathFollow.pathIndex--;
@@ -74,12 +74,12 @@ public class PathFollowGetNewPathSystem : JobComponentSystem
 
         EntityCommandBuffer.ParallelWriter entityCommandBuffer = endSimulationEntityCommandBufferSystem.CreateCommandBuffer().AsParallelWriter();
 
-        JobHandle jobHandle = Entities.WithNone<PathfindingParams>().ForEach((Entity entity, int entityInQueryIndex, in PathFollow pathFollow, in CustomTransform transform) =>
+        JobHandle jobHandle = Entities.WithNone<PathfindingParams>().ForEach((Entity entity, int entityInQueryIndex, in PathFollow pathFollow, in Translation transform) =>
         {
             if (pathFollow.pathIndex == -1)
             {
 
-                GetXY(transform.translation + new float3(1, 0, 1) * cellSize * +.5f, originPosition, cellSize, out int startX, out int startY);
+                GetXY(transform.Value + new float3(1, 0, 1) * cellSize * +.5f, originPosition, cellSize, out int startX, out int startY);
                 ValidateGridPosition(ref startX, ref startY, mapWidth, mapHeight);
 
                 //Fixed target position to Castle

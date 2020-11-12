@@ -58,7 +58,7 @@ public class PlayerManager : MonoBehaviour
     {
         if (StockOperator != null) return;
         if (isSkillActive) return;
-        if (sceneManager.currScreenShown != 0 || sceneManager.nextScreenShown != 0) return;
+        //if (sceneManager.currScreenShown != 0 || sceneManager.nextScreenShown != 0) return;
         isChecking = true;
 
         Camera targetCam = (Screen.width > Screen.height) ? refCamL : refCamP;

@@ -47,16 +47,16 @@ public class AttackSpawner : MonoBehaviour
 
         Entities = new NativeArray<Entity>(count, Allocator.Persistent);
         var archetype = EntityManager.CreateArchetype(
-             typeof(Radius), typeof(Damage),
+             typeof(Radius), typeof(Damage), typeof(Velocity),
              typeof(WaitingTime), typeof(Lifetime), typeof(ActionTime),
-            ComponentType.ReadOnly<CustomTransform>()
+            ComponentType.ReadOnly<Translation>()
             //ComponentType.ReadOnly<Hybrid>()
             );
         EntityManager.CreateEntity(archetype, Entities);
     }
 
-    public int[] Spawn(int prefabID, float3 Position, Quaternion Rotation, float damage, 
-        float radius, float wait, float lifetime, float action, int num = 1)
+    public int[] Spawn(int prefabID, float3 position, float3 entityposition, Quaternion rotation, float3 velocity, float damage, 
+        float radius, float wait, float lifetime, float action=0.2f, int num = 1)
     {
         int spawnCnt = 0;
         int[] spawnIndexList = new int[num];
@@ -64,10 +64,10 @@ public class AttackSpawner : MonoBehaviour
         {
             if (GameObjects[i] != null) continue;
             GameObjects[i] = Instantiate(PrefabObject[prefabID], transform);
-            GameObjects[i].transform.position = Position;
+            GameObjects[i].transform.position = position;
             AutoDestroyVFX autoDestroy = GameObjects[i].GetComponent<AutoDestroyVFX>();
             if (autoDestroy) autoDestroy.Timer = lifetime;
-             GameObjects[i].transform.localRotation = Rotation;
+             GameObjects[i].transform.localRotation = rotation;
             transforms[i] = GameObjects[i].transform;
            
             //AddtoEntities
@@ -78,6 +78,10 @@ public class AttackSpawner : MonoBehaviour
             EntityManager.SetComponentData(Entities[i], new Radius
             {
                 Value = radius,
+            });
+            EntityManager.SetComponentData(Entities[i], new Velocity
+            {
+                Value = velocity,
             });
             EntityManager.SetComponentData(Entities[i], new WaitingTime
             {
@@ -92,10 +96,9 @@ public class AttackSpawner : MonoBehaviour
                 Value = action,
             });
 
-            EntityManager.SetComponentData(Entities[i], new CustomTransform
+            EntityManager.SetComponentData(Entities[i], new Translation
             {
-               translation=Position,
-               angle=Rotation.eulerAngles.y
+               Value= entityposition,
             });
 
             //EntityManager.SetComponentData(Entities[i], new Hybrid

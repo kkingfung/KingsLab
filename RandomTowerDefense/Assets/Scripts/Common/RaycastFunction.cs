@@ -159,9 +159,22 @@ public class RaycastFunction : MonoBehaviour
     private IEnumerator ColorRoutine()
     {
         Color color=new Color();
-        if (GetComponent<MeshRenderer>()) color = GetComponent<MeshRenderer>().material.color;
-        if (GetComponent<RawImage>()) color = GetComponent<RawImage>().color;
-        if (GetComponent<SpriteRenderer>()) color = GetComponent<SpriteRenderer>().color;
+        int type = -1;
+        if (GetComponent<MeshRenderer>())
+        { 
+            color = GetComponent<MeshRenderer>().material.color;
+            type = 0;
+        }
+        if (GetComponent<RawImage>())
+        {
+            color = GetComponent<RawImage>().color;
+            type = 1;
+        }
+        if (GetComponent<SpriteRenderer>())
+        {
+            color = GetComponent<SpriteRenderer>().color;
+            type = 2;
+        }
         color.r = 0; color.g = 0; color.b = 0;
         float reqFrame =0.2f;
         float chgSpdr = (oriColor.r - color.r) / (reqFrame*60);
@@ -173,14 +186,30 @@ public class RaycastFunction : MonoBehaviour
             color.r += chgSpdr;
             color.b += chgSpdb;
             color.g += chgSpdg;
-            if (GetComponent<MeshRenderer>())  GetComponent<MeshRenderer>().material.color= color;
-            if (GetComponent<RawImage>())  GetComponent<RawImage>().color = color;
-            if (GetComponent<SpriteRenderer>()) GetComponent<SpriteRenderer>().color = color;
+            switch (type)
+            {
+                case 0:
+                    GetComponent<MeshRenderer>().material.color = color;
+                    break;
+                case 1:
+                    GetComponent<RawImage>().color = color;
+                    break;
+                case 2:
+                    GetComponent<SpriteRenderer>().color = color;
+                    break;
+            }
             yield return new WaitForSeconds(0f);
         }
-        if (GetComponent<MeshRenderer>()) GetComponent<MeshRenderer>().material.color = oriColor;
-        if (GetComponent<RawImage>()) GetComponent<RawImage>().color = oriColor;
-        if (GetComponent<SpriteRenderer>()) GetComponent<SpriteRenderer>().color = oriColor;
-
+        switch (type) {
+            case 0:
+                GetComponent<MeshRenderer>().material.color = oriColor;
+                break;
+            case 1:
+                GetComponent<RawImage>().color = oriColor;
+                break;
+            case 2:
+                GetComponent<SpriteRenderer>().color = oriColor;
+                break;
+        }
     }
 }

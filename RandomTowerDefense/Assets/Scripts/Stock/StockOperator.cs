@@ -8,7 +8,7 @@ public class StockOperator : MonoBehaviour
     private readonly Vector3 TargetScale = new Vector3(0.3f, 0.3f, 0.3f);
     private readonly int Rotation = 1;
 
-    public List<GameObject> StockSlot;
+    public List<SpriteRenderer> StockSlot;
 
     public Sprite SprBoss1;
     public Sprite SprBoss2;
@@ -39,36 +39,36 @@ public class StockOperator : MonoBehaviour
             switch (SkillStack.GetStock(i))
             {
                 default:
-                    StockSlot[i].GetComponent<SpriteRenderer>().sprite = null;
-                    StockSlot[i].GetComponent<SpriteRenderer>().material = MatNull;
+                    StockSlot[i].sprite = null;
+                    StockSlot[i].material = MatNull;
                     break;
                 case (int)Upgrades.StoreItems.BonusBoss1:
-                    StockSlot[i].GetComponent<SpriteRenderer>().sprite = SprBoss1;
-                    StockSlot[i].GetComponent<SpriteRenderer>().material = MatBoss1;
+                    StockSlot[i].sprite = SprBoss1;
+                    StockSlot[i].material = MatBoss1;
                     break;
                 case (int)Upgrades.StoreItems.BonusBoss2: 
-                    StockSlot[i].GetComponent<SpriteRenderer>().sprite = SprBoss2;
-                    StockSlot[i].GetComponent<SpriteRenderer>().material = MatBoss2;
+                    StockSlot[i].sprite = SprBoss2;
+                    StockSlot[i].material = MatBoss2;
                     break;
                 case (int)Upgrades.StoreItems.BonusBoss3:
-                    StockSlot[i].GetComponent<SpriteRenderer>().sprite = SprBoss3;
-                    StockSlot[i].GetComponent<SpriteRenderer>().material = MatBoss3;
+                    StockSlot[i].sprite = SprBoss3;
+                    StockSlot[i].material = MatBoss3;
                     break;
                 case (int)Upgrades.StoreItems.MagicMeteor: 
-                    StockSlot[i].GetComponent<SpriteRenderer>().sprite = SprMeteor;
-                    StockSlot[i].GetComponent<SpriteRenderer>().material = MatMeteor;
+                    StockSlot[i].sprite = SprMeteor;
+                    StockSlot[i].material = MatMeteor;
                     break;
                 case (int)Upgrades.StoreItems.MagicBlizzard:
-                    StockSlot[i].GetComponent<SpriteRenderer>().sprite = SprBlizzard;
-                    StockSlot[i].GetComponent<SpriteRenderer>().material = MatBlizzard;
+                    StockSlot[i].sprite = SprBlizzard;
+                    StockSlot[i].material = MatBlizzard;
                     break;
                 case (int)Upgrades.StoreItems.MagicPetrification:
-                    StockSlot[i].GetComponent<SpriteRenderer>().sprite = SprPetrification;
-                    StockSlot[i].GetComponent<SpriteRenderer>().material = MatPetrification;
+                    StockSlot[i].sprite = SprPetrification;
+                    StockSlot[i].material = MatPetrification;
                     break;
                 case (int)Upgrades.StoreItems.MagicMinions: 
-                    StockSlot[i].GetComponent<SpriteRenderer>().sprite = SprMinions;
-                    StockSlot[i].GetComponent<SpriteRenderer>().material = MatMinions;
+                    StockSlot[i].sprite = SprMinions;
+                    StockSlot[i].material = MatMinions;
                     break;
             }
         }

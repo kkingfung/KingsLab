@@ -42,6 +42,7 @@ public class ISceneChange : MonoBehaviour
                 FadeOutDelegate += i.FadeOut;
             }
         }
+
         EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         entityManager.DestroyEntity(entityManager.GetAllEntities(Allocator.Temp));
     }

@@ -395,9 +395,9 @@ public static class StageInfo
         WaveAttr[] waveArray = new WaveAttr[waveNum];
 
         List<EnmDetail> detail = new List<EnmDetail>();
-        detail.Add(new EnmDetail(1, 1 * (int)enmNumEx, 0, monsterCat0[Random.Range(0, monsterCat0.Length)]));
+       // detail.Add(new EnmDetail(1, 1 * (int)enmNumEx, 0, monsterCat0[Random.Range(0, monsterCat0.Length)]));
         detail.Add(new EnmDetail(1, 1 * (int)enmNumEx, 1, monsterCat0[Random.Range(0, monsterCat0.Length)]));
-        detail.Add(new EnmDetail(1, 1 * (int)enmNumEx, 2, monsterCat0[Random.Range(0, monsterCat0.Length)]));
+       // detail.Add(new EnmDetail(1, 1 * (int)enmNumEx, 2, monsterCat0[Random.Range(0, monsterCat0.Length)]));
 
         for (int k = 2; k < waveNum; k++) {
             if (k < 10 - 1)

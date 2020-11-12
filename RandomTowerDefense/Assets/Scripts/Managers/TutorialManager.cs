@@ -364,7 +364,10 @@ public class TutorialManager : MonoBehaviour
     {
         tutorialStage = stage;
     }
-
+    public TutorialStageID GetTutorialStage()
+    {
+        return tutorialStage;
+    }
     private void DestroyAllRelated() {
         foreach (Text i in InstructionText_Landscape)
             Destroy(i.gameObject);

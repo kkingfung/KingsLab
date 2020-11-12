@@ -144,7 +144,7 @@ public class EnemySpawner : MonoBehaviour
            typeof(Radius), typeof(PetrifyAmt),  typeof(Lifetime), typeof(SlowRate), 
             typeof(BuffTime),typeof(PathFollow), typeof(LocalToWorld),
             typeof(QuadrantEntity),
-            ComponentType.ReadOnly<CustomTransform>()
+            ComponentType.ReadOnly<Translation>()
             //ComponentType.ReadOnly<Translation>(),
             //    ComponentType.ReadOnly<RotationEulerXYZ>(),
             //ComponentType.ReadOnly<Hybrid>()
@@ -165,9 +165,7 @@ public class EnemySpawner : MonoBehaviour
     private void Update() {
         for (int i = 0; i < GameObjects.Length; ++i) {
             if (GameObjects[i] == null) continue;
-                GameObjects[i].transform.position = EntityManager.GetComponentData<CustomTransform>(Entities[i]).translation;
-                float angle = EntityManager.GetComponentData<CustomTransform>(Entities[i]).angle;
-                GameObjects[i].transform.localEulerAngles = new Vector3(0, angle, 0);
+                GameObjects[i].transform.position = EntityManager.GetComponentData<Translation>(Entities[i]).Value;
         }
         UpdateArrays();
     }
@@ -241,10 +239,9 @@ public class EnemySpawner : MonoBehaviour
                 Value = money,
             });
 
-            EntityManager.SetComponentData(Entities[i], new CustomTransform
+            EntityManager.SetComponentData(Entities[i], new Translation
             {
-                translation = Position,
-                angle = Rotation.y
+                Value = Position
             });
 
             EntityManager.SetComponentData(Entities[i], new QuadrantEntity 

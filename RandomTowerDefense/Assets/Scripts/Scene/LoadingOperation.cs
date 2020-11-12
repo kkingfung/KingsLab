@@ -12,23 +12,27 @@ public class LoadingOperation : ISceneChange
     public List<GameObject> RandomObjs;
     public List<GameObject> LoadingIcon;
 
-    float Progress;
-
+    AsyncOperation loadingOperation;
+    private bool isLoading;
     // Start is called before the first frame update
     private void Start()
     {
         base.SceneIn();
 
+        foreach (GameObject i in LoadingIcon)
+        {
+            i.GetComponent<MeshRenderer>().material.SetFloat("_DissolveAmount", 2);
+        }
+
         nextScene = PlayerPrefs.GetString("nextScene","TitleScene");
-        Progress = 0;
-     
+        isLoading = false; 
         if (RandomObjs.Count == 0) return;
         Random.InitState(Time.frameCount);
         int RndNum = Random.Range(0,RandomObjs.Count-1);
         foreach (GameObject i in RandomObjs) {
             i.SetActive(false);
         }
-        RandomObjs[RndNum].SetActive(true); 
+        RandomObjs[RndNum].SetActive(true);
     }
 
     // Update is called once per frame
@@ -44,23 +48,51 @@ public class LoadingOperation : ISceneChange
             }
         }
 
-
-        //Change Scene
-        if (isSceneFinished && nextScene != null && chkFadeReady)
-                SceneManager.LoadScene(nextScene);
-
         //LoadingScene Animation
-        if (isSceneFinished||LoadingIcon.Count == 0 ||!chkFadeReady) return;
-        //Amend if necessary
-        if (Progress < 1) Progress += 0.01f;
-        else
-        {
-            isSceneFinished = true;
-            if (fadeQuad[0]&& fadeQuad[1]) SceneOut();
+        if (isSceneFinished || LoadingIcon.Count == 0 || !chkFadeReady) {
+            return; 
         }
-        foreach (GameObject i in LoadingIcon)
+
+        if (!isLoading && chkFadeReady)
         {
-            i.GetComponent<MeshRenderer>().material.SetFloat("_DissolveAmount", 2.0f-Progress*2.0f);
+            StartCoroutine("FadeLoadingScreen");
+            isLoading = true;
         }
+    }
+
+    IEnumerator FadeLoadingScreen()
+    {
+        loadingOperation = SceneManager.LoadSceneAsync(nextScene);
+        loadingOperation.allowSceneActivation = false;
+        float duration=0.0f;
+        float progress;
+        while (duration < 1)
+        {
+            progress = Mathf.Clamp01(loadingOperation.progress / 0.9f);
+            if (duration < progress) duration += 0.02f;
+            foreach (GameObject i in LoadingIcon)
+            {
+                i.GetComponent<MeshRenderer>().material.SetFloat("_DissolveAmount", 2.0f - duration * 2.0f);
+            }
+            yield return null;
+        }
+
+        isSceneFinished = true;
+        SceneOut();
+
+        bool chkFadeReady = false;
+        while (!chkFadeReady) {
+            foreach (FadeEffect i in fadeQuad)
+            {
+                if (i.isReady)
+                {
+                    chkFadeReady = true;
+                    break;
+                }
+            }
+            yield return null;
+        }
+
+        loadingOperation.allowSceneActivation = true;
     }
 }

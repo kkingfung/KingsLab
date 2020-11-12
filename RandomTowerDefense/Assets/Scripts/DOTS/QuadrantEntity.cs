@@ -16,7 +16,8 @@ public struct QuadrantEntity : IComponentData
     public enum TypeEnum
     {
         PlayerTag,
-        EnemyTag
+        EnemyTag,
+        MinionsTag
     }
 }
 
@@ -54,18 +55,18 @@ public class QuadrantSystem : ComponentSystem
     }
 
     [BurstCompile]
-    private struct SetQuadrantDataHashMapJob : IJobForEachWithEntity<CustomTransform, QuadrantEntity>
+    private struct SetQuadrantDataHashMapJob : IJobForEachWithEntity<Translation, QuadrantEntity>
     {
 
         public NativeMultiHashMap<int, QuadrantData>.ParallelWriter quadrantMultiHashMap;
 
-        public void Execute(Entity entity, int index, ref CustomTransform transform, ref QuadrantEntity quadrantEntity)
+        public void Execute(Entity entity, int index, ref Translation transform, ref QuadrantEntity quadrantEntity)
         {
-            int hashMapKey = GetPositionHashMapKey(transform.translation);
+            int hashMapKey = GetPositionHashMapKey(transform.Value);
             quadrantMultiHashMap.Add(hashMapKey, new QuadrantData
             {
                 entity = entity,
-                position = transform.translation,
+                position = transform.Value,
                 quadrantEntity = quadrantEntity
             });
         }
@@ -86,7 +87,7 @@ public class QuadrantSystem : ComponentSystem
 
     protected override void OnUpdate()
     {
-        EntityQuery entityQuery = GetEntityQuery(typeof(CustomTransform), typeof(QuadrantEntity));
+        EntityQuery entityQuery = GetEntityQuery(typeof(Translation), typeof(QuadrantEntity));
 
         quadrantMultiHashMap.Clear();
         if (entityQuery.CalculateEntityCount() > quadrantMultiHashMap.Capacity)
@@ -101,7 +102,7 @@ public class QuadrantSystem : ComponentSystem
         JobHandle jobHandle = JobForEachExtensions.Schedule(setQuadrantDataHashMapJob, entityQuery);
         jobHandle.Complete();
 
-        DebugDrawQuadrant(Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        //DebugDrawQuadrant(Camera.main.ScreenToWorldPoint(Input.mousePosition));
     }
 
 }

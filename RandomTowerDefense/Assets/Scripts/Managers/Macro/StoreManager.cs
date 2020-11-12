@@ -125,10 +125,10 @@ public class StoreManager : MonoBehaviour
         {
             switch (i % MaxItemPerCategory)
             {
-                case 0: ArmyLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army1).ToString(); break;
-                case 1: ArmyLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army2).ToString(); break;
-                case 2: ArmyLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army3).ToString(); break;
-                case 3: ArmyLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army4).ToString(); break;
+                case 0: ArmyLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army1).ToString(); break;
+                case 1: ArmyLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army2).ToString(); break;
+                case 2: ArmyLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army3).ToString(); break;
+                case 3: ArmyLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army4).ToString(); break;
             }
         }
 
@@ -144,10 +144,10 @@ public class StoreManager : MonoBehaviour
         {
             switch (i % MaxItemPerCategory)
             {
-                case 0: SkillLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor).ToString(); break;
-                case 1: SkillLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard).ToString(); break;
-                case 2: SkillLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification).ToString(); break;
-                case 3: SkillLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions).ToString(); break;
+                case 0: SkillLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor).ToString(); break;
+                case 1: SkillLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard).ToString(); break;
+                case 2: SkillLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification).ToString(); break;
+                case 3: SkillLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions).ToString(); break;
             }
         }
 
@@ -193,10 +193,10 @@ public class StoreManager : MonoBehaviour
         //        {
         //            switch (i % MaxItemPerCategory)
         //            {
-        //                case 0: ArmyLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army1).ToString(); break;
-        //                case 1: ArmyLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army2).ToString(); break;
-        //                case 2: ArmyLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army3).ToString(); break;
-        //                case 3: ArmyLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army4).ToString(); break;
+        //                case 0: ArmyLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army1).ToString(); break;
+        //                case 1: ArmyLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army2).ToString(); break;
+        //                case 2: ArmyLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army3).ToString(); break;
+        //                case 3: ArmyLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army4).ToString(); break;
         //            }
         //        }
         //        break;
@@ -213,10 +213,10 @@ public class StoreManager : MonoBehaviour
         //        {
         //            switch (i % MaxItemPerCategory)
         //            {
-        //                case 0: SkillLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor).ToString(); break;
-        //                case 1: SkillLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard).ToString(); break;
-        //                case 2: SkillLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification).ToString(); break;
-        //                case 3: SkillLvTextObj[i].GetComponent<TextMesh>().text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions).ToString(); break;
+        //                case 0: SkillLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor).ToString(); break;
+        //                case 1: SkillLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard).ToString(); break;
+        //                case 2: SkillLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification).ToString(); break;
+        //                case 3: SkillLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions).ToString(); break;
         //            }
         //        }
         //        break;

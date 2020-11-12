@@ -1,4 +1,5 @@
-﻿using Unity.Burst;
+﻿using Unity;
+using Unity.Burst;
 using Unity.Burst.Intrinsics;
 using Unity.Collections;
 using Unity.Entities;
@@ -7,6 +8,7 @@ using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class CollisionSystem : JobComponentSystem
 {
@@ -38,27 +40,27 @@ public class CollisionSystem : JobComponentSystem
 
 	protected override JobHandle OnUpdate(JobHandle inputDependencies)
 	{
-        castleGroup = GetEntityQuery(typeof(Health), typeof(Radius),
-        ComponentType.ReadOnly<CustomTransform>(), ComponentType.ReadOnly<CastleTag>());
+		castleGroup = GetEntityQuery(typeof(Health), typeof(Radius),
+		ComponentType.ReadOnly<Translation>(), ComponentType.ReadOnly<CastleTag>());
 
-        enemyGroup = GetEntityQuery(typeof(Health), typeof(Radius), typeof(Damage), typeof(SlowRate),
-            typeof(PetrifyAmt), typeof(BuffTime),
-            ComponentType.ReadOnly<CustomTransform>(), ComponentType.ReadOnly<EnemyTag>());
+		enemyGroup = GetEntityQuery(typeof(Health), typeof(Radius), typeof(Damage), typeof(SlowRate),
+			typeof(PetrifyAmt), typeof(BuffTime),
+			ComponentType.ReadOnly<Translation>(), ComponentType.ReadOnly<EnemyTag>());
 
-        MeteorGroup = GetEntityQuery(typeof(Radius), typeof(Damage), typeof(ActionTime), typeof(WaitingTime),
-            ComponentType.ReadOnly<CustomTransform>(), ComponentType.ReadOnly<MeteorTag>());
-        MinionsGroup = GetEntityQuery(typeof(Radius), typeof(Damage), typeof(ActionTime), typeof(WaitingTime),
-            ComponentType.ReadOnly<CustomTransform>(), ComponentType.ReadOnly<MinionsTag>());
+		MeteorGroup = GetEntityQuery(typeof(Radius), typeof(Damage), typeof(WaitingTime), typeof(SkillTag),
+			ComponentType.ReadOnly<Translation>(), ComponentType.ReadOnly<MeteorTag>());
+		MinionsGroup = GetEntityQuery(typeof(Radius), typeof(Damage), typeof(WaitingTime), typeof(SkillTag),
+			ComponentType.ReadOnly<Translation>(), ComponentType.ReadOnly<MinionsTag>());
 
-        PetrificationGroup = GetEntityQuery(typeof(Radius), typeof(Damage), typeof(WaitingTime), typeof(ActionTime), typeof(SlowRate), typeof(BuffTime),
-            ComponentType.ReadOnly<CustomTransform>(), ComponentType.ReadOnly<PetrificationTag>());
-        BlizzardGroup = GetEntityQuery(typeof(Radius), typeof(Damage), typeof(WaitingTime), typeof(ActionTime), typeof(SlowRate), typeof(BuffTime),
-            ComponentType.ReadOnly<CustomTransform>(), ComponentType.ReadOnly<BlizzardTag>());
+		PetrificationGroup = GetEntityQuery(typeof(Radius), typeof(Damage), typeof(WaitingTime), typeof(SlowRate), typeof(BuffTime), typeof(SkillTag),
+			ComponentType.ReadOnly<Translation>(), ComponentType.ReadOnly<PetrificationTag>());
+		BlizzardGroup = GetEntityQuery(typeof(Radius), typeof(Damage), typeof(WaitingTime), typeof(SlowRate), typeof(BuffTime), typeof(SkillTag),
+			ComponentType.ReadOnly<Translation>(), ComponentType.ReadOnly<BlizzardTag>());
 
-        AttackGroup = GetEntityQuery(typeof(Radius), typeof(Damage), typeof(ActionTime), typeof(WaitingTime),
-            ComponentType.ReadOnly<CustomTransform>(), ComponentType.ReadOnly<AttackTag>());
+		AttackGroup = GetEntityQuery(typeof(Radius), typeof(Damage), typeof(ActionTime), typeof(WaitingTime),
+			ComponentType.ReadOnly<Translation>(), ComponentType.ReadOnly<AttackTag>());
 
-        var transformType = GetComponentTypeHandle<CustomTransform>(true);
+		var transformType = GetComponentTypeHandle<Translation>(true);
 
 		var healthType = GetComponentTypeHandle<Health>(false);
 		var radiusType = GetComponentTypeHandle<Radius>(true);
@@ -68,77 +70,86 @@ public class CollisionSystem : JobComponentSystem
 		//var cycleType = GetComponentTypeHandle<CycleTime>(true);
 		//var activeType = GetComponentTypeHandle<Lifetime>(true);
 		//var actionType = GetComponentTypeHandle<ActionTime>(true);
-		
+
 		var slowType = GetComponentTypeHandle<SlowRate>(false);
 		var petrifyType = GetComponentTypeHandle<PetrifyAmt>(false);
 		var buffType = GetComponentTypeHandle<BuffTime>(false);
 
-		JobHandle jobHandle;
+		JobHandle jobHandle=inputDependencies;
 
-		//castle by enemy
-		var jobCvE = new CollisionJobCvE()
+		if (enemyGroup.CalculateEntityCount() > 0)
+		{
+			//castle by enemy
+			var jobCvE = new CollisionJobCvE()
 		{
 			healthType = healthType,
 			translationType = transformType,
 			radius = radiusType,
 			targetDamage = enemyGroup.ToComponentDataArray<Damage>(Allocator.TempJob),
 			targetRadius = enemyGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
-			targetTrans = enemyGroup.ToComponentDataArray<CustomTransform>(Allocator.TempJob),
+			targetTrans = enemyGroup.ToComponentDataArray<Translation>(Allocator.TempJob),
 			targetHealth = enemyGroup.ToComponentDataArray<Health>(Allocator.TempJob)
 		};
 		jobHandle = jobCvE.Schedule(castleGroup, inputDependencies);
 		jobHandle.Complete();
 
 		//enemy by castle
-		var jobEvC = new CollisionJobEvC()
-		{
-			healthType = healthType,
-			translationType = transformType,
-			radius = radiusType,
-			targetRadius = castleGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
-			targetTrans = castleGroup.ToComponentDataArray<CustomTransform>(Allocator.TempJob)
-		};
-		jobHandle = jobEvC.Schedule(enemyGroup, inputDependencies);
-		jobHandle.Complete();
+
+			var jobEvC = new CollisionJobEvC()
+			{
+				healthType = healthType,
+				translationType = transformType,
+				radius = radiusType,
+				targetRadius = castleGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
+				targetTrans = castleGroup.ToComponentDataArray<Translation>(Allocator.TempJob)
+			};
+			jobHandle = jobEvC.Schedule(enemyGroup, inputDependencies);
+			jobHandle.Complete();
+		}
 
 		//For GameOver
 		//if (Settings.IsPlayerDead())
 		//	return jobHandle;
 
 		//enemy by Attack
-		var jobEvA = new CollisionJobEvA()
+		if (AttackGroup.CalculateEntityCount() > 0 && enemyGroup.CalculateEntityCount() > 0)
 		{
-			radiusType = radiusType,
-			healthType = healthType,
-			translationType = transformType,
+			var jobEvA = new CollisionJobEvA()
+			{
+				radiusType = radiusType,
+				healthType = healthType,
+				translationType = transformType,
 
-			targetRadius = AttackGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
-			targetDamage = AttackGroup.ToComponentDataArray<Damage>(Allocator.TempJob),
-			targetTrans = AttackGroup.ToComponentDataArray<CustomTransform>(Allocator.TempJob),
-			targetAction = AttackGroup.ToComponentDataArray<ActionTime>(Allocator.TempJob),
-			targetWait = AttackGroup.ToComponentDataArray<WaitingTime>(Allocator.TempJob)
-		};
-		jobHandle = jobEvA.Schedule(enemyGroup, inputDependencies);
-		jobHandle.Complete();
-
+				targetRadius = AttackGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
+				targetDamage = AttackGroup.ToComponentDataArray<Damage>(Allocator.TempJob),
+				targetTrans = AttackGroup.ToComponentDataArray<Translation>(Allocator.TempJob),
+				targetAction = AttackGroup.ToComponentDataArray<ActionTime>(Allocator.TempJob),
+				targetWait = AttackGroup.ToComponentDataArray<WaitingTime>(Allocator.TempJob)
+			};
+			jobHandle = jobEvA.Schedule(enemyGroup, inputDependencies);
+			jobHandle.Complete();
+		}
 		//enemy by meteor
-		var JobEvSM1 = new CollisionJobEvSM()
+		if (MeteorGroup.CalculateEntityCount() > 0 && enemyGroup.CalculateEntityCount() > 0)
 		{
-			radiusType = radiusType,
-			healthType = healthType,
-			translationType = transformType,
+			var JobEvSM1 = new CollisionJobEvSM()
+			{
+				radiusType = radiusType,
+				healthType = healthType,
+				translationType = transformType,
 
-			targetRadius = MeteorGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
-			targetDamage = MeteorGroup.ToComponentDataArray<Damage>(Allocator.TempJob),
-			targetTrans = MeteorGroup.ToComponentDataArray<CustomTransform>(Allocator.TempJob),
-			targetAction = MeteorGroup.ToComponentDataArray<ActionTime>(Allocator.TempJob),
-			targetWait = MeteorGroup.ToComponentDataArray<WaitingTime>(Allocator.TempJob)
-		};
-		jobHandle = JobEvSM1.Schedule(enemyGroup, inputDependencies);
-		jobHandle.Complete();
-
+				targetRadius = MeteorGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
+				targetDamage = MeteorGroup.ToComponentDataArray<Damage>(Allocator.TempJob),
+				targetTrans = MeteorGroup.ToComponentDataArray<Translation>(Allocator.TempJob),
+				targetWait = MeteorGroup.ToComponentDataArray<WaitingTime>(Allocator.TempJob)
+			};
+			jobHandle = JobEvSM1.Schedule(enemyGroup, inputDependencies);
+			jobHandle.Complete();
+		}
 		//enemy by minions
-		var JobEvSM2 = new CollisionJobEvSM()
+		if (MinionsGroup.CalculateEntityCount() > 0 && enemyGroup.CalculateEntityCount() > 0)
+		{
+			var JobEvSM2 = new CollisionJobEvSM()
 		{
 			radiusType = radiusType,
 			healthType = healthType,
@@ -146,45 +157,48 @@ public class CollisionSystem : JobComponentSystem
 
 			targetRadius = MinionsGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
 			targetDamage = MinionsGroup.ToComponentDataArray<Damage>(Allocator.TempJob),
-			targetTrans = MinionsGroup.ToComponentDataArray<CustomTransform>(Allocator.TempJob),
-			targetAction = MinionsGroup.ToComponentDataArray<ActionTime>(Allocator.TempJob),
+			targetTrans = MinionsGroup.ToComponentDataArray<Translation>(Allocator.TempJob),
 			targetWait = MinionsGroup.ToComponentDataArray<WaitingTime>(Allocator.TempJob)
 		};
 		jobHandle = JobEvSM2.Schedule(enemyGroup, inputDependencies);
 		jobHandle.Complete();
+	}
 
 		//enemy by blizzard
-		var jobEvSB = new CollisionJobEvSB()
+		if (BlizzardGroup.CalculateEntityCount() > 0 && enemyGroup.CalculateEntityCount() > 0)
 		{
-			radiusType = radiusType,
-			healthType = healthType,
-			translationType = transformType,
+			var jobEvSB = new CollisionJobEvSB()
+			{
+				radiusType = radiusType,
+				healthType = healthType,
+				translationType = transformType,
 
-			targetRadius = BlizzardGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
-			targetDamage = BlizzardGroup.ToComponentDataArray<Damage>(Allocator.TempJob),
-			targetTrans = BlizzardGroup.ToComponentDataArray<CustomTransform>(Allocator.TempJob),
-			targetAction = BlizzardGroup.ToComponentDataArray<ActionTime>(Allocator.TempJob),
+				targetRadius = BlizzardGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
+				targetDamage = BlizzardGroup.ToComponentDataArray<Damage>(Allocator.TempJob),
+				targetTrans = BlizzardGroup.ToComponentDataArray<Translation>(Allocator.TempJob),
 
-			slowType = slowType,
-			buffType = buffType,
-			targetSlow = BlizzardGroup.ToComponentDataArray<SlowRate>(Allocator.TempJob),
-			targetBuff = BlizzardGroup.ToComponentDataArray<BuffTime>(Allocator.TempJob)
-		};
-		jobHandle = jobEvSB.Schedule(enemyGroup, inputDependencies);
-		jobHandle.Complete();
+				slowType = slowType,
+				buffType = buffType,
+				targetSlow = BlizzardGroup.ToComponentDataArray<SlowRate>(Allocator.TempJob),
+				targetBuff = BlizzardGroup.ToComponentDataArray<BuffTime>(Allocator.TempJob)
+			};
+			jobHandle = jobEvSB.Schedule(enemyGroup, inputDependencies);
+			jobHandle.Complete();
+		}
 
 		//enemy by petrification
-		var jobEvSP = new CollisionJobEvSP()
+		if (PetrificationGroup.CalculateEntityCount() > 0 && enemyGroup.CalculateEntityCount() > 0)
 		{
-			petrifyType = petrifyType,
-			buffType = buffType,
-			healthType = healthType,
-			targetAction = PetrificationGroup.ToComponentDataArray<ActionTime>(Allocator.TempJob),
-			targetPetrify = PetrificationGroup.ToComponentDataArray<SlowRate>(Allocator.TempJob),
-			targetBuff = PetrificationGroup.ToComponentDataArray<BuffTime>(Allocator.TempJob),
-		};
-		jobHandle = jobEvSP.Schedule(enemyGroup, inputDependencies);
-
+			var jobEvSP = new CollisionJobEvSP()
+			{
+				petrifyType = petrifyType,
+				buffType = buffType,
+				healthType = healthType,
+				targetPetrify = PetrificationGroup.ToComponentDataArray<SlowRate>(Allocator.TempJob),
+				targetBuff = PetrificationGroup.ToComponentDataArray<BuffTime>(Allocator.TempJob),
+			};
+			jobHandle = jobEvSP.Schedule(enemyGroup, inputDependencies);
+		}
 		return jobHandle;
 	}
 
@@ -207,12 +221,12 @@ public class CollisionSystem : JobComponentSystem
 	{
 		[ReadOnly] public ComponentTypeHandle<Radius> radius;
 		public ComponentTypeHandle<Health> healthType;
-		[ReadOnly] public ComponentTypeHandle<CustomTransform> translationType;
+		[ReadOnly] public ComponentTypeHandle<Translation> translationType;
 
 		[DeallocateOnJobCompletion]
 		public NativeArray<Radius> targetRadius;
 		[DeallocateOnJobCompletion]
-		public NativeArray<CustomTransform> targetTrans;
+		public NativeArray<Translation> targetTrans;
 
 		public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
 		{
@@ -226,13 +240,13 @@ public class CollisionSystem : JobComponentSystem
 				Health health = chunkHealths[i];
 				if (health.Value <= 0) continue;
 				Radius radius = chunkRadius[i];
-				CustomTransform pos = chunkTranslations[i];
+				Translation pos = chunkTranslations[i];
 
 				for (int j = 0; j < targetTrans.Length && damage<=0; j++)
 				{
-					CustomTransform pos2 = targetTrans[j];
+					Translation pos2 = targetTrans[j];
 
-					if (CheckCollision(pos.translation, pos2.translation, targetRadius[j].Value + radius.Value))
+					if (CheckCollision(pos.Value, pos2.Value, targetRadius[j].Value + radius.Value))
 					{
 						damage += 1;
 					}
@@ -255,14 +269,14 @@ public class CollisionSystem : JobComponentSystem
 	{
 		[ReadOnly] public ComponentTypeHandle<Radius> radius;
 		public ComponentTypeHandle<Health> healthType;
-		[ReadOnly] public ComponentTypeHandle<CustomTransform> translationType;
+		[ReadOnly] public ComponentTypeHandle<Translation> translationType;
 
 		[DeallocateOnJobCompletion]
 		public NativeArray<Damage> targetDamage;
 		[DeallocateOnJobCompletion]
 		public NativeArray<Radius> targetRadius;
 		[DeallocateOnJobCompletion]
-		public NativeArray<CustomTransform> targetTrans;
+		public NativeArray<Translation> targetTrans;
 		[DeallocateOnJobCompletion]
 		public NativeArray<Health> targetHealth;
 
@@ -278,14 +292,14 @@ public class CollisionSystem : JobComponentSystem
 				Health health = chunkHealths[i];
 				if (health.Value <= 0) continue;
 				Radius radius = chunkRadius[i];
-				CustomTransform pos = chunkTranslations[i];
+				Translation pos = chunkTranslations[i];
 
 				for (int j = 0; j < targetTrans.Length; j++)
 				{
 					if (targetHealth[j].Value <= 0) continue;
-					CustomTransform pos2 = targetTrans[j];
+					Translation pos2 = targetTrans[j];
 
-					if (CheckCollision(pos.translation, pos2.translation, targetRadius[j].Value + radius.Value))
+					if (CheckCollision(pos.Value, pos2.Value, targetRadius[j].Value + radius.Value))
 					{
 						damage += targetDamage[j].Value;
 					}
@@ -307,14 +321,14 @@ public class CollisionSystem : JobComponentSystem
 	{
 		[ReadOnly] public ComponentTypeHandle<Radius> radiusType;
 		public ComponentTypeHandle<Health> healthType;
-		[ReadOnly] public ComponentTypeHandle<CustomTransform> translationType;
+		[ReadOnly] public ComponentTypeHandle<Translation> translationType;
 
 		[DeallocateOnJobCompletion]
 		public NativeArray<Damage> targetDamage;
 		[DeallocateOnJobCompletion]
 		public NativeArray<Radius> targetRadius;
 		[DeallocateOnJobCompletion]
-		public NativeArray<CustomTransform> targetTrans;
+		public NativeArray<Translation> targetTrans;
 		[DeallocateOnJobCompletion]
 		public NativeArray<ActionTime> targetAction;
 		[DeallocateOnJobCompletion]
@@ -332,18 +346,23 @@ public class CollisionSystem : JobComponentSystem
 				Health health = chunkHealths[i];
 				if (health.Value <= 0) continue;
 				Radius radius = chunkRadius[i];
-				CustomTransform pos = chunkTranslations[i];
+				Translation pos = chunkTranslations[i];
 
 				for (int j = 0; j < targetTrans.Length; j++)
 				{
 					if (targetAction[j].Value <= 0) continue;
 					if (targetWait[j].Value > 0) continue;
 
-					CustomTransform pos2 = targetTrans[j];
+					Translation pos2 = targetTrans[j];
 
-					if (CheckCollision(pos.translation, pos2.translation, targetRadius[j].Value + radius.Value))
+					if (CheckCollision(pos.Value, pos2.Value, targetRadius[j].Value + radius.Value))
 					{
+						//Debug.DrawLine(pos.Value, pos.Value + new float3(0, 1, 0), Color.red);
 						damage += targetDamage[j].Value;
+					}
+					else
+					{
+						//Debug.DrawLine(pos.Value, pos.Value + new float3(0, 1, 0), Color.green);
 					}
 				}
 
@@ -365,16 +384,14 @@ public class CollisionSystem : JobComponentSystem
 
 		[ReadOnly] public ComponentTypeHandle<Radius> radiusType;
 		public ComponentTypeHandle<Health> healthType;
-		[ReadOnly] public ComponentTypeHandle<CustomTransform> translationType;
+		[ReadOnly] public ComponentTypeHandle<Translation> translationType;
 
 		[DeallocateOnJobCompletion]
 		public NativeArray<Damage> targetDamage;
 		[DeallocateOnJobCompletion]
 		public NativeArray<Radius> targetRadius;
 		[DeallocateOnJobCompletion]
-		public NativeArray<CustomTransform> targetTrans;
-		[DeallocateOnJobCompletion]
-		public NativeArray<ActionTime> targetAction;
+		public NativeArray<Translation> targetTrans;
 		[DeallocateOnJobCompletion]
 		public NativeArray<WaitingTime> targetWait;
 
@@ -390,18 +407,27 @@ public class CollisionSystem : JobComponentSystem
 				Health health = chunkHealths[i];
 				if (health.Value <= 0) continue;
 				Radius radius = chunkRadius[i];
-				CustomTransform pos = chunkTranslations[i];
+				Translation pos = chunkTranslations[i];
 
 				for (int j = 0; j < targetTrans.Length; j++)
 				{
-					if (targetAction[j].Value <= 0) continue;
 					if (targetWait[j].Value > 0) continue;
 
-					CustomTransform pos2 = targetTrans[j];
+					Translation pos2 = targetTrans[j];
 
-					if (CheckCollision(pos.translation, pos2.translation, targetRadius[j].Value + radius.Value))
+					if (CheckCollision(pos.Value, pos2.Value, targetRadius[j].Value + radius.Value))
 					{
+						//Debug.DrawLine(pos.Value, pos.Value + new float3(0, 1, 0), Color.red);
 						damage += targetDamage[j].Value;
+						//Debug.Log("Damaged");
+					}
+					else
+					{
+						//Debug.DrawLine(pos.Value, pos.Value + new float3(0, 1, 0), Color.green);
+						//Debug.Log(GetDistance(pos.Value, pos2.Value));
+						//Debug.Log(pos.Value);
+						//Debug.Log(pos2.Value);
+						//Debug.Log("NotHitted");
 					}
 				}
 
@@ -423,7 +449,7 @@ public class CollisionSystem : JobComponentSystem
 
 		[ReadOnly] public ComponentTypeHandle<Radius> radiusType;
 		public ComponentTypeHandle<Health> healthType;
-		[ReadOnly] public ComponentTypeHandle<CustomTransform> translationType;
+		[ReadOnly] public ComponentTypeHandle<Translation> translationType;
 		public ComponentTypeHandle<SlowRate> slowType;
 		public ComponentTypeHandle<BuffTime> buffType;
 
@@ -432,9 +458,7 @@ public class CollisionSystem : JobComponentSystem
 		[DeallocateOnJobCompletion]
 		public NativeArray<Radius> targetRadius;
 		[DeallocateOnJobCompletion]
-		public NativeArray<CustomTransform> targetTrans;
-		[DeallocateOnJobCompletion]
-		public NativeArray<ActionTime> targetAction;
+		public NativeArray<Translation> targetTrans;
 		[DeallocateOnJobCompletion]
 		public NativeArray<SlowRate> targetSlow;
 		[DeallocateOnJobCompletion]
@@ -455,22 +479,24 @@ public class CollisionSystem : JobComponentSystem
 				Health health = chunkHealths[i];
 				if (health.Value <= 0) continue;
 				Radius radius = chunkRadius[i];
-				CustomTransform pos = chunkTranslations[i];
+				Translation pos = chunkTranslations[i];
 				SlowRate slow = chunkSlow[i];
 				BuffTime buff = chunkBuff[i];
 
 				for (int j = 0; j < targetTrans.Length; j++)
 				{
-					if (targetAction[j].Value <= 0) continue;
+					Translation pos2 = targetTrans[j];
 
-					CustomTransform pos2 = targetTrans[j];
-
-					if (CheckCollision(pos.translation, pos2.translation, targetRadius[j].Value + radius.Value))
+					if (CheckCollision(pos.Value, pos2.Value, targetRadius[j].Value + radius.Value))
 					{
+						//Debug.DrawLine(pos.Value, pos.Value + new float3(0, 1, 0), Color.red);
 						damage += targetDamage[j].Value;
 						 slow.Value = Mathf.Clamp(slow.Value+targetSlow[j].Value,0,0.95f);
 						if (buff.Value < targetBuff[j].Value) buff.Value = targetBuff[j].Value;
+						//Debug.Log("Slowed");
 					}
+					//else 
+						//Debug.DrawLine(pos.Value, pos.Value + new float3(0, 1, 0), Color.green);
 				}
 
 				if (damage > 0)
@@ -495,8 +521,6 @@ public class CollisionSystem : JobComponentSystem
 		public ComponentTypeHandle<BuffTime> buffType;
 
 		[DeallocateOnJobCompletion]
-		public NativeArray<ActionTime> targetAction;
-		[DeallocateOnJobCompletion]
 		public NativeArray<SlowRate> targetPetrify;
 		[DeallocateOnJobCompletion]
 		public NativeArray<BuffTime> targetBuff;
@@ -513,13 +537,11 @@ public class CollisionSystem : JobComponentSystem
 				if (health.Value <= 0) continue;
 				PetrifyAmt petrifyAmt = chunkPetrify[i];
 				BuffTime buff = chunkBuff[i];
-
-				for (int j = 0; j < targetAction.Length; j++)
+				for (int j = 0; j < targetPetrify.Length; j++)
 				{
-					if (targetAction[j].Value <= 0) continue;
 					petrifyAmt.Value = targetPetrify[j].Value;
 					buff.Value += targetBuff[j].Value;
-
+					//Debug.Log("Petrified");
 				}
 				chunkPetrify[i] = petrifyAmt;
 				chunkBuff[i] = buff;

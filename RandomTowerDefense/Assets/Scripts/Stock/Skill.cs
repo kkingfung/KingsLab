@@ -17,14 +17,13 @@ public class Skill : MonoBehaviour
 
     private PlayerManager playerManager;//For Raycasting target Position
 
-    private GameObject targetEnm;
+    private Vector3 targetEnm;
 
     private AudioManager audioManager;
     private AudioSource audioSource;
 
     private EnemySpawner enemySpawner;
-
-    private float temp;//for any purpose
+    private EntityManager entityManager;
 
     private SkillSpawner skillSpawner;
 
@@ -36,7 +35,8 @@ public class Skill : MonoBehaviour
             MyStart();
     }
 
-    private void MyStart() {
+    private void MyStart()
+    {
         ActionEnded = false;
 
         playerManager = FindObjectOfType<PlayerManager>();
@@ -48,36 +48,32 @@ public class Skill : MonoBehaviour
         switch (actionID)
         {
             case Upgrades.StoreItems.MagicMeteor:
-                this.transform.position = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
+                //this.transform.position = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
                 if (audioManager.enabledSE)
                 {
                     audioSource.PlayOneShot(audioManager.GetAudio("se_MagicFire"));
                 }
+                //skillSpawner.UpdateEntityPos(entityID,transform.position);
                 break;
             case Upgrades.StoreItems.MagicBlizzard:
-                this.transform.position = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
+                //this.transform.position = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
                 if (audioManager.enabledSE)
                 {
                     audioSource.clip = audioManager.GetAudio("se_MagicBlizzard");
                     audioSource.loop = true;
                     audioSource.Play();
                 }
+                //skillSpawner.UpdateEntityPos(entityID, transform.position);
                 break;
             case Upgrades.StoreItems.MagicPetrification:
-                this.transform.position = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
+                //this.transform.position = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
                 if (audioManager.enabledSE)
                 {
                     audioSource.PlayOneShot(audioManager.GetAudio("se_MagicPetrification"));
                 }
+                // skillSpawner.UpdateEntityPos(entityID, transform.position);
                 break;
             case Upgrades.StoreItems.MagicMinions:
-                findEnm();
-                this.GetComponent<VisualEffect>().SetVector3("TargetLocation",
-                    targetEnm.transform.position - this.transform.position);
-                if (audioManager.enabledSE)
-                {
-                    audioSource.PlayOneShot(audioManager.GetAudio("se_MagicSummon"));
-                }
                 break;
         }
     }
@@ -88,27 +84,24 @@ public class Skill : MonoBehaviour
         {
             case Upgrades.StoreItems.MagicMeteor:
             case Upgrades.StoreItems.MagicPetrification:
+                break;
             case Upgrades.StoreItems.MagicMinions:
-                attr.waitTime -= Time.deltaTime;
-                if (ActionEnded == false && attr.waitTime < 0)
+                if (targetEnm == new Vector3() && findEnm())
                 {
-                    if (!ActionEnded)
+                    this.GetComponent<VisualEffect>().SetVector3("TargetLocation",
+                        targetEnm - this.transform.position);
+                    if (audioManager.enabledSE)
                     {
-                        Destroy(this.gameObject);
-                        ActionEnded = true;
+                        audioSource.PlayOneShot(audioManager.GetAudio("se_MagicSummon"));
                     }
+                    skillSpawner.UpdateEntityPos(entityID, targetEnm);
                 }
                 break;
             case Upgrades.StoreItems.MagicBlizzard:
                 if (ActionEnded == false)
                 {
                     this.transform.position = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
-                    EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-                    entityManager.SetComponentData(skillSpawner.Entities[entityID], new CustomTransform
-                    {
-                        translation = this.transform.position,
-                        angle=this.transform.localEulerAngles.y
-                    });
+                    skillSpawner.UpdateEntityPos(entityID, this.transform.position);
 
                     attr.lifeTime -= Time.deltaTime;
                     if (!ActionEnded && attr.lifeTime < 0)
@@ -133,10 +126,9 @@ public class Skill : MonoBehaviour
         {
             case Upgrades.StoreItems.MagicMinions:
                 EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-                entityManager.SetComponentData(skillSpawner.Entities[entityID], new CustomTransform
+                entityManager.SetComponentData(skillSpawner.Entities[entityID], new Translation
                 {
-                    translation = this.transform.position,
-                    angle = this.transform.localEulerAngles.y
+                    Value = this.transform.position
                 });
                 break;
         }
@@ -153,30 +145,16 @@ public class Skill : MonoBehaviour
         }
     }
 
-    private void findEnm()
+    private bool findEnm()
     {
-        if (targetEnm != null) return;
-        if (defaultTarget == null)
-            defaultTarget = GameObject.FindGameObjectWithTag("DebugTag");
-
-        this.transform.position = Camera.main.transform.position;
-        Vector3 targetPos = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
-        List<GameObject> allAliveMonsters = enemySpawner.AllAliveMonstersList();
-        if (allAliveMonsters.Count > 0)
+        //if (defaultTarget == null)
+        //    defaultTarget = GameObject.FindGameObjectWithTag("DebugTag");
+  
+        if ( skillSpawner.hastargetArray[entityID])
         {
-            GameObject nearestMonster = null;
-            float dist = float.MaxValue;
-            foreach (GameObject i in allAliveMonsters)
-            {
-                float tempDist = (i.transform.position - targetPos).sqrMagnitude;
-                if (tempDist < dist)
-                {
-                    dist = tempDist;
-                    nearestMonster = i;
-                }
-            }
-            targetEnm = nearestMonster;
+                targetEnm = skillSpawner.targetArray[entityID];
+                return true;
         }
-        else targetEnm = defaultTarget;
+        return false;
     }
 }

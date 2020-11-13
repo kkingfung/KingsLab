@@ -73,17 +73,20 @@ public class StageManager : MonoBehaviour
 
             //Fixed CastleMapPos
             int[] entityID = castleSpawner.Spawn(mapGenerator.CoordToPosition(SpawnPoint[0]) + mapGenerator.transform.position, 
-                Quaternion.Euler(0f, 90f, 0f), (int)PlayerPrefs.GetFloat("hpMax",1), 0);
+                Quaternion.Euler(0f, 90f, 0f), (int)PlayerPrefs.GetFloat("hpMax",5), 0);
             CastleEntityID = entityID[0];
             for (int i = 0; i < EnemySpawnPtNum; ++i)
             {
                 Vector3 pos = mapGenerator.CoordToPosition(SpawnPoint[i + 1]) + mapGenerator.transform.position;
+                if (i == 0)
+                {
+                    GameObject WaveDisplayMesh = Instantiate(WaveDisplayMeshPrefab, pos, Quaternion.Euler(90f, 0, 0));
+                    waveManager.waveNumMesh = WaveDisplayMesh.GetComponent<TextMesh>();
+                    waveManager.waveNumMesh.text = "WAVE 1";
+                }
                 if (sceneManager.CheckIfTutorial()&& i!=1)  continue;
                 EnemySpawnPort[i] = Instantiate(EnemySpawnPortPrefab, pos, Quaternion.identity);
             }
-            GameObject WaveDisplayMesh= Instantiate(WaveDisplayMeshPrefab, EnemySpawnPort[0].transform.position, Quaternion.Euler(90f,0,0));
-            waveManager.waveNumMesh = WaveDisplayMesh.GetComponent<TextMesh>();
-            waveManager.waveNumMesh.text = "WAVE 1";
         }
     }
 
@@ -131,8 +134,9 @@ public class StageManager : MonoBehaviour
         }
     }
 
-    public void CheckLose()
+    public bool CheckLose()
     {
+        Debug.Log(GetCurrHP());
         if (GetCurrHP() <= 0 && result == 0)
         {
             result = -1;
@@ -145,7 +149,9 @@ public class StageManager : MonoBehaviour
                 i.DestroyMesh();
             scoreCalculation.CalculationScore();
             StartCoroutine(FadeInRoutine());
+            return true;
         }
+        return false;
     }
 
     public bool SetWin()
@@ -199,6 +205,7 @@ public class StageManager : MonoBehaviour
 
         for (int i = 0; i < EnemySpawnPort.Length; ++i)
         {
+            if(EnemySpawnPort[i]!=null)
             pos[i] = EnemySpawnPort[i].transform.position;
         }
 

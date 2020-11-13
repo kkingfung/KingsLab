@@ -12,6 +12,7 @@ public class Castle : MonoBehaviour
     private AudioSource audioSource;
     private StageManager stageManager;
     private CastleSpawner castleSpawner;
+    private TutorialManager tutorialManager;
 
     // Start is called before the first frame update
     void Start()
@@ -20,8 +21,8 @@ public class Castle : MonoBehaviour
         castleSpawner = FindObjectOfType<CastleSpawner>();
         audioSource = GetComponent<AudioSource>();
         stageManager = FindObjectOfType<StageManager>();
-
-        MaxCastleHP = (int)PlayerPrefs.GetFloat("hpMax",1);
+        tutorialManager = FindObjectOfType<TutorialManager>();
+        MaxCastleHP = (int)PlayerPrefs.GetFloat("hpMax",5);
         CurrCastleHP = MaxCastleHP;
     }
 
@@ -32,16 +33,24 @@ public class Castle : MonoBehaviour
         CurrCastleHP = GetCastleHpFromEntity();
 
         HPText.text = CurrCastleHP < 0 ? "0" : CurrCastleHP.ToString();
-        if (PreviousCastleHP > CurrCastleHP && audioManager.enabledSE)
-            audioSource.PlayOneShot(audioManager.GetAudio("se_Hitted"));
+        if (PreviousCastleHP > CurrCastleHP) {
+            AddedHealth(0);
+            if(audioManager.enabledSE)
+                audioSource.PlayOneShot(audioManager.GetAudio("se_Hitted"));
+        }
+           
+
         Shield.SetActive(CurrCastleHP > 1);
     }
 
     public bool AddedHealth(int Val = 1)
     {
         castleSpawner.castleHPArray[0] = CurrCastleHP + Val;
-        if(CurrCastleHP + Val<=0)
-            stageManager.CheckLose();
+        if (CurrCastleHP + Val <= 0)
+        {
+            if (stageManager.CheckLose())
+                tutorialManager.DestroyAllRelated();
+        }
         if (CurrCastleHP > 0)
             SetCastleHpToEntity(CurrCastleHP + Val);
                  

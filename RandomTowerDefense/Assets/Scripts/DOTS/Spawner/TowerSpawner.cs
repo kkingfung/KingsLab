@@ -159,4 +159,15 @@ public class TowerSpawner : MonoBehaviour
         //TransformAccessArray = new TransformAccessArray(transforms);
         return spawnIndexList;
     }
+
+    public List<GameObject> AllAliveObjList()
+    {
+        List<GameObject> result = new List<GameObject>();
+        foreach (GameObject i in GameObjects)
+        {
+            if (i != null)
+                result.Add(i);
+        }
+        return result;
+    }
 }

@@ -60,11 +60,11 @@ public static class TowerInfo
             new TowerAttr(
                 40, 20,//radius,damage
                 3.0f, 3,//wait,atklife
-                0.01f, 2,//atkwait,atkrad
+                0.01f, 1,//atkwait,atkrad
                 0,5));//atkspd,lifetime
         towerInfo.Add(TowerInfoID.Enum_TowerUsurper,
             new TowerAttr(
-                8, 0.3f,//radius,damage
+                8, 1f,//radius,damage
                 0.2f, 1,//wait,atklife
                 0f, 0.5f,//atkwait,atkrad
                 1f,5));//atkspd,lifetime

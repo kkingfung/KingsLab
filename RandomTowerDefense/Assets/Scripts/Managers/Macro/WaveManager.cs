@@ -38,7 +38,13 @@ public class WaveManager : MonoBehaviour
         TotalWaveNum = CurrAttr.waveNum;
         CurrentWaveNum = 0;
         //fireworkcounter = 0;
-   
+
+        foreach (Text i in waveNumUI)
+        {
+            i.text = "";
+            i.color = new Color(i.color.r, i.color.g, i.color.b, 0.0f);
+        }
+
         if (sceneManager.GetCurrIsland() != 0)
         {
             inTutorial = false;
@@ -73,7 +79,6 @@ public class WaveManager : MonoBehaviour
 
         if (waveNumMesh)
             waveNumMesh.text = "WAVE " + CurrentWaveNum;
-
         StartCoroutine(SpawnWave(CurrAttr.waveDetail[CurrentWaveNum - 1]));
         return false;
     }
@@ -92,9 +97,6 @@ public class WaveManager : MonoBehaviour
             {
                 WaveChg();
                 WaveTimer = Time.time;
-            }
-            else
-            {
                 inTutorial = false;
             }
         }
@@ -113,12 +115,12 @@ public class WaveManager : MonoBehaviour
     private IEnumerator SpawnWave(WaveAttr wave)
     {
         float spawnTimer = wave.enmStartTime;
-
         bool CheckCustomData = sceneManager && (sceneManager.GetCurrIsland() == StageInfo.IslandNum - 1);
         bool isSpawning = true;
         while (stageManager.GetResult()==0 && isSpawning)
         {
-            spawnTimer -= Time.deltaTime;
+            if (tutorialManager && tutorialManager.WaitingResponds) { }
+            else { spawnTimer -= Time.deltaTime; }
             if (spawnTimer < 0)
             {
                 for (int i = 0; i < wave.enmDetail.Count; ++i)

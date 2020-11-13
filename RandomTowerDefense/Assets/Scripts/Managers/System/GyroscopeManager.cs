@@ -73,13 +73,21 @@ public class GyroscopeManager : MonoBehaviour
         {
             UpdateGyroYPR();
             GyroModify();
-    
+
             if (gyroDiffUI.Count > 0)
             {
                 foreach (GameObject i in gyroDiffUI)
                 {
                     i.transform.localEulerAngles = new Vector3(0, 0, yawRef);
                 }
+            }
+        }
+
+        if (gyroDiffUI.Count > 0)
+        {
+            foreach (GameObject i in gyroDiffUI)
+            {
+                i.transform.localEulerAngles = new Vector3(0, 0, yawRef);
             }
         }
     }
@@ -89,6 +97,11 @@ public class GyroscopeManager : MonoBehaviour
         foreach (Slider i in senseSlider)
             i.value = sensitivity;
         PlayerPrefs.SetFloat("Gyro", sensitivity);
+    }
+
+    public void SetYawChg(float value)
+    {
+        yawRef += value;
     }
 
     public void GyroModify()

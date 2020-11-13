@@ -24,10 +24,13 @@ public class TutorialManager : MonoBehaviour
     private string fullText;
     private int textCnt;
 
+    private int reviewStage;
+
     public List<Text> InstructionText_Landscape;
     public List<Text> InstructionText_Protrait;
     public List<GameObject> InstructionSprite_Landscape;
     public List<GameObject> InstructionSprite_Protrait;
+    public List<Button> HistoryIcons;
 
     private InGameOperation SceneManager;
     private TowerSpawner towerSpawner;
@@ -43,7 +46,8 @@ public class TutorialManager : MonoBehaviour
         StageProgress = 0;
         textCnt = 0;
         fullText = "";
-
+        reviewStage = 0;
+ 
         SceneManager = FindObjectOfType<InGameOperation>();
         towerSpawner = FindObjectOfType<TowerSpawner>();
         enemySpawner = FindObjectOfType<EnemySpawner>();
@@ -75,9 +79,13 @@ public class TutorialManager : MonoBehaviour
                 break;
             case TutorialStageID.TutorialProgress_FreeBattle:
                 WaitingResponds = false;
+                reviewStage = 0;
                 DestroyAllRelated();
                 return;
         }
+        foreach (Button i in HistoryIcons)
+            i.interactable = !WaitingResponds && tutorialStage< TutorialStageID.TutorialProgress_FreeBattle;
+
         FixedUpdateText();
         UpdateActiveness();
     }
@@ -118,8 +126,9 @@ public class TutorialManager : MonoBehaviour
         switch (StageProgress)
         {
             case 0:
-                ChangeText("新人，ハンは第九師団団長だぞ");
+                ChangeText("新人，キンは第九師団団長だぞ");
                 StageProgress++;
+                reviewStage = 0;
                 break;
             case 1:
                 if (Input.GetMouseButtonUp(0) ||
@@ -133,7 +142,7 @@ public class TutorialManager : MonoBehaviour
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
-                    ChangeText("ハンは傍にいるだぞ");
+                    ChangeText("キンは傍にいるだぞ");
                     StageProgress++;
                 }
                 break;
@@ -141,7 +150,7 @@ public class TutorialManager : MonoBehaviour
                 if (Input.GetMouseButtonUp(0) ||
                  (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
-                    ChangeText("自分を信じなくていい、\nハンを信じるだぞ");
+                    ChangeText("自分を信じなくていい、\nキンを信じるだぞ");
                     StageProgress++;
                 }
                 break;
@@ -162,16 +171,27 @@ public class TutorialManager : MonoBehaviour
                 }
                 break;
             case 6:
-                WaitingResponds = false;
-                if (((Input.GetMouseButtonUp(0) ||
-                    (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))) 
-                    && towerSpawner.GameObjects[0]!=null)
+                if (Input.GetMouseButtonUp(0) ||
+                    (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
-                    ChangeText("それは新人の部隊だぞ");
+                    ChangeText("");
                     StageProgress++;
                 }
                 break;
             case 7:
+                WaitingResponds = false;
+                if ( towerSpawner.AllAliveObjList().Count>0)
+                {
+                    ChangeText("");
+                    StageProgress++;
+                }
+                break;
+            case 8:
+                ChangeText("それは新人の部隊だぞ");
+                StageProgress++;
+                reviewStage = 7;
+                break;
+            case 9:
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
@@ -179,7 +199,7 @@ public class TutorialManager : MonoBehaviour
                     StageProgress++;
                 }
                 break;
-            case 8:
+            case 10:
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
@@ -187,7 +207,7 @@ public class TutorialManager : MonoBehaviour
                     StageProgress++;
                 }
                 break;
-            case 9:
+            case 11:
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
@@ -195,7 +215,7 @@ public class TutorialManager : MonoBehaviour
                     StageProgress++;
                 }
                 break;
-            case 10:
+            case 12:
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
@@ -203,11 +223,10 @@ public class TutorialManager : MonoBehaviour
                     StageProgress++;
                 }
                 break;
-            case 11:
+            case 13:
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
-                    ChangeText("");
                     StageProgress = 0;
                     tutorialStage++;
                 }
@@ -220,14 +239,23 @@ public class TutorialManager : MonoBehaviour
         switch (StageProgress)
         {
             case 0:
-                if (enemySpawner.GameObjects[0]!=null)
-                    StageProgress++;
+                reviewStage = 0;
+                ChangeText("");
+                StageProgress++;
                 break;
             case 1:
+                reviewStage = 1;
+                if (enemySpawner.GameObjects[0] != null)
+                {
+                    StageProgress++;
+                }
+                break;
+            case 2:
+                reviewStage = 2;
                 if (enemySpawner.AllAliveMonstersList().Count <= 0) {
-                    ChangeText("悪くない\n褒めてやるだぞ");
                     StageProgress = 0;
                     tutorialStage++;
+                    reviewStage = 0;
                 }
                 break;
         }
@@ -238,6 +266,11 @@ public class TutorialManager : MonoBehaviour
         switch (StageProgress)
         {
             case 0:
+                ChangeText("悪くない\n褒めてやるだぞ");
+                StageProgress++;
+                reviewStage = 0;
+                break;
+            case 1:
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
@@ -245,7 +278,7 @@ public class TutorialManager : MonoBehaviour
                     StageProgress++;
                 }
                 break;
-            case 1:
+            case 2:
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
@@ -253,15 +286,20 @@ public class TutorialManager : MonoBehaviour
                     StageProgress++;
                 }
                 break;
-            case 2:
+            case 3:
                 WaitingResponds = false;
                 if (SceneManager.currScreenShown==2)
                 {
-                    ChangeText("これは基地通信だぞ、\n追加ミッションを要求");
+                    ChangeText("");
                     StageProgress++;
                 }
                 break;
-            case 3:
+            case 4:
+                reviewStage = 0;
+                ChangeText("これは基地通信だぞ、\n追加ミッションを要求");
+                StageProgress++;
+                break;
+            case 5:
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
@@ -269,7 +307,7 @@ public class TutorialManager : MonoBehaviour
                     StageProgress++;
                 }
                 break;
-            case 4:
+            case 6:
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
@@ -278,31 +316,20 @@ public class TutorialManager : MonoBehaviour
                     StageProgress++;
                 }
                 break;
-            case 5:
-                if (Input.GetMouseButtonUp(0) ||
-                    (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
-                {
-                    ChangeText("早く戦場に戻るだぞ");
-                    StageProgress++;
-                }
-                break;
-            case 6:
+            case 7:
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
                     ChangeText("");
-                    StageProgress++;
-                }
-                break;
-            case 7:
-                WaitingResponds = false;
-                if (SceneManager.currScreenShown == 0)
-                {
-                    ChangeText("道具の使用は長押しながら、\nアイテムを選ぶだぞ");
                     StageProgress++;
                 }
                 break;
             case 8:
+                reviewStage = 8;
+                ChangeText("早く戦場に戻るだぞ");
+                StageProgress++;
+                break;
+            case 9:
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
@@ -310,7 +337,28 @@ public class TutorialManager : MonoBehaviour
                     StageProgress++;
                 }
                 break;
-            case 9:
+            case 10:
+                WaitingResponds = false;
+                if (SceneManager.currScreenShown == 0)
+                {
+                    ChangeText("");
+                    StageProgress++;
+                }
+                break;
+            case 11:
+                reviewStage = 11;
+                ChangeText("道具の使用は長押しながら、\nアイテムを選ぶだぞ");
+                StageProgress++;
+                break;
+            case 12:
+                if (Input.GetMouseButtonUp(0) ||
+                    (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
+                {
+                    ChangeText("");
+                    StageProgress++;
+                }
+                break;
+            case 13:
                 WaitingResponds = false;
                 if (skillSpawner.GameObjects[0] != null)
                 {
@@ -326,21 +374,26 @@ public class TutorialManager : MonoBehaviour
         switch (StageProgress)
         {
             case 0:
-                if (enemySpawner.AllAliveMonstersList().Count <= 0)
-                {
-                    ChangeText("ハンのおかけで、\nどうやら大丈夫だ");
-                    StageProgress++;
-                }
+                reviewStage = 0;
+                ChangeText("");
+                StageProgress++;
                 break;
             case 1:
-                if (Input.GetMouseButtonUp(0) ||
-                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
+                if (enemySpawner.AllAliveMonstersList().Count <= 0)
                 {
-                    ChangeText("ハンは忙しいから、\n雑魚は新人に任すだぞ");
+                    ChangeText("キンのおかけで、\nどうやら大丈夫だ");
                     StageProgress++;
                 }
                 break;
             case 2:
+                if (Input.GetMouseButtonUp(0) ||
+                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
+                {
+                    ChangeText("キンは忙しいから、\n雑魚は新人に任すだぞ");
+                    StageProgress++;
+                }
+                break;
+            case 3:
                 if (Input.GetMouseButtonUp(0) ||
                         (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
@@ -348,7 +401,7 @@ public class TutorialManager : MonoBehaviour
                     StageProgress++;
                 }
                 break;
-            case 3:
+            case 4:
                 if (Input.GetMouseButtonUp(0) ||
                         (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
@@ -368,7 +421,7 @@ public class TutorialManager : MonoBehaviour
     {
         return tutorialStage;
     }
-    private void DestroyAllRelated() {
+    public void DestroyAllRelated() {
         foreach (Text i in InstructionText_Landscape)
             Destroy(i.gameObject);
         foreach (GameObject i in InstructionSprite_Landscape)
@@ -377,6 +430,12 @@ public class TutorialManager : MonoBehaviour
             Destroy(i.gameObject);
         foreach (GameObject i in InstructionSprite_Protrait)
             Destroy(i);
+        foreach (Button i in HistoryIcons)
+            Destroy(i.gameObject);
         Destroy(this);
+    }
+
+    public void ViewHistory() {
+        StageProgress = reviewStage;
     }
 }

@@ -95,7 +95,7 @@ public class TitleOperation: ISceneChange
         PlayerPrefs.SetFloat("enmNum", 1);
         PlayerPrefs.SetFloat("enmSpeed", 1);
         PlayerPrefs.SetFloat("spawnSpeed", 1);
-        PlayerPrefs.SetFloat("hpMax", 1);
+        PlayerPrefs.SetFloat("hpMax", 5);
         PlayerPrefs.SetFloat("resource", 1);
     }
     // Start is called before the first frame update

@@ -153,7 +153,7 @@ public class StageSelectOperation : ISceneChange
         //Change Scene
         if (isSceneFinished && ((LandscapeFade && LandscapeFade.isReady) || (PortraitFade && PortraitFade.isReady)))
         {
-            SceneManager.LoadScene("GameScene");
+            SceneManager.LoadScene("LoadingScene");
             return;
         }
 

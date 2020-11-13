@@ -202,7 +202,7 @@ public static class StageInfo
                 }
                 break;
             case StageInfoID.Enum_hpMax:
-                tempVal = PlayerPrefs.GetFloat("hpMax", 1);
+                tempVal = PlayerPrefs.GetFloat("hpMax", 5);
                 for (; elementID < hpMaxFactor.Length; elementID++)
                 {
                     if (hpMaxFactor[elementID] > tempVal) break;
@@ -260,7 +260,7 @@ public static class StageInfo
         stageSizeEx = (int)PlayerPrefs.GetFloat("stageSize",100);
         enmNumEx = (int)PlayerPrefs.GetFloat("enmNum",1);
         enmSpeedEx = (int)PlayerPrefs.GetFloat("enmSpeed",1);
-        spawnSpeedEx = (int)PlayerPrefs.GetFloat("spawnSpeed",1);
+        spawnSpeedEx = (int)PlayerPrefs.GetFloat("spawnSpeed",5);
         hpMaxEx = (int)PlayerPrefs.GetFloat("hpMax",1);
         resourceEx = (int)PlayerPrefs.GetFloat("resource",1);
     }
@@ -294,7 +294,7 @@ public static class StageInfo
                     detailPerWave.Add(detail[j]);
                 }
             }
-            waveArray[i] = new WaveAttr(5, 0.5f, detailPerWave);
+            waveArray[i] = new WaveAttr(2, 2.0f, detailPerWave);
         }
         return waveArray;
 
@@ -333,7 +333,7 @@ public static class StageInfo
                     detailPerWave.Add(detail[j]);
                 }
             }
-            waveArray[i] = new WaveAttr(5, 0.5f, detailPerWave);
+            waveArray[i] = new WaveAttr(3, 1.0f, detailPerWave);
         }
         return waveArray;
     }
@@ -385,7 +385,7 @@ public static class StageInfo
                     detailPerWave.Add(detail[j]);
                 }
             }
-            waveArray[i] = new WaveAttr(5, 0.5f, detailPerWave);
+            waveArray[i] = new WaveAttr(3, 0.5f, detailPerWave);
         }
         return waveArray;
     }
@@ -455,7 +455,7 @@ public static class StageInfo
                     detailPerWave.Add(detail[j]);
                 }
             }
-            waveArray[i] = new WaveAttr(1, 1f, detailPerWave);
+            waveArray[i] = new WaveAttr(3, 1f, detailPerWave);
         }
         return waveArray;
     }

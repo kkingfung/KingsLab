@@ -189,6 +189,11 @@ public class InGameOperation : ISceneChange
     {
         base.Update();
 
+        foreach (Text i in UICurrentGold)
+        {
+            i.text = resourceManager.GetCurrMaterial().ToString() + "G";
+        }
+
         if (!isOption)
         {
             ArrowOperation();
@@ -202,7 +207,7 @@ public class InGameOperation : ISceneChange
             {
                 if (timeManager.GetControl() == false)
                 {
-                    timeManager.timeFactor = 0;
+                    timeManager.timeFactor = 0.00001f;
                     timeManager.TimeControl();
                 }
             }
@@ -228,12 +233,6 @@ public class InGameOperation : ISceneChange
         {
             SceneManager.LoadScene("LoadingScene");
             return;
-        }
-
-
-        foreach (Text i in UICurrentGold)
-        {
-            i.text = resourceManager.GetCurrMaterial().ToString() + "G";
         }
 
         if (isScreenChanging == false)

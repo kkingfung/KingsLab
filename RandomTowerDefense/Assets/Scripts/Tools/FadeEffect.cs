@@ -22,6 +22,7 @@ public class FadeEffect : MonoBehaviour
         ThresholdRecord = Threshold;
     }
     private void Update() {
+        Threshold = PlayerPrefs.GetFloat("_FadeThreshold");
         if (ThresholdRecord != Threshold)
         {
             FadeMat.SetFloat("_FadeThreshold", Threshold);

@@ -101,6 +101,7 @@ public class CameraManager : MonoBehaviour
                 }
                 else
                 {
+                    GyroscopeManager.SetYawChg(Input.GetAxis("Horizontal") * Time.deltaTime * -50f);
                     for (int i = 0; i < GyroCamGp.Count; ++i)
                     {
                         GyroCamGp[i].transform.Rotate(new Vector3(Input.GetAxis("Vertical") * Time.deltaTime * -50f,

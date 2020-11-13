@@ -38,6 +38,7 @@ public class PlayerManager : MonoBehaviour
     FilledMapGenerator mapGenerator;
     SkillManager skillManager;
 
+    public GameObject TowerRaycastResult;
     private void Start()
     {
         sceneManager = FindObjectOfType<InGameOperation>();
@@ -51,8 +52,33 @@ public class PlayerManager : MonoBehaviour
 
     private void Update()
     {
+        TowerRaycastResult = null;
+        if (sceneManager)
+        {
+            if(sceneManager.GetOptionStatus() == false)
+            TowerRaycastResult = CheckTowerRaycast();
+            towerManager.UpdateInfo(TowerRaycastResult);
+        }
     }
 
+    private GameObject CheckTowerRaycast() {
+        Ray ray;
+        RaycastHit hit = new RaycastHit();
+
+        //Get Ray according to orientation
+        if (Screen.width > Screen.height)
+        {
+            ray = refCamL.ScreenPointToRay(new Vector2(Screen.width * 0.5f, Screen.height * 0.5f));
+        }
+        else
+        {
+            ray = refCamP.ScreenPointToRay(new Vector2(Screen.width * 0.5f, Screen.height * 0.5f));
+        }
+        Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("Tower"));
+        if (hit.transform)
+            return hit.transform.gameObject;
+        return null;
+    }
     public Vector2 GetDragPos() { return StockPos; }
     public void CheckStock(Vector2 DragPos)
     {
@@ -193,16 +219,16 @@ public class PlayerManager : MonoBehaviour
         if (isSelling)
         {
             isSelling = false;
-            if (Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("Tower")))
+            if (TowerRaycastResult)
             {
-                towerManager.SellTower(hit.transform.gameObject);
+                towerManager.SellTower(TowerRaycastResult);
             }
         }
         else
         {
-            if (Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("Tower")))
+            if (TowerRaycastResult!=null)
             {
-                towerManager.MergeTower(hit.transform.gameObject, hit.point);
+                towerManager.MergeTower(TowerRaycastResult, hit.point);
             }
             else if (Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("Pillar")))
             {

@@ -18,6 +18,8 @@ public class WaveManager : MonoBehaviour
 
     public List<VisualEffect> FireWork;
     public  List<Text> waveNumUI;
+    [HideInInspector]
+    public TextMesh waveNumMesh;
 
     //private int fireworkcounter;
     private InGameOperation sceneManager;
@@ -68,6 +70,9 @@ public class WaveManager : MonoBehaviour
             i.text = "WAVE " + CurrentWaveNum;
             i.color = new Color(i.color.r, i.color.g, i.color.b, 1.0f);
         }
+
+        if (waveNumMesh)
+            waveNumMesh.text = "WAVE " + CurrentWaveNum;
 
         StartCoroutine(SpawnWave(CurrAttr.waveDetail[CurrentWaveNum - 1]));
         return false;

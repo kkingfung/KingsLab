@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.VFX;
 
 public class TowerManager : MonoBehaviour
@@ -43,6 +44,9 @@ public class TowerManager : MonoBehaviour
     [HideInInspector]
     public List<GameObject> TowerUsurperList;
 
+    [Header("TowerInfo Settings")]
+    public List<GameObject> TargetInfo;
+
     private ResourceManager resourceManager;
     private FilledMapGenerator filledMapGenerator;
     private InGameOperation sceneManager;
@@ -68,6 +72,32 @@ public class TowerManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void UpdateInfo(GameObject target)
+    {
+        foreach (GameObject i in TargetInfo)
+        {
+            i.SetActive(target != null);
+            if (target == null) continue;
+            Tower towerinfo = target.GetComponent<Tower>();
+            Text text = i.GetComponent<Text>();
+            text.text = "Rank" + towerinfo.rank + " Lv" + towerinfo.level;
+            switch (towerinfo.type) {
+                case TowerInfo.TowerInfoID.Enum_TowerNightmare:
+                    text.color = Color.yellow;
+                    break;
+                case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
+                    text.color = Color.grey;
+                    break;
+                case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
+                    text.color = Color.cyan;
+                    break;
+                case TowerInfo.TowerInfoID.Enum_TowerUsurper:
+                    text.color = Color.magenta;
+                    break;
+            }
+        }
     }
 
     public void BuildTower(GameObject pillar, int rank = 1)

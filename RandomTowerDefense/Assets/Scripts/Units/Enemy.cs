@@ -13,6 +13,7 @@ public class Enemy : MonoBehaviour
     private Vector3 oriScale;
     private Vector3 prevPos;
     private int DamagedCount = 0;
+    private int money;
     private float HealthRecord;
     private Animator animator;
 
@@ -72,11 +73,12 @@ public class Enemy : MonoBehaviour
 
     }
 
-    public void Init(GameObject DieEffect, GameObject DropEffect,int entityID)
+    public void Init(GameObject DieEffect, GameObject DropEffect,int entityID,int money)
     {
         this.DieEffect = DieEffect;
         this.DropEffect = DropEffect;
         this.entityID = entityID;
+        this.money = money;
     }
 
     public void Damaged(float currHP)
@@ -85,9 +87,9 @@ public class Enemy : MonoBehaviour
         //DamagedCount = 2;
         if (currHP <= 0) {
             isDead = true;
-            resourceManager.ChangeMaterial(enemySpawner.moneyArray[entityID]);
+            resourceManager.ChangeMaterial(money);
             GameObject vfx = Instantiate(DropEffect, this.transform.position, Quaternion.identity);
-            vfx.GetComponent<VisualEffect>().SetInt("SpawnCount", enemySpawner.moneyArray[entityID]);
+            vfx.GetComponent<VisualEffect>().SetInt("SpawnCount", money);
 
             if (animator)
                 animator.SetTrigger("Dead");

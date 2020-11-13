@@ -51,7 +51,6 @@ public class EnemySpawner : MonoBehaviour
     [HideInInspector]
     public TransformAccessArray TransformAccessArray;
     public NativeArray<float> healthArray;
-    public NativeArray<int>   moneyArray;
     public NativeArray<float> petrifyArray;
     public NativeArray<float> slowArray;
 
@@ -120,8 +119,6 @@ public class EnemySpawner : MonoBehaviour
         //Disposing Array
         if (healthArray.IsCreated)
             healthArray.Dispose();
-        if (moneyArray.IsCreated)
-            moneyArray.Dispose();
         if (slowArray.IsCreated)
             slowArray.Dispose();
         if (petrifyArray.IsCreated)
@@ -140,7 +137,7 @@ public class EnemySpawner : MonoBehaviour
 
         Entities = new NativeArray<Entity>(count, Allocator.Persistent);
         var archetype = EntityManager.CreateArchetype(
-             typeof(Health), typeof(Damage), typeof(Money), typeof(Speed),
+             typeof(Health), typeof(Damage), typeof(Speed),
            typeof(Radius), typeof(PetrifyAmt),  typeof(Lifetime), typeof(SlowRate), 
             typeof(BuffTime),typeof(PathFollow), typeof(LocalToWorld),
             typeof(QuadrantEntity),
@@ -157,7 +154,6 @@ public class EnemySpawner : MonoBehaviour
 
         TransformAccessArray = new TransformAccessArray(transforms);
         healthArray = new NativeArray<float>(count, Allocator.Persistent);
-        moneyArray = new NativeArray<int>(count, Allocator.Persistent);
         slowArray = new NativeArray<float>(count, Allocator.Persistent);
         petrifyArray = new NativeArray<float>(count, Allocator.Persistent);
     }
@@ -176,7 +172,6 @@ public class EnemySpawner : MonoBehaviour
         {
             if (GameObjects[i] == null) continue;
             healthArray[i] = EntityManager.GetComponentData<Health>(Entities[i]).Value;
-            moneyArray[i] = EntityManager.GetComponentData<Money>(Entities[i]).Value;
             slowArray[i] = EntityManager.GetComponentData<SlowRate>(Entities[i]).Value;
             petrifyArray[i] = EntityManager.GetComponentData<PetrifyAmt>(Entities[i]).Value;
         }
@@ -193,11 +188,10 @@ public class EnemySpawner : MonoBehaviour
             GameObjects[i] = Instantiate(allMonsterList[Name], transform);
             GameObjects[i].transform.position = Position;
             GameObjects[i].transform.localRotation = Quaternion.identity;
-            GameObjects[i].GetComponent<Enemy>().Init(DieEffect, DropEffect, i);
+            GameObjects[i].GetComponent<Enemy>().Init(DieEffect, DropEffect, i, money);
 
             transforms[i] = GameObjects[i].transform;
             healthArray[i] = health;
-            moneyArray[i] = money;
             slowArray[i] = 0;
             petrifyArray[i] = 0;
 
@@ -233,10 +227,6 @@ public class EnemySpawner : MonoBehaviour
             EntityManager.SetComponentData(Entities[i], new BuffTime
             {
                 Value = 0,
-            });
-            EntityManager.SetComponentData(Entities[i], new Money
-            {
-                Value = money,
             });
 
             EntityManager.SetComponentData(Entities[i], new Translation

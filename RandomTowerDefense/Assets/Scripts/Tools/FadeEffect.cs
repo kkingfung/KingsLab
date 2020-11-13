@@ -7,7 +7,7 @@ public class FadeEffect : MonoBehaviour
 {
      private float Threshold = 0.0f;
     private readonly float FadeRate = 0.02f;
-
+    private float ThresholdRecord;
     Material FadeMat;
     public bool isReady { get; private set;}
 
@@ -19,15 +19,20 @@ public class FadeEffect : MonoBehaviour
         if (FadeMat == null && GetComponent<Image>()) FadeMat = GetComponent<Image>().material;
         FadeMat.SetFloat("_FadeThreshold", 1f);
         PlayerPrefs.SetFloat("_FadeThreshold", 1f);
+        ThresholdRecord = Threshold;
     }
     private void Update() {
-        FadeMat.SetFloat("_FadeThreshold",PlayerPrefs.GetFloat("_FadeThreshold",1));
+        if (ThresholdRecord != Threshold)
+        {
+            FadeMat.SetFloat("_FadeThreshold", Threshold);
+            ThresholdRecord = Threshold;
+        }
+      
     }
 
     public void FadeIn() {
         Threshold = 0.0f;
-        FadeMat.SetFloat("_FadeThreshold", 0.0f);
-        PlayerPrefs.SetFloat("_FadeThreshold", 0.0f);
+        PlayerPrefs.SetFloat("_FadeThreshold", Threshold);
         isReady = false;
         if (this.gameObject.activeInHierarchy)
             StartCoroutine(FadeInRoutine());
@@ -35,8 +40,7 @@ public class FadeEffect : MonoBehaviour
     public void FadeOut()
     {
         Threshold = 1.0f;
-        FadeMat.SetFloat("_FadeThreshold", 1f);
-        PlayerPrefs.SetFloat("_FadeThreshold", 1f);
+        PlayerPrefs.SetFloat("_FadeThreshold", Threshold);
         isReady = false;
         if (this.gameObject.activeInHierarchy)
             StartCoroutine(FadeOutRoutine());
@@ -50,12 +54,10 @@ public class FadeEffect : MonoBehaviour
         if (FadeMat == null && GetComponent<Image>()) FadeMat = GetComponent<Image>().material;
 
         while (Threshold > 0f) {
-            FadeMat.SetFloat("_FadeThreshold", Threshold);
             Threshold -= FadeRate;
+            PlayerPrefs.SetFloat("_FadeThreshold", Threshold);
             yield return new WaitForSeconds(0f);
         }
-        FadeMat.SetFloat("_FadeThreshold", Threshold);
-        PlayerPrefs.SetFloat("_FadeThreshold",Threshold);
         isReady = true;
     }
 
@@ -68,12 +70,10 @@ public class FadeEffect : MonoBehaviour
 
         while (Threshold < 1f)
         {
-            FadeMat.SetFloat("_FadeThreshold", Threshold);
             Threshold += FadeRate;
+            PlayerPrefs.SetFloat("_FadeThreshold", Threshold);
             yield return new WaitForSeconds(0f);
         }
-        FadeMat.SetFloat("_FadeThreshold", Threshold);
-        PlayerPrefs.SetFloat("_FadeThreshold", Threshold);
         isReady = true;
     }
 }

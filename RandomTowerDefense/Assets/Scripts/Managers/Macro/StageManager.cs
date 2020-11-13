@@ -11,10 +11,12 @@ public class StageManager : MonoBehaviour
     public Coord[] SpawnPoint;
 
     public GameObject EnemySpawnPortPrefab;
+    public GameObject WaveDisplayMeshPrefab;
 
     private InGameOperation sceneManager;
     private AudioManager audioManager;
     private TimeManager timeManager;
+    private WaveManager waveManager;
     private ScoreCalculation scoreCalculation;
     public List<GameObject> GameClearCanva;
     public List<GameObject> GameOverCanva;
@@ -44,6 +46,7 @@ public class StageManager : MonoBehaviour
         mapGenerator = FindObjectOfType<FilledMapGenerator>();
         audioManager = FindObjectOfType<AudioManager>();
         timeManager = FindObjectOfType<TimeManager>();
+        waveManager = FindObjectOfType<WaveManager>();
         scoreCalculation = FindObjectOfType<ScoreCalculation>();
         castleSpawner = FindObjectOfType<CastleSpawner>();
 
@@ -77,8 +80,10 @@ public class StageManager : MonoBehaviour
                 Vector3 pos = mapGenerator.CoordToPosition(SpawnPoint[i + 1]) + mapGenerator.transform.position;
                 if (sceneManager.CheckIfTutorial()&& i!=1)  continue;
                 EnemySpawnPort[i] = Instantiate(EnemySpawnPortPrefab, pos, Quaternion.identity);
-
             }
+            GameObject WaveDisplayMesh= Instantiate(WaveDisplayMeshPrefab, EnemySpawnPort[0].transform.position, Quaternion.Euler(90f,0,0));
+            waveManager.waveNumMesh = WaveDisplayMesh.GetComponent<TextMesh>();
+            waveManager.waveNumMesh.text = "WAVE 1";
         }
     }
 

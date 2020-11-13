@@ -7,7 +7,7 @@ using Unity.Collections;
 public class ISceneChange : MonoBehaviour
 {
     protected struct LatiosSceneChangeDummyTag : IComponentData { }
-    
+
     [Header("Gyro Settings")]
     public List<GameObject> LandscapeObjs;
     public List<GameObject> PortraitObjs;
@@ -35,7 +35,8 @@ public class ISceneChange : MonoBehaviour
 
         OrientationLock = false;
         fadeQuad = FindObjectsOfType<FadeEffect>();
-        if (fadeQuad.Length > 0) {
+        if (fadeQuad.Length > 0)
+        {
             foreach (FadeEffect i in fadeQuad)
             {
                 FadeInDelegate += i.FadeIn;
@@ -57,12 +58,15 @@ public class ISceneChange : MonoBehaviour
             }
         }
     }
-    protected void SceneIn() {
-        if (FadeInDelegate != null) {
+    protected void SceneIn()
+    {
+        if (FadeInDelegate != null)
+        {
             FadeInDelegate();
         }
     }
-    protected void SceneOut() {
+    protected void SceneOut()
+    {
         OrientationLock = true;
         if (FadeOutDelegate != null)
         {
@@ -82,7 +86,8 @@ public class ISceneChange : MonoBehaviour
             i.SetActive(!OrientationLand);
     }
 
-    protected void SetNextScene(string sceneName) {
+    protected void SetNextScene(string sceneName)
+    {
         PlayerPrefs.SetString("nextScene", sceneName);
     }
 

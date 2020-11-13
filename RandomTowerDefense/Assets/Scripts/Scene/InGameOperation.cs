@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class InGameOperation : ISceneChange
 {
-    public enum ScreenShownID {
+    public enum ScreenShownID
+    {
         SSIDArena = 0,
         SSIDTopLeft = 1,
         SSIDTop = 2,
@@ -81,7 +82,7 @@ public class InGameOperation : ISceneChange
     private bool WaitSceneChg;
 
     //CameraOperation
-    private readonly float maxCamPosChgTime = 0.5f;
+    private readonly float maxCamPosChgTime = 0.2f;
 
     private void OnDestroy()
     {
@@ -97,8 +98,8 @@ public class InGameOperation : ISceneChange
         SkillStack.init();
         Upgrades.init();
 
-        IslandNow = PlayerPrefs.GetInt("IslandNow",0);
-        IslandEnabled = PlayerPrefs.GetInt("IslandEnabled",1);
+        IslandNow = PlayerPrefs.GetInt("IslandNow", 0);
+        IslandEnabled = PlayerPrefs.GetInt("IslandEnabled", 1);
         isTutorial = (IslandNow == 0);
         WaitSceneChg = false;
     }
@@ -107,7 +108,7 @@ public class InGameOperation : ISceneChange
     {
         base.SceneIn();
 
-        FloorMat.SetFloat("ShapesSides",3+ IslandNow);
+        FloorMat.SetFloat("ShapesSides", 3 + IslandNow);
         MainCam.transform.position = MainCamStayPt[0];
         MainCam.transform.rotation = Quaternion.Euler(MainCamRotationAngle[0]);
 
@@ -127,14 +128,15 @@ public class InGameOperation : ISceneChange
         scoreCalculation = FindObjectOfType<ScoreCalculation>();
         tutorialManager = FindObjectOfType<TutorialManager>();
 
-        if (tutorialManager && isTutorial == false) 
+        if (tutorialManager && isTutorial == false)
         {
             tutorialManager.SetTutorialStage(TutorialManager.TutorialStageID.TutorialProgress_FreeBattle);
         }
 
-        AudioManager.PlayAudio("bgm_Battle",true);
+        AudioManager.PlayAudio("bgm_Battle", true);
 
-        foreach (Material mat in PetrifyMat) {
+        foreach (Material mat in PetrifyMat)
+        {
             mat.SetFloat("_Progress", 0);
         }
 
@@ -156,17 +158,22 @@ public class InGameOperation : ISceneChange
 
         foreach (Text i in UIIslandName)
         {
-            switch (IslandNow) {
-                case 0: i.text = "ヒジリカ島";
-                    FloorMat.SetColor("_Color",new Color(0.34f,1f,0f));
+            switch (IslandNow)
+            {
+                case 0:
+                    i.text = "ヒジリカ島";
+                    FloorMat.SetColor("_Color", new Color(0.34f, 1f, 0f));
                     break;
-                case 1: i.text = "テンシュキ島";
+                case 1:
+                    i.text = "テンシュキ島";
                     FloorMat.SetColor("_Color", new Color(0.82f, 0.47f, 1f));
                     break;
-                case 2: i.text = "ニモハサ島";
+                case 2:
+                    i.text = "ニモハサ島";
                     FloorMat.SetColor("_Color", new Color(1f, 0.2f, 0f));
                     break;
-                case 3: i.text = "ギイシカ島";
+                case 3:
+                    i.text = "ギイシカ島";
                     FloorMat.SetColor("_Color", new Color(1f, 0.7f, 0f));
                     break;
             }
@@ -199,7 +206,7 @@ public class InGameOperation : ISceneChange
                     timeManager.TimeControl();
                 }
             }
-            else 
+            else
             {
                 if (timeManager.GetControl() != false)
                 {
@@ -208,7 +215,8 @@ public class InGameOperation : ISceneChange
             }
             return;
         }
-        else {
+        else
+        {
             timeManager.timeFactor = 0.05f;
         }
 
@@ -225,7 +233,32 @@ public class InGameOperation : ISceneChange
 
         foreach (Text i in UICurrentGold)
         {
-            i.text = resourceManager.GetCurrMaterial().ToString()+"G";
+            i.text = resourceManager.GetCurrMaterial().ToString() + "G";
+        }
+
+        if (isScreenChanging == false)
+        {
+            Vector3 angle = CameraManager.GyroCamGp[0].transform.rotation.eulerAngles;
+            while (angle.x > 180) angle.x -= 360;
+            while (angle.x < -180) angle.x += 360;
+            if (angle.x > 0) { currScreenShown = 0; nextScreenShown = 0; }
+            else
+            {
+                while (angle.y > 180) angle.y -= 360;
+                while (angle.y < -180) angle.y += 360;
+                if (angle.y > -60 && angle.y < 60)
+                {
+                    currScreenShown = 2; nextScreenShown = 2;
+                }
+                else if (angle.y > -180 && angle.y < -60)
+                {
+                    currScreenShown = 1; nextScreenShown = 1;
+                }
+                else if (angle.y > 60 && angle.y < 180)
+                {
+                    currScreenShown = 3; nextScreenShown = 3;
+                }
+            }
         }
     }
 
@@ -244,7 +277,7 @@ public class InGameOperation : ISceneChange
             case ScreenShownID.SSIDTopLeft:
                 foreach (GameObject i in UIUpArrow) i.SetActive(false);
                 foreach (GameObject i in UIDownArrow) i.SetActive(true);
-                foreach (GameObject i in UILeftArrow) i.SetActive(false);
+                foreach (GameObject i in UILeftArrow) i.SetActive(true);
                 foreach (GameObject i in UIRightArrow) i.SetActive(true);
                 break;
             case ScreenShownID.SSIDTop:
@@ -257,7 +290,7 @@ public class InGameOperation : ISceneChange
                 foreach (GameObject i in UIUpArrow) i.SetActive(false);
                 foreach (GameObject i in UIDownArrow) i.SetActive(true);
                 foreach (GameObject i in UILeftArrow) i.SetActive(true);
-                foreach (GameObject i in UIRightArrow) i.SetActive(false);
+                foreach (GameObject i in UIRightArrow) i.SetActive(true);
                 break;
         }
     }
@@ -312,7 +345,7 @@ public class InGameOperation : ISceneChange
             yield return new WaitForSeconds(0f);
         }
 
-        SetNextScene(sceneID==0?"GameScene": "StageSelection");
+        SetNextScene(sceneID == 0 ? "GameScene" : "StageSelection");
 
         PlayerPrefs.SetInt("IslandNow", IslandNow);
         SceneOut();
@@ -325,33 +358,35 @@ public class InGameOperation : ISceneChange
     {
         if (isOption) return;
         //DownArrow:0,LeftArrow:1,UpArrow:2 ,RightArrow:3
-        switch (chgValue) {
+        switch (chgValue)
+        {
             case 0:
                 if (currScreenShown == 0) return;
                 nextScreenShown = 0;
                 break;
             case 1:
                 if (currScreenShown == 2 || currScreenShown == 3) nextScreenShown = currScreenShown - 1;
-                else return;
+                else
+                    if (currScreenShown == 1) nextScreenShown = 3;
+                else
+                    return;
                 break;
             case 2:
-                if (currScreenShown==0) nextScreenShown =2;
+                if (currScreenShown == 0) nextScreenShown = 2;
                 else return;
                 break;
             case 3:
                 if (currScreenShown == 1 || currScreenShown == 2) nextScreenShown = currScreenShown + 1;
-                else return;
+                else
+                    if (currScreenShown == 3) nextScreenShown = 1;
+                else
+                    return;
                 break;
             default:
                 return;
         }
 
-        foreach (GameObject i in CameraManager.GyroCamGp)
-        {
-            i.transform.localEulerAngles = new Vector3();
-        }
         GyroscopeManager.GyroModify();
-        GyroscopeManager.ResetReference();
 
         if (nextScreenShown != currScreenShown)
         {
@@ -364,12 +399,12 @@ public class InGameOperation : ISceneChange
     {
         if (isScreenChanging) return;
         //Gyroscope Operation
-        if (GyroscopeManager.LeftShake) 
+        if (GyroscopeManager.LeftShake)
             ChangeScreenShownByButton(1);
-        if (GyroscopeManager.RightShake) 
+        if (GyroscopeManager.RightShake)
             ChangeScreenShownByButton(3);
         if (GyroscopeManager.VerticalShake)
-            ChangeScreenShownByButton(currScreenShown==0 ?2:0);
+            ChangeScreenShownByButton(currScreenShown == 0 ? 2 : 0);
     }
 
     private void ChangeScreenShownByDrag()
@@ -391,19 +426,21 @@ public class InGameOperation : ISceneChange
         toDrag = -1;
     }
 
-    private IEnumerator ChangeScreenShown() {
-            Vector3 spd;
-        float timer = 0;
-        Vector3 ori = MainCam.transform.localEulerAngles;
-        Vector3 tar = MainCamRotationAngle[nextScreenShown];
-        spd = MainCamRotationAngle[nextScreenShown] - MainCam.transform.localEulerAngles;
+    private IEnumerator ChangeScreenShown()
+    {
+        Vector3 spd;
+        float timer=0;
+        Vector3 ori = CameraManager.GyroCamGp[0].transform.rotation.eulerAngles;
+        MainCam.transform.localEulerAngles = ori;
+        GyroscopeManager.ResetReference();
 
-        while (spd.x > 180f) spd.x -= 360f;
+        spd = MainCamRotationAngle[nextScreenShown] - ori;
+
         while (spd.y > 180f) spd.y -= 360f;
-        while (spd.z > 180f) spd.z -= 360f;
-
-        while (spd.x < -180f) spd.x += 360f;
         while (spd.y < -180f) spd.y += 360f;
+        while (spd.x > 180f) spd.x -= 360f;
+        while (spd.x < -180f) spd.x += 360f;
+        while (spd.z > 180f) spd.z -= 360f;
         while (spd.z < -180f) spd.z += 360f;
 
         spd /= maxCamPosChgTime;
@@ -413,9 +450,10 @@ public class InGameOperation : ISceneChange
             InputManager.isDragging = false;
             timer += Time.deltaTime;
             if (timer > maxCamPosChgTime) timer = maxCamPosChgTime;
-            MainCam.transform.localEulerAngles = ori + spd * timer;
+            MainCam.transform.localEulerAngles = MainCamRotationAngle[nextScreenShown] - spd * (maxCamPosChgTime - timer);
             yield return new WaitForSeconds(0f);
         }
+
         MainCam.transform.localEulerAngles = MainCamRotationAngle[nextScreenShown];
 
         currScreenShown = nextScreenShown;

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Mathematics;
 
+using System.IO;
+
+
 public class TowerAttr
 {
     public float damage;
@@ -64,10 +67,32 @@ public static class TowerInfo
                 0,5));//atkspd,lifetime
         towerInfo.Add(TowerInfoID.Enum_TowerUsurper,
             new TowerAttr(
-                8, 1f,//radius,damage
+                8, 2f,//radius,damage
                 0.2f, 1,//wait,atklife
                 0f, 0.5f,//atkwait,atkrad
                 1f,5));//atkspd,lifetime
+    }
+
+    public static void InitByFile(string filepath)
+    {
+        StreamReader inp_stm = new StreamReader(filepath);
+
+        towerInfo = new Dictionary<TowerInfoID, TowerAttr>();
+
+        while (!inp_stm.EndOfStream)
+        {
+            string inp_ln = inp_stm.ReadLine();
+            string[] seperateInfo = inp_ln.Split(':');
+            if(seperateInfo.Length==9)
+            towerInfo.Add((TowerInfoID)int.Parse(seperateInfo[0]), new TowerAttr(
+                float.Parse(seperateInfo[1]), float.Parse(seperateInfo[2]),
+                float.Parse(seperateInfo[3]), float.Parse(seperateInfo[4]),
+                float.Parse(seperateInfo[5]), float.Parse(seperateInfo[6]),
+                float.Parse(seperateInfo[7]), float.Parse(seperateInfo[8])));
+           // Debug.Log(seperateInfo.Length);
+        }
+
+        inp_stm.Close();
     }
 
     static void Release()

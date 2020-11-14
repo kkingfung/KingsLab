@@ -84,7 +84,7 @@ public class Enemy : MonoBehaviour
     public void Damaged(float currHP)
     {
         transform.localScale = oriScale*0.5f;
-        //DamagedCount = 2;
+        DamagedCount = 2;
         if (currHP <= 0) {
             isDead = true;
             resourceManager.ChangeMaterial(money);
@@ -100,7 +100,7 @@ public class Enemy : MonoBehaviour
     public void Die()
     {
         GameObject.Instantiate(DieEffect, this.transform.position, Quaternion.identity);
-        Destroy(this.gameObject, 2) ;
+        Destroy(this.gameObject, 1) ;
     }
 
     public void Petrified() {

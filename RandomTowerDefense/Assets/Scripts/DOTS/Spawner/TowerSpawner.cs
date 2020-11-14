@@ -8,7 +8,7 @@ using UnityEngine.Jobs;
 
 public class TowerSpawner : MonoBehaviour
 {
-    private readonly int count = 500;
+    private readonly int count = 100;
     public static TowerSpawner Instance { get; private set; }
     public List<GameObject> PrefabObject;
 
@@ -59,7 +59,7 @@ public class TowerSpawner : MonoBehaviour
 
         Entities = new NativeArray<Entity>(count, Allocator.Persistent);
         var archetype = EntityManager.CreateArchetype(
-             typeof(WaitingTime), typeof(Lifetime), typeof(Radius), 
+             typeof(WaitingTime), typeof(Radius), 
              typeof(Damage), typeof(LocalToWorld),  typeof(QuadrantEntity),
             ComponentType.ReadOnly<Translation>()
             );
@@ -94,8 +94,7 @@ public class TowerSpawner : MonoBehaviour
         }
     }
 
-    public int[] Spawn(int prefabID, float3 Position, float3 Rotation, float radius,
-        float wait, float lifetime,  int num = 1)
+    public int[] Spawn(int prefabID, float3 Position, int num = 1)
     {
         int spawnCnt = 0;
         int[] spawnIndexList = new int[num];
@@ -113,15 +112,12 @@ public class TowerSpawner : MonoBehaviour
             //AddtoEntities
             EntityManager.SetComponentData(Entities[i], new WaitingTime
             {
-                Value = wait,
+                Value =float.MaxValue,
             });
-            EntityManager.SetComponentData(Entities[i], new Lifetime
-            {
-                Value = lifetime,
-            });
+
             EntityManager.SetComponentData(Entities[i], new Radius
             {
-                Value = radius,
+                Value = 0,
             });
 
             EntityManager.SetComponentData(Entities[i], new Translation

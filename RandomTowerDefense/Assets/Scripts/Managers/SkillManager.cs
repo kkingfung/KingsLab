@@ -131,6 +131,7 @@ public class SkillManager : MonoBehaviour
  
         while (frame-Time.time > 0)
         {
+            Debug.Log(frame - Time.time);
             if (Time.time-frameToNext > attr.cycleTime) {
                 float3 pos = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
                 int[] entityID = skillSpawner.Spawn(0, pos,

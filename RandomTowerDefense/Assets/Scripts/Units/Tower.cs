@@ -134,10 +134,7 @@ public class Tower : MonoBehaviour
     {
         //AlsoDestroy Entity
         GameObject.FindObjectOfType<FilledMapGenerator>().UpdatePillarStatus(pillar, 0);
-        entityManager.SetComponentData(towerSpawner.Entities[this.entityID], new Lifetime
-        {
-            Value = -1
-        });
+        entityManager.RemoveComponent(towerSpawner.Entities[this.entityID],typeof(PlayerTag));
 
         //foreach (GameObject i in AtkVFX)
         //{

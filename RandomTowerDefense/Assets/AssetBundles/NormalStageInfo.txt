@@ -1,0 +1,15 @@
+1:5:1:Slime
+2:5:1:Mushroom
+3:10:2:Slime
+4:10:1:Mushroom
+5:10:0:TurtleShell
+6:10:1:Footman
+7:20:1:Slime
+8:20:2:Grunt
+9:30:2:Skeleton
+10:30:0:Footman
+11:20:0:FootmanS
+12:30:1:Skeleton
+13:20:0:GruntS
+14:20:2:TurtleShell
+15:2:1:Bull

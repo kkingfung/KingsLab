@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using System.IO;
 public class EnemyAttr {
     public float health;
     public float speed;
@@ -64,6 +65,29 @@ public class EnemyAttr {
         enemyInfo.Add("TurtleShell", new EnemyAttr(10, 100, 0.5f, 0.5f, 1, 0.5f));
         enemyInfo.Add("Mushroom", new EnemyAttr(5, 50, 1f, 1.0f, 1, 0.5f));
         enemyInfo.Add("Slime", new EnemyAttr(5, 30, 0.8f, 0.08f, 1, 0.5f));
+    }
+
+    public static void InitByFile(string filepath)
+    {
+        StreamReader inp_stm = new StreamReader(filepath);
+
+        enemyInfo = new Dictionary<string, EnemyAttr>();
+
+        while (!inp_stm.EndOfStream)
+        {
+            string inp_ln = inp_stm.ReadLine();
+            string[] seperateInfo = inp_ln.Split(':');
+            if (seperateInfo.Length == 7)
+            {
+                enemyInfo.Add(seperateInfo[0], new EnemyAttr(
+                    int.Parse(seperateInfo[1]), float.Parse(seperateInfo[2]),
+                    float.Parse(seperateInfo[3]), float.Parse(seperateInfo[4]),
+                    int.Parse(seperateInfo[5]), float.Parse(seperateInfo[6])));
+            }
+           // Debug.Log(seperateInfo.Length);
+        }
+
+        inp_stm.Close();
     }
 
     static void Release()

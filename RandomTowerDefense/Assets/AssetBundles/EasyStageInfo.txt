@@ -1,0 +1,5 @@
+1:5:1:Slime
+2:5:1:Mushroom
+3:10:1:Slime
+4:10:1:TurtleShell
+5:1:1:StoneMonster

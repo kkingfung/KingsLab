@@ -136,7 +136,6 @@ public class StageManager : MonoBehaviour
 
     public bool CheckLose()
     {
-        Debug.Log(GetCurrHP());
         if (GetCurrHP() <= 0 && result == 0)
         {
             result = -1;

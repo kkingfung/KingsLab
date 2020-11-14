@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f21dea98fbbcae347bb8f277337a17c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CutCascades: 3
+  CutCascades: 2
   ExplodeForce: 1
 --- !u!114 &6410246888899845419
 MonoBehaviour:
@@ -26,7 +26,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f21dea98fbbcae347bb8f277337a17c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CutCascades: 3
+  CutCascades: 2
   ExplodeForce: 1
 --- !u!114 &889152169461110505
 MonoBehaviour:
@@ -40,7 +40,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f21dea98fbbcae347bb8f277337a17c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CutCascades: 3
+  CutCascades: 2
   ExplodeForce: 1
 --- !u!114 &2646267712193440790
 MonoBehaviour:
@@ -54,7 +54,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f21dea98fbbcae347bb8f277337a17c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CutCascades: 3
+  CutCascades: 2
   ExplodeForce: 1
 --- !u!114 &3963333924645432364
 MonoBehaviour:
@@ -68,7 +68,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f21dea98fbbcae347bb8f277337a17c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CutCascades: 3
+  CutCascades: 2
   ExplodeForce: 1
 --- !u!1 &6575158893123592809
 GameObject:

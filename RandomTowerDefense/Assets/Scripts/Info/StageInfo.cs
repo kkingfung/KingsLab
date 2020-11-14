@@ -6,6 +6,8 @@ using Unity.Physics;
 using UnityEditor;
 using UnityEngine;
 
+using System.IO;
+
 public class EnmDetail
 {
     public int waveID;
@@ -58,6 +60,11 @@ public class StageAttr
 public static class StageInfo
 {
     public static readonly int IslandNum = 4;
+
+    public static readonly int EasyStageWaveNum = 5;
+    public static readonly int NormalStageWaveNum = 15;
+    public static readonly int HardStageWaveNum = 30;
+
     public static readonly int MaxMapDepth = 20;
     public static readonly int MinMapDepth = 6;
 
@@ -78,11 +85,11 @@ public static class StageInfo
     };
     public static readonly string[] monsterCat3 = {
         "FootmanS","GruntS","SpiderGhost",
-        "SkeletonArmed","GolemS", "FreeLichS",  
+        "SkeletonArmed","GolemS", "FreeLichS",
         "Bull", "Dragon"
     };
     //Extra Stage Customization
-    public enum StageInfoID{
+    public enum StageInfoID {
         Enum_stageSize = 0,
         Enum_waveNum,
         Enum_enmNum,
@@ -95,7 +102,7 @@ public static class StageInfo
     public static readonly int[] stageSizeFactor = { 36, 72, 108, 144 };//6*6 + 9*8 + 12*9 + 16*9
     public static readonly int[] waveNumFactor = { 30, 35, 50, 999 };
     public static readonly float[] enmNumFactor = { 0.5f, 1f, 2f, 4f, 8f };
-    public static readonly float[] enmSpeedFactor = { 0.5f, 1f,1.5f, 2f, 4f };
+    public static readonly float[] enmSpeedFactor = { 0.5f, 1f, 1.5f, 2f, 4f };
     public static readonly int[] hpMaxFactor = { 1, 5, 10, 30 };
 
     public static readonly float[] spawnSpeedFactor = { 0.5f, 1f, 1.5f, 2f, 4f };
@@ -103,7 +110,7 @@ public static class StageInfo
     //public static readonly float[] spawnSpeedFactor = { 4f, 2f, 1.5f, 1f, 0.5f };
     //public static readonly float[] resourceFactor = { 1.25f, 1f, 0.75f, 0.5f };
 
-    public static float stageSizeEx =0;//Fill Map Generator
+    public static float stageSizeEx = 0;//Fill Map Generator
     public static float waveNumEx = 0;//StageInfo
     public static float enmNumEx = 0;//StageInfo
     public static float enmSpeedEx = 0;//WaveManager
@@ -111,24 +118,36 @@ public static class StageInfo
     public static float spawnSpeedEx = 0;//StageInfo
     public static float resourceEx = 0;//WaveManager
 
-    public static void Init()
+    public static void Init(bool useFile,string filepath)
     {
         UpdateCustomizedData();
-        int temp = PlayerPrefs.GetInt("IslandNow",0);
+        int temp = PlayerPrefs.GetInt("IslandNow", 0);
         switch (temp)
         {
             case 0:
-                stageInfo = new StageAttr(5, PrepareEasyStageInfo(5));
+                if(useFile)
+                    stageInfo = new StageAttr(EasyStageWaveNum, PrepareStageInfoByFile(EasyStageWaveNum,
+                        filepath + "/EasyStageInfo.txt"));
+                else                          
+                    stageInfo = new StageAttr(EasyStageWaveNum, PrepareEasyStageInfo(EasyStageWaveNum));
                 break;
             case 1:
-                stageInfo = new StageAttr(15, PrepareNormalStageInfo(15));
+                if (useFile)
+                    stageInfo = new StageAttr(NormalStageWaveNum, PrepareStageInfoByFile(NormalStageWaveNum,
+                        filepath + "/NormalStageInfo.txt"));
+                else
+                    stageInfo = new StageAttr(NormalStageWaveNum, PrepareNormalStageInfo(NormalStageWaveNum));
                 break;
             case 2:
-                stageInfo = new StageAttr(30, PrepareHardStageInfo(30));
+                if (useFile)
+                    stageInfo = new StageAttr(HardStageWaveNum, PrepareStageInfoByFile(HardStageWaveNum,
+                        filepath + "/HardStageInfo.txt"));
+                else
+                    stageInfo = new StageAttr(HardStageWaveNum, PrepareHardStageInfo(HardStageWaveNum));
                 break;
             case 3:
-                stageInfo = new StageAttr((int)PlayerPrefs.GetFloat("waveNum",10),
-                    PrepareCustomStageInfo((int)PlayerPrefs.GetFloat("waveNum",10)));
+                stageInfo = new StageAttr((int)PlayerPrefs.GetFloat("waveNum", 10),
+                    PrepareCustomStageInfo((int)PlayerPrefs.GetFloat("waveNum", 10)));
                 break;
         }
     }
@@ -218,7 +237,7 @@ public static class StageInfo
         }
         return Mathf.Max(elementID - 1, 0);
     }
-        public static float SaveDataInPrefs(int infoID, int chg)
+    public static float SaveDataInPrefs(int infoID, int chg)
     {
         float tempVal = 0;
         int currentID = GetNearestElement(infoID);
@@ -256,21 +275,54 @@ public static class StageInfo
     }
 
     private static void UpdateCustomizedData() {
-        waveNumEx = (int)PlayerPrefs.GetFloat("waveNum",1);
-        stageSizeEx = (int)PlayerPrefs.GetFloat("stageSize",100);
-        enmNumEx = (int)PlayerPrefs.GetFloat("enmNum",1);
-        enmSpeedEx = (int)PlayerPrefs.GetFloat("enmSpeed",1);
-        spawnSpeedEx = (int)PlayerPrefs.GetFloat("spawnSpeed",5);
-        hpMaxEx = (int)PlayerPrefs.GetFloat("hpMax",1);
-        resourceEx = (int)PlayerPrefs.GetFloat("resource",1);
+        waveNumEx = (int)PlayerPrefs.GetFloat("waveNum", 1);
+        stageSizeEx = (int)PlayerPrefs.GetFloat("stageSize", 100);
+        enmNumEx = (int)PlayerPrefs.GetFloat("enmNum", 1);
+        enmSpeedEx = (int)PlayerPrefs.GetFloat("enmSpeed", 1);
+        spawnSpeedEx = (int)PlayerPrefs.GetFloat("spawnSpeed", 5);
+        hpMaxEx = (int)PlayerPrefs.GetFloat("hpMax", 1);
+        resourceEx = (int)PlayerPrefs.GetFloat("resource", 1);
     }
 
     public static StageAttr GetStageInfo()
     {
         return stageInfo;
     }
+    private static WaveAttr[] PrepareStageInfoByFile(int waveNum, string filepath)
+    {
+        StreamReader inp_stm = new StreamReader(filepath);
+        WaveAttr[] waveArray = new WaveAttr[waveNum];
+        List<EnmDetail> detail = new List<EnmDetail>();
 
+        while (!inp_stm.EndOfStream)
+        {
+            string inp_ln = inp_stm.ReadLine();
+            string[] seperateInfo = inp_ln.Split(':');
 
+            if (seperateInfo.Length == 4)
+                detail.Add(new EnmDetail(int.Parse(seperateInfo[0]), int.Parse(seperateInfo[1]),
+                    int.Parse(seperateInfo[2]), seperateInfo[3]));
+           // Debug.Log(seperateInfo.Length);
+        }
+
+        inp_stm.Close();
+
+        int j = 0;
+
+        for (int i = 0; i < waveNum; ++i)
+        {
+            List<EnmDetail> detailPerWave = new List<EnmDetail>();
+            for (; j < detail.Count && detail[j].waveID <= i + 1; ++j)
+            {
+                if (detail[j].waveID == i + 1)
+                {
+                    detailPerWave.Add(detail[j]);
+                }
+            }
+            waveArray[i] = new WaveAttr(2, 2.0f, detailPerWave);
+        }
+        return waveArray;
+    }
 
     private static WaveAttr[] PrepareEasyStageInfo(int waveNum) {
         WaveAttr[] waveArray = new WaveAttr[waveNum];
@@ -299,6 +351,7 @@ public static class StageInfo
         return waveArray;
 
     }
+
 
     private static WaveAttr[] PrepareNormalStageInfo(int waveNum)
     {
@@ -396,10 +449,10 @@ public static class StageInfo
 
         List<EnmDetail> detail = new List<EnmDetail>();
        // detail.Add(new EnmDetail(1, 1 * (int)enmNumEx, 0, monsterCat0[Random.Range(0, monsterCat0.Length)]));
-        detail.Add(new EnmDetail(1, 1 * (int)enmNumEx, 1, monsterCat0[Random.Range(0, monsterCat0.Length)]));
+        //detail.Add(new EnmDetail(1, 1 * (int)enmNumEx, 1, monsterCat0[Random.Range(0, monsterCat0.Length)]));
        // detail.Add(new EnmDetail(1, 1 * (int)enmNumEx, 2, monsterCat0[Random.Range(0, monsterCat0.Length)]));
 
-        for (int k = 2; k < waveNum; k++) {
+        for (int k = 1; k < waveNum; k++) {
             if (k < 10 - 1)
             {
                 detail.Add(new EnmDetail(k, 10 * (int)enmNumEx, Random.Range(0,3), monsterCat0[Random.Range(0,monsterCat0.Length)]));

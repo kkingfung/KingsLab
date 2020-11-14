@@ -8,7 +8,7 @@ using UnityEngine.Jobs;
 
 public class AttackSpawner : MonoBehaviour
 {
-    private readonly int count=1000;
+    private readonly int count=100;
     public static AttackSpawner Instance { get; private set; }
     public List<GameObject> PrefabObject;
 

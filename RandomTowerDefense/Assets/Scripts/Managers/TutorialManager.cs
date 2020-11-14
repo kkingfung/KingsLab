@@ -126,7 +126,7 @@ public class TutorialManager : MonoBehaviour
         switch (StageProgress)
         {
             case 0:
-                ChangeText("新人，キンは第九師団団長だぞ");
+                ChangeText("新人，Kは第九師団団長だぞ");
                 StageProgress++;
                 reviewStage = 0;
                 break;
@@ -142,7 +142,7 @@ public class TutorialManager : MonoBehaviour
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
-                    ChangeText("キンは傍にいるだぞ");
+                    ChangeText("Kは傍にいるだぞ");
                     StageProgress++;
                 }
                 break;
@@ -150,7 +150,7 @@ public class TutorialManager : MonoBehaviour
                 if (Input.GetMouseButtonUp(0) ||
                  (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
-                    ChangeText("自分を信じなくていい、\nキンを信じるだぞ");
+                    ChangeText("自分を信じなくていい、\nKを信じるだぞ");
                     StageProgress++;
                 }
                 break;
@@ -245,7 +245,7 @@ public class TutorialManager : MonoBehaviour
                 break;
             case 1:
                 reviewStage = 1;
-                if (enemySpawner.GameObjects[0] != null)
+                if (enemySpawner.AllAliveMonstersList().Count>0)
                 {
                     StageProgress++;
                 }
@@ -379,21 +379,27 @@ public class TutorialManager : MonoBehaviour
                 StageProgress++;
                 break;
             case 1:
-                if (enemySpawner.AllAliveMonstersList().Count <= 0)
+                if (enemySpawner.AllAliveMonstersList().Count > 0)
                 {
-                    ChangeText("キンのおかけで、\nどうやら大丈夫だ");
                     StageProgress++;
                 }
                 break;
             case 2:
-                if (Input.GetMouseButtonUp(0) ||
-                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
+                if (enemySpawner.AllAliveMonstersList().Count <= 0)
                 {
-                    ChangeText("キンは忙しいから、\n雑魚は新人に任すだぞ");
+                    ChangeText("Kのおかけで、\nどうやら大丈夫だ");
                     StageProgress++;
                 }
                 break;
             case 3:
+                if (Input.GetMouseButtonUp(0) ||
+                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
+                {
+                    ChangeText("Kは忙しいから、\n雑魚は新人に任すだぞ");
+                    StageProgress++;
+                }
+                break;
+            case 4:
                 if (Input.GetMouseButtonUp(0) ||
                         (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
@@ -401,7 +407,7 @@ public class TutorialManager : MonoBehaviour
                     StageProgress++;
                 }
                 break;
-            case 4:
+            case 5:
                 if (Input.GetMouseButtonUp(0) ||
                         (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
@@ -421,6 +427,12 @@ public class TutorialManager : MonoBehaviour
     {
         return tutorialStage;
     }
+
+    public int GetTutorialStageProgress()
+    {
+        return StageProgress;
+    }
+
     public void DestroyAllRelated() {
         foreach (Text i in InstructionText_Landscape)
             Destroy(i.gameObject);

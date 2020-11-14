@@ -1,0 +1,4 @@
+SkillMeteor:5:8:2.5:1:15:0:0
+SkillMinions:1:0.2:0.1:1:10:0:0
+SkillBlizzard:20:0.1:5:0:15:0.01:3.0
+SkillPetrification:1000:0:0.2:0:5:1:0.0015

@@ -160,7 +160,7 @@ public class TowerManager : MonoBehaviour
             {
                 case (int)TowerInfo.TowerInfoID.Enum_TowerNightmare:
                     entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerNightmare,
-                        location, new Unity.Mathematics.float3(), 0, float.MaxValue, float.MaxValue);
+                        location);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
                     tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerNightmareAura,
                         TowerInfo.TowerInfoID.Enum_TowerNightmare, 1, rank);
@@ -169,7 +169,7 @@ public class TowerManager : MonoBehaviour
                     break;
                 case (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater:
                     entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater,
-                        location, new Unity.Mathematics.float3(), 0, float.MaxValue, float.MaxValue);
+                        location);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
                     tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerSoulEaterAura,
                         TowerInfo.TowerInfoID.Enum_TowerSoulEater, 1, rank);
@@ -178,7 +178,7 @@ public class TowerManager : MonoBehaviour
                     break;
                 case (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
                     entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer,
-                         location, new Unity.Mathematics.float3(), 0, float.MaxValue, float.MaxValue);
+                        location);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
                     tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerTerrorBringerAura,
                         TowerInfo.TowerInfoID.Enum_TowerTerrorBringer, 1, rank);
@@ -187,7 +187,7 @@ public class TowerManager : MonoBehaviour
                     break;
                 case (int)TowerInfo.TowerInfoID.Enum_TowerUsurper:
                     entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerUsurper,
-                        location, new Unity.Mathematics.float3(), 0, float.MaxValue, float.MaxValue);
+                        location);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
                     tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerUsurperAura,
                         TowerInfo.TowerInfoID.Enum_TowerUsurper, 1, rank);
@@ -349,7 +349,7 @@ public class TowerManager : MonoBehaviour
         {
             filledMapGenerator.UpdatePillarStatus(targetedTower,0);
             GameObject temp = Instantiate(TowerSell, targetedTower.transform.position, Quaternion.identity);
-            Destroy(temp,10.0f);
+           // Destroy(temp,10.0f);
             removeTowerFromList(targetedTower);
         }
     }

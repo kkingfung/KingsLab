@@ -48,6 +48,7 @@ public class InputManager : MonoBehaviour
     private CameraManager cameraManager;
     private StageSelectOperation sceneManagerSel;
     private InGameOperation sceneManager;
+    private TutorialManager tutorialManager;
 
     private float DragTimeRecord;
     [HideInInspector]
@@ -76,10 +77,12 @@ public class InputManager : MonoBehaviour
         cameraManager = FindObjectOfType<CameraManager>();
         sceneManager = FindObjectOfType<InGameOperation>();
         sceneManagerSel = FindObjectOfType<StageSelectOperation>();
+        tutorialManager = FindObjectOfType<TutorialManager>();
     }
 
     private void Update()
     {
+        if (tutorialManager && tutorialManager.WaitingResponds) return;
         if (Buttons.Count+ButtonsCenter.Count > 0) { RaycastTest(); }
 
         if (useTouch) UpdateTouchInfo();

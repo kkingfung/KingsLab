@@ -20,29 +20,29 @@ public class StoreManager : MonoBehaviour
     public List<TextMesh> SkillPriceTextObj;
     public List<TextMesh> SkillLvTextObj;
 
-    InGameOperation sceneManager;
-    StageManager stageManager;
-    ResourceManager resourceManager;
+    private InGameOperation sceneManager;
+    private StageManager stageManager;
+    private ResourceManager resourceManager;
 
-    int[] pendToKart= { 0,0,0,0};
-    int[] costToKart = { 0, 0, 0, 0 };
+    private int[] pendToKart= { 0,0,0,0};
+    private int[] costToKart = { 0, 0, 0, 0 };
 
-    int[] bonusBossCooldown = { 0, 0, 0};
+    private int[] bonusBossCooldown = { 0, 0, 0};
 
-    readonly int[] PriceForArmy1 = { 100, 150, 210, 270, 330, 390, 440, 500, 570, 650 };
-    readonly int[] PriceForArmy2 = { 100, 150, 210, 270, 330, 390, 440, 500, 570, 650 };
-    readonly int[] PriceForArmy3 = { 100, 150, 210, 270, 330, 390, 440, 500, 570, 650 };
-    readonly int[] PriceForArmy4 = { 100, 150, 210, 270, 330, 390, 440, 500, 570, 650 };
+    private readonly int[] PriceForArmy1 = { 100, 150, 210, 270, 330, 390, 440, 500, 570, 650 };
+    private readonly int[] PriceForArmy2 = { 100, 150, 210, 270, 330, 390, 440, 500, 570, 650 };
+    private readonly int[] PriceForArmy3 = { 100, 150, 210, 270, 330, 390, 440, 500, 570, 650 };
+    private readonly int[] PriceForArmy4 = { 100, 150, 210, 270, 330, 390, 440, 500, 570, 650 };
 
-    readonly int[] PriceForCastleHP = { 50, 50, 50, 50, 50, 50, 50, 50, 50, 50 };
-    readonly int[] PriceForBonusBoss1 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-    readonly int[] PriceForBonusBoss2 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-    readonly int[] PriceForBonusBoss3 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    private readonly int[] PriceForCastleHP = { 50, 50, 50, 50, 50, 50, 50, 50, 50, 50 };
+    private readonly int[] PriceForBonusBoss1 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    private readonly int[] PriceForBonusBoss2 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    private readonly int[] PriceForBonusBoss3 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-    readonly int[] PriceForMagicMeteor = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 };
-    readonly int[] PriceForMagicBlizzard = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100 };
-    readonly int[] PriceForMagicMinions = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100 };
-    readonly int[] PriceForMagicPetrification = { 10, 20, 30, 50, 60, 70, 80, 90, 100 };
+    private readonly int[] PriceForMagicMeteor = { 10, 15, 20, 25, 30, 35, 40, 45, 50, 55 };
+    private readonly int[] PriceForMagicBlizzard = { 10, 15, 20, 25, 30, 35, 40, 45, 50, 55 };
+    private readonly int[] PriceForMagicMinions = { 10, 15, 20, 25, 30, 35, 40, 45, 50, 55 };
+    private readonly int[] PriceForMagicPetrification = { 10, 15, 20, 25, 30, 35, 40, 45, 50, 55 };
 
     // Start is called before the first frame update
     private void Start()
@@ -150,78 +150,8 @@ public class StoreManager : MonoBehaviour
                 case 3: SkillLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions).ToString(); break;
             }
         }
-
-        //switch (sceneManager.currScreenShown)
-        //{
-        //    case (int)InGameOperation.ScreenShownID.SSIDTop:
-        //        //Tower Items
-        //        for (int i = 0; i < TowerPriceTextObj.Count; ++i)
-        //        {
-        //            //Currently all same price
-        //            int price = PriceForCastleHP[0];
-        //            TowerPriceTextObj[i].text = price.ToString() + "G";
-        //            TowerPriceTextObj[i].color = (price > resourceManager.GetCurrMaterial()) ? new Color(1, 0, 0, 1) : OriColor;
-
-        //        }
-        //        for (int i = 0; i < TowerHPTextObj.Count; ++i)
-        //            TowerHPTextObj[i].text = stageManager.GetCurrHP().ToString() + "/" + stageManager.GetMaxHP().ToString();
-        //        //Bonus Boss Items
-        //        for (int i = 0; i < MonsterCDTextObj.Count; ++i)
-        //        {
-        //            int cd = bonusBossCooldown[i % bonusBossCooldown.Length];
-        //            MonsterCDTextObj[i].text = "CD" + cd.ToString();
-        //            MonsterCDTextObj[i].color = (cd > 0 || SkillStack.CheckFullStocks()) ? new Color(1, 0, 0, 1) : OriColor;
-        //        }
-        //        break;
-        //    case (int)InGameOperation.ScreenShownID.SSIDTopLeft:
-        //        for (int i = 0; i < ArmyPriceTextObj.Count; ++i) {
-        //            Upgrades.StoreItems itemID = Upgrades.StoreItems.Army1 + i % MaxItemPerCategory;
-        //            int price = ItemPrice[itemID][Upgrades.GetLevel(itemID)];
-        //            if (Upgrades.CheckTopLevel(itemID))
-        //            {
-        //                ArmyPriceTextObj[i].text = price.ToString() + "G";
-        //                ArmyPriceTextObj[i].color = (price > resourceManager.GetCurrMaterial()) ? new Color(1, 0, 0, 1) : OriColor;
-        //            }
-        //            else 
-        //            {
-        //                ArmyPriceTextObj[i].text = "-";
-        //                ArmyPriceTextObj[i].color= new Color(0, 0, 0, 1) ;
-        //            }
-        //        }
-
-        //        for (int i = 0; i < ArmyLvTextObj.Count; ++i)
-        //        {
-        //            switch (i % MaxItemPerCategory)
-        //            {
-        //                case 0: ArmyLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army1).ToString(); break;
-        //                case 1: ArmyLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army2).ToString(); break;
-        //                case 2: ArmyLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army3).ToString(); break;
-        //                case 3: ArmyLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army4).ToString(); break;
-        //            }
-        //        }
-        //        break;
-        //    case (int)InGameOperation.ScreenShownID.SSIDTopRight:
-        //        for (int i = 0; i < SkillPriceTextObj.Count; ++i)
-        //        {
-        //            Upgrades.StoreItems itemID = Upgrades.StoreItems.MagicMeteor + i % MaxItemPerCategory;
-        //            int price = ItemPrice[itemID][Upgrades.GetLevel(itemID)];
-        //            SkillPriceTextObj[i].text = price.ToString() + "G";
-        //            SkillPriceTextObj[i].color = (price > resourceManager.GetCurrMaterial() || SkillStack.CheckFullStocks()) ? new Color(1, 0, 0, 1) : OriColor;
-        //        }
-
-        //        for (int i = 0; i < SkillLvTextObj.Count; ++i)
-        //        {
-        //            switch (i % MaxItemPerCategory)
-        //            {
-        //                case 0: SkillLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor).ToString(); break;
-        //                case 1: SkillLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard).ToString(); break;
-        //                case 2: SkillLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification).ToString(); break;
-        //                case 3: SkillLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions).ToString(); break;
-        //            }
-        //        }
-        //        break;
-        //}
     }
+
     public int GetPrice(int itemID) {
         return GetPrice((Upgrades.StoreItems)itemID);
     }

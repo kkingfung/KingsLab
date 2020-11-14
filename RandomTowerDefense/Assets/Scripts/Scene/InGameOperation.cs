@@ -44,6 +44,8 @@ public class InGameOperation : ISceneChange
     public List<Material> PetrifyMat;
 
     [Header("Other Settings")]
+    [SerializeField]
+    public bool UseFileAsset;
     public Material FloorMat;
     public GameObject LandscapeFadeImg;
     public GameObject PortraitFadeImg;
@@ -51,7 +53,7 @@ public class InGameOperation : ISceneChange
     private FadeEffect LandscapeFade;
     private FadeEffect PortraitFade;
 
-    public bool isDebugging;//For ingame Debugger
+    //public bool isDebugging;//For ingame Debugger
     private bool isTutorial;//For 1st Stage Only
     //public VolumeProfile volumeProfile; // For Spare
 
@@ -91,10 +93,23 @@ public class InGameOperation : ISceneChange
     private void Awake()
     {
         base.Awake();
-        StageInfo.Init();
-        TowerInfo.Init();
-        EnemyInfo.Init();
-        SkillInfo.Init();
+
+     
+        if (UseFileAsset)
+        {
+            StageInfo.Init(UseFileAsset, "Assets/AssetBundles");
+            TowerInfo.InitByFile("Assets/AssetBundles/TowerInfo.txt");
+            EnemyInfo.InitByFile("Assets/AssetBundles/EnemyInfo.txt");
+            SkillInfo.InitByFile("Assets/AssetBundles/SkillInfo.txt");
+        }
+        else
+        {
+            StageInfo.Init(UseFileAsset,null);
+            TowerInfo.Init();
+            EnemyInfo.Init();
+            SkillInfo.Init();
+        }
+
         SkillStack.init();
         Upgrades.init();
 
@@ -203,6 +218,7 @@ public class InGameOperation : ISceneChange
 
         if (tutorialManager && isTutorial)
         {
+            timeManager.timeFactor = 0.05f;
             if (tutorialManager.WaitingResponds)
             {
                 if (timeManager.GetControl() == false)
@@ -210,15 +226,17 @@ public class InGameOperation : ISceneChange
                     timeManager.timeFactor = 0.00001f;
                     timeManager.TimeControl();
                 }
+
             }
             else
             {
+
                 if (timeManager.GetControl() != false)
                 {
+                   
                     timeManager.TimeControl();
                 }
             }
-            return;
         }
         else
         {
@@ -235,12 +253,14 @@ public class InGameOperation : ISceneChange
             return;
         }
 
+        if (tutorialManager == null || (tutorialManager.GetTutorialStage()> TutorialManager.TutorialStageID.TutorialProgress_StoreSkill
+            ||(tutorialManager.GetTutorialStage() == TutorialManager.TutorialStageID.TutorialProgress_StoreSkill && tutorialManager.GetTutorialStageProgress() > 8)))
         if (isScreenChanging == false)
         {
             Vector3 angle = CameraManager.GyroCamGp[0].transform.rotation.eulerAngles;
             while (angle.x > 180) angle.x -= 360;
             while (angle.x < -180) angle.x += 360;
-            if (angle.x > 0) { currScreenShown = 0; nextScreenShown = 0; }
+            if (angle.x > 30) { currScreenShown = 0; nextScreenShown = 0; }
             else
             {
                 while (angle.y > 180) angle.y -= 360;

@@ -919,7 +919,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614583}
   - {fileID: 8926484042661614585}
   dataType: 0
-  capacity: 100000
+  capacity: 5000
   stripCapacity: 16
   particlePerStripCount: 16
   m_Space: 0
@@ -4375,7 +4375,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614730}
   - {fileID: 8926484042661615914}
   dataType: 0
-  capacity: 10239
+  capacity: 5000
   stripCapacity: 16
   particlePerStripCount: 16
   m_Space: 0
@@ -8513,7 +8513,7 @@ MonoBehaviour:
   - {fileID: 8926484042661615287}
   m_ExposedName: MainColor
   m_Exposed: 1
-  m_Order: 4
+  m_Order: 3
   m_Category: 
   m_Min:
     m_Type:
@@ -10951,7 +10951,7 @@ MonoBehaviour:
   - {fileID: 8926484042661615724}
   m_ExposedName: AuraSize
   m_Exposed: 1
-  m_Order: 5
+  m_Order: 4
   m_Category: 
   m_Min:
     m_Type:
@@ -13441,7 +13441,7 @@ MonoBehaviour:
   - {fileID: 8926484042661616082}
   m_ExposedName: WaitTime
   m_Exposed: 1
-  m_Order: 6
+  m_Order: 5
   m_Category: 
   m_Min:
     m_Type:
@@ -13520,7 +13520,7 @@ MonoBehaviour:
   - {fileID: 8926484042661616086}
   m_ExposedName: Color over life
   m_Exposed: 1
-  m_Order: 8
+  m_Order: 6
   m_Category: 
   m_Min:
     m_Type:
@@ -13597,7 +13597,7 @@ MonoBehaviour:
   - {fileID: 8926484042661616088}
   m_ExposedName: Particle Size
   m_Exposed: 1
-  m_Order: 9
+  m_Order: 7
   m_Category: 
   m_Min:
     m_Type:
@@ -13674,7 +13674,7 @@ MonoBehaviour:
   - {fileID: 8926484042661616090}
   m_ExposedName: Random speed
   m_Exposed: 1
-  m_Order: 10
+  m_Order: 8
   m_Category: 
   m_Min:
     m_Type:
@@ -13753,7 +13753,7 @@ MonoBehaviour:
   - {fileID: 8926484042661616092}
   m_ExposedName: Tangent speed
   m_Exposed: 1
-  m_Order: 11
+  m_Order: 9
   m_Category: 
   m_Min:
     m_Type:
@@ -13832,7 +13832,7 @@ MonoBehaviour:
   - {fileID: 8926484042661616094}
   m_ExposedName: Portal radius
   m_Exposed: 1
-  m_Order: 12
+  m_Order: 10
   m_Category: 
   m_Min:
     m_Type:
@@ -15791,7 +15791,7 @@ MonoBehaviour:
   - {fileID: 8926484042661616549}
   m_ExposedName: SizeMultipier
   m_Exposed: 1
-  m_Order: 13
+  m_Order: 11
   m_Category: 
   m_Min:
     m_Type:
@@ -15860,7 +15860,7 @@ MonoBehaviour:
   - {fileID: 8926484042661616551}
   m_ExposedName: StarSize
   m_Exposed: 1
-  m_Order: 14
+  m_Order: 12
   m_Category: 
   m_Min:
     m_Type:
@@ -16834,7 +16834,7 @@ MonoBehaviour:
   - {fileID: 8926484042661616643}
   m_ExposedName: TimeAdj
   m_Exposed: 1
-  m_Order: 15
+  m_Order: 13
   m_Category: 
   m_Min:
     m_Type:
@@ -21477,7 +21477,7 @@ MonoBehaviour:
   - {fileID: 8926484042661617233}
   m_ExposedName: Height
   m_Exposed: 1
-  m_Order: 16
+  m_Order: 14
   m_Category: 
   m_Min:
     m_Type:

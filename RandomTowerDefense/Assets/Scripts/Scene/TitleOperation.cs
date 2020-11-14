@@ -34,6 +34,9 @@ public class TitleOperation: ISceneChange
     [Header("Other Settings")]
     public List<GameObject> TitleImg;
     public List<GameObject> TitleEffectImg;
+    public List<string> bundleUrl;
+    public List<string> bundleName;
+
     public GameObject BoidSpawn;
     public GameObject LandscapeFadeImg;
     public GameObject PortraitFadeImg;
@@ -149,6 +152,9 @@ public class TitleOperation: ISceneChange
         {
             i.GetComponent<VisualEffect>().Stop();
         }
+
+        for (int i = 0; i < bundleUrl.Count; i++)
+            LoadBundle.LoadAssetBundle(bundleUrl[i], bundleName[i], "Assets/AssetBundles");
     }
 
     // Update is called once per frame

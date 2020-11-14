@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using System.IO;
+
 public class SkillAttr
 {
     public float radius;
@@ -64,6 +66,29 @@ public static class SkillInfo
             5, 1.0f,//lifetime,slowrate(include petrify)
             0.0015f));//bufftime
     }
+
+    public static void InitByFile(string filepath)
+    {
+        StreamReader inp_stm = new StreamReader(filepath);
+
+        skillInfo = new Dictionary<string, SkillAttr>();
+
+        while (!inp_stm.EndOfStream)
+        {
+            string inp_ln = inp_stm.ReadLine();
+            string[] seperateInfo = inp_ln.Split(':');
+            if (seperateInfo.Length == 8)
+                skillInfo.Add(seperateInfo[0], new SkillAttr(
+                    float.Parse(seperateInfo[1]), float.Parse(seperateInfo[2]),
+                    float.Parse(seperateInfo[3]), float.Parse(seperateInfo[4]),
+                    float.Parse(seperateInfo[5]), float.Parse(seperateInfo[6]),
+                    float.Parse(seperateInfo[7])));
+            //Debug.Log(seperateInfo.Length);
+        }
+
+        inp_stm.Close();
+    }
+
     static void Release()
     {
         skillInfo.Clear();

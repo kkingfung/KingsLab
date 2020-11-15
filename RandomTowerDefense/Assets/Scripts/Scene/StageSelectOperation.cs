@@ -239,11 +239,11 @@ public class StageSelectOperation : ISceneChange
         //Gyroscope Operation
         if (GyroscopeManager.LeftShake)
         {
-            toDrag = 2;
+            toDrag = (int)InputManager.DragDirectionSel.DragToRight;
         }
         if (GyroscopeManager.RightShake)
         {
-            toDrag = 1;
+            toDrag = (int)InputManager.DragDirectionSel.DragToLeft;
         }
     }
 

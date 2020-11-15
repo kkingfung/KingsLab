@@ -405,7 +405,7 @@ namespace LinearAlgebra
         {
             int hash = 0;
 
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < 9; ++i)
                 hash ^= this[i].GetHashCode();
 
             return hash;

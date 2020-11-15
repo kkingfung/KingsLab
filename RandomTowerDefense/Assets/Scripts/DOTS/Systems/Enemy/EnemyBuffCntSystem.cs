@@ -14,6 +14,7 @@ public class EnemyBuffCntSystem : JobComponentSystem
 
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
+        float recoveryRate = 0.2f;
         float deltaTime = Time.DeltaTime;
 
         return Entities.WithAll<EnemyTag>().ForEach((Entity entity, ref SlowRate slowRate, ref PetrifyAmt petrifyAmt, ref BuffTime buffTime) =>
@@ -24,10 +25,10 @@ public class EnemyBuffCntSystem : JobComponentSystem
             else
             {
                 if (slowRate.Value > 0) {
-                    slowRate.Value = Mathf.Max(slowRate.Value - 0.2f * deltaTime, 0f); 
+                    slowRate.Value = Mathf.Max(slowRate.Value - recoveryRate * deltaTime, 0f); 
                 }
                 if (petrifyAmt.Value > 0) { 
-                    petrifyAmt.Value = Mathf.Max(petrifyAmt.Value - 0.2f * deltaTime, 0f);
+                    petrifyAmt.Value = Mathf.Max(petrifyAmt.Value - recoveryRate * deltaTime, 0f);
                 }
             }
 

@@ -23,6 +23,7 @@ public class SkillManager : MonoBehaviour
     //Total Cast Number * Constant for each Magic 
     private readonly int[] SkillRequirement = { 5, 15, 30, 50, 75, 100, 130, 170, 210, 250 };
     private readonly int[] SkillExp = { 5, 10, 15, 19, 23, 26, 29, 31, 34, 35 };
+    private readonly int ExpPerActivation = 5;
 
     private SkillSpawner skillSpawner;
 
@@ -79,7 +80,7 @@ public class SkillManager : MonoBehaviour
 
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillMeteor");
         attr.damage = attr.damage * (1+Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor) *0.3f);
-        GainExp(Upgrades.StoreItems.MagicMeteor, 5);
+        GainExp(Upgrades.StoreItems.MagicMeteor, ExpPerActivation);
 
         StartCoroutine(MeteorSkillCoroutine(attr));
         return SkillAura;
@@ -91,7 +92,7 @@ public class SkillManager : MonoBehaviour
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillBlizzard");
         attr.radius = attr.radius * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * 0.2f);
         attr.damage = attr.damage * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * 0.1f);
-        GainExp(Upgrades.StoreItems.MagicBlizzard, 5);
+        GainExp(Upgrades.StoreItems.MagicBlizzard, ExpPerActivation);
 
         StartCoroutine(BlizzardSkillCoroutine(attr));
         return SkillAura;
@@ -100,7 +101,7 @@ public class SkillManager : MonoBehaviour
     { 
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillPetrification");
         attr.buffTime = attr.buffTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification) * 0.3f);
-        GainExp(Upgrades.StoreItems.MagicPetrification, 5);
+        GainExp(Upgrades.StoreItems.MagicPetrification, ExpPerActivation);
 
         StartCoroutine(PetrificationCoroutine(attr));
         return null;
@@ -110,7 +111,7 @@ public class SkillManager : MonoBehaviour
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillMinions");
         attr.cycleTime = attr.cycleTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * 0.2f);
         attr.damage = attr.damage * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * 0.1f);
-        GainExp(Upgrades.StoreItems.MagicMinions, 5);
+        GainExp(Upgrades.StoreItems.MagicMinions, ExpPerActivation);
 
         StartCoroutine(MinionsSkillCoroutine(attr));
         return null;

@@ -8,6 +8,7 @@ public class GyroscopeManager : MonoBehaviour
     readonly Vector2 shakeThreshold = new Vector2(5,8); // horizontal
     readonly Vector2 shakeThresholdV = new Vector2(5, 5); // vertical
     readonly float timeInterval = 2f;
+    readonly float sensitiveAdjustment = 0.05f;
 
     public bool isFunctioning;
     public List<GameObject> gyroDiffUI;
@@ -198,9 +199,9 @@ public class GyroscopeManager : MonoBehaviour
     }
     public void UpdateGyroYPR() 
     {
-        pitch = Input.gyro.rotationRateUnbiased.x * Mathf.Rad2Deg*0.05f*sensitivity;
-        yaw = Input.gyro.rotationRateUnbiased.y * Mathf.Rad2Deg * 0.05f * sensitivity;
-        //roll = Input.gyro.rotationRateUnbiased.z * Mathf.Rad2De*0.05f*sensitivity;
+        pitch = Input.gyro.rotationRateUnbiased.x * Mathf.Rad2Deg* sensitiveAdjustment * sensitivity;
+        yaw = Input.gyro.rotationRateUnbiased.y * Mathf.Rad2Deg * sensitiveAdjustment * sensitivity;
+        //roll = Input.gyro.rotationRateUnbiased.z * Mathf.Rad2De*0sensitiveAdjustment05f*sensitivity;
 
         //rollRef += roll;
         yawRef += yaw;

@@ -222,7 +222,7 @@ namespace LinearAlgebra
                 if (Mathf.Abs(det) < eps)
                 {
                     int index = int.MaxValue;
-                    for (int i = 0; i < 3; i++)
+                    for (int i = 0; i < 3; ++i)
                     {
                         float len = Vector3.SqrMagnitude(MadjTt.GetRow(i));
                         if (len > eps)
@@ -261,7 +261,7 @@ namespace LinearAlgebra
                 float g1 = gamma * 0.5f;
                 float g2 = 0.5f / (gamma * det);
 
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < 3; ++i)
                 {
                     for (int j = 0; j < 3; j++)
                     {

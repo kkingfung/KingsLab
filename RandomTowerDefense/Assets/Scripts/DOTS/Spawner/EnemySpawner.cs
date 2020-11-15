@@ -182,7 +182,7 @@ public class EnemySpawner : MonoBehaviour
     {
         int spawnCnt = 0;
         int[] spawnIndexList = new int[num];
-        for (int i = 0; i < count && spawnCnt < num; i++)
+        for (int i = 0; i < count && spawnCnt < num; ++i)
         {
             if (GameObjects[i] != null) continue;
             GameObjects[i] = Instantiate(allMonsterList[Name], transform);

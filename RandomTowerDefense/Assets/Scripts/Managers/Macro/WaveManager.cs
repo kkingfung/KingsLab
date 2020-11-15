@@ -7,7 +7,7 @@ using UnityEngine.VFX;
 
 public class WaveManager : MonoBehaviour
 {
-
+    private readonly float WaveChgSpeedFactor = 2.0f;
     //private readonly int FireworkMax=120;
     private int TotalWaveNum;
    private int CurrentWaveNum;
@@ -108,7 +108,7 @@ public class WaveManager : MonoBehaviour
                 WaveTimer = Time.time;
             }
             if (enemySpawner.AllAliveMonstersList().Count <= 0)
-                WaveTimer -= Time.deltaTime * 2.0f;
+                WaveTimer -= Time.deltaTime * WaveChgSpeedFactor;
         }
     }
 
@@ -147,7 +147,7 @@ public class WaveManager : MonoBehaviour
                                 attr.time
                                 );
 
-                            yield return new WaitForSeconds(wave.enmSpawnPeriod);
+                            yield return new WaitForSeconds(wave.enmSpawnPeriod / Mathf.Max(StageInfo.spawnSpeedEx,1));
                         }
                     }
                 }

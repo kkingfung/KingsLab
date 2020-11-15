@@ -1,3 +1,4 @@
+TowerInfoID,radius,damage,wait,atklife,atkwait,atkrad,atkspd,lifetime
 0:20:1:2:3:0.01:1:0:5
 1:13:8:0.5:3:0:0.5:1:5
 2:40:20:3.0:3:0.01:1:0:5

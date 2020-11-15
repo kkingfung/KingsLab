@@ -7,6 +7,11 @@ using UnityEditor;
 
 public class Enemy : MonoBehaviour
 {
+    private readonly int DamageCounterMax = 5;
+    private readonly int ResizeFactor = 2;
+    private readonly float ResizeScale = 0.5f;
+    private readonly float EnemyDestroyTime = 1;
+
     private GameObject DieEffect;
     private GameObject DropEffect;
 
@@ -23,6 +28,9 @@ public class Enemy : MonoBehaviour
     private int entityID=-1;
     private EnemySpawner enemySpawner;
     private ResourceManager resourceManager;
+
+    private SkinnedMeshRenderer[] meshes;
+
 
     private bool isDead;
     // Start is called before the first frame update
@@ -59,17 +67,22 @@ public class Enemy : MonoBehaviour
             Petrified();
             Slowed();
         }
-        if (DamagedCount > 0) { DamagedCount--;
-            if(DamagedCount == 0)
+
+        if (DamagedCount > 0) 
+        { 
+            DamagedCount--;
+            if(DamagedCount % ResizeFactor ==0)
                 transform.localScale = oriScale;
+            else
+                transform.localScale = oriScale * ResizeScale;
         }
+
         if (transform.position != prevPos)
         {
             Vector3 direction = transform.position - prevPos;
             transform.forward = direction;
             prevPos = transform.position;
         }
-
 
     }
 
@@ -83,8 +96,7 @@ public class Enemy : MonoBehaviour
 
     public void Damaged(float currHP)
     {
-        transform.localScale = oriScale*0.5f;
-        DamagedCount = 2;
+        DamagedCount += DamageCounterMax;
         if (currHP <= 0) {
             isDead = true;
             resourceManager.ChangeMaterial(money);
@@ -100,15 +112,13 @@ public class Enemy : MonoBehaviour
     public void Die()
     {
         GameObject.Instantiate(DieEffect, this.transform.position, Quaternion.identity);
-        Destroy(this.gameObject, 1) ;
+        Destroy(this.gameObject, EnemyDestroyTime) ;
     }
 
     public void Petrified() {
         float petrifyAmt = enemySpawner.petrifyArray[entityID];
         if (PetrifyRecord == petrifyAmt) return;
         else PetrifyRecord = petrifyAmt;
-
-        SkinnedMeshRenderer[] meshes = this.GetComponentsInChildren<SkinnedMeshRenderer>();
 
         for (int i = 0; i < meshes.Length; ++i)
         {
@@ -128,7 +138,6 @@ public class Enemy : MonoBehaviour
         if (SlowRecord == slow) return;
         else SlowRecord = slow;
 
-        SkinnedMeshRenderer[] meshes = this.GetComponentsInChildren<SkinnedMeshRenderer>();
         for (int i = 0; i < meshes.Length; ++i)
         {
             List<Material> mats = new List<Material>();

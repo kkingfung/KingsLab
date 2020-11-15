@@ -96,7 +96,7 @@ public class EnemyToMeteor : JobComponentSystem
 			var chunkTranslations = chunk.GetNativeArray(translationType);
 			var chunkRadius = chunk.GetNativeArray(radiusType);
 
-			for (int i = 0; i < chunk.Count; i++)
+			for (int i = 0; i < chunk.Count; ++i)
 			{
 				float damage = 0;
 				Health health = chunkHealths[i];

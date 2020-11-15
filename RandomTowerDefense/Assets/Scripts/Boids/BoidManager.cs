@@ -24,7 +24,7 @@ public class BoidManager : MonoBehaviour {
             int numBoids = boids.Length;
             var boidData = new BoidData[numBoids];
 
-            for (int i = 0; i < boids.Length; i++) {
+            for (int i = 0; i < boids.Length; ++i) {
                 boidData[i].position = boids[i].position;
                 boidData[i].direction = boids[i].forward;
             }
@@ -42,7 +42,7 @@ public class BoidManager : MonoBehaviour {
 
             boidBuffer.GetData (boidData);
 
-            for (int i = 0; i < boids.Length; i++) {
+            for (int i = 0; i < boids.Length; ++i) {
                 boids[i].avgFlockHeading = boidData[i].flockHeading;
                 boids[i].centreOfFlockmates = boidData[i].flockCentre;
                 boids[i].avgAvoidanceHeading = boidData[i].avoidanceHeading;

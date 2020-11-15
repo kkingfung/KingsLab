@@ -10,6 +10,9 @@ public class Tower : MonoBehaviour
 {
     private readonly int[] MaxLevel = { 10, 30, 50, 70 };
     //private readonly int[] MaxLevel = { 1, 1, 1, 1 };
+    private readonly float TowerDestroyTime = 2;
+    private readonly int ActionSetNum = 3;
+    private readonly int ExpPerAttack = 5;
 
     public TowerAttr attr;
     public int level;
@@ -37,18 +40,16 @@ public class Tower : MonoBehaviour
     //GameObject defaultTarget;
 
     private Animator animator;
+    private VisualEffect lvupVFXComponent;
 
     private int entityID;
     private TowerSpawner towerSpawner;
     private AttackSpawner attackSpawner;
 
     private EntityManager entityManager;
-
+    private FilledMapGenerator filledMapGenerator;
     private void Awake()
     {
-        audioManager = FindObjectOfType<AudioManager>();
-        towerSpawner = FindObjectOfType<TowerSpawner>();
-        attackSpawner = FindObjectOfType<AttackSpawner>();
         atkCounter = 0;
         entityID = -1;
         //AtkVFX = new List<GameObject>();
@@ -57,6 +58,14 @@ public class Tower : MonoBehaviour
 
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         //defaultTarget = GameObject.FindGameObjectWithTag("DefaultTag");
+    }
+
+    private void Start()
+    {
+        audioManager = FindObjectOfType<AudioManager>();
+        towerSpawner = FindObjectOfType<TowerSpawner>();
+        attackSpawner = FindObjectOfType<AttackSpawner>();
+        filledMapGenerator = FindObjectOfType<FilledMapGenerator>();
     }
 
     void Update()
@@ -122,9 +131,9 @@ public class Tower : MonoBehaviour
         //StartCoroutine(WaitToKillVFX(this.AtkVFX[AtkVFX.Count - 1], 8, 0));
 
         atkCounter = attr.waitTime;
-        GainExp(5);
+        GainExp(ExpPerAttack);
         animator.SetTrigger("Detected");
-        animator.SetInteger("ActionID", UnityEngine.Random.Range(0, 2));
+        animator.SetInteger("ActionID", UnityEngine.Random.Range(0, ActionSetNum-1));
     }
 
     /// <summary>
@@ -133,7 +142,7 @@ public class Tower : MonoBehaviour
     public void Destroy()
     {
         //AlsoDestroy Entity
-        GameObject.FindObjectOfType<FilledMapGenerator>().UpdatePillarStatus(pillar, 0);
+        filledMapGenerator.UpdatePillarStatus(pillar, 0);
         entityManager.RemoveComponent(towerSpawner.Entities[this.entityID],typeof(PlayerTag));
 
         //foreach (GameObject i in AtkVFX)
@@ -145,7 +154,7 @@ public class Tower : MonoBehaviour
             Destroy(auraVFX);
         if (lvupVFX)
             Destroy(lvupVFX);
-        Destroy(this.gameObject, 2);
+        Destroy(this.gameObject, TowerDestroyTime);
     }
 
     public void newTower(int entityID,GameObject pillar, GameObject LevelUpVFX, GameObject AuraVFX, TowerInfo.TowerInfoID type, int lv = 1, int rank = 1)
@@ -159,20 +168,20 @@ public class Tower : MonoBehaviour
         lvupVFXPrefab = LevelUpVFX;
         this.auraVFX = GameObject.Instantiate(auraVFXPrefab, this.transform.position, Quaternion.Euler(90f, 0, 0));
         this.lvupVFX = GameObject.Instantiate(lvupVFXPrefab, this.transform.position, Quaternion.identity);
-
+        lvupVFXComponent = this.lvupVFX.GetComponent<VisualEffect>();
         switch (type)
         {
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
-                this.lvupVFX.GetComponent<VisualEffect>().SetVector4("MainColor", new Vector4(1, 1, 0, 1));
+                lvupVFXComponent.SetVector4("MainColor", new Vector4(1, 1, 0, 1));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-                this.lvupVFX.GetComponent<VisualEffect>().SetVector4("MainColor", new Vector4(0, 1, 0, 1));
+                lvupVFXComponent.SetVector4("MainColor", new Vector4(0, 1, 0, 1));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
-                this.lvupVFX.GetComponent<VisualEffect>().SetVector4("MainColor", new Vector4(0, 0, 1, 1));
+                lvupVFXComponent.SetVector4("MainColor", new Vector4(0, 0, 1, 1));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                this.lvupVFX.GetComponent<VisualEffect>().SetVector4("MainColor", new Vector4(1, 0, 0, 1));
+                lvupVFXComponent.SetVector4("MainColor", new Vector4(1, 0, 0, 1));
                 break;
         }
 
@@ -183,6 +192,7 @@ public class Tower : MonoBehaviour
     public void GainExp(int exp)
     {
         this.exp += exp;
+        //Level Lv Formula
         if (this.exp > 25 * level * (1 + level))
         {
             LevelUp();
@@ -198,7 +208,7 @@ public class Tower : MonoBehaviour
     public void SetLevel(int lv)
     {
         level = lv;
-        this.lvupVFX.GetComponent<VisualEffect>().SetFloat("SpawnRate", level);
+        lvupVFXComponent.SetFloat("SpawnRate", level);
         UpdateAttr();
     }
 
@@ -206,6 +216,7 @@ public class Tower : MonoBehaviour
     {
         attr = TowerInfo.GetTowerInfo(type);
 
+        //Update by rank/level with factors
         attr = new TowerAttr(attr.radius * (0.2f * rank + 0.005f * level),
             attr.damage * (1f * rank + 0.05f * level),
             attr.waitTime * (1f - (0.1f * rank)), attr.attackLifetime, attr.attackWaittime, attr.attackRadius,attr.attackSpd);

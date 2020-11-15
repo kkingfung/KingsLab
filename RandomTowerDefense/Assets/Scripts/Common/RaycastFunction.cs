@@ -6,14 +6,24 @@ using UnityEngine.Experimental.TerrainAPI;
 
 public class RaycastFunction : MonoBehaviour
 {
+    private enum EnumRenderType {
+        NotChecked = 0,
+        FoundMeshRenderer,
+        FoundRawImg,
+        FoundSprRenderer,
+    }
     public int ActionID;
     public int InfoID;
-
+    private EnumRenderType rendertype;
     private StageSelectOperation SelectionSceneManager;
     private InGameOperation sceneManager;
 
     private StoreManager storeManager;
     private AudioManager audioManager;
+
+    private MeshRenderer chkMeshRender;
+    private RawImage chkRawImg;
+    private SpriteRenderer chkSprRender;
 
     private Color oriColor;
     private enum ActionTypeID {
@@ -42,6 +52,11 @@ public class RaycastFunction : MonoBehaviour
         GameScene_StoreMagicMinions,//Metal
     }
 
+    private void Awake()
+    {
+        rendertype = EnumRenderType.NotChecked;
+
+    }
     private void Start()
     {
         SelectionSceneManager = FindObjectOfType<StageSelectOperation>();
@@ -50,11 +65,35 @@ public class RaycastFunction : MonoBehaviour
         storeManager = FindObjectOfType<StoreManager>();
         audioManager = FindObjectOfType<AudioManager>();
 
-        if (GetComponent<MeshRenderer>()) oriColor = GetComponent<MeshRenderer>().material.color;
-        if (GetComponent<RawImage>()) oriColor = GetComponent<RawImage>().color;
-        if (GetComponent<SpriteRenderer>()) oriColor = GetComponent<SpriteRenderer>().color;
+        if (rendertype == EnumRenderType.NotChecked)
+            GetOriColor(oriColor);
     }
 
+    public void GetOriColor(Color color) {
+        chkMeshRender = GetComponent<MeshRenderer>();
+        if (chkMeshRender)
+        {
+            color = chkMeshRender.material.color;
+            rendertype = EnumRenderType.FoundMeshRenderer;
+        }
+        else {
+            chkRawImg = GetComponent<RawImage>();
+            if (chkRawImg)
+            {
+                color = chkRawImg.color;
+                rendertype = EnumRenderType.FoundRawImg;
+            }
+            else
+            {
+                chkSprRender = GetComponent<SpriteRenderer>();
+                if (chkSprRender)
+                {
+                    color = chkSprRender.color;
+                    rendertype = EnumRenderType.FoundSprRenderer;
+                }
+            }
+        }
+    }
     public void ActionFunc()
     {
         if (SelectionSceneManager == null && sceneManager==null) return;
@@ -159,22 +198,17 @@ public class RaycastFunction : MonoBehaviour
     private IEnumerator ColorRoutine()
     {
         Color color=new Color();
-        int type = -1;
-        if (GetComponent<MeshRenderer>())
-        { 
-            color = GetComponent<MeshRenderer>().material.color;
-            type = 0;
+        switch (rendertype) {
+            case EnumRenderType.NotChecked:
+                GetOriColor(color);break;
+            case EnumRenderType.FoundMeshRenderer:
+                color = chkMeshRender.material.color; break;
+            case EnumRenderType.FoundRawImg:
+                color = chkRawImg.color; break;
+            case EnumRenderType.FoundSprRenderer:
+                color = chkSprRender.color; break;
         }
-        if (GetComponent<RawImage>())
-        {
-            color = GetComponent<RawImage>().color;
-            type = 1;
-        }
-        if (GetComponent<SpriteRenderer>())
-        {
-            color = GetComponent<SpriteRenderer>().color;
-            type = 2;
-        }
+
         color.r = 0; color.g = 0; color.b = 0;
         float reqFrame =0.2f;
         float chgSpdr = (oriColor.r - color.r) / (reqFrame*60);
@@ -186,30 +220,26 @@ public class RaycastFunction : MonoBehaviour
             color.r += chgSpdr;
             color.b += chgSpdb;
             color.g += chgSpdg;
-            switch (type)
+            switch (rendertype)
             {
-                case 0:
-                    GetComponent<MeshRenderer>().material.color = color;
-                    break;
-                case 1:
-                    GetComponent<RawImage>().color = color;
-                    break;
-                case 2:
-                    GetComponent<SpriteRenderer>().color = color;
-                    break;
+                case EnumRenderType.FoundMeshRenderer:
+                    chkMeshRender.material.color=color; break;
+                case EnumRenderType.FoundRawImg:
+                    chkRawImg.color = color; break;
+                case EnumRenderType.FoundSprRenderer:
+                    chkSprRender.color = color; break;
             }
+
             yield return new WaitForSeconds(0f);
         }
-        switch (type) {
-            case 0:
-                GetComponent<MeshRenderer>().material.color = oriColor;
-                break;
-            case 1:
-                GetComponent<RawImage>().color = oriColor;
-                break;
-            case 2:
-                GetComponent<SpriteRenderer>().color = oriColor;
-                break;
+        switch (rendertype)
+        {
+            case EnumRenderType.FoundMeshRenderer:
+                chkMeshRender.material.color = oriColor; break;
+            case EnumRenderType.FoundRawImg:
+                chkRawImg.color = oriColor; break;
+            case EnumRenderType.FoundSprRenderer:
+                chkSprRender.color = oriColor; break;
         }
     }
 }

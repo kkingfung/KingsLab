@@ -84,7 +84,7 @@ public class PlayerManager : MonoBehaviour
     {
         if (StockOperator != null) return;
         if (isSkillActive) return;
-        //if (sceneManager.currScreenShown != 0 || sceneManager.nextScreenShown != 0) return;
+        //if (sceneManager.currScreenShown != (int)InGameOperation.ScreenShownID.SSIDArena || sceneManager.nextScreenShown != (int)InGameOperation.ScreenShownID.SSIDArena) return;
         isChecking = true;
 
         Camera targetCam = (Screen.width > Screen.height) ? refCamL : refCamP;
@@ -220,7 +220,7 @@ public class PlayerManager : MonoBehaviour
             isSelling = false;
             if (TowerRaycastResult)
             {
-                towerManager.SellTower(TowerRaycastResult);
+                towerManager.SellTower(TowerRaycastResult.GetComponent<Tower>());
             }
         }
         else

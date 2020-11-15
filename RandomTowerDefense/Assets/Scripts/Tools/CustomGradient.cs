@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class CustomGradient {
+public class CustomGradient
+{
 
     public enum BlendMode { Linear, Discrete };
     public BlendMode blendMode;
@@ -23,7 +24,7 @@ public class CustomGradient {
         ColourKey keyLeft = keys[0];
         ColourKey keyRight = keys[keys.Count - 1];
 
-        for (int i = 0; i < keys.Count; i++)
+        for (int i = 0; i < keys.Count; ++i)
         {
             if (keys[i].Time < time)
             {
@@ -47,7 +48,7 @@ public class CustomGradient {
     public int AddKey(Color colour, float time)
     {
         ColourKey newKey = new ColourKey(colour, time);
-        for (int i = 0; i < keys.Count; i++)
+        for (int i = 0; i < keys.Count; ++i)
         {
             if (newKey.Time < keys[i].Time)
             {
@@ -97,7 +98,7 @@ public class CustomGradient {
     {
         Texture2D texture = new Texture2D(width, 1);
         Color[] colours = new Color[width];
-        for (int i = 0; i < width; i++)
+        for (int i = 0; i < width; ++i)
         {
             colours[i] = Evaluate((float)i / (width - 1));
         }

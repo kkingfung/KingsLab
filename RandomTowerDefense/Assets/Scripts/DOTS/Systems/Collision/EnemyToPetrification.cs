@@ -85,7 +85,7 @@ public class EnemyToPetrification : JobComponentSystem
 			var chunkPetrify = chunk.GetNativeArray(petrifyType);
 			var chunkBuff = chunk.GetNativeArray(buffType);
 
-			for (int i = 0; i < chunk.Count; i++)
+			for (int i = 0; i < chunk.Count; ++i)
 			{
 				Health health = chunkHP[i];
 				if (health.Value <= 0) continue;

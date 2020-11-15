@@ -24,6 +24,8 @@ public class CastleSpawner : MonoBehaviour
     public GameObject[] GameObjects;
     public NativeArray<Entity> Entities;
 
+    [HideInInspector]
+    public Castle castle;
     //For input
     private Transform[] transforms;
 
@@ -85,14 +87,15 @@ public class CastleSpawner : MonoBehaviour
     {
         int spawnCnt = 0;
         int[] spawnIndexList = new int[num];
-        for (int i = 0; i < count && spawnCnt < num; i++)
+        for (int i = 0; i < count && spawnCnt < num; ++i)
         {
             if (GameObjects[i] != null) continue;
 
             GameObjects[i] = Instantiate(PrefabObject[prefabID], transform);
             GameObjects[i].transform.position = Position;
             GameObjects[i].transform.localRotation = Rotation;
-            transforms[i] = GameObjects[i].transform;
+            if (castle == null) castle = GameObjects[i].GetComponent<Castle>();
+             transforms[i] = GameObjects[i].transform;
             castleHPArray[i] = castleHP;
 
             //AddtoEntities

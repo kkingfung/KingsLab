@@ -5,6 +5,16 @@ using UnityEngine.UI;
 
 public class ScoreCalculation : MonoBehaviour
 {
+    private readonly int ScoreForBase = 5000; 
+    private readonly int ScoreForStage = 500;
+    private readonly int ScoreForStageEx = 10;
+    private readonly int ScoreForCastleHP = 20;
+    private readonly int ScoreForStartHP = 10;
+    private readonly int ScoreForStartHPEx = 100;
+    private readonly int ScoreForUpgrades = 100;
+
+    private readonly int RecordCharNum = 5;
+
     public List<Text> ScoreObj;
     public List<Text> RankObj;
     public List<Text> NameObj;
@@ -23,6 +33,7 @@ public class ScoreCalculation : MonoBehaviour
     private RecordManager recordManager;
     private StageManager stageManager;
 
+    private List<UIEffect> uiEffect;
     //For Calculation
     private ResourceManager resourceManager;
 
@@ -36,6 +47,9 @@ public class ScoreCalculation : MonoBehaviour
         recordManager = FindObjectOfType<RecordManager>();
         stageManager = FindObjectOfType<StageManager>();
         resourceManager = FindObjectOfType<ResourceManager>();
+        uiEffect = new List<UIEffect>();
+        for (int i = 0; i < ScoreObj.Count; ++i)
+            uiEffect.Add(ScoreObj[i].gameObject.GetComponent<UIEffect>());
     }
     private void LateUpdate()
     {
@@ -57,20 +71,20 @@ public class ScoreCalculation : MonoBehaviour
 
         //Clear
         if (result > 0) {
-            score += 5000 + 500 * currIsland;
+            score += ScoreForBase + ScoreForStage * currIsland;
             score += ((currIsland != StageInfo.IslandNum - 1) ? 0 :
-                (StageInfo.MaxMapDepth* StageInfo.MaxMapDepth - (int)StageInfo.stageSizeEx) * 10);
+                (StageInfo.MaxMapDepth* StageInfo.MaxMapDepth - (int)StageInfo.stageSizeEx) * ScoreForStageEx);
             scoreStr += score+"\n";
         }
 
         //CastleHP
-        scoreChg = 20 * stageManager.GetCurrHP();
+        scoreChg = ScoreForCastleHP * stageManager.GetCurrHP();
          score += scoreChg;
         scoreStr += "+" + scoreChg + "\n";
 
 
         //Upgrades
-        scoreChg = 100 * Upgrades.allLevel();
+        scoreChg = ScoreForUpgrades * Upgrades.allLevel();
         score += scoreChg;
         scoreStr += "+" + scoreChg + "\n";
 
@@ -82,21 +96,23 @@ public class ScoreCalculation : MonoBehaviour
         scoreStr += "+" + scoreChg + "\n";
 
         //Remark: Special Function for extra mode
-        if (currIsland != StageInfo.IslandNum - 1 && result == -1)
+        if (currIsland != StageInfo.IslandNum - 1 && result == (int)StageManager.GameResult.Lose)
         {
-            scoreStr += "-" + (score+PlayerPrefs.GetFloat("hpMax",5)*10) + "\n";
+            scoreStr += "-" + (score+PlayerPrefs.GetFloat("hpMax",5)* ScoreForStartHP) + "\n";
             score = 0;
         }
         else {
-            scoreStr += "-" + ((currIsland != StageInfo.IslandNum - 1)?0:StageInfo.hpMaxEx*100).ToString() + "\n";
+            scoreStr += "-" + ((currIsland != StageInfo.IslandNum - 1) ? 0 : StageInfo.hpMaxEx * ScoreForStartHPEx).ToString() + "\n";
         }
 
         scoreStr += "=" + score;
 
-        foreach (Text i in ScoreObj)
+        for (int i = 0; i < ScoreObj.Count; ++i)
         {
-            i.text = scoreStr;
-            i.gameObject.GetComponent<UIEffect>().ResetForScoreShow();
+            ScoreObj[i].text = scoreStr;
+            if (uiEffect[i])
+                uiEffect[i].ResetForScoreShow();
+
         }
 
         if (score <= 0) return;
@@ -113,7 +129,7 @@ public class ScoreCalculation : MonoBehaviour
 
         if (keyboard != null)
         {
-            keyboard.characterLimit = 5;
+            keyboard.characterLimit = RecordCharNum;
             StartCoroutine(TouchScreenInputUpdate(infoID));
             CancelKeybroad = false;
         }

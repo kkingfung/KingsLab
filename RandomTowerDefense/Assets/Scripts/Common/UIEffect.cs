@@ -17,7 +17,7 @@ public class UIEffect : MonoBehaviour
     private TextMesh textMesh;
     private SpriteRenderer spr;
 
-    private Vector3 oriPos;
+    //private Vector3 oriPos;
     private Vector3 oriPosRect;
     private Vector3 oriRot;
     private Vector3 oriScale;
@@ -33,6 +33,9 @@ public class UIEffect : MonoBehaviour
 
     public List<GameObject> relatedObjs;
 
+    private List<TextMesh> relatedObjsTextMesh;
+    private List<SpriteRenderer> relatedObjsSpriteRenderer;
+    private RectTransform rectTrans;
     private StageSelectOperation selectionSceneManager;
     private InGameOperation gameSceneManager;
     private PlayerManager playerManager;
@@ -54,9 +57,9 @@ public class UIEffect : MonoBehaviour
         gameSceneManager= FindObjectOfType<InGameOperation>();
         playerManager = GameObject.FindObjectOfType<PlayerManager>();
         inputManager = GameObject.FindObjectOfType<InputManager>();
-        oriPos = this.transform.localPosition;
+        //oriPos = this.transform.localPosition;
         if(this.GetComponent<RectTransform>())
-        oriPosRect = this.GetComponent<RectTransform>().localPosition;
+
         oriRot = this.transform.localEulerAngles;
         oriScale = this.transform.localScale;
         alpha = 0f;
@@ -64,6 +67,17 @@ public class UIEffect : MonoBehaviour
         if (textMesh) fullText = textMesh.text;
         else if(text) fullText = text.text;
         LandscapeOrientation = Screen.width > Screen.height;
+
+        relatedObjsTextMesh = new List<TextMesh>();
+        relatedObjsSpriteRenderer = new List<SpriteRenderer>();
+        foreach (GameObject i in relatedObjs)
+        {
+            relatedObjsTextMesh.Add(i.GetComponent<TextMesh>());
+            relatedObjsSpriteRenderer.Add(i.GetComponent<SpriteRenderer>());
+        }
+        rectTrans = this.GetComponent<RectTransform>();
+        if(rectTrans)
+        oriPosRect = new Vector3(rectTrans.localPosition.x, rectTrans.localPosition.y, rectTrans.localPosition.z);
 
     }
 
@@ -102,31 +116,27 @@ public class UIEffect : MonoBehaviour
                     Input.mousePosition.x < Screen.width && Input.mousePosition.y < Screen.height)) &&
                         Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("RecordBroad")))
                 {
-                    foreach (GameObject i in relatedObjs) 
+                    for (int i= 0; i < relatedObjs.Count; ++i)
                     {
-                        TextMesh textMesh = i.GetComponent<TextMesh>();
-                        SpriteRenderer spr = i.GetComponent<SpriteRenderer>();
-                        if (textMesh)
-                            textMesh.color = new Color(textMesh.color.r, textMesh.color.g, textMesh.color.b, 1f);
-                        if (spr)
-                            spr.color = new Color(spr.color.r, spr.color.g, spr.color.b, 1f);
+                        if (relatedObjsTextMesh[i])
+                            relatedObjsTextMesh[i].color = new Color(relatedObjsTextMesh[i].color.r, relatedObjsTextMesh[i].color.g, relatedObjsTextMesh[i].color.b, 1f);
+                        else if (relatedObjsSpriteRenderer[i])
+                            relatedObjsSpriteRenderer[i].color = new Color(relatedObjsSpriteRenderer[i].color.r, relatedObjsSpriteRenderer[i].color.g, relatedObjsSpriteRenderer[i].color.b, 1f);
                     }
                 }
                 else 
                 {
-                    foreach (GameObject i in relatedObjs)
+                    for (int i = 0; i < relatedObjs.Count; ++i)
                     {
-                        TextMesh textMesh = i.GetComponent<TextMesh>();
-                        SpriteRenderer spr = i.GetComponent<SpriteRenderer>();
-                        if (textMesh)
+                        if (relatedObjsTextMesh[i])
                         {
-                            temp = Mathf.Max(0.0f, textMesh.color.a - 0.005f);
-                            textMesh.color = new Color(textMesh.color.r, textMesh.color.g, textMesh.color.b, temp);
+                            temp = Mathf.Max(0.0f, relatedObjsTextMesh[i].color.a - 0.005f);
+                            relatedObjsTextMesh[i].color = new Color(relatedObjsTextMesh[i].color.r, relatedObjsTextMesh[i].color.g, relatedObjsTextMesh[i].color.b, temp);
                         }
-                        if (spr)
+                        else if (relatedObjsSpriteRenderer[i])
                         {
-                            temp = Mathf.Max(0.0f, spr.color.a - 0.005f);
-                            spr.color = new Color(spr.color.r, spr.color.g, spr.color.b, temp);
+                            temp = Mathf.Max(0.0f, relatedObjsSpriteRenderer[i].color.a - 0.005f);
+                            relatedObjsSpriteRenderer[i].color = new Color(relatedObjsSpriteRenderer[i].color.r, relatedObjsSpriteRenderer[i].color.g, relatedObjsSpriteRenderer[i].color.b, temp);
                         }
                     }
                 }
@@ -135,10 +145,10 @@ public class UIEffect : MonoBehaviour
                 if (text) text.color =new Color (text.color.r, text.color.g, text.color.b,Mathf.Abs(Mathf.Sin(Time.time* magnitude)));
                 break;
             case 1://for Selection Scene Arrow Vertical
-                this.GetComponent<RectTransform>().localPosition = oriPosRect + Mathf.Sin(Time.time) * magnitude * targetCam.transform.up;   
+                rectTrans.localPosition = oriPosRect + Mathf.Sin(Time.time) * magnitude * targetCam.transform.up;   
                 break;
             case 2://for Selection Scene Arrow Horizontal
-                this.GetComponent<RectTransform>().localPosition = oriPosRect + Mathf.Sin(Time.time) * magnitude * targetCam.transform.right;
+                rectTrans.localPosition = oriPosRect + Mathf.Sin(Time.time) * magnitude * targetCam.transform.right;
                 break;
             case 3://for Option Canva Gyro
                 if (slider) this.transform.localEulerAngles = new Vector3(
@@ -167,7 +177,7 @@ public class UIEffect : MonoBehaviour
                 this.transform.localScale = oriScale - Mathf.Sin(Time.time*12.0f) * new Vector3(0.1f, 0.1f, 0);
                 break;
             case 9://for Game Scene SellingMark
-                if (playerManager.isSelling && gameSceneManager.GetOptionStatus()!=true && gameSceneManager.currScreenShown ==0)
+                if (playerManager.isSelling && gameSceneManager.GetOptionStatus()!=true && gameSceneManager.currScreenShown == (int)InGameOperation.ScreenShownID.SSIDArena)
                 {
                     image.color = new Color(image.color.r, image.color.g, image.color.b, Mathf.Abs(Mathf.Sin(Time.time * magnitude)));
                 }

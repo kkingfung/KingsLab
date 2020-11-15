@@ -560,7 +560,7 @@ namespace LinearAlgebra
         {
             int hash = 0;
 
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < 16; ++i)
                 hash ^= this[i].GetHashCode();
 
             return hash;

@@ -103,7 +103,7 @@ public class CastleToEnemy : JobComponentSystem
 			var chunkTranslations = chunk.GetNativeArray(translationType);
 			var chunkRadius = chunk.GetNativeArray(radius);
 
-			for (int i = 0; i < chunk.Count; i++)
+			for (int i = 0; i < chunk.Count; ++i)
 			{
 				int damage = 0;
 				Health health = chunkHealths[i];
@@ -155,7 +155,7 @@ public class CastleToEnemy : JobComponentSystem
 			var chunkTranslations = chunk.GetNativeArray(translationType);
 			var chunkRadius = chunk.GetNativeArray(radius);
 
-			for (int i = 0; i < chunk.Count; i++)
+			for (int i = 0; i < chunk.Count; ++i)
 			{
 				float damage = 0;
 				Health health = chunkHealths[i];

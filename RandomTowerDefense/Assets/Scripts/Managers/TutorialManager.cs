@@ -288,7 +288,7 @@ public class TutorialManager : MonoBehaviour
                 break;
             case 3:
                 WaitingResponds = false;
-                if (SceneManager.currScreenShown==2)
+                if (SceneManager.currScreenShown== (int)InGameOperation.ScreenShownID.SSIDTop)
                 {
                     ChangeText("");
                     StageProgress++;
@@ -339,7 +339,7 @@ public class TutorialManager : MonoBehaviour
                 break;
             case 10:
                 WaitingResponds = false;
-                if (SceneManager.currScreenShown == 0)
+                if (SceneManager.currScreenShown == (int)InGameOperation.ScreenShownID.SSIDArena)
                 {
                     ChangeText("");
                     StageProgress++;

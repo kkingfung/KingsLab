@@ -73,7 +73,7 @@ static public class Upgrades
         switch (itemID)
         {
             case StoreItems.CastleHP:
-                castleSpawner.GameObjects[0].GetComponent<Castle>().AddedHealth();
+                castleSpawner.castle.AddedHealth();
                 break;
             case StoreItems.BonusBoss1: 
             case StoreItems.BonusBoss2:

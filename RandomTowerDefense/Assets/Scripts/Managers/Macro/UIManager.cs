@@ -13,7 +13,7 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         GameObject[] allObj = FindObjectsOfType<GameObject>();
-        for (int i = 0; i < allObj.Length; i++)
+        for (int i = 0; i < allObj.Length; ++i)
         {
             if (allObj[i].layer == LayerMask.GetMask("UI")) {
                 Renderer renderer = allObj[i].GetComponent<Renderer>();
@@ -24,7 +24,7 @@ public class UIManager : MonoBehaviour
 
     private void LateUpdate () {
         if (isUIshown != isUIshownHistory) {
-            for (int i = 0; i < allUI.Count; i++) {
+            for (int i = 0; i < allUI.Count; ++i) {
                 allUI[i].enabled = isUIshown;
             }
             isUIshownHistory = isUIshown;

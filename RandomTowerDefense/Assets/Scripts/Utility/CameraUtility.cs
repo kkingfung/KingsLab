@@ -47,7 +47,7 @@ public static class CameraUtility {
         var localBounds = renderer.sharedMesh.bounds;
         bool anyPointIsInFrontOfCamera = false;
 
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 8; ++i) {
             Vector3 localSpaceCorner = localBounds.center + Vector3.Scale (localBounds.extents, cubeCornerOffsets[i]);
             Vector3 worldSpaceCorner = renderer.transform.TransformPoint (localSpaceCorner);
             Vector3 viewportSpaceCorner = mainCamera.WorldToViewportPoint (worldSpaceCorner);

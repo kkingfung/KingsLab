@@ -26,6 +26,9 @@ public class LBM : MonoBehaviour {
 	RenderTexture rt3c;
 	RenderTexture rtMask;
 
+	public Camera LandscapeCam;
+	public Camera ProtraitCam;
+
 	bool isDragging=false;
 	Vector2 interactPos;
 
@@ -164,8 +167,16 @@ public class LBM : MonoBehaviour {
 		}
 		else
 		{
-			interactPos.x = Camera.main.WorldToScreenPoint(Pos).x;
-			interactPos.y = Camera.main.WorldToScreenPoint(Pos).y;
+			if (Screen.width > Screen.height)
+			{
+				interactPos.x = LandscapeCam.WorldToScreenPoint(Pos).x;
+				interactPos.y = LandscapeCam.WorldToScreenPoint(Pos).y;
+			}
+			else 
+			{
+				interactPos.x = ProtraitCam.WorldToScreenPoint(Pos).x;
+				interactPos.y = ProtraitCam.WorldToScreenPoint(Pos).y;
+			}
 		}
 
 		if (isButtonDown)

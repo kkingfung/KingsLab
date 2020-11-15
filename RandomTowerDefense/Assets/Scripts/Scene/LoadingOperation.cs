@@ -6,11 +6,12 @@ using Unity.Entities;
 
 public class LoadingOperation : ISceneChange
 {
-
+    private readonly float LoadingSpd = 0.02f;
     [HideInInspector]
     public string nextScene;
     public List<GameObject> RandomObjs;
     public List<GameObject> LoadingIcon;
+    private List<MeshRenderer> LoadingIconRenderer;
 
     AsyncOperation loadingOperation;
     private bool isLoading;
@@ -18,10 +19,11 @@ public class LoadingOperation : ISceneChange
     private void Start()
     {
         base.SceneIn();
-
-        foreach (GameObject i in LoadingIcon)
+        LoadingIconRenderer = new List<MeshRenderer>();
+        for (int i=0;i< LoadingIcon.Count;++i)
         {
-            i.GetComponent<MeshRenderer>().material.SetFloat("_DissolveAmount", 2);
+            LoadingIconRenderer.Add(LoadingIcon[i].GetComponent<MeshRenderer>());
+            LoadingIconRenderer[i].material.SetFloat("_DissolveAmount", 2);
         }
 
         nextScene = PlayerPrefs.GetString("nextScene","TitleScene");
@@ -69,10 +71,10 @@ public class LoadingOperation : ISceneChange
         while (duration < 1)
         {
             progress = Mathf.Clamp01(loadingOperation.progress / 0.9f);
-            if (duration < progress) duration += 0.02f;
-            foreach (GameObject i in LoadingIcon)
+            if (duration < progress) duration += LoadingSpd;
+            foreach (MeshRenderer i in LoadingIconRenderer)
             {
-                i.GetComponent<MeshRenderer>().material.SetFloat("_DissolveAmount", 2.0f - duration * 2.0f);
+                i.material.SetFloat("_DissolveAmount", 2.0f - duration * 2.0f);
             }
             yield return null;
         }

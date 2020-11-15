@@ -13,9 +13,14 @@ public class MeshDestroy : MonoBehaviour
     public int CutCascades = 1;
     public float ExplodeForce = 0;
 
+    private Mesh originalMesh;
+
+    private void Start()
+    {
+        originalMesh = GetComponent<MeshFilter>().mesh;
+    }
     public void DestroyMesh()
     {
-        var originalMesh = GetComponent<MeshFilter>().mesh;
         originalMesh.RecalculateBounds();
         var parts = new List<PartMesh>();
         var subParts = new List<PartMesh>();
@@ -28,14 +33,14 @@ public class MeshDestroy : MonoBehaviour
             Triangles = new int[originalMesh.subMeshCount][],
             Bounds = originalMesh.bounds
         };
-        for (int i = 0; i < originalMesh.subMeshCount; i++)
+        for (int i = 0; i < originalMesh.subMeshCount; ++i)
             mainPart.Triangles[i] = originalMesh.GetTriangles(i);
 
         parts.Add(mainPart);
 
         for (var c = 0; c < CutCascades; c++)
         {
-            for (var i = 0; i < parts.Count; i++)
+            for (var i = 0; i < parts.Count; ++i)
             {
                 var bounds = parts[i].Bounds;
                 bounds.Expand(0.5f);
@@ -52,9 +57,9 @@ public class MeshDestroy : MonoBehaviour
             subParts.Clear();
         }
 
-        for (var i = 0; i < parts.Count; i++)
+        for (var i = 0; i < parts.Count; ++i)
         {
-            parts[i].MakeGameobject(this);
+            parts[i].MakeGameobject(this, originalMesh);
             if (parts[i].GameObject == null) continue;
             parts[i].GameObject.GetComponent<Rigidbody>().AddForceAtPosition(parts[i].Bounds.center * ExplodeForce, transform.position);
         }
@@ -69,7 +74,7 @@ public class MeshDestroy : MonoBehaviour
         var ray2 = new Ray();
 
 
-        for (var i = 0; i < original.Triangles.Length; i++)
+        for (var i = 0; i < original.Triangles.Length; ++i)
         {
             var triangles = original.Triangles[i];
             edgeSet = false;
@@ -247,11 +252,11 @@ public class MeshDestroy : MonoBehaviour
             Normals = _Normals.ToArray();
             UV = _UVs.ToArray();
             Triangles = new int[_Triangles.Count][];
-            for (var i = 0; i < _Triangles.Count; i++)
+            for (var i = 0; i < _Triangles.Count; ++i)
                 Triangles[i] = _Triangles[i].ToArray();
         }
 
-        public void MakeGameobject(MeshDestroy original)
+        public void MakeGameobject(MeshDestroy original, Mesh originalMesh)
         {
             GameObject = new GameObject(original.name);
             GameObject.transform.position = original.transform.position;
@@ -259,12 +264,12 @@ public class MeshDestroy : MonoBehaviour
             GameObject.transform.localScale = original.transform.localScale;
 
             var mesh = new Mesh();
-            mesh.name = original.GetComponent<MeshFilter>().mesh.name;
+            mesh.name = originalMesh.name;
     
             mesh.vertices = Vertices;
             mesh.normals = Normals;
             mesh.uv = UV;
-            for (var i = 0; i < Triangles.Length; i++)
+            for (var i = 0; i < Triangles.Length; ++i)
                 mesh.SetTriangles(Triangles[i], i, true);
             Bounds = mesh.bounds;
 

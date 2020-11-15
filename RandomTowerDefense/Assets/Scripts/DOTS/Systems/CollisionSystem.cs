@@ -223,7 +223,7 @@
 //			var chunkTranslations = chunk.GetNativeArray(translationType);
 //			var chunkRadius = chunk.GetNativeArray(radius);
 
-//			for (int i = 0; i < chunk.Count; i++)
+//			for (int i = 0; i < chunk.Count; ++i)
 //			{
 //				int damage = 0;
 //				Health health = chunkHealths[i];
@@ -275,7 +275,7 @@
 //			var chunkTranslations = chunk.GetNativeArray(translationType);
 //			var chunkRadius = chunk.GetNativeArray(radius);
 
-//			for (int i = 0; i < chunk.Count; i++)
+//			for (int i = 0; i < chunk.Count; ++i)
 //			{
 //				float damage = 0;
 //				Health health = chunkHealths[i];
@@ -329,7 +329,7 @@
 //			var chunkTranslations = chunk.GetNativeArray(translationType);
 //			var chunkRadius = chunk.GetNativeArray(radiusType);
 
-//			for (int i = 0; i < chunk.Count; i++)
+//			for (int i = 0; i < chunk.Count; ++i)
 //			{
 //				float damage = 0;
 //				Health health = chunkHealths[i];
@@ -390,7 +390,7 @@
 //			var chunkTranslations = chunk.GetNativeArray(translationType);
 //			var chunkRadius = chunk.GetNativeArray(radiusType);
 
-//			for (int i = 0; i < chunk.Count; i++)
+//			for (int i = 0; i < chunk.Count; ++i)
 //			{
 //				float damage = 0;
 //				Health health = chunkHealths[i];
@@ -462,7 +462,7 @@
 //			var chunkSlow = chunk.GetNativeArray(slowType);
 //			var chunkBuff = chunk.GetNativeArray(buffType);
 
-//			for (int i = 0; i < chunk.Count; i++)
+//			for (int i = 0; i < chunk.Count; ++i)
 //			{
 //				float damage = 0;
 //				Health health = chunkHealths[i];
@@ -520,7 +520,7 @@
 //			var chunkPetrify = chunk.GetNativeArray(petrifyType);
 //			var chunkBuff = chunk.GetNativeArray(buffType);
 
-//			for (int i = 0; i < chunk.Count; i++)
+//			for (int i = 0; i < chunk.Count; ++i)
 //			{
 //				Health health = chunkHP[i];
 //				if (health.Value <= 0) continue;

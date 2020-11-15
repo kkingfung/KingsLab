@@ -46,7 +46,7 @@ public class IKCCD : MonoBehaviour
         //CCD
         var lastBone = Bones[Bones.Length - 1];
 
-        //for (var i = 0; i < Bones.Length; i++)
+        //for (var i = 0; i < Bones.Length; ++i)
         //  Bones[i].rotation = InitialRotation[i];
 
         for (int iteration = 0; iteration < Iterations; iteration++)

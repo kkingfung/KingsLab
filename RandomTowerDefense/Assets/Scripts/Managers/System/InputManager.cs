@@ -19,6 +19,18 @@ public class MyMobileInput
 [System.Serializable]
 public class InputManager : MonoBehaviour
 {
+    public enum DragDirectionSel
+    {
+        DragToLeft=1,
+        DragToRight = 2,
+    }
+    public enum DragDirection
+    {
+        DragToDown = 0,
+        DragToLeft = 1,
+        DragToUp = 2,
+        DragToRight = 3,
+    }
     readonly float tapStayTime = 0.3f;
     readonly float tapDoubleTime = 0.2f;
     readonly float dragDiff = 40.0f;//cooperate with Scene Script(toDrag)
@@ -103,7 +115,7 @@ public class InputManager : MonoBehaviour
     private void ArenaActionsByMouse()
     {
         //For Arena Scene/Screen Only
-        if (sceneManager && sceneManager.currScreenShown != 0) return;
+        if (sceneManager && sceneManager.currScreenShown != (int)InGameOperation.ScreenShownID.SSIDArena) return;
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -146,12 +158,12 @@ public class InputManager : MonoBehaviour
             {
                 if (Input.mousePosition.x - posDragging.x > dragDiff)
                 {
-                    sceneManagerSel.toDrag = 2;
+                    sceneManagerSel.toDrag = (int)DragDirectionSel.DragToRight;
                     isDragging = false;
                 }
                 if (Input.mousePosition.x - posDragging.x < -dragDiff)
                 {
-                    sceneManagerSel.toDrag = 1;
+                    sceneManagerSel.toDrag = (int)DragDirectionSel.DragToLeft;
                     isDragging = false; 
                 }
             }
@@ -165,12 +177,12 @@ public class InputManager : MonoBehaviour
                     {
                         if (tempDiffX > dragDiff)
                         {
-                            sceneManager.toDrag = 1;
+                            sceneManager.toDrag =(int)DragDirection.DragToLeft;
                             isDragging = false;
                         }
                         else if (tempDiffX < -dragDiff)
                         {
-                            sceneManager.toDrag = 3;
+                            sceneManager.toDrag = (int)DragDirection.DragToRight;
                             isDragging = false;
                         }
                     }
@@ -178,12 +190,12 @@ public class InputManager : MonoBehaviour
                     {
                         if (tempDiffY > dragDiff)
                         {
-                            sceneManager.toDrag = 0;
+                            sceneManager.toDrag = (int)DragDirection.DragToDown;
                             isDragging = false;
                         }
                         else if (tempDiffY < -dragDiff)
                         {
-                            sceneManager.toDrag = 2;
+                            sceneManager.toDrag = (int)DragDirection.DragToUp;
                             isDragging = false;
                         }
                     }
@@ -201,7 +213,7 @@ public class InputManager : MonoBehaviour
     private void ArenaActionsByTouch(int TouchCount)
     {
         //For Arena Scene/Screen Only
-        if (sceneManager && sceneManager.currScreenShown != 0) return;
+        if (sceneManager && sceneManager.currScreenShown != (int)InGameOperation.ScreenShownID.SSIDArena) return;
 
         for (int touchId = 0; touchId < Math.Min(TouchCount, mobileInput.maxTouch); ++touchId)
         {
@@ -236,11 +248,11 @@ public class InputManager : MonoBehaviour
                         {
                             if (touch.position.x - posDragging.x > dragDiff)
                             {
-                                sceneManagerSel.toDrag = 2;
+                                sceneManagerSel.toDrag = (int)DragDirectionSel.DragToRight;
                             }
                             if (touch.position.x - posDragging.x < -dragDiff)
                             {
-                                sceneManagerSel.toDrag = 1;
+                                sceneManagerSel.toDrag = (int)DragDirectionSel.DragToLeft;
                             }
                         }
 
@@ -255,22 +267,22 @@ public class InputManager : MonoBehaviour
                                 {
                                     if (tempDiffX > dragDiff)
                                     {
-                                        sceneManager.toDrag = 1;
+                                        sceneManager.toDrag = (int)DragDirection.DragToLeft;
                                     }
                                     else if (tempDiffX < -dragDiff)
                                     {
-                                        sceneManager.toDrag = 3;
+                                        sceneManager.toDrag = (int)DragDirection.DragToRight;
                                     }
                                 }
                                 else
                                 {
                                     if (tempDiffY > dragDiff)
                                     {
-                                        sceneManager.toDrag = 0;
+                                        sceneManager.toDrag = (int)DragDirection.DragToDown;
                                     }
                                     else if (tempDiffY < -dragDiff)
                                     {
-                                        sceneManager.toDrag = 2;
+                                        sceneManager.toDrag = (int)DragDirection.DragToUp;
                                     }
                                 }
                             }
@@ -410,8 +422,9 @@ public class InputManager : MonoBehaviour
                         Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("ButtonLayer")))
                     && Buttons.Contains(hit.transform.gameObject))
                     {
-                        if (hit.transform== hit2.transform && hit.transform.GetComponent<RaycastFunction>())
-                            hit.transform.GetComponent<RaycastFunction>().ActionFunc();
+                        RaycastFunction raycastFunction = hit.transform.GetComponent<RaycastFunction>();
+                        if (hit.transform== hit2.transform && raycastFunction)
+                            raycastFunction.ActionFunc();
                         break;
                     }
                     if ((Input.GetTouch(t.fingerId).position-posTap).sqrMagnitude<touchTapDiff &&
@@ -438,9 +451,10 @@ public class InputManager : MonoBehaviour
             }
             if ((Physics.Raycast(ray2, out hit2)&& Physics.Raycast(ray, out hit)) && (Buttons.Contains(hit.transform.gameObject)|| ButtonsCenter.Contains(hit.transform.gameObject)))
             {
-                if (hit.transform == hit2.transform && hit.transform.GetComponent<RaycastFunction>())
-                { 
-                    hit.transform.GetComponent<RaycastFunction>().ActionFunc();
+                RaycastFunction raycastFunction = hit.transform.GetComponent<RaycastFunction>();
+                if (hit.transform == hit2.transform && raycastFunction)
+                {
+                    raycastFunction.ActionFunc();
                 }
             }
         }

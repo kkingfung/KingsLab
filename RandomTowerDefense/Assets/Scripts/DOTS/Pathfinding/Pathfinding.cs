@@ -135,7 +135,7 @@ public class Pathfinding : ComponentSystem {
         //public BufferFromEntity<PathPosition> pathPositionBuffer;
 
         public void Execute() {
-            for (int i = 0; i < pathNodeArray.Length; i++) {
+            for (int i = 0; i < pathNodeArray.Length; ++i) {
                 PathNode pathNode = pathNodeArray[i];
                 pathNode.hCost = CalculateDistanceCost(new int2(pathNode.x, pathNode.y), endPosition);
                 pathNode.cameFromNodeIndex = -1;
@@ -175,7 +175,7 @@ public class Pathfinding : ComponentSystem {
                 }
 
                 // Remove current node from Open List
-                for (int i = 0; i < openList.Length; i++) {
+                for (int i = 0; i < openList.Length; ++i) {
                     if (openList[i] == currentNodeIndex) {
                         openList.RemoveAtSwapBack(i);
                         break;
@@ -184,7 +184,7 @@ public class Pathfinding : ComponentSystem {
 
                 closedList.Add(currentNodeIndex);
 
-                for (int i = 0; i < neighbourOffsetArray.Length; i++) {
+                for (int i = 0; i < neighbourOffsetArray.Length; ++i) {
                     int2 neighbourOffset = neighbourOffsetArray[i];
                     int2 neighbourPosition = new int2(currentNode.x + neighbourOffset.x, currentNode.y + neighbourOffset.y);
 
@@ -287,7 +287,7 @@ public class Pathfinding : ComponentSystem {
         NativeList<int2> waypoints = new NativeList<int2>(Allocator.Temp);
         Vector2 directionOld = Vector2.zero;
 
-        for (int i = 1; i < path.Length; i++)
+        for (int i = 1; i < path.Length; ++i)
         {
             Vector2 directionNew = new Vector2(path[i - 1].x - path[i].x, path[i - 1].y - path[i].y);
             if (directionNew != directionOld)
@@ -321,7 +321,7 @@ public class Pathfinding : ComponentSystem {
     
     private static int GetLowestCostFNodeIndex(NativeList<int> openList, NativeArray<PathNode> pathNodeArray) {
         PathNode lowestCostPathNode = pathNodeArray[openList[0]];
-        for (int i = 1; i < openList.Length; i++) {
+        for (int i = 1; i < openList.Length; ++i) {
             PathNode testPathNode = pathNodeArray[openList[i]];
             if (testPathNode.fCost < lowestCostPathNode.fCost) {
                 lowestCostPathNode = testPathNode;

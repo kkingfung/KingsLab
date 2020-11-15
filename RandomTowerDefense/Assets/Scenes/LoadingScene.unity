@@ -849,6 +849,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7230004028665658216, guid: 0bf10365e57006443bbfcbdec3d57f72, type: 3}
+      propertyPath: LandscapeCam
+      value: 
+      objectReference: {fileID: 84682717}
+    - target: {fileID: 7230004028665658216, guid: 0bf10365e57006443bbfcbdec3d57f72, type: 3}
+      propertyPath: ProtraitCam
+      value: 
+      objectReference: {fileID: 2071277378}
     - target: {fileID: 7230004028665658217, guid: 0bf10365e57006443bbfcbdec3d57f72, type: 3}
       propertyPath: m_Name
       value: LBMTest

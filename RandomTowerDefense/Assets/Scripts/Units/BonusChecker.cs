@@ -42,9 +42,10 @@ public class BonusChecker : MonoBehaviour
         int result = 0x00000;
         foreach (GameObject i in targetList)
         {
-            if ((result & (0x00001 << (i.GetComponent<Tower>().rank - 1))) == 0x00000)
+            Tower tower = i.GetComponent<Tower>();
+            if ((result & (0x00001 << (tower.rank - 1))) == 0x00000)
             {
-                result &= (0x00001 << (i.GetComponent<Tower>().rank - 1));
+                result &= (0x00001 << (tower.rank - 1));
             }
             if (result == 0x11111) {
                 resourceManager.ChangeMaterial(BonusForAllRanksByTypeChk);

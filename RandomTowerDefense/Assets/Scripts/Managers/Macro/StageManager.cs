@@ -5,6 +5,13 @@ using UnityEngine.UI;
 
 public class StageManager : MonoBehaviour
 {
+    public enum GameResult
+    {
+        Lose = -1,
+        NotEndedYet = 0,
+        Won = 1
+    }
+
     private const int EnemySpawnPtNum = 3;
 
     [HideInInspector]
@@ -27,6 +34,8 @@ public class StageManager : MonoBehaviour
     private FilledMapGenerator mapGenerator;
 
     private GameObject[] EnemySpawnPort;
+    private MeshDestroy[] castleDestroy;
+
     [HideInInspector]
     public int CastleEntityID;
     private CastleSpawner castleSpawner;
@@ -50,7 +59,7 @@ public class StageManager : MonoBehaviour
         scoreCalculation = FindObjectOfType<ScoreCalculation>();
         castleSpawner = FindObjectOfType<CastleSpawner>();
 
-        result = 0;
+        result = (int)GameResult.NotEndedYet;
         foreach (GameObject i in GameClearCanva)
         {
             i.SetActive(false);
@@ -60,7 +69,7 @@ public class StageManager : MonoBehaviour
 
         if (mapGenerator)
         {
-            if (sceneManager.GetCurrIsland() != 3)
+            if (sceneManager.GetCurrIsland() != StageInfo.IslandNum-1)
             {
                 mapGenerator.OnNewStage(sceneManager.GetCurrIsland());
             }
@@ -75,6 +84,8 @@ public class StageManager : MonoBehaviour
             int[] entityID = castleSpawner.Spawn(mapGenerator.CoordToPosition(SpawnPoint[0]) + mapGenerator.transform.position, 
                 Quaternion.Euler(0f, 90f, 0f), (int)PlayerPrefs.GetFloat("hpMax",5), 0);
             CastleEntityID = entityID[0];
+            castleDestroy = castleSpawner.GameObjects[CastleEntityID].GetComponentsInChildren<MeshDestroy>();
+
             for (int i = 0; i < EnemySpawnPtNum; ++i)
             {
                 Vector3 pos = mapGenerator.CoordToPosition(SpawnPoint[i + 1]) + mapGenerator.transform.position;
@@ -93,7 +104,7 @@ public class StageManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (result != 0 && isReady)
+        if (result != (int)GameResult.NotEndedYet && isReady)
         {
             sceneManager.DarkenCam.SetActive(true);
             if (Screen.width > Screen.height)
@@ -136,14 +147,13 @@ public class StageManager : MonoBehaviour
 
     public bool CheckLose()
     {
-        if (GetCurrHP() <= 0 && result == 0)
+        if (GetCurrHP() <= 0 && result == (int)GameResult.NotEndedYet)
         {
-            result = -1;
+            result = (int)GameResult.Lose;
             isReady = false;
             sceneManager.SetOptionStatus(false);
             audioManager.PlayAudio("se_Lose");
             timeManager.SetTimeScale(0);
-            MeshDestroy[] castleDestroy = castleSpawner.GameObjects[CastleEntityID].GetComponentsInChildren<MeshDestroy>();
             foreach(MeshDestroy i in castleDestroy)
                 i.DestroyMesh();
             scoreCalculation.CalculationScore();
@@ -155,10 +165,10 @@ public class StageManager : MonoBehaviour
 
     public bool SetWin()
     {
-        if (result == -1)
+        if (result == (int)GameResult.Lose)
             return false;
 
-        result = 1;
+        result = (int)GameResult.Won;
 
         scoreCalculation.CalculationScore();
         if (sceneManager.GetEnabledIsland() == sceneManager.GetCurrIsland() && sceneManager.GetEnabledIsland() < StageInfo.IslandNum - 1)
@@ -166,7 +176,11 @@ public class StageManager : MonoBehaviour
         audioManager.PlayAudio("se_Clear");
         return true;
     }
-    public int GetMaxHP() { return castleSpawner.GameObjects[CastleEntityID].GetComponent<Castle>().MaxCastleHP; }
+    public int GetMaxHP() {
+        if(castleSpawner && castleSpawner.castle)
+            return castleSpawner.castle.MaxCastleHP;
+        return 1;
+    }
     public int GetCurrHP() { return Mathf.Max(0, castleSpawner.castleHPArray[0]); }
 
     private IEnumerator FadeOutRoutine()
@@ -213,6 +227,6 @@ public class StageManager : MonoBehaviour
 
     public void AddedHealth(int Val = 1)
     {
-        castleSpawner.GameObjects[0].GetComponent<Castle>().AddedHealth(Val);
+        castleSpawner.castle.AddedHealth(Val);
     }
 }

@@ -6,7 +6,9 @@ using UnityEngine;
 public class StockOperator : MonoBehaviour
 {
     private readonly Vector3 TargetScale = new Vector3(0.4f, 0.4f, 0.4f);
+    private readonly float ScaleFactorWhenZoom = 0.03f;
     private readonly int Rotation = 1;
+    private readonly int AnimTotalFrameDefault = 20;
 
     public List<SpriteRenderer> StockSlot;
 
@@ -82,9 +84,9 @@ public class StockOperator : MonoBehaviour
 
     private IEnumerator StartAnimation()
     {
-        int frame = 20;
+        int frame = AnimTotalFrameDefault;
         float rotateChgsbyFrame = (Rotation * 360f - this.transform.localEulerAngles.z) / frame;
-        float scaleChgsbyFrame = ((TargetScale.x -PlayerPrefs.GetFloat("zoomRate",0)*(TargetScale.x-0.03f)) - this.transform.localScale.x) / frame;
+        float scaleChgsbyFrame = ((TargetScale.x -PlayerPrefs.GetFloat("zoomRate",0)*(TargetScale.x- ScaleFactorWhenZoom)) - this.transform.localScale.x) / frame;
         while (frame-- > 0)
         {
             this.transform.localEulerAngles = new Vector3(this.transform.localEulerAngles.x,

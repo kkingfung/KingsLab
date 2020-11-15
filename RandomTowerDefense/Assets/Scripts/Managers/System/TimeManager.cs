@@ -44,7 +44,7 @@ public class TimeManager : MonoBehaviour
 	public void AdjustTime()
 	{
 		Time.timeScale = timeFactor;
-		Time.fixedDeltaTime = Time.timeScale * .02f;
+		Time.fixedDeltaTime = Time.timeScale * timeLength;
 	}
 
 	public void TimeControl()

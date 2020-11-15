@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class InGameOperation : ISceneChange
 {
+    private readonly float tutorialTimeFactor = 0.05f;
+    private readonly int BasicFloorMatSize = 3;
     public enum ScreenShownID
     {
         SSIDArena = 0,
@@ -61,7 +63,7 @@ public class InGameOperation : ISceneChange
     private int IslandEnabled = 0;//Check when win
 
     [HideInInspector]
-    public int currScreenShown = 0;//0:Main, 1:Top-Left, 2:Top, 3:Top-Right
+    public int currScreenShown = (int)InGameOperation.ScreenShownID.SSIDArena;//0:Main, 1:Top-Left, 2:Top, 3:Top-Right
     [HideInInspector]
     public int nextScreenShown = 0;
     private bool isScreenChanging = false;
@@ -123,7 +125,7 @@ public class InGameOperation : ISceneChange
     {
         base.SceneIn();
 
-        FloorMat.SetFloat("ShapesSides", 3 + IslandNow);
+        FloorMat.SetFloat("ShapesSides", BasicFloorMatSize + IslandNow);
         MainCam.transform.position = MainCamStayPt[0];
         MainCam.transform.rotation = Quaternion.Euler(MainCamRotationAngle[0]);
 
@@ -240,7 +242,7 @@ public class InGameOperation : ISceneChange
         }
         else
         {
-            timeManager.timeFactor = 0.05f;
+            timeManager.timeFactor = tutorialTimeFactor;
         }
 
         foreach (Button i in OptionButton)
@@ -254,28 +256,28 @@ public class InGameOperation : ISceneChange
         }
 
         if (tutorialManager == null || (tutorialManager.GetTutorialStage()> TutorialManager.TutorialStageID.TutorialProgress_StoreSkill
-            ||(tutorialManager.GetTutorialStage() == TutorialManager.TutorialStageID.TutorialProgress_StoreSkill && tutorialManager.GetTutorialStageProgress() > 8)))
+            ||(tutorialManager.GetTutorialStage() == TutorialManager.TutorialStageID.TutorialProgress_StoreSkill && tutorialManager.GetTutorialStageProgress() > 8)))//8:referred to TutorialManager(varies)
         if (isScreenChanging == false)
         {
             Vector3 angle = CameraManager.GyroCamGp[0].transform.rotation.eulerAngles;
             while (angle.x > 180) angle.x -= 360;
             while (angle.x < -180) angle.x += 360;
-            if (angle.x > 30) { currScreenShown = 0; nextScreenShown = 0; }
+            if (angle.x > 30) { currScreenShown = (int)ScreenShownID.SSIDArena; nextScreenShown = (int)ScreenShownID.SSIDArena; }
             else
             {
                 while (angle.y > 180) angle.y -= 360;
                 while (angle.y < -180) angle.y += 360;
                 if (angle.y > -60 && angle.y < 60)
                 {
-                    currScreenShown = 2; nextScreenShown = 2;
+                    currScreenShown = (int)ScreenShownID.SSIDTop; nextScreenShown = (int)ScreenShownID.SSIDTop;
                 }
                 else if (angle.y > -180 && angle.y < -60)
                 {
-                    currScreenShown = 1; nextScreenShown = 1;
+                    currScreenShown = (int)ScreenShownID.SSIDTopLeft; nextScreenShown = (int)ScreenShownID.SSIDTopLeft;
                 }
                 else if (angle.y > 60 && angle.y < 180)
                 {
-                    currScreenShown = 3; nextScreenShown = 3;
+                    currScreenShown = (int)ScreenShownID.SSIDTopRight; nextScreenShown = (int)ScreenShownID.SSIDTopRight;
                 }
             }
         }
@@ -380,24 +382,24 @@ public class InGameOperation : ISceneChange
         switch (chgValue)
         {
             case 0:
-                if (currScreenShown == 0) return;
-                nextScreenShown = 0;
+                if (currScreenShown == (int)InGameOperation.ScreenShownID.SSIDArena) return;
+                nextScreenShown = (int)InGameOperation.ScreenShownID.SSIDArena;
                 break;
             case 1:
-                if (currScreenShown == 2 || currScreenShown == 3) nextScreenShown = currScreenShown - 1;
+                if (currScreenShown == (int)ScreenShownID.SSIDTop || currScreenShown == (int)ScreenShownID.SSIDTopRight) nextScreenShown = currScreenShown - 1;
                 else
-                    if (currScreenShown == 1) nextScreenShown = 3;
+                    if (currScreenShown == (int)ScreenShownID.SSIDTopLeft) nextScreenShown = (int)ScreenShownID.SSIDTopRight;
                 else
                     return;
                 break;
             case 2:
-                if (currScreenShown == 0) nextScreenShown = 2;
+                if (currScreenShown == (int)ScreenShownID.SSIDArena) nextScreenShown = (int)ScreenShownID.SSIDTop;
                 else return;
                 break;
             case 3:
-                if (currScreenShown == 1 || currScreenShown == 2) nextScreenShown = currScreenShown + 1;
+                if (currScreenShown == (int)ScreenShownID.SSIDTopLeft || currScreenShown == (int)ScreenShownID.SSIDTop) nextScreenShown = currScreenShown + 1;
                 else
-                    if (currScreenShown == 3) nextScreenShown = 1;
+                    if (currScreenShown == (int)ScreenShownID.SSIDTopRight) nextScreenShown = (int)ScreenShownID.SSIDTopLeft;
                 else
                     return;
                 break;
@@ -423,7 +425,7 @@ public class InGameOperation : ISceneChange
         if (GyroscopeManager.RightShake)
             ChangeScreenShownByButton(3);
         if (GyroscopeManager.VerticalShake)
-            ChangeScreenShownByButton(currScreenShown == 0 ? 2 : 0);
+            ChangeScreenShownByButton(currScreenShown == (int)ScreenShownID.SSIDArena ? (int)ScreenShownID.SSIDTop : (int)ScreenShownID.SSIDArena);
     }
 
     private void ChangeScreenShownByDrag()

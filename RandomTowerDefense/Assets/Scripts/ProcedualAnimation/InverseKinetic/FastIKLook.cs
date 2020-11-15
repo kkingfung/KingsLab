@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace DitzelGames.FastIK
+namespace FastIK
 {
     public class FastIKLook : MonoBehaviour
     {

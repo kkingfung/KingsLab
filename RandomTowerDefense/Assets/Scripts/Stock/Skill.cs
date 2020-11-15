@@ -28,6 +28,7 @@ public class Skill : MonoBehaviour
     private SkillSpawner skillSpawner;
 
     private GameObject defaultTarget;
+    private VisualEffect VFX;
     // Start is called before the first frame update
     private void Start()
     {
@@ -44,6 +45,7 @@ public class Skill : MonoBehaviour
         audioManager = FindObjectOfType<AudioManager>();
         audioSource = GetComponent<AudioSource>();
         skillSpawner = FindObjectOfType<SkillSpawner>();
+        VFX = this.GetComponent<VisualEffect>();
 
         switch (actionID)
         {
@@ -88,7 +90,7 @@ public class Skill : MonoBehaviour
             case Upgrades.StoreItems.MagicMinions:
                 if (targetEnm == new Vector3() && findEnm())
                 {
-                    this.GetComponent<VisualEffect>().SetVector3("TargetLocation",
+                    VFX.SetVector3("TargetLocation",
                         targetEnm - this.transform.position);
                     if (audioManager.enabledSE)
                     {
@@ -139,8 +141,8 @@ public class Skill : MonoBehaviour
         switch (actionID)
         {
             case Upgrades.StoreItems.MagicPetrification:
-                this.GetComponent<VisualEffect>().SetFloat("Radius", val * 1.5f);
-                this.GetComponent<VisualEffect>().SetFloat("Rotation", val / attr.lifeTime * 30.0f);
+                VFX.SetFloat("Radius", val * 1.5f);
+                VFX.SetFloat("Rotation", val / attr.lifeTime * 30.0f);
                 break;
         }
     }

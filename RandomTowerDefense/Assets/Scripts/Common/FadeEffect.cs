@@ -5,7 +5,17 @@ using UnityEngine.UI;
 
 public class FadeEffect : MonoBehaviour
 {
-     private float Threshold = 0.0f;
+    //private enum EnumRenderType
+    //{
+    //    NotChecked = 0,
+    //    FoundMeshRenderer,
+    //    FoundRawImg,
+    //    FoundSprRenderer,
+    //    FoundImage,
+    //}
+    //private EnumRenderType rendertype;
+
+    private float Threshold = 0.0f;
     private readonly float FadeRate = 0.02f;
     private float ThresholdRecord;
     Material FadeMat;
@@ -13,10 +23,8 @@ public class FadeEffect : MonoBehaviour
 
     private void Awake()
     {
-        if (FadeMat == null && GetComponent<MeshRenderer>()) FadeMat = GetComponent<MeshRenderer>().material;
-        if (FadeMat == null && GetComponent<RawImage>()) FadeMat = GetComponent<RawImage>().material;
-        if (FadeMat == null && GetComponent<SpriteRenderer>()) FadeMat = GetComponent<SpriteRenderer>().material;
-        if (FadeMat == null && GetComponent<Image>()) FadeMat = GetComponent<Image>().material;
+        if (FadeMat == null)
+            GetFadeMaterial();
         FadeMat.SetFloat("_FadeThreshold", 1f);
         PlayerPrefs.SetFloat("_FadeThreshold", 1f);
         ThresholdRecord = Threshold;
@@ -29,6 +37,42 @@ public class FadeEffect : MonoBehaviour
             ThresholdRecord = Threshold;
         }
       
+    }
+    public void GetFadeMaterial()
+    {
+        MeshRenderer chkMeshRender = GetComponent<MeshRenderer>();
+        if (chkMeshRender)
+        {
+            FadeMat = chkMeshRender.material;
+            //rendertype = EnumRenderType.FoundMeshRenderer;
+        }
+        else
+        {
+            RawImage chkRawImg = GetComponent<RawImage>();
+            if (chkRawImg)
+            {
+                FadeMat = chkRawImg.material;
+                //rendertype = EnumRenderType.FoundRawImg;
+            }
+            else
+            {
+                SpriteRenderer chkSprRender = GetComponent<SpriteRenderer>();
+                if (chkSprRender)
+                {
+                    FadeMat = chkSprRender.material;
+                    //rendertype = EnumRenderType.FoundSprRenderer;
+                }
+                else
+                {
+                    Image chkImage = GetComponent<Image>();
+                    if (chkImage)
+                    {
+                        FadeMat = chkImage.material;
+                        //rendertype = EnumRenderType.FoundImage;
+                    }
+                }
+            }
+        }
     }
 
     public void FadeIn() {
@@ -49,10 +93,8 @@ public class FadeEffect : MonoBehaviour
 
     private IEnumerator FadeOutRoutine()
     {
-        if (FadeMat == null && GetComponent<MeshRenderer>()) FadeMat = GetComponent<MeshRenderer>().material;
-        if (FadeMat == null && GetComponent<RawImage>()) FadeMat = GetComponent<RawImage>().material;
-        if (FadeMat == null && GetComponent<SpriteRenderer>()) FadeMat = GetComponent<SpriteRenderer>().material;
-        if (FadeMat == null && GetComponent<Image>()) FadeMat = GetComponent<Image>().material;
+        if (FadeMat == null)
+            GetFadeMaterial();
 
         while (Threshold > 0f) {
             Threshold -= FadeRate;
@@ -64,10 +106,8 @@ public class FadeEffect : MonoBehaviour
 
     private IEnumerator FadeInRoutine()
     {
-        if (FadeMat == null && GetComponent<MeshRenderer>()) FadeMat = GetComponent<MeshRenderer>().material;
-        if (FadeMat == null && GetComponent<RawImage>()) FadeMat = GetComponent<RawImage>().material;
-        if (FadeMat == null && GetComponent<SpriteRenderer>()) FadeMat = GetComponent<SpriteRenderer>().material;
-        if (FadeMat == null && GetComponent<Image>()) FadeMat = GetComponent<Image>().material;
+        if (FadeMat == null)
+            GetFadeMaterial();
 
         while (Threshold < 1f)
         {

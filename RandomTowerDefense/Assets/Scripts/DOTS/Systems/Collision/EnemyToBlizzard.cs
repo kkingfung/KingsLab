@@ -109,7 +109,7 @@ public class EnemyToBlizzard : JobComponentSystem
 			var chunkSlow = chunk.GetNativeArray(slowType);
 			var chunkBuff = chunk.GetNativeArray(buffType);
 
-			for (int i = 0; i < chunk.Count; i++)
+			for (int i = 0; i < chunk.Count; ++i)
 			{
 				float damage = 0;
 				Health health = chunkHealths[i];

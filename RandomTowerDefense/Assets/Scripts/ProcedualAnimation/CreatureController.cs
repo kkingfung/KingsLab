@@ -39,7 +39,7 @@ public class CreatureController : MonoBehaviour {
 
     void Start() {
         sceneManager = FindObjectOfType<StageSelectOperation>();
-        for (int i = 0; i < legs.Length; i++) {
+        for (int i = 0; i < legs.Length; ++i) {
             averageRotationRadius += legs[i].restingPosition.z;
         }
         averageRotationRadius /= legs.Length;
@@ -65,7 +65,7 @@ public class CreatureController : MonoBehaviour {
             index = (index + 1) % legs.Length;
             if (legs[index] == null) return;
 
-            for (int i = 0; i < legs.Length; i++) {
+            for (int i = 0; i < legs.Length; ++i) {
                 legs[i].MoveVelocity(CalculateLegVelocity(i));
             }
 
@@ -119,7 +119,7 @@ public class CreatureController : MonoBehaviour {
         Vector3 point, a, b, c;
 
         // Takes The Cross Product Of Each Leg And Calculates An Average Up
-        for (int i = 0; i < legs.Length; i++) {
+        for (int i = 0; i < legs.Length; ++i) {
             point = legs[i].stepPoint;
             avgSurfaceDist += transform.InverseTransformPoint(point).y;
             a = (transform.position - point).normalized;

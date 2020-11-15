@@ -59,7 +59,7 @@ public class FastIKFabric : MonoBehaviour
 
         //find root
         Root = transform;
-        for (var i = 0; i <= ChainLength; i++)
+        for (var i = 0; i <= ChainLength; ++i)
         {
             if (Root == null)
                 throw new UnityException("The chain value is longer than the ancestor chain!");
@@ -124,7 +124,7 @@ public class FastIKFabric : MonoBehaviour
         //   x--------------------x--------------------x---...
 
         //get position
-        for (int i = 0; i < Bones.Length; i++)
+        for (int i = 0; i < Bones.Length; ++i)
             Positions[i] = GetPositionRootSpace(Bones[i]);
 
         var targetPosition = GetPositionRootSpace(Target);
@@ -136,12 +136,12 @@ public class FastIKFabric : MonoBehaviour
             //just strech it
             var direction = (targetPosition - Positions[0]).normalized;
             //set everything after root
-            for (int i = 1; i < Positions.Length; i++)
+            for (int i = 1; i < Positions.Length; ++i)
                 Positions[i] = Positions[i - 1] + direction * BonesLength[i - 1];
         }
         else
         {
-            for (int i = 0; i < Positions.Length - 1; i++)
+            for (int i = 0; i < Positions.Length - 1; ++i)
                 Positions[i + 1] = Vector3.Lerp(Positions[i + 1], Positions[i] + StartDirectionSucc[i], SnapBackStrength);
 
             for (int iteration = 0; iteration < Iterations; iteration++)
@@ -157,7 +157,7 @@ public class FastIKFabric : MonoBehaviour
                 }
 
                 //forward
-                for (int i = 1; i < Positions.Length; i++)
+                for (int i = 1; i < Positions.Length; ++i)
                     Positions[i] = Positions[i - 1] + (Positions[i] - Positions[i - 1]).normalized * BonesLength[i - 1];
 
                 //close enough?
@@ -170,7 +170,7 @@ public class FastIKFabric : MonoBehaviour
         if (Pole != null)
         {
             var polePosition = GetPositionRootSpace(Pole);
-            for (int i = 1; i < Positions.Length - 1; i++)
+            for (int i = 1; i < Positions.Length - 1; ++i)
             {
                 var plane = new Plane(Positions[i + 1] - Positions[i - 1], Positions[i - 1]);
                 var projectedPole = plane.ClosestPointOnPlane(polePosition);
@@ -181,7 +181,7 @@ public class FastIKFabric : MonoBehaviour
         }
 
         //set position & rotation
-        for (int i = 0; i < Positions.Length; i++)
+        for (int i = 0; i < Positions.Length; ++i)
         {
             if (i == Positions.Length - 1)
                 SetRotationRootSpace(Bones[i], Quaternion.Inverse(targetRotation) * StartRotationTarget * Quaternion.Inverse(StartRotationBone[i]));
@@ -227,7 +227,7 @@ public class FastIKFabric : MonoBehaviour
     //void OnDrawGizmos()
     //{
     //    var current = this.transform;
-    //    for (int i = 0; i < ChainLength && current != null && current.parent != null; i++)
+    //    for (int i = 0; i < ChainLength && current != null && current.parent != null; ++i)
     //    {
     //        var scale = Vector3.Distance(current.position, current.parent.position) * 0.1f;
     //        Handles.matrix = Matrix4x4.TRS(current.position, Quaternion.FromToRotation(Vector3.up, current.parent.position - current.position), new Vector3(scale, Vector3.Distance(current.parent.position, current.position), scale));

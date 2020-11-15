@@ -9,7 +9,7 @@ public class BoidSpawner : MonoBehaviour {
     public int spawnCount = 10;
 
     void Awake () {
-        for (int i = 0; i < spawnCount; i++) {
+        for (int i = 0; i < spawnCount; ++i) {
             Vector3 pos = transform.position + Random.insideUnitSphere * spawnRadius;
             int rand = Random.Range(0, prefab.Count);
             Boid boid = Instantiate (prefab[rand]);

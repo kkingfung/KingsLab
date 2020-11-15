@@ -46,6 +46,7 @@ public class TowerManager : MonoBehaviour
 
     [Header("TowerInfo Settings")]
     public List<GameObject> TargetInfo;
+    private List<Text> TargetInfoText;
 
     private ResourceManager resourceManager;
     private FilledMapGenerator filledMapGenerator;
@@ -66,6 +67,12 @@ public class TowerManager : MonoBehaviour
         sceneManager = FindObjectOfType<InGameOperation>();
         towerSpawner = FindObjectOfType<TowerSpawner>();
         tutorialManager = FindObjectOfType<TutorialManager>();
+
+        TargetInfoText = new List<Text>();
+        foreach (GameObject i in TargetInfo)
+        {
+            TargetInfoText.Add(i.GetComponent<Text>());
+        }
     }
 
     // Update is called once per frame
@@ -76,26 +83,29 @@ public class TowerManager : MonoBehaviour
 
     public void UpdateInfo(GameObject target)
     {
-        foreach (GameObject i in TargetInfo)
-        {
-            i.SetActive(target != null);
+for(int i = 0; i < TargetInfo.Count; ++i) {
+            TargetInfo[i].SetActive(target != null);
             if (target == null) continue;
-            Tower towerinfo = target.GetComponent<Tower>();
-            Text text = i.GetComponent<Text>();
-            text.text = "Rank" + towerinfo.rank + " Lv" + towerinfo.level;
-            switch (towerinfo.type) {
-                case TowerInfo.TowerInfoID.Enum_TowerNightmare:
-                    text.color = Color.yellow;
-                    break;
-                case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-                    text.color = Color.grey;
-                    break;
-                case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
-                    text.color = Color.cyan;
-                    break;
-                case TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                    text.color = Color.magenta;
-                    break;
+
+            if (TargetInfoText[i])
+            {
+                Tower towerinfo = target.GetComponent<Tower>();
+                TargetInfoText[i].text = "Rank" + towerinfo.rank + " Lv" + towerinfo.level;
+                switch (towerinfo.type)
+                {
+                    case TowerInfo.TowerInfoID.Enum_TowerNightmare:
+                        TargetInfoText[i].color = Color.yellow;
+                        break;
+                    case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
+                        TargetInfoText[i].color = Color.grey;
+                        break;
+                    case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
+                        TargetInfoText[i].color = Color.cyan;
+                        break;
+                    case TowerInfo.TowerInfoID.Enum_TowerUsurper:
+                        TargetInfoText[i].color = Color.magenta;
+                        break;
+                }
             }
         }
     }
@@ -210,6 +220,7 @@ public class TowerManager : MonoBehaviour
         else if (TowerUsurperList.Contains(targetedTower)) type = TowerInfo.TowerInfoID.Enum_TowerUsurper;
         else return false;
 
+        Tower targetedTowerScript = targetedTower.GetComponent<Tower>();
         //count same towers at max level
         List<GameObject> candidateList = new List<GameObject>();
         List<GameObject> tempList;
@@ -225,9 +236,10 @@ public class TowerManager : MonoBehaviour
                     int randNum = Random.Range(0, tempList.Count);
                     GameObject chkTarget = tempList[randNum];
                     tempList.Remove(chkTarget);
-                    if (chkTarget.GetComponent<Tower>().rank!= targetedTower.GetComponent<Tower>().rank)
+                    Tower chkTowerScript = chkTarget.GetComponent<Tower>();
+                    if (chkTowerScript.rank!= targetedTowerScript.rank)
                         continue;
-                    else if (chkTarget.GetComponent<Tower>().CheckLevel())
+                    else if (chkTowerScript.CheckLevel())
                     {
                         candidateList.Add(chkTarget);
                         count++;
@@ -242,9 +254,10 @@ public class TowerManager : MonoBehaviour
                     int randNum = Random.Range(0, tempList.Count);
                     GameObject chkTarget = tempList[randNum];
                     tempList.Remove(chkTarget);
-                    if (chkTarget.GetComponent<Tower>().rank != targetedTower.GetComponent<Tower>().rank)
+                    Tower chkTowerScript = chkTarget.GetComponent<Tower>();
+                    if (chkTowerScript.rank != targetedTowerScript.rank)
                         continue;
-                    else if (chkTarget.GetComponent<Tower>().CheckLevel())
+                    else if (chkTowerScript.CheckLevel())
                     {
                         candidateList.Add(chkTarget);
                         count++;
@@ -259,9 +272,10 @@ public class TowerManager : MonoBehaviour
                     int randNum = Random.Range(0, tempList.Count);
                     GameObject chkTarget = tempList[randNum];
                     tempList.Remove(chkTarget);
-                    if (chkTarget.GetComponent<Tower>().rank != targetedTower.GetComponent<Tower>().rank)
+                    Tower chkTowerScript = chkTarget.GetComponent<Tower>();
+                    if (chkTowerScript.rank != targetedTowerScript.rank)
                         continue;
-                    else if (chkTarget.GetComponent<Tower>().CheckLevel())
+                    else if (chkTowerScript.CheckLevel())
                     {
                         candidateList.Add(chkTarget);
                         count++;
@@ -276,9 +290,10 @@ public class TowerManager : MonoBehaviour
                     int randNum = Random.Range(0, tempList.Count);
                     GameObject chkTarget = tempList[randNum];
                     tempList.Remove(chkTarget);
-                    if (chkTarget.GetComponent<Tower>().rank != targetedTower.GetComponent<Tower>().rank)
+                    Tower chkTowerScript = chkTarget.GetComponent<Tower>();
+                    if (chkTowerScript.rank != targetedTowerScript.rank)
                         continue;
-                    else if (chkTarget.GetComponent<Tower>().CheckLevel())
+                    else if (chkTowerScript.CheckLevel())
                     {
                         candidateList.Add(chkTarget);
                         count++;
@@ -296,36 +311,39 @@ public class TowerManager : MonoBehaviour
             GameObject candidate = candidateList[randCandidate];
             candidateList.Remove(candidate);
             GameObject temp = Instantiate<GameObject>(TowerDisappear, candidate.transform.position, Quaternion.identity);
-            switch (candidate.GetComponent<Tower>().type)
+            VisualEffect tempVFX = temp.GetComponent<VisualEffect>();
+            Tower candidateTowerScript = candidate.GetComponent<Tower>();
+            switch (candidateTowerScript.type)
             {
                 case TowerInfo.TowerInfoID.Enum_TowerNightmare:
-                    temp.GetComponent<VisualEffect>().SetVector4("MainColor", new Vector4(1, 1, 0, 1));
+                    tempVFX.SetVector4("MainColor", new Vector4(1, 1, 0, 1));
                     break;
                 case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-                    temp.GetComponent<VisualEffect>().SetVector4("MainColor", new Vector4(0, 1, 0, 1));
+                    tempVFX.SetVector4("MainColor", new Vector4(0, 1, 0, 1));
                     break;
                 case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
-                    temp.GetComponent<VisualEffect>().SetVector4("MainColor", new Vector4(0, 0, 1, 1));
+                    tempVFX.SetVector4("MainColor", new Vector4(0, 0, 1, 1));
                     break;
                 case TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                    temp.GetComponent<VisualEffect>().SetVector4("MainColor", new Vector4(1, 0, 0, 1));
+                    tempVFX.SetVector4("MainColor", new Vector4(1, 0, 0, 1));
                     break;
             }
-            temp.GetComponent<VisualEffect>().SetVector3("TargetLocation", targetedTower.transform.position);
+            tempVFX.SetVector3("TargetLocation", targetedTower.transform.position);
             StartCoroutine(WaitToKillVFX(temp, 5, 10));
             removeTowerFromList(candidate);
         }
         removeTowerFromList(targetedTower);
 
         //Build 
-        BuildTower(targetedTower.GetComponent<Tower>().pillar,targetedTower.transform.position, targetedTower.GetComponent<Tower>().rank + 1);
+        BuildTower(targetedTowerScript.pillar,targetedTower.transform.position, targetedTowerScript.rank + 1);
 
         return true;
     }
 
     private void removeTowerFromList(GameObject targetedTower)
     {
-        switch (targetedTower.GetComponent<Tower>().type)
+        Tower targetedTowerScript = targetedTower.GetComponent<Tower>();
+        switch (targetedTowerScript.type)
         {
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
                 TowerNightmareList.Remove(targetedTower);
@@ -340,17 +358,17 @@ public class TowerManager : MonoBehaviour
                 TowerUsurperList.Remove(targetedTower);
                 break;
         }
-        targetedTower.GetComponent<Tower>().Destroy();
+        targetedTowerScript.Destroy();
     }
 
-    public void SellTower(GameObject targetedTower)
+    public void SellTower(Tower targetedTower)
     {
         if (resourceManager.SellTower(targetedTower))
         {
-            filledMapGenerator.UpdatePillarStatus(targetedTower,0);
+            filledMapGenerator.UpdatePillarStatus(targetedTower.gameObject,0);
             GameObject temp = Instantiate(TowerSell, targetedTower.transform.position, Quaternion.identity);
            // Destroy(temp,10.0f);
-            removeTowerFromList(targetedTower);
+            removeTowerFromList(targetedTower.gameObject);
         }
     }
     private IEnumerator WaitToKillVFX(GameObject targetVFX, int waittime, int killtime)

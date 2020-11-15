@@ -32,10 +32,9 @@ public class ResourceManager : MonoBehaviour
         return enoughResource;
     }
 
-    public bool SellTower(GameObject targetTower) {
-        Tower towerinfo = targetTower.GetComponent<Tower>();
-        if (towerinfo == null) return false;
-        CurrentMaterial += SellPrice[towerinfo.rank - 1];
+    public bool SellTower(Tower targetTower) {
+        if (targetTower == null) return false;
+        CurrentMaterial += SellPrice[targetTower.rank - 1];
         return true;
     }
 }

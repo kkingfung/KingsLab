@@ -60,18 +60,20 @@ public class ISceneChange : MonoBehaviour
     }
     protected void SceneIn()
     {
-        if (FadeInDelegate != null)
-        {
-            FadeInDelegate();
-        }
+        FadeInDelegate?.Invoke();
+        //if (FadeInDelegate != null)
+        //{
+        //    FadeInDelegate();
+        //}
     }
     protected void SceneOut()
     {
         OrientationLock = true;
-        if (FadeOutDelegate != null)
-        {
-            FadeOutDelegate();
-        }
+        FadeOutDelegate?.Invoke();
+        //if (FadeOutDelegate != null)
+        //{
+        //    FadeOutDelegate();
+        //}
     }
 
     protected void Update()

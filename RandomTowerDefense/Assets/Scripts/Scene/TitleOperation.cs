@@ -12,10 +12,12 @@ public class TitleOperation: ISceneChange
     public GameObject DarkenCam;
 
     public GameObject RightCam;
+    public Camera RightCamComponent;
     public List<Vector3> RightCamStartPt;
     public List<Vector3> RightCamStayPt;
     public List<Vector3> RightCamEndPt;
     public GameObject BottomCam;
+    public Camera BottomCamComponent;
     public List<Vector3> BottomCamStartPt;
     public List<Vector3> BottomCamStayPt;
     public List<Vector3> BottomCamEndPt;
@@ -33,7 +35,11 @@ public class TitleOperation: ISceneChange
 
     [Header("Other Settings")]
     public List<GameObject> TitleImg;
+    public List<RawImage> TitleImgRaw;
+    public List<Text> TitleImgText;
+
     public List<GameObject> TitleEffectImg;
+    private List<VisualEffect> TitleEffectImgVFX;
     public List<string> bundleUrl;
     public List<string> bundleName;
 
@@ -148,12 +154,25 @@ public class TitleOperation: ISceneChange
                 i.material.SetFloat("_Progress", 0);
         }
 
-        foreach (GameObject i in TitleEffectImg)
+    TitleImgRaw = new List<RawImage>();
+            TitleImgText = new List<Text>();
+        foreach (GameObject i in TitleImg)
         {
-            i.GetComponent<VisualEffect>().Stop();
+            TitleImgRaw.Add(i.GetComponent<RawImage>());
+            TitleImgText.Add(i.GetComponent<Text>());
         }
 
-        for (int i = 0; i < bundleUrl.Count; i++)
+        TitleEffectImgVFX = new List<VisualEffect>();
+        foreach (GameObject i in TitleEffectImg)
+        {
+            TitleEffectImgVFX.Add(i.GetComponent<VisualEffect>());
+            TitleEffectImgVFX[TitleEffectImgVFX.Count-1].Stop();
+        }
+
+        RightCamComponent = RightCam.GetComponent<Camera>();
+        BottomCamComponent = BottomCam.GetComponent<Camera>();
+
+        for (int i = 0; i < bundleUrl.Count; ++i)
             LoadBundle.LoadAssetBundle(bundleUrl[i], bundleName[i], "Assets/AssetBundles");
     }
 
@@ -180,9 +199,9 @@ public class TitleOperation: ISceneChange
 
         if (isOpening && InputManager.GetAnyInput()) {
             isWaiting = true;
-            foreach (GameObject i in TitleEffectImg)
+            foreach (VisualEffect i in TitleEffectImgVFX)
             {
-                i.GetComponent<VisualEffect>().Play();
+                i.Play();
             }
             StartCoroutine(PreparationToMain());
         }
@@ -204,8 +223,8 @@ public class TitleOperation: ISceneChange
     private void LateUpdate()
     {
         if (isOption) {
-            RightCam.GetComponent<Camera>().enabled = false;
-            BottomCam.GetComponent<Camera>().enabled = false;
+            RightCamComponent.enabled = false;
+            BottomCamComponent.enabled = false;
         }
     }
     #region CommonOperation
@@ -440,12 +459,12 @@ public class TitleOperation: ISceneChange
 
         while (frame-- > 0)
         {
-            foreach (GameObject i in TitleImg)
+            for (int i = 0; i < TitleImg.Count; ++i)
             {
-                if (i.GetComponent<RawImage>())
-                    i.GetComponent<RawImage>().color = new Color(frame / 40f, frame / 40f, frame / 40f, frame / 40f);
-                if (i.GetComponent<Text>())
-                    i.GetComponent<Text>().color = new Color(1, 1, 1, frame / 20f);
+                if (TitleImgRaw[i])
+                    TitleImgRaw[i].color = new Color(frame / 40f, frame / 40f, frame / 40f, frame / 40f);
+                if (TitleImgText[i])
+                    TitleImgText[i].color = new Color(1, 1, 1, frame / 20f);
             }
 
             yield return new WaitForSeconds(0f);

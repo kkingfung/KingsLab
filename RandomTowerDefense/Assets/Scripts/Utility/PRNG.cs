@@ -41,7 +41,7 @@ public class PRNG {
 	// Returns a vector4 where each component is a random number in range [min, max)
 	public Vector4 RangeVector4 (float minInclusive, float maxExclusive) {
 		Vector4 vector = Vector4.zero;
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 4; ++i) {
 			vector[i] = Range (minInclusive, maxExclusive);
 		}
 		return vector;
@@ -130,7 +130,7 @@ public class PRNG {
 		}
 
 		float smallestValue = Value ();
-		for (int i = 0; i < weightStrength; i++) {
+		for (int i = 0; i < weightStrength; ++i) {
 			smallestValue = Mathf.Min (smallestValue, Value ());
 		}
 
@@ -152,7 +152,7 @@ public class PRNG {
 	// Returns the smallest of n random numbers between 0 and 1
 	public float SmallestRandom01 (int n) {
 		float smallest = 1;
-		for (int i = 0; i < n; i++) {
+		for (int i = 0; i < n; ++i) {
 			smallest = Mathf.Min (smallest, Value ());
 		}
 		return smallest;
@@ -161,7 +161,7 @@ public class PRNG {
 	// Returns the largest of n random numbers between 0 and 1
 	public float LargestRandom01 (int n) {
 		float largest = 0;
-		for (int i = 0; i < n; i++) {
+		for (int i = 0; i < n; ++i) {
 			largest = Mathf.Max (largest, Value ());
 		}
 		return largest;
@@ -170,7 +170,7 @@ public class PRNG {
 	// Returns the value closest to 0.5 out of n random numbers between 0 and 1
 	public float CentredRandom01 (int n) {
 		float mostCentredValue = 0;
-		for (int i = 0; i < n; i++) {
+		for (int i = 0; i < n; ++i) {
 			float value = Value ();
 			if (Mathf.Abs (value - 0.5f) < Mathf.Abs (mostCentredValue - 0.5f)) {
 				mostCentredValue = value;
@@ -210,7 +210,7 @@ public class PRNG {
 
 	public void Shuffle<T> (T[] array) {
 		int n = array.Length;
-		for (int i = 0; i < n - 1; i++) {
+		for (int i = 0; i < n - 1; ++i) {
 			int j = prng.Next (i, n);
 			T temp = array[j];
 			array[j] = array[i];
@@ -220,7 +220,7 @@ public class PRNG {
 
 	public void Shuffle<T> (List<T> list) {
 		int n = list.Count;
-		for (int i = 0; i < n - 1; i++) {
+		for (int i = 0; i < n - 1; ++i) {
 			int j = prng.Next (i, n);
 			T temp = list[j];
 			list[j] = list[i];

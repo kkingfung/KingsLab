@@ -102,7 +102,7 @@ public class Boid : MonoBehaviour {
     Vector3 ObstacleRays () {
         Vector3[] rayDirections = BoidHelper.directions;
 
-        for (int i = 0; i < rayDirections.Length; i++) {
+        for (int i = 0; i < rayDirections.Length; ++i) {
             Vector3 dir = cachedTransform.TransformDirection (rayDirections[i]);
             Ray ray = new Ray (position, dir);
             if (!Physics.SphereCast (ray, settings.boundsRadius, settings.collisionAvoidDst, settings.obstacleMask)) {

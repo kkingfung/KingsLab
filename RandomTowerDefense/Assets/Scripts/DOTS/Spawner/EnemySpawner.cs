@@ -188,7 +188,7 @@ public class EnemySpawner : MonoBehaviour
             GameObjects[i] = Instantiate(allMonsterList[Name], transform);
             GameObjects[i].transform.position = Position;
             GameObjects[i].transform.localRotation = Quaternion.identity;
-            GameObjects[i].GetComponent<Enemy>().Init(DieEffect, DropEffect, i, money);
+            GameObjects[i].GetComponent<Enemy>().Init(this,DieEffect, DropEffect, i, money);
 
             transforms[i] = GameObjects[i].transform;
             healthArray[i] = health;

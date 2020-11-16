@@ -22,8 +22,7 @@ public class Skill : MonoBehaviour
     private AudioManager audioManager;
     private AudioSource audioSource;
 
-    private EnemySpawner enemySpawner;
-    private EntityManager entityManager;
+   // private EnemySpawner enemySpawner;
 
     private SkillSpawner skillSpawner;
 
@@ -32,20 +31,13 @@ public class Skill : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        if (skillSpawner == null)
-            MyStart();
-    }
-
-    private void MyStart()
-    {
         ActionEnded = false;
 
         playerManager = FindObjectOfType<PlayerManager>();
-        enemySpawner = FindObjectOfType<EnemySpawner>();
+        //enemySpawner = FindObjectOfType<EnemySpawner>();
         audioManager = FindObjectOfType<AudioManager>();
-        audioSource = GetComponent<AudioSource>();
-        skillSpawner = FindObjectOfType<SkillSpawner>();
-        VFX = this.GetComponent<VisualEffect>();
+        if (skillSpawner == null) skillSpawner = FindObjectOfType<SkillSpawner>();
+        if (VFX == null) VFX = this.GetComponent<VisualEffect>();
 
         switch (actionID)
         {
@@ -79,6 +71,7 @@ public class Skill : MonoBehaviour
                 break;
         }
     }
+
     // Update is called once per frame
     private void Update()
     {
@@ -102,8 +95,12 @@ public class Skill : MonoBehaviour
             case Upgrades.StoreItems.MagicBlizzard:
                 if (ActionEnded == false)
                 {
-                    this.transform.position = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
-                    skillSpawner.UpdateEntityPos(entityID, this.transform.position);
+                    Vector3 result= playerManager.RaycastTest(LayerMask.GetMask("Arena"));
+                    if (result.sqrMagnitude != 0)
+                    {
+                        this.transform.position = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
+                        skillSpawner.UpdateEntityPos(entityID, this.transform.position);
+                    }
 
                     attr.lifeTime -= Time.deltaTime;
                     if (!ActionEnded && attr.lifeTime < 0)
@@ -116,13 +113,12 @@ public class Skill : MonoBehaviour
         }
     }
 
-    public void Init(Upgrades.StoreItems actionID, SkillAttr attr, int entityID)
+    public void Init(SkillSpawner skillSpawner,Upgrades.StoreItems actionID, SkillAttr attr, int entityID)
     {
         this.actionID = actionID;
         this.attr = new SkillAttr(attr);
         this.entityID = entityID;
-        if (skillSpawner == null)
-            MyStart();
+        this.skillSpawner = skillSpawner;
 
         switch (actionID)
         {
@@ -141,6 +137,7 @@ public class Skill : MonoBehaviour
         switch (actionID)
         {
             case Upgrades.StoreItems.MagicPetrification:
+                if (VFX == null) VFX = this.GetComponent<VisualEffect>();
                 VFX.SetFloat("Radius", val * 1.5f);
                 VFX.SetFloat("Rotation", val / attr.lifeTime * 30.0f);
                 break;

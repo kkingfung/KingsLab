@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-//using UnityEngine.Windows;
+using UnityEngine.Windows;
 
 using System.IO;
 
@@ -14,8 +14,8 @@ public class BuildBundle:Editor
         // 成果物を出力するフォルダを指定する（プロジェクトフォルダからの相対パス）
         var targetDir = "Assets/AssetBundles";
 
-        //if (!UnityEngine.Windows.Directory.Exists(targetDir))
-        //    UnityEngine.Windows.Directory.CreateDirectory(targetDir);
+        if (!UnityEngine.Windows.Directory.Exists(targetDir))
+            UnityEngine.Windows.Directory.CreateDirectory(targetDir);
 
         var builds = new List<AssetBundleBuild>();
 

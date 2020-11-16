@@ -94,7 +94,7 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
-        if (tutorialManager && tutorialManager.WaitingResponds) return;
+        //if (tutorialManager && tutorialManager.WaitingResponds) return;
         if (Buttons.Count+ButtonsCenter.Count > 0) { RaycastTest(); }
 
         if (useTouch) UpdateTouchInfo();

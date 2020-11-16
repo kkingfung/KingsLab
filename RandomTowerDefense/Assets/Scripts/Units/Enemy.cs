@@ -36,8 +36,9 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
+        transform.localScale = transform.localScale * ResizeScale;
         oriScale = transform.localScale;
-        enemySpawner = FindObjectOfType<EnemySpawner>();
+        if(enemySpawner==null) enemySpawner = FindObjectOfType<EnemySpawner>();
         resourceManager = FindObjectOfType<ResourceManager>();
         animator = GetComponent<Animator>();
 
@@ -49,6 +50,8 @@ public class Enemy : MonoBehaviour
         prevPos = transform.position;
         isDead = false;
         if (animator==null) animator = GetComponentInChildren<Animator>();
+
+        meshes = GetComponentsInChildren<SkinnedMeshRenderer>();
     }
 
     // Update is called once per frame
@@ -86,8 +89,9 @@ public class Enemy : MonoBehaviour
 
     }
 
-    public void Init(GameObject DieEffect, GameObject DropEffect,int entityID,int money)
+    public void Init(EnemySpawner enemySpawner,GameObject DieEffect, GameObject DropEffect,int entityID,int money)
     {
+        this.enemySpawner = enemySpawner;
         this.DieEffect = DieEffect;
         this.DropEffect = DropEffect;
         this.entityID = entityID;
@@ -120,18 +124,18 @@ public class Enemy : MonoBehaviour
         if (PetrifyRecord == petrifyAmt) return;
         else PetrifyRecord = petrifyAmt;
 
-        for (int i = 0; i < meshes.Length; ++i)
-        {
-            List<Material> mats = new List<Material>();
-            meshes[i].GetMaterials(mats);
-            foreach (Material j in mats)
+            for (int i = 0; i < meshes.Length; ++i)
             {
-                if (j.name== "Desertification (Instance)")
-                { 
-                    j.SetFloat("_Progress", petrifyAmt);
+                List<Material> mats = new List<Material>();
+                meshes[i].GetMaterials(mats);
+                foreach (Material j in mats)
+                {
+                    if (j.name == "Desertification (Instance)")
+                    {
+                        j.SetFloat("_Progress", petrifyAmt);
+                    }
                 }
             }
-        }
     }
     public void Slowed() {
         float slow = enemySpawner.slowArray[entityID];

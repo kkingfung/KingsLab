@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Unity.RemoteConfig;
+using System.IO;
 
 public class InGameOperation : ISceneChange
 {
@@ -48,6 +50,8 @@ public class InGameOperation : ISceneChange
     [Header("Other Settings")]
     [SerializeField]
     public bool UseFileAsset;
+    [SerializeField]
+    public bool UseRemoteConfig;
     public Material FloorMat;
     public GameObject LandscapeFadeImg;
     public GameObject PortraitFadeImg;
@@ -88,6 +92,10 @@ public class InGameOperation : ISceneChange
     //CameraOperation
     private readonly float maxCamPosChgTime = 0.2f;
 
+    //RemoteConfig
+    public struct userAttributes { }
+    public struct appAttributes { }
+    
     private void OnDestroy()
     {
         PlayerPrefs.Save();
@@ -96,17 +104,38 @@ public class InGameOperation : ISceneChange
     {
         base.Awake();
 
-     
-        if (UseFileAsset)
+        if (UseRemoteConfig)
         {
-            StageInfo.Init(UseFileAsset, "Assets/AssetBundles");
-            TowerInfo.InitByFile("Assets/AssetBundles/TowerInfo.txt");
-            EnemyInfo.InitByFile("Assets/AssetBundles/EnemyInfo.txt");
-            SkillInfo.InitByFile("Assets/AssetBundles/SkillInfo.txt");
+            //ConfigManager.FetchCompleted += StageInfo.InitByRemote;
+            ConfigManager.FetchCompleted += TowerInfo.InitByRemote;
+            ConfigManager.FetchCompleted += EnemyInfo.InitByRemote;
+            ConfigManager.FetchCompleted += SkillInfo.InitByRemote;
+            ConfigManager.FetchConfigs<userAttributes, appAttributes>(new userAttributes(), new appAttributes());
+            if (UseFileAsset && Directory.Exists("Assets/AssetBundles"))
+                StageInfo.Init(true, "Assets/AssetBundles");
+            else
+                StageInfo.Init(false, null);
+        }
+        else if (UseFileAsset)
+        {
+            if (Directory.Exists("Assets/AssetBundles"))
+            {
+                StageInfo.Init(true, "Assets/AssetBundles");
+                TowerInfo.InitByFile("Assets/AssetBundles/TowerInfo.txt");
+                EnemyInfo.InitByFile("Assets/AssetBundles/EnemyInfo.txt");
+                SkillInfo.InitByFile("Assets/AssetBundles/SkillInfo.txt");
+            }
+            else 
+            {
+                StageInfo.Init(false, null);
+                TowerInfo.Init();
+                EnemyInfo.Init();
+                SkillInfo.Init();
+            }
         }
         else
         {
-            StageInfo.Init(UseFileAsset,null);
+            StageInfo.Init(false, null);
             TowerInfo.Init();
             EnemyInfo.Init();
             SkillInfo.Init();
@@ -220,29 +249,22 @@ public class InGameOperation : ISceneChange
 
         if (tutorialManager && isTutorial)
         {
-            timeManager.timeFactor = 0.05f;
             if (tutorialManager.WaitingResponds)
             {
-                if (timeManager.GetControl() == false)
+                if (timeManager.timeFactor != 0.00001f)
                 {
                     timeManager.timeFactor = 0.00001f;
                     timeManager.TimeControl();
                 }
-
             }
             else
             {
-
-                if (timeManager.GetControl() != false)
+                if (timeManager.timeFactor != tutorialTimeFactor)
                 {
-                   
+                    timeManager.timeFactor = tutorialTimeFactor;
                     timeManager.TimeControl();
                 }
             }
-        }
-        else
-        {
-            timeManager.timeFactor = tutorialTimeFactor;
         }
 
         foreach (Button i in OptionButton)
@@ -251,6 +273,13 @@ public class InGameOperation : ISceneChange
         //Change Scene
         if (isSceneFinished && ((LandscapeFade && LandscapeFade.isReady) || (PortraitFade && PortraitFade.isReady)))
         {
+            if (UseRemoteConfig)
+            {
+                //ConfigManager.FetchCompleted -= StageInfo.InitByRemote;
+                ConfigManager.FetchCompleted -= TowerInfo.InitByRemote;
+                ConfigManager.FetchCompleted -= EnemyInfo.InitByRemote;
+                ConfigManager.FetchCompleted -= SkillInfo.InitByRemote;
+            }
             SceneManager.LoadScene("LoadingScene");
             return;
         }

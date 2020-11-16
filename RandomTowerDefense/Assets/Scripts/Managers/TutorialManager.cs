@@ -36,6 +36,7 @@ public class TutorialManager : MonoBehaviour
     private TowerSpawner towerSpawner;
     private EnemySpawner enemySpawner;
     private SkillSpawner skillSpawner;
+    private TimeManager timeManager;
 
     // Start is called before the first frame update
     void Start()
@@ -52,6 +53,7 @@ public class TutorialManager : MonoBehaviour
         towerSpawner = FindObjectOfType<TowerSpawner>();
         enemySpawner = FindObjectOfType<EnemySpawner>();
         skillSpawner = FindObjectOfType<SkillSpawner>();
+        timeManager = FindObjectOfType<TimeManager>();
         if (SceneManager.CheckIfTutorial() == false) {
             DestroyAllRelated();
         }
@@ -66,7 +68,7 @@ public class TutorialManager : MonoBehaviour
                 Update_TutorialInfo();
                 break;
             case TutorialStageID.TutorialProgress_FirstWave:
-                WaitingResponds = false;
+                WaitingResponds = true;
                 Update_TutorialFirstWave();
                 break;
             case TutorialStageID.TutorialProgress_StoreSkill:
@@ -79,6 +81,8 @@ public class TutorialManager : MonoBehaviour
                 break;
             case TutorialStageID.TutorialProgress_FreeBattle:
                 WaitingResponds = false;
+                timeManager.timeFactor = 0.05f;
+                timeManager.TimeControl();
                 reviewStage = 0;
                 DestroyAllRelated();
                 return;
@@ -244,6 +248,7 @@ public class TutorialManager : MonoBehaviour
                 StageProgress++;
                 break;
             case 1:
+                WaitingResponds = false;
                 reviewStage = 1;
                 if (enemySpawner.AllAliveMonstersList().Count>0)
                 {
@@ -251,6 +256,7 @@ public class TutorialManager : MonoBehaviour
                 }
                 break;
             case 2:
+                WaitingResponds = false;
                 reviewStage = 2;
                 if (enemySpawner.AllAliveMonstersList().Count <= 0) {
                     StageProgress = 0;
@@ -360,7 +366,7 @@ public class TutorialManager : MonoBehaviour
                 break;
             case 13:
                 WaitingResponds = false;
-                if (skillSpawner.GameObjects[0] != null)
+                if (skillSpawner.AllAliveSkillsList().Count>0)
                 {
                     StageProgress = 0;
                     tutorialStage++;
@@ -379,12 +385,14 @@ public class TutorialManager : MonoBehaviour
                 StageProgress++;
                 break;
             case 1:
+                WaitingResponds = false;
                 if (enemySpawner.AllAliveMonstersList().Count > 0)
                 {
                     StageProgress++;
                 }
                 break;
             case 2:
+                WaitingResponds = false;
                 if (enemySpawner.AllAliveMonstersList().Count <= 0)
                 {
                     ChangeText("Kのおかけで、\nどうやら大丈夫だ");
@@ -450,4 +458,5 @@ public class TutorialManager : MonoBehaviour
     public void ViewHistory() {
         StageProgress = reviewStage;
     }
+
 }

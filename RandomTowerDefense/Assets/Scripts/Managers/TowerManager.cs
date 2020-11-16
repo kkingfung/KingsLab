@@ -172,7 +172,7 @@ for(int i = 0; i < TargetInfo.Count; ++i) {
                     entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerNightmare,
                         location);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
-                    tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerNightmareAura,
+                    tower.GetComponent<Tower>().newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerNightmareAura,
                         TowerInfo.TowerInfoID.Enum_TowerNightmare, 1, rank);
                     tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
                     TowerNightmareList.Add(tower);
@@ -181,7 +181,7 @@ for(int i = 0; i < TargetInfo.Count; ++i) {
                     entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater,
                         location);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
-                    tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerSoulEaterAura,
+                    tower.GetComponent<Tower>().newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerSoulEaterAura,
                         TowerInfo.TowerInfoID.Enum_TowerSoulEater, 1, rank);
                     tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
                     TowerSoulEaterList.Add(tower);
@@ -190,7 +190,7 @@ for(int i = 0; i < TargetInfo.Count; ++i) {
                     entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer,
                         location);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
-                    tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerTerrorBringerAura,
+                    tower.GetComponent<Tower>().newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerTerrorBringerAura,
                         TowerInfo.TowerInfoID.Enum_TowerTerrorBringer, 1, rank);
                     tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
                     TowerTerrorBringerList.Add(tower);
@@ -199,7 +199,7 @@ for(int i = 0; i < TargetInfo.Count; ++i) {
                     entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerUsurper,
                         location);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
-                    tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerUsurperAura,
+                    tower.GetComponent<Tower>().newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerUsurperAura,
                         TowerInfo.TowerInfoID.Enum_TowerUsurper, 1, rank);
                     tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
                     TowerUsurperList.Add(tower);

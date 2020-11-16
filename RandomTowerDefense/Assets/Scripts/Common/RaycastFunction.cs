@@ -55,6 +55,7 @@ public class RaycastFunction : MonoBehaviour
     private void Awake()
     {
         rendertype = EnumRenderType.NotChecked;
+        oriColor = Color.white;
 
     }
     private void Start()
@@ -66,10 +67,10 @@ public class RaycastFunction : MonoBehaviour
         audioManager = FindObjectOfType<AudioManager>();
 
         if (rendertype == EnumRenderType.NotChecked)
-            GetOriColor(oriColor);
+            GetColor(oriColor);
     }
 
-    public void GetOriColor(Color color) {
+    public void GetColor(Color color) {
         chkMeshRender = GetComponent<MeshRenderer>();
         if (chkMeshRender)
         {
@@ -200,7 +201,7 @@ public class RaycastFunction : MonoBehaviour
         Color color=new Color();
         switch (rendertype) {
             case EnumRenderType.NotChecked:
-                GetOriColor(color);break;
+                GetColor(color);break;
             case EnumRenderType.FoundMeshRenderer:
                 color = chkMeshRender.material.color; break;
             case EnumRenderType.FoundRawImg:
@@ -210,16 +211,13 @@ public class RaycastFunction : MonoBehaviour
         }
 
         color.r = 0; color.g = 0; color.b = 0;
-        float reqFrame =0.2f;
-        float chgSpdr = (oriColor.r - color.r) / (reqFrame*60);
-        float chgSpdb = (oriColor.b - color.b) / (reqFrame*60);
-        float chgSpdg = (oriColor.g - color.g) / (reqFrame*60);
-        while (reqFrame>0)
+        float reqTime =0;
+        while (reqTime < 1f)
         {
-            reqFrame -= Time.deltaTime;
-            color.r += chgSpdr;
-            color.b += chgSpdb;
-            color.g += chgSpdg;
+            reqTime += Time.deltaTime;
+            color.r = reqTime * oriColor.r;
+            color.g = reqTime * oriColor.g;
+            color.b = reqTime * oriColor.b;
             switch (rendertype)
             {
                 case EnumRenderType.FoundMeshRenderer:
@@ -229,9 +227,9 @@ public class RaycastFunction : MonoBehaviour
                 case EnumRenderType.FoundSprRenderer:
                     chkSprRender.color = color; break;
             }
-
             yield return new WaitForSeconds(0f);
         }
+
         switch (rendertype)
         {
             case EnumRenderType.FoundMeshRenderer:

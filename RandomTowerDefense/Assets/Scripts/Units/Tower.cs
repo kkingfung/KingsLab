@@ -63,7 +63,7 @@ public class Tower : MonoBehaviour
     private void Start()
     {
         audioManager = FindObjectOfType<AudioManager>();
-        towerSpawner = FindObjectOfType<TowerSpawner>();
+        if (towerSpawner == null) towerSpawner = FindObjectOfType<TowerSpawner>();
         attackSpawner = FindObjectOfType<AttackSpawner>();
         filledMapGenerator = FindObjectOfType<FilledMapGenerator>();
     }
@@ -76,6 +76,7 @@ public class Tower : MonoBehaviour
             if (entityManager.HasComponent<Target>(towerSpawner.Entities[entityID])) {
                 Target target = entityManager.GetComponentData<Target>(towerSpawner.Entities[entityID]);
                 Vector3 targetPos = target.targetPos;
+                targetPos.y = transform.position.y;
                 transform.forward = (targetPos - transform.position).normalized;
                 atkEntityPos = targetPos;
                 Attack();
@@ -157,8 +158,9 @@ public class Tower : MonoBehaviour
         Destroy(this.gameObject, TowerDestroyTime);
     }
 
-    public void newTower(int entityID,GameObject pillar, GameObject LevelUpVFX, GameObject AuraVFX, TowerInfo.TowerInfoID type, int lv = 1, int rank = 1)
+    public void newTower(int entityID,TowerSpawner towerSpawner,GameObject pillar, GameObject LevelUpVFX, GameObject AuraVFX, TowerInfo.TowerInfoID type, int lv = 1, int rank = 1)
     {
+        this.towerSpawner = towerSpawner;
         this.type = type;
         this.level = lv;
         this.rank = rank;

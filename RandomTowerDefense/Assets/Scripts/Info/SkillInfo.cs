@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.RemoteConfig;
 
 using System.IO;
 
@@ -14,7 +15,7 @@ public class SkillAttr
     public float slowRate;//for Blizzard only
     public float buffTime;//for Blizzard and Petricfication only
 
-    public SkillAttr(float area, float damage, float cycleTime, float waitTime, float lifeTime, float slowRate=0, float buffTime=0)
+    public SkillAttr(float area, float damage, float cycleTime, float waitTime, float lifeTime, float slowRate = 0, float buffTime = 0)
     {
         this.radius = area;
         this.damage = damage;
@@ -38,6 +39,7 @@ public class SkillAttr
 public static class SkillInfo
 {
     static Dictionary<string, SkillAttr> skillInfo;
+
     public static void Init()
     {
         skillInfo = new Dictionary<string, SkillAttr>();
@@ -87,6 +89,21 @@ public static class SkillInfo
         }
 
         inp_stm.Close();
+    }
+
+    public static void InitByRemote(ConfigResponse response)
+    {
+        skillInfo = new Dictionary<string, SkillAttr>();
+
+        string[] allName = { "SkillMeteor", "SkillMinions", "SkillBlizzard" , "SkillPetrification" };
+        foreach (string name in allName)
+        {
+            skillInfo.Add(name, new SkillAttr(
+                      ConfigManager.appConfig.GetFloat(name+"Radius"), ConfigManager.appConfig.GetFloat(name+"Damage"),//radius,damage
+                      ConfigManager.appConfig.GetFloat(name+"SpawnCycle"), ConfigManager.appConfig.GetFloat(name+"Wait"),//respawn cycle,wait to action
+                       ConfigManager.appConfig.GetFloat(name+"Life"), ConfigManager.appConfig.GetFloat(name+"SlowRate"),//lifetime,slowrate(include petrify)
+                        ConfigManager.appConfig.GetFloat(name+"BuffTime")));//bufftime
+        }
     }
 
     static void Release()

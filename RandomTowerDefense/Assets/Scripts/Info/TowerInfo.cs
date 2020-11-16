@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Mathematics;
+using Unity.RemoteConfig;
 
 using System.IO;
 
@@ -93,6 +94,36 @@ public static class TowerInfo
         }
 
         inp_stm.Close();
+    }
+
+    public static void InitByRemote(ConfigResponse response)
+    {
+        towerInfo = new Dictionary<TowerInfoID, TowerAttr>();
+
+        towerInfo.Add(TowerInfoID.Enum_TowerNightmare,
+            new TowerAttr(
+                ConfigManager.appConfig.GetFloat("TowerNightmareRadius"), ConfigManager.appConfig.GetFloat("TowerNightmareDamage"), //radius,damage
+                ConfigManager.appConfig.GetFloat("TowerNightmareWait"), ConfigManager.appConfig.GetFloat("TowerNightmareLife"), //wait,atklife
+               ConfigManager.appConfig.GetFloat("TowerNightmareAtkWait"), ConfigManager.appConfig.GetFloat("TowerNightmareAtkRadius"),//atkwait,atkrad
+                ConfigManager.appConfig.GetFloat("TowerNightmareAtkSpd"), ConfigManager.appConfig.GetFloat("TowerNightmareAtkLife")));//atkspd,lifetime
+        towerInfo.Add(TowerInfoID.Enum_TowerSoulEater,
+            new TowerAttr(
+  ConfigManager.appConfig.GetFloat("TowerSoulEaterRadius"), ConfigManager.appConfig.GetFloat("TowerSoulEaterDamage"), //radius,damage
+                ConfigManager.appConfig.GetFloat("TowerSoulEaterWait"), ConfigManager.appConfig.GetFloat("TowerSoulEaterLife"), //wait,atklife
+               ConfigManager.appConfig.GetFloat("TowerSoulEaterAtkWait"), ConfigManager.appConfig.GetFloat("TowerSoulEaterAtkRadius"),//atkwait,atkrad
+                ConfigManager.appConfig.GetFloat("TowerSoulEaterAtkSpd"), ConfigManager.appConfig.GetFloat("TowerSoulEaterAtkLife")));//atkspd,lifetime
+        towerInfo.Add(TowerInfoID.Enum_TowerTerrorBringer,
+            new TowerAttr(
+  ConfigManager.appConfig.GetFloat("TowerTerrorBringerRadius"), ConfigManager.appConfig.GetFloat("TowerTerrorBringerDamage"), //radius,damage
+                ConfigManager.appConfig.GetFloat("TowerTerrorBringerWait"), ConfigManager.appConfig.GetFloat("TowerTerrorBringerLife"), //wait,atklife
+               ConfigManager.appConfig.GetFloat("TowerTerrorBringerAtkWait"), ConfigManager.appConfig.GetFloat("TowerTerrorBringerAtkRadius"),//atkwait,atkrad
+                ConfigManager.appConfig.GetFloat("TowerTerrorBringerAtkSpd"), ConfigManager.appConfig.GetFloat("TowerTerrorBringerAtkLife")));//atkspd,lifetime
+        towerInfo.Add(TowerInfoID.Enum_TowerUsurper,
+            new TowerAttr(
+  ConfigManager.appConfig.GetFloat("TowerUsurperRadius"), ConfigManager.appConfig.GetFloat("TowerUsurperDamage"), //radius,damage
+                ConfigManager.appConfig.GetFloat("TowerUsurperWait"), ConfigManager.appConfig.GetFloat("TowerUsurperLife"), //wait,atklife
+               ConfigManager.appConfig.GetFloat("TowerUsurperAtkWait"), ConfigManager.appConfig.GetFloat("TowerUsurperAtkRadius"),//atkwait,atkrad
+                ConfigManager.appConfig.GetFloat("TowerUsurperAtkSpd"), ConfigManager.appConfig.GetFloat("TowerUsurperAtkLife")));//atkspd,lifetime
     }
 
     static void Release()

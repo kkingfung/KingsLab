@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.RemoteConfig;
 
 using System.IO;
 public class EnemyAttr {
@@ -88,6 +89,26 @@ public class EnemyAttr {
         }
 
         inp_stm.Close();
+    }
+    public static void InitByRemote(ConfigResponse response)
+    {
+        enemyInfo = new Dictionary<string, EnemyAttr>();
+
+        string[] allName = {
+            "MetalonGreen", "MetalonPurple", "MetalonRed", "AttackBot" , "RobotSphere",
+                        "Dragon", "Bull", "StoneMonster", "FreeLichS" , "FreeLich",
+                            "GolemS", "Golem", "SkeletonArmed", "SpiderGhost" , "Skeleton",
+                              "GruntS", "FootmanS", "Grunt", "Footman" , "TurtleShell",
+                               "Mushroom" , "Slime"
+
+        };
+        foreach (string name in allName)
+        {
+            enemyInfo.Add(name, new EnemyAttr(
+                      ConfigManager.appConfig.GetInt("Enemy"+name + "Money"), ConfigManager.appConfig.GetFloat("Enemy" + name + "Health"),
+                      ConfigManager.appConfig.GetFloat("Enemy" + name + "Speed"), ConfigManager.appConfig.GetFloat("Enemy" + name + "Time"),
+                       ConfigManager.appConfig.GetInt("Enemy" + name + "Damage"), ConfigManager.appConfig.GetFloat("Enemy" + name + "Radius")));
+        }
     }
 
     static void Release()

@@ -12,11 +12,2327 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 469c24fdb3bd6431b92cc1465bd9166b, type: 3}
   m_Name: RemoteConfigDataStoreAsset
   m_EditorClassIdentifier: 
-  rsKeyList: []
-  rsLastCachedKeyList: []
-  configId: 
-  currentEnvironmentId: 
-  environments: []
+  rsKeyList:
+  - metadata:
+      entityId: 27dc1809-8130-4bef-9f45-78ca4630ac6e
+    rs:
+      key: SkillMeteorRadius
+      type: float
+      value: 5
+  - metadata:
+      entityId: 0324c3f4-e3f9-454f-9f1e-24fd231bf28b
+    rs:
+      key: SkillMeteorDamage
+      type: float
+      value: 8
+  - metadata:
+      entityId: 742a10af-99c5-4eb8-ab4b-58c4b371d523
+    rs:
+      key: SkillMeteorSpawnCycle
+      type: float
+      value: 2.5
+  - metadata:
+      entityId: b0ebcbc0-8e8d-4517-a2ac-43a69adddeb5
+    rs:
+      key: SkillMeteorWait
+      type: float
+      value: 1
+  - metadata:
+      entityId: 9a1cbedb-a596-4547-bd76-e35e0c211d25
+    rs:
+      key: SkillMeteorLife
+      type: float
+      value: 15
+  - metadata:
+      entityId: b19a4d98-c3dd-48ed-98fc-cdd1d5a7d34b
+    rs:
+      key: SkillMeteorSlowRate
+      type: float
+      value: 0
+  - metadata:
+      entityId: deadc795-249a-4ed2-81a8-bcf17796cace
+    rs:
+      key: SkillMeteorBuffTime
+      type: float
+      value: 0
+  - metadata:
+      entityId: 708b0d63-a634-4017-b832-2da014d888fa
+    rs:
+      key: SkillBlizzardRadius
+      type: float
+      value: 20
+  - metadata:
+      entityId: 80d08c00-b2ca-4f37-9f34-7e66ee46ce9c
+    rs:
+      key: SkillBlizzardDamage
+      type: float
+      value: 0.1
+  - metadata:
+      entityId: ac217ea4-2572-484f-8beb-7891387b9152
+    rs:
+      key: SkillBlizzardSpawnCycle
+      type: float
+      value: 5
+  - metadata:
+      entityId: 4ab874ea-7def-4864-9ba1-64f0aab3301f
+    rs:
+      key: SkillBlizzardWait
+      type: float
+      value: 0
+  - metadata:
+      entityId: bb644385-d0e7-4443-8b10-835b60fc698c
+    rs:
+      key: SkillBlizzardLife
+      type: float
+      value: 15
+  - metadata:
+      entityId: 514738fc-2d90-48ea-9983-d0163ad5bf1b
+    rs:
+      key: SkillBlizzardSlowRate
+      type: float
+      value: 0.01
+  - metadata:
+      entityId: b833d83f-8ba1-4f2d-8b28-84d1e5c96acf
+    rs:
+      key: SkillBlizzardBuffTime
+      type: float
+      value: 3
+  - metadata:
+      entityId: 6e8d936a-bde1-45ef-a92e-2c3f8b1c78cb
+    rs:
+      key: SkillMinionsRadius
+      type: float
+      value: 1
+  - metadata:
+      entityId: 88b63aa2-bd1f-4d99-ad26-d853acd83b05
+    rs:
+      key: SkillMinionsDamage
+      type: float
+      value: 0.2
+  - metadata:
+      entityId: 0a664dfa-4113-47d6-92b5-1c6d898b6a61
+    rs:
+      key: SkillMinionsSpawnCycle
+      type: float
+      value: 0.1
+  - metadata:
+      entityId: caf8a36d-3f5e-47af-9e77-30324f3f7c49
+    rs:
+      key: SkillMinionsWait
+      type: float
+      value: 1
+  - metadata:
+      entityId: 22261359-2cd1-4683-a1a2-869ad78053a1
+    rs:
+      key: SkillMinionsLife
+      type: float
+      value: 10
+  - metadata:
+      entityId: 07083124-e3ad-4c93-93fb-5a8932306b86
+    rs:
+      key: SkillMinionsSlowRate
+      type: float
+      value: 0
+  - metadata:
+      entityId: 3562ca79-d749-4cc3-9056-aa2813152243
+    rs:
+      key: SkillMinionsBuffTime
+      type: float
+      value: 0
+  - metadata:
+      entityId: bd865920-5367-4bef-8931-327cf2861dba
+    rs:
+      key: SkillPetrificationRadius
+      type: float
+      value: 1000
+  - metadata:
+      entityId: 70d17d88-1902-4f17-bc78-8f7fbe162673
+    rs:
+      key: SkillPetrificationDamage
+      type: float
+      value: 0
+  - metadata:
+      entityId: 7132946e-2420-475a-828d-8ef48b692e4b
+    rs:
+      key: SkillPetrificationSpawnCycle
+      type: float
+      value: 0.2
+  - metadata:
+      entityId: 10250515-3107-450d-8cf1-429b5aa73177
+    rs:
+      key: SkillPetrificationWait
+      type: float
+      value: 0
+  - metadata:
+      entityId: cb29d9e0-c0c1-4843-b584-3df135f050c7
+    rs:
+      key: SkillPetrificationLife
+      type: float
+      value: 5
+  - metadata:
+      entityId: 7653397f-3a91-42e2-8aeb-35c374fc00c8
+    rs:
+      key: SkillPetrificationSlowRate
+      type: float
+      value: 1
+  - metadata:
+      entityId: 7213a929-3df3-45eb-8cac-94e6a36687ea
+    rs:
+      key: SkillPetrificationBuffTime
+      type: float
+      value: 0.0015
+  - metadata:
+      entityId: 2894e559-91da-4096-aa4f-f90f2c018a83
+    rs:
+      key: TowerNightmareRadius
+      type: float
+      value: 20
+  - metadata:
+      entityId: dc0a9003-bcdb-4855-8b43-4568f904a4e2
+    rs:
+      key: TowerNightmareDamage
+      type: float
+      value: 1
+  - metadata:
+      entityId: 0438b76b-893e-40ef-a8c8-81b0391091e5
+    rs:
+      key: TowerNightmareWait
+      type: float
+      value: 2
+  - metadata:
+      entityId: fd50523a-8a9a-4237-8e8f-d5d5a331b3d9
+    rs:
+      key: TowerNightmareLife
+      type: float
+      value: 3
+  - metadata:
+      entityId: 6f853eee-415c-4e1c-9e1d-f1d12ee176a1
+    rs:
+      key: TowerNightmareAtkWait
+      type: float
+      value: 0.01
+  - metadata:
+      entityId: 471bc1a7-76bb-4cab-8a86-c9f3d391f8ba
+    rs:
+      key: TowerNightmareAtkRadius
+      type: float
+      value: 1
+  - metadata:
+      entityId: 0a29b8dd-72ba-499c-8dbe-c274e5540eb1
+    rs:
+      key: TowerNightmareAtkSpd
+      type: float
+      value: 0
+  - metadata:
+      entityId: 7208b146-c269-4963-90cb-492110656c61
+    rs:
+      key: TowerNightmareAtkLife
+      type: float
+      value: 5
+  - metadata:
+      entityId: 3df4ba7b-cfb2-4a09-8e09-b4d029457173
+    rs:
+      key: TowerSoulEaterRadius
+      type: float
+      value: 13
+  - metadata:
+      entityId: 4e25d1a5-1dd8-4228-be1e-33647319d0e7
+    rs:
+      key: TowerSoulEaterDamage
+      type: float
+      value: 8
+  - metadata:
+      entityId: 16d37da5-3386-44ba-88be-b434e765be87
+    rs:
+      key: TowerSoulEaterWait
+      type: float
+      value: 0.5
+  - metadata:
+      entityId: 294545ae-d99d-4e17-9d52-59c715e99712
+    rs:
+      key: TowerSoulEaterLife
+      type: float
+      value: 3
+  - metadata:
+      entityId: 7a6a967e-893c-4782-9311-00a1b1c36991
+    rs:
+      key: TowerSoulEaterAtkWait
+      type: float
+      value: 0
+  - metadata:
+      entityId: 917b1e7f-bee9-490e-83f3-69848fd8daa8
+    rs:
+      key: TowerSoulEaterAtkRadius
+      type: float
+      value: 0.5
+  - metadata:
+      entityId: 9e5b886e-eaa5-473f-8520-e7a7b985a952
+    rs:
+      key: TowerSoulEaterAtkSpd
+      type: float
+      value: 1
+  - metadata:
+      entityId: f242b1eb-d5d5-46c2-918a-dae2766b7aaa
+    rs:
+      key: TowerSoulEaterAtkLife
+      type: float
+      value: 5
+  - metadata:
+      entityId: 5a5053e0-d5b4-4af3-b9bc-217847948d7f
+    rs:
+      key: TowerTerrorBringerRadius
+      type: float
+      value: 40
+  - metadata:
+      entityId: f8a42e6b-b686-48c3-9bf6-4f6f1d394635
+    rs:
+      key: TowerTerrorBringerDamage
+      type: float
+      value: 20
+  - metadata:
+      entityId: 2bbd28e9-8be1-4df4-867d-eaea14ac7cb1
+    rs:
+      key: TowerTerrorBringerWait
+      type: float
+      value: 3
+  - metadata:
+      entityId: 758a5da3-044f-4617-9dae-5491734213ef
+    rs:
+      key: TowerTerrorBringerLife
+      type: float
+      value: 3
+  - metadata:
+      entityId: 6e7789f9-cf47-425c-9033-281638cb4163
+    rs:
+      key: TowerTerrorBringerAtkWait
+      type: float
+      value: 0.01
+  - metadata:
+      entityId: cc14d7e4-1f2e-48fc-bd2a-5b4049ed8863
+    rs:
+      key: TowerTerrorBringerAtkRadius
+      type: float
+      value: 1
+  - metadata:
+      entityId: 74b55cde-4049-42d6-b35b-bd70ce06c34b
+    rs:
+      key: TowerTerrorBringerAtkSpd
+      type: float
+      value: 0
+  - metadata:
+      entityId: bbcb67a6-6858-45a3-9a2f-b331ed5cdbed
+    rs:
+      key: TowerTerrorBringerAtkLife
+      type: float
+      value: 5
+  - metadata:
+      entityId: 7f56f3a4-66c7-4267-a63c-28acf9bcd0f5
+    rs:
+      key: TowerUsurperRadius
+      type: float
+      value: 8
+  - metadata:
+      entityId: 017ff968-66a3-403b-a0f8-23f94421da64
+    rs:
+      key: TowerUsurperDamage
+      type: float
+      value: 2
+  - metadata:
+      entityId: 048f34a2-e004-4dab-93d5-7696c9521ddd
+    rs:
+      key: TowerUsurperWait
+      type: float
+      value: 0.2
+  - metadata:
+      entityId: 0ebc650e-d2a8-43fb-895b-8b99ede1f0d0
+    rs:
+      key: TowerUsurperLife
+      type: float
+      value: 1
+  - metadata:
+      entityId: 97750623-72d1-4155-8766-d560d63a7c37
+    rs:
+      key: TowerUsurperAtkWait
+      type: float
+      value: 0
+  - metadata:
+      entityId: b2ae7c77-44ad-4cfe-9a45-d2a8c808afdb
+    rs:
+      key: TowerUsurperAtkRadius
+      type: float
+      value: 0.5
+  - metadata:
+      entityId: 68f4bbcc-e950-4628-811d-03f58e9c9da4
+    rs:
+      key: TowerUsurperAtkSpd
+      type: float
+      value: 1
+  - metadata:
+      entityId: 01b755ff-4454-4a44-a368-1b0d615334e8
+    rs:
+      key: TowerUsurperAtkLife
+      type: float
+      value: 5
+  - metadata:
+      entityId: 1af2a4c4-53b4-4f68-9e1d-009c766741cc
+    rs:
+      key: EnemyMetalonGreenMoney
+      type: int
+      value: 50
+  - metadata:
+      entityId: 0f6cbbaf-c22e-4b44-9a75-80926245de0d
+    rs:
+      key: EnemyMetalonGreenHealth
+      type: float
+      value: 100
+  - metadata:
+      entityId: b2c70cf1-790b-455a-90ff-07da2c56c993
+    rs:
+      key: EnemyMetalonGreenSpeed
+      type: float
+      value: 30
+  - metadata:
+      entityId: bd7f0352-df2b-4a9f-8f20-bebd4c004272
+    rs:
+      key: EnemyMetalonGreenTime
+      type: float
+      value: 0.5
+  - metadata:
+      entityId: 62fb2900-1c87-4a0e-a814-5d65ccfdd3b7
+    rs:
+      key: EnemyMetalonGreenDamage
+      type: int
+      value: 5
+  - metadata:
+      entityId: 3b51fdf0-1b4d-42f5-871d-5547d2424176
+    rs:
+      key: EnemyMetalonGreenRadius
+      type: float
+      value: 0.5
+  - metadata:
+      entityId: 862e73f3-30e0-4978-9a9c-7acecc99a74b
+    rs:
+      key: EnemyMetalonPurpleMoney
+      type: int
+      value: 150
+  - metadata:
+      entityId: da558db9-8f6f-4d8c-a007-12d0cebba28b
+    rs:
+      key: EnemyMetalonPurpleHealth
+      type: float
+      value: 200
+  - metadata:
+      entityId: 20eba0bd-6ebf-4a9c-a8ab-9accd1fb38d4
+    rs:
+      key: EnemyMetalonPurpleSpeed
+      type: float
+      value: 30
+  - metadata:
+      entityId: 2bf158ef-f5e9-479a-baed-ec9d4e300d9e
+    rs:
+      key: EnemyMetalonPurpleTime
+      type: float
+      value: 0.5
+  - metadata:
+      entityId: eee7a2f5-1421-42c2-8bbf-28310552190a
+    rs:
+      key: EnemyMetalonPurpleDamage
+      type: int
+      value: 5
+  - metadata:
+      entityId: b285e6c7-6318-493f-8c21-5c480a3070dd
+    rs:
+      key: EnemyMetalonPurpleRadius
+      type: float
+      value: 0.5
+  - metadata:
+      entityId: 7fc83f2c-0428-4f09-b740-2c0f2d5578b7
+    rs:
+      key: EnemyMetalonRedMoney
+      type: int
+      value: 300
+  - metadata:
+      entityId: 32f0c74a-5ea6-4b86-88f6-e32bf65a9444
+    rs:
+      key: EnemyMetalonRedHealth
+      type: float
+      value: 500.000000
+  - metadata:
+      entityId: 45a7e6bb-1db7-40bc-a96d-3103d034f503
+    rs:
+      key: EnemyMetalonRedSpeed
+      type: float
+      value: 30.000000
+  - metadata:
+      entityId: f8ca9b30-57a7-4d22-9352-eecc2c4b8ca0
+    rs:
+      key: EnemyMetalonRedTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: e2a8ab35-c314-4618-ba64-244d66a24921
+    rs:
+      key: EnemyMetalonRedDamage
+      type: int
+      value: 5
+  - metadata:
+      entityId: 24f49747-36b0-463f-a0b7-4a08f5bd2460
+    rs:
+      key: EnemyMetalonRedRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 0f854308-4fe5-4895-8420-c4fef0218b7e
+    rs:
+      key: EnemyAttackBotMoney
+      type: int
+      value: 150
+  - metadata:
+      entityId: 5b407d75-017d-4239-9a02-3b73f87ce868
+    rs:
+      key: EnemyAttackBotHealth
+      type: float
+      value: 300.000000
+  - metadata:
+      entityId: 337e13e6-3302-49d2-a875-2180df901cc7
+    rs:
+      key: EnemyAttackBotSpeed
+      type: float
+      value: 15.000000
+  - metadata:
+      entityId: 4989f15f-f5ba-4c99-a35a-e75823c326c2
+    rs:
+      key: EnemyAttackBotTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 03112f4f-f519-4bc5-bf2e-5d8db2bfc233
+    rs:
+      key: EnemyAttackBotDamage
+      type: int
+      value: 5
+  - metadata:
+      entityId: 1ca52c59-b036-47ec-9b8c-72e068abcdf9
+    rs:
+      key: EnemyAttackBotRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 7f0b9226-9175-416c-944c-9126a989d1dd
+    rs:
+      key: EnemyRobotSphereMoney
+      type: int
+      value: 100
+  - metadata:
+      entityId: 4c3c193f-3bd8-424f-b8f4-15c3e02ee378
+    rs:
+      key: EnemyRobotSphereHealth
+      type: float
+      value: 250.000000
+  - metadata:
+      entityId: 6d94ae55-05ce-4b0c-a442-259382cef520
+    rs:
+      key: EnemyRobotSphereSpeed
+      type: float
+      value: 20.000000
+  - metadata:
+      entityId: 11adf483-0fde-49b8-b6b2-d776604c9023
+    rs:
+      key: EnemyRobotSphereTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: ada9e34f-fe8a-4146-9402-90766e5ac07e
+    rs:
+      key: EnemyRobotSphereDamage
+      type: int
+      value: 5
+  - metadata:
+      entityId: 8b30c0e0-2f77-4128-878d-d896108df103
+    rs:
+      key: EnemyRobotSphereRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: d85678e1-a0e1-4588-b4d2-3fd74b7c69d6
+    rs:
+      key: EnemyDragonMoney
+      type: int
+      value: 50
+  - metadata:
+      entityId: a86d099b-9e7f-4fd1-a473-5d31118f311a
+    rs:
+      key: EnemyDragonHealth
+      type: float
+      value: 160.000000
+  - metadata:
+      entityId: 7fadefa3-1842-4a8d-aa8e-7f0dd4b9843a
+    rs:
+      key: EnemyDragonSpeed
+      type: float
+      value: 12.000000
+  - metadata:
+      entityId: 63e1f4b4-414d-4768-8291-4fa6424945d4
+    rs:
+      key: EnemyDragonTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 764c6e5b-aa90-4413-9776-4ce99305c032
+    rs:
+      key: EnemyDragonDamage
+      type: int
+      value: 5
+  - metadata:
+      entityId: 236d3e82-5835-4891-a22a-16c7a30bb940
+    rs:
+      key: EnemyDragonRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 4ac03b4e-e341-4c7c-a3b5-84b25c18bd07
+    rs:
+      key: EnemyBullMoney
+      type: int
+      value: 30
+  - metadata:
+      entityId: 1aa252fe-f76f-4e6f-90a1-75b1aacfe85f
+    rs:
+      key: EnemyBullHealth
+      type: float
+      value: 200.000000
+  - metadata:
+      entityId: 0122980a-7e4a-4e11-b093-7ce09031805c
+    rs:
+      key: EnemyBullSpeed
+      type: float
+      value: 8.000000
+  - metadata:
+      entityId: db0217d5-3555-4ab5-9a44-1290e089e174
+    rs:
+      key: EnemyBullTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 50f33d21-7b75-46b1-9381-12ca3670ec2b
+    rs:
+      key: EnemyBullDamage
+      type: int
+      value: 5
+  - metadata:
+      entityId: 929a6caa-5fc5-46a7-9605-e82b41d4af53
+    rs:
+      key: EnemyBullRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 8168f04a-d418-4c16-8a5c-3b29a7f2cd62
+    rs:
+      key: EnemyStoneMonsterMoney
+      type: int
+      value: 15
+  - metadata:
+      entityId: 2f97add1-b065-49c7-bef4-889f1ed49833
+    rs:
+      key: EnemyStoneMonsterHealth
+      type: float
+      value: 60.000000
+  - metadata:
+      entityId: 39e3f227-b1a1-4193-bbeb-233b4de771ed
+    rs:
+      key: EnemyStoneMonsterSpeed
+      type: float
+      value: 3.000000
+  - metadata:
+      entityId: 3babb60e-00bf-4742-9836-abaf0b6d3021
+    rs:
+      key: EnemyStoneMonsterTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 0d9512b0-13d9-4c4b-8a02-c4e1b9f68106
+    rs:
+      key: EnemyStoneMonsterDamage
+      type: int
+      value: 5
+  - metadata:
+      entityId: b41fcce1-9db9-48e9-8e7e-8bb3df649721
+    rs:
+      key: EnemyStoneMonsterRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 9aa3c3d4-5585-4e5b-b1d1-d67b6b72316e
+    rs:
+      key: EnemyFreeLichSMoney
+      type: int
+      value: 5
+  - metadata:
+      entityId: 36803f6f-2e8b-431c-b34f-55a15e9bb21a
+    rs:
+      key: EnemyFreeLichSHealth
+      type: float
+      value: 150.000000
+  - metadata:
+      entityId: b9de5425-c283-445c-82e4-30b68bf93930
+    rs:
+      key: EnemyFreeLichSSpeed
+      type: float
+      value: 7.500000
+  - metadata:
+      entityId: 451f88d9-be1a-4494-ad52-c5fa58b1c3f7
+    rs:
+      key: EnemyFreeLichSTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: aa67e2ab-9f69-44bc-87f9-67ba071c90bf
+    rs:
+      key: EnemyFreeLichSDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: 68eef33a-8807-4415-891c-f8ccca845bdb
+    rs:
+      key: EnemyFreeLichSRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: b67401dd-5b80-4ed6-bdf5-82960f7aed5e
+    rs:
+      key: EnemyFreeLichMoney
+      type: int
+      value: 3
+  - metadata:
+      entityId: 84c6cb90-9dae-4dd3-9266-fbba297fe649
+    rs:
+      key: EnemyFreeLichHealth
+      type: float
+      value: 80.000000
+  - metadata:
+      entityId: 959d24c1-7a40-423e-8998-3045f0a04508
+    rs:
+      key: EnemyFreeLichSpeed
+      type: float
+      value: 6.000000
+  - metadata:
+      entityId: d861b6e8-8b5b-42e1-8915-80928a4c4d34
+    rs:
+      key: EnemyFreeLichTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 4b090df3-a2fc-421c-862c-b933aa9a2be1
+    rs:
+      key: EnemyFreeLichDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: d5beb3a1-d35c-49c9-bed9-c9a66cc9eb92
+    rs:
+      key: EnemyFreeLichRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 01a6bec3-5fbb-479e-8519-48c9772c2474
+    rs:
+      key: EnemyGolemSMoney
+      type: int
+      value: 5
+  - metadata:
+      entityId: f1dd111b-9c50-48c1-91e8-7e7c1900ea5e
+    rs:
+      key: EnemyGolemSHealth
+      type: float
+      value: 220.000000
+  - metadata:
+      entityId: 8c0f1834-b3a7-4c96-9bda-f57a27e77393
+    rs:
+      key: EnemyGolemSSpeed
+      type: float
+      value: 7.500000
+  - metadata:
+      entityId: b3bb8aaf-e56d-4260-ba49-42a69a3976d0
+    rs:
+      key: EnemyGolemSTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 10d86e08-039e-4a4a-9b4e-8c74f138090d
+    rs:
+      key: EnemyGolemSDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: 279b42bb-e22b-4ca9-a9ac-33c6ca6f6c89
+    rs:
+      key: EnemyGolemSRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 9e64b369-a373-402c-8947-189b7f0fb284
+    rs:
+      key: EnemyGolemMoney
+      type: int
+      value: 3
+  - metadata:
+      entityId: 841dd1df-9b76-4220-8380-0dbc409b24a6
+    rs:
+      key: EnemyGolemHealth
+      type: float
+      value: 180.000000
+  - metadata:
+      entityId: 566cb819-8019-495b-a707-d1a5d26c8956
+    rs:
+      key: EnemyGolemSpeed
+      type: float
+      value: 6.000000
+  - metadata:
+      entityId: b84870ca-2692-4029-96b8-dde81d62b63b
+    rs:
+      key: EnemyGolemTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 490f3598-0fd6-49a2-be13-aa7a5caedc26
+    rs:
+      key: EnemyGolemDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: 74b7bc44-bdc1-4dad-a117-ae0d95e3be3f
+    rs:
+      key: EnemyGolemRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: b180b456-78bb-446e-bb83-a11268c08d17
+    rs:
+      key: EnemySkeletonArmedMoney
+      type: int
+      value: 3
+  - metadata:
+      entityId: 94e547f9-b148-469a-9bc1-8f0cb0ffbab7
+    rs:
+      key: EnemySkeletonArmedHealth
+      type: float
+      value: 120.000000
+  - metadata:
+      entityId: cf88335a-9543-4de1-85ac-04c5a9a19e89
+    rs:
+      key: EnemySkeletonArmedSpeed
+      type: float
+      value: 9.000000
+  - metadata:
+      entityId: 8af5cfab-05fe-4f64-b3dc-5e1e026f4b89
+    rs:
+      key: EnemySkeletonArmedTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 10cab970-d689-4049-a0f7-e33880c582e8
+    rs:
+      key: EnemySkeletonArmedDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: 84922df8-7b82-40d0-bf00-05c6a6cf89dd
+    rs:
+      key: EnemySkeletonArmedRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 4615dc6d-62d6-4630-a627-249e06192050
+    rs:
+      key: EnemySpiderGhostMoney
+      type: int
+      value: 3
+  - metadata:
+      entityId: 9cd1ec7f-ce99-4699-a759-c2b04a881283
+    rs:
+      key: EnemySpiderGhostHealth
+      type: float
+      value: 40.000000
+  - metadata:
+      entityId: e46b6bb5-eee6-4049-bd08-811d959b8bdc
+    rs:
+      key: EnemySpiderGhostSpeed
+      type: float
+      value: 12.000000
+  - metadata:
+      entityId: d7bd4189-af26-49d9-8a38-6294ff2f3e76
+    rs:
+      key: EnemySpiderGhostTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 320dc292-8e48-482d-a10f-5908aa7cfa52
+    rs:
+      key: EnemySpiderGhostDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: 9e1a1191-b479-4898-b02e-f576ccdee470
+    rs:
+      key: EnemySpiderGhostRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: a8f9e5c6-03ee-43d1-a5d1-70a8596aad86
+    rs:
+      key: EnemySkeletonMoney
+      type: int
+      value: 3
+  - metadata:
+      entityId: 669ad5c0-c437-470e-af22-589a0b04f918
+    rs:
+      key: EnemySkeletonHealth
+      type: float
+      value: 60.000000
+  - metadata:
+      entityId: e953ddc7-9cfa-4f81-bd62-7b8a13aa2b6c
+    rs:
+      key: EnemySkeletonSpeed
+      type: float
+      value: 9.500000
+  - metadata:
+      entityId: 900ca404-79fd-4a7b-bed3-e1ca869b6dba
+    rs:
+      key: EnemySkeletonTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: e2bc4f19-60b7-46c8-8b53-fc87c05a9e5b
+    rs:
+      key: EnemySkeletonDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: 678cf99e-7f96-480d-a396-52dea276ec10
+    rs:
+      key: EnemySkeletonRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: e92866c1-c323-4f6a-94e4-a58afd2c055a
+    rs:
+      key: EnemyGruntSMoney
+      type: int
+      value: 3
+  - metadata:
+      entityId: cc578e85-e5c1-417b-8c7f-5a0e3bff2900
+    rs:
+      key: EnemyGruntSHealth
+      type: float
+      value: 80.000000
+  - metadata:
+      entityId: 67d38429-2049-422c-bdb3-acf1859764e2
+    rs:
+      key: EnemyGruntSSpeed
+      type: float
+      value: 15.000000
+  - metadata:
+      entityId: 10b2dd68-d8e0-4bc6-b2fd-4b44dbb350a3
+    rs:
+      key: EnemyGruntSTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 61af9845-3fb7-49ec-9847-07f387bd5f31
+    rs:
+      key: EnemyGruntSDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: 23333f92-5ee3-4d7a-94f5-0ac46c03c198
+    rs:
+      key: EnemyGruntSRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: e1afadaa-d1d5-4618-a0d5-4166f0462218
+    rs:
+      key: EnemyFootmanSMoney
+      type: int
+      value: 3
+  - metadata:
+      entityId: 441153bf-2f3b-45b7-b3e5-9d143841ef9e
+    rs:
+      key: EnemyFootmanSHealth
+      type: float
+      value: 120.000000
+  - metadata:
+      entityId: 212e56c9-6563-4183-815f-98067df25fe1
+    rs:
+      key: EnemyFootmanSSpeed
+      type: float
+      value: 8.000000
+  - metadata:
+      entityId: 7e92cce1-024b-4052-9a90-7bac5b917572
+    rs:
+      key: EnemyFootmanSTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 9d35ef5b-2896-4d7f-8458-b920f2480ca1
+    rs:
+      key: EnemyFootmanSDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: bfb7661c-83ea-4706-9a60-b2411d7991dd
+    rs:
+      key: EnemyFootmanSRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 8427f219-8052-49c3-b476-d73d2a86e19c
+    rs:
+      key: EnemyGruntMoney
+      type: int
+      value: 2
+  - metadata:
+      entityId: 5b6c717d-2fbb-4b46-b557-6d3edd700e20
+    rs:
+      key: EnemyGruntHealth
+      type: float
+      value: 30.000000
+  - metadata:
+      entityId: fa271771-575a-4ba4-baa7-4a9dfde4196d
+    rs:
+      key: EnemyGruntSpeed
+      type: float
+      value: 10.000000
+  - metadata:
+      entityId: 358389ac-bfb8-4ff0-b862-e5173e33d216
+    rs:
+      key: EnemyGruntTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: c21cd986-fa63-4288-ac9b-f9f234bf6a04
+    rs:
+      key: EnemyGruntDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: db21bc96-efe0-4e7e-93dd-545815309f1b
+    rs:
+      key: EnemyGruntRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: ef0e907d-2370-4d33-8c5d-39923242ba32
+    rs:
+      key: EnemyFootmanMoney
+      type: int
+      value: 2
+  - metadata:
+      entityId: 60a6e7ca-a92e-4615-a9a8-b0f42266b130
+    rs:
+      key: EnemyFootmanHealth
+      type: float
+      value: 50.000000
+  - metadata:
+      entityId: d7c39e42-db1d-47df-9c9c-36cfe2092be5
+    rs:
+      key: EnemyFootmanSpeed
+      type: float
+      value: 5.000000
+  - metadata:
+      entityId: 1077e999-ba68-4b09-aff0-1cce53a54ed8
+    rs:
+      key: EnemyFootmanTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 576c400f-e9bb-433e-989d-df3693d346a5
+    rs:
+      key: EnemyFootmanDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: 8e398886-8d2b-4755-806a-03bbdef753b0
+    rs:
+      key: EnemyFootmanRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 6abe6e07-16b7-4538-9a64-dd2adb438ed9
+    rs:
+      key: EnemyTurtleShellMoney
+      type: int
+      value: 10
+  - metadata:
+      entityId: 5e65eb6e-18ec-42c9-a148-71e497f7d55d
+    rs:
+      key: EnemyTurtleShellHealth
+      type: float
+      value: 100.000000
+  - metadata:
+      entityId: c334c849-e669-492d-b203-a949b722ce56
+    rs:
+      key: EnemyTurtleShellSpeed
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 59bc8345-13a7-4058-8d14-101d2ed96361
+    rs:
+      key: EnemyTurtleShellTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: c904667d-13b3-4500-8ff2-e72edc2ad60a
+    rs:
+      key: EnemyTurtleShellDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: a73ecb40-a39c-4868-8d6e-9dd43b2867b1
+    rs:
+      key: EnemyTurtleShellRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 9531c9ca-d082-4a9c-8c58-eee4d16edc6a
+    rs:
+      key: EnemyMushroomMoney
+      type: int
+      value: 5
+  - metadata:
+      entityId: 91e9d9cf-10f9-45f5-93da-06e3850670a4
+    rs:
+      key: EnemyMushroomHealth
+      type: float
+      value: 50.000000
+  - metadata:
+      entityId: 6212313e-c554-4f16-9203-b01225061647
+    rs:
+      key: EnemyMushroomSpeed
+      type: float
+      value: 1.000000
+  - metadata:
+      entityId: e456b097-2c71-4957-86da-17574fb2bc87
+    rs:
+      key: EnemyMushroomTime
+      type: float
+      value: 1.000000
+  - metadata:
+      entityId: 0e45b4a5-e270-47ac-9200-cd34b918a9c7
+    rs:
+      key: EnemyMushroomDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: 9f97fecf-6f87-4440-961d-a0768b114f2e
+    rs:
+      key: EnemyMushroomRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: efbbd67b-4480-4f20-8a2e-2ed0f32d0b4f
+    rs:
+      key: EnemySlimeMoney
+      type: int
+      value: 5
+  - metadata:
+      entityId: 19810a3b-cce4-48f3-bfd9-a9d2c3cc3cfc
+    rs:
+      key: EnemySlimeHealth
+      type: float
+      value: 30.000000
+  - metadata:
+      entityId: f782c1fa-bbe1-4239-a161-89fb04d2f9be
+    rs:
+      key: EnemySlimeSpeed
+      type: float
+      value: 0.800000
+  - metadata:
+      entityId: 132f2bea-75d8-48de-8af7-3828f207753f
+    rs:
+      key: EnemySlimeTime
+      type: float
+      value: 0.080000
+  - metadata:
+      entityId: 0afe53fe-99d8-4296-859d-fd8705c6f5e1
+    rs:
+      key: EnemySlimeDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: 37bf2ab0-989d-499a-ab59-758d66b88914
+    rs:
+      key: EnemySlimeRadius
+      type: float
+      value: 0.500000
+  rsLastCachedKeyList:
+  - metadata:
+      entityId: 27dc1809-8130-4bef-9f45-78ca4630ac6e
+    rs:
+      key: SkillMeteorRadius
+      type: float
+      value: 5.000000
+  - metadata:
+      entityId: 0324c3f4-e3f9-454f-9f1e-24fd231bf28b
+    rs:
+      key: SkillMeteorDamage
+      type: float
+      value: 8.000000
+  - metadata:
+      entityId: 742a10af-99c5-4eb8-ab4b-58c4b371d523
+    rs:
+      key: SkillMeteorSpawnCycle
+      type: float
+      value: 2.500000
+  - metadata:
+      entityId: b0ebcbc0-8e8d-4517-a2ac-43a69adddeb5
+    rs:
+      key: SkillMeteorWait
+      type: float
+      value: 1.000000
+  - metadata:
+      entityId: 9a1cbedb-a596-4547-bd76-e35e0c211d25
+    rs:
+      key: SkillMeteorLife
+      type: float
+      value: 15.000000
+  - metadata:
+      entityId: b19a4d98-c3dd-48ed-98fc-cdd1d5a7d34b
+    rs:
+      key: SkillMeteorSlowRate
+      type: float
+      value: 0.000000
+  - metadata:
+      entityId: deadc795-249a-4ed2-81a8-bcf17796cace
+    rs:
+      key: SkillMeteorBuffTime
+      type: float
+      value: 0.000000
+  - metadata:
+      entityId: 708b0d63-a634-4017-b832-2da014d888fa
+    rs:
+      key: SkillBlizzardRadius
+      type: float
+      value: 20.000000
+  - metadata:
+      entityId: 80d08c00-b2ca-4f37-9f34-7e66ee46ce9c
+    rs:
+      key: SkillBlizzardDamage
+      type: float
+      value: 0.100000
+  - metadata:
+      entityId: ac217ea4-2572-484f-8beb-7891387b9152
+    rs:
+      key: SkillBlizzardSpawnCycle
+      type: float
+      value: 5.000000
+  - metadata:
+      entityId: 4ab874ea-7def-4864-9ba1-64f0aab3301f
+    rs:
+      key: SkillBlizzardWait
+      type: float
+      value: 0.000000
+  - metadata:
+      entityId: bb644385-d0e7-4443-8b10-835b60fc698c
+    rs:
+      key: SkillBlizzardLife
+      type: float
+      value: 15.000000
+  - metadata:
+      entityId: 514738fc-2d90-48ea-9983-d0163ad5bf1b
+    rs:
+      key: SkillBlizzardSlowRate
+      type: float
+      value: 0.010000
+  - metadata:
+      entityId: b833d83f-8ba1-4f2d-8b28-84d1e5c96acf
+    rs:
+      key: SkillBlizzardBuffTime
+      type: float
+      value: 3.000000
+  - metadata:
+      entityId: 6e8d936a-bde1-45ef-a92e-2c3f8b1c78cb
+    rs:
+      key: SkillMinionsRadius
+      type: float
+      value: 1.000000
+  - metadata:
+      entityId: 88b63aa2-bd1f-4d99-ad26-d853acd83b05
+    rs:
+      key: SkillMinionsDamage
+      type: float
+      value: 0.200000
+  - metadata:
+      entityId: 0a664dfa-4113-47d6-92b5-1c6d898b6a61
+    rs:
+      key: SkillMinionsSpawnCycle
+      type: float
+      value: 0.100000
+  - metadata:
+      entityId: caf8a36d-3f5e-47af-9e77-30324f3f7c49
+    rs:
+      key: SkillMinionsWait
+      type: float
+      value: 1.000000
+  - metadata:
+      entityId: 22261359-2cd1-4683-a1a2-869ad78053a1
+    rs:
+      key: SkillMinionsLife
+      type: float
+      value: 10.000000
+  - metadata:
+      entityId: 07083124-e3ad-4c93-93fb-5a8932306b86
+    rs:
+      key: SkillMinionsSlowRate
+      type: float
+      value: 0.000000
+  - metadata:
+      entityId: 3562ca79-d749-4cc3-9056-aa2813152243
+    rs:
+      key: SkillMinionsBuffTime
+      type: float
+      value: 0.000000
+  - metadata:
+      entityId: bd865920-5367-4bef-8931-327cf2861dba
+    rs:
+      key: SkillPetrificationRadius
+      type: float
+      value: 1000.000000
+  - metadata:
+      entityId: 70d17d88-1902-4f17-bc78-8f7fbe162673
+    rs:
+      key: SkillPetrificationDamage
+      type: float
+      value: 0.000000
+  - metadata:
+      entityId: 7132946e-2420-475a-828d-8ef48b692e4b
+    rs:
+      key: SkillPetrificationSpawnCycle
+      type: float
+      value: 0.200000
+  - metadata:
+      entityId: 10250515-3107-450d-8cf1-429b5aa73177
+    rs:
+      key: SkillPetrificationWait
+      type: float
+      value: 0.000000
+  - metadata:
+      entityId: cb29d9e0-c0c1-4843-b584-3df135f050c7
+    rs:
+      key: SkillPetrificationLife
+      type: float
+      value: 5.000000
+  - metadata:
+      entityId: 7653397f-3a91-42e2-8aeb-35c374fc00c8
+    rs:
+      key: SkillPetrificationSlowRate
+      type: float
+      value: 1.000000
+  - metadata:
+      entityId: 7213a929-3df3-45eb-8cac-94e6a36687ea
+    rs:
+      key: SkillPetrificationBuffTime
+      type: float
+      value: 0.001500
+  - metadata:
+      entityId: 2894e559-91da-4096-aa4f-f90f2c018a83
+    rs:
+      key: TowerNightmareRadius
+      type: float
+      value: 20.000000
+  - metadata:
+      entityId: dc0a9003-bcdb-4855-8b43-4568f904a4e2
+    rs:
+      key: TowerNightmareDamage
+      type: float
+      value: 1.000000
+  - metadata:
+      entityId: 0438b76b-893e-40ef-a8c8-81b0391091e5
+    rs:
+      key: TowerNightmareWait
+      type: float
+      value: 2.000000
+  - metadata:
+      entityId: fd50523a-8a9a-4237-8e8f-d5d5a331b3d9
+    rs:
+      key: TowerNightmareLife
+      type: float
+      value: 3.000000
+  - metadata:
+      entityId: 6f853eee-415c-4e1c-9e1d-f1d12ee176a1
+    rs:
+      key: TowerNightmareAtkWait
+      type: float
+      value: 0.010000
+  - metadata:
+      entityId: 471bc1a7-76bb-4cab-8a86-c9f3d391f8ba
+    rs:
+      key: TowerNightmareAtkRadius
+      type: float
+      value: 1.000000
+  - metadata:
+      entityId: 0a29b8dd-72ba-499c-8dbe-c274e5540eb1
+    rs:
+      key: TowerNightmareAtkSpd
+      type: float
+      value: 0.000000
+  - metadata:
+      entityId: 7208b146-c269-4963-90cb-492110656c61
+    rs:
+      key: TowerNightmareAtkLife
+      type: float
+      value: 5.000000
+  - metadata:
+      entityId: 3df4ba7b-cfb2-4a09-8e09-b4d029457173
+    rs:
+      key: TowerSoulEaterRadius
+      type: float
+      value: 13.000000
+  - metadata:
+      entityId: 4e25d1a5-1dd8-4228-be1e-33647319d0e7
+    rs:
+      key: TowerSoulEaterDamage
+      type: float
+      value: 8.000000
+  - metadata:
+      entityId: 16d37da5-3386-44ba-88be-b434e765be87
+    rs:
+      key: TowerSoulEaterWait
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 294545ae-d99d-4e17-9d52-59c715e99712
+    rs:
+      key: TowerSoulEaterLife
+      type: float
+      value: 3.000000
+  - metadata:
+      entityId: 7a6a967e-893c-4782-9311-00a1b1c36991
+    rs:
+      key: TowerSoulEaterAtkWait
+      type: float
+      value: 0.000000
+  - metadata:
+      entityId: 917b1e7f-bee9-490e-83f3-69848fd8daa8
+    rs:
+      key: TowerSoulEaterAtkRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 9e5b886e-eaa5-473f-8520-e7a7b985a952
+    rs:
+      key: TowerSoulEaterAtkSpd
+      type: float
+      value: 1.000000
+  - metadata:
+      entityId: f242b1eb-d5d5-46c2-918a-dae2766b7aaa
+    rs:
+      key: TowerSoulEaterAtkLife
+      type: float
+      value: 5.000000
+  - metadata:
+      entityId: 5a5053e0-d5b4-4af3-b9bc-217847948d7f
+    rs:
+      key: TowerTerrorBringerRadius
+      type: float
+      value: 40.000000
+  - metadata:
+      entityId: f8a42e6b-b686-48c3-9bf6-4f6f1d394635
+    rs:
+      key: TowerTerrorBringerDamage
+      type: float
+      value: 20.000000
+  - metadata:
+      entityId: 2bbd28e9-8be1-4df4-867d-eaea14ac7cb1
+    rs:
+      key: TowerTerrorBringerWait
+      type: float
+      value: 3.000000
+  - metadata:
+      entityId: 758a5da3-044f-4617-9dae-5491734213ef
+    rs:
+      key: TowerTerrorBringerLife
+      type: float
+      value: 3.000000
+  - metadata:
+      entityId: 6e7789f9-cf47-425c-9033-281638cb4163
+    rs:
+      key: TowerTerrorBringerAtkWait
+      type: float
+      value: 0.010000
+  - metadata:
+      entityId: cc14d7e4-1f2e-48fc-bd2a-5b4049ed8863
+    rs:
+      key: TowerTerrorBringerAtkRadius
+      type: float
+      value: 1.000000
+  - metadata:
+      entityId: 74b55cde-4049-42d6-b35b-bd70ce06c34b
+    rs:
+      key: TowerTerrorBringerAtkSpd
+      type: float
+      value: 0.000000
+  - metadata:
+      entityId: bbcb67a6-6858-45a3-9a2f-b331ed5cdbed
+    rs:
+      key: TowerTerrorBringerAtkLife
+      type: float
+      value: 5.000000
+  - metadata:
+      entityId: 7f56f3a4-66c7-4267-a63c-28acf9bcd0f5
+    rs:
+      key: TowerUsurperRadius
+      type: float
+      value: 8.000000
+  - metadata:
+      entityId: 017ff968-66a3-403b-a0f8-23f94421da64
+    rs:
+      key: TowerUsurperDamage
+      type: float
+      value: 2.000000
+  - metadata:
+      entityId: 048f34a2-e004-4dab-93d5-7696c9521ddd
+    rs:
+      key: TowerUsurperWait
+      type: float
+      value: 0.200000
+  - metadata:
+      entityId: 0ebc650e-d2a8-43fb-895b-8b99ede1f0d0
+    rs:
+      key: TowerUsurperLife
+      type: float
+      value: 1.000000
+  - metadata:
+      entityId: 97750623-72d1-4155-8766-d560d63a7c37
+    rs:
+      key: TowerUsurperAtkWait
+      type: float
+      value: 0.000000
+  - metadata:
+      entityId: b2ae7c77-44ad-4cfe-9a45-d2a8c808afdb
+    rs:
+      key: TowerUsurperAtkRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 68f4bbcc-e950-4628-811d-03f58e9c9da4
+    rs:
+      key: TowerUsurperAtkSpd
+      type: float
+      value: 1.000000
+  - metadata:
+      entityId: 01b755ff-4454-4a44-a368-1b0d615334e8
+    rs:
+      key: TowerUsurperAtkLife
+      type: float
+      value: 5.000000
+  - metadata:
+      entityId: 1af2a4c4-53b4-4f68-9e1d-009c766741cc
+    rs:
+      key: EnemyMetalonGreenMoney
+      type: int
+      value: 50
+  - metadata:
+      entityId: 0f6cbbaf-c22e-4b44-9a75-80926245de0d
+    rs:
+      key: EnemyMetalonGreenHealth
+      type: float
+      value: 100.000000
+  - metadata:
+      entityId: b2c70cf1-790b-455a-90ff-07da2c56c993
+    rs:
+      key: EnemyMetalonGreenSpeed
+      type: float
+      value: 30.000000
+  - metadata:
+      entityId: bd7f0352-df2b-4a9f-8f20-bebd4c004272
+    rs:
+      key: EnemyMetalonGreenTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 62fb2900-1c87-4a0e-a814-5d65ccfdd3b7
+    rs:
+      key: EnemyMetalonGreenDamage
+      type: int
+      value: 5
+  - metadata:
+      entityId: 3b51fdf0-1b4d-42f5-871d-5547d2424176
+    rs:
+      key: EnemyMetalonGreenRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 862e73f3-30e0-4978-9a9c-7acecc99a74b
+    rs:
+      key: EnemyMetalonPurpleMoney
+      type: int
+      value: 150
+  - metadata:
+      entityId: da558db9-8f6f-4d8c-a007-12d0cebba28b
+    rs:
+      key: EnemyMetalonPurpleHealth
+      type: float
+      value: 200.000000
+  - metadata:
+      entityId: 20eba0bd-6ebf-4a9c-a8ab-9accd1fb38d4
+    rs:
+      key: EnemyMetalonPurpleSpeed
+      type: float
+      value: 30.000000
+  - metadata:
+      entityId: 2bf158ef-f5e9-479a-baed-ec9d4e300d9e
+    rs:
+      key: EnemyMetalonPurpleTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: eee7a2f5-1421-42c2-8bbf-28310552190a
+    rs:
+      key: EnemyMetalonPurpleDamage
+      type: int
+      value: 5
+  - metadata:
+      entityId: b285e6c7-6318-493f-8c21-5c480a3070dd
+    rs:
+      key: EnemyMetalonPurpleRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 7fc83f2c-0428-4f09-b740-2c0f2d5578b7
+    rs:
+      key: EnemyMetalonRedMoney
+      type: int
+      value: 300
+  - metadata:
+      entityId: 32f0c74a-5ea6-4b86-88f6-e32bf65a9444
+    rs:
+      key: EnemyMetalonRedHealth
+      type: float
+      value: 500.000000
+  - metadata:
+      entityId: 45a7e6bb-1db7-40bc-a96d-3103d034f503
+    rs:
+      key: EnemyMetalonRedSpeed
+      type: float
+      value: 30.000000
+  - metadata:
+      entityId: f8ca9b30-57a7-4d22-9352-eecc2c4b8ca0
+    rs:
+      key: EnemyMetalonRedTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: e2a8ab35-c314-4618-ba64-244d66a24921
+    rs:
+      key: EnemyMetalonRedDamage
+      type: int
+      value: 5
+  - metadata:
+      entityId: 24f49747-36b0-463f-a0b7-4a08f5bd2460
+    rs:
+      key: EnemyMetalonRedRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 0f854308-4fe5-4895-8420-c4fef0218b7e
+    rs:
+      key: EnemyAttackBotMoney
+      type: int
+      value: 150
+  - metadata:
+      entityId: 5b407d75-017d-4239-9a02-3b73f87ce868
+    rs:
+      key: EnemyAttackBotHealth
+      type: float
+      value: 300.000000
+  - metadata:
+      entityId: 337e13e6-3302-49d2-a875-2180df901cc7
+    rs:
+      key: EnemyAttackBotSpeed
+      type: float
+      value: 15.000000
+  - metadata:
+      entityId: 4989f15f-f5ba-4c99-a35a-e75823c326c2
+    rs:
+      key: EnemyAttackBotTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 03112f4f-f519-4bc5-bf2e-5d8db2bfc233
+    rs:
+      key: EnemyAttackBotDamage
+      type: int
+      value: 5
+  - metadata:
+      entityId: 1ca52c59-b036-47ec-9b8c-72e068abcdf9
+    rs:
+      key: EnemyAttackBotRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 7f0b9226-9175-416c-944c-9126a989d1dd
+    rs:
+      key: EnemyRobotSphereMoney
+      type: int
+      value: 100
+  - metadata:
+      entityId: 4c3c193f-3bd8-424f-b8f4-15c3e02ee378
+    rs:
+      key: EnemyRobotSphereHealth
+      type: float
+      value: 250.000000
+  - metadata:
+      entityId: 6d94ae55-05ce-4b0c-a442-259382cef520
+    rs:
+      key: EnemyRobotSphereSpeed
+      type: float
+      value: 20.000000
+  - metadata:
+      entityId: 11adf483-0fde-49b8-b6b2-d776604c9023
+    rs:
+      key: EnemyRobotSphereTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: ada9e34f-fe8a-4146-9402-90766e5ac07e
+    rs:
+      key: EnemyRobotSphereDamage
+      type: int
+      value: 5
+  - metadata:
+      entityId: 8b30c0e0-2f77-4128-878d-d896108df103
+    rs:
+      key: EnemyRobotSphereRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: d85678e1-a0e1-4588-b4d2-3fd74b7c69d6
+    rs:
+      key: EnemyDragonMoney
+      type: int
+      value: 50
+  - metadata:
+      entityId: a86d099b-9e7f-4fd1-a473-5d31118f311a
+    rs:
+      key: EnemyDragonHealth
+      type: float
+      value: 160.000000
+  - metadata:
+      entityId: 7fadefa3-1842-4a8d-aa8e-7f0dd4b9843a
+    rs:
+      key: EnemyDragonSpeed
+      type: float
+      value: 12.000000
+  - metadata:
+      entityId: 63e1f4b4-414d-4768-8291-4fa6424945d4
+    rs:
+      key: EnemyDragonTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 764c6e5b-aa90-4413-9776-4ce99305c032
+    rs:
+      key: EnemyDragonDamage
+      type: int
+      value: 5
+  - metadata:
+      entityId: 236d3e82-5835-4891-a22a-16c7a30bb940
+    rs:
+      key: EnemyDragonRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 4ac03b4e-e341-4c7c-a3b5-84b25c18bd07
+    rs:
+      key: EnemyBullMoney
+      type: int
+      value: 30
+  - metadata:
+      entityId: 1aa252fe-f76f-4e6f-90a1-75b1aacfe85f
+    rs:
+      key: EnemyBullHealth
+      type: float
+      value: 200.000000
+  - metadata:
+      entityId: 0122980a-7e4a-4e11-b093-7ce09031805c
+    rs:
+      key: EnemyBullSpeed
+      type: float
+      value: 8.000000
+  - metadata:
+      entityId: db0217d5-3555-4ab5-9a44-1290e089e174
+    rs:
+      key: EnemyBullTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 50f33d21-7b75-46b1-9381-12ca3670ec2b
+    rs:
+      key: EnemyBullDamage
+      type: int
+      value: 5
+  - metadata:
+      entityId: 929a6caa-5fc5-46a7-9605-e82b41d4af53
+    rs:
+      key: EnemyBullRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 8168f04a-d418-4c16-8a5c-3b29a7f2cd62
+    rs:
+      key: EnemyStoneMonsterMoney
+      type: int
+      value: 15
+  - metadata:
+      entityId: 2f97add1-b065-49c7-bef4-889f1ed49833
+    rs:
+      key: EnemyStoneMonsterHealth
+      type: float
+      value: 60.000000
+  - metadata:
+      entityId: 39e3f227-b1a1-4193-bbeb-233b4de771ed
+    rs:
+      key: EnemyStoneMonsterSpeed
+      type: float
+      value: 3.000000
+  - metadata:
+      entityId: 3babb60e-00bf-4742-9836-abaf0b6d3021
+    rs:
+      key: EnemyStoneMonsterTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 0d9512b0-13d9-4c4b-8a02-c4e1b9f68106
+    rs:
+      key: EnemyStoneMonsterDamage
+      type: int
+      value: 5
+  - metadata:
+      entityId: b41fcce1-9db9-48e9-8e7e-8bb3df649721
+    rs:
+      key: EnemyStoneMonsterRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 9aa3c3d4-5585-4e5b-b1d1-d67b6b72316e
+    rs:
+      key: EnemyFreeLichSMoney
+      type: int
+      value: 5
+  - metadata:
+      entityId: 36803f6f-2e8b-431c-b34f-55a15e9bb21a
+    rs:
+      key: EnemyFreeLichSHealth
+      type: float
+      value: 150.000000
+  - metadata:
+      entityId: b9de5425-c283-445c-82e4-30b68bf93930
+    rs:
+      key: EnemyFreeLichSSpeed
+      type: float
+      value: 7.500000
+  - metadata:
+      entityId: 451f88d9-be1a-4494-ad52-c5fa58b1c3f7
+    rs:
+      key: EnemyFreeLichSTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: aa67e2ab-9f69-44bc-87f9-67ba071c90bf
+    rs:
+      key: EnemyFreeLichSDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: 68eef33a-8807-4415-891c-f8ccca845bdb
+    rs:
+      key: EnemyFreeLichSRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: b67401dd-5b80-4ed6-bdf5-82960f7aed5e
+    rs:
+      key: EnemyFreeLichMoney
+      type: int
+      value: 3
+  - metadata:
+      entityId: 84c6cb90-9dae-4dd3-9266-fbba297fe649
+    rs:
+      key: EnemyFreeLichHealth
+      type: float
+      value: 80.000000
+  - metadata:
+      entityId: 959d24c1-7a40-423e-8998-3045f0a04508
+    rs:
+      key: EnemyFreeLichSpeed
+      type: float
+      value: 6.000000
+  - metadata:
+      entityId: d861b6e8-8b5b-42e1-8915-80928a4c4d34
+    rs:
+      key: EnemyFreeLichTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 4b090df3-a2fc-421c-862c-b933aa9a2be1
+    rs:
+      key: EnemyFreeLichDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: d5beb3a1-d35c-49c9-bed9-c9a66cc9eb92
+    rs:
+      key: EnemyFreeLichRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 01a6bec3-5fbb-479e-8519-48c9772c2474
+    rs:
+      key: EnemyGolemSMoney
+      type: int
+      value: 5
+  - metadata:
+      entityId: f1dd111b-9c50-48c1-91e8-7e7c1900ea5e
+    rs:
+      key: EnemyGolemSHealth
+      type: float
+      value: 220.000000
+  - metadata:
+      entityId: 8c0f1834-b3a7-4c96-9bda-f57a27e77393
+    rs:
+      key: EnemyGolemSSpeed
+      type: float
+      value: 7.500000
+  - metadata:
+      entityId: b3bb8aaf-e56d-4260-ba49-42a69a3976d0
+    rs:
+      key: EnemyGolemSTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 10d86e08-039e-4a4a-9b4e-8c74f138090d
+    rs:
+      key: EnemyGolemSDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: 279b42bb-e22b-4ca9-a9ac-33c6ca6f6c89
+    rs:
+      key: EnemyGolemSRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 9e64b369-a373-402c-8947-189b7f0fb284
+    rs:
+      key: EnemyGolemMoney
+      type: int
+      value: 3
+  - metadata:
+      entityId: 841dd1df-9b76-4220-8380-0dbc409b24a6
+    rs:
+      key: EnemyGolemHealth
+      type: float
+      value: 180.000000
+  - metadata:
+      entityId: 566cb819-8019-495b-a707-d1a5d26c8956
+    rs:
+      key: EnemyGolemSpeed
+      type: float
+      value: 6.000000
+  - metadata:
+      entityId: b84870ca-2692-4029-96b8-dde81d62b63b
+    rs:
+      key: EnemyGolemTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 490f3598-0fd6-49a2-be13-aa7a5caedc26
+    rs:
+      key: EnemyGolemDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: 74b7bc44-bdc1-4dad-a117-ae0d95e3be3f
+    rs:
+      key: EnemyGolemRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: b180b456-78bb-446e-bb83-a11268c08d17
+    rs:
+      key: EnemySkeletonArmedMoney
+      type: int
+      value: 3
+  - metadata:
+      entityId: 94e547f9-b148-469a-9bc1-8f0cb0ffbab7
+    rs:
+      key: EnemySkeletonArmedHealth
+      type: float
+      value: 120.000000
+  - metadata:
+      entityId: cf88335a-9543-4de1-85ac-04c5a9a19e89
+    rs:
+      key: EnemySkeletonArmedSpeed
+      type: float
+      value: 9.000000
+  - metadata:
+      entityId: 8af5cfab-05fe-4f64-b3dc-5e1e026f4b89
+    rs:
+      key: EnemySkeletonArmedTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 10cab970-d689-4049-a0f7-e33880c582e8
+    rs:
+      key: EnemySkeletonArmedDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: 84922df8-7b82-40d0-bf00-05c6a6cf89dd
+    rs:
+      key: EnemySkeletonArmedRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 4615dc6d-62d6-4630-a627-249e06192050
+    rs:
+      key: EnemySpiderGhostMoney
+      type: int
+      value: 3
+  - metadata:
+      entityId: 9cd1ec7f-ce99-4699-a759-c2b04a881283
+    rs:
+      key: EnemySpiderGhostHealth
+      type: float
+      value: 40.000000
+  - metadata:
+      entityId: e46b6bb5-eee6-4049-bd08-811d959b8bdc
+    rs:
+      key: EnemySpiderGhostSpeed
+      type: float
+      value: 12.000000
+  - metadata:
+      entityId: d7bd4189-af26-49d9-8a38-6294ff2f3e76
+    rs:
+      key: EnemySpiderGhostTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 320dc292-8e48-482d-a10f-5908aa7cfa52
+    rs:
+      key: EnemySpiderGhostDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: 9e1a1191-b479-4898-b02e-f576ccdee470
+    rs:
+      key: EnemySpiderGhostRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: a8f9e5c6-03ee-43d1-a5d1-70a8596aad86
+    rs:
+      key: EnemySkeletonMoney
+      type: int
+      value: 3
+  - metadata:
+      entityId: 669ad5c0-c437-470e-af22-589a0b04f918
+    rs:
+      key: EnemySkeletonHealth
+      type: float
+      value: 60.000000
+  - metadata:
+      entityId: e953ddc7-9cfa-4f81-bd62-7b8a13aa2b6c
+    rs:
+      key: EnemySkeletonSpeed
+      type: float
+      value: 9.500000
+  - metadata:
+      entityId: 900ca404-79fd-4a7b-bed3-e1ca869b6dba
+    rs:
+      key: EnemySkeletonTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: e2bc4f19-60b7-46c8-8b53-fc87c05a9e5b
+    rs:
+      key: EnemySkeletonDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: 678cf99e-7f96-480d-a396-52dea276ec10
+    rs:
+      key: EnemySkeletonRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: e92866c1-c323-4f6a-94e4-a58afd2c055a
+    rs:
+      key: EnemyGruntSMoney
+      type: int
+      value: 3
+  - metadata:
+      entityId: cc578e85-e5c1-417b-8c7f-5a0e3bff2900
+    rs:
+      key: EnemyGruntSHealth
+      type: float
+      value: 80.000000
+  - metadata:
+      entityId: 67d38429-2049-422c-bdb3-acf1859764e2
+    rs:
+      key: EnemyGruntSSpeed
+      type: float
+      value: 15.000000
+  - metadata:
+      entityId: 10b2dd68-d8e0-4bc6-b2fd-4b44dbb350a3
+    rs:
+      key: EnemyGruntSTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 61af9845-3fb7-49ec-9847-07f387bd5f31
+    rs:
+      key: EnemyGruntSDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: 23333f92-5ee3-4d7a-94f5-0ac46c03c198
+    rs:
+      key: EnemyGruntSRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: e1afadaa-d1d5-4618-a0d5-4166f0462218
+    rs:
+      key: EnemyFootmanSMoney
+      type: int
+      value: 3
+  - metadata:
+      entityId: 441153bf-2f3b-45b7-b3e5-9d143841ef9e
+    rs:
+      key: EnemyFootmanSHealth
+      type: float
+      value: 120.000000
+  - metadata:
+      entityId: 212e56c9-6563-4183-815f-98067df25fe1
+    rs:
+      key: EnemyFootmanSSpeed
+      type: float
+      value: 8.000000
+  - metadata:
+      entityId: 7e92cce1-024b-4052-9a90-7bac5b917572
+    rs:
+      key: EnemyFootmanSTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 9d35ef5b-2896-4d7f-8458-b920f2480ca1
+    rs:
+      key: EnemyFootmanSDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: bfb7661c-83ea-4706-9a60-b2411d7991dd
+    rs:
+      key: EnemyFootmanSRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 8427f219-8052-49c3-b476-d73d2a86e19c
+    rs:
+      key: EnemyGruntMoney
+      type: int
+      value: 2
+  - metadata:
+      entityId: 5b6c717d-2fbb-4b46-b557-6d3edd700e20
+    rs:
+      key: EnemyGruntHealth
+      type: float
+      value: 30.000000
+  - metadata:
+      entityId: fa271771-575a-4ba4-baa7-4a9dfde4196d
+    rs:
+      key: EnemyGruntSpeed
+      type: float
+      value: 10.000000
+  - metadata:
+      entityId: 358389ac-bfb8-4ff0-b862-e5173e33d216
+    rs:
+      key: EnemyGruntTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: c21cd986-fa63-4288-ac9b-f9f234bf6a04
+    rs:
+      key: EnemyGruntDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: db21bc96-efe0-4e7e-93dd-545815309f1b
+    rs:
+      key: EnemyGruntRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: ef0e907d-2370-4d33-8c5d-39923242ba32
+    rs:
+      key: EnemyFootmanMoney
+      type: int
+      value: 2
+  - metadata:
+      entityId: 60a6e7ca-a92e-4615-a9a8-b0f42266b130
+    rs:
+      key: EnemyFootmanHealth
+      type: float
+      value: 50.000000
+  - metadata:
+      entityId: d7c39e42-db1d-47df-9c9c-36cfe2092be5
+    rs:
+      key: EnemyFootmanSpeed
+      type: float
+      value: 5.000000
+  - metadata:
+      entityId: 1077e999-ba68-4b09-aff0-1cce53a54ed8
+    rs:
+      key: EnemyFootmanTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 576c400f-e9bb-433e-989d-df3693d346a5
+    rs:
+      key: EnemyFootmanDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: 8e398886-8d2b-4755-806a-03bbdef753b0
+    rs:
+      key: EnemyFootmanRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 6abe6e07-16b7-4538-9a64-dd2adb438ed9
+    rs:
+      key: EnemyTurtleShellMoney
+      type: int
+      value: 10
+  - metadata:
+      entityId: 5e65eb6e-18ec-42c9-a148-71e497f7d55d
+    rs:
+      key: EnemyTurtleShellHealth
+      type: float
+      value: 100.000000
+  - metadata:
+      entityId: c334c849-e669-492d-b203-a949b722ce56
+    rs:
+      key: EnemyTurtleShellSpeed
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 59bc8345-13a7-4058-8d14-101d2ed96361
+    rs:
+      key: EnemyTurtleShellTime
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: c904667d-13b3-4500-8ff2-e72edc2ad60a
+    rs:
+      key: EnemyTurtleShellDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: a73ecb40-a39c-4868-8d6e-9dd43b2867b1
+    rs:
+      key: EnemyTurtleShellRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: 9531c9ca-d082-4a9c-8c58-eee4d16edc6a
+    rs:
+      key: EnemyMushroomMoney
+      type: int
+      value: 5
+  - metadata:
+      entityId: 91e9d9cf-10f9-45f5-93da-06e3850670a4
+    rs:
+      key: EnemyMushroomHealth
+      type: float
+      value: 50.000000
+  - metadata:
+      entityId: 6212313e-c554-4f16-9203-b01225061647
+    rs:
+      key: EnemyMushroomSpeed
+      type: float
+      value: 1.000000
+  - metadata:
+      entityId: e456b097-2c71-4957-86da-17574fb2bc87
+    rs:
+      key: EnemyMushroomTime
+      type: float
+      value: 1.000000
+  - metadata:
+      entityId: 0e45b4a5-e270-47ac-9200-cd34b918a9c7
+    rs:
+      key: EnemyMushroomDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: 9f97fecf-6f87-4440-961d-a0768b114f2e
+    rs:
+      key: EnemyMushroomRadius
+      type: float
+      value: 0.500000
+  - metadata:
+      entityId: efbbd67b-4480-4f20-8a2e-2ed0f32d0b4f
+    rs:
+      key: EnemySlimeMoney
+      type: int
+      value: 5
+  - metadata:
+      entityId: 19810a3b-cce4-48f3-bfd9-a9d2c3cc3cfc
+    rs:
+      key: EnemySlimeHealth
+      type: float
+      value: 30.000000
+  - metadata:
+      entityId: f782c1fa-bbe1-4239-a161-89fb04d2f9be
+    rs:
+      key: EnemySlimeSpeed
+      type: float
+      value: 0.800000
+  - metadata:
+      entityId: 132f2bea-75d8-48de-8af7-3828f207753f
+    rs:
+      key: EnemySlimeTime
+      type: float
+      value: 0.080000
+  - metadata:
+      entityId: 0afe53fe-99d8-4296-859d-fd8705c6f5e1
+    rs:
+      key: EnemySlimeDamage
+      type: int
+      value: 1
+  - metadata:
+      entityId: 37bf2ab0-989d-499a-ab59-758d66b88914
+    rs:
+      key: EnemySlimeRadius
+      type: float
+      value: 0.500000
+  configId: 2f6865fe-b8aa-4daf-97b2-b5340e44ff8d
+  currentEnvironmentId: e610988a-8b22-4053-881e-946e05c82756
+  environments:
+  - id: 0201d305-3ee7-4a02-a136-45da4a79703d
+    appId: 
+    name: Release
+    description: 
+    createdAt: 2020-11-16T06:17:52Z
+    updatedAt: 2020-11-16T06:20:27Z
+  - id: e610988a-8b22-4053-881e-946e05c82756
+    appId: 
+    name: Development (Default)
+    description: 
+    createdAt: 2020-11-16T06:17:52Z
+    updatedAt: 2020-11-16T06:20:27Z
   rulesList: []
   lastCachedRulesList: []
   addedRulesIDs: []

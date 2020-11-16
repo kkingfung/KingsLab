@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using Unity.Physics;
 using UnityEditor;
 using UnityEngine;
+using Unity.RemoteConfig;
 
 using System.IO;
 
@@ -118,21 +119,21 @@ public static class StageInfo
     public static float spawnSpeedEx = 0;//StageInfo
     public static float resourceEx = 0;//WaveManager
 
-    public static void Init(bool useFile,string filepath)
+    public static void Init( bool useFile,string filepath)
     {
         UpdateCustomizedData();
         int temp = PlayerPrefs.GetInt("IslandNow", 0);
         switch (temp)
         {
             case 0:
-                if(useFile)
+                if (useFile)
                     stageInfo = new StageAttr(EasyStageWaveNum, PrepareStageInfoByFile(EasyStageWaveNum,
                         filepath + "/EasyStageInfo.txt"));
                 else                          
                     stageInfo = new StageAttr(EasyStageWaveNum, PrepareEasyStageInfo(EasyStageWaveNum));
                 break;
             case 1:
-                if (useFile)
+               if (useFile)
                     stageInfo = new StageAttr(NormalStageWaveNum, PrepareStageInfoByFile(NormalStageWaveNum,
                         filepath + "/NormalStageInfo.txt"));
                 else
@@ -323,6 +324,7 @@ public static class StageInfo
         }
         return waveArray;
     }
+
 
     private static WaveAttr[] PrepareEasyStageInfo(int waveNum) {
         WaveAttr[] waveArray = new WaveAttr[waveNum];

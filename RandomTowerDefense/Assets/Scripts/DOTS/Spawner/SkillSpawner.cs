@@ -204,4 +204,15 @@ public class SkillSpawner : MonoBehaviour
             Value = pos,
         });
     }
+
+    public List<GameObject> AllAliveSkillsList()
+    {
+        List<GameObject> result = new List<GameObject>();
+        foreach (GameObject i in GameObjects)
+        {
+            if (i != null)
+                result.Add(i);
+        }
+        return result;
+    }
 }

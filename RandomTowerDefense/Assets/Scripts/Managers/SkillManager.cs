@@ -79,9 +79,8 @@ public class SkillManager : MonoBehaviour
         SkillAura = Instantiate(FireFieldSkAura, hitPos, Quaternion.identity);
 
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillMeteor");
-        attr.damage = attr.damage * (1+Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor) *0.3f);
+        attr.damage = attr.damage * (1+Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor) *0.6f);
         GainExp(Upgrades.StoreItems.MagicMeteor, ExpPerActivation);
-
         StartCoroutine(MeteorSkillCoroutine(attr));
         return SkillAura;
     }
@@ -90,8 +89,8 @@ public class SkillManager : MonoBehaviour
         SkillAura = Instantiate(BlizzardFieldSkAura, hitPos, Quaternion.identity);
 
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillBlizzard");
-        attr.radius = attr.radius * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * 0.2f);
-        attr.damage = attr.damage * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * 0.1f);
+        attr.radius = attr.radius * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * 0.3f);
+        attr.damage = attr.damage * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * 0.3f);
         GainExp(Upgrades.StoreItems.MagicBlizzard, ExpPerActivation);
 
         StartCoroutine(BlizzardSkillCoroutine(attr));
@@ -100,7 +99,7 @@ public class SkillManager : MonoBehaviour
     public GameObject PetrificationSkill(Vector3 hitPos)
     { 
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillPetrification");
-        attr.buffTime = attr.buffTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification) * 0.3f);
+        attr.buffTime = attr.buffTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification) * 0.6f);
         GainExp(Upgrades.StoreItems.MagicPetrification, ExpPerActivation);
 
         StartCoroutine(PetrificationCoroutine(attr));
@@ -109,8 +108,8 @@ public class SkillManager : MonoBehaviour
     public GameObject MinionsSkill(Vector3 hitPos)
     {
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillMinions");
-        attr.cycleTime = attr.cycleTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * 0.2f);
-        attr.damage = attr.damage * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * 0.1f);
+        attr.cycleTime = attr.cycleTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * 0.5f);
+        attr.damage = attr.damage * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * 0.1f);
         GainExp(Upgrades.StoreItems.MagicMinions, ExpPerActivation);
 
         StartCoroutine(MinionsSkillCoroutine(attr));
@@ -132,15 +131,14 @@ public class SkillManager : MonoBehaviour
  
         while (frame-Time.time > 0)
         {
-            Debug.Log(frame - Time.time);
             if (Time.time-frameToNext > attr.cycleTime) {
                 float3 pos = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
                 int[] entityID = skillSpawner.Spawn(0, pos,
                     pos, new float3(),
                     attr.damage,attr.radius,attr.waitTime,attr.lifeTime,attr.waitTime);
+
                 skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
-                    .Init(Upgrades.StoreItems.MagicMeteor, attr,entityID[0]);
-               
+                    .Init(skillSpawner, Upgrades.StoreItems.MagicMeteor, attr,entityID[0]);
                 frameToNext = Time.time;
             }
 
@@ -165,7 +163,7 @@ public class SkillManager : MonoBehaviour
             attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime,
             attr.slowRate, attr.buffTime);
         skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
-            .Init(Upgrades.StoreItems.MagicBlizzard, attr, entityID[0]);
+            .Init(skillSpawner,Upgrades.StoreItems.MagicBlizzard, attr, entityID[0]);
         skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
             .SetConstantForVFX(attr.waitTime);
 
@@ -199,7 +197,7 @@ public class SkillManager : MonoBehaviour
                     attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime,
                     attr.slowRate, attr.buffTime);
                 skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
-                    .Init(Upgrades.StoreItems.MagicPetrification, attr, entityID[0]);
+                    .Init(skillSpawner, Upgrades.StoreItems.MagicPetrification, attr, entityID[0]);
                 skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
                     .SetConstantForVFX((Time.time - record) / attr.lifeTime * 10);
 
@@ -234,7 +232,7 @@ public class SkillManager : MonoBehaviour
                         attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime);
 
                     skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
-                        .Init(Upgrades.StoreItems.MagicMinions, attr, entityID[0]);
+                        .Init(skillSpawner, Upgrades.StoreItems.MagicMinions, attr, entityID[0]);
                 }
                 frameToNext = Time.time;
             }

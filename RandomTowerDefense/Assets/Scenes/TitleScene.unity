@@ -1054,6 +1054,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BoidSpawner
       objectReference: {fileID: 0}
+    - target: {fileID: 4172675465753274322, guid: 783d7ade55c0ab14c8caf460efc56eaa, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4172675465753274323, guid: 783d7ade55c0ab14c8caf460efc56eaa, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1084,7 +1088,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4172675465753274323, guid: 783d7ade55c0ab14c8caf460efc56eaa, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4172675465753274323, guid: 783d7ade55c0ab14c8caf460efc56eaa, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2135,6 +2139,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BoidManager
       objectReference: {fileID: 0}
+    - target: {fileID: 4322015884491522360, guid: e678eacaf1d097c4790333816e55f982, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4322015884491522375, guid: e678eacaf1d097c4790333816e55f982, type: 3}
       propertyPath: m_LocalPosition.x
       value: -92.683525
@@ -2165,7 +2173,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4322015884491522375, guid: e678eacaf1d097c4790333816e55f982, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4322015884491522375, guid: e678eacaf1d097c4790333816e55f982, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -4865,6 +4873,7 @@ MonoBehaviour:
   OrientationLock: 0
   DarkenCam: {fileID: 1537512924}
   RightCam: {fileID: 1285845743}
+  RightCamComponent: {fileID: 0}
   RightCamStartPt:
   - {x: 464, y: 507, z: -93.4}
   - {x: 167, y: 304, z: -93.4}
@@ -4884,6 +4893,7 @@ MonoBehaviour:
   - {x: 464, y: 99, z: -93.4}
   - {x: 464, y: -105, z: -93.4}
   BottomCam: {fileID: 852089971}
+  BottomCamComponent: {fileID: 0}
   BottomCamStartPt:
   - {x: 427, y: 394, z: -151}
   - {x: 128, y: 187, z: -151}
@@ -4936,9 +4946,13 @@ MonoBehaviour:
   - {fileID: 1578533419}
   - {fileID: 1573053345}
   - {fileID: 1774581551}
+  TitleImgRaw: []
+  TitleImgText: []
   TitleEffectImg:
   - {fileID: 1527309738}
   - {fileID: 1165667389}
+  bundleUrl: []
+  bundleName: []
   BoidSpawn: {fileID: 1563674594}
   LandscapeFadeImg: {fileID: 548952175}
   PortraitFadeImg: {fileID: 100818823}
@@ -9230,6 +9244,7 @@ Transform:
   m_Children:
   - {fileID: 245884791}
   - {fileID: 2061498598}
+  - {fileID: 1754140089}
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -10633,6 +10648,57 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+--- !u!1 &1754140088
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1754140089}
+  - component: {fileID: 1754140090}
+  m_Layer: 0
+  m_Name: DotsBoid
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1754140089
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1754140088}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1563674595}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1754140090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1754140088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 495433c0230abfd42b95977a4270a9af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefab:
+  - {fileID: 8382119115245457058, guid: e7ffe7915f812094a831cde373751a7f, type: 3}
+  - {fileID: 8382119115245457058, guid: 137a68014d427bb48b0fe72fb159e066, type: 3}
+  - {fileID: 8382119115245457058, guid: 047b1b81231c15547a8d22bec12852e5, type: 3}
+  settings: {fileID: 11400000, guid: d15785625a289314d802d447af90a93d, type: 2}
+  spawnRadius: 10
+  spawnCount: 100
+  GameObjects: []
 --- !u!1 &1761492477
 GameObject:
   m_ObjectHideFlags: 0

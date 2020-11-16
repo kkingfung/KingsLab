@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BoidSpawner : MonoBehaviour {
 
+    BoidSettings settings;
+
     public List<Boid> prefab;
     public float spawnRadius = 10;
     public int spawnCount = 10;
@@ -15,8 +17,6 @@ public class BoidSpawner : MonoBehaviour {
             Boid boid = Instantiate (prefab[rand]);
             boid.transform.position = pos;
             boid.transform.forward = Random.insideUnitSphere;
-            Color colour = new Color(Random.Range(0f, 0.3f), Random.Range(0f, 0.3f), Random.Range(0f, 0.3f)); 
-            boid.SetColour (colour);
             boid.transform.parent = this.transform;
         }
     }

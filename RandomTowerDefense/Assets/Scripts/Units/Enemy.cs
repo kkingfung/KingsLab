@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 using Unity.Entities;
-using UnityEditor;
 
 public class Enemy : MonoBehaviour
 {

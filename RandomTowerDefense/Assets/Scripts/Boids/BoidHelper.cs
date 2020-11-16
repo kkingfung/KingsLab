@@ -7,7 +7,7 @@ public static class BoidHelper {
     const int numViewDirections = 300;
     public static readonly Vector3[] directions;
 
-    static BoidHelper () {
+    static BoidHelper() {
         directions = new Vector3[BoidHelper.numViewDirections];
 
         float goldenRatio = (1 + Mathf.Sqrt (5)) / 2;

@@ -106,15 +106,12 @@ public class InGameOperation : ISceneChange
 
         if (UseRemoteConfig)
         {
+            ConfigManager.FetchCompleted += ApplyRemoteSettings;
             //ConfigManager.FetchCompleted += StageInfo.InitByRemote;
             ConfigManager.FetchCompleted += TowerInfo.InitByRemote;
             ConfigManager.FetchCompleted += EnemyInfo.InitByRemote;
             ConfigManager.FetchCompleted += SkillInfo.InitByRemote;
             ConfigManager.FetchConfigs<userAttributes, appAttributes>(new userAttributes(), new appAttributes());
-            if (UseFileAsset && Directory.Exists("Assets/AssetBundles"))
-                StageInfo.Init(true, "Assets/AssetBundles");
-            else
-                StageInfo.Init(false, null);
         }
         else if (UseFileAsset)
         {
@@ -149,6 +146,42 @@ public class InGameOperation : ISceneChange
         isTutorial = (IslandNow == 0);
         WaitSceneChg = false;
     }
+
+    void ApplyRemoteSettings(ConfigResponse configResponse)
+    {
+
+        // レスポンス元に応じて設定を更新する
+        switch (configResponse.requestOrigin)
+        {
+            case ConfigOrigin.Default:
+                if (UseFileAsset && Directory.Exists("Assets/AssetBundles"))
+                {
+                    TowerInfo.InitByFile("Assets/AssetBundles/TowerInfo.txt");
+                    EnemyInfo.InitByFile("Assets/AssetBundles/EnemyInfo.txt");
+                    SkillInfo.InitByFile("Assets/AssetBundles/SkillInfo.txt");
+                }
+                else
+                {
+                    TowerInfo.Init();
+                    EnemyInfo.Init();
+                    SkillInfo.Init();
+                }
+                break;
+            case ConfigOrigin.Cached:
+                break;
+            case ConfigOrigin.Remote:
+                TowerInfo.InitByRemote(configResponse);
+                EnemyInfo.InitByRemote(configResponse);
+                SkillInfo.InitByRemote(configResponse);
+                break;
+        }
+
+        if (UseFileAsset && Directory.Exists("Assets/AssetBundles"))
+            StageInfo.Init(true, "Assets/AssetBundles");
+        else
+            StageInfo.Init(false, null);
+    }
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -275,10 +308,11 @@ public class InGameOperation : ISceneChange
         {
             if (UseRemoteConfig)
             {
+                ConfigManager.FetchCompleted -= ApplyRemoteSettings;
                 //ConfigManager.FetchCompleted -= StageInfo.InitByRemote;
-                ConfigManager.FetchCompleted -= TowerInfo.InitByRemote;
-                ConfigManager.FetchCompleted -= EnemyInfo.InitByRemote;
-                ConfigManager.FetchCompleted -= SkillInfo.InitByRemote;
+                //ConfigManager.FetchCompleted -= TowerInfo.InitByRemote;
+                //ConfigManager.FetchCompleted -= EnemyInfo.InitByRemote;
+                //ConfigManager.FetchCompleted -= SkillInfo.InitByRemote;
             }
             SceneManager.LoadScene("LoadingScene");
             return;

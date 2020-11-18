@@ -16,7 +16,7 @@ public class SkillSpawner : MonoBehaviour
 
     //Array
     [HideInInspector]
-    public TransformAccessArray TransformAccessArray;
+    //public TransformAccessArray TransformAccessArray;
     public NativeArray<float> lifetimeArray;
     public NativeArray<float3> targetArray;
     public NativeArray<bool> hastargetArray;
@@ -27,7 +27,7 @@ public class SkillSpawner : MonoBehaviour
     public NativeArray<Entity> Entities;
 
     //For input
-    private Transform[] transforms;
+    //private Transform[] transforms;
 
     void Awake()
     {
@@ -41,8 +41,8 @@ public class SkillSpawner : MonoBehaviour
         if (Entities.IsCreated)
             Entities.Dispose();
 
-        if (TransformAccessArray.isCreated)
-            TransformAccessArray.Dispose();
+        //if (TransformAccessArray.isCreated)
+            //TransformAccessArray.Dispose();
 
         //Disposing Array
         if (lifetimeArray.IsCreated)
@@ -58,7 +58,7 @@ public class SkillSpawner : MonoBehaviour
 
         //Prepare input
         GameObjects = new GameObject[count];
-        transforms = new Transform[count];
+        //transforms = new Transform[count];
 
         Entities = new NativeArray<Entity>(count, Allocator.Persistent);
         var archetype = EntityManager.CreateArchetype(
@@ -70,7 +70,7 @@ public class SkillSpawner : MonoBehaviour
             );
         EntityManager.CreateEntity(archetype, Entities);
 
-        TransformAccessArray = new TransformAccessArray(transforms);
+        //TransformAccessArray = new TransformAccessArray(transforms);
         lifetimeArray = new NativeArray<float>(count, Allocator.Persistent);
         targetArray = new NativeArray<float3>(count, Allocator.Persistent);
         hastargetArray = new NativeArray<bool>(count, Allocator.Persistent);
@@ -113,7 +113,7 @@ public class SkillSpawner : MonoBehaviour
             GameObjects[i] = Instantiate(PrefabObject[prefabID], transform);
             GameObjects[i].transform.position = Position;
             GameObjects[i].transform.localRotation = Quaternion.Euler(Rotation);
-            transforms[i] = GameObjects[i].transform;
+            //transforms[i] = GameObjects[i].transform;
             lifetimeArray[i] = lifetime;
 
             //AddtoEntities

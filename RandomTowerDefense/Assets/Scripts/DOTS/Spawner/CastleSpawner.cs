@@ -16,7 +16,7 @@ public class CastleSpawner : MonoBehaviour
 
     //Array
     [HideInInspector]
-    public TransformAccessArray TransformAccessArray;
+    //public TransformAccessArray TransformAccessArray;
     public NativeArray<int> castleHPArray;
 
     //Bridge
@@ -27,7 +27,7 @@ public class CastleSpawner : MonoBehaviour
     [HideInInspector]
     public Castle castle;
     //For input
-    private Transform[] transforms;
+    //private Transform[] transforms;
 
     void Awake()
     {
@@ -41,8 +41,8 @@ public class CastleSpawner : MonoBehaviour
         if (Entities.IsCreated)
             Entities.Dispose();
 
-        if (TransformAccessArray.isCreated)
-            TransformAccessArray.Dispose();
+        //if (TransformAccessArray.isCreated)
+            //TransformAccessArray.Dispose();
 
         //Disposing Array
         if (castleHPArray.IsCreated)
@@ -55,7 +55,7 @@ public class CastleSpawner : MonoBehaviour
 
         //Prepare input
         GameObjects = new GameObject[count];
-        transforms = new Transform[count];
+        //transforms = new Transform[count];
 
         Entities = new NativeArray<Entity>(count, Allocator.Persistent);
         var archetype = EntityManager.CreateArchetype(
@@ -64,7 +64,7 @@ public class CastleSpawner : MonoBehaviour
             //ComponentType.ReadOnly<Hybrid>()
             );
         EntityManager.CreateEntity(archetype, Entities);
-        TransformAccessArray = new TransformAccessArray(transforms);
+        //TransformAccessArray = new TransformAccessArray(transforms);
         castleHPArray = new NativeArray<int>(count, Allocator.Persistent);
     }
 
@@ -95,7 +95,7 @@ public class CastleSpawner : MonoBehaviour
             GameObjects[i].transform.position = Position;
             GameObjects[i].transform.localRotation = Rotation;
             if (castle == null) castle = GameObjects[i].GetComponent<Castle>();
-             transforms[i] = GameObjects[i].transform;
+            // transforms[i] = GameObjects[i].transform;
             castleHPArray[i] = castleHP;
 
             //AddtoEntities

@@ -71,15 +71,15 @@ public static class StageInfo
 
     private static StageAttr stageInfo;
     public static readonly string[] monsterCat0 = {
-        "Slime","Mushroom","TurtleShell"
+        "Slime","Mushroom","PhoenixChick","TurtleShell"
     };
     public static readonly string[] monsterCat1 = {
-        "Footman","Grunt","TurtleShell",
+        "Footman","Grunt","TurtleShell","RockCritter",
         "FootmanS","GruntS","Skeleton",
         "StoneMonster"
     };
     public static readonly string[] monsterCat2 = {
-        "FootmanS","GruntS","SpiderGhost",
+        "FootmanS","GruntS","SpiderGhost","PigChef",
         "SkeletonArmed","Golem","GolemS",
         "FreeLich",  "FreeLichS",  "Bull",
          "StoneMonster"

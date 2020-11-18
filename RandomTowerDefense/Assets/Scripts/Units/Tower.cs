@@ -11,7 +11,7 @@ public class Tower : MonoBehaviour
     private readonly int[] MaxLevel = { 10, 30, 50, 70 };
     //private readonly int[] MaxLevel = { 1, 1, 1, 1 };
     private readonly float TowerDestroyTime = 2;
-    private readonly int ActionSetNum = 3;
+    private readonly int ActionSetNum = 2;
     private readonly int ExpPerAttack = 5;
 
     public TowerAttr attr;
@@ -117,7 +117,7 @@ public class Tower : MonoBehaviour
                 {
                     audioSource.PlayOneShot(audioManager.GetAudio("se_MagicFire"));
                 }
-                posAdj = 1f;
+                posAdj = 0.5f;
                 atkEntityPos = transform.position;
                 break;
         }

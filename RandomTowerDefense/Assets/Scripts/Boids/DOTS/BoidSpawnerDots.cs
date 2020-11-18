@@ -9,25 +9,25 @@ using UnityEngine.Jobs;
 public class BoidSpawnerDots : MonoBehaviour
 {
     private readonly int count = 100;
+
     public static BoidSpawnerDots Instance { get; private set; }
     public List<GameObject> prefab;
     public BoidSettings settings;
 
     public float spawnRadius = 10;
     public int spawnCount = 10;
+    public float BoundingRadius = 100;
 
     private EntityManager EntityManager;
 
     //Array
-    [HideInInspector]
-    public TransformAccessArray TransformAccessArray;
+    //[HideInInspector]
+    //public TransformAccessArray TransformAccessArray;
 
     //Bridge
     [HideInInspector]
     public GameObject[] GameObjects;
     public NativeArray<Entity> Entities;
-
-    private Transform[] transforms;
 
     void Awake()
     {
@@ -42,17 +42,14 @@ public class BoidSpawnerDots : MonoBehaviour
         EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         //Prepare input
         GameObjects = new GameObject[count];
-        transforms = new Transform[count];
 
         Entities = new NativeArray<Entity>(count, Allocator.Persistent);
         var archetype = EntityManager.CreateArchetype(
-              typeof(BoidData), typeof(Velocity), typeof(OriPos), typeof(BoidDirection),
-              typeof(BoidSettingDots), typeof(LocalToWorld),
-            ComponentType.ReadOnly<Translation>()
+              typeof(BoidData), typeof(Velocity), typeof(OriPos), 
+              typeof(BoidRotation),
+              typeof(BoidSettingDots), typeof(BoidDataAvg)
             );
         EntityManager.CreateEntity(archetype, Entities);
-
-        TransformAccessArray = new TransformAccessArray(transforms);
 
         Spawn(spawnCount);
     }
@@ -61,8 +58,25 @@ public class BoidSpawnerDots : MonoBehaviour
         for (int i = 0; i < GameObjects.Length; ++i)
         {
             if (GameObjects[i] == null) continue;
-            GameObjects[i].transform.position = EntityManager.GetComponentData<Translation>(Entities[i]).Value;
+            BoidData data = EntityManager.GetComponentData<BoidData>(Entities[i]);
+            GameObjects[i].transform.position = data.position;
+            GameObjects[i].transform.forward = data.direction;
+
+            EntityManager.SetComponentData<BoidRotation>(Entities[i], new BoidRotation
+            {
+                rotation = GameObjects[i].transform.rotation
+            });
         }
+
+        Debug.DrawLine(this.transform.position + new Vector3(-BoundingRadius, BoundingRadius, BoundingRadius),
+            this.transform.position + new Vector3(BoundingRadius, BoundingRadius, BoundingRadius));
+        Debug.DrawLine(this.transform.position + new Vector3(-BoundingRadius, -BoundingRadius, BoundingRadius),
+                   this.transform.position + new Vector3(BoundingRadius, -BoundingRadius, BoundingRadius));
+
+        Debug.DrawLine(this.transform.position + new Vector3(-BoundingRadius, BoundingRadius, -BoundingRadius),
+            this.transform.position + new Vector3(BoundingRadius, BoundingRadius, -BoundingRadius));
+        Debug.DrawLine(this.transform.position + new Vector3(-BoundingRadius, -BoundingRadius, -BoundingRadius),
+                   this.transform.position + new Vector3(BoundingRadius, -BoundingRadius, -BoundingRadius));
     }
 
     void OnDisable()
@@ -70,8 +84,8 @@ public class BoidSpawnerDots : MonoBehaviour
         if (Entities.IsCreated)
             Entities.Dispose();
 
-        if (TransformAccessArray.isCreated)
-            TransformAccessArray.Dispose();
+        //if (TransformAccessArray.isCreated)
+        //    TransformAccessArray.Dispose();
     }
 
     public int[] Spawn(int num = 1)
@@ -83,16 +97,27 @@ public class BoidSpawnerDots : MonoBehaviour
             if (GameObjects[i] != null) continue;
             Vector3 pos = transform.position + UnityEngine.Random.insideUnitSphere * spawnRadius;
             int rand = UnityEngine.Random.Range(0, prefab.Count);
-            GameObjects[i] = Instantiate(prefab[rand], transform);
+            GameObjects[i] = Instantiate(prefab[rand]);
             GameObjects[i].transform.position = pos;
             GameObjects[i].transform.forward = UnityEngine.Random.insideUnitSphere;
-            GameObjects[i].GetComponent<BoidDots>().Init(this, i);
             GameObjects[i].transform.parent = this.transform;
 
-            transforms[i] = GameObjects[i].transform;
-
             //AddtoEntities
-            //??BoidData
+            EntityManager.SetComponentData(Entities[i], new BoidData
+            {
+                position = GameObjects[i].transform.position,
+                direction = GameObjects[i].transform.forward,
+                flockHeading = new float3(),
+                flockCentre = new float3(),
+                avoidanceHeading = new float3(),
+                numFlockmates = 0
+            });
+
+            EntityManager.SetComponentData(Entities[i], new BoidRotation
+            {
+                rotation = GameObjects[i].transform.rotation
+            });
+
             EntityManager.SetComponentData(Entities[i], new BoidSettingDots
             {
                 minSpeed = settings.minSpeed,
@@ -112,18 +137,13 @@ public class BoidSpawnerDots : MonoBehaviour
                 collisionAvoidDst = settings.collisionAvoidDst,
             });
 
-            EntityManager.SetComponentData(Entities[i], new Translation
-            {
-                Value = pos
-            });
             EntityManager.SetComponentData(Entities[i], new OriPos
             {
-                Value = pos
+                Value = pos,
+                BoundingRadius = BoundingRadius
+
             });
-            EntityManager.SetComponentData(Entities[i], new BoidDirection
-            {
-                Value = GameObjects[i].transform.forward
-            });
+
             EntityManager.SetComponentData(Entities[i], new Velocity
             {
                 Value = GameObjects[i].transform.forward  * ((settings.minSpeed + settings.maxSpeed) / 2)
@@ -135,8 +155,6 @@ public class BoidSpawnerDots : MonoBehaviour
             spawnIndexList[spawnCnt++] = i;
         }
 
-        //Change Whenever Spawned (Not Needed?)
-        //TransformAccessArray = new TransformAccessArray(transforms);
         return spawnIndexList;
     }
 

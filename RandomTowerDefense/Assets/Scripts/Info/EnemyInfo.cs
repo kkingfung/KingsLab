@@ -66,6 +66,11 @@ public class EnemyAttr {
         enemyInfo.Add("TurtleShell", new EnemyAttr(10, 100, 0.5f, 0.5f, 1, 0.5f));
         enemyInfo.Add("Mushroom", new EnemyAttr(5, 50, 1f, 1.0f, 1, 0.5f));
         enemyInfo.Add("Slime", new EnemyAttr(5, 30, 0.8f, 0.08f, 1, 0.5f));
+
+        //Addition
+        enemyInfo.Add("PigChef", new EnemyAttr(10, 100, 0.5f, 0.5f, 1, 0.5f));
+        enemyInfo.Add("PhoenixChick", new EnemyAttr(5, 50, 1f, 1.0f, 1, 0.5f));
+        enemyInfo.Add("RockCritter", new EnemyAttr(5, 30, 0.8f, 0.08f, 1, 0.5f));
     }
 
     public static void InitByFile(string filepath)
@@ -99,7 +104,7 @@ public class EnemyAttr {
                         "Dragon", "Bull", "StoneMonster", "FreeLichS" , "FreeLich",
                             "GolemS", "Golem", "SkeletonArmed", "SpiderGhost" , "Skeleton",
                               "GruntS", "FootmanS", "Grunt", "Footman" , "TurtleShell",
-                               "Mushroom" , "Slime"
+                               "Mushroom" , "Slime", "PigChef", "PhoenixChick" , "RockCritter"
 
         };
         foreach (string name in allName)

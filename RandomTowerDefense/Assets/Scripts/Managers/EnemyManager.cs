@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
-    [SerializeField] private List<AnimationCurve> SpawnRateCurves;
+    //[SerializeField] private List<AnimationCurve> SpawnRateCurves;
 
     private EnemySpawner enemySpawner;
     // Start is called before the first frame update

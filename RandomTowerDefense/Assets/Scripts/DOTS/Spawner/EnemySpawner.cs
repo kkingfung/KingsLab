@@ -44,12 +44,16 @@ public class EnemySpawner : MonoBehaviour
     public GameObject Mushroom;
     public GameObject Slime;
 
+    public GameObject PigChef;
+    public GameObject PhoenixChick;
+    public GameObject RockCritter;
+
     public Dictionary<string, GameObject> allMonsterList;
     private EntityManager EntityManager;
 
     //Array
     [HideInInspector]
-    public TransformAccessArray TransformAccessArray;
+    //public TransformAccessArray TransformAccessArray;
     public NativeArray<float> healthArray;
     public NativeArray<float> petrifyArray;
     public NativeArray<float> slowArray;
@@ -60,7 +64,7 @@ public class EnemySpawner : MonoBehaviour
     public NativeArray<Entity> Entities;
 
     //For input
-    private Transform[] transforms;
+    //private Transform[] transforms;
 
     private FilledMapGenerator mapGenerator;
     // private CastleSpawner castleSpawner;
@@ -107,14 +111,19 @@ public class EnemySpawner : MonoBehaviour
         allMonsterList.Add("TurtleShell", TurtleShell);
         allMonsterList.Add("Mushroom", Mushroom);
         allMonsterList.Add("Slime", Slime);
+
+        //Addition
+        allMonsterList.Add("PigChef", PigChef);
+        allMonsterList.Add("PhoenixChick", PhoenixChick);
+        allMonsterList.Add("RockCritter", RockCritter);
     }
     private void OnDisable()
     {
         if (Entities.IsCreated)
             Entities.Dispose();
 
-        if (TransformAccessArray.isCreated)
-            TransformAccessArray.Dispose();
+        //if (TransformAccessArray.isCreated)
+        //    TransformAccessArray.Dispose();
 
         //Disposing Array
         if (healthArray.IsCreated)
@@ -133,7 +142,7 @@ public class EnemySpawner : MonoBehaviour
 
         //Prepare input
         GameObjects = new GameObject[count];
-        transforms = new Transform[count];
+        //transforms = new Transform[count];
 
         Entities = new NativeArray<Entity>(count, Allocator.Persistent);
         var archetype = EntityManager.CreateArchetype(
@@ -152,7 +161,7 @@ public class EnemySpawner : MonoBehaviour
             EntityManager.AddBuffer<PathPosition>(Entities[i]);
         }
 
-        TransformAccessArray = new TransformAccessArray(transforms);
+       // TransformAccessArray = new TransformAccessArray(transforms);
         healthArray = new NativeArray<float>(count, Allocator.Persistent);
         slowArray = new NativeArray<float>(count, Allocator.Persistent);
         petrifyArray = new NativeArray<float>(count, Allocator.Persistent);
@@ -190,7 +199,7 @@ public class EnemySpawner : MonoBehaviour
             GameObjects[i].transform.localRotation = Quaternion.identity;
             GameObjects[i].GetComponent<Enemy>().Init(this,DieEffect, DropEffect, i, money);
 
-            transforms[i] = GameObjects[i].transform;
+            //transforms[i] = GameObjects[i].transform;
             healthArray[i] = health;
             slowArray[i] = 0;
             petrifyArray[i] = 0;

@@ -16,7 +16,7 @@ public class TowerSpawner : MonoBehaviour
 
     //Array
     [HideInInspector]
-    public TransformAccessArray TransformAccessArray;
+    //public TransformAccessArray TransformAccessArray;
     public NativeArray<float3> targetArray;
     public NativeArray<bool> hastargetArray;
 
@@ -26,7 +26,7 @@ public class TowerSpawner : MonoBehaviour
     public NativeArray<Entity> Entities;
 
     //For input
-    private Transform[] transforms;
+    //private Transform[] transforms;
 
     private void Awake()
     {
@@ -40,8 +40,8 @@ public class TowerSpawner : MonoBehaviour
         if (Entities.IsCreated)
             Entities.Dispose();
 
-        if (TransformAccessArray.isCreated)
-            TransformAccessArray.Dispose();
+        //if (TransformAccessArray.isCreated)
+            //TransformAccessArray.Dispose();
 
         //Disposing Array
         if (targetArray.IsCreated)
@@ -55,7 +55,7 @@ public class TowerSpawner : MonoBehaviour
 
         //Prepare input
         GameObjects = new GameObject[count];
-        transforms = new Transform[count];
+        //transforms = new Transform[count];
 
         Entities = new NativeArray<Entity>(count, Allocator.Persistent);
         var archetype = EntityManager.CreateArchetype(
@@ -66,7 +66,7 @@ public class TowerSpawner : MonoBehaviour
         EntityManager.CreateEntity(archetype, Entities);
 
 
-        TransformAccessArray = new TransformAccessArray(transforms);
+        //TransformAccessArray = new TransformAccessArray(transforms);
         targetArray = new NativeArray<float3>(count, Allocator.Persistent);
         hastargetArray = new NativeArray<bool>(count, Allocator.Persistent);
     }
@@ -105,7 +105,7 @@ public class TowerSpawner : MonoBehaviour
             GameObjects[i] = Instantiate(PrefabObject[prefabID], transform);
             GameObjects[i].transform.position = Position;
             GameObjects[i].transform.localRotation = Quaternion.identity;
-            transforms[i] = GameObjects[i].transform;
+            //transforms[i] = GameObjects[i].transform;
             hastargetArray[i] = false;
             targetArray[i] = Position;
 

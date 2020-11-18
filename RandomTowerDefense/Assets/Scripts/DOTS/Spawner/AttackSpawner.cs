@@ -20,7 +20,7 @@ public class AttackSpawner : MonoBehaviour
     public NativeArray<Entity> Entities;
 
     //For input
-    private Transform[] transforms;
+    //private Transform[] transforms;
     private void Update()
     {
     }
@@ -43,7 +43,7 @@ public class AttackSpawner : MonoBehaviour
 
         //Prepare input
         GameObjects = new GameObject[count];
-        transforms = new Transform[count];
+        //transforms = new Transform[count];
 
         Entities = new NativeArray<Entity>(count, Allocator.Persistent);
         var archetype = EntityManager.CreateArchetype(
@@ -68,7 +68,7 @@ public class AttackSpawner : MonoBehaviour
             AutoDestroyVFX autoDestroy = GameObjects[i].GetComponent<AutoDestroyVFX>();
             if (autoDestroy) autoDestroy.Timer = lifetime;
              GameObjects[i].transform.localRotation = rotation;
-            transforms[i] = GameObjects[i].transform;
+           // transforms[i] = GameObjects[i].transform;
            
             //AddtoEntities
             EntityManager.SetComponentData(Entities[i], new Damage

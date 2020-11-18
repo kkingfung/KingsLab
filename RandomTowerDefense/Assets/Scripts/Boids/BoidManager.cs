@@ -25,8 +25,8 @@ public class BoidManager : MonoBehaviour {
             var boidData = new BoidData[numBoids];
 
             for (int i = 0; i < boids.Length; ++i) {
-                boidData[i].position = boids[i].position;
-                boidData[i].direction = boids[i].forward;
+                boidData[i].position = boids[i].transform.position;
+                boidData[i].direction = boids[i].transform.forward;
             }
 
             var boidBuffer = new ComputeBuffer (numBoids, BoidData.Size);

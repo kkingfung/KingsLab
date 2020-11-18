@@ -1,19 +1,17 @@
 ﻿using System;
 using Unity.Entities;
 using Unity.Mathematics;
-
-//Wait until First Collision Check
+using UnityEngine;
 
 [Serializable]
 public struct BoidTag : IComponentData
 {
-    public float Value;
 }
 
 [Serializable]
 public struct BoidData : IComponentData
 {
-    //public float3 position;
+    public float3 position;
     public float3 direction;
 
     public float3 flockHeading;
@@ -21,13 +19,29 @@ public struct BoidData : IComponentData
     public float3 avoidanceHeading;
     public int numFlockmates;
 
-    public static int Size
-    {
-        get
-        {
-            return sizeof(float) * 3 * 5 + sizeof(int);
-        }
-    }
+    //public static int Size
+    //{
+    //    get
+    //    {
+    //        return sizeof(float) * 3 * 5 + sizeof(int);
+    //    }
+    //}
+}
+
+
+[Serializable]
+public struct BoidRotation : IComponentData
+{
+    public Quaternion rotation;
+}
+
+[Serializable]
+public struct BoidDataAvg : IComponentData
+{
+    public float3 avgFlockHeading;
+    public float3 avgAvoidanceHeading;
+    public float3 centreOfFlockmates;
+    public int numPerceivedFlockmates;
 }
 
 [Serializable]
@@ -50,14 +64,10 @@ public struct BoidSettingDots : IComponentData
     public float collisionAvoidDst;
 }
 
+//Sphere Bounding instead of Gameobj Bounding Box
 [Serializable]
 public struct OriPos : IComponentData
 {
     public float3 Value;
-}
-
-[Serializable]
-public struct BoidDirection : IComponentData
-{
-    public float3 Value;
+    public float BoundingRadius;
 }

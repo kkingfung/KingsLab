@@ -10,80 +10,76 @@ using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class BoidDataUpdateSystem : JobComponentSystem
+public class BoidDataUpdateSystem : ComponentSystem
 {
     EntityQuery boidGroup;
 
     protected override void OnCreate()
     {
-        boidGroup = GetEntityQuery(typeof(BoidData), typeof(Velocity),
-            typeof(OriPos), typeof(BoidSettingDots), typeof(LocalToWorld),
-            ComponentType.ReadOnly<Translation>(), ComponentType.ReadOnly<BoidTag>());
+        boidGroup = GetEntityQuery(typeof(BoidData), 
+            ComponentType.ReadOnly<BoidTag>());
     }
 
-    protected override JobHandle OnUpdate(JobHandle inputDeps)
+    protected override void OnUpdate()
     {
-        float deltaTime = Time.DeltaTime;
+        NativeList<JobHandle> jobHandleList = new NativeList<JobHandle>(Allocator.Temp);
 
-        var transformType = GetComponentTypeHandle<Translation>(true);
-        var dataType = GetComponentTypeHandle<BoidData>(true);
-        var settingType = GetComponentTypeHandle<BoidSettingDots>(false);
-
-        JobHandle jobHandle = inputDeps;
+        NativeArray<BoidData> targetDataArray = boidGroup.ToComponentDataArray<BoidData>(Allocator.Temp);
 
         if (boidGroup.CalculateEntityCount() > 0)
         {
-            var jobData = new UpdateBoidData()
+            Entities.WithAll<BoidTag>().ForEach((Entity entity) =>
             {
-                dataType = dataType,
-                translationType = transformType,
-                settingType = settingType,
-                targetTrans = boidGroup.ToComponentDataArray<Translation>(Allocator.TempJob),
-                targetVec = boidGroup.ToComponentDataArray<Velocity>(Allocator.TempJob)
-            };
-            jobHandle = jobData.Schedule(boidGroup, inputDeps);
-            jobHandle.Complete();
+                NativeArray<BoidData> targetData = new NativeArray<BoidData>(targetDataArray, Allocator.TempJob);
+
+                var dataType = GetComponentTypeHandle<BoidData>(true);
+                var settingType = GetComponentTypeHandle<BoidSettingDots>(false);
+
+                var jobData = new UpdateBoidData()
+                {
+                    dataType = dataType,
+                    settingType = settingType,
+                    targetData = targetData
+                };
+
+                jobHandleList.Add(jobData.Schedule(boidGroup));
+            });
         }
-        return jobHandle;
+
+        JobHandle.CompleteAll(jobHandleList);
     }
 
     [BurstCompile]
     struct UpdateBoidData : IJobChunk
     {
         public ComponentTypeHandle<BoidData> dataType;
-        [ReadOnly] public ComponentTypeHandle<Translation> translationType;
         [ReadOnly] public ComponentTypeHandle<BoidSettingDots> settingType;
 
         [DeallocateOnJobCompletion]
-        public NativeArray<Translation> targetTrans;
-        [DeallocateOnJobCompletion]
-        public NativeArray<Velocity> targetVec;
+        public NativeArray<BoidData> targetData;
 
         public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
         {
             var chunkData = chunk.GetNativeArray(dataType);
-            var chunkTranslations = chunk.GetNativeArray(translationType);
             var chunkSetting = chunk.GetNativeArray(settingType);
 
             for (int i = 0; i < chunk.Count; ++i)
             {
-                Translation translation = chunkTranslations[i];
                 BoidData data = chunkData[i];
                 BoidSettingDots setting = chunkSetting[i];
 
-                for (int j = 0; j < targetTrans.Length; j++)
+                for (int j = 0; j < targetData.Length; j++)
                 {
                     if (i == j) continue;
-                    float3 offset = translation.Value - targetTrans[j].Value;
+                    float3 offset = targetData[j].position - data.position;
                     float sqrDst = offset.x * offset.x + offset.y * offset.y + offset.z * offset.z;
 
                     if (sqrDst < setting.perceptionRadius * setting.perceptionRadius)
                     {
                         data.numFlockmates += 1;
-                        Vector3 forward= new Vector3(targetVec[j].Value.x,
-                            targetVec[j].Value.y, targetVec[j].Value.z).normalized;
-                        data.flockHeading += new float3(forward.x, forward.y, forward.z);
-                        data.flockCentre += targetTrans[j].Value;
+                        data.flockHeading += targetData[j].direction;
+                        data.flockCentre += targetData[j].position;
+
                         if (sqrDst < setting.avoidanceRadius * setting.avoidanceRadius)
                         {
                             data.avoidanceHeading -= offset / sqrDst;

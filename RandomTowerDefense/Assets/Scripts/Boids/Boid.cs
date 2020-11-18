@@ -7,14 +7,9 @@ public class Boid : MonoBehaviour {
     BoidSettings settings;
 
     // State
-    [HideInInspector]
-    public Vector3 position;
-    [HideInInspector]
-    public Vector3 forward;
     Vector3 velocity;
 
     // To update:
-    Vector3 acceleration;
     [HideInInspector]
     public Vector3 avgFlockHeading;
     [HideInInspector]
@@ -38,9 +33,6 @@ public class Boid : MonoBehaviour {
         this.target = target;
         this.settings = settings;
 
-        position = cachedTransform.position;
-        forward = cachedTransform.forward;
-
         float startSpeed = (settings.minSpeed + settings.maxSpeed) / 2;
         velocity = transform.forward * startSpeed;
     }
@@ -55,27 +47,28 @@ public class Boid : MonoBehaviour {
         Vector3 acceleration = Vector3.zero;
 
         if (target != null) {
-            Vector3 offsetToTarget = (target.position - position);
+            Vector3 offsetToTarget = (target.position - this.transform.position);
             acceleration = SteerTowards (offsetToTarget) * settings.targetWeight;
         }
 
         if (numPerceivedFlockmates != 0) {
             centreOfFlockmates /= numPerceivedFlockmates;
 
-            Vector3 offsetToFlockmatesCentre = (centreOfFlockmates - position);
+            Vector3 offsetToFlockmatesCentre = (centreOfFlockmates - this.transform.position);
 
-            var alignmentForce = SteerTowards (avgFlockHeading) * settings.alignWeight;
-            var cohesionForce = SteerTowards (offsetToFlockmatesCentre) * settings.cohesionWeight;
-            var seperationForce = SteerTowards (avgAvoidanceHeading) * settings.seperateWeight;
+            var alignmentForce = SteerTowards(avgFlockHeading) * settings.alignWeight;
+            var cohesionForce = SteerTowards(offsetToFlockmatesCentre) * settings.cohesionWeight;
+            var seperationForce = SteerTowards(avgAvoidanceHeading) * settings.seperateWeight;
 
             acceleration += alignmentForce;
             acceleration += cohesionForce;
             acceleration += seperationForce;
         }
 
-        if (IsHeadingForCollision ()) {
-            Vector3 collisionAvoidDir = ObstacleRays ();
-            Vector3 collisionAvoidForce = SteerTowards (collisionAvoidDir) * settings.avoidCollisionWeight;
+        if (IsHeadingForCollision())
+        {
+            Vector3 collisionAvoidDir = ObstacleRays();
+            Vector3 collisionAvoidForce = SteerTowards(collisionAvoidDir) * settings.avoidCollisionWeight;
             acceleration += collisionAvoidForce;
         }
 
@@ -85,32 +78,38 @@ public class Boid : MonoBehaviour {
         speed = Mathf.Clamp (speed, settings.minSpeed, settings.maxSpeed);
         velocity = dir * speed;
 
-        cachedTransform.position += velocity * Time.deltaTime;
-        cachedTransform.forward = dir;
-        position = cachedTransform.position;
-        forward = dir;
+        this.transform.position += velocity * Time.deltaTime;
+        this.transform.forward = dir;
     }
 
     bool IsHeadingForCollision () {
         RaycastHit hit;
-        if (Physics.SphereCast (position, settings.boundsRadius, forward, out hit, settings.collisionAvoidDst, settings.obstacleMask)) {
+        if (Physics.SphereCast (this.transform.position, settings.boundsRadius, 
+            this.transform.forward, out hit, settings.collisionAvoidDst, settings.obstacleMask)) {
             return true;
         } else { }
         return false;
+    }
+    static Vector3 QuaternionMultiplyVector(Quaternion rotation, Vector3 vec)
+    {
+        LinearAlgebra.Quaternion3d quaternion = new LinearAlgebra.Quaternion3d(
+            rotation.x, rotation.y, rotation.z, rotation.w);
+
+        return quaternion * vec;
     }
 
     Vector3 ObstacleRays () {
         Vector3[] rayDirections = BoidHelper.directions;
 
         for (int i = 0; i < rayDirections.Length; ++i) {
-            Vector3 dir = cachedTransform.TransformDirection (rayDirections[i]);
-            Ray ray = new Ray (position, dir);
+            Vector3 dir = QuaternionMultiplyVector(this.transform.rotation, rayDirections[i]);
+            Ray ray = new Ray (this.transform.position, dir);
             if (!Physics.SphereCast (ray, settings.boundsRadius, settings.collisionAvoidDst, settings.obstacleMask)) {
                 return dir;
             }
         }
 
-        return forward;
+        return this.transform.forward;
     }
 
     Vector3 SteerTowards (Vector3 vector) {

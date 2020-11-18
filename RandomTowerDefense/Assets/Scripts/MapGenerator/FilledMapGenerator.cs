@@ -94,11 +94,11 @@ public class FilledMapGenerator : MonoBehaviour {
 				allTileCoords.Remove(i);
 		}
 
-		shuffledTileCoords = new Queue<Coord> (Utility.ShuffleArray (allTileCoords.ToArray (), currentMap.seed));
-
 		allTileCoords.Remove(new Coord(currentMap.mapSize.x - 1, currentMap.mapSize.y - 1));
 		allTileCoords.Remove(new Coord(currentMap.mapSize.x - 1, 0));
 		allTileCoords.Remove(new Coord(0, currentMap.mapSize.y - 1));
+
+		shuffledTileCoords = new Queue<Coord> (Utility.ShuffleArray (allTileCoords.ToArray (), currentMap.seed));
 
 		// Create map holder object
 		string holderName = "Generated Map";

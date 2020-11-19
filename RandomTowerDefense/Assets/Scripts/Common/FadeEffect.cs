@@ -21,7 +21,7 @@ public class FadeEffect : MonoBehaviour
     Material FadeMat;
     public bool isReady { get; private set;}
 
-    private void Awake()
+    private void Start()
     {
         if (FadeMat == null)
             GetFadeMaterial();

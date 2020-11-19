@@ -53,11 +53,22 @@ public class ScoreCalculation : MonoBehaviour
     }
     private void LateUpdate()
     {
-        foreach (Text i in RankObj)
-            i.text = rank == 0 ? "" : rank + ".";
+        if (rank <= 5)
+        {
+            foreach (Text i in RankObj)
+                i.text = rank == 0 ? "" : rank + ".";
 
-        foreach (Text i in NameObj)
-            i.text = rank == 0 ? "" : playerName;
+            foreach (Text i in NameObj)
+                i.text = rank == 0 ? "" : playerName;
+        }
+        else 
+        {
+            foreach (Text i in RankObj)
+                i.text = "-";
+
+            foreach (Text i in NameObj)
+                i.text = "" ;
+        }
     }
 
     public void CalculationScore() 
@@ -121,7 +132,10 @@ public class ScoreCalculation : MonoBehaviour
 
     public void TouchKeybroad(int infoID)
     {
-        if (rank > 5) return;
+        if (rank > 5)
+        {
+            return;
+        }
 
         Inputting = true;
 

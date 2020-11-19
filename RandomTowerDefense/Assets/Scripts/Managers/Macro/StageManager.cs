@@ -173,7 +173,12 @@ public class StageManager : MonoBehaviour
         scoreCalculation.CalculationScore();
         if (sceneManager.GetEnabledIsland() == sceneManager.GetCurrIsland() && sceneManager.GetEnabledIsland() < StageInfo.IslandNum - 1)
             PlayerPrefs.SetInt("IslandEnabled", sceneManager.GetCurrIsland() + 1);
+
+        isReady = false;
+        sceneManager.SetOptionStatus(false);
         audioManager.PlayAudio("se_Clear");
+        timeManager.SetTimeScale(0);
+        StartCoroutine(FadeInRoutine());
         return true;
     }
     public int GetMaxHP() {

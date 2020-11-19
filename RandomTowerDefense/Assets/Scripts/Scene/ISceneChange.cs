@@ -82,10 +82,46 @@ public class ISceneChange : MonoBehaviour
         {
             OrientationLand = Screen.width > Screen.height;
         }
+        else 
+        {
+            Screen.orientation = OrientationLand? ScreenOrientation.Landscape: ScreenOrientation.Portrait;
+        }
         foreach (GameObject i in LandscapeObjs)
-            i.SetActive(OrientationLand);
+        {
+            SpriteRenderer spr = i.GetComponent<SpriteRenderer>();
+            if (spr)
+            {
+                spr.enabled = OrientationLand;
+            }
+            else
+            {
+                MeshRenderer mesh = i.GetComponent<MeshRenderer>();
+                if (mesh)
+                    mesh.enabled = OrientationLand;
+                else
+                {
+                    i.SetActive(OrientationLand);
+                }
+            }
+        }
         foreach (GameObject i in PortraitObjs)
-            i.SetActive(!OrientationLand);
+        {
+            SpriteRenderer spr = i.GetComponent<SpriteRenderer>();
+            if (spr)
+            {
+                spr.enabled = !OrientationLand;
+            }
+            else
+            {
+                MeshRenderer mesh = i.GetComponent<MeshRenderer>();
+                if (mesh)
+                    mesh.enabled = !OrientationLand;
+                else
+                {
+                    i.SetActive(!OrientationLand);
+                }
+            }
+        }
     }
 
     protected void SetNextScene(string sceneName)

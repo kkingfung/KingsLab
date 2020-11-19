@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
+using UnityEngine.UI;
 using Unity.Entities;
 
 public class Enemy : MonoBehaviour
@@ -19,8 +20,7 @@ public class Enemy : MonoBehaviour
     private int DamagedCount = 0;
     private int money;
     private float HealthRecord;
-    private Animator animator;
-
+   
     private float SlowRecord;
     private float PetrifyRecord;
 
@@ -29,7 +29,9 @@ public class Enemy : MonoBehaviour
     private ResourceManager resourceManager;
 
     private SkinnedMeshRenderer[] meshes;
-
+    public Animator animator;
+    public Slider HpBar;
+    private RectTransform HpBarRot;
 
     private bool isDead;
     // Start is called before the first frame update
@@ -39,16 +41,21 @@ public class Enemy : MonoBehaviour
         oriScale = transform.localScale;
         if(enemySpawner==null) enemySpawner = FindObjectOfType<EnemySpawner>();
         resourceManager = FindObjectOfType<ResourceManager>();
-        animator = GetComponent<Animator>();
+
+        if (animator == null) 
+            animator = GetComponent<Animator>();
 
         if (animator == null) {
             animator = GetComponentInChildren<Animator>();
         }
 
         HealthRecord = 1;
+        if (HpBar == null)
+            HpBar = GetComponentInChildren<Slider>();
+        if (HpBar != null)
+            HpBarRot = HpBar.gameObject.GetComponent<RectTransform>();
         prevPos = transform.position;
         isDead = false;
-        if (animator==null) animator = GetComponentInChildren<Animator>();
 
         meshes = GetComponentsInChildren<SkinnedMeshRenderer>();
     }
@@ -62,7 +69,9 @@ public class Enemy : MonoBehaviour
             float currHP = enemySpawner.healthArray[entityID];
             if (currHP != HealthRecord) {
                 Damaged(currHP);
-                currHP = HealthRecord;
+                HealthRecord = currHP;
+                HpBar.value = currHP;
+                HpBarRot.eulerAngles = new Vector3(0, 0, 0);
             }
       
             //CheckingStatus
@@ -95,6 +104,8 @@ public class Enemy : MonoBehaviour
         this.DropEffect = DropEffect;
         this.entityID = entityID;
         this.money = money;
+        HpBar.maxValue = enemySpawner.healthArray[entityID];
+        HpBar.value = HpBar.maxValue;
     }
 
     public void Damaged(float currHP)

@@ -47,11 +47,12 @@ public class TowerManager : MonoBehaviour
     [Header("TowerInfo Settings")]
     public List<GameObject> TargetInfo;
     private List<Text> TargetInfoText;
+    public List<Slider> TargetInfoSlider;
 
     private ResourceManager resourceManager;
     private FilledMapGenerator filledMapGenerator;
-    private InGameOperation sceneManager;
-    private TutorialManager tutorialManager;
+    //private InGameOperation sceneManager;
+    //private TutorialManager tutorialManager;
     private TowerSpawner towerSpawner;
 
     // Start is called before the first frame update
@@ -64,9 +65,9 @@ public class TowerManager : MonoBehaviour
 
         resourceManager = FindObjectOfType<ResourceManager>();
         filledMapGenerator = FindObjectOfType<FilledMapGenerator>();
-        sceneManager = FindObjectOfType<InGameOperation>();
+        //sceneManager = FindObjectOfType<InGameOperation>();
         towerSpawner = FindObjectOfType<TowerSpawner>();
-        tutorialManager = FindObjectOfType<TutorialManager>();
+        //tutorialManager = FindObjectOfType<TutorialManager>();
 
         TargetInfoText = new List<Text>();
         foreach (GameObject i in TargetInfo)
@@ -83,8 +84,13 @@ public class TowerManager : MonoBehaviour
 
     public void UpdateInfo(GameObject target)
     {
-for(int i = 0; i < TargetInfo.Count; ++i) {
+        for(int i = 0; i < TargetInfo.Count; ++i) {
             TargetInfo[i].SetActive(target != null);
+            foreach (Slider j in TargetInfoSlider)
+            {
+
+                j.transform.gameObject.SetActive(target != null);
+            }
             if (target == null) continue;
 
             if (TargetInfoText[i])
@@ -105,6 +111,11 @@ for(int i = 0; i < TargetInfo.Count; ++i) {
                     case TowerInfo.TowerInfoID.Enum_TowerUsurper:
                         TargetInfoText[i].color = Color.magenta;
                         break;
+                }
+                foreach (Slider j in TargetInfoSlider)
+                {
+                    j.maxValue = towerinfo.RequiredExp();
+                    j.value= Mathf.Min(towerinfo.exp, j.maxValue);
                 }
             }
         }

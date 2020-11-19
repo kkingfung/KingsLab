@@ -195,11 +195,15 @@ public class Tower : MonoBehaviour
     {
         this.exp += exp;
         //Level Lv Formula
-        if (this.exp > 25 * level * (1 + level))
+        if (this.exp > RequiredExp())
         {
             LevelUp();
             this.exp = 0;
         }
+    }
+
+    public int RequiredExp() {
+        return 25 * level * (1 + level);
     }
 
     public void LevelUp(int chg = 1)

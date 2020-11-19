@@ -80,7 +80,7 @@ Material:
     m_Floats:
     - Vector1_368E273: 0.2
     - Vector1_631E0281: 5
-    - Vector1_77ADE9CD: 2
+    - Vector1_77ADE9CD: 0.2
     - Vector1_94115D9A: 0.5
     - Vector1_9C0D5890: 30
     - _AlphaClip: 0

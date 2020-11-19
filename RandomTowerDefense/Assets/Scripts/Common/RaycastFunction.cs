@@ -67,21 +67,21 @@ public class RaycastFunction : MonoBehaviour
         audioManager = FindObjectOfType<AudioManager>();
 
         if (rendertype == EnumRenderType.NotChecked)
-            GetColor(oriColor);
+            GetColor();
     }
 
-    public void GetColor(Color color) {
+    public Color GetColor() {
         chkMeshRender = GetComponent<MeshRenderer>();
         if (chkMeshRender)
         {
-            color = chkMeshRender.material.color;
+            oriColor = chkMeshRender.material.color;
             rendertype = EnumRenderType.FoundMeshRenderer;
         }
         else {
             chkRawImg = GetComponent<RawImage>();
             if (chkRawImg)
             {
-                color = chkRawImg.color;
+                oriColor = chkRawImg.color;
                 rendertype = EnumRenderType.FoundRawImg;
             }
             else
@@ -89,12 +89,14 @@ public class RaycastFunction : MonoBehaviour
                 chkSprRender = GetComponent<SpriteRenderer>();
                 if (chkSprRender)
                 {
-                    color = chkSprRender.color;
+                    oriColor = chkSprRender.color;
                     rendertype = EnumRenderType.FoundSprRenderer;
                 }
             }
         }
+        return oriColor;
     }
+
     public void ActionFunc()
     {
         if (SelectionSceneManager == null && sceneManager==null) return;
@@ -201,7 +203,7 @@ public class RaycastFunction : MonoBehaviour
         Color color=new Color();
         switch (rendertype) {
             case EnumRenderType.NotChecked:
-                GetColor(color);break;
+                color=GetColor();break;
             case EnumRenderType.FoundMeshRenderer:
                 color = chkMeshRender.material.color; break;
             case EnumRenderType.FoundRawImg:

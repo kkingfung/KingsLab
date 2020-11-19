@@ -96,7 +96,9 @@ public class TowerManager : MonoBehaviour
             if (TargetInfoText[i])
             {
                 Tower towerinfo = target.GetComponent<Tower>();
-                TargetInfoText[i].text = "Rank" + towerinfo.rank + " Lv" + towerinfo.level;
+                TargetInfoText[i].text = "Rank" + (towerinfo.CheckMaxRank() ? "MAX" : towerinfo.rank.ToString())
+                    + " Lv" + (towerinfo.CheckMaxLevel() ? "MAX" : towerinfo.level.ToString());
+
                 switch (towerinfo.type)
                 {
                     case TowerInfo.TowerInfoID.Enum_TowerNightmare:

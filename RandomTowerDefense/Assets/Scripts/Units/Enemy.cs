@@ -8,8 +8,8 @@ using Unity.Entities;
 public class Enemy : MonoBehaviour
 {
     private readonly int DamageCounterMax = 5;
-    private readonly int ResizeFactor = 2;
-    private readonly float ResizeScale = 0.5f;
+    private readonly int ResizeFactor = 3;
+    private readonly float ResizeScale = 0.0f;
     private readonly float EnemyDestroyTime = 1;
 
     private GameObject DieEffect;
@@ -37,9 +37,9 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        transform.localScale = transform.localScale * ResizeScale;
         oriScale = transform.localScale;
-        if(enemySpawner==null) enemySpawner = FindObjectOfType<EnemySpawner>();
+        transform.localScale = transform.localScale * ResizeScale;
+        if (enemySpawner==null) enemySpawner = FindObjectOfType<EnemySpawner>();
         resourceManager = FindObjectOfType<ResourceManager>();
 
         if (animator == null) 
@@ -50,6 +50,7 @@ public class Enemy : MonoBehaviour
         }
 
         HealthRecord = 1;
+
         if (HpBar == null)
             HpBar = GetComponentInChildren<Slider>();
         if (HpBar != null)
@@ -67,22 +68,23 @@ public class Enemy : MonoBehaviour
 
         if (entityID >= 0 && HealthRecord>0) {
             float currHP = enemySpawner.healthArray[entityID];
+            if (currHP > HpBar.maxValue)
+                HpBar.maxValue = currHP;
             if (currHP != HealthRecord) {
                 Damaged(currHP);
                 HealthRecord = currHP;
-                HpBar.value = currHP;
-                HpBarRot.eulerAngles = new Vector3(0, 0, 0);
+                HpBar.value = Mathf.Max(currHP, 0);
             }
-      
+            HpBarRot.eulerAngles = new Vector3(0, 0, 0);
             //CheckingStatus
             Petrified();
             Slowed();
         }
 
-        if (DamagedCount > 0) 
-        { 
+        if (DamagedCount > 0)
+        {
             DamagedCount--;
-            if(DamagedCount % ResizeFactor ==0)
+            if ((DamagedCount / ResizeFactor) % 2 == 0)
                 transform.localScale = oriScale;
             else
                 transform.localScale = oriScale * ResizeScale;
@@ -104,8 +106,8 @@ public class Enemy : MonoBehaviour
         this.DropEffect = DropEffect;
         this.entityID = entityID;
         this.money = money;
-        HpBar.maxValue = enemySpawner.healthArray[entityID];
-        HpBar.value = HpBar.maxValue;
+        HpBar.maxValue = 1;
+        HpBar.value = 1;
     }
 
     public void Damaged(float currHP)

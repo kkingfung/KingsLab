@@ -50,7 +50,7 @@ public class StageAttr
     public float waveWaitTime;
     public WaveAttr[] waveDetail;
 
-    public StageAttr(int waveNum, WaveAttr[] waveAttr, float waveTime = 60f)
+    public StageAttr(int waveNum, WaveAttr[] waveAttr, float waveTime = 30f)
     {
         this.waveNum = waveNum;
         this.waveWaitTime = waveTime;

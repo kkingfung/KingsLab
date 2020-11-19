@@ -105,6 +105,7 @@ public class Skill : MonoBehaviour
                     attr.lifeTime -= Time.deltaTime;
                     if (!ActionEnded && attr.lifeTime < 0)
                     {
+                            
                         Destroy(this.gameObject);
                         ActionEnded = true;
                     }

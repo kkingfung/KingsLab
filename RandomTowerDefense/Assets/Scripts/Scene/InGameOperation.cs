@@ -112,6 +112,14 @@ public class InGameOperation : ISceneChange
             ConfigManager.FetchCompleted += EnemyInfo.InitByRemote;
             ConfigManager.FetchCompleted += SkillInfo.InitByRemote;
             ConfigManager.FetchConfigs<userAttributes, appAttributes>(new userAttributes(), new appAttributes());
+            if (Directory.Exists("Assets/AssetBundles"))
+            {
+                StageInfo.Init(true, "Assets/AssetBundles");
+            }
+            else
+            {
+                StageInfo.Init(false, null);
+            }
         }
         else if (UseFileAsset)
         {
@@ -122,7 +130,7 @@ public class InGameOperation : ISceneChange
                 EnemyInfo.InitByFile("Assets/AssetBundles/EnemyInfo.txt");
                 SkillInfo.InitByFile("Assets/AssetBundles/SkillInfo.txt");
             }
-            else 
+            else
             {
                 StageInfo.Init(false, null);
                 TowerInfo.Init();

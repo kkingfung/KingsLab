@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class PlayerManager : MonoBehaviour
 {
-    private readonly float CancelDist = 50f;
+    private readonly float CancelDist = 30f;
 
     [HideInInspector]
     public bool isSkillActive;
@@ -84,8 +84,9 @@ public class PlayerManager : MonoBehaviour
     {
         if (StockOperator != null) return;
         if (isSkillActive) return;
-        //if (sceneManager.currScreenShown != (int)InGameOperation.ScreenShownID.SSIDArena || sceneManager.nextScreenShown != (int)InGameOperation.ScreenShownID.SSIDArena) return;
-        isChecking = true;
+        isSelling = false;
+         //if (sceneManager.currScreenShown != (int)InGameOperation.ScreenShownID.SSIDArena || sceneManager.nextScreenShown != (int)InGameOperation.ScreenShownID.SSIDArena) return;
+         isChecking = true;
 
         Camera targetCam = (Screen.width > Screen.height) ? refCamL : refCamP;
         StockOperator = Instantiate(StockOperatorPrefab, targetCam.transform);

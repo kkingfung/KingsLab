@@ -12,7 +12,7 @@ public class Tower : MonoBehaviour
     //private readonly int[] MaxLevel = { 1, 1, 1, 1 };
     private readonly float TowerDestroyTime = 2;
     private readonly int ActionSetNum = 2;
-    private readonly int ExpPerAttack = 5;
+    private readonly int ExpPerAttack = 1;
 
     public TowerAttr attr;
     public int level;
@@ -95,6 +95,7 @@ public class Tower : MonoBehaviour
                     audioSource.PlayOneShot(audioManager.GetAudio("se_Lighting"));
                 }
                 posAdj = 0.2f;
+                GainExp(ExpPerAttack * 5);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
                 if (audioManager.enabledSE)
@@ -103,6 +104,7 @@ public class Tower : MonoBehaviour
                 }
                 posAdj = -0.2f;
                 atkEntityPos = transform.position;
+                GainExp(ExpPerAttack * 2);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
                 if (audioManager.enabledSE)
@@ -111,6 +113,7 @@ public class Tower : MonoBehaviour
                 }
 
                 posAdj = 0.0f;
+                GainExp(ExpPerAttack*10);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
                 if (audioManager.enabledSE)
@@ -119,6 +122,7 @@ public class Tower : MonoBehaviour
                 }
                 posAdj = 0.5f;
                 atkEntityPos = transform.position;
+                GainExp(ExpPerAttack);
                 break;
         }
         int[] entityID=attackSpawner.Spawn((int)type, this.transform.position
@@ -132,7 +136,6 @@ public class Tower : MonoBehaviour
         //StartCoroutine(WaitToKillVFX(this.AtkVFX[AtkVFX.Count - 1], 8, 0));
 
         atkCounter = attr.waitTime;
-        GainExp(ExpPerAttack);
         animator.SetTrigger("Detected");
         animator.SetInteger("ActionID", UnityEngine.Random.Range(0, ActionSetNum-1));
     }
@@ -266,7 +269,17 @@ public class Tower : MonoBehaviour
     public bool CheckLevel()
     {
         return true;
-        //return Level == MaxLevel[rank - 1];
+        //return level == MaxLevel[rank - 1];
+    }
+
+    public bool CheckMaxLevel()
+    {
+        return level == MaxLevel[rank - 1];
+    }
+
+    public bool CheckMaxRank()
+    {
+        return rank == MaxLevel.Length;
     }
 
     private IEnumerator WaitToKillVFX(GameObject targetVFX, int waittime, int killtime)

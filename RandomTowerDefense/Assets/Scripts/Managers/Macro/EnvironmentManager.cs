@@ -11,7 +11,7 @@ public class EnvironmentManager : MonoBehaviour
     private int stageID;
     private float shaderInput;
     private int maxSkyboxCubemap = 3;
-
+    public bool showTerrain = false;
     //private TimeManager timeManager;
     private InGameOperation sceneManager;
 
@@ -24,9 +24,13 @@ public class EnvironmentManager : MonoBehaviour
         //timeManager = FindObjectOfType<TimeManager>();
         RenderSettings.skybox = skyboxMat[stageID];
 
-        for(int i=0;i< terrainObj.Count;++i) {
-            if (i == stageID) terrainObj[i].SetActive(true);
-            else terrainObj[i].SetActive(false);
+        if (showTerrain)
+        {
+            for (int i = 0; i < terrainObj.Count; ++i)
+            {
+                if (i == stageID) terrainObj[i].SetActive(true);
+                else terrainObj[i].SetActive(false);
+            }
         }
     }
 

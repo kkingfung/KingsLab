@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Unity.Entities;
+using System.Collections;
 
 public class Castle : MonoBehaviour
 {
@@ -33,12 +34,13 @@ public class Castle : MonoBehaviour
         CurrCastleHP = GetCastleHpFromEntity();
 
         HPText.text = CurrCastleHP < 0 ? "0" : CurrCastleHP.ToString();
-        if (PreviousCastleHP > CurrCastleHP) {
+        if (PreviousCastleHP > CurrCastleHP)
+        {
             AddedHealth(0);
-            if(audioManager.enabledSE)
+            stageManager.PlayDmgAnim();
+            if (audioManager.enabledSE)
                 audioSource.PlayOneShot(audioManager.GetAudio("se_Hitted"));
         }
-           
 
         Shield.SetActive(CurrCastleHP > 1);
     }

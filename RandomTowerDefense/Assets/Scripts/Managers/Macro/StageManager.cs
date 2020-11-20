@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 using UnityEngine.UI;
 
 public class StageManager : MonoBehaviour
 {
+    private readonly float timerForDmgVFX = 0.05f;
+
     public enum GameResult
     {
         Lose = -1,
@@ -43,10 +46,12 @@ public class StageManager : MonoBehaviour
     private int result = 0;
     private bool isReady = false;
 
+    public VisualEffect dmgVFX;
     void Awake()
     {
         SpawnPoint = new Coord[EnemySpawnPtNum + 1];
         EnemySpawnPort = new GameObject[EnemySpawnPtNum];
+        if(dmgVFX) dmgVFX.Stop();
     }
     // Start is called before the first frame update
     void Start()
@@ -233,5 +238,23 @@ public class StageManager : MonoBehaviour
     public void AddedHealth(int Val = 1)
     {
         castleSpawner.castle.AddedHealth(Val);
+    }
+
+    public void PlayDmgAnim()
+    {
+        StartCoroutine(DmgAnimation());
+    }
+
+    
+    private IEnumerator DmgAnimation()
+    {
+        dmgVFX.Play();
+        float timerCount = timerForDmgVFX;
+        while (timerCount >0)
+        {
+            timerCount -= Time.deltaTime;
+            yield return new WaitForSeconds(0f);
+        }
+        dmgVFX.Stop();
     }
 }

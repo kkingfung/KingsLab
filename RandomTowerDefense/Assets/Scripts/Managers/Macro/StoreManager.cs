@@ -29,10 +29,10 @@ public class StoreManager : MonoBehaviour
 
     private int[] bonusBossCooldown = { 0, 0, 0};
 
-    private readonly int[] PriceForArmy1 = { 100, 150, 210, 270, 330, 390, 440, 500, 570, 650 };
-    private readonly int[] PriceForArmy2 = { 100, 150, 210, 270, 330, 390, 440, 500, 570, 650 };
-    private readonly int[] PriceForArmy3 = { 100, 150, 210, 270, 330, 390, 440, 500, 570, 650 };
-    private readonly int[] PriceForArmy4 = { 100, 150, 210, 270, 330, 390, 440, 500, 570, 650 };
+    private readonly int[] PriceForArmy1 = { 100, 200, 300, 400, 550, 700, 850, 1000, 1200, 1500 };
+    private readonly int[] PriceForArmy2 = { 100, 200, 300, 400, 550, 700, 850, 1000, 1200, 1500 };
+    private readonly int[] PriceForArmy3 = { 100, 200, 300, 400, 550, 700, 850, 1000, 1200, 1500 };
+    private readonly int[] PriceForArmy4 = { 100, 200, 300, 400, 550, 700, 850, 1000, 1200, 1500 };
 
     private readonly int[] PriceForCastleHP = { 50, 50, 50, 50, 50, 50, 50, 50, 50, 50 };
     private readonly int[] PriceForBonusBoss1 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };

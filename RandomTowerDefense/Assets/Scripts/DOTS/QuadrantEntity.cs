@@ -38,20 +38,12 @@ public class QuadrantSystem : ComponentSystem
 
     public static NativeMultiHashMap<int, QuadrantData> quadrantMultiHashMap;
 
-    public const int quadrantYMultiplier = 1000;
-    private const int quadrantCellSize = 10;
+    public const int quadrantYMultiplier = 100;
+    private const int quadrantCellSize =10;
 
     public static int GetPositionHashMapKey(float3 position)
     {
-        return (int)(math.floor(position.x / quadrantCellSize) + (quadrantYMultiplier * math.floor(position.y / quadrantCellSize)));
-    }
-    private static void DebugDrawQuadrant(float3 position)
-    {
-        Vector3 lowerLeft = new Vector3(math.floor(position.x / quadrantCellSize) * quadrantCellSize, math.floor(position.y / quadrantCellSize) * quadrantCellSize);
-        Debug.DrawLine(lowerLeft, lowerLeft + new Vector3(+1, +0) * quadrantCellSize);
-        Debug.DrawLine(lowerLeft, lowerLeft + new Vector3(+0, +1) * quadrantCellSize);
-        Debug.DrawLine(lowerLeft + new Vector3(+1, +0) * quadrantCellSize, lowerLeft + new Vector3(+1, +1) * quadrantCellSize);
-        Debug.DrawLine(lowerLeft + new Vector3(+0, +1) * quadrantCellSize, lowerLeft + new Vector3(+1, +1) * quadrantCellSize);
+        return (int)(math.floor(position.x / quadrantCellSize) + (quadrantYMultiplier * math.floor(position.z / quadrantCellSize)));
     }
 
     [BurstCompile]
@@ -101,8 +93,6 @@ public class QuadrantSystem : ComponentSystem
         };
         JobHandle jobHandle = JobForEachExtensions.Schedule(setQuadrantDataHashMapJob, entityQuery);
         jobHandle.Complete();
-
-        //DebugDrawQuadrant(Camera.main.ScreenToWorldPoint(Input.mousePosition));
     }
 
 }

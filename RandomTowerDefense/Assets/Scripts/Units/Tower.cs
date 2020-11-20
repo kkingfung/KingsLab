@@ -8,7 +8,7 @@ using Unity.Entities;
 
 public class Tower : MonoBehaviour
 {
-    private readonly int[] MaxLevel = { 10, 30, 50, 70 };
+    private readonly int[] MaxLevel = { 15, 30, 50, 99 };
     //private readonly int[] MaxLevel = { 1, 1, 1, 1 };
     private readonly float TowerDestroyTime = 2;
     private readonly int ActionSetNum = 2;
@@ -48,6 +48,8 @@ public class Tower : MonoBehaviour
 
     private EntityManager entityManager;
     private FilledMapGenerator filledMapGenerator;
+
+    private float3 oriScale;
     private void Awake()
     {
         atkCounter = 0;
@@ -66,6 +68,11 @@ public class Tower : MonoBehaviour
         if (towerSpawner == null) towerSpawner = FindObjectOfType<TowerSpawner>();
         attackSpawner = FindObjectOfType<AttackSpawner>();
         filledMapGenerator = FindObjectOfType<FilledMapGenerator>();
+
+        oriScale = transform.localScale;
+        transform.localScale = new Vector3();
+
+        StartCoroutine(StartAnim());
     }
 
     void Update()
@@ -133,8 +140,6 @@ public class Tower : MonoBehaviour
         if (type == TowerInfo.TowerInfoID.Enum_TowerNightmare || type == TowerInfo.TowerInfoID.Enum_TowerTerrorBringer)
             attackSpawner.GameObjects[entityID[0]].GetComponent<VisualEffect>().SetVector3("TargetPos", towerSpawner.targetArray[this.entityID]);
 
-        //StartCoroutine(WaitToKillVFX(this.AtkVFX[AtkVFX.Count - 1], 8, 0));
-
         atkCounter = attr.waitTime;
         animator.SetTrigger("Detected");
         animator.SetInteger("ActionID", UnityEngine.Random.Range(0, ActionSetNum-1));
@@ -154,11 +159,8 @@ public class Tower : MonoBehaviour
         //    AtkVFX.Remove(i);
         //    Destroy(i);
         //}
-        if (auraVFX)
-            Destroy(auraVFX);
-        if (lvupVFX)
-            Destroy(lvupVFX);
-        Destroy(this.gameObject, TowerDestroyTime);
+
+        StartCoroutine(EndAnim());
     }
 
     public void newTower(int entityID,TowerSpawner towerSpawner,GameObject pillar, GameObject LevelUpVFX, GameObject AuraVFX, TowerInfo.TowerInfoID type, int lv = 1, int rank = 1)
@@ -226,28 +228,43 @@ public class Tower : MonoBehaviour
         attr = TowerInfo.GetTowerInfo(type);
 
         //Update by rank/level with factors
-        attr = new TowerAttr(attr.radius * (0.2f * rank + 0.005f * level),
-            attr.damage * (1f * rank + 0.05f * level),
+        attr = new TowerAttr(attr.radius * (1 + 0.05f * rank + 0.005f * level),
+            attr.damage * (1 + 1f * rank + 0.1f * level),
             attr.waitTime * (1f - (0.1f * rank)), attr.attackLifetime, attr.attackWaittime, attr.attackRadius,attr.attackSpd);
 
         switch (type)
         {
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
                 attr.radius = attr.radius
-                    * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
+                    * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
+                attr.damage = attr.damage
+                   * (1 + (0.02f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
+                attr.waitTime = attr.waitTime
+                   * (1 - (0.02f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
                 attr.radius = attr.radius
-                      * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
-
+                      * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
+                attr.damage = attr.damage
+                        * (1 + (0.02f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
+                attr.waitTime = attr.waitTime
+                   * (1 - (0.02f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
                 attr.damage = attr.damage
-                    * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
+                    * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
+                attr.radius = attr.radius
+                     * (1 + (0.02f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
+                attr.waitTime = attr.waitTime
+                   * (1 - (0.02f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
                 attr.waitTime = attr.waitTime
-                    * (1 - (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
+                    * (1 - (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
+                attr.damage = attr.damage
+                     * (1 + (0.02f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
+                attr.radius = attr.radius
+                   * (1 + (0.02f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
                 break;
         }
 
@@ -282,15 +299,41 @@ public class Tower : MonoBehaviour
         return rank == MaxLevel.Length;
     }
 
-    private IEnumerator WaitToKillVFX(GameObject targetVFX, int waittime, int killtime)
+    private IEnumerator EndAnim()
     {
-        float timer = waittime;
-        while (timer-- > 0)
+        float timeCounter = 0;
+        float spd = transform.localScale.x / (TowerDestroyTime);
+        while (timeCounter < TowerDestroyTime)
         {
-            timer -= Time.deltaTime;
-            yield return new WaitForSeconds(0f);
+            float delta = Time.deltaTime;
+            timeCounter += delta;
+            transform.localScale = new Vector3(transform.localScale.x - spd * delta,
+                transform.localScale.y - spd * delta, transform.localScale.z - spd * delta);
+            yield return new WaitForSeconds(0);
         }
-        targetVFX.GetComponent<VisualEffect>().Stop();
-        Destroy(targetVFX, killtime);
+
+        transform.localScale = new Vector3();
+
+        if (auraVFX)
+            Destroy(auraVFX);
+        if (lvupVFX)
+            Destroy(lvupVFX);
+        Destroy(this.gameObject);
+    }
+
+    private IEnumerator StartAnim()
+    {
+        float timeCounter = 0;
+        float spd = oriScale.x / (TowerDestroyTime * 0.1f);
+        while (timeCounter< TowerDestroyTime * 0.1f) 
+        {
+            float delta = Time.deltaTime;
+            timeCounter += delta;
+            transform.localScale = new Vector3(transform.localScale.x + spd * delta,
+                transform.localScale.y + spd * delta, transform.localScale.z + spd * delta);
+            yield return new WaitForSeconds(0);
+        }
+        
+        transform.localScale = oriScale;
     }
 }

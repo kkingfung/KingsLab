@@ -120,6 +120,7 @@ public class InGameOperation : ISceneChange
             {
                 StageInfo.Init(false, null);
             }
+            Debug.Log("UpdatedByRemoteConfig");
         }
         else if (UseFileAsset)
         {
@@ -129,6 +130,7 @@ public class InGameOperation : ISceneChange
                 TowerInfo.InitByFile("Assets/AssetBundles/TowerInfo.txt");
                 EnemyInfo.InitByFile("Assets/AssetBundles/EnemyInfo.txt");
                 SkillInfo.InitByFile("Assets/AssetBundles/SkillInfo.txt");
+                Debug.Log("UpdatedByFileAsset");
             }
             else
             {
@@ -136,6 +138,7 @@ public class InGameOperation : ISceneChange
                 TowerInfo.Init();
                 EnemyInfo.Init();
                 SkillInfo.Init();
+                Debug.Log("UpdatedByScriptInput");
             }
         }
         else
@@ -144,6 +147,7 @@ public class InGameOperation : ISceneChange
             TowerInfo.Init();
             EnemyInfo.Init();
             SkillInfo.Init();
+            Debug.Log("UpdatedByScriptInput");
         }
 
         SkillStack.init();

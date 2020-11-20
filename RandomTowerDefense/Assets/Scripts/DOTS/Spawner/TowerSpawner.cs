@@ -59,8 +59,8 @@ public class TowerSpawner : MonoBehaviour
 
         Entities = new NativeArray<Entity>(count, Allocator.Persistent);
         var archetype = EntityManager.CreateArchetype(
-             typeof(WaitingTime), typeof(Radius), 
-             typeof(Damage), typeof(LocalToWorld),  typeof(QuadrantEntity),
+             typeof(WaitingTime), typeof(Radius), typeof(CastlePos),
+             typeof(Damage), typeof(LocalToWorld),
             ComponentType.ReadOnly<Translation>()
             );
         EntityManager.CreateEntity(archetype, Entities);
@@ -94,7 +94,7 @@ public class TowerSpawner : MonoBehaviour
         }
     }
 
-    public int[] Spawn(int prefabID, float3 Position, int num = 1)
+    public int[] Spawn(int prefabID, float3 Position, float3 CastlePosition, int num = 1)
     {
         int spawnCnt = 0;
         int[] spawnIndexList = new int[num];
@@ -125,9 +125,16 @@ public class TowerSpawner : MonoBehaviour
                 Value = Position
             });
 
+            if (EntityManager.HasComponent<QuadrantEntity>(Entities[i]) == false)
+                EntityManager.AddComponent<QuadrantEntity>(Entities[i]);
             EntityManager.SetComponentData(Entities[i], new QuadrantEntity
             {
                 typeEnum = QuadrantEntity.TypeEnum.PlayerTag
+            });
+
+            EntityManager.SetComponentData(Entities[i], new CastlePos
+            {
+                Value = CastlePosition,
             });
 
             //EntityManager.SetComponentData(Entities[i], new RotationEulerXYZ
@@ -147,6 +154,7 @@ public class TowerSpawner : MonoBehaviour
 
             if (EntityManager.HasComponent<PlayerTag>(Entities[i]) == false)
                 EntityManager.AddComponent<PlayerTag>(Entities[i]);
+
 
             spawnIndexList[spawnCnt++] = i;
         }

@@ -10,7 +10,7 @@ public class Enemy : MonoBehaviour
     private readonly int DamageCounterMax = 5;
     private readonly int ResizeFactor = 3;
     private readonly float ResizeScale = 0.0f;
-    private readonly float EnemyDestroyTime = 1;
+    private readonly float EnemyDestroyTime = 0.2f;
 
     private GameObject DieEffect;
     private GameObject DropEffect;
@@ -34,11 +34,11 @@ public class Enemy : MonoBehaviour
     private RectTransform HpBarRot;
 
     private bool isDead;
+    private bool isReady;
+
     // Start is called before the first frame update
     private void Awake()
     {
-        oriScale = transform.localScale;
-        transform.localScale = transform.localScale * ResizeScale;
         if (enemySpawner==null) enemySpawner = FindObjectOfType<EnemySpawner>();
         resourceManager = FindObjectOfType<ResourceManager>();
 
@@ -59,18 +59,24 @@ public class Enemy : MonoBehaviour
         isDead = false;
 
         meshes = GetComponentsInChildren<SkinnedMeshRenderer>();
+        isReady = false;
     }
 
+    private void Start() 
+    {
+        oriScale = transform.localScale;
+        transform.localScale = new Vector3();
+        StartCoroutine(StartAnim());
+    }
     // Update is called once per frame
     private void Update()
     {
         if (isDead) return;
-
         if (entityID >= 0 && HealthRecord>0) {
             float currHP = enemySpawner.healthArray[entityID];
             if (currHP > HpBar.maxValue)
                 HpBar.maxValue = currHP;
-            if (currHP != HealthRecord) {
+            if (currHP != HealthRecord && HealthRecord >= 0) {
                 Damaged(currHP);
                 HealthRecord = currHP;
                 HpBar.value = Mathf.Max(currHP, 0);
@@ -81,7 +87,7 @@ public class Enemy : MonoBehaviour
             Slowed();
         }
 
-        if (DamagedCount > 0)
+        if (DamagedCount > 0 && isReady)
         {
             DamagedCount--;
             if ((DamagedCount / ResizeFactor) % 2 == 0)
@@ -96,7 +102,6 @@ public class Enemy : MonoBehaviour
             transform.forward = direction;
             prevPos = transform.position;
         }
-
     }
 
     public void Init(EnemySpawner enemySpawner,GameObject DieEffect, GameObject DropEffect,int entityID,int money)
@@ -115,20 +120,15 @@ public class Enemy : MonoBehaviour
         DamagedCount += DamageCounterMax;
         if (currHP <= 0) {
             isDead = true;
-            resourceManager.ChangeMaterial(money);
-            GameObject vfx = Instantiate(DropEffect, this.transform.position, Quaternion.identity);
-            vfx.GetComponent<VisualEffect>().SetInt("SpawnCount", money);
-
-            if (animator)
-                animator.SetTrigger("Dead");
-            Die();
+            StartCoroutine(DieAnimation());
         }
     }
 
     public void Die()
     {
-        GameObject.Instantiate(DieEffect, this.transform.position, Quaternion.identity);
-        Destroy(this.gameObject, EnemyDestroyTime) ;
+        transform.localScale = oriScale;
+        isReady = false;
+        StartCoroutine(EndAnim());
     }
 
     public void Petrified() {
@@ -168,5 +168,52 @@ public class Enemy : MonoBehaviour
             }
         }
 
+    }
+
+    private IEnumerator DieAnimation()
+    {
+        if (animator)
+            animator.SetTrigger("Dead");
+        GameObject.Instantiate(DieEffect, this.transform.position+Vector3.up*0.5f, Quaternion.identity);
+        yield return new WaitForSeconds(EnemyDestroyTime*0.2f);
+
+        GameObject vfx = Instantiate(DropEffect, this.transform.position, Quaternion.identity);
+        vfx.GetComponent<VisualEffect>().SetInt("SpawnCount", money);
+        resourceManager.ChangeMaterial(money);
+        Die();
+    }
+
+    private IEnumerator EndAnim()
+    {
+        float timeCounter = 0;
+        float spd = transform.localScale.x / (EnemyDestroyTime);
+        while (timeCounter < EnemyDestroyTime)
+        {
+            float delta = Time.deltaTime;
+            timeCounter += delta;
+            transform.localScale = new Vector3(transform.localScale.x - spd * delta,
+                transform.localScale.y - spd * delta, transform.localScale.z - spd * delta);
+            yield return new WaitForSeconds(0);
+        }
+
+        transform.localScale = new Vector3();
+        Destroy(this.gameObject);
+    }
+
+    private IEnumerator StartAnim()
+    {
+        float timeCounter = 0;
+        float spd = oriScale.x / (EnemyDestroyTime * 0.1f);
+        while (timeCounter < EnemyDestroyTime * 0.1f)
+        {
+            float delta = Time.deltaTime;
+            timeCounter += delta;
+            transform.localScale = new Vector3(transform.localScale.x + spd * delta,
+                transform.localScale.y + spd * delta, transform.localScale.z + spd * delta);
+            yield return new WaitForSeconds(0);
+        }
+
+        transform.localScale = oriScale;
+        isReady = true;
     }
 }

@@ -54,6 +54,7 @@ public class TowerManager : MonoBehaviour
     //private InGameOperation sceneManager;
     //private TutorialManager tutorialManager;
     private TowerSpawner towerSpawner;
+    private CastleSpawner castleSpawner;
 
     // Start is called before the first frame update
     void Start()
@@ -68,6 +69,7 @@ public class TowerManager : MonoBehaviour
         //sceneManager = FindObjectOfType<InGameOperation>();
         towerSpawner = FindObjectOfType<TowerSpawner>();
         //tutorialManager = FindObjectOfType<TutorialManager>();
+        castleSpawner = FindObjectOfType<CastleSpawner>();
 
         TargetInfoText = new List<Text>();
         foreach (GameObject i in TargetInfo)
@@ -138,52 +140,13 @@ public class TowerManager : MonoBehaviour
         {
             return;
         }
-        #region SpareCodeForTutorial
-        /*
-        if (sceneManager.CheckIfTutorial() && tutorialManager && tutorialManager.FreeToBuild == false)
-        {
-            if (towerSpawner.GameObjects.Length > 0)
-            {
-                int type = (int)towerSpawner.GameObjects[0].GetComponent<Tower>().type;
-                entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * type,
-                       location, new Unity.Mathematics.float3(), 0, float.MaxValue, float.MaxValue);
-                tower = towerSpawner.GameObjects[entityIDList[0]];
-                tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
 
-                switch (type)
-                {
-                    case (int)TowerInfo.TowerInfoID.Enum_TowerNightmare:
-                        tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerNightmareAura,
-                            TowerInfo.TowerInfoID.Enum_TowerNightmare, 1, rank);
-                        TowerNightmareList.Add(tower);
-                        break;
-                    case (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-                        tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerSoulEaterAura,
-                             TowerInfo.TowerInfoID.Enum_TowerSoulEater, 1, rank);
-                        TowerSoulEaterList.Add(tower);
-                        break;
-                    case (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
-                        tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerTerrorBringerAura,
-                               TowerInfo.TowerInfoID.Enum_TowerTerrorBringer, 1, rank);
-                        TowerTerrorBringerList.Add(tower);
-                        break;
-                    case (int)TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                        tower.GetComponent<Tower>().newTower(entityIDList[0], pillar, TowerLevelUp, TowerUsurperAura,
-                            TowerInfo.TowerInfoID.Enum_TowerUsurper, 1, rank);
-                        TowerUsurperList.Add(tower);
-                        break;
-                }
-            }
-        }
-        else
-        */
-        #endregion
         {
             switch (UnityEngine.Random.Range(0, NumTowerType))
             {
                 case (int)TowerInfo.TowerInfoID.Enum_TowerNightmare:
                     entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerNightmare,
-                        location);
+                        location, castleSpawner.castle.transform.position);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
                     tower.GetComponent<Tower>().newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerNightmareAura,
                         TowerInfo.TowerInfoID.Enum_TowerNightmare, 1, rank);
@@ -192,7 +155,7 @@ public class TowerManager : MonoBehaviour
                     break;
                 case (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater:
                     entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater,
-                        location);
+                        location, castleSpawner.castle.transform.position);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
                     tower.GetComponent<Tower>().newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerSoulEaterAura,
                         TowerInfo.TowerInfoID.Enum_TowerSoulEater, 1, rank);
@@ -201,7 +164,7 @@ public class TowerManager : MonoBehaviour
                     break;
                 case (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
                     entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer,
-                        location);
+                        location, castleSpawner.castle.transform.position);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
                     tower.GetComponent<Tower>().newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerTerrorBringerAura,
                         TowerInfo.TowerInfoID.Enum_TowerTerrorBringer, 1, rank);
@@ -210,7 +173,7 @@ public class TowerManager : MonoBehaviour
                     break;
                 case (int)TowerInfo.TowerInfoID.Enum_TowerUsurper:
                     entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerUsurper,
-                        location);
+                        location, castleSpawner.castle.transform.position);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
                     tower.GetComponent<Tower>().newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerUsurperAura,
                         TowerInfo.TowerInfoID.Enum_TowerUsurper, 1, rank);
@@ -386,11 +349,7 @@ public class TowerManager : MonoBehaviour
     }
     private IEnumerator WaitToKillVFX(GameObject targetVFX, int waittime, int killtime)
     {
-        int frame = waittime;
-        while (frame-- > 0)
-        {
-            yield return new WaitForSeconds(0f);
-        }
+        yield return new WaitForSeconds(waittime);
         targetVFX.GetComponent<VisualEffect>().Stop();
         Destroy(targetVFX,killtime);
     }

@@ -149,7 +149,6 @@ public class EnemySpawner : MonoBehaviour
              typeof(Health), typeof(Damage), typeof(Speed),
            typeof(Radius), typeof(PetrifyAmt),  typeof(Lifetime), typeof(SlowRate), 
             typeof(BuffTime),typeof(PathFollow), typeof(LocalToWorld),
-            typeof(QuadrantEntity),
             ComponentType.ReadOnly<Translation>()
             //ComponentType.ReadOnly<Translation>(),
             //    ComponentType.ReadOnly<RotationEulerXYZ>(),
@@ -198,7 +197,6 @@ public class EnemySpawner : MonoBehaviour
             GameObjects[i].transform.position = Position;
             GameObjects[i].transform.localRotation = Quaternion.identity;
             GameObjects[i].GetComponent<Enemy>().Init(this,DieEffect, DropEffect, i, money);
-
             //transforms[i] = GameObjects[i].transform;
             healthArray[i] = health;
             slowArray[i] = 0;
@@ -243,6 +241,8 @@ public class EnemySpawner : MonoBehaviour
                 Value = Position
             });
 
+            if (EntityManager.HasComponent<QuadrantEntity>(Entities[i]) == false)
+                EntityManager.AddComponent<QuadrantEntity>(Entities[i]);
             EntityManager.SetComponentData(Entities[i], new QuadrantEntity 
             { 
                 typeEnum = QuadrantEntity.TypeEnum.EnemyTag

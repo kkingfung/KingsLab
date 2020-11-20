@@ -35,7 +35,7 @@ public class TowerFindTargetSystem : JobComponentSystem
     }
 
     [RequireComponentTag(typeof(PlayerTag))]
-    [ExcludeComponent(typeof(HasTarget))]
+    [ExcludeComponent(typeof(Target))]
     // Add HasTarget Component to Entities that have a Closest Target
     private struct AddComponentJob : IJobForEachWithEntity<Translation>
     {
@@ -57,66 +57,58 @@ public class TowerFindTargetSystem : JobComponentSystem
 
 
     [RequireComponentTag(typeof(PlayerTag))]
-    [ExcludeComponent(typeof(HasTarget))]
+    [ExcludeComponent(typeof(Target))]
     [BurstCompile]
-    private struct FindTargetQuadrantSystemJob : IJobForEachWithEntity<Translation, Radius, QuadrantEntity>
+    private struct FindTargetQuadrantSystemJob : IJobForEachWithEntity<Translation, Radius, QuadrantEntity, CastlePos>
     {
-
         [ReadOnly] public NativeMultiHashMap<int, QuadrantData> quadrantMultiHashMap;
         public NativeArray<EntityWithPosition> closestTargetEntityArray;
 
-        public void Execute(Entity entity, int index, [ReadOnly] ref Translation transform, [ReadOnly] ref Radius radius, [ReadOnly] ref QuadrantEntity quadrantEntity)
+        public void Execute(Entity entity, int index, [ReadOnly] ref Translation transform, [ReadOnly] ref Radius radius, [ReadOnly] ref QuadrantEntity quadrantEntity,ref CastlePos castle)
         {
             float3 unitPosition = transform.Value;
             Entity closestTargetEntity = Entity.Null;
             float closestTargetDistance = float.MaxValue;
             float3 closestTargetPosition = transform.Value;
             int hashMapKey = QuadrantSystem.GetPositionHashMapKey(transform.Value);
+            FindTarget(hashMapKey, unitPosition, radius.Value,quadrantEntity, castle.Value, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
 
-            FindTarget(hashMapKey, unitPosition, radius.Value,quadrantEntity, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
-            FindTarget(hashMapKey + 1, unitPosition, radius.Value, quadrantEntity, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
-            FindTarget(hashMapKey - 1, unitPosition, radius.Value, quadrantEntity, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
-            FindTarget(hashMapKey + QuadrantSystem.quadrantYMultiplier, unitPosition,  radius.Value, quadrantEntity, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
-            FindTarget(hashMapKey - QuadrantSystem.quadrantYMultiplier, unitPosition,  radius.Value, quadrantEntity, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
-            FindTarget(hashMapKey + 1 + QuadrantSystem.quadrantYMultiplier, unitPosition,radius.Value, quadrantEntity, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
-            FindTarget(hashMapKey - 1 + QuadrantSystem.quadrantYMultiplier, unitPosition,radius.Value, quadrantEntity, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
-            FindTarget(hashMapKey + 1 - QuadrantSystem.quadrantYMultiplier, unitPosition,radius.Value, quadrantEntity, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
-            FindTarget(hashMapKey - 1 - QuadrantSystem.quadrantYMultiplier, unitPosition, radius.Value, quadrantEntity, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
-
+            if (closestTargetEntity == Entity.Null)
+            {
+                FindTarget(hashMapKey + 1, unitPosition, radius.Value, quadrantEntity, castle.Value, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
+                FindTarget(hashMapKey - 1, unitPosition, radius.Value, quadrantEntity, castle.Value, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
+                FindTarget(hashMapKey + QuadrantSystem.quadrantYMultiplier, unitPosition, radius.Value, quadrantEntity, castle.Value, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
+                FindTarget(hashMapKey - QuadrantSystem.quadrantYMultiplier, unitPosition, radius.Value, quadrantEntity, castle.Value, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
+            }
+            if (closestTargetEntity == Entity.Null)
+            {
+                FindTarget(hashMapKey + 1 + QuadrantSystem.quadrantYMultiplier, unitPosition, radius.Value, quadrantEntity, castle.Value, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
+                FindTarget(hashMapKey - 1 + QuadrantSystem.quadrantYMultiplier, unitPosition, radius.Value, quadrantEntity, castle.Value, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
+                FindTarget(hashMapKey + 1 - QuadrantSystem.quadrantYMultiplier, unitPosition, radius.Value, quadrantEntity, castle.Value, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
+                FindTarget(hashMapKey - 1 - QuadrantSystem.quadrantYMultiplier, unitPosition, radius.Value, quadrantEntity, castle.Value, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
+            }
             EntityWithPosition targetDetail = new EntityWithPosition { entity = closestTargetEntity, position = closestTargetPosition };
             closestTargetEntityArray[index] = targetDetail;
         }
 
-        private void FindTarget(int hashMapKey, float3 unitPosition, float maxdist, QuadrantEntity quadrantEntity, ref Entity closestTargetEntity, ref float closestTargetDistance, ref float3 closestTargetPosition)
+        private void FindTarget(int hashMapKey, float3 unitPosition, float maxdist, QuadrantEntity quadrantEntity, float3 castlePos, ref Entity closestTargetEntity, ref float closestTargetDistance, ref float3 closestTargetPosition)
         {
             QuadrantData quadrantData;
             NativeMultiHashMapIterator<int> nativeMultiHashMapIterator;
             if (quadrantMultiHashMap.TryGetFirstValue(hashMapKey, out quadrantData, out nativeMultiHashMapIterator))
             {
+                //Debug.Log("findtarget");
                 do
                 {
                     if (quadrantData.quadrantEntity.typeEnum == QuadrantEntity.TypeEnum.EnemyTag)
                     {
-                        float distSq = math.distancesq(unitPosition, quadrantData.position);
-                        if (closestTargetEntity == Entity.Null)
+                        float distCastleSq = math.distancesq(castlePos, quadrantData.position);
+                        if (distCastleSq < closestTargetDistance && CheckCollision(unitPosition, quadrantData.position, maxdist * maxdist))
                         {
-                            // No target
-                            if (distSq < maxdist* maxdist)
-                            {
-                                closestTargetEntity = quadrantData.entity;
-                                closestTargetDistance = math.distancesq(unitPosition, quadrantData.position);
-                                closestTargetPosition = quadrantData.position;
-                            }
-                        }
-                        else
-                        {
-                            if (distSq < closestTargetDistance)
-                            {
-                                // This target is closer
-                                closestTargetEntity = quadrantData.entity;
-                                closestTargetDistance = math.distancesq(unitPosition, quadrantData.position);
-                                closestTargetPosition = quadrantData.position;
-                            }
+                            // This target is closer
+                            closestTargetEntity = quadrantData.entity;
+                            closestTargetDistance = distCastleSq;
+                            closestTargetPosition = quadrantData.position;
                         }
                     }
                 } while (quadrantMultiHashMap.TryGetNextValue(out quadrantData, ref nativeMultiHashMapIterator));
@@ -136,8 +128,6 @@ public class TowerFindTargetSystem : JobComponentSystem
 
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
-        EntityQuery targetQuery = GetEntityQuery(typeof(EnemyTag), ComponentType.ReadOnly<Translation>());
-
         EntityQuery unitQuery = GetEntityQuery(typeof(PlayerTag), typeof(Radius)/*, ComponentType.Exclude<Target>()*/);
         NativeArray<EntityWithPosition> closestTargetEntityArray = new NativeArray<EntityWithPosition>(unitQuery.CalculateEntityCount(), Allocator.TempJob);
 
@@ -159,6 +149,18 @@ public class TowerFindTargetSystem : JobComponentSystem
         endSimulationEntityCommandBufferSystem.AddJobHandleForProducer(jobHandle);
 
         return jobHandle;
+    }
+
+    //Common Function
+   static private float GetDistance(float3 posA, float3 posB)
+    {
+        float3 delta = posA - posB;
+        return delta.x * delta.x + delta.z * delta.z;
+    }
+
+    static private bool CheckCollision(float3 posA, float3 posB, float radiusSqr)
+    {
+        return GetDistance(posA, posB) <= radiusSqr;
     }
 }
 

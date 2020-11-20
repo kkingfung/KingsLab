@@ -50,7 +50,7 @@ public class SkillManager : MonoBehaviour
     {
         foreach (Slider i in SkillActivenessSlider)
         {
-                i.gameObject.SetActive(currActiveTime != 0);
+            i.gameObject.SetActive(currActiveTime != 0);
         }
         if (currActiveTime != 0)
         {
@@ -61,14 +61,17 @@ public class SkillManager : MonoBehaviour
         }
     }
 
-    public void GainExp(Upgrades.StoreItems itemID,int exp) {
+    public void GainExp(Upgrades.StoreItems itemID, int exp)
+    {
         SkillUpgrader[itemID] += exp;
         SkillUpgrade(itemID);
     }
 
-    void SkillUpgrade(Upgrades.StoreItems itemID) {
+    void SkillUpgrade(Upgrades.StoreItems itemID)
+    {
         int currExp = SkillUpgrader[itemID];
-        if (currExp > SkillRequirement[Upgrades.GetLevel(itemID)]) {
+        if (currExp > SkillRequirement[Upgrades.GetLevel(itemID)])
+        {
             if (Upgrades.AddSkillLevel(itemID, 1))
                 SkillUpgrader[itemID] = 0;
         }
@@ -79,7 +82,7 @@ public class SkillManager : MonoBehaviour
         SkillAura = Instantiate(FireFieldSkAura, hitPos, Quaternion.identity);
 
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillMeteor");
-        attr.damage = attr.damage * (1+Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor) *0.6f);
+        attr.damage = attr.damage * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor) * Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor) * 0.6f);
         GainExp(Upgrades.StoreItems.MagicMeteor, ExpPerActivation);
         StartCoroutine(MeteorSkillCoroutine(attr));
         return SkillAura;
@@ -89,17 +92,17 @@ public class SkillManager : MonoBehaviour
         SkillAura = Instantiate(BlizzardFieldSkAura, hitPos, Quaternion.identity);
 
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillBlizzard");
-        attr.radius = attr.radius * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * 0.3f);
-        attr.damage = attr.damage * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * 0.3f);
+        attr.radius = attr.radius * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * 0.3f);
+        attr.damage = attr.damage * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * 0.3f);
         GainExp(Upgrades.StoreItems.MagicBlizzard, ExpPerActivation);
 
         StartCoroutine(BlizzardSkillCoroutine(attr));
         return SkillAura;
     }
     public GameObject PetrificationSkill(Vector3 hitPos)
-    { 
+    {
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillPetrification");
-        attr.buffTime = attr.buffTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification) * 0.6f);
+        attr.buffTime = attr.buffTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification) * Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification) * 0.6f);
         GainExp(Upgrades.StoreItems.MagicPetrification, ExpPerActivation);
 
         StartCoroutine(PetrificationCoroutine(attr));
@@ -108,15 +111,16 @@ public class SkillManager : MonoBehaviour
     public GameObject MinionsSkill(Vector3 hitPos)
     {
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillMinions");
-        attr.cycleTime = attr.cycleTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * 0.5f);
-        attr.damage = attr.damage * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * 0.1f);
+        attr.cycleTime = attr.cycleTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * 0.4f);
+        attr.damage = attr.damage * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * 0.2f);
         GainExp(Upgrades.StoreItems.MagicMinions, ExpPerActivation);
 
         StartCoroutine(MinionsSkillCoroutine(attr));
         return null;
     }
 
-    public void SkillEnd() {
+    public void SkillEnd()
+    {
         playerManager.isSkillActive = false;
     }
 
@@ -128,21 +132,22 @@ public class SkillManager : MonoBehaviour
 
         maxActiveTime = attr.lifeTime;
         currActiveTime = maxActiveTime;
- 
-        while (frame-Time.time > 0)
+
+        while (frame - Time.time > 0)
         {
-            if (Time.time-frameToNext > attr.cycleTime) {
+            if (Time.time - frameToNext > attr.cycleTime)
+            {
                 float3 pos = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
                 int[] entityID = skillSpawner.Spawn(0, pos,
                     pos, new float3(),
-                    attr.damage,attr.radius,attr.waitTime,attr.lifeTime,attr.waitTime);
+                    attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime);
 
                 skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
-                    .Init(skillSpawner, Upgrades.StoreItems.MagicMeteor, attr,entityID[0]);
+                    .Init(skillSpawner, Upgrades.StoreItems.MagicMeteor, attr, entityID[0]);
                 frameToNext = Time.time;
             }
 
-            currActiveTime =Mathf.Max(0,currActiveTime-Time.deltaTime);
+            currActiveTime = Mathf.Max(0, currActiveTime - Time.deltaTime);
             yield return new WaitForSeconds(0f);
         }
 
@@ -159,18 +164,18 @@ public class SkillManager : MonoBehaviour
         maxActiveTime = attr.lifeTime;
         currActiveTime = maxActiveTime;
         float3 pos = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
-        int[] entityID = skillSpawner.Spawn(1, pos, pos,new float3(),
+        int[] entityID = skillSpawner.Spawn(1, pos, pos, new float3(),
             attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime,
             attr.slowRate, attr.buffTime);
         skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
-            .Init(skillSpawner,Upgrades.StoreItems.MagicBlizzard, attr, entityID[0]);
+            .Init(skillSpawner, Upgrades.StoreItems.MagicBlizzard, attr, entityID[0]);
         skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
             .SetConstantForVFX(attr.waitTime);
 
         while (frame - Time.time > 0)
         {
             currActiveTime = Mathf.Max(0, currActiveTime - Time.deltaTime);
-            yield return new WaitForSeconds(0f);
+            yield return new WaitForSeconds(currActiveTime);
         }
 
         currActiveTime = 0;

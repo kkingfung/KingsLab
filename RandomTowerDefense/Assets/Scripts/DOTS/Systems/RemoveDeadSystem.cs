@@ -25,6 +25,7 @@ public class RemoveDeadSystem : JobComponentSystem
 		{
 			if (health.Value <= 0)
 			{
+				ecbc.RemoveComponent<QuadrantEntity>(entityInQueryIndex, entity);
 				ecbc.RemoveComponent<EnemyTag>(entityInQueryIndex, entity);
 				//ecbc.DestroyEntity(entityInQueryIndex, entity);
 			}

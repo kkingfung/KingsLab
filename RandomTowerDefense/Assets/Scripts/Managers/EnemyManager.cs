@@ -8,10 +8,12 @@ public class EnemyManager : MonoBehaviour
     //[SerializeField] private List<AnimationCurve> SpawnRateCurves;
 
     private EnemySpawner enemySpawner;
+    private WaveManager waveManager;
     // Start is called before the first frame update
     void Start()
     {
         enemySpawner = FindObjectOfType<EnemySpawner>();
+        waveManager = FindObjectOfType<WaveManager>();
     }
 
     // Update is called once per frame
@@ -25,8 +27,9 @@ public class EnemyManager : MonoBehaviour
         if (enemySpawner.allMonsterList.ContainsKey(monsterName))
         {
             EnemyAttr attr = EnemyInfo.GetEnemyInfo(monsterName);
-            int[] entityIDList=enemySpawner.Spawn(monsterName, SpawnPoint,new float3(), attr.health,attr.money,
-                attr.damage, attr.radius, attr.speed, attr.time);
+            int[] entityIDList=enemySpawner.Spawn(monsterName, SpawnPoint,new float3(), 
+                attr.health * (1+ 0.3f * waveManager.GetCurrentWaveNum() * waveManager.GetCurrentWaveNum()),attr.money,
+                attr.damage, attr.radius, attr.speed * (1 + 0.02f * waveManager.GetCurrentWaveNum()), attr.time);
         }
     }
 

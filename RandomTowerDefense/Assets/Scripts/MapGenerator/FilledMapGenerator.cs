@@ -89,14 +89,10 @@ public class FilledMapGenerator : MonoBehaviour {
 			stageManager.SpawnPoint[2] = new Coord(currentMap.mapSize.x - 1, currentMap.mapSize.y - 1);
 			stageManager.SpawnPoint[3] = new Coord(0, currentMap.mapSize.y - 1);
 
-			//Remove for Confirmed Open Space
-			foreach (Coord i in stageManager.SpawnPoint)
-				allTileCoords.Remove(i);
+			////Remove for Confirmed Open Space
+			//foreach (Coord i in stageManager.SpawnPoint)
+			//	allTileCoords.Remove(i);
 		}
-
-		allTileCoords.Remove(new Coord(currentMap.mapSize.x - 1, currentMap.mapSize.y - 1));
-		allTileCoords.Remove(new Coord(currentMap.mapSize.x - 1, 0));
-		allTileCoords.Remove(new Coord(0, currentMap.mapSize.y - 1));
 
 		shuffledTileCoords = new Queue<Coord> (Utility.ShuffleArray (allTileCoords.ToArray (), currentMap.seed));
 
@@ -129,6 +125,11 @@ public class FilledMapGenerator : MonoBehaviour {
 		
 		for (int i =0; i < obstacleCount; i ++) {
 			Coord randomCoord = GetRandomCoord();
+			if (randomCoord.x == 0 && randomCoord.y == 0) continue;
+			if (randomCoord.x == currentMap.mapSize.x - 1 && randomCoord.y == 0) continue;
+			if (randomCoord.x == 0 && randomCoord.y == currentMap.mapSize.y - 1) continue;
+			if (randomCoord.x == currentMap.mapSize.x - 1 && randomCoord.y == currentMap.mapSize.y - 1) continue;
+
 			obstacleMap[randomCoord.x,randomCoord.y] = true;
 			currentObstacleCount ++;
 			
@@ -187,6 +188,7 @@ public class FilledMapGenerator : MonoBehaviour {
 	
 	bool MapIsFullyAccessible(bool[,] obstacleMap, int currentObstacleCount) {
 		bool[,] mapFlags = new bool[obstacleMap.GetLength(0),obstacleMap.GetLength(1)];
+
 		Queue<Coord> queue = new Queue<Coord> ();
 		queue.Enqueue (currentMap.mapCentre);
 		mapFlags [currentMap.mapCentre.x, currentMap.mapCentre.y] = true;

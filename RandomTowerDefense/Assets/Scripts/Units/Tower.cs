@@ -92,7 +92,7 @@ public class Tower : MonoBehaviour
     }
     public void Attack()
     {
-        float posAdj = 0;
+        Vector3 posAdj = new Vector3();
 
         switch (type)
         {
@@ -101,7 +101,7 @@ public class Tower : MonoBehaviour
                 {
                     audioSource.PlayOneShot(audioManager.GetAudio("se_Lighting"));
                 }
-                posAdj = 0.2f;
+                posAdj.z = 0.2f;
                 GainExp(ExpPerAttack * 5);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
@@ -109,7 +109,7 @@ public class Tower : MonoBehaviour
                 {
                     audioSource.PlayOneShot(audioManager.GetAudio("se_Snail"));
                 }
-                posAdj = -0.2f;
+                posAdj.z = -0.2f;
                 atkEntityPos = transform.position;
                 GainExp(ExpPerAttack * 2);
                 break;
@@ -119,7 +119,7 @@ public class Tower : MonoBehaviour
                     audioSource.PlayOneShot(audioManager.GetAudio("se_Shot"));
                 }
 
-                posAdj = 0.0f;
+                posAdj.z = 0.0f;
                 GainExp(ExpPerAttack*10);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
@@ -127,13 +127,14 @@ public class Tower : MonoBehaviour
                 {
                     audioSource.PlayOneShot(audioManager.GetAudio("se_MagicFire"));
                 }
-                posAdj = 0.5f;
+                posAdj.z = 0.5f;
+                posAdj.y = 0.15f;
                 atkEntityPos = transform.position;
                 GainExp(ExpPerAttack);
                 break;
         }
         int[] entityID=attackSpawner.Spawn((int)type, this.transform.position
-          + this.transform.forward * posAdj, atkEntityPos, this.transform.localRotation,
+          + this.transform.forward * posAdj.z + this.transform.up * posAdj.y, atkEntityPos, this.transform.localRotation,
           attr.attackSpd*transform.forward, attr.damage, attr.attackRadius,
           attr.attackWaittime, attr.attackLifetime);
         //this.AtkVFX.Add(attackSpawner.GameObjects[entityID[0]]);

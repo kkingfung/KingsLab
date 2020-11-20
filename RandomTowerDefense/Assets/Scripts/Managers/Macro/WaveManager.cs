@@ -7,17 +7,18 @@ using UnityEngine.VFX;
 
 public class WaveManager : MonoBehaviour
 {
-    private readonly float WaveChgSpeedFactor = 2.0f;
+    //private readonly float WaveChgSpeedFactor = 2.0f;
     //private readonly int FireworkMax=120;
     private int TotalWaveNum;
-   private int CurrentWaveNum;
-   private float WaveTimer;
+    private int CurrentWaveNum;
+    private float WaveTimer;
 
-   private StageAttr CurrAttr;
+    private StageAttr CurrAttr;
     private bool inTutorial;
+    private bool allSpawned;
 
     public List<VisualEffect> FireWork;
-    public  List<Text> waveNumUI;
+    public List<Text> waveNumUI;
     [HideInInspector]
     public TextMesh waveNumMesh;
 
@@ -28,7 +29,7 @@ public class WaveManager : MonoBehaviour
     private EnemySpawner enemySpawner;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         CurrAttr = StageInfo.GetStageInfo();
         sceneManager = FindObjectOfType<InGameOperation>();
@@ -38,6 +39,7 @@ public class WaveManager : MonoBehaviour
         TotalWaveNum = CurrAttr.waveNum;
         CurrentWaveNum = 0;
         //fireworkcounter = 0;
+        allSpawned = false;
 
         foreach (Text i in waveNumUI)
         {
@@ -50,7 +52,8 @@ public class WaveManager : MonoBehaviour
             inTutorial = false;
             WaveChg();
         }
-        else {
+        else
+        {
             inTutorial = true;
         }
         WaveTimer = Time.time;
@@ -59,7 +62,8 @@ public class WaveManager : MonoBehaviour
     public int GetTotalWaveNum() { return TotalWaveNum; }
     public int GetCurrentWaveNum() { return CurrentWaveNum; }
 
-    public bool WaveChg() {
+    public bool WaveChg()
+    {
         CurrentWaveNum++;
 
         //fireworkcounter = FireworkMax;
@@ -68,7 +72,7 @@ public class WaveManager : MonoBehaviour
 
         if (CurrentWaveNum > TotalWaveNum)
         {
-            stageManager.SetWin();
+            allSpawned = true;
             return true;
         }
         foreach (Text i in waveNumUI)
@@ -83,7 +87,7 @@ public class WaveManager : MonoBehaviour
         return false;
     }
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         //if (fireworkcounter > 0) {
         //    if (--fireworkcounter == 0) {
@@ -91,9 +95,15 @@ public class WaveManager : MonoBehaviour
         //            i.Stop();
         //    }
         //}
+        if (allSpawned && enemySpawner.AllAliveMonstersList().Count == 0)
+        {
+            stageManager.SetWin();
+            return;
+        }
 
-        if (inTutorial) {
-            if (tutorialManager && tutorialManager.GetTutorialStage()>= TutorialManager.TutorialStageID.TutorialProgress_FirstWave) 
+        if (inTutorial)
+        {
+            if (tutorialManager && tutorialManager.GetTutorialStage() >= TutorialManager.TutorialStageID.TutorialProgress_FirstWave)
             {
                 WaveChg();
                 WaveTimer = Time.time;
@@ -107,8 +117,6 @@ public class WaveManager : MonoBehaviour
                 WaveChg();
                 WaveTimer = Time.time;
             }
-            if (enemySpawner.AllAliveMonstersList().Count <= 0)
-                WaveTimer -= Time.deltaTime * WaveChgSpeedFactor;
         }
     }
 
@@ -117,7 +125,7 @@ public class WaveManager : MonoBehaviour
         float spawnTimer = wave.enmStartTime;
         bool CheckCustomData = sceneManager && (sceneManager.GetCurrIsland() == StageInfo.IslandNum - 1);
         bool isSpawning = true;
-        while (stageManager.GetResult()==0 && isSpawning)
+        while (stageManager.GetResult() == 0 && isSpawning)
         {
             if (tutorialManager && tutorialManager.WaitingResponds) { }
             else { spawnTimer -= Time.deltaTime; }
@@ -147,7 +155,7 @@ public class WaveManager : MonoBehaviour
                                 attr.time
                                 );
 
-                            yield return new WaitForSeconds(wave.enmSpawnPeriod / Mathf.Max(StageInfo.spawnSpeedEx,1));
+                            yield return new WaitForSeconds(wave.enmSpawnPeriod / Mathf.Max(StageInfo.spawnSpeedEx, 1));
                         }
                     }
                 }

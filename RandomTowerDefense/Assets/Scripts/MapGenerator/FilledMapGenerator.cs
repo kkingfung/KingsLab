@@ -25,21 +25,21 @@ public class FilledMapGenerator : MonoBehaviour {
 	public float outlinePercent;
 	
 	public float tileSize;
-	List<Coord> allTileCoords;
-	Queue<Coord> shuffledTileCoords;
-	Queue<Coord> shuffledOpenTileCoords;
-	Transform[,] tileMap;
-	List<Pillar> PillarList;
+	private List<Coord> allTileCoords;
+	private Queue<Coord> shuffledTileCoords;
+	private Queue<Coord> shuffledOpenTileCoords;
+	private Transform[,] tileMap;
+	private List<Pillar> PillarList;
 
-	Map currentMap;
+	private Map currentMap;
 
 	[HideInInspector]
 	public Vector3 originPos;
-	private InGameOperation sceneManager;
-	private StageManager stageManager;
+	public InGameOperation sceneManager;
+	public StageManager stageManager;
 	private void Start() {
-		sceneManager = FindObjectOfType<InGameOperation>();
-		stageManager = FindObjectOfType<StageManager>();
+		//sceneManager = FindObjectOfType<InGameOperation>();
+		//stageManager = FindObjectOfType<StageManager>();
 	}
 	//public void followParentCam(bool toFollow) {
 	//	FollowFakeParent = toFollow;

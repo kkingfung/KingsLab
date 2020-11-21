@@ -7,13 +7,13 @@ public class EnemyManager : MonoBehaviour
 {
     //[SerializeField] private List<AnimationCurve> SpawnRateCurves;
 
-    private EnemySpawner enemySpawner;
-    private WaveManager waveManager;
+    public EnemySpawner enemySpawner;
+    public WaveManager waveManager;
     // Start is called before the first frame update
     void Start()
     {
-        enemySpawner = FindObjectOfType<EnemySpawner>();
-        waveManager = FindObjectOfType<WaveManager>();
+        //enemySpawner = FindObjectOfType<EnemySpawner>();
+        //waveManager = FindObjectOfType<WaveManager>();
     }
 
     // Update is called once per frame

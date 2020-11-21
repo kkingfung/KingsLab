@@ -66,7 +66,7 @@ public class EnemySpawner : MonoBehaviour
     //For input
     //private Transform[] transforms;
 
-    private FilledMapGenerator mapGenerator;
+    public FilledMapGenerator mapGenerator;
     // private CastleSpawner castleSpawner;
 
     private void Awake()
@@ -138,7 +138,7 @@ public class EnemySpawner : MonoBehaviour
     {
         EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         //castleSpawner = FindObjectOfType<CastleSpawner>();
-        mapGenerator = FindObjectOfType<FilledMapGenerator>();
+       // mapGenerator = FindObjectOfType<FilledMapGenerator>();
 
         //Prepare input
         GameObjects = new GameObject[count];

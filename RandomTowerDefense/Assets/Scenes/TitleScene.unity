@@ -4956,6 +4956,11 @@ MonoBehaviour:
   BoidSpawn: {fileID: 1563674594}
   LandscapeFadeImg: {fileID: 548952175}
   PortraitFadeImg: {fileID: 100818823}
+  AudioManager: {fileID: 219264886}
+  CameraManager: {fileID: 1216493098}
+  CanvaManager: {fileID: 2046766742}
+  InputManager: {fileID: 675448556}
+  GyroscopeManager: {fileID: 1991764197}
 --- !u!1 &1016641448
 GameObject:
   m_ObjectHideFlags: 0
@@ -8072,6 +8077,7 @@ MonoBehaviour:
     - {fileID: 2078689478}
     - {fileID: 389719381}
     - {fileID: 1836258549}
+  sceneManager: {fileID: 0}
 --- !u!1 &1427594117
 GameObject:
   m_ObjectHideFlags: 0
@@ -12069,6 +12075,9 @@ MonoBehaviour:
   LeftShake: 0
   RightShake: 0
   VerticalShake: 0
+  inputManager: {fileID: 675448556}
+  cameraManager: {fileID: 1216493098}
+  sceneManager: {fileID: 946681069}
 --- !u!4 &1991764198
 Transform:
   m_ObjectHideFlags: 0

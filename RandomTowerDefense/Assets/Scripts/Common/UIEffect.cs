@@ -114,7 +114,7 @@ public class UIEffect : MonoBehaviour
                 if (((inputManager.GetUseTouch()&&Input.touchCount > 0) || 
                     (inputManager.GetUseTouch()==false && Input.mousePosition.x > 0 && Input.mousePosition.y > 0 && 
                     Input.mousePosition.x < Screen.width && Input.mousePosition.y < Screen.height)) &&
-                        Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("RecordBroad")))
+                        Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("RecordBroad")))
                 {
                     for (int i= 0; i < relatedObjs.Count; ++i)
                     {

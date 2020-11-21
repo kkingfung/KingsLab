@@ -27,37 +27,45 @@ public class PlayerManager : MonoBehaviour
     [HideInInspector]
     public bool isChecking;
 
-    GameObject CurrentSkill;
-    GameObject StockOperator;
+    //private GameObject CurrentSkill;
+    private GameObject StockOperator;
 
-    InGameOperation sceneManager;
-    EnemyManager enemyManager;
-    StageManager stageManager;
-    InputManager inputManager;
-    TowerManager towerManager;
-    FilledMapGenerator mapGenerator;
-    SkillManager skillManager;
+    public InGameOperation sceneManager;
+    public EnemyManager enemyManager;
+    public StageManager stageManager;
+    public InputManager inputManager;
+    public TowerManager towerManager;
+    public FilledMapGenerator mapGenerator;
+    public SkillManager skillManager;
 
     public GameObject TowerRaycastResult;
+    private RaycastHit hitPillar;
+    private RaycastHit hitArena;
+
     private void Start()
     {
-        sceneManager = FindObjectOfType<InGameOperation>();
-        enemyManager = FindObjectOfType<EnemyManager>();
-        stageManager = FindObjectOfType<StageManager>();
-        inputManager = FindObjectOfType<InputManager>();
-        towerManager = FindObjectOfType<TowerManager>();
-        skillManager = FindObjectOfType<SkillManager>();
-        mapGenerator = FindObjectOfType<FilledMapGenerator>();
+        //sceneManager = FindObjectOfType<InGameOperation>();
+        //enemyManager = FindObjectOfType<EnemyManager>();
+        //stageManager = FindObjectOfType<StageManager>();
+        //inputManager = FindObjectOfType<InputManager>();
+        //towerManager = FindObjectOfType<TowerManager>();
+        //skillManager = FindObjectOfType<SkillManager>();
+        //mapGenerator = FindObjectOfType<FilledMapGenerator>();
     }
 
     private void Update()
     {
+        Physics.Simulate(Time.fixedDeltaTime);
         TowerRaycastResult = null;
+        hitPillar = new RaycastHit();
+        hitArena = new RaycastHit();
         if (sceneManager)
         {
-            if(sceneManager.GetOptionStatus() == false)
-            TowerRaycastResult = CheckTowerRaycast();
-            towerManager.UpdateInfo(TowerRaycastResult);
+            if (sceneManager.GetOptionStatus() == false && sceneManager.currScreenShown==0)
+            {
+                TowerRaycastResult = CheckTowerRaycast();
+                towerManager.UpdateInfo(TowerRaycastResult);
+            }
         }
     }
 
@@ -74,7 +82,7 @@ public class PlayerManager : MonoBehaviour
         {
             ray = refCamP.ScreenPointToRay(new Vector2(Screen.width * 0.5f, Screen.height * 0.5f));
         }
-        Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("Tower"));
+        Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("Tower"));
         if (hit.transform)
             return hit.transform.gameObject;
         return null;
@@ -149,19 +157,23 @@ public class PlayerManager : MonoBehaviour
                 enemyManager.SpawnBonusBoss(2, mapGenerator.CoordToPosition(stageManager.SpawnPoint[Random.Range(1, 3)]));
                 break;
             case (int)Upgrades.StoreItems.MagicMeteor:
-                CurrentSkill = skillManager.MeteorSkill(hitPosition);
+                //CurrentSkill = 
+                skillManager.MeteorSkill(hitPosition);
                 isSkillActive = true;
                 break;
             case (int)Upgrades.StoreItems.MagicBlizzard:
-                CurrentSkill = skillManager.BlizzardSkill(hitPosition);
+                //CurrentSkill = 
+                skillManager.BlizzardSkill(hitPosition);
                 isSkillActive = true;
                 break;
             case (int)Upgrades.StoreItems.MagicMinions:
-                CurrentSkill = skillManager.MinionsSkill(hitPosition);
+                //CurrentSkill = 
+                skillManager.MinionsSkill(hitPosition);
                 isSkillActive = true;
                 break;
             case (int)Upgrades.StoreItems.MagicPetrification:
-                CurrentSkill = skillManager.PetrificationSkill(hitPosition);
+                //CurrentSkill = 
+                    skillManager.PetrificationSkill(hitPosition);
                 isSkillActive = true;
                 break;
             default:
@@ -171,6 +183,9 @@ public class PlayerManager : MonoBehaviour
 
     public Vector3 RaycastTest(int layer)
     {
+        if (layer == LayerMask.GetMask("Arena") && hitArena.transform != null)
+            return hitArena.point;
+
         Ray ray = new Ray();
         RaycastHit hit = new RaycastHit();
 
@@ -184,7 +199,9 @@ public class PlayerManager : MonoBehaviour
             ray = refCamP.ScreenPointToRay(new Vector2(Screen.width * 0.5f, Screen.height * 0.5f));
         }
 
-        Physics.Raycast(ray, out hit, 1000, layer);
+        Physics.Raycast(ray, out hit, 100, layer);
+        if (layer == LayerMask.GetMask("Arena"))
+            hitArena = hit;
         return hit.point;
     }
 
@@ -203,7 +220,6 @@ public class PlayerManager : MonoBehaviour
         }
 
         Ray ray;
-        RaycastHit hit = new RaycastHit();
 
         //Get Ray according to orientation
         if (Screen.width > Screen.height)
@@ -226,16 +242,19 @@ public class PlayerManager : MonoBehaviour
         }
         else
         {
-            if (TowerRaycastResult!=null)
+            if (TowerRaycastResult != null)
             {
-                towerManager.MergeTower(TowerRaycastResult, hit.point);
+                towerManager.MergeTower(TowerRaycastResult);
             }
-            else if (Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("Pillar")))
+            else 
             {
-                towerManager.BuildTower(hit.transform.gameObject);
+                if (hitPillar.transform == null)
+                    Physics.Raycast(ray, out hitPillar, 100, LayerMask.GetMask("Pillar"));
+                if (hitPillar.transform != null)
+                    towerManager.BuildTower(hitPillar.transform.gameObject);
             }
         }
-        return hit.point;
+        return hitPillar.point;
     }
 
     public bool StockCheckExist()

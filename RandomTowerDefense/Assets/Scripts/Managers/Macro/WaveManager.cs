@@ -23,19 +23,19 @@ public class WaveManager : MonoBehaviour
     public TextMesh waveNumMesh;
 
     //private int fireworkcounter;
-    private InGameOperation sceneManager;
-    private TutorialManager tutorialManager;
-    private StageManager stageManager;
-    private EnemySpawner enemySpawner;
+    public InGameOperation sceneManager;
+    public TutorialManager tutorialManager;
+    public StageManager stageManager;
+    public EnemySpawner enemySpawner;
 
     // Start is called before the first frame update
     private void Start()
     {
         CurrAttr = StageInfo.GetStageInfo();
-        sceneManager = FindObjectOfType<InGameOperation>();
-        stageManager = FindObjectOfType<StageManager>();
-        enemySpawner = FindObjectOfType<EnemySpawner>();
-        tutorialManager = FindObjectOfType<TutorialManager>();
+        //sceneManager = FindObjectOfType<InGameOperation>();
+        //stageManager = FindObjectOfType<StageManager>();
+        //enemySpawner = FindObjectOfType<EnemySpawner>();
+        //tutorialManager = FindObjectOfType<TutorialManager>();
         TotalWaveNum = CurrAttr.waveNum;
         CurrentWaveNum = 0;
         //fireworkcounter = 0;
@@ -137,11 +137,11 @@ public class WaveManager : MonoBehaviour
                     {
                         break;
                     }
-                    if (wave.enmDetail[i].waveID < CurrentWaveNum)
+                    else if (wave.enmDetail[i].waveID < CurrentWaveNum)
                     {
                         continue;
                     }
-                    if (wave.enmDetail[i].waveID == CurrentWaveNum)
+                    else if (wave.enmDetail[i].waveID == CurrentWaveNum)
                     {
                         for (int j = wave.enmDetail[i].enmNum; j > 0; --j)
                         {

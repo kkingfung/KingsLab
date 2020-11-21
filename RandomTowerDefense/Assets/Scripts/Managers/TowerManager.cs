@@ -12,12 +12,6 @@ public class TowerManager : MonoBehaviour
     private readonly int NumTowerType = 4;
 
     [Header("Tower Settings")]
-    //ToTowerSpawner
-    //public List<GameObject> TowerNightmare;
-    //public List<GameObject> TowerSoulEater;
-    //public List<GameObject> TowerTerrorBringer;
-    //public List<GameObject> TowerUsurper;
-
     public GameObject TowerBuild;
     public GameObject TowerLevelUp;
     public GameObject TowerDisappear;
@@ -49,12 +43,15 @@ public class TowerManager : MonoBehaviour
     private List<Text> TargetInfoText;
     public List<Slider> TargetInfoSlider;
 
-    private ResourceManager resourceManager;
-    private FilledMapGenerator filledMapGenerator;
-    //private InGameOperation sceneManager;
-    //private TutorialManager tutorialManager;
-    private TowerSpawner towerSpawner;
-    private CastleSpawner castleSpawner;
+    public ResourceManager resourceManager;
+    public FilledMapGenerator filledMapGenerator;
+    //public InGameOperation sceneManager;
+    //public TutorialManager tutorialManager;
+    public TowerSpawner towerSpawner;
+    public CastleSpawner castleSpawner;
+
+    public AudioManager audioManager;
+    public AttackSpawner attackSpawner;
 
     // Start is called before the first frame update
     void Start()
@@ -64,12 +61,12 @@ public class TowerManager : MonoBehaviour
         TowerTerrorBringerList = new List<GameObject>();
         TowerUsurperList = new List<GameObject>();
 
-        resourceManager = FindObjectOfType<ResourceManager>();
-        filledMapGenerator = FindObjectOfType<FilledMapGenerator>();
+        //resourceManager = FindObjectOfType<ResourceManager>();
+        //filledMapGenerator = FindObjectOfType<FilledMapGenerator>();
         //sceneManager = FindObjectOfType<InGameOperation>();
-        towerSpawner = FindObjectOfType<TowerSpawner>();
+        //towerSpawner = FindObjectOfType<TowerSpawner>();
         //tutorialManager = FindObjectOfType<TutorialManager>();
-        castleSpawner = FindObjectOfType<CastleSpawner>();
+        //castleSpawner = FindObjectOfType<CastleSpawner>();
 
         TargetInfoText = new List<Text>();
         foreach (GameObject i in TargetInfo)
@@ -130,9 +127,9 @@ public class TowerManager : MonoBehaviour
         if (rank == 1 && filledMapGenerator.ChkPillarStatusEmpty(pillar) == false) return;
 
         Vector3 location = pillar.transform.position + Vector3.up * filledMapGenerator.UpdatePillarStatus(pillar);
-        BuildTower(pillar,location, rank);
+        BuildTower(pillar, location, rank);
     }
-        public void BuildTower(GameObject pillar, Vector3 location, int rank = 1)
+    public void BuildTower(GameObject pillar, Vector3 location, int rank = 1)
     {
         GameObject tower;
         int[] entityIDList;
@@ -142,13 +139,17 @@ public class TowerManager : MonoBehaviour
         }
 
         {
+            Tower script;
+
             switch (UnityEngine.Random.Range(0, NumTowerType))
             {
                 case (int)TowerInfo.TowerInfoID.Enum_TowerNightmare:
                     entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerNightmare,
                         location, castleSpawner.castle.transform.position);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
-                    tower.GetComponent<Tower>().newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerNightmareAura,
+                    script = tower.GetComponent<Tower>();
+                    script.linkingManagers(towerSpawner, audioManager, attackSpawner, filledMapGenerator);
+                    script.newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerNightmareAura,
                         TowerInfo.TowerInfoID.Enum_TowerNightmare, 1, rank);
                     tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
                     TowerNightmareList.Add(tower);
@@ -157,7 +158,9 @@ public class TowerManager : MonoBehaviour
                     entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater,
                         location, castleSpawner.castle.transform.position);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
-                    tower.GetComponent<Tower>().newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerSoulEaterAura,
+                    script = tower.GetComponent<Tower>();
+                    script.linkingManagers(towerSpawner, audioManager, attackSpawner, filledMapGenerator);
+                    script.newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerSoulEaterAura,
                         TowerInfo.TowerInfoID.Enum_TowerSoulEater, 1, rank);
                     tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
                     TowerSoulEaterList.Add(tower);
@@ -166,7 +169,9 @@ public class TowerManager : MonoBehaviour
                     entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer,
                         location, castleSpawner.castle.transform.position);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
-                    tower.GetComponent<Tower>().newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerTerrorBringerAura,
+                    script = tower.GetComponent<Tower>();
+                    script.linkingManagers(towerSpawner, audioManager, attackSpawner, filledMapGenerator);
+                    script.newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerTerrorBringerAura,
                         TowerInfo.TowerInfoID.Enum_TowerTerrorBringer, 1, rank);
                     tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
                     TowerTerrorBringerList.Add(tower);
@@ -175,18 +180,19 @@ public class TowerManager : MonoBehaviour
                     entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerUsurper,
                         location, castleSpawner.castle.transform.position);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
-                    tower.GetComponent<Tower>().newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerUsurperAura,
+                    script = tower.GetComponent<Tower>();
+                    script.linkingManagers(towerSpawner, audioManager, attackSpawner, filledMapGenerator);
+                    script.newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerUsurperAura,
                         TowerInfo.TowerInfoID.Enum_TowerUsurper, 1, rank);
                     tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
                     TowerUsurperList.Add(tower);
                     break;
             }
         }
-        GameObject temp = Instantiate<GameObject>(TowerBuild, location, Quaternion.identity);
-        Destroy(temp, 5.0f);
+        GameObject.Instantiate<GameObject>(TowerBuild, location, Quaternion.identity);
     }
 
-    public bool MergeTower(GameObject targetedTower, Vector3 spawnPoint)
+    public bool MergeTower(GameObject targetedTower)
     {
         //Check Type
         TowerInfo.TowerInfoID type;
@@ -334,11 +340,12 @@ public class TowerManager : MonoBehaviour
                 TowerUsurperList.Remove(targetedTower);
                 break;
         }
-        targetedTowerScript.Destroy();
+        targetedTowerScript.enabled=false;
     }
 
     public void SellTower(Tower targetedTower)
     {
+        Debug.Log(1);
         if (resourceManager.SellTower(targetedTower))
         {
             filledMapGenerator.UpdatePillarStatus(targetedTower.gameObject,0);

@@ -12,13 +12,13 @@ public class EnvironmentManager : MonoBehaviour
     private float shaderInput;
     private int maxSkyboxCubemap = 3;
     public bool showTerrain = false;
-    //private TimeManager timeManager;
-    private InGameOperation sceneManager;
+    //public TimeManager timeManager;
+    public InGameOperation sceneManager;
 
     // Start is called before the first frame update
     private void Start()
     {
-        sceneManager = FindObjectOfType<InGameOperation>();
+        //sceneManager = FindObjectOfType<InGameOperation>();
         stageID = sceneManager?sceneManager.GetCurrIsland():0;
         shaderInput = Time.time;
         //timeManager = FindObjectOfType<TimeManager>();

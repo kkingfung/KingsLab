@@ -29,13 +29,13 @@ public class ScoreCalculation : MonoBehaviour
 
     private TouchScreenKeyboard keyboard;
     private bool CancelKeybroad = false;
-    private InGameOperation sceneManager;
-    private RecordManager recordManager;
-    private StageManager stageManager;
+    public InGameOperation sceneManager;
+    public RecordManager recordManager;
+    public StageManager stageManager;
 
     private List<UIEffect> uiEffect;
     //For Calculation
-    private ResourceManager resourceManager;
+    public ResourceManager resourceManager;
 
     // Start is called before the first frame update
     private void Start()
@@ -43,10 +43,10 @@ public class ScoreCalculation : MonoBehaviour
         Inputting = false;
         playerName = "AAAAA";
         rank = 0;
-        sceneManager = FindObjectOfType<InGameOperation>();
-        recordManager = FindObjectOfType<RecordManager>();
-        stageManager = FindObjectOfType<StageManager>();
-        resourceManager = FindObjectOfType<ResourceManager>();
+        //sceneManager = FindObjectOfType<InGameOperation>();
+        //recordManager = FindObjectOfType<RecordManager>();
+        //stageManager = FindObjectOfType<StageManager>();
+        //resourceManager = FindObjectOfType<ResourceManager>();
         uiEffect = new List<UIEffect>();
         for (int i = 0; i < ScoreObj.Count; ++i)
             uiEffect.Add(ScoreObj[i].gameObject.GetComponent<UIEffect>());

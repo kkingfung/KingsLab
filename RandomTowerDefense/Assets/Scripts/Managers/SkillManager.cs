@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.VFX;
 
 public class SkillManager : MonoBehaviour
 {
@@ -10,13 +11,12 @@ public class SkillManager : MonoBehaviour
     public GameObject FireFieldSkAura;
     public GameObject BlizzardFieldSkAura;
 
-    private PlayerManager playerManager;
-    private EnemySpawner enemySpawner;
+    public PlayerManager playerManager;
+    public EnemySpawner enemySpawner;
 
     public Camera MainCamera;
 
     //private GameObject Skill;
-    private GameObject SkillAura;
 
     private Dictionary<Upgrades.StoreItems, int> SkillUpgrader;
 
@@ -25,18 +25,21 @@ public class SkillManager : MonoBehaviour
     private readonly int[] SkillExp = { 5, 10, 15, 19, 23, 26, 29, 31, 34, 35 };
     private readonly int ExpPerActivation = 5;
 
-    private SkillSpawner skillSpawner;
+    public SkillSpawner skillSpawner;
 
     public float maxActiveTime;
     public float currActiveTime;
 
     public List<Slider> SkillActivenessSlider;
 
+    private VisualEffect SkillAuraSnow;
+    private VisualEffect SkillAuraFire;
+
     void Start()
     {
-        playerManager = FindObjectOfType<PlayerManager>();
-        enemySpawner = FindObjectOfType<EnemySpawner>();
-        skillSpawner = FindObjectOfType<SkillSpawner>();
+        //playerManager = FindObjectOfType<PlayerManager>();
+        //enemySpawner = FindObjectOfType<EnemySpawner>();
+        //skillSpawner = FindObjectOfType<SkillSpawner>();
         SkillUpgrader = new Dictionary<Upgrades.StoreItems, int>();
         SkillUpgrader.Add(Upgrades.StoreItems.MagicMeteor, 0);
         SkillUpgrader.Add(Upgrades.StoreItems.MagicBlizzard, 0);
@@ -44,6 +47,9 @@ public class SkillManager : MonoBehaviour
         SkillUpgrader.Add(Upgrades.StoreItems.MagicPetrification, 0);
         maxActiveTime = 1;
         currActiveTime = 0;
+
+        SkillAuraSnow = null;
+        SkillAuraFire = null;
     }
 
     private void Update()
@@ -77,38 +83,52 @@ public class SkillManager : MonoBehaviour
         }
     }
 
-    public GameObject MeteorSkill(Vector3 hitPos)
+    public void MeteorSkill(Vector3 hitPos)
     {
-        SkillAura = Instantiate(FireFieldSkAura, hitPos, Quaternion.identity);
-
+        if (SkillAuraFire == null)
+        {
+            GameObject SkillAura = Instantiate(FireFieldSkAura, hitPos, Quaternion.identity);
+            SkillAura.transform.parent = this.transform;
+            SkillAuraFire = SkillAura.GetComponent<VisualEffect>();
+        }
+        else
+        {
+            SkillAuraFire.enabled = true;
+        }
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillMeteor");
         attr.damage = attr.damage * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor) * Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor) * 0.6f);
         GainExp(Upgrades.StoreItems.MagicMeteor, ExpPerActivation);
         StartCoroutine(MeteorSkillCoroutine(attr));
-        return SkillAura;
     }
-    public GameObject BlizzardSkill(Vector3 hitPos)
+    public void BlizzardSkill(Vector3 hitPos)
     {
-        SkillAura = Instantiate(BlizzardFieldSkAura, hitPos, Quaternion.identity);
-
+        if (SkillAuraSnow == null)
+        {
+            GameObject SkillAura = Instantiate(BlizzardFieldSkAura, hitPos, Quaternion.identity);
+            SkillAura.transform.parent = this.transform;
+            SkillAuraSnow = SkillAura.GetComponent<VisualEffect>();
+        }
+        else
+        {
+            SkillAuraSnow.enabled = true;
+        }
+       
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillBlizzard");
         attr.radius = attr.radius * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * 0.3f);
         attr.damage = attr.damage * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * 0.3f);
         GainExp(Upgrades.StoreItems.MagicBlizzard, ExpPerActivation);
 
         StartCoroutine(BlizzardSkillCoroutine(attr));
-        return SkillAura;
     }
-    public GameObject PetrificationSkill(Vector3 hitPos)
+    public void PetrificationSkill(Vector3 hitPos)
     {
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillPetrification");
         attr.buffTime = attr.buffTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification) * Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification) * 0.6f);
         GainExp(Upgrades.StoreItems.MagicPetrification, ExpPerActivation);
 
         StartCoroutine(PetrificationCoroutine(attr));
-        return null;
     }
-    public GameObject MinionsSkill(Vector3 hitPos)
+    public void MinionsSkill(Vector3 hitPos)
     {
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillMinions");
         attr.cycleTime = attr.cycleTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * 0.4f);
@@ -116,7 +136,6 @@ public class SkillManager : MonoBehaviour
         GainExp(Upgrades.StoreItems.MagicMinions, ExpPerActivation);
 
         StartCoroutine(MinionsSkillCoroutine(attr));
-        return null;
     }
 
     public void SkillEnd()
@@ -154,7 +173,7 @@ public class SkillManager : MonoBehaviour
         currActiveTime = 0;
         GainExp(Upgrades.StoreItems.MagicMeteor,
             SkillExp[Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor)]);
-        Destroy(SkillAura);
+        SkillAuraFire.enabled = false;
         SkillEnd();
     }
 
@@ -181,7 +200,7 @@ public class SkillManager : MonoBehaviour
         currActiveTime = 0;
         GainExp(Upgrades.StoreItems.MagicBlizzard,
             SkillExp[Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard)]);
-        Destroy(SkillAura);
+        SkillAuraSnow.enabled = false;
         SkillEnd();
     }
 

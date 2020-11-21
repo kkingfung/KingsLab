@@ -13,7 +13,7 @@ public class RecordManager : MonoBehaviour
     public List<UIRecordList> AllRecords;
 
     List<SaveObject> stageRecords;
-    private InGameOperation sceneManager;
+    public InGameOperation sceneManager;
     private void OnEnable()
     {
         stageRecords = new List<SaveObject>();
@@ -38,7 +38,7 @@ public class RecordManager : MonoBehaviour
 
     private void Start()
     {
-        sceneManager = FindObjectOfType<InGameOperation>();
+        //sceneManager = FindObjectOfType<InGameOperation>();
     }
     public int RecordComparison(int stageID, string name, int score) {
         stageRecords[stageID]=stageRecords[stageID].InsertObject(stageID, name, score);

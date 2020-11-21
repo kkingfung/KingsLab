@@ -51,11 +51,11 @@ public class TitleOperation: ISceneChange
     private FadeEffect PortraitFade;
 
     //Manager
-    private AudioManager AudioManager;
-    private CameraManager CameraManager;
-    private CanvaManager CanvaManager;
-    private InputManager InputManager;
-    private GyroscopeManager GyroscopeManager;
+    public AudioManager AudioManager;
+    public CameraManager CameraManager;
+    public CanvaManager CanvaManager;
+    public InputManager InputManager;
+    public GyroscopeManager GyroscopeManager;
 
     private bool isOpening;
     private bool isWaiting;
@@ -121,11 +121,11 @@ public class TitleOperation: ISceneChange
         currentRecStatusBottomCam = 1;
         nextRecStatusBottomCam = (currentRecStatusBottomCam % maxRecStatus) + 1;
 
-        InputManager = FindObjectOfType<InputManager>();
-        AudioManager = FindObjectOfType<AudioManager>();
-        CameraManager = FindObjectOfType<CameraManager>();
-        CanvaManager = FindObjectOfType<CanvaManager>();
-        GyroscopeManager = FindObjectOfType<GyroscopeManager>();
+        //InputManager = FindObjectOfType<InputManager>();
+        //AudioManager = FindObjectOfType<AudioManager>();
+        //CameraManager = FindObjectOfType<CameraManager>();
+        //CanvaManager = FindObjectOfType<CanvaManager>();
+        //GyroscopeManager = FindObjectOfType<GyroscopeManager>();
 
         LandscapeFade = LandscapeFadeImg.GetComponent<FadeEffect>();
         PortraitFade = PortraitFadeImg.GetComponent<FadeEffect>();

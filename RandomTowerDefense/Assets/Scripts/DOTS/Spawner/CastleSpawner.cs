@@ -59,7 +59,7 @@ public class CastleSpawner : MonoBehaviour
 
         Entities = new NativeArray<Entity>(count, Allocator.Persistent);
         var archetype = EntityManager.CreateArchetype(
-             typeof(Health), typeof(Radius), 
+             typeof(Health), typeof(Radius), typeof(Damage),
             ComponentType.ReadOnly<Translation>()
             //ComponentType.ReadOnly<Hybrid>()
             );
@@ -106,6 +106,10 @@ public class CastleSpawner : MonoBehaviour
             EntityManager.SetComponentData(Entities[i], new Radius
             {
                 Value = radius,
+            });
+            EntityManager.SetComponentData(Entities[i], new Damage
+            {
+                Value = -1,
             });
             EntityManager.SetComponentData(Entities[i], new Translation
             {

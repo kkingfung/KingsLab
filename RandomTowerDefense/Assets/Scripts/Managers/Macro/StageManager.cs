@@ -23,25 +23,26 @@ public class StageManager : MonoBehaviour
     public GameObject EnemySpawnPortPrefab;
     public GameObject WaveDisplayMeshPrefab;
 
-    private InGameOperation sceneManager;
-    private AudioManager audioManager;
-    private TimeManager timeManager;
-    private WaveManager waveManager;
-    private ScoreCalculation scoreCalculation;
+    public InGameOperation sceneManager;
+    public AudioManager audioManager;
+    public TimeManager timeManager;
+    public WaveManager waveManager;
+    public ScoreCalculation scoreCalculation;
+
     public List<GameObject> GameClearCanva;
     public List<GameObject> GameOverCanva;
 
     public Material CoveringMateral;
     private readonly float FadeRate = 0.02f;
 
-    private FilledMapGenerator mapGenerator;
+    public FilledMapGenerator mapGenerator;
 
     private GameObject[] EnemySpawnPort;
     private MeshDestroy[] castleDestroy;
 
     [HideInInspector]
     public int CastleEntityID;
-    private CastleSpawner castleSpawner;
+    public CastleSpawner castleSpawner;
 
     private int result = 0;
     private bool isReady = false;
@@ -56,13 +57,13 @@ public class StageManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        sceneManager = FindObjectOfType<InGameOperation>();
-        mapGenerator = FindObjectOfType<FilledMapGenerator>();
-        audioManager = FindObjectOfType<AudioManager>();
-        timeManager = FindObjectOfType<TimeManager>();
-        waveManager = FindObjectOfType<WaveManager>();
-        scoreCalculation = FindObjectOfType<ScoreCalculation>();
-        castleSpawner = FindObjectOfType<CastleSpawner>();
+        //sceneManager = FindObjectOfType<InGameOperation>();
+        //mapGenerator = FindObjectOfType<FilledMapGenerator>();
+        //audioManager = FindObjectOfType<AudioManager>();
+        //timeManager = FindObjectOfType<TimeManager>();
+        //waveManager = FindObjectOfType<WaveManager>();
+        //scoreCalculation = FindObjectOfType<ScoreCalculation>();
+        //castleSpawner = FindObjectOfType<CastleSpawner>();
 
         result = (int)GameResult.NotEndedYet;
         foreach (GameObject i in GameClearCanva)
@@ -100,8 +101,10 @@ public class StageManager : MonoBehaviour
                     waveManager.waveNumMesh = WaveDisplayMesh.GetComponent<TextMesh>();
                     waveManager.waveNumMesh.text = "WAVE 1";
                 }
+
                 if (sceneManager.CheckIfTutorial()&& i!=1)  continue;
                 EnemySpawnPort[i] = Instantiate(EnemySpawnPortPrefab, pos, Quaternion.identity);
+
             }
         }
     }

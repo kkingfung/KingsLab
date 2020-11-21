@@ -73,16 +73,16 @@ public class InGameOperation : ISceneChange
     private bool isScreenChanging = false;
 
     //Manager
-    private AudioManager AudioManager;
-    private CameraManager CameraManager;
-    private CanvaManager CanvaManager;
-    private InputManager InputManager;
-    private GyroscopeManager GyroscopeManager;
-    private ResourceManager resourceManager;
-    //private WaveManager waveManager;
-    private TimeManager timeManager;
-    private TutorialManager tutorialManager;
-    private ScoreCalculation scoreCalculation;
+    public AudioManager AudioManager;
+    public CameraManager CameraManager;
+    public CanvaManager CanvaManager;
+    public InputManager InputManager;
+    public GyroscopeManager GyroscopeManager;
+    public ResourceManager resourceManager;
+    //public WaveManager waveManager;
+    public TimeManager timeManager;
+    public TutorialManager tutorialManager;
+    public ScoreCalculation scoreCalculation;
 
     //Prevent DoubleHit
     private float TimeRecord = 0;
@@ -208,16 +208,16 @@ public class InGameOperation : ISceneChange
         LandscapeFade = LandscapeFadeImg.GetComponent<FadeEffect>();
         PortraitFade = PortraitFadeImg.GetComponent<FadeEffect>();
 
-        InputManager = FindObjectOfType<InputManager>();
-        AudioManager = FindObjectOfType<AudioManager>();
-        CameraManager = FindObjectOfType<CameraManager>();
-        CanvaManager = FindObjectOfType<CanvaManager>();
-        GyroscopeManager = FindObjectOfType<GyroscopeManager>();
+        //InputManager = FindObjectOfType<InputManager>();
+        //AudioManager = FindObjectOfType<AudioManager>();
+        //CameraManager = FindObjectOfType<CameraManager>();
+        //CanvaManager = FindObjectOfType<CanvaManager>();
+        //GyroscopeManager = FindObjectOfType<GyroscopeManager>();
         //waveManager = FindObjectOfType<WaveManager>();
-        resourceManager = FindObjectOfType<ResourceManager>();
-        timeManager = FindObjectOfType<TimeManager>();
-        scoreCalculation = FindObjectOfType<ScoreCalculation>();
-        tutorialManager = FindObjectOfType<TutorialManager>();
+        //resourceManager = FindObjectOfType<ResourceManager>();
+        //timeManager = FindObjectOfType<TimeManager>();
+        //scoreCalculation = FindObjectOfType<ScoreCalculation>();
+        //tutorialManager = FindObjectOfType<TutorialManager>();
 
         if (tutorialManager && isTutorial == false)
         {
@@ -554,6 +554,7 @@ public class InGameOperation : ISceneChange
 
         currScreenShown = nextScreenShown;
         isScreenChanging = false;
+        GyroscopeManager.setTempInactive();
     }
 
     #endregion

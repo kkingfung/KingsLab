@@ -23,7 +23,7 @@ public class CastleToEnemy : JobComponentSystem
 
 	protected override JobHandle OnUpdate(JobHandle inputDependencies)
 	{
-		castleGroup = GetEntityQuery(typeof(Health), typeof(Radius),
+		castleGroup = GetEntityQuery(typeof(Health), typeof(Radius), typeof(Damage),
 		ComponentType.ReadOnly<Translation>(), ComponentType.ReadOnly<CastleTag>());
 
 		enemyGroup = GetEntityQuery(typeof(Health), typeof(Radius), typeof(Damage),
@@ -32,6 +32,7 @@ public class CastleToEnemy : JobComponentSystem
 		var transformType = GetComponentTypeHandle<Translation>(true);
 		var healthType = GetComponentTypeHandle<Health>(false);
 		var radiusType = GetComponentTypeHandle<Radius>(true);
+		var damageType = GetComponentTypeHandle<Damage>(false);
 
 		JobHandle jobHandle = inputDependencies;
 
@@ -43,6 +44,7 @@ public class CastleToEnemy : JobComponentSystem
 				healthType = healthType,
 				translationType = transformType,
 				radius = radiusType,
+				damageRecord = damageType,
 				targetDamage = enemyGroup.ToComponentDataArray<Damage>(Allocator.TempJob),
 				targetRadius = enemyGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
 				targetTrans = enemyGroup.ToComponentDataArray<Translation>(Allocator.TempJob),
@@ -56,10 +58,7 @@ public class CastleToEnemy : JobComponentSystem
 			var jobEvC = new CollisionJobEvC()
 			{
 				healthType = healthType,
-				translationType = transformType,
-				radius = radiusType,
-				targetRadius = castleGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
-				targetTrans = castleGroup.ToComponentDataArray<Translation>(Allocator.TempJob)
+				targetRecord = castleGroup.ToComponentDataArray<Damage>(Allocator.TempJob)
 			};
 			jobHandle = jobEvC.Schedule(enemyGroup, inputDependencies);
 			jobHandle.Complete();
@@ -88,44 +87,28 @@ public class CastleToEnemy : JobComponentSystem
 	[BurstCompile]
 	struct CollisionJobEvC : IJobChunk
 	{
-		[ReadOnly] public ComponentTypeHandle<Radius> radius;
 		public ComponentTypeHandle<Health> healthType;
-		[ReadOnly] public ComponentTypeHandle<Translation> translationType;
-
 		[DeallocateOnJobCompletion]
-		public NativeArray<Radius> targetRadius;
-		[DeallocateOnJobCompletion]
-		public NativeArray<Translation> targetTrans;
+		public NativeArray<Damage> targetRecord;
 
 		public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
 		{
 			var chunkHealths = chunk.GetNativeArray(healthType);
-			var chunkTranslations = chunk.GetNativeArray(translationType);
-			var chunkRadius = chunk.GetNativeArray(radius);
 
 			for (int i = 0; i < chunk.Count; ++i)
 			{
-				int damage = 0;
 				Health health = chunkHealths[i];
 				if (health.Value <= 0) continue;
-				Radius radius = chunkRadius[i];
-				Translation pos = chunkTranslations[i];
 
-				for (int j = 0; j < targetTrans.Length && damage <= 0; j++)
+				for (int j = 0; j < targetRecord.Length ; j++)
 				{
-					Translation pos2 = targetTrans[j];
-
-					if (CheckCollision(pos.Value, pos2.Value, targetRadius[j].Value + radius.Value))
+					if (targetRecord[j].Value < 0)
+						return;
+					if (targetRecord[j].Value == chunkIndex)
 					{
-						damage += 1;
+						health.Value = 0;
+						chunkHealths[i] = health;
 					}
-
-				}
-
-				if (damage > 0)
-				{
-					health.Value = 0;
-					chunkHealths[i] = health;
 				}
 			}
 		}
@@ -138,6 +121,7 @@ public class CastleToEnemy : JobComponentSystem
 	{
 		[ReadOnly] public ComponentTypeHandle<Radius> radius;
 		public ComponentTypeHandle<Health> healthType;
+		public ComponentTypeHandle<Damage> damageRecord;
 		[ReadOnly] public ComponentTypeHandle<Translation> translationType;
 
 		[DeallocateOnJobCompletion]
@@ -154,6 +138,7 @@ public class CastleToEnemy : JobComponentSystem
 			var chunkHealths = chunk.GetNativeArray(healthType);
 			var chunkTranslations = chunk.GetNativeArray(translationType);
 			var chunkRadius = chunk.GetNativeArray(radius);
+			var chunkDamage = chunk.GetNativeArray(damageRecord);
 
 			for (int i = 0; i < chunk.Count; ++i)
 			{
@@ -162,21 +147,26 @@ public class CastleToEnemy : JobComponentSystem
 				if (health.Value <= 0) continue;
 				Radius radius = chunkRadius[i];
 				Translation pos = chunkTranslations[i];
+				Damage damageRec = chunkDamage[i];
+				damageRec.Value = -1;
 
 				for (int j = 0; j < targetTrans.Length; j++)
 				{
 					if (targetHealth[j].Value <= 0) continue;
 					Translation pos2 = targetTrans[j];
-
 					if (CheckCollision(pos.Value, pos2.Value, targetRadius[j].Value + radius.Value))
 					{
+						damageRec.Value = j;
 						damage += targetDamage[j].Value;
+						break;
 					}
 				}
 
 				if (damage > 0)
 				{
+					
 					health.Value -= damage;
+					chunkDamage[i] = damageRec;
 					chunkHealths[i] = health;
 				}
 			}

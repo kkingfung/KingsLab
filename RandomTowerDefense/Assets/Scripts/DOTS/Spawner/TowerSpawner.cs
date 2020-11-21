@@ -8,11 +8,33 @@ using UnityEngine.Jobs;
 
 public class TowerSpawner : MonoBehaviour
 {
+    private const int MonsterColorNumber = 4;
     private readonly int count = 100;
     public static TowerSpawner Instance { get; private set; }
     public List<GameObject> PrefabObject;
 
     private EntityManager EntityManager;
+
+    //ToTowerSpawner
+    public List<GameObject> TowerNightmareRank1;
+    public List<GameObject> TowerNightmareRank2;
+    public List<GameObject> TowerNightmareRank3;
+    public List<GameObject> TowerNightmareRank4;
+
+    public List<GameObject> TowerSoulEaterRank1;
+    public List<GameObject> TowerSoulEaterRank2;
+    public List<GameObject> TowerSoulEaterRank3;
+    public List<GameObject> TowerSoulEaterRank4;
+
+    public List<GameObject> TowerTerrorBringerRank1;
+    public List<GameObject> TowerTerrorBringerRank2;
+    public List<GameObject> TowerTerrorBringerRank3;
+    public List<GameObject> TowerTerrorBringerRank4;
+
+    public List<GameObject> TowerUsurperRank1;
+    public List<GameObject> TowerUsurperRank2;
+    public List<GameObject> TowerUsurperRank3;
+    public List<GameObject> TowerUsurperRank4;
 
     //Array
     [HideInInspector]
@@ -41,7 +63,7 @@ public class TowerSpawner : MonoBehaviour
             Entities.Dispose();
 
         //if (TransformAccessArray.isCreated)
-            //TransformAccessArray.Dispose();
+        //TransformAccessArray.Dispose();
 
         //Disposing Array
         if (targetArray.IsCreated)
@@ -51,6 +73,26 @@ public class TowerSpawner : MonoBehaviour
     }
     private void Start()
     {
+        TowerNightmareRank1 = new List<GameObject>();
+        TowerNightmareRank2 = new List<GameObject>();
+        TowerNightmareRank3 = new List<GameObject>();
+        TowerNightmareRank4 = new List<GameObject>();
+
+        TowerSoulEaterRank1 = new List<GameObject>();
+        TowerSoulEaterRank2 = new List<GameObject>();
+        TowerSoulEaterRank3 = new List<GameObject>();
+        TowerSoulEaterRank4 = new List<GameObject>();
+
+        TowerTerrorBringerRank1 = new List<GameObject>();
+        TowerTerrorBringerRank2 = new List<GameObject>();
+        TowerTerrorBringerRank3 = new List<GameObject>();
+        TowerTerrorBringerRank4 = new List<GameObject>();
+
+        TowerUsurperRank1 = new List<GameObject>();
+        TowerUsurperRank2 = new List<GameObject>();
+        TowerUsurperRank3 = new List<GameObject>();
+        TowerUsurperRank4 = new List<GameObject>();
+
         EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
         //Prepare input
@@ -76,7 +118,8 @@ public class TowerSpawner : MonoBehaviour
         UpdateArrays();
     }
 
-    public void UpdateArrays() {
+    public void UpdateArrays()
+    {
         for (int i = 0; i < GameObjects.Length; ++i)
         {
             if (GameObjects[i] == null) continue;
@@ -85,7 +128,7 @@ public class TowerSpawner : MonoBehaviour
                 Target target = EntityManager.GetComponentData<Target>(Entities[i]);
                 targetArray[i] = target.targetPos;
                 hastargetArray[i] = EntityManager.HasComponent<EnemyTag>(target.targetEntity);
-                Debug.DrawLine(target.targetPos, GameObjects[i].transform.position,Color.cyan);
+                Debug.DrawLine(target.targetPos, GameObjects[i].transform.position, Color.cyan);
             }
             else
             {
@@ -101,8 +144,213 @@ public class TowerSpawner : MonoBehaviour
         for (int i = 0; i < count && spawnCnt < num; ++i)
         {
             if (GameObjects[i] != null) continue;
+            bool reuse = false;
 
-            GameObjects[i] = Instantiate(PrefabObject[prefabID], transform);
+            switch (prefabID)
+            {
+                case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerNightmare + 0:
+                    foreach (GameObject j in TowerNightmareRank1)
+                    {
+                        if (j.activeSelf) continue;
+                        GameObjects[i] = j;
+                        reuse = true;
+                        break;
+                    }
+                    break;
+                case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerNightmare + 1:
+                    foreach (GameObject j in TowerNightmareRank2)
+                    {
+                        if (j.activeSelf) continue;
+                        GameObjects[i] = j;
+                        reuse = true;
+                        break;
+                    }
+                    break;
+                case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerNightmare + 2:
+                    foreach (GameObject j in TowerNightmareRank3)
+                    {
+                        if (j.activeSelf) continue;
+                        GameObjects[i] = j;
+                        reuse = true;
+                        break;
+                    }
+                    break;
+                case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerNightmare + 3:
+                    foreach (GameObject j in TowerNightmareRank4)
+                    {
+                        if (j.activeSelf) continue;
+                        GameObjects[i] = j;
+                        reuse = true;
+                        break;
+                    }
+                    break;
+                case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater + 0:
+                    foreach (GameObject j in TowerSoulEaterRank1)
+                    {
+                        if (j.activeSelf) continue;
+                        GameObjects[i] = j;
+                        reuse = true;
+                        break;
+                    }
+                    break;
+                case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater + 1:
+                    foreach (GameObject j in TowerSoulEaterRank2)
+                    {
+                        if (j.activeSelf) continue;
+                        GameObjects[i] = j;
+                        reuse = true;
+                        break;
+                    }
+                    break;
+                case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater + 2:
+                    foreach (GameObject j in TowerSoulEaterRank3)
+                    {
+                        if (j.activeSelf) continue;
+                        GameObjects[i] = j;
+                        reuse = true;
+                        break;
+                    }
+                    break;
+                case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater + 3:
+                    foreach (GameObject j in TowerSoulEaterRank4)
+                    {
+                        if (j.activeSelf) continue;
+                        GameObjects[i] = j;
+                        reuse = true;
+                        break;
+                    }
+                    break;
+                case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer + 0:
+                    foreach (GameObject j in TowerTerrorBringerRank1)
+                    {
+                        if (j.activeSelf) continue;
+                        GameObjects[i] = j;
+                        reuse = true;
+                        break;
+                    }
+                    break;
+                case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer + 1:
+                    foreach (GameObject j in TowerTerrorBringerRank2)
+                    {
+                        if (j.activeSelf) continue;
+                        GameObjects[i] = j;
+                        reuse = true;
+                        break;
+                    }
+                    break;
+                case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer + 2:
+                    foreach (GameObject j in TowerTerrorBringerRank3)
+                    {
+                        if (j.activeSelf) continue;
+                        GameObjects[i] = j;
+                        reuse = true;
+                        break;
+                    }
+                    break;
+                case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer + 3:
+                    foreach (GameObject j in TowerTerrorBringerRank4)
+                    {
+                        if (j.activeSelf) continue;
+                        GameObjects[i] = j;
+                        reuse = true;
+                        break;
+                    }
+                    break;
+                case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerUsurper + 0:
+                    foreach (GameObject j in TowerUsurperRank1)
+                    {
+                        if (j.activeSelf) continue;
+                        GameObjects[i] = j;
+                        reuse = true;
+                        break;
+                    }
+                    break;
+                case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerUsurper + 1:
+                    foreach (GameObject j in TowerUsurperRank2)
+                    {
+                        if (j.activeSelf) continue;
+                        GameObjects[i] = j;
+                        reuse = true;
+                        break;
+                    }
+                    break;
+                case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerUsurper + 2:
+                    foreach (GameObject j in TowerUsurperRank3)
+                    {
+                        if (j.activeSelf) continue;
+                        GameObjects[i] = j;
+                        reuse = true;
+                        break;
+                    }
+                    break;
+                case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerUsurper + 3:
+                    foreach (GameObject j in TowerUsurperRank4)
+                    {
+                        if (j.activeSelf) continue;
+                        GameObjects[i] = j;
+                        reuse = true;
+                        break;
+                    }
+                    break;
+            }
+            if (reuse == false)
+            {
+                GameObjects[i] = Instantiate(PrefabObject[prefabID], transform);
+                switch (prefabID)
+                {
+                    case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerNightmare + 0:
+                        TowerNightmareRank1.Add(GameObjects[i]);
+                        break;
+                    case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerNightmare + 1:
+                        TowerNightmareRank2.Add(GameObjects[i]);
+                        break;
+                    case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerNightmare + 2:
+                        TowerNightmareRank3.Add(GameObjects[i]);
+                        break;
+                    case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerNightmare + 3:
+                        TowerNightmareRank4.Add(GameObjects[i]);
+                        break;
+                    case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater + 0:
+                        TowerSoulEaterRank1.Add(GameObjects[i]);
+                        break;
+                    case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater + 1:
+                        TowerSoulEaterRank2.Add(GameObjects[i]);
+                        break;
+                    case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater + 2:
+                        TowerSoulEaterRank3.Add(GameObjects[i]);
+                        break;
+                    case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater + 3:
+                        TowerSoulEaterRank4.Add(GameObjects[i]);
+                        break;
+                    case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer + 0:
+                        TowerTerrorBringerRank1.Add(GameObjects[i]);
+                        break;
+                    case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer + 1:
+                        TowerTerrorBringerRank2.Add(GameObjects[i]);
+                        break;
+                    case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer + 2:
+                        TowerTerrorBringerRank3.Add(GameObjects[i]);
+                        break;
+                    case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer + 3:
+                        TowerTerrorBringerRank4.Add(GameObjects[i]);
+                        break;
+                    case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerUsurper + 0:
+                        TowerUsurperRank1.Add(GameObjects[i]);
+                        break;
+                    case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerUsurper + 1:
+                        TowerUsurperRank2.Add(GameObjects[i]);
+                        break;
+                    case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerUsurper + 2:
+                        TowerUsurperRank3.Add(GameObjects[i]);
+                        break;
+                    case MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerUsurper + 3:
+                        TowerUsurperRank4.Add(GameObjects[i]);
+                        break;
+                }
+            }
+            else {
+                GameObjects[i].SetActive(true);
+            }
             GameObjects[i].transform.position = Position;
             GameObjects[i].transform.localRotation = Quaternion.identity;
             //transforms[i] = GameObjects[i].transform;
@@ -112,7 +360,7 @@ public class TowerSpawner : MonoBehaviour
             //AddtoEntities
             EntityManager.SetComponentData(Entities[i], new WaitingTime
             {
-                Value =float.MaxValue,
+                Value = float.MaxValue,
             });
 
             EntityManager.SetComponentData(Entities[i], new Radius

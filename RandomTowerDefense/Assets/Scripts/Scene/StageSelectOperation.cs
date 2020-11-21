@@ -57,11 +57,11 @@ public class StageSelectOperation : ISceneChange
     private int IslandEnabled = 0;
 
     //Manager
-    private AudioManager AudioManager;
-    //private CameraManager CameraManager;
-    private CanvaManager CanvaManager;
-    //private InputManager InputManager;
-    private GyroscopeManager GyroscopeManager;
+    public AudioManager AudioManager;
+    //public CameraManager CameraManager;
+    public CanvaManager CanvaManager;
+    //public InputManager InputManager;
+    public GyroscopeManager GyroscopeManager;
 
     private TouchScreenKeyboard keyboard;
     private bool CancelKeybroad =false;
@@ -104,10 +104,10 @@ public class StageSelectOperation : ISceneChange
         PortraitFade = PortraitFadeImg.GetComponent<FadeEffect>();
 
         //InputManager = FindObjectOfType<InputManager>();
-        AudioManager = FindObjectOfType<AudioManager>();
+        //AudioManager = FindObjectOfType<AudioManager>();
         //CameraManager = FindObjectOfType<CameraManager>();
-        CanvaManager = FindObjectOfType<CanvaManager>();
-        GyroscopeManager = FindObjectOfType<GyroscopeManager>();
+        //CanvaManager = FindObjectOfType<CanvaManager>();
+        //GyroscopeManager = FindObjectOfType<GyroscopeManager>();
 
         AudioManager.PlayAudio("bgm_Title",true);
 

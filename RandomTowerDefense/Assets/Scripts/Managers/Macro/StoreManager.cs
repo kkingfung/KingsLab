@@ -20,9 +20,9 @@ public class StoreManager : MonoBehaviour
     public List<TextMesh> SkillPriceTextObj;
     public List<TextMesh> SkillLvTextObj;
 
-    private InGameOperation sceneManager;
-    private StageManager stageManager;
-    private ResourceManager resourceManager;
+    public InGameOperation sceneManager;
+    public StageManager stageManager;
+    public ResourceManager resourceManager;
 
     private int[] pendToKart= { 0,0,0,0};
     private int[] costToKart = { 0, 0, 0, 0 };
@@ -47,9 +47,9 @@ public class StoreManager : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        sceneManager = FindObjectOfType<InGameOperation>();
-        resourceManager = FindObjectOfType<ResourceManager>();
-        stageManager = FindObjectOfType<StageManager>();
+        //sceneManager = FindObjectOfType<InGameOperation>();
+        //resourceManager = FindObjectOfType<ResourceManager>();
+        //stageManager = FindObjectOfType<StageManager>();
 
         ItemPrice = new Dictionary<Upgrades.StoreItems, int[]>();
 
@@ -71,15 +71,20 @@ public class StoreManager : MonoBehaviour
 
     private void Update()
     {
-        for (int i = 0, s = bonusBossCooldown.Length; i < s; ++i) {
-            if (bonusBossCooldown[i] > 0) {
-                bonusBossCooldown[i]--;
+        if (sceneManager.currScreenShown != 0)
+        {
+            for (int i = 0, s = bonusBossCooldown.Length; i < s; ++i)
+            {
+                if (bonusBossCooldown[i] > 0)
+                {
+                    bonusBossCooldown[i]--;
+                }
+                if (sceneManager.CheckIfTutorial())
+                    bonusBossCooldown[i] = 99;
             }
-            if (sceneManager.CheckIfTutorial())
-                bonusBossCooldown[i] = 99;
-        }
 
-        UpdatePrice();
+            UpdatePrice();
+        }
     }
 
     private void UpdatePrice() {

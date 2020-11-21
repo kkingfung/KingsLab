@@ -19,8 +19,8 @@ public class TimeManager : MonoBehaviour
 
 	private bool isControl = false;
 
-	private InGameOperation sceneManager;
-	private InputManager inputManager;
+	public InGameOperation sceneManager;
+	public InputManager inputManager;
 	void Start()
 	{
 		timeScaleId = 0;
@@ -31,8 +31,8 @@ public class TimeManager : MonoBehaviour
 		foreach (Text i in text)
 			i.text = "X" + (int)Time.timeScale;
 
-		sceneManager = FindObjectOfType<InGameOperation>();
-		inputManager = FindObjectOfType<InputManager>();
+		//sceneManager = FindObjectOfType<InGameOperation>();
+		//inputManager = FindObjectOfType<InputManager>();
 	}
 	void Update()
 	{

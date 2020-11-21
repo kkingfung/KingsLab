@@ -38,8 +38,9 @@ public class GyroscopeManager : MonoBehaviour
 
     private float timeRecord;
 
-    private CameraManager cameraManager;
-    private ISceneChange sceneManager;
+    public InputManager inputManager;
+    public CameraManager cameraManager;
+    public ISceneChange sceneManager;
     private bool isActive;
     private void Awake()
     {
@@ -53,7 +54,7 @@ public class GyroscopeManager : MonoBehaviour
 
     private void Start()
     {
-        isFunctioning = FindObjectOfType<InputManager>().GetUseTouch();
+        isFunctioning = inputManager.GetUseTouch();
         sensitivity = PlayerPrefs.GetFloat("Gyro",0);
         foreach (Slider i in senseSlider)
             i.value = sensitivity;

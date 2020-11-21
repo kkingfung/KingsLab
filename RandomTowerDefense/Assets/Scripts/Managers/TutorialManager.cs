@@ -32,11 +32,11 @@ public class TutorialManager : MonoBehaviour
     public List<GameObject> InstructionSprite_Protrait;
     public List<Button> HistoryIcons;
 
-    private InGameOperation SceneManager;
-    private TowerSpawner towerSpawner;
-    private EnemySpawner enemySpawner;
-    private SkillSpawner skillSpawner;
-    private TimeManager timeManager;
+    public InGameOperation SceneManager;
+    public TowerSpawner towerSpawner;
+    public EnemySpawner enemySpawner;
+    public SkillSpawner skillSpawner;
+    public TimeManager timeManager;
 
     // Start is called before the first frame update
     void Start()
@@ -49,11 +49,11 @@ public class TutorialManager : MonoBehaviour
         fullText = "";
         reviewStage = 0;
  
-        SceneManager = FindObjectOfType<InGameOperation>();
-        towerSpawner = FindObjectOfType<TowerSpawner>();
-        enemySpawner = FindObjectOfType<EnemySpawner>();
-        skillSpawner = FindObjectOfType<SkillSpawner>();
-        timeManager = FindObjectOfType<TimeManager>();
+        //SceneManager = FindObjectOfType<InGameOperation>();
+        //towerSpawner = FindObjectOfType<TowerSpawner>();
+        //enemySpawner = FindObjectOfType<EnemySpawner>();
+        //skillSpawner = FindObjectOfType<SkillSpawner>();
+        //timeManager = FindObjectOfType<TimeManager>();
         if (SceneManager.CheckIfTutorial() == false) {
             DestroyAllRelated();
         }

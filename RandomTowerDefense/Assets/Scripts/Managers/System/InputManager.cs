@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 
-public class MyMobileInput
-{
-    public readonly int maxTouch = 2;
-    public Touch[] TouchInfo; //0:first finger 1:second fingers
-    public bool[] isTouch; //0:one finger 1:two fingers
+//public class MyMobileInput
+//{
+//    public Touch[] TouchInfo; //0:first finger 1:second fingers
+//    public bool[] isTouch; //0:one finger 1:two fingers
 
-    public MyMobileInput()
-    {
-        TouchInfo = new Touch[2];
-        isTouch = new bool[2];
-    }
-};
+//    public MyMobileInput()
+//    {
+//        TouchInfo = new Touch[2];
+//        isTouch = new bool[2];
+//    }
+//};
 
 [System.Serializable]
 public class InputManager : MonoBehaviour
 {
+    public readonly int maxTouch = 1;
     public enum DragDirectionSel
     {
         DragToLeft=1,
@@ -48,7 +48,7 @@ public class InputManager : MonoBehaviour
     //Mobile Input
     private bool isAndroid;
     private bool isiOS;
-    private MyMobileInput mobileInput;
+    //private MyMobileInput mobileInput;
     private bool useTouch;
     [HideInInspector]
     public bool isDragging;
@@ -73,7 +73,7 @@ public class InputManager : MonoBehaviour
 
     private void Awake()
     {
-        mobileInput = new MyMobileInput();
+        //mobileInput = new MyMobileInput();
 
         //Checking Platform
         isAndroid = (Application.platform == RuntimePlatform.Android);
@@ -95,11 +95,22 @@ public class InputManager : MonoBehaviour
     private void Update()
     {
         //if (tutorialManager && tutorialManager.WaitingResponds) return;
-        if (Buttons.Count+ButtonsCenter.Count > 0) { RaycastTest(); }
+        if (sceneManager) {
+            if (sceneManager.currScreenShown != 0 && 
+                Buttons.Count + ButtonsCenter.Count > 0) 
+            { 
+                RaycastTest();
+            }
+        }
+        else if (Buttons.Count+ButtonsCenter.Count > 0)
+            RaycastTest(); 
 
-        if (useTouch) UpdateTouchInfo();
-        else UpdateMouseInfo();
-        if (LBMTest) LBMTesting(); //Only for Loading Scene
+        if (useTouch) 
+            UpdateTouchInfo();
+        else 
+            UpdateMouseInfo();
+        if (LBMTest) 
+            LBMTesting(); //Only for Loading Scene
 
 
         //ClickEffect
@@ -215,11 +226,11 @@ public class InputManager : MonoBehaviour
         //For Arena Scene/Screen Only
         if (sceneManager && sceneManager.currScreenShown != (int)InGameOperation.ScreenShownID.SSIDArena) return;
 
-        for (int touchId = 0; touchId < Math.Min(TouchCount, mobileInput.maxTouch); ++touchId)
+        for (int touchId = 0; touchId < Math.Min(TouchCount, maxTouch); ++touchId)
         {
             Touch touch = Input.GetTouch(touchId);
-            mobileInput.TouchInfo[touchId] = touch;
-            mobileInput.isTouch[touchId] = true;
+            //mobileInput.TouchInfo[touchId] = touch;
+            //mobileInput.isTouch[touchId] = true;
             if (touchId != 0) continue;
             switch (touch.phase)
             {
@@ -312,8 +323,8 @@ public class InputManager : MonoBehaviour
         int TouchCount = Input.touchCount;
 
         //reset Boolean
-        mobileInput.isTouch[0] = false;
-        mobileInput.isTouch[1] = false;
+        //mobileInput.isTouch[0] = false;
+        //mobileInput.isTouch[1] = false;
 
         if (TouchCount>0)
         {
@@ -378,8 +389,8 @@ public class InputManager : MonoBehaviour
 
         if (useTouch)
         {
-            LBMTest.Interaction(mobileInput.isTouch[0], !mobileInput.isTouch[0], mobileInput.TouchInfo[0].position, true);
-            LBMTest.Interaction(mobileInput.isTouch[1], !mobileInput.isTouch[1], mobileInput.TouchInfo[1].position, true);
+           // LBMTest.Interaction(mobileInput.isTouch[0], !mobileInput.isTouch[0], mobileInput.TouchInfo[0].position, true);
+           // LBMTest.Interaction(mobileInput.isTouch[1], !mobileInput.isTouch[1], mobileInput.TouchInfo[1].position, true);
         }
         else
             LBMTest.Interaction(Input.GetMouseButton(0), !Input.GetMouseButton(0), Input.mousePosition, true);
@@ -387,7 +398,7 @@ public class InputManager : MonoBehaviour
 
     public bool GetAnyInput()
     {
-        return mobileInput.isTouch[0] || Input.GetMouseButton(0);
+        return Input.touchCount>0 || Input.GetMouseButton(0);
     }
 
     private RaycastHit RaycastTest()
@@ -418,21 +429,27 @@ public class InputManager : MonoBehaviour
               
                 if (Input.GetTouch(t.fingerId).phase == TouchPhase.Ended)
                 {
-                    if ((Physics.Raycast(ray2, out hit2, 1000, LayerMask.GetMask("ButtonLayer")) && 
-                        Physics.Raycast(ray, out hit, 1000, LayerMask.GetMask("ButtonLayer")))
-                    && Buttons.Contains(hit.transform.gameObject))
+                    if (Buttons.Count > 0)
                     {
-                        RaycastFunction raycastFunction = hit.transform.GetComponent<RaycastFunction>();
-                        if (hit.transform== hit2.transform && raycastFunction)
-                            raycastFunction.ActionFunc();
-                        break;
+                        if ((Physics.Raycast(ray2, out hit2, 100, LayerMask.GetMask("ButtonLayer")) &&
+                            Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("ButtonLayer")))
+                        && Buttons.Contains(hit.transform.gameObject))
+                        {
+                            RaycastFunction raycastFunction = hit.transform.GetComponent<RaycastFunction>();
+                            if (hit.transform == hit2.transform && raycastFunction)
+                                raycastFunction.ActionFunc();
+                            break;
+                        }
                     }
-                    if ((Input.GetTouch(t.fingerId).position-posTap).sqrMagnitude<touchTapDiff &&
-                         Physics.Raycast(ray3, out hit3, 1000, LayerMask.GetMask("StoreLayer"))
-                         && ButtonsCenter.Contains(hit3.transform.gameObject))
+                    if (ButtonsCenter.Count > 0 && sceneManager.currScreenShown!=0)
                     {
-                        hit3.transform.GetComponent<RaycastFunction>().ActionFunc();
-                        break;
+                        if ((Input.GetTouch(t.fingerId).position - posTap).sqrMagnitude < touchTapDiff &&
+                         Physics.Raycast(ray3, out hit3, 100, LayerMask.GetMask("StoreLayer"))
+                         && ButtonsCenter.Contains(hit3.transform.gameObject))
+                        {
+                            hit3.transform.GetComponent<RaycastFunction>().ActionFunc();
+                            break;
+                        }
                     }
                 }
             }
@@ -449,7 +466,9 @@ public class InputManager : MonoBehaviour
                 ray = refCamP.ScreenPointToRay(Input.mousePosition);
                 ray2 = refCamP.ScreenPointToRay(posTap);
             }
-            if ((Physics.Raycast(ray2, out hit2)&& Physics.Raycast(ray, out hit)) && (Buttons.Contains(hit.transform.gameObject)|| ButtonsCenter.Contains(hit.transform.gameObject)))
+
+            if ((Physics.Raycast(ray2, out hit2, 100) && Physics.Raycast(ray, out hit,100)) && 
+                (Buttons.Contains(hit.transform.gameObject)|| ButtonsCenter.Contains(hit.transform.gameObject)))
             {
                 RaycastFunction raycastFunction = hit.transform.GetComponent<RaycastFunction>();
                 if (hit.transform == hit2.transform && raycastFunction)

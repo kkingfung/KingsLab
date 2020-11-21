@@ -26,7 +26,6 @@ public class Tower : MonoBehaviour
 
     //private List<GameObject> AtkVFX;
     private GameObject auraVFX;
-    private GameObject lvupVFX;
 
     private GameObject auraVFXPrefab;
     private GameObject lvupVFXPrefab;
@@ -50,6 +49,7 @@ public class Tower : MonoBehaviour
     private FilledMapGenerator filledMapGenerator;
 
     private float3 oriScale;
+    private bool newlySpawned;
     private void Awake()
     {
         atkCounter = 0;
@@ -60,19 +60,31 @@ public class Tower : MonoBehaviour
 
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         //defaultTarget = GameObject.FindGameObjectWithTag("DefaultTag");
+        newlySpawned = true;
     }
 
     private void Start()
     {
-        audioManager = FindObjectOfType<AudioManager>();
-        if (towerSpawner == null) towerSpawner = FindObjectOfType<TowerSpawner>();
-        attackSpawner = FindObjectOfType<AttackSpawner>();
-        filledMapGenerator = FindObjectOfType<FilledMapGenerator>();
+        //towerSpawner = FindObjectOfType<TowerSpawner>();
+        //audioManager = FindObjectOfType<AudioManager>();
+        //attackSpawner = FindObjectOfType<AttackSpawner>();
+        //filledMapGenerator = FindObjectOfType<FilledMapGenerator>();
 
         oriScale = transform.localScale;
         transform.localScale = new Vector3();
-
         StartCoroutine(StartAnim());
+    }
+
+    private void OnEnable() {
+        if (newlySpawned == false) {
+            transform.localScale = new Vector3();
+            StartCoroutine(StartAnim());
+        }
+    }
+
+    private void OnDisable()
+    {
+        newlySpawned = false;
     }
 
     void Update()
@@ -164,19 +176,32 @@ public class Tower : MonoBehaviour
         StartCoroutine(EndAnim());
     }
 
-    public void newTower(int entityID,TowerSpawner towerSpawner,GameObject pillar, GameObject LevelUpVFX, GameObject AuraVFX, TowerInfo.TowerInfoID type, int lv = 1, int rank = 1)
+    public void newTower(int entityID,TowerSpawner towerSpawner,GameObject pillar, 
+        GameObject LevelUpVFX, GameObject AuraVFX, TowerInfo.TowerInfoID type, 
+        int lv = 1, int rank = 1)
     {
         this.towerSpawner = towerSpawner;
         this.type = type;
-        this.level = lv;
         this.rank = rank;
         this.pillar = pillar;
         this.entityID = entityID;
         auraVFXPrefab = AuraVFX;
         lvupVFXPrefab = LevelUpVFX;
         this.auraVFX = GameObject.Instantiate(auraVFXPrefab, this.transform.position, Quaternion.Euler(90f, 0, 0));
-        this.lvupVFX = GameObject.Instantiate(lvupVFXPrefab, this.transform.position, Quaternion.identity);
-        lvupVFXComponent = this.lvupVFX.GetComponent<VisualEffect>();
+        this.auraVFX.transform.parent = this.transform;
+        this.lvupVFXComponent = pillar.GetComponentInChildren<VisualEffect>();
+
+        if (this.lvupVFXComponent == null)
+        {
+            GameObject lvupVFX = GameObject.Instantiate(lvupVFXPrefab, this.transform.position, Quaternion.identity);
+            lvupVFX.transform.parent = pillar.transform;
+            lvupVFXComponent = lvupVFX.GetComponentInChildren<VisualEffect>();
+        }
+        else
+        {
+            this.lvupVFXComponent.enabled = true;
+        }
+        
         switch (type)
         {
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
@@ -194,17 +219,27 @@ public class Tower : MonoBehaviour
         }
 
         exp = 0;
-        UpdateAttr();
+        SetLevel(lv);
+    }
+
+    public void linkingManagers(TowerSpawner towerSpawner, AudioManager audioManager, AttackSpawner attackSpawner, FilledMapGenerator filledMapGenerator)
+    {
+        this.towerSpawner = towerSpawner;
+        this.audioManager = audioManager;
+        this.attackSpawner = attackSpawner;
+        this.filledMapGenerator = filledMapGenerator;
     }
 
     public void GainExp(int exp)
     {
         this.exp += exp;
+        int reqExp = RequiredExp();
         //Level Lv Formula
-        if (this.exp > RequiredExp())
+        while (this.exp > reqExp)
         {
+            this.exp -= reqExp;
+            reqExp = RequiredExp();
             LevelUp();
-            this.exp = 0;
         }
     }
 
@@ -317,9 +352,10 @@ public class Tower : MonoBehaviour
 
         if (auraVFX)
             Destroy(auraVFX);
-        if (lvupVFX)
-            Destroy(lvupVFX);
-        Destroy(this.gameObject);
+        lvupVFXComponent.enabled = false;
+
+        this.gameObject.SetActive(false);
+        //Destroy(this.gameObject);
     }
 
     private IEnumerator StartAnim()

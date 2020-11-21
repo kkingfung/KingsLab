@@ -40,11 +40,12 @@ public class GyroscopeManager : MonoBehaviour
 
     private CameraManager cameraManager;
     private ISceneChange sceneManager;
+    private bool isActive;
     private void Awake()
     {
         Gyro = Input.gyro;
         Gyro.enabled = true;
-
+        isActive = true;
         //For Locking Screen Orientation (Spare)
         //Screen.orientation = ScreenOrientation.LandscapeLeft;
         //Portrait//PortraitUpsideDown//LandscapeRight//AutoRotation
@@ -70,7 +71,7 @@ public class GyroscopeManager : MonoBehaviour
 
     private void Update()
     {
-        if (isFunctioning)
+        if (isFunctioning && isActive)
         {
             UpdateGyroYPR();
             GyroModify();
@@ -93,6 +94,25 @@ public class GyroscopeManager : MonoBehaviour
         }
     }
 
+    public void setTempInactive() {
+        isActive = false;
+        StartCoroutine(WaitToResume());
+    }
+
+    private IEnumerator WaitToResume()
+    {
+        float timeRecord = 0;
+        while (timeRecord < 0.2f)
+        {
+            timeRecord += Time.deltaTime;
+            yaw = 0;
+            pitch = 0;
+            ResetReference();
+            yield return new WaitForSeconds(0);
+        }
+
+        isActive = true;
+    }
     public void SetGyro(float value) {
         sensitivity = value;
         foreach (Slider i in senseSlider)

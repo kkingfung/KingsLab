@@ -82,10 +82,10 @@ public class ISceneChange : MonoBehaviour
         {
             OrientationLand = Screen.width > Screen.height;
         }
-        else 
-        {
-            Screen.orientation = OrientationLand? ScreenOrientation.Landscape: ScreenOrientation.Portrait;
-        }
+        //else 
+        //{
+        //    Screen.orientation = OrientationLand? ScreenOrientation.Landscape: ScreenOrientation.Portrait;
+        //}
         foreach (GameObject i in LandscapeObjs)
         {
             SpriteRenderer spr = i.GetComponent<SpriteRenderer>();

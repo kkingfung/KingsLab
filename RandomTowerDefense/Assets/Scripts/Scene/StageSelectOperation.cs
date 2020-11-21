@@ -70,6 +70,7 @@ public class StageSelectOperation : ISceneChange
     private float TimeRecord = 0;
     private const float TimeWait = 0.5f;
 
+    private bool lateStart;
     //CameraOperation
     private readonly float maxIslandChgTime = 0.2f;
 
@@ -81,7 +82,7 @@ public class StageSelectOperation : ISceneChange
     // Start is called before the first frame update
     private void Start()
     {
-        base.SceneIn();
+        lateStart = true;
 
         IslandNow = PlayerPrefs.GetInt("IslandNow",0);
         IslandNext = IslandNow;
@@ -108,7 +109,7 @@ public class StageSelectOperation : ISceneChange
         CanvaManager = FindObjectOfType<CanvaManager>();
         GyroscopeManager = FindObjectOfType<GyroscopeManager>();
 
-        AudioManager.PlayAudio("bgm_Title");
+        AudioManager.PlayAudio("bgm_Title",true);
 
         //UnityEngine.Rendering.Universal.Bloom bloom;
         //volumeProfile.TryGet<UnityEngine.Rendering.Universal.Bloom>(out bloom);
@@ -142,6 +143,12 @@ public class StageSelectOperation : ISceneChange
     {
         base.Update();
 
+        if (lateStart)
+        {
+            base.SceneIn();
+            lateStart = false;
+        }
+
         foreach (Button i in OptionButton)
         {
             i.interactable = !isOption && !isSceneFinished;
@@ -168,6 +175,8 @@ public class StageSelectOperation : ISceneChange
 
         if (!isOption) ChangeIsland();
         DarkenCam.SetActive(isOption);
+
+        OrientationLock = false;
     }
 
     #region CommonOperation
@@ -300,6 +309,7 @@ public class StageSelectOperation : ISceneChange
         }
         MainCam.transform.position = MainCamStayPt[IslandNext];
         IslandNow = IslandNext;
+        GyroscopeManager.setTempInactive();
     }
 
     private IEnumerator RecRightCamOperation()

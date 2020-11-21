@@ -9,7 +9,7 @@ public class CameraManager : MonoBehaviour
     readonly float defaultFOV = 60f;
     readonly float minFOV = 5f;
     readonly int rotateFrame = 60;
-
+    readonly float yawAdj = 2.0f;
     public List<Camera> LandscapeCam_Main;
     public List<Camera> LandscapeCam_Sub;
 
@@ -93,10 +93,10 @@ public class CameraManager : MonoBehaviour
                 {
                     for (int i = 0; i < GyroCamGp.Count; ++i)
                     {
-                        GyroCamGp[i].transform.Rotate(new Vector3(GyroscopeManager.GetLocalPitch(),
+                        GyroCamGp[i].transform.Rotate(new Vector3(GyroscopeManager.GetLocalPitch() * yawAdj,
                             0, 0), Space.Self);
                         GyroCamGp[i].transform.Rotate(new Vector3(0,
-                            GyroscopeManager.GetWorldYaw(),0), Space.World);
+                            GyroscopeManager.GetWorldYaw(), 0), Space.World);
                     }
                 }
                 else

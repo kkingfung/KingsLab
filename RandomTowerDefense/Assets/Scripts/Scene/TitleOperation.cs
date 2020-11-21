@@ -426,7 +426,7 @@ public class TitleOperation: ISceneChange
 
         isOpening = false;
 
-        AudioManager.PlayAudio("bgm_Title");
+        AudioManager.PlayAudio("bgm_Title",true);
         AudioManager.PlayAudio("se_Button");
     }
 

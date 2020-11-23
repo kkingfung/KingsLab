@@ -2032,7 +2032,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 20
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &159093421
 GameObject:
@@ -7258,6 +7258,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de4cce722a3f3434395f3924ceaa743a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SpawnPointByAI: 0
   FireWork: []
   waveNumUI:
   - {fileID: 902828441}
@@ -7462,7 +7463,7 @@ Transform:
   m_Children:
   - {fileID: 1348691711}
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &581227742
 GameObject:
@@ -8087,12 +8088,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 610570153}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -52.74, y: -31, z: -7.57}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_Father: {fileID: 2029087498}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &611131975
 GameObject:
@@ -12321,7 +12322,7 @@ RectTransform:
   m_Children:
   - {fileID: 1965261334}
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -13284,6 +13285,10 @@ MonoBehaviour:
   LBMTest: {fileID: 0}
   ApplyClickEfc: 0
   isDragging: 0
+  playerManager: {fileID: 2011459891}
+  cameraManager: {fileID: 912783845409816688}
+  sceneManagerSel: {fileID: 0}
+  sceneManager: {fileID: 1829121298}
   TapTimeRecord: 0
   refCamL: {fileID: 429212406}
   refCamP: {fileID: 731968216}
@@ -16266,7 +16271,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 19
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &1247096617
 GameObject:
@@ -16577,7 +16582,7 @@ RectTransform:
   m_Children:
   - {fileID: 1452876575}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -21419,7 +21424,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 18
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 33.484, y: 145.031, z: 45.473}
 --- !u!123 &1547367670
 LensFlare:
@@ -25676,7 +25681,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1843921347
 GameObject:

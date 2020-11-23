@@ -12,10 +12,11 @@ public class WaveManager : MonoBehaviour
     private int TotalWaveNum;
     private int CurrentWaveNum;
     private float WaveTimer;
-
     private StageAttr CurrAttr;
     private bool inTutorial;
     private bool allSpawned;
+
+    public int SpawnPointByAI;
 
     public List<VisualEffect> FireWork;
     public List<Text> waveNumUI;
@@ -57,6 +58,7 @@ public class WaveManager : MonoBehaviour
             inTutorial = true;
         }
         WaveTimer = Time.time;
+        SpawnPointByAI = -1;
     }
 
     public int GetTotalWaveNum() { return TotalWaveNum; }
@@ -147,7 +149,7 @@ public class WaveManager : MonoBehaviour
                         {
                             EnemyAttr attr = EnemyInfo.GetEnemyInfo(wave.enmDetail[i].enmType);
                             enemySpawner.Spawn(wave.enmDetail[i].enmType,
-                                stageManager.GetPortalPosition()[wave.enmDetail[i].enmPort], new float3(),
+                                stageManager.GetPortalPosition()[SpawnPointByAI >= 0 ? SpawnPointByAI : wave.enmDetail[i].enmPort], new float3(),
                                 (float)(attr.health * (1 + 0.005f * (CurrentWaveNum * CurrentWaveNum))),
                                 attr.money * (CheckCustomData ? (int)StageInfo.resourceEx : 1),
                                 attr.damage, attr.radius,

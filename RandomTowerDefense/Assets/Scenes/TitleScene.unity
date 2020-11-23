@@ -3729,6 +3729,10 @@ MonoBehaviour:
   LBMTest: {fileID: 0}
   ApplyClickEfc: 0
   isDragging: 0
+  playerManager: {fileID: 0}
+  cameraManager: {fileID: 1216493098}
+  sceneManagerSel: {fileID: 0}
+  sceneManager: {fileID: 0}
   TapTimeRecord: 0
   refCamL: {fileID: 1225335766}
   refCamP: {fileID: 654067875}
@@ -9923,11 +9927,10 @@ TextMesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1667544528}
-  m_Text: "\u30C1\u30FC\u30E0   \u3000\u3000\u3000   KingsLab\n\u30D5\u30EA\u30FC\u7D20\u6750\u306B\u3064\u3044\u3066\n\u30D5\u30A9\u30F3\u30C8\u3000         
+  m_Text: "\u30C1\u30FC\u30E0   \u3000\u3000\u3000   KingsLab\n\n\u30D5\u30EA\u30FC\u7D20\u6750\u306B\u3064\u3044\u3066\n\u30D5\u30A9\u30F3\u30C8\u3000         
     Brian J. B.\n                   DBA Astigmatic\nSE/BGM   \u3000\u3000\u3000\u3000
     \u9B54\u738B\u9B42\n\u4ED6\u306E\u53C2\u8003\u8CC7\u6599 (Youtube)  \n    Sebastian
-    Lague, Code \nMonkey, Brackey,  Unity, \nPolyToots, Gabriel Aguiar \nProd.,AE
-    Tuts)"
+    Lague, Code \nMonkey, Brackey,  Unity, \nSebastian Schuchmann, ..."
   m_OffsetZ: 0
   m_CharacterSize: 0.5
   m_LineSpacing: 1

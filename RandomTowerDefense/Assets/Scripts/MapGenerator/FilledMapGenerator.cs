@@ -29,7 +29,7 @@ public class FilledMapGenerator : MonoBehaviour {
 	private Queue<Coord> shuffledTileCoords;
 	private Queue<Coord> shuffledOpenTileCoords;
 	private Transform[,] tileMap;
-	private List<Pillar> PillarList;
+	public List<Pillar> PillarList;
 
 	private Map currentMap;
 
@@ -60,14 +60,13 @@ public class FilledMapGenerator : MonoBehaviour {
 	public void GenerateMap() {
 		PillarList = new List<Pillar>();
 		currentMap = maps[mapIndex];
-
 		if (sceneManager && (sceneManager.GetCurrIsland() == StageInfo.IslandNum - 1))
 		{
 			float width = Mathf.Sqrt(StageInfo.stageSizeEx);
 			currentMap.mapSize.x = (int)(width);
-			currentMap.mapSize.y = (int)(StageInfo.stageSizeEx/width);
+			currentMap.mapSize.y = (int)(StageInfo.stageSizeEx / width);
 		}
-		
+
 		if (Randomize)
 			currentMap.seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
 		tileMap = new Transform[currentMap.mapSize.x,currentMap.mapSize.y];

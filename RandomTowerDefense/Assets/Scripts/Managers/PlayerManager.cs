@@ -76,16 +76,19 @@ public class PlayerManager : MonoBehaviour
     }
 
     private GameObject CheckTowerRaycast() {
+
         UnityEngine.Ray ray;
         UnityEngine.RaycastHit hit = new UnityEngine.RaycastHit();
 
         //Get Ray according to orientation
         if (Screen.width > Screen.height)
         {
+            if (refCamL==null) return null;
             ray = refCamL.ScreenPointToRay(new Vector2(Screen.width * 0.5f, Screen.height * 0.5f));
         }
         else
         {
+            if (refCamP == null) return null;
             ray = refCamP.ScreenPointToRay(new Vector2(Screen.width * 0.5f, Screen.height * 0.5f));
         }
         Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("Tower"));

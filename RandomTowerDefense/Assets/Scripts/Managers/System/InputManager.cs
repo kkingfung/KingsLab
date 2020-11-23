@@ -56,11 +56,11 @@ public class InputManager : MonoBehaviour
     private Vector2 posTap;
 
     //Common Variables
-    private PlayerManager playerManager;
-    private CameraManager cameraManager;
-    private StageSelectOperation sceneManagerSel;
-    private InGameOperation sceneManager;
-    private TutorialManager tutorialManager;
+    public PlayerManager playerManager;
+    public CameraManager cameraManager;
+    public StageSelectOperation sceneManagerSel;
+    public InGameOperation sceneManager;
+    //public TutorialManager tutorialManager;
 
     private float DragTimeRecord;
     [HideInInspector]
@@ -85,11 +85,11 @@ public class InputManager : MonoBehaviour
     {
         isDragging = false;
 
-        playerManager = FindObjectOfType<PlayerManager>();
-        cameraManager = FindObjectOfType<CameraManager>();
-        sceneManager = FindObjectOfType<InGameOperation>();
-        sceneManagerSel = FindObjectOfType<StageSelectOperation>();
-        tutorialManager = FindObjectOfType<TutorialManager>();
+        //playerManager = FindObjectOfType<PlayerManager>();
+        //cameraManager = FindObjectOfType<CameraManager>();
+        //sceneManager = FindObjectOfType<InGameOperation>();
+        //sceneManagerSel = FindObjectOfType<StageSelectOperation>();
+        //tutorialManager = FindObjectOfType<TutorialManager>();
     }
 
     private void Update()

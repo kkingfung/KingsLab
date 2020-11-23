@@ -63,8 +63,8 @@ public class InGameOperation : ISceneChange
     private bool isTutorial;//For 1st Stage Only
     //public VolumeProfile volumeProfile; // For Spare
 
-    private int IslandNow = 0;//For changing colour of Sea/Sky
-    private int IslandEnabled = 0;//Check when win
+    protected int IslandNow = 0;//For changing colour of Sea/Sky
+    protected int IslandEnabled = 0;//Check when win
 
     [HideInInspector]
     public int currScreenShown = (int)InGameOperation.ScreenShownID.SSIDArena;//0:Main, 1:Top-Left, 2:Top, 3:Top-Right

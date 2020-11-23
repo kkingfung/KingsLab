@@ -9,6 +9,7 @@ using System.IO;
 public class AITrainingOperation : InGameOperation
 {
     public TowerManager towerManager;
+    public TowerSpawner towerSpawner;
     public FilledMapGenerator filledMapGenerator;
 
     private void Awake()
@@ -120,29 +121,64 @@ public class AITrainingOperation : InGameOperation
         }
         else {
             int count;
+            List<GameObject> targetList;
             //Check three in a kind to merge
-            switch (Random.Range(0, 4)) {
-                case 0:
-                    count = towerManager.TowerNightmareList.Count;
-                    if (count > 2)
-                    towerManager.MergeTower(towerManager.TowerNightmareList[Random.Range(0, count)]);
+            switch (Random.Range(0, 4*4)) {
+                case 0 + 4 * 0:
+                    targetList = new List<GameObject>(towerSpawner.TowerNightmareRank1);
                     break;
-                case 1:
-                    count = towerManager.TowerSoulEaterList.Count;
-                    if (count > 2)
-                        towerManager.MergeTower(towerManager.TowerSoulEaterList[Random.Range(0, count)]);
+                case 1 + 4 * 0:
+                    targetList = new List<GameObject>(towerSpawner.TowerNightmareRank2);
                     break;
-                case 2:
-                    count = towerManager.TowerTerrorBringerList.Count;
-                    if (count > 2)
-                        towerManager.MergeTower(towerManager.TowerTerrorBringerList[Random.Range(0, count)]);
+                case 2 + 4 * 0:
+                    targetList = new List<GameObject>(towerSpawner.TowerNightmareRank3);
                     break;
-                case 3:
-                    count = towerManager.TowerUsurperList.Count;
-                    if (count > 2)
-                        towerManager.MergeTower(towerManager.TowerUsurperList[Random.Range(0, count)]);
+                case 3 + 4 * 0:
+                    targetList = new List<GameObject>(towerSpawner.TowerNightmareRank4);
+                    break;
+                case 0 + 4 * 1:
+                    targetList = new List<GameObject>(towerSpawner.TowerSoulEaterRank1);
+                    break;
+                case 1 + 4 * 1:
+                    targetList = new List<GameObject>(towerSpawner.TowerSoulEaterRank2);
+                    break;
+                case 2 + 4 * 1:
+                    targetList = new List<GameObject>(towerSpawner.TowerSoulEaterRank3);
+                    break;
+                case 3 + 4 * 1:
+                    targetList = new List<GameObject>(towerSpawner.TowerSoulEaterRank4);
+                    break;
+                case 0 + 4 * 2:
+                    targetList = new List<GameObject>(towerSpawner.TowerTerrorBringerRank1);
+                    break;
+                case 1 + 4 * 2:
+                    targetList = new List<GameObject>(towerSpawner.TowerTerrorBringerRank2);
+                    break;
+                case 2 + 4 * 2:
+                    targetList = new List<GameObject>(towerSpawner.TowerTerrorBringerRank3);
+                    break;
+                case 3 + 4 * 2:
+                    targetList = new List<GameObject>(towerSpawner.TowerTerrorBringerRank4);
+                    break;
+                case 0 + 4 * 3:
+                    targetList = new List<GameObject>(towerSpawner.TowerUsurperRank1);
+                    break;
+                case 1 + 4 * 3:
+                    targetList = new List<GameObject>(towerSpawner.TowerUsurperRank2);
+                    break;
+                case 2 + 4 * 3:
+                    targetList = new List<GameObject>(towerSpawner.TowerUsurperRank3);
+                    break;
+                case 3 + 4 * 3:
+                    targetList = new List<GameObject>(towerSpawner.TowerUsurperRank4);
+                    break;
+                default:
+                    targetList = new List<GameObject>();
                     break;
             }
+            count = targetList.Count;
+            if (count > 2)
+                towerManager.MergeTower(targetList[Random.Range(0, count)]);
         }
     }
 

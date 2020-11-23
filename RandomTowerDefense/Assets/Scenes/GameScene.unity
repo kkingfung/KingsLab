@@ -2904,10 +2904,6 @@ MonoBehaviour:
   TowerSoulEaterAura: {fileID: 3005076821723679740, guid: a92f0a1eaa6c17b4aa6638cdc37eb3a5, type: 3}
   TowerTerrorBringerAura: {fileID: 591614086710081014, guid: cee60b09ee191ed4e90265e980961eae, type: 3}
   TowerUsurperAura: {fileID: 525118464522439101, guid: 58cfea8fa8ad8bd42ac163f121a8dbeb, type: 3}
-  TowerNightmareList: []
-  TowerSoulEaterList: []
-  TowerTerrorBringerList: []
-  TowerUsurperList: []
   TargetInfo:
   - {fileID: 977873222}
   - {fileID: 966256761}
@@ -25496,6 +25492,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cc7ccd5649b53146971e98fe66ef84c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  resourceManager: {fileID: 1011788840}
+  towerSpawner: {fileID: 124639428}
 --- !u!114 &1829121298
 MonoBehaviour:
   m_ObjectHideFlags: 0

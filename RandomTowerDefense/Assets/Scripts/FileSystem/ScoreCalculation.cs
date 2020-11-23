@@ -53,7 +53,7 @@ public class ScoreCalculation : MonoBehaviour
     }
     private void LateUpdate()
     {
-        if (rank <= 5)
+        if (rank <= RecordCharNum)
         {
             foreach (Text i in RankObj)
                 i.text = rank == 0 ? "" : rank + ".";
@@ -132,7 +132,7 @@ public class ScoreCalculation : MonoBehaviour
 
     public void TouchKeybroad(int infoID)
     {
-        if (rank > 5)
+        if (rank > RecordCharNum)
         {
             return;
         }

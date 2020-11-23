@@ -9,6 +9,7 @@ using Unity.Entities;
 public class Tower : MonoBehaviour
 {
     private readonly int[] MaxLevel = { 15, 30, 50, 99 };
+    private readonly int[] MaxLevelBonus = { 100, 200, 300, 400 };
     //private readonly int[] MaxLevel = { 1, 1, 1, 1 };
     private readonly float TowerDestroyTime = 2;
     private readonly int ActionSetNum = 2;
@@ -31,6 +32,7 @@ public class Tower : MonoBehaviour
     private GameObject lvupVFXPrefab;
 
     private AudioManager audioManager;
+    private ResourceManager resourceManager;
     public GameObject pillar;
 
     private AudioSource audioSource;
@@ -222,12 +224,13 @@ public class Tower : MonoBehaviour
         SetLevel(lv);
     }
 
-    public void linkingManagers(TowerSpawner towerSpawner, AudioManager audioManager, AttackSpawner attackSpawner, FilledMapGenerator filledMapGenerator)
+    public void linkingManagers(TowerSpawner towerSpawner, AudioManager audioManager, AttackSpawner attackSpawner, FilledMapGenerator filledMapGenerator,ResourceManager resourceManager)
     {
         this.towerSpawner = towerSpawner;
         this.audioManager = audioManager;
         this.attackSpawner = attackSpawner;
         this.filledMapGenerator = filledMapGenerator;
+        this.resourceManager = resourceManager;
     }
 
     public void GainExp(int exp)
@@ -239,7 +242,8 @@ public class Tower : MonoBehaviour
         {
             this.exp -= reqExp;
             reqExp = RequiredExp();
-            LevelUp();
+            if (level < MaxLevel[rank - 1])
+                LevelUp();
         }
     }
 
@@ -257,6 +261,8 @@ public class Tower : MonoBehaviour
         level = lv;
         lvupVFXComponent.SetFloat("SpawnRate", level);
         UpdateAttr();
+        if (level == MaxLevel[rank - 1])
+            resourceManager.ChangeMaterial(MaxLevelBonus[rank - 1]);
     }
 
     private void UpdateAttr()

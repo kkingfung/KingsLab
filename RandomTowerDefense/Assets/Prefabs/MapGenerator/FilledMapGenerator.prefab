@@ -90,9 +90,11 @@ MonoBehaviour:
   navmeshFloor: {fileID: 2786186499764198953}
   navmeshMaskPrefab: {fileID: 404898, guid: 2819726a480fa46419aec4f76b1268e7, type: 3}
   maxMapSize: {x: 20, y: 20}
-  FakeParentCam: {fileID: 0}
   outlinePercent: 0
   tileSize: 1
+  originPos: {x: 0, y: 0, z: 0}
+  sceneManager: {fileID: 0}
+  stageManager: {fileID: 0}
 --- !u!1 &2786186499764198952
 GameObject:
   m_ObjectHideFlags: 0

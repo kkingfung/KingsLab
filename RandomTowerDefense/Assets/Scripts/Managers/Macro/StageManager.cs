@@ -119,6 +119,7 @@ public class StageManager : MonoBehaviour
             {
                 if (result > 0)
                 {
+                    Debug.Log(0);
                     GameOverCanva[0].SetActive(false);
                     GameOverCanva[1].SetActive(false);
                     GameClearCanva[0].SetActive(false);
@@ -126,6 +127,7 @@ public class StageManager : MonoBehaviour
                 }
                 else
                 {
+                    Debug.Log(1);
                     GameOverCanva[0].SetActive(false);
                     GameOverCanva[1].SetActive(true);
                     GameClearCanva[0].SetActive(false);
@@ -136,6 +138,7 @@ public class StageManager : MonoBehaviour
             {
                 if (result > 0)
                 {
+                    Debug.Log(2);
                     GameOverCanva[0].SetActive(false);
                     GameOverCanva[1].SetActive(false);
                     GameClearCanva[0].SetActive(true);
@@ -143,6 +146,7 @@ public class StageManager : MonoBehaviour
                 }
                 else
                 {
+                    Debug.Log(3);
                     GameOverCanva[0].SetActive(true);
                     GameOverCanva[1].SetActive(false);
                     GameClearCanva[0].SetActive(false);
@@ -162,8 +166,8 @@ public class StageManager : MonoBehaviour
             sceneManager.SetOptionStatus(false);
             audioManager.PlayAudio("se_Lose");
             timeManager.SetTimeScale(0);
-            foreach(MeshDestroy i in castleDestroy)
-                i.DestroyMesh();
+            //foreach(MeshDestroy i in castleDestroy)
+            //    i.DestroyMesh();
             scoreCalculation.CalculationScore();
             StartCoroutine(FadeInRoutine());
             return true;
@@ -173,7 +177,7 @@ public class StageManager : MonoBehaviour
 
     public bool SetWin()
     {
-        if (result == (int)GameResult.Lose)
+        if (result == (int)GameResult.Lose || result == (int)GameResult.Won)
             return false;
 
         result = (int)GameResult.Won;

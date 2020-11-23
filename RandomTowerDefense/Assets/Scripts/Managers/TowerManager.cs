@@ -340,12 +340,11 @@ public class TowerManager : MonoBehaviour
                 TowerUsurperList.Remove(targetedTower);
                 break;
         }
-        targetedTowerScript.enabled=false;
+        targetedTowerScript.Destroy();
     }
 
     public void SellTower(Tower targetedTower)
     {
-        Debug.Log(1);
         if (resourceManager.SellTower(targetedTower))
         {
             filledMapGenerator.UpdatePillarStatus(targetedTower.gameObject,0);

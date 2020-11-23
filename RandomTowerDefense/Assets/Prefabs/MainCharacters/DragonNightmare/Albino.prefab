@@ -67,7 +67,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6af17cae97d0c6b49bd3ab630848a878, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Level: 0
+  level: 0
   rank: 0
   exp: 0
   type: 0

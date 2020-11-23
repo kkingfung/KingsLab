@@ -13,13 +13,13 @@ using UnityEngine.Rendering;
 
 public class CastleToEnemy : JobComponentSystem
 {
-    EntityQuery castleGroup;
+	EntityQuery castleGroup;
 
-    EntityQuery enemyGroup;
+	EntityQuery enemyGroup;
 
-    protected override void OnCreate()
-    {
-    }
+	protected override void OnCreate()
+	{
+	}
 
 	protected override JobHandle OnUpdate(JobHandle inputDependencies)
 	{
@@ -29,15 +29,15 @@ public class CastleToEnemy : JobComponentSystem
 		enemyGroup = GetEntityQuery(typeof(Health), typeof(Radius), typeof(Damage),
 			ComponentType.ReadOnly<Translation>(), ComponentType.ReadOnly<EnemyTag>());
 
-		var transformType = GetComponentTypeHandle<Translation>(true);
-		var healthType = GetComponentTypeHandle<Health>(false);
-		var radiusType = GetComponentTypeHandle<Radius>(true);
-		var damageType = GetComponentTypeHandle<Damage>(false);
-
 		JobHandle jobHandle = inputDependencies;
 
 		if (enemyGroup.CalculateEntityCount() > 0)
 		{
+			var transformType = GetComponentTypeHandle<Translation>(true);
+			var healthType = GetComponentTypeHandle<Health>(false);
+			var radiusType = GetComponentTypeHandle<Radius>(true);
+			var damageType = GetComponentTypeHandle<Damage>(false);
+
 			//castle by enemy
 			var jobCvE = new CollisionJobCvE()
 			{
@@ -100,7 +100,7 @@ public class CastleToEnemy : JobComponentSystem
 				Health health = chunkHealths[i];
 				if (health.Value <= 0) continue;
 
-				for (int j = 0; j < targetRecord.Length ; j++)
+				for (int j = 0; j < targetRecord.Length; j++)
 				{
 					if (targetRecord[j].Value < 0)
 						return;
@@ -164,7 +164,7 @@ public class CastleToEnemy : JobComponentSystem
 
 				if (damage > 0)
 				{
-					
+
 					health.Value -= damage;
 					chunkDamage[i] = damageRec;
 					chunkHealths[i] = health;

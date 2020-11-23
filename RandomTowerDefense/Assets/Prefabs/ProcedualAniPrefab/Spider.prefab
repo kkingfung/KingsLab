@@ -300,10 +300,10 @@ GameObject:
   - component: {fileID: 2125270372615509438}
   m_Layer: 0
   m_Name: Spider
-  m_TagString: Untagged
+  m_TagString: DebugTag
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &1014025007316824797
 Transform:
@@ -312,8 +312,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2105028103311130195}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 5, z: 0}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_Children:
   - {fileID: 5445345568556006755}
@@ -356,7 +356,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 014ffc6b975134f8ea9c8f7c5045be3e, type: 2}
+  - {fileID: 2100000, guid: 423172a212b83df499cab0f9b513938f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -407,9 +407,8 @@ MonoBehaviour:
   inputVelocity: {x: 0, y: 0, z: 0}
   worldVelocity: {x: 0, y: 0, z: 0}
   walkSpeed: 20
-  sprintSpeed: 40
   rotateInputFactor: 90
-  rotationSpeed: 90
+  rotationSpeed: 45
   averageRotationRadius: 2.95
   legs:
   - {fileID: 1075080752075376489}
@@ -452,9 +451,10 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  desiredSufaceDist: -2
+  desiredSurfaceDist: -1
   dist: 0
   grounded: 0
+  TargetLocation: {x: 50, y: 0, z: 50}
 --- !u!1 &7333169836809937529
 GameObject:
   m_ObjectHideFlags: 0

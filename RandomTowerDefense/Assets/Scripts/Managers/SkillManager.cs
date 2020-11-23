@@ -63,6 +63,7 @@ public class SkillManager : MonoBehaviour
             foreach (Slider i in SkillActivenessSlider)
             {
                 i.value = currActiveTime / maxActiveTime;
+                Debug.Log(i.value);
             }
         }
     }
@@ -194,7 +195,7 @@ public class SkillManager : MonoBehaviour
         while (frame - Time.time > 0)
         {
             currActiveTime = Mathf.Max(0, currActiveTime - Time.deltaTime);
-            yield return new WaitForSeconds(currActiveTime);
+            yield return new WaitForSeconds(0f);
         }
 
         currActiveTime = 0;

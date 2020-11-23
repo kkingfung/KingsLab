@@ -4,6 +4,11 @@ using System.Linq;
 using System.Threading;
 using UnityEngine;
 
+using Unity.Entities;
+using Unity.Mathematics;
+using Unity.Physics;
+using Unity.Physics.Systems;
+
 public class PlayerManager : MonoBehaviour
 {
     private readonly float CancelDist = 30f;
@@ -39,8 +44,8 @@ public class PlayerManager : MonoBehaviour
     public SkillManager skillManager;
 
     public GameObject TowerRaycastResult;
-    private RaycastHit hitPillar;
-    private RaycastHit hitArena;
+    private UnityEngine.RaycastHit hitPillar;
+    private Vector3 hitArena;
 
     private void Start()
     {
@@ -57,8 +62,9 @@ public class PlayerManager : MonoBehaviour
     {
         Physics.Simulate(Time.fixedDeltaTime);
         TowerRaycastResult = null;
-        hitPillar = new RaycastHit();
-        hitArena = new RaycastHit();
+        hitPillar = new UnityEngine.RaycastHit();
+        hitArena.y = float.MinValue;
+
         if (sceneManager)
         {
             if (sceneManager.GetOptionStatus() == false && sceneManager.currScreenShown==0)
@@ -70,8 +76,8 @@ public class PlayerManager : MonoBehaviour
     }
 
     private GameObject CheckTowerRaycast() {
-        Ray ray;
-        RaycastHit hit = new RaycastHit();
+        UnityEngine.Ray ray;
+        UnityEngine.RaycastHit hit = new UnityEngine.RaycastHit();
 
         //Get Ray according to orientation
         if (Screen.width > Screen.height)
@@ -148,13 +154,13 @@ public class PlayerManager : MonoBehaviour
         switch (SkillStack.UseStock(StockSelected))
         {
             case (int)Upgrades.StoreItems.BonusBoss1:
-                enemyManager.SpawnBonusBoss(0, mapGenerator.CoordToPosition(stageManager.SpawnPoint[Random.Range(1, 3)]));
+                enemyManager.SpawnBonusBoss(0, mapGenerator.CoordToPosition(stageManager.SpawnPoint[UnityEngine.Random.Range(1, 3)]));
                 break;
             case (int)Upgrades.StoreItems.BonusBoss2:
-                enemyManager.SpawnBonusBoss(1, mapGenerator.CoordToPosition(stageManager.SpawnPoint[Random.Range(1, 3)]));
+                enemyManager.SpawnBonusBoss(1, mapGenerator.CoordToPosition(stageManager.SpawnPoint[UnityEngine.Random.Range(1, 3)]));
                 break;
             case (int)Upgrades.StoreItems.BonusBoss3:
-                enemyManager.SpawnBonusBoss(2, mapGenerator.CoordToPosition(stageManager.SpawnPoint[Random.Range(1, 3)]));
+                enemyManager.SpawnBonusBoss(2, mapGenerator.CoordToPosition(stageManager.SpawnPoint[UnityEngine.Random.Range(1, 3)]));
                 break;
             case (int)Upgrades.StoreItems.MagicMeteor:
                 //CurrentSkill = 
@@ -181,13 +187,49 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
+    public Vector3 RaycastTestDOTS(float3 fromPosition, float3 toPosition,int layer)
+    {
+        if (layer == LayerMask.GetMask("Arena") && hitArena.z != float.MinValue)
+        {
+            return hitArena;
+        }
+
+        BuildPhysicsWorld buildPhysicsWorld = World.DefaultGameObjectInjectionWorld.GetExistingSystem<BuildPhysicsWorld>();
+        CollisionWorld collisionWorld = buildPhysicsWorld.PhysicsWorld.CollisionWorld;
+
+        RaycastInput raycastInput = new RaycastInput
+        {
+            Start = fromPosition,
+            End = toPosition,
+            Filter = new CollisionFilter
+            {
+                BelongsTo = ~0u,
+                CollidesWith = (uint)layer,
+                GroupIndex = 0,
+            }
+        };
+
+        Unity.Physics.RaycastHit raycastHit = new Unity.Physics.RaycastHit();
+
+        if (collisionWorld.CastRay(raycastInput, out raycastHit))
+        {
+            if (layer == LayerMask.GetMask("Arena"))
+            {
+                hitArena = raycastHit.Position;
+                return hitArena;
+            }
+        }
+
+        return raycastHit.Position;
+    }
+    
     public Vector3 RaycastTest(int layer)
     {
-        if (layer == LayerMask.GetMask("Arena") && hitArena.transform != null)
-            return hitArena.point;
-
-        Ray ray = new Ray();
-        RaycastHit hit = new RaycastHit();
+        if (layer == LayerMask.GetMask("Arena") && hitArena.y != float.MinValue)
+            return hitArena;
+            
+        UnityEngine.Ray ray = new UnityEngine.Ray();
+        UnityEngine.RaycastHit hit = new UnityEngine.RaycastHit();
 
         //Get Ray according to orientation
         if (Screen.width > Screen.height)
@@ -201,7 +243,7 @@ public class PlayerManager : MonoBehaviour
 
         Physics.Raycast(ray, out hit, 100, layer);
         if (layer == LayerMask.GetMask("Arena"))
-            hitArena = hit;
+            hitArena = hit.point;
         return hit.point;
     }
 
@@ -219,7 +261,7 @@ public class PlayerManager : MonoBehaviour
             return new Vector3();
         }
 
-        Ray ray;
+        UnityEngine.Ray ray;
 
         //Get Ray according to orientation
         if (Screen.width > Screen.height)
@@ -260,5 +302,35 @@ public class PlayerManager : MonoBehaviour
     public bool StockCheckExist()
     {
         return (this.StockOperator != null);
+    }
+
+    private Entity Raycast(float3 fromPosition, float3 toPosition)
+    {
+        BuildPhysicsWorld buildPhysicsWorld = World.DefaultGameObjectInjectionWorld.GetExistingSystem<BuildPhysicsWorld>();
+        CollisionWorld collisionWorld = buildPhysicsWorld.PhysicsWorld.CollisionWorld;
+
+        RaycastInput raycastInput = new RaycastInput
+        {
+            Start = fromPosition,
+            End = toPosition,
+            Filter = new CollisionFilter
+            {
+                BelongsTo = ~0u,
+                CollidesWith = ~0u,
+                GroupIndex = 0,
+            }
+        };
+
+        Unity.Physics.RaycastHit raycastHit = new Unity.Physics.RaycastHit();
+
+        if (collisionWorld.CastRay(raycastInput, out raycastHit))
+        {
+            // Hit something
+            return buildPhysicsWorld.PhysicsWorld.Bodies[raycastHit.RigidBodyIndex].Entity;
+        }
+        else
+        {
+            return Entity.Null;
+        }
     }
 }

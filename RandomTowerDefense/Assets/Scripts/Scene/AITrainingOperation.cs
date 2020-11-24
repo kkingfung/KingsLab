@@ -18,7 +18,7 @@ public class AITrainingOperation : InGameOperation
         IslandNow = 3;
         PlayerPrefs.SetInt("IslandNow", 3);
         PlayerPrefs.SetFloat("waveNum", 999);
-        PlayerPrefs.SetFloat("stageSize", 400);
+        PlayerPrefs.SetFloat("stageSize", 100);
         PlayerPrefs.SetFloat("hpMax", 9999);
 
         if (UseRemoteConfig)

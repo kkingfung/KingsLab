@@ -111,7 +111,7 @@ public class Tower : MonoBehaviour
         switch (type)
         {
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
-                if (audioManager.enabledSE)
+                if (audioManager && audioManager.enabledSE)
                 {
                     audioSource.PlayOneShot(audioManager.GetAudio("se_Lighting"));
                 }
@@ -119,7 +119,7 @@ public class Tower : MonoBehaviour
                 GainExp(ExpPerAttack * 5);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-                if (audioManager.enabledSE)
+                if (audioManager && audioManager.enabledSE)
                 {
                     audioSource.PlayOneShot(audioManager.GetAudio("se_Snail"));
                 }
@@ -128,7 +128,7 @@ public class Tower : MonoBehaviour
                 GainExp(ExpPerAttack * 2);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
-                if (audioManager.enabledSE)
+                if (audioManager && audioManager.enabledSE)
                 {
                     audioSource.PlayOneShot(audioManager.GetAudio("se_Shot"));
                 }
@@ -137,7 +137,7 @@ public class Tower : MonoBehaviour
                 GainExp(ExpPerAttack*10);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                if (audioManager.enabledSE)
+                if (audioManager && audioManager.enabledSE)
                 {
                     audioSource.PlayOneShot(audioManager.GetAudio("se_MagicFire"));
                 }

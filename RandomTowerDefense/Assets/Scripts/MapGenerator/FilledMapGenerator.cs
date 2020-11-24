@@ -25,18 +25,26 @@ public class FilledMapGenerator : MonoBehaviour {
 	public float outlinePercent;
 	
 	public float tileSize;
+	public bool packedObstacles;
+
 	private List<Coord> allTileCoords;
 	private Queue<Coord> shuffledTileCoords;
 	private Queue<Coord> shuffledOpenTileCoords;
 	private Transform[,] tileMap;
+
+	[HideInInspector]
 	public List<Pillar> PillarList;
 
 	private Map currentMap;
+	private Transform mapHolder;
 
 	[HideInInspector]
 	public Vector3 originPos;
 	public InGameOperation sceneManager;
 	public StageManager stageManager;
+
+	private System.Random prng;
+
 	private void Start() {
 		//sceneManager = FindObjectOfType<InGameOperation>();
 		//stageManager = FindObjectOfType<StageManager>();
@@ -70,7 +78,7 @@ public class FilledMapGenerator : MonoBehaviour {
 		if (Randomize)
 			currentMap.seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
 		tileMap = new Transform[currentMap.mapSize.x,currentMap.mapSize.y];
-		System.Random prng = new System.Random (currentMap.seed);
+		prng = new System.Random (currentMap.seed);
 
 		// Generating coords
 		allTileCoords = new List<Coord> ();
@@ -101,7 +109,7 @@ public class FilledMapGenerator : MonoBehaviour {
 			DestroyImmediate (transform.Find (holderName).gameObject);
 		}
 		
-		Transform mapHolder = new GameObject (holderName).transform;
+		mapHolder = new GameObject (holderName).transform;
 		mapHolder.parent = transform;
 
 		// Spawning tiles
@@ -162,6 +170,11 @@ public class FilledMapGenerator : MonoBehaviour {
 		shuffledOpenTileCoords.Enqueue(new Coord(currentMap.mapSize.x - 1, 0));
 		shuffledOpenTileCoords.Enqueue(new Coord(0, currentMap.mapSize.y - 1));
 
+		//Ensure ONE and ONLY ONE road
+		if(packedObstacles)
+		FillingNonNecessary(shuffledOpenTileCoords,obstacleMap);
+
+
 		//// Creating navmesh mask
 		//Transform maskLeft = Instantiate (navmeshMaskPrefab, this.transform.position + Vector3.left * (currentMap.mapSize.x + maxMapSize.x) / 4f * tileSize, Quaternion.identity) as Transform;
 		//maskLeft.parent = mapHolder;
@@ -184,7 +197,70 @@ public class FilledMapGenerator : MonoBehaviour {
 
 		originPos = this.transform.position + CoordToPosition(0, 0);
 	}
-	
+
+	void FillingNonNecessary(Queue<Coord> openTileList, bool[,] obstacleMap) {
+		List<Coord> tempList = openTileList.ToList<Coord>();
+		bool openTileRemoved = true;
+		while (openTileRemoved)
+		{
+			openTileRemoved = false;
+			foreach (Coord i in tempList)
+			{
+				if (i.x == 0 && i.y == 0) continue;
+				if (i.x == currentMap.mapSize.x - 1 && i.y == 0) continue;
+				if (i.x == 0 && i.y == currentMap.mapSize.y - 1) continue;
+				if (i.x == currentMap.mapSize.x - 1 && i.y == currentMap.mapSize.y - 1) continue;
+
+				int CntSurrounding = 0;
+				for (int x = -1; x <= 1; x++)
+				{
+					for (int y = -1; y <= 1; y++)
+					{
+						int neighbourX = i.x + x;
+						int neighbourY = i.y + y;
+						if (x == 0 ^ y == 0)
+						{
+							if (neighbourX >= 0 && neighbourX < obstacleMap.GetLength(0) && neighbourY >= 0 && neighbourY < obstacleMap.GetLength(1))
+							{
+								if (obstacleMap[neighbourX, neighbourY] == false)
+								{
+									CntSurrounding++;
+								}
+							}
+						}
+						if (CntSurrounding > 1) break;
+					}
+					if (CntSurrounding > 1) break;
+				}
+
+				if (CntSurrounding == 1)
+				{
+					//Build Obstacle
+					float obstacleHeight = Mathf.Lerp(currentMap.minObstacleHeight, currentMap.maxObstacleHeight, (float)prng.NextDouble());
+					Vector3 obstaclePosition = CoordToPosition(i.x, i.y);
+
+					Transform newObstacle = Instantiate(obstaclePrefab, this.transform.position + obstaclePosition + Vector3.up * obstacleHeight / 2, Quaternion.identity) as Transform;
+					newObstacle.parent = mapHolder;
+					newObstacle.localScale = new Vector3((1 - outlinePercent) * tileSize, obstacleHeight, (1 - outlinePercent) * tileSize);
+					PillarList.Add(new Pillar(newObstacle.gameObject, i.x, i.y, obstacleHeight));
+
+					Renderer obstacleRenderer = newObstacle.GetComponent<Renderer>();
+					Material obstacleMaterial = new Material(obstacleRenderer.sharedMaterial);
+					float colourPercent = i.y / (float)currentMap.mapSize.y;
+					obstacleMaterial.color = Color.Lerp(currentMap.foregroundColour, currentMap.backgroundColour, colourPercent);
+					obstacleRenderer.sharedMaterial = obstacleMaterial;
+
+					//Restart Processing
+					openTileRemoved = true;
+					tempList.Remove(i);
+					obstacleMap[i.x, i.y] = true;
+					break;
+				}
+			}
+		}
+		openTileList = new Queue<Coord>(tempList);
+	}
+
 	bool MapIsFullyAccessible(bool[,] obstacleMap, int currentObstacleCount) {
 		bool[,] mapFlags = new bool[obstacleMap.GetLength(0),obstacleMap.GetLength(1)];
 
@@ -201,7 +277,7 @@ public class FilledMapGenerator : MonoBehaviour {
 				for (int y = -1; y <= 1; y ++) {
 					int neighbourX = tile.x + x;
 					int neighbourY = tile.y + y;
-					if (x == 0 || y == 0) {
+					if (x == 0 ^ y == 0) {
 						if (neighbourX >= 0 && neighbourX < obstacleMap.GetLength(0) && neighbourY >= 0 && neighbourY < obstacleMap.GetLength(1)) {
 							if (!mapFlags[neighbourX,neighbourY] && !obstacleMap[neighbourX,neighbourY]) {
 								mapFlags[neighbourX,neighbourY] = true;
@@ -213,7 +289,6 @@ public class FilledMapGenerator : MonoBehaviour {
 				}
 			}
 		}
-		
 		int targetAccessibleTileCount = (int)(currentMap.mapSize.x * currentMap.mapSize.y - currentObstacleCount);
 		return targetAccessibleTileCount == accessibleTileCount;
 	}

@@ -10,7 +10,6 @@ TagManager:
   - ClearMark
   - ClickEffect
   - DebugTag
-  - PillarTag
   layers:
   - Default
   - TransparentFX

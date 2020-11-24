@@ -35,7 +35,7 @@ public class ISceneChange : MonoBehaviour
 
         OrientationLock = false;
         fadeQuad = FindObjectsOfType<FadeEffect>();
-        if (fadeQuad.Length > 0)
+        if (fadeQuad != null && fadeQuad.Length > 0)
         {
             foreach (FadeEffect i in fadeQuad)
             {
@@ -49,7 +49,7 @@ public class ISceneChange : MonoBehaviour
     }
     protected void OnDisable()
     {
-        if (fadeQuad.Length > 0)
+        if (fadeQuad!=null && fadeQuad.Length > 0)
         {
             foreach (FadeEffect i in fadeQuad)
             {

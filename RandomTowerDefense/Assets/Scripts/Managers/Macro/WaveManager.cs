@@ -15,6 +15,7 @@ public class WaveManager : MonoBehaviour
     private StageAttr CurrAttr;
     private bool inTutorial;
     private bool allSpawned;
+    public bool isSpawning;
 
     public int SpawnPointByAI;
 
@@ -126,7 +127,7 @@ public class WaveManager : MonoBehaviour
     {
         float spawnTimer = wave.enmStartTime;
         bool CheckCustomData = sceneManager && (sceneManager.GetCurrIsland() == StageInfo.IslandNum - 1);
-        bool isSpawning = true;
+        isSpawning = true;
         while (stageManager.GetResult() == 0 && isSpawning)
         {
             if (tutorialManager && tutorialManager.WaitingResponds) { }

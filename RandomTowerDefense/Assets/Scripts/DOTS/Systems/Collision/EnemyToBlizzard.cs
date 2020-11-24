@@ -13,137 +13,137 @@ using UnityEngine.Rendering;
 
 public class EnemyToBlizzard : JobComponentSystem
 {
-	EntityQuery enemyGroup;
+    EntityQuery enemyGroup;
 
-	EntityQuery BlizzardGroup;
+    EntityQuery BlizzardGroup;
 
-	protected override void OnCreate()
-	{
-	}
+    protected override void OnCreate()
+    {
+    }
 
-	protected override JobHandle OnUpdate(JobHandle inputDependencies)
-	{
-		enemyGroup = GetEntityQuery(typeof(Health), typeof(Radius), typeof(Damage), typeof(SlowRate),
-			typeof(PetrifyAmt), typeof(BuffTime),
-			ComponentType.ReadOnly<Translation>(), ComponentType.ReadOnly<EnemyTag>());
-		
-		BlizzardGroup = GetEntityQuery(typeof(Radius), typeof(Damage), typeof(WaitingTime), typeof(SlowRate), typeof(BuffTime), typeof(SkillTag),
-			ComponentType.ReadOnly<Translation>(), ComponentType.ReadOnly<BlizzardTag>());
+    protected override JobHandle OnUpdate(JobHandle inputDependencies)
+    {
+        enemyGroup = GetEntityQuery(typeof(Health), typeof(Radius), typeof(Damage), typeof(SlowRate),
+            typeof(PetrifyAmt), typeof(BuffTime),
+            ComponentType.ReadOnly<Translation>(), ComponentType.ReadOnly<EnemyTag>());
 
-		var transformType = GetComponentTypeHandle<Translation>(true);
+        BlizzardGroup = GetEntityQuery(typeof(Radius), typeof(Damage), typeof(WaitingTime), typeof(SlowRate), typeof(BuffTime), typeof(SkillTag),
+            ComponentType.ReadOnly<Translation>(), ComponentType.ReadOnly<BlizzardTag>());
 
-		var healthType = GetComponentTypeHandle<Health>(false);
-		var radiusType = GetComponentTypeHandle<Radius>(true);
+        var transformType = GetComponentTypeHandle<Translation>(true);
 
-		var slowType = GetComponentTypeHandle<SlowRate>(false);
-		var buffType = GetComponentTypeHandle<BuffTime>(false);
+        var healthType = GetComponentTypeHandle<Health>(false);
+        var radiusType = GetComponentTypeHandle<Radius>(true);
 
-		JobHandle jobHandle = inputDependencies;
+        var slowType = GetComponentTypeHandle<SlowRate>(false);
+        var buffType = GetComponentTypeHandle<BuffTime>(false);
 
-		//enemy by blizzard
-		if (BlizzardGroup.CalculateEntityCount() > 0 && enemyGroup.CalculateEntityCount() > 0)
-		{
-			var jobEvSB = new CollisionJobEvSB()
-			{
-				radiusType = radiusType,
-				healthType = healthType,
-				translationType = transformType,
+        JobHandle jobHandle = inputDependencies;
 
-				targetRadius = BlizzardGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
-				targetDamage = BlizzardGroup.ToComponentDataArray<Damage>(Allocator.TempJob),
-				targetTrans = BlizzardGroup.ToComponentDataArray<Translation>(Allocator.TempJob),
+        //enemy by blizzard
+        if (BlizzardGroup.CalculateEntityCount() > 0 && enemyGroup.CalculateEntityCount() > 0)
+        {
+            var jobEvSB = new CollisionJobEvSB()
+            {
+                radiusType = radiusType,
+                healthType = healthType,
+                translationType = transformType,
 
-				slowType = slowType,
-				buffType = buffType,
-				targetSlow = BlizzardGroup.ToComponentDataArray<SlowRate>(Allocator.TempJob),
-				targetBuff = BlizzardGroup.ToComponentDataArray<BuffTime>(Allocator.TempJob)
-			};
-			jobHandle = jobEvSB.Schedule(enemyGroup, inputDependencies);
-			jobHandle.Complete();
-		}
+                targetRadius = BlizzardGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
+                targetDamage = BlizzardGroup.ToComponentDataArray<Damage>(Allocator.TempJob),
+                targetTrans = BlizzardGroup.ToComponentDataArray<Translation>(Allocator.TempJob),
 
-		return jobHandle;
-	}
+                slowType = slowType,
+                buffType = buffType,
+                targetSlow = BlizzardGroup.ToComponentDataArray<SlowRate>(Allocator.TempJob),
+                targetBuff = BlizzardGroup.ToComponentDataArray<BuffTime>(Allocator.TempJob)
+            };
+            jobHandle = jobEvSB.Schedule(enemyGroup, inputDependencies);
+            jobHandle.Complete();
+        }
 
-	//Common Function
-	static float GetDistance(float3 posA, float3 posB)
-	{
-		float3 delta = posA - posB;
-		return delta.x * delta.x + delta.z * delta.z;
-	}
+        return jobHandle;
+    }
 
-	static bool CheckCollision(float3 posA, float3 posB, float radiusSqr)
-	{
-		return GetDistance(posA, posB) <= radiusSqr;
-	}
+    //Common Function
+    static float GetDistance(float3 posA, float3 posB)
+    {
+        float3 delta = posA - posB;
+        return delta.x * delta.x + delta.z * delta.z;
+    }
 
-	//enemy by blizzard
-	#region JobEvSB
-	[BurstCompile]
-	struct CollisionJobEvSB : IJobChunk
-	{
+    static bool CheckCollision(float3 posA, float3 posB, float radiusSqr)
+    {
+        return GetDistance(posA, posB) <= radiusSqr;
+    }
 
-		[ReadOnly] public ComponentTypeHandle<Radius> radiusType;
-		public ComponentTypeHandle<Health> healthType;
-		[ReadOnly] public ComponentTypeHandle<Translation> translationType;
-		public ComponentTypeHandle<SlowRate> slowType;
-		public ComponentTypeHandle<BuffTime> buffType;
+    //enemy by blizzard
+    #region JobEvSB
+    [BurstCompile]
+    struct CollisionJobEvSB : IJobChunk
+    {
 
-		[DeallocateOnJobCompletion]
-		public NativeArray<Damage> targetDamage;
-		[DeallocateOnJobCompletion]
-		public NativeArray<Radius> targetRadius;
-		[DeallocateOnJobCompletion]
-		public NativeArray<Translation> targetTrans;
-		[DeallocateOnJobCompletion]
-		public NativeArray<SlowRate> targetSlow;
-		[DeallocateOnJobCompletion]
-		public NativeArray<BuffTime> targetBuff;
+        [ReadOnly] public ComponentTypeHandle<Radius> radiusType;
+        public ComponentTypeHandle<Health> healthType;
+        [ReadOnly] public ComponentTypeHandle<Translation> translationType;
+        public ComponentTypeHandle<SlowRate> slowType;
+        public ComponentTypeHandle<BuffTime> buffType;
 
-		public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
-		{
-			var chunkHealths = chunk.GetNativeArray(healthType);
-			var chunkTranslations = chunk.GetNativeArray(translationType);
-			var chunkRadius = chunk.GetNativeArray(radiusType);
+        [DeallocateOnJobCompletion]
+        public NativeArray<Damage> targetDamage;
+        [DeallocateOnJobCompletion]
+        public NativeArray<Radius> targetRadius;
+        [DeallocateOnJobCompletion]
+        public NativeArray<Translation> targetTrans;
+        [DeallocateOnJobCompletion]
+        public NativeArray<SlowRate> targetSlow;
+        [DeallocateOnJobCompletion]
+        public NativeArray<BuffTime> targetBuff;
 
-			var chunkSlow = chunk.GetNativeArray(slowType);
-			var chunkBuff = chunk.GetNativeArray(buffType);
+        public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
+        {
+            var chunkHealths = chunk.GetNativeArray(healthType);
+            var chunkTranslations = chunk.GetNativeArray(translationType);
+            var chunkRadius = chunk.GetNativeArray(radiusType);
 
-			for (int i = 0; i < chunk.Count; ++i)
-			{
-				float damage = 0;
-				Health health = chunkHealths[i];
-				if (health.Value <= 0) continue;
-				Radius radius = chunkRadius[i];
-				Translation pos = chunkTranslations[i];
-				SlowRate slow = chunkSlow[i];
-				BuffTime buff = chunkBuff[i];
+            var chunkSlow = chunk.GetNativeArray(slowType);
+            var chunkBuff = chunk.GetNativeArray(buffType);
 
-				for (int j = 0; j < targetTrans.Length; j++)
-				{
-					Translation pos2 = targetTrans[j];
+            for (int i = 0; i < chunk.Count; ++i)
+            {
+                float damage = 0;
+                Health health = chunkHealths[i];
+                if (health.Value <= 0) continue;
+                Radius radius = chunkRadius[i];
+                Translation pos = chunkTranslations[i];
+                SlowRate slow = chunkSlow[i];
+                BuffTime buff = chunkBuff[i];
 
-					if (CheckCollision(pos.Value, pos2.Value, targetRadius[j].Value + radius.Value))
-					{
-						//Debug.DrawLine(pos.Value, pos.Value + new float3(0, 1, 0), Color.red);
-						damage += targetDamage[j].Value;
-						slow.Value = Mathf.Clamp(slow.Value + targetSlow[j].Value, 0, 0.95f);
-						if (buff.Value < targetBuff[j].Value) buff.Value = targetBuff[j].Value;
-						//Debug.Log("Slowed");
-					}
-					//else 
-					//Debug.DrawLine(pos.Value, pos.Value + new float3(0, 1, 0), Color.green);
-				}
+                for (int j = 0; j < targetTrans.Length; j++)
+                {
+                    Translation pos2 = targetTrans[j];
 
-				if (damage > 0)
-				{
-					health.Value -= damage;
-					chunkHealths[i] = health;
-					chunkSlow[i] = slow;
-					chunkBuff[i] = buff;
-				}
-			}
-		}
-	}
-	#endregion
+                    if (CheckCollision(pos.Value, pos2.Value, targetRadius[j].Value + radius.Value))
+                    {
+                        //Debug.DrawLine(pos.Value, pos.Value + new float3(0, 1, 0), Color.red);
+                        damage += targetDamage[j].Value;
+                        slow.Value = Mathf.Clamp(slow.Value + targetSlow[j].Value, 0, 0.95f);
+                        if (buff.Value < targetBuff[j].Value) buff.Value = targetBuff[j].Value;
+                        //Debug.Log("Slowed");
+                    }
+                    //else 
+                    //Debug.DrawLine(pos.Value, pos.Value + new float3(0, 1, 0), Color.green);
+                }
+
+                if (damage > 0)
+                {
+                    health.Value -= damage;
+                    chunkHealths[i] = health;
+                    chunkSlow[i] = slow;
+                    chunkBuff[i] = buff;
+                }
+            }
+        }
+    }
+    #endregion
 }

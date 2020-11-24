@@ -16,7 +16,7 @@ public class FilledMapGenerator : MonoBehaviour {
 	public Transform navmeshFloor;
 	public Transform navmeshMaskPrefab;
 	public Vector2 maxMapSize;
-
+	public int2 MapSize;
 	//public GameObject FakeParentCam;
 	//private Vector3 RelativePosition;
 	//private bool FollowFakeParent=false;
@@ -73,6 +73,7 @@ public class FilledMapGenerator : MonoBehaviour {
 			float width = Mathf.Sqrt(StageInfo.stageSizeEx);
 			currentMap.mapSize.x = (int)(width);
 			currentMap.mapSize.y = (int)(StageInfo.stageSizeEx / width);
+			MapSize = new int2(currentMap.mapSize.x, currentMap.mapSize.y);
 		}
 
 		if (Randomize)
@@ -302,7 +303,8 @@ public class FilledMapGenerator : MonoBehaviour {
 		return new Vector3 (-currentMap.mapSize.x / 2f + 0.5f + x, 0, -currentMap.mapSize.y / 2f + 0.5f + y) * tileSize;
 	}
 
-	public Transform GetTileFromPosition(Vector3 position) {
+	public Transform GetTileFromPosition(Vector3 position)
+	{
 		int x = Mathf.RoundToInt((position.x - transform.position.x) / tileSize + (currentMap.mapSize.x - 1) / 2f);
 		int y = Mathf.RoundToInt((position.z - transform.position.z) / tileSize + (currentMap.mapSize.y - 1) / 2f);
 		x = Mathf.Clamp (x, 0, tileMap.GetLength (0) -1);

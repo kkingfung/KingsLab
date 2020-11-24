@@ -71,6 +71,7 @@ public class TowerFindTargetSystem : JobComponentSystem
             float closestTargetDistance = float.MaxValue;
             float3 closestTargetPosition = transform.Value;
             int hashMapKey = QuadrantSystem.GetPositionHashMapKey(transform.Value);
+
             FindTarget(hashMapKey, unitPosition, radius.Value,quadrantEntity, castle.Value, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
 
             if (closestTargetEntity == Entity.Null)

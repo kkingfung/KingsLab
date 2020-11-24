@@ -10,6 +10,7 @@
     "com.unity.ide.visualstudio": "2.0.2",
     "com.unity.ide.vscode": "1.2.1",
     "com.unity.jobs": "0.5.0-preview.14",
+    "com.unity.ml-agents": "1.6.0-preview",
     "com.unity.physics": "0.5.1-preview.2",
     "com.unity.remote-config": "1.0.9",
     "com.unity.render-pipelines.universal": "8.2.0",

@@ -5,6 +5,8 @@ using UnityEngine.VFX;
 using UnityEngine.UI;
 using Unity.Entities;
 
+using Unity.MLAgents;
+
 public class Enemy : MonoBehaviour
 {
     private readonly int DamageCounterMax = 5;
@@ -27,6 +29,9 @@ public class Enemy : MonoBehaviour
     private int entityID=-1;
     private EnemySpawner enemySpawner;
     private ResourceManager resourceManager;
+
+    private TestingAgentScript agent;
+    private Vector3 oriPos;
 
     private SkinnedMeshRenderer[] meshes;
     public Animator animator;
@@ -56,6 +61,7 @@ public class Enemy : MonoBehaviour
         if (HpBar != null)
             HpBarRot = HpBar.gameObject.GetComponent<RectTransform>();
         prevPos = transform.position;
+        oriPos = prevPos;
         isDead = false;
 
         meshes = GetComponentsInChildren<SkinnedMeshRenderer>();
@@ -64,10 +70,12 @@ public class Enemy : MonoBehaviour
 
     private void Start() 
     {
+
         oriScale = transform.localScale;
         transform.localScale = new Vector3();
         StartCoroutine(StartAnim());
     }
+
     // Update is called once per frame
     private void Update()
     {
@@ -104,13 +112,14 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void Init(EnemySpawner enemySpawner,GameObject DieEffect, GameObject DropEffect,int entityID,int money)
+    public void Init(EnemySpawner enemySpawner,GameObject DieEffect, GameObject DropEffect,int entityID,int money, TestingAgentScript agent=null)
     {
         this.enemySpawner = enemySpawner;
         this.DieEffect = DieEffect;
         this.DropEffect = DropEffect;
         this.entityID = entityID;
         this.money = money;
+        this.agent = agent;
         HpBar.maxValue = 1;
         HpBar.value = 1;
     }
@@ -128,6 +137,7 @@ public class Enemy : MonoBehaviour
     {
         transform.localScale = oriScale;
         isReady = false;
+        if (agent) agent.EnemyDisappear(oriPos, this.transform.position);
         StartCoroutine(EndAnim());
     }
 

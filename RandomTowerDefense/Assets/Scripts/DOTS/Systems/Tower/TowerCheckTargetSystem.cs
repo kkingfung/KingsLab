@@ -13,7 +13,7 @@ public class TowerCheckTargetSystem : ComponentSystem
         Entities.WithAll<PlayerTag>().ForEach((Entity unitEntity, ref Target target, ref Translation transform, ref WaitingTime wait, ref Radius radius) => 
         {
 
-            if (entityManager.Exists(target.targetEntity))
+            if (entityManager.Exists(target.targetEntity) && target.targetEntity!=Entity.Null)
             {
                 if (entityManager.HasComponent<EnemyTag>(target.targetEntity))
                 {
@@ -25,6 +25,7 @@ public class TowerCheckTargetSystem : ComponentSystem
                         // far to target, destroy it
                         //PostUpdateCommands.DestroyEntity(hasTarget.targetEntity);
                         //PostUpdateCommands.RemoveComponent(unitEntity, typeof(Target));
+                        target.targetEntity = Entity.Null;
                         entityManager.RemoveComponent<Target>(unitEntity);
                     }
                 }

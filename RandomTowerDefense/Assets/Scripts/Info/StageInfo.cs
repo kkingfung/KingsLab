@@ -30,7 +30,7 @@ public class WaveAttr
     public float enmStartTime;
     public float enmSpawnPeriod;
     public List<EnmDetail> enmDetail;
-    public WaveAttr(float enmStartTime, float enmSpawnPeriod, List<EnmDetail> enmDetail)
+    public WaveAttr(List<EnmDetail> enmDetail, float enmStartTime=1.5f, float enmSpawnPeriod=0.25f)
     {
         this.enmStartTime = enmStartTime;
         this.enmSpawnPeriod = enmSpawnPeriod;
@@ -50,7 +50,7 @@ public class StageAttr
     public float waveWaitTime;
     public WaveAttr[] waveDetail;
 
-    public StageAttr(int waveNum, WaveAttr[] waveAttr, float waveTime = 30f)
+    public StageAttr(int waveNum, WaveAttr[] waveAttr, float waveTime = 10f)
     {
         this.waveNum = waveNum;
         this.waveWaitTime = waveTime;
@@ -320,7 +320,7 @@ public static class StageInfo
                     detailPerWave.Add(detail[j]);
                 }
             }
-            waveArray[i] = new WaveAttr(2, 2.0f, detailPerWave);
+            waveArray[i] = new WaveAttr(detailPerWave);
         }
         return waveArray;
     }
@@ -330,11 +330,12 @@ public static class StageInfo
         WaveAttr[] waveArray = new WaveAttr[waveNum];
 
         List<EnmDetail> detail = new List<EnmDetail>();
-        detail.Add(new EnmDetail(1, 5, 1, "Slime"));
-        detail.Add(new EnmDetail(2, 5, 1, "Mushroom"));
-        detail.Add(new EnmDetail(3, 10, 1, "Slime"));
-        detail.Add(new EnmDetail(4, 10, 1, "TurtleShell"));
-        detail.Add(new EnmDetail(5, 1, 1, "StoneMonster"));
+        int waveIDCnt = 1;
+        detail.Add(new EnmDetail(waveIDCnt++, 10, 1, "Slime"));
+        detail.Add(new EnmDetail(waveIDCnt++, 10, 1, "Mushroom"));
+        detail.Add(new EnmDetail(waveIDCnt++, 20, 1, "Slime"));
+        detail.Add(new EnmDetail(waveIDCnt++, 20, 1, "TurtleShell"));
+        detail.Add(new EnmDetail(waveIDCnt++, 3, 1, "StoneMonster"));
 
         int j = 0;
 
@@ -348,7 +349,7 @@ public static class StageInfo
                     detailPerWave.Add(detail[j]);
                 }
             }
-            waveArray[i] = new WaveAttr(2, 2.0f, detailPerWave);
+            waveArray[i] = new WaveAttr(detailPerWave);
         }
         return waveArray;
 
@@ -360,21 +361,26 @@ public static class StageInfo
         WaveAttr[] waveArray = new WaveAttr[waveNum];
 
         List<EnmDetail> detail = new List<EnmDetail>();
-        detail.Add(new EnmDetail(1, 5, 1, "Slime"));
-        detail.Add(new EnmDetail(2, 5, 1, "Mushroom"));
-        detail.Add(new EnmDetail(3, 10, 2, "Slime"));
-        detail.Add(new EnmDetail(4, 10, 1, "Mushroom"));
-        detail.Add(new EnmDetail(5, 10, 0, "TurtleShell"));
-        detail.Add(new EnmDetail(6, 10, 1, "Footman"));
-        detail.Add(new EnmDetail(7, 20, 1, "Slime"));
-        detail.Add(new EnmDetail(8, 20, 2, "Grunt"));
-        detail.Add(new EnmDetail(9, 30, 2, "Skeleton"));
-        detail.Add(new EnmDetail(10, 30, 0, "Footman"));
-        detail.Add(new EnmDetail(11, 20, 0, "FootmanS"));
-        detail.Add(new EnmDetail(12, 30, 1, "Skeleton"));
-        detail.Add(new EnmDetail(13, 20, 0, "GruntS"));
-        detail.Add(new EnmDetail(14, 20, 2, "TurtleShell"));
-        detail.Add(new EnmDetail(15, 2, 1, "Bull"));
+        int waveIDCnt = 1;
+        detail.Add(new EnmDetail(waveIDCnt++, 10, 1, "Slime"));
+        detail.Add(new EnmDetail(waveIDCnt++, 10, 1, "Mushroom"));
+        detail.Add(new EnmDetail(waveIDCnt++, 20, 2, "Slime"));
+        detail.Add(new EnmDetail(waveIDCnt++, 20, 1, "Mushroom"));
+        detail.Add(new EnmDetail(waveIDCnt++, 20, 0, "TurtleShell"));
+
+        detail.Add(new EnmDetail(waveIDCnt++, 30, 1, "Footman"));
+        detail.Add(new EnmDetail(waveIDCnt++, 30, 1, "Slime"));
+        detail.Add(new EnmDetail(waveIDCnt++, 30, 2, "Grunt"));
+        detail.Add(new EnmDetail(waveIDCnt++, 30, 2, "Skeleton"));
+        detail.Add(new EnmDetail(waveIDCnt++, 40, 0, "Footman"));
+
+        detail.Add(new EnmDetail(waveIDCnt++, 40, 0, "FootmanS"));
+        detail.Add(new EnmDetail(waveIDCnt++, 40, 1, "Skeleton"));
+        detail.Add(new EnmDetail(waveIDCnt++, 30, 0, "GruntS"));
+        detail.Add(new EnmDetail(waveIDCnt++, 40, 2, "TurtleShell"));
+        detail.Add(new EnmDetail(waveIDCnt, 1, 0, "Bull"));
+        detail.Add(new EnmDetail(waveIDCnt, 1, 2, "Bull"));
+        detail.Add(new EnmDetail(waveIDCnt, 1, 1, "Bull"));
 
         int j = 0;
 
@@ -388,7 +394,7 @@ public static class StageInfo
                     detailPerWave.Add(detail[j]);
                 }
             }
-            waveArray[i] = new WaveAttr(3, 1.0f, detailPerWave);
+            waveArray[i] = new WaveAttr(detailPerWave);
         }
         return waveArray;
     }
@@ -397,36 +403,45 @@ public static class StageInfo
     {
         WaveAttr[] waveArray = new WaveAttr[waveNum];
         List<EnmDetail> detail = new List<EnmDetail>();
-        detail.Add(new EnmDetail(1, 5, 1, "Slime"));
-        detail.Add(new EnmDetail(2, 5, 1, "Mushroom"));
-        detail.Add(new EnmDetail(3, 10, 2, "TurtleShell"));
-        detail.Add(new EnmDetail(4, 10, 2, "Footman"));
-        detail.Add(new EnmDetail(5, 10, 0, "Mushroom"));
-        detail.Add(new EnmDetail(6, 10, 0, "Grunt"));
-        detail.Add(new EnmDetail(7, 20, 1, "Skeleton"));
-        detail.Add(new EnmDetail(8, 20, 2, "Slime"));
-        detail.Add(new EnmDetail(9, 30, 0, "Grunt"));
-        detail.Add(new EnmDetail(10, 30, 0, "TurtleShell"));
-        detail.Add(new EnmDetail(11, 20, 1, "Mushroom"));
-        detail.Add(new EnmDetail(12, 30, 1, "Grunt"));
-        detail.Add(new EnmDetail(13, 20, 2, "Skeleton"));
-        detail.Add(new EnmDetail(14, 20, 2, "Footman"));
-        detail.Add(new EnmDetail(15, 10, 0, "StoneMonster"));
-        detail.Add(new EnmDetail(16, 20, 2, "SpiderGhost"));
-        detail.Add(new EnmDetail(17, 20, 1, "Golem"));
-        detail.Add(new EnmDetail(18, 25, 1, "SkeletonArmed"));
-        detail.Add(new EnmDetail(19, 30, 1, "FreeLich"));
-        detail.Add(new EnmDetail(20, 35, 0, "SpiderGhost"));
-        detail.Add(new EnmDetail(21, 15, 0, "Golem"));
-        detail.Add(new EnmDetail(22, 30, 2, "SkeletonArmed"));
-        detail.Add(new EnmDetail(23, 20, 2, "FreeLich"));
-        detail.Add(new EnmDetail(24, 40, 1, "Slime"));
-        detail.Add(new EnmDetail(25, 10, 1, "Bull"));
-        detail.Add(new EnmDetail(26, 20, 0, "FootmanS"));
-        detail.Add(new EnmDetail(27, 30, 0, "SpiderGhost"));
-        detail.Add(new EnmDetail(28, 20, 2, "GolemS"));
-        detail.Add(new EnmDetail(29, 20, 2, "FreeLichS"));
-        detail.Add(new EnmDetail(30, 1, 1, "Dragon"));
+        int waveIDCnt = 1;
+        detail.Add(new EnmDetail(waveIDCnt++, 10, 1, "Slime"));
+        detail.Add(new EnmDetail(waveIDCnt++, 10, 1, "Mushroom"));
+        detail.Add(new EnmDetail(waveIDCnt++, 20, 2, "TurtleShell"));
+        detail.Add(new EnmDetail(waveIDCnt++, 20, 2, "Footman"));
+        detail.Add(new EnmDetail(waveIDCnt++, 20, 0, "Mushroom"));
+
+        detail.Add(new EnmDetail(waveIDCnt++, 20, 0, "Grunt"));
+        detail.Add(new EnmDetail(waveIDCnt++, 25, 1, "Skeleton"));
+        detail.Add(new EnmDetail(waveIDCnt++, 30, 2, "Slime"));
+        detail.Add(new EnmDetail(waveIDCnt++, 35, 0, "Grunt"));
+        detail.Add(new EnmDetail(waveIDCnt++, 35, 0, "TurtleShell"));
+
+        detail.Add(new EnmDetail(waveIDCnt++, 25, 1, "Mushroom"));
+        detail.Add(new EnmDetail(waveIDCnt++, 30, 1, "Grunt"));
+        detail.Add(new EnmDetail(waveIDCnt++, 30, 2, "Skeleton"));
+        detail.Add(new EnmDetail(waveIDCnt++, 35, 2, "Footman"));
+        detail.Add(new EnmDetail(waveIDCnt, 10, 2, "StoneMonster"));
+        detail.Add(new EnmDetail(waveIDCnt, 10, 1, "StoneMonster"));
+        detail.Add(new EnmDetail(waveIDCnt++, 10, 0, "StoneMonster"));
+
+        detail.Add(new EnmDetail(waveIDCnt++, 30, 2, "SpiderGhost"));
+        detail.Add(new EnmDetail(waveIDCnt++, 30, 1, "Golem"));
+        detail.Add(new EnmDetail(waveIDCnt++, 30, 1, "SkeletonArmed"));
+        detail.Add(new EnmDetail(waveIDCnt++, 25, 1, "FreeLich"));
+        detail.Add(new EnmDetail(waveIDCnt++, 35, 0, "SpiderGhost"));
+
+        detail.Add(new EnmDetail(waveIDCnt++, 20, 0, "Golem"));
+        detail.Add(new EnmDetail(waveIDCnt++, 30, 2, "SkeletonArmed"));
+        detail.Add(new EnmDetail(waveIDCnt++, 30, 2, "FreeLich"));
+        detail.Add(new EnmDetail(waveIDCnt++, 50, 1, "Slime"));
+        detail.Add(new EnmDetail(waveIDCnt, 3, 0, "Bull"));
+        detail.Add(new EnmDetail(waveIDCnt++, 3, 2, "Bull"));
+
+        detail.Add(new EnmDetail(waveIDCnt++, 20, 1, "FootmanS"));
+        detail.Add(new EnmDetail(waveIDCnt++, 30, 1, "SpiderGhost"));
+        detail.Add(new EnmDetail(waveIDCnt++, 20, 0, "GolemS"));
+        detail.Add(new EnmDetail(waveIDCnt++, 20, 2, "FreeLichS"));
+        detail.Add(new EnmDetail(waveIDCnt++, 1, 1, "Dragon"));
 
         int j = 0;
 
@@ -440,7 +455,7 @@ public static class StageInfo
                     detailPerWave.Add(detail[j]);
                 }
             }
-            waveArray[i] = new WaveAttr(3, 0.5f, detailPerWave);
+            waveArray[i] = new WaveAttr(detailPerWave);
         }
         return waveArray;
     }
@@ -461,14 +476,14 @@ public static class StageInfo
             }
             else if (k < 30 - 1)
             {
-                detail.Add(new EnmDetail(k, Random.Range(15, 25)* (int)enmNumEx, Random.Range(0, 3), monsterCat1[Random.Range(0, monsterCat1.Length)]));
-                detail.Add(new EnmDetail(k, Random.Range(15, 25) * (int)enmNumEx, Random.Range(0, 3), monsterCat1[Random.Range(0, monsterCat1.Length)]));
+                detail.Add(new EnmDetail(k, Random.Range(15, 35)* (int)enmNumEx, Random.Range(0, 3), monsterCat1[Random.Range(0, monsterCat1.Length)]));
+                detail.Add(new EnmDetail(k, Random.Range(15, 35) * (int)enmNumEx, Random.Range(0, 3), monsterCat1[Random.Range(0, monsterCat1.Length)]));
             }
             else if (k < 50 - 1)
             {
-                detail.Add(new EnmDetail(k, Random.Range(15, 25)* (int)enmNumEx, Random.Range(0, 3), monsterCat2[Random.Range(0, monsterCat2.Length)]));
-                detail.Add(new EnmDetail(k, Random.Range(15, 25)* (int)enmNumEx, Random.Range(0, 3), monsterCat2[Random.Range(0, monsterCat2.Length)]));
-                detail.Add(new EnmDetail(k, Random.Range(15, 25) * (int)enmNumEx, Random.Range(0, 3), monsterCat2[Random.Range(0, monsterCat2.Length)]));
+                detail.Add(new EnmDetail(k, Random.Range(15, 35)* (int)enmNumEx, Random.Range(0, 3), monsterCat2[Random.Range(0, monsterCat2.Length)]));
+                detail.Add(new EnmDetail(k, Random.Range(15, 35)* (int)enmNumEx, Random.Range(0, 3), monsterCat2[Random.Range(0, monsterCat2.Length)]));
+                detail.Add(new EnmDetail(k, Random.Range(15, 35) * (int)enmNumEx, Random.Range(0, 3), monsterCat2[Random.Range(0, monsterCat2.Length)]));
             }
             else
             {
@@ -510,7 +525,7 @@ public static class StageInfo
                     detailPerWave.Add(detail[j]);
                 }
             }
-            waveArray[i] = new WaveAttr(3, 1f, detailPerWave);
+            waveArray[i] = new WaveAttr(detailPerWave);
         }
         return waveArray;
     }

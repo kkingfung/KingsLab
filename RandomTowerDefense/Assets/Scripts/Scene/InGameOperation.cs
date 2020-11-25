@@ -10,6 +10,7 @@ public class InGameOperation : ISceneChange
 {
     private readonly float tutorialTimeFactor = 0.05f;
     private readonly int BasicFloorMatSize = 3;
+    private readonly float BGMSpawnThreshold = 0.1f;//0.02f;
     public enum ScreenShownID
     {
         SSIDArena = 0,
@@ -91,6 +92,12 @@ public class InGameOperation : ISceneChange
 
     //CameraOperation
     private readonly float maxCamPosChgTime = 0.2f;
+
+    //SpawnReferringToBGM
+    public float timeBGM;
+    private float[] dataBGM;
+    private float dataBGMPrev;
+    public bool readyToSpawn;
 
     //RemoteConfig
     public struct userAttributes { }
@@ -225,6 +232,10 @@ public class InGameOperation : ISceneChange
         }
 
         AudioManager.PlayAudio("bgm_Battle", true);
+        dataBGM = AudioManager.GetClipWaveform("bgm_Battle");
+        timeBGM = Time.time;
+        dataBGMPrev = dataBGM[((int)timeBGM * 44100) % dataBGM.Length];
+        readyToSpawn = false;
 
         foreach (Material mat in PetrifyMat)
         {
@@ -279,6 +290,15 @@ public class InGameOperation : ISceneChange
     private void Update()
     {
         base.Update();
+
+        if (readyToSpawn == false && Time.time - timeBGM >= 0.25f)
+        {
+            //if (dataBGM[(int)(timeBGM * 0.25f* 44100) % dataBGM.Length] - dataBGMPrev > BGMSpawnThreshold)
+            if (dataBGM[(int)(timeBGM * 0.25f * 44100) % dataBGM.Length]> BGMSpawnThreshold)
+                    readyToSpawn = true;
+            //dataBGMPrev = dataBGM[(int)(timeBGM * 0.25f* 44100) % dataBGM.Length];
+            timeBGM += 0.25f;
+        }
 
         foreach (Text i in UICurrentGold)
         {

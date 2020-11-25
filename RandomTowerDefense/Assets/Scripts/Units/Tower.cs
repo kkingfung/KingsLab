@@ -248,7 +248,7 @@ public class Tower : MonoBehaviour
     }
 
     public int RequiredExp() {
-        return 25 * level * (1 + level);
+        return 25 * level * (1 + level) * rank;
     }
 
     public void LevelUp(int chg = 1)
@@ -278,35 +278,35 @@ public class Tower : MonoBehaviour
         {
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
                 attr.radius = attr.radius
-                    * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
+                    * (1 + (0.06f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
                 attr.damage = attr.damage
-                   * (1 + (0.02f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
+                   * (1 + (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
                 attr.waitTime = attr.waitTime
-                   * (1 - (0.02f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
+                   * (1 - (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
                 attr.radius = attr.radius
-                      * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
+                      * (1 + (0.06f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
                 attr.damage = attr.damage
-                        * (1 + (0.02f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
+                        * (1 + (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
                 attr.waitTime = attr.waitTime
-                   * (1 - (0.02f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
+                   * (1 - (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
                 attr.damage = attr.damage
-                    * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
+                    * (1 + (0.06f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
                 attr.radius = attr.radius
-                     * (1 + (0.02f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
+                     * (1 + (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
                 attr.waitTime = attr.waitTime
-                   * (1 - (0.02f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
+                   * (1 - (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
                 attr.waitTime = attr.waitTime
-                    * (1 - (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
+                    * (1 - (0.06f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
                 attr.damage = attr.damage
-                     * (1 + (0.02f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
+                     * (1 + (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
                 attr.radius = attr.radius
-                   * (1 + (0.02f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
+                   * (1 + (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
                 break;
         }
 

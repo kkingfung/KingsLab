@@ -58,7 +58,11 @@ public class CastleToEnemy : JobComponentSystem
             var jobEvC = new CollisionJobEvC()
             {
                 healthType = healthType,
-                targetRecord = castleGroup.ToComponentDataArray<Damage>(Allocator.TempJob)
+                translationType = transformType,
+                radius = radiusType,
+                targetRecord = castleGroup.ToComponentDataArray<Damage>(Allocator.TempJob),
+                targetRadius = castleGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
+                targetTrans = castleGroup.ToComponentDataArray<Translation>(Allocator.TempJob)
             };
             jobHandle = jobEvC.Schedule(enemyGroup, inputDependencies);
             jobHandle.Complete();
@@ -77,9 +81,9 @@ public class CastleToEnemy : JobComponentSystem
         return delta.x * delta.x + delta.z * delta.z;
     }
 
-    static bool CheckCollision(float3 posA, float3 posB, float radiusSqr)
+    static bool CheckCollision(float3 posA, float3 posB, float radius)
     {
-        return GetDistance(posA, posB) <= radiusSqr;
+        return GetDistance(posA, posB) <= radius * radius;
     }
 
     //Collision Job
@@ -88,28 +92,46 @@ public class CastleToEnemy : JobComponentSystem
     struct CollisionJobEvC : IJobChunk
     {
         public ComponentTypeHandle<Health> healthType;
+        [ReadOnly] public ComponentTypeHandle<Radius> radius;
+        [ReadOnly] public ComponentTypeHandle<Translation> translationType;
+
         [DeallocateOnJobCompletion]
         public NativeArray<Damage> targetRecord;
+        [DeallocateOnJobCompletion]
+        public NativeArray<Radius> targetRadius;
+        [DeallocateOnJobCompletion]
+        public NativeArray<Translation> targetTrans;
 
         public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
         {
             var chunkHealths = chunk.GetNativeArray(healthType);
+            var chunkTranslations = chunk.GetNativeArray(translationType);
+            var chunkRadius = chunk.GetNativeArray(radius);
 
-            for (int i = 0; i < chunk.Count; ++i)
+            for (int j = 0; j < targetRecord.Length; j++)
             {
-                Health health = chunkHealths[i];
-                if (health.Value <= 0) continue;
+                int counter = (int)targetRecord[j].Value;
+                if (counter < 0)
+                    continue;
+                Translation pos2 = targetTrans[j];
 
-                for (int j = 0; j < targetRecord.Length; j++)
+                for (int i = 0; i < chunk.Count; ++i)
                 {
-                    if (targetRecord[j].Value < 0)
-                        return;
-                    if (targetRecord[j].Value == chunkIndex)
+                    Health health = chunkHealths[i];
+                    if (health.Value <= 0) continue;
+                    Radius radius = chunkRadius[i];
+                    Translation pos = chunkTranslations[i];
+                    if (CheckCollision(pos.Value, pos2.Value, targetRadius[j].Value*0.5f + radius.Value))
                     {
+                        counter--;
                         health.Value = 0;
                         chunkHealths[i] = health;
                     }
+
+                    if (counter < 0)
+                        break;
                 }
+
             }
         }
     }
@@ -142,33 +164,27 @@ public class CastleToEnemy : JobComponentSystem
 
             for (int i = 0; i < chunk.Count; ++i)
             {
-                float damage = 0;
                 Health health = chunkHealths[i];
                 if (health.Value <= 0) continue;
                 Radius radius = chunkRadius[i];
                 Translation pos = chunkTranslations[i];
                 Damage damageRec = chunkDamage[i];
-                damageRec.Value = -1;
+                damageRec.Value = 0;
 
                 for (int j = 0; j < targetTrans.Length; j++)
                 {
                     if (targetHealth[j].Value <= 0) continue;
                     Translation pos2 = targetTrans[j];
+
                     if (CheckCollision(pos.Value, pos2.Value, targetRadius[j].Value + radius.Value))
                     {
-                        damageRec.Value = j;
-                        damage += targetDamage[j].Value;
-                        break;
+                        damageRec.Value += 1;
+                        health.Value -= targetDamage[j].Value;
                     }
                 }
 
-                if (damage > 0)
-                {
-
-                    health.Value -= damage;
-                    chunkDamage[i] = damageRec;
-                    chunkHealths[i] = health;
-                }
+                chunkHealths[i] = health;
+                chunkDamage[i] = damageRec;
             }
         }
     }

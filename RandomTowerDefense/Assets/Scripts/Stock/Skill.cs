@@ -36,6 +36,8 @@ public class Skill : MonoBehaviour
         playerManager = FindObjectOfType<PlayerManager>();
         //enemySpawner = FindObjectOfType<EnemySpawner>();
         audioManager = FindObjectOfType<AudioManager>();
+        audioSource = GetComponent<AudioSource>();
+
         if (skillSpawner == null) skillSpawner = FindObjectOfType<SkillSpawner>();
         if (VFX == null) VFX = this.GetComponent<VisualEffect>();
 

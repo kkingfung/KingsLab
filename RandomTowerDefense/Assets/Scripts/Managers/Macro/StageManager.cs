@@ -88,7 +88,7 @@ public class StageManager : MonoBehaviour
 
             //Fixed CastleMapPos
             int[] entityID = castleSpawner.Spawn(mapGenerator.CoordToPosition(SpawnPoint[0]) + mapGenerator.transform.position, 
-                Quaternion.Euler(0f, 90f, 0f), (int)PlayerPrefs.GetFloat("hpMax",5), 0);
+                Quaternion.Euler(0f, 90f, 0f), (int)PlayerPrefs.GetFloat("hpMax",5), 0f);
             CastleEntityID = entityID[0];
             castleDestroy = castleSpawner.GameObjects[CastleEntityID].GetComponentsInChildren<MeshDestroy>();
 
@@ -255,13 +255,15 @@ public class StageManager : MonoBehaviour
     
     private IEnumerator DmgAnimation()
     {
-        dmgVFX.Play();
+        if (dmgVFX)
+            dmgVFX.Play();
         float timerCount = timerForDmgVFX;
         while (timerCount >0)
         {
             timerCount -= Time.deltaTime;
             yield return new WaitForSeconds(0f);
         }
-        dmgVFX.Stop();
+        if (dmgVFX)
+            dmgVFX.Stop();
     }
 }

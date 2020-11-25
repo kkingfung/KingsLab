@@ -115,10 +115,10 @@ public class WaveManager : MonoBehaviour
         }
         else if (stageManager.GetResult() == 0)
         {
-            if (Time.time - WaveTimer > CurrAttr.waveWaitTime)
+            if (isSpawning==false && Time.time - WaveTimer > CurrAttr.waveWaitTime)
             {
                 WaveChg();
-                WaveTimer = Time.time;
+                //WaveTimer = Time.time;
             }
         }
     }
@@ -150,7 +150,22 @@ public class WaveManager : MonoBehaviour
                         {
                             while (true) 
                             {
-                                if (debugManager.ready)
+                                if (sceneManager && sceneManager.readyToSpawn)
+                                {
+                                    EnemyAttr attr = EnemyInfo.GetEnemyInfo(wave.enmDetail[i].enmType);
+                                    enemySpawner.Spawn(wave.enmDetail[i].enmType,
+                                        stageManager.GetPortalPosition()[SpawnPointByAI >= 0 ? SpawnPointByAI : wave.enmDetail[i].enmPort], new float3(),
+                                        (float)(attr.health * (1 + 0.005f * (CurrentWaveNum * CurrentWaveNum))),
+                                        attr.money * (CheckCustomData ? (int)StageInfo.resourceEx : 1),
+                                        attr.damage, attr.radius,
+                                         (float)(attr.speed * (1 + 0.005f * (CurrentWaveNum * CurrentWaveNum) * (CheckCustomData ? (int)StageInfo.enmSpeedEx : 1))),
+                                        attr.time
+                                        );
+                                    sceneManager.readyToSpawn = false;
+                                    sceneManager.timeBGM = Time.time;
+                                    break;
+                                }
+                                else if (debugManager && debugManager.ready)
                                 {
                                     EnemyAttr attr = EnemyInfo.GetEnemyInfo(wave.enmDetail[i].enmType);
                                     enemySpawner.Spawn(wave.enmDetail[i].enmType,
@@ -162,6 +177,7 @@ public class WaveManager : MonoBehaviour
                                         attr.time
                                         );
                                     debugManager.ready = false;
+                                    debugManager.time = Time.time;
                                     break;
                                 }
                                 yield return new WaitForSeconds(0);
@@ -169,11 +185,17 @@ public class WaveManager : MonoBehaviour
                             yield return new WaitForSeconds(wave.enmSpawnPeriod / Mathf.Max(StageInfo.spawnSpeedEx, 1));
                         }
                     }
+    
                 }
                 isSpawning = false;
+                WaveTimer = Time.time;
             }
 
             yield return new WaitForSeconds(0f);
         }
+    }
+
+    public void SetCurrWAveNum(int num) {
+        CurrentWaveNum = num;
     }
 }

@@ -28,7 +28,7 @@ public class EnemyManager : MonoBehaviour
         {
             EnemyAttr attr = EnemyInfo.GetEnemyInfo(monsterName);
             int[] entityIDList=enemySpawner.Spawn(monsterName, SpawnPoint,new float3(), 
-                attr.health * (1+ 0.3f * waveManager.GetCurrentWaveNum() * waveManager.GetCurrentWaveNum()),attr.money,
+                attr.health * (1+ 0.1f * waveManager.GetCurrentWaveNum() * waveManager.GetCurrentWaveNum()),attr.money,
                 attr.damage, attr.radius, attr.speed * (1 + 0.02f * waveManager.GetCurrentWaveNum()), attr.time);
         }
     }

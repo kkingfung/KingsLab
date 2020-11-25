@@ -112,14 +112,14 @@ public class AITrainingOperation : InGameOperation
     // Update is called once per frame
     private void Update()
     {
-        if (resourceManager.GetCurrMaterial() >= 150)
+        if (resourceManager.GetCurrMaterial() >= 120)
         {
             //Random Spawn Tower
             GameObject pillar = GetRandomFreePillar(true);
             if (pillar)
                 towerManager.BuildTower(pillar);
         }
-        else {
+        else if(Random.Range(0,100)==0){
             int count;
             List<GameObject> targetList;
             //Check three in a kind to merge

@@ -47,39 +47,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maps:
   - mapSize:
-      x: 6
-      y: 6
+      x: 5
+      y: 5
     obstaclePercent: 1
-    seed: 2
-    minObstacleHeight: 0.1
-    maxObstacleHeight: 0.6
+    seed: -1808409572
+    minObstacleHeight: 0.2
+    maxObstacleHeight: 0.3
     foregroundColour: {r: 0.4117647, g: 0, b: 0, a: 0}
     backgroundColour: {r: 0.9098039, g: 0.05882353, b: 0.25490198, a: 0}
   - mapSize:
-      x: 9
+      x: 8
       y: 8
     obstaclePercent: 1
-    seed: 3
-    minObstacleHeight: 0.1
-    maxObstacleHeight: 0.6
+    seed: -381656168
+    minObstacleHeight: 0.15
+    maxObstacleHeight: 0.25
     foregroundColour: {r: 0.4117647, g: 0, b: 0, a: 0}
     backgroundColour: {r: 0.9098039, g: 0.05882353, b: 0.25490198, a: 0}
   - mapSize:
-      x: 12
-      y: 9
+      x: 10
+      y: 10
     obstaclePercent: 1
-    seed: 4
+    seed: -481984086
     minObstacleHeight: 0.1
-    maxObstacleHeight: 0.6
+    maxObstacleHeight: 0.2
     foregroundColour: {r: 0.4117647, g: 0, b: 0, a: 0}
     backgroundColour: {r: 0.9098039, g: 0.05882353, b: 0.25490198, a: 0}
   - mapSize:
-      x: 16
-      y: 9
+      x: 10
+      y: 10
     obstaclePercent: 1
-    seed: 0
-    minObstacleHeight: 0.1
-    maxObstacleHeight: 0.6
+    seed: -144748691
+    minObstacleHeight: 0.05
+    maxObstacleHeight: 0.15
     foregroundColour: {r: 0.4117647, g: 0, b: 0, a: 0}
     backgroundColour: {r: 0.9098039, g: 0.05882353, b: 0.25490198, a: 0}
   mapIndex: 3
@@ -90,8 +90,12 @@ MonoBehaviour:
   navmeshFloor: {fileID: 2786186499764198953}
   navmeshMaskPrefab: {fileID: 404898, guid: 2819726a480fa46419aec4f76b1268e7, type: 3}
   maxMapSize: {x: 20, y: 20}
+  MapSize:
+    x: 0
+    y: 0
   outlinePercent: 0
   tileSize: 1
+  packedObstacles: 1
   originPos: {x: 0, y: 0, z: 0}
   sceneManager: {fileID: 0}
   stageManager: {fileID: 0}

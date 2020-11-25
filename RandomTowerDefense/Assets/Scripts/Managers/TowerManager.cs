@@ -193,10 +193,6 @@ public class TowerManager : MonoBehaviour
 
     public bool MergeTower(GameObject targetedTower)
     {
-        //Check Type
-        TowerInfo.TowerInfoID type;
-        Tower towerScript = targetedTower.GetComponent<Tower>();
-
         //if (TowerNightmareList.Contains(targetedTower)) type = TowerInfo.TowerInfoID.Enum_TowerNightmare;
         //else if (TowerSoulEaterList.Contains(targetedTower)) type = TowerInfo.TowerInfoID.Enum_TowerSoulEater;
         //else if (TowerTerrorBringerList.Contains(targetedTower)) type = TowerInfo.TowerInfoID.Enum_TowerTerrorBringer;

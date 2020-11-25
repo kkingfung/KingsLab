@@ -20,7 +20,8 @@ public class AudioManager : MonoBehaviour
     [HideInInspector]
     public bool enabledSE;
 
-    public void EnableBGM(bool enable) {
+    public void EnableBGM(bool enable)
+    {
         enabledBGM = enable;
         PlayerPrefs.SetInt("BGM", enabledBGM ? 1 : 0);
         foreach (Toggle i in bgmUI)
@@ -58,7 +59,7 @@ public class AudioManager : MonoBehaviour
         PlayerPrefs.SetInt("SE", enabledSE ? 1 : 0);
     }
 
-    private void Awake() 
+    private void Awake()
     {
         audioSource = GetComponents<AudioSource>();
 
@@ -94,7 +95,8 @@ public class AudioManager : MonoBehaviour
         audioSource[1].Play();
     }
 
-    void Release() {
+    void Release()
+    {
         foreach (var device in Microphone.devices)
         {
             if (Microphone.IsRecording(device))
@@ -104,36 +106,38 @@ public class AudioManager : MonoBehaviour
 
     public float[] GetClipWaveform(string clipname)
     {
-        float[] data = new float[bgmList[clipname].samples];
+        float[] data = new float[bgmList[clipname].samples * bgmList[clipname].channels];
         if (bgmList[clipname].GetData(data, 0) == false)
         {
             seList[clipname].GetData(data, 0);
         }
-        for(int i=0;i<10000;i++)
-        Debug.Log(data[i]*1000);
+        //for (int i = 0; i*0.25f * 44100 < data.Length; i++)
+        //    Debug.Log(data[(int)(i * 0.25f * 44100)]);
         return data;
     }
 
-    float[] GetWaveform(string clipname) 
+    float[] GetWaveform(string clipname)
     {
-        float[] data=new float[Microphone.GetPosition("Built-in Microphone")];
-        if (bgmList[clipname].GetData(data, 0) == false) {
+        float[] data = new float[Microphone.GetPosition("Built-in Microphone")];
+        if (bgmList[clipname].GetData(data, 0) == false)
+        {
             seList[clipname].GetData(data, 0);
         }
         return data;
     }
 
-    public void PlayAudio(string clipname,bool isLoop=false)
+    public void PlayAudio(string clipname, bool isLoop = false)
     {
         if (bgmList.ContainsKey(clipname))
         {
             if (enabledBGM == false) return;
-                audioSource[0].pitch = 1;
+            audioSource[0].pitch = 1;
             audioSource[0].clip = bgmList[clipname];
             audioSource[0].loop = isLoop;
-                audioSource[0].Play();
+            audioSource[0].Play();
         }
-        else {
+        else
+        {
             if (enabledSE)
                 audioSource[1].PlayOneShot(seList[clipname]);
         }
@@ -155,12 +159,12 @@ public class AudioManager : MonoBehaviour
     {
         if (bgmList.ContainsKey(clipname))
         {
-            if (enabledBGM==false) return;
+            if (enabledBGM == false) return;
             audioSource[0].pitch = -1;
             audioSource[0].clip = bgmList[clipname];
             audioSource[0].loop = isLoop;
             audioSource[0].Play();
-            StartCoroutine(StopLoop(isLoop,0));
+            StartCoroutine(StopLoop(isLoop, 0));
         }
         else
         {
@@ -169,18 +173,19 @@ public class AudioManager : MonoBehaviour
             audioSource[1].clip = seList[clipname];
             audioSource[1].loop = isLoop;
             audioSource[1].Play();
-            StartCoroutine(StopLoop(isLoop,1));
+            StartCoroutine(StopLoop(isLoop, 1));
         }
-        
+
     }
 
-    public IEnumerator StopLoop(bool isLoop,int SourceID)
+    public IEnumerator StopLoop(bool isLoop, int SourceID)
     {
         yield return new WaitForSeconds(1f);
         audioSource[SourceID].loop = isLoop;
     }
 
-    public void SetAudioPitch(float pitch, int SourceID) {
+    public void SetAudioPitch(float pitch, int SourceID)
+    {
         audioSource[SourceID].pitch = pitch;
     }
 }

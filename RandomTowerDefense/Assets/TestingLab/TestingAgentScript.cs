@@ -7,9 +7,9 @@ using Unity.MLAgents.Sensors;
 
 public class TestingAgentScript : Agent
 {
-    private WaveManager waveManager;
-    private FilledMapGenerator filledMapGenerator;
-    private TowerSpawner towerSpawner;
+    public WaveManager waveManager;
+    public FilledMapGenerator filledMapGenerator;
+    public TowerSpawner towerSpawner;
 
     private int2 AgentCoord;
     //private int2 MaxCoord;
@@ -20,18 +20,19 @@ public class TestingAgentScript : Agent
     int[] TowerDistribution;
     public override void Initialize()
     {
-        waveManager = FindObjectOfType<WaveManager>();
+        //waveManager = FindObjectOfType<WaveManager>();
         waveManager.SpawnPointByAI = 1;
         counter = 0;
 
-        filledMapGenerator = FindObjectOfType<FilledMapGenerator>();
+        //filledMapGenerator = FindObjectOfType<FilledMapGenerator>();
      
-        towerSpawner = FindObjectOfType<TowerSpawner>();
+        //towerSpawner = FindObjectOfType<TowerSpawner>();
     }
 
     private void Reset()
     {
         waveManager.SpawnPointByAI = 1;
+        waveManager.SetCurrWAveNum(0);
         counter = 0;
     }
 
@@ -42,6 +43,8 @@ public class TestingAgentScript : Agent
             if(counter<100)
             counter++;
             RequestDecision();
+
+            if (waveManager.GetCurrentWaveNum() >= 50) EndEpisode();
         }
     }
 
@@ -49,10 +52,10 @@ public class TestingAgentScript : Agent
     {
         TowerDistribution = CntTowerRankTotal();
         if (TowerDistribution.Length == 4) {
-            sensor.AddObservation(TowerDistribution[0]);
-            sensor.AddObservation(TowerDistribution[1]);
-            sensor.AddObservation(TowerDistribution[2]);
-            sensor.AddObservation(TowerDistribution[3]);
+            sensor.AddObservation((float)TowerDistribution[0]);
+            sensor.AddObservation((float)TowerDistribution[1]);
+            sensor.AddObservation((float)TowerDistribution[2]);
+            sensor.AddObservation((float)TowerDistribution[3]);
         }
     }
 
@@ -60,12 +63,12 @@ public class TestingAgentScript : Agent
     {
         int temp = waveManager.SpawnPointByAI;
 
-        if (vectorAction[0] == -1)
+        if (vectorAction[0] < -0.3)
             waveManager.SpawnPointByAI = 0;
-        else if (vectorAction[0] == 0)
-            waveManager.SpawnPointByAI = 1;
-        else if (vectorAction[0] == 1)
+        else if (vectorAction[0] > 0.3)
             waveManager.SpawnPointByAI = 2;
+        else
+            waveManager.SpawnPointByAI = 1;
 
         if (temp == waveManager.SpawnPointByAI)
             AddReward(-1 * counter/100.0f);
@@ -87,6 +90,7 @@ public class TestingAgentScript : Agent
     public override void OnEpisodeBegin()
     {
         Reset();
+        Application.Quit();
     }
 
     public void EnemyDisappear(Vector3 EnemyOriPos,Vector3 EnemyDiePos) {

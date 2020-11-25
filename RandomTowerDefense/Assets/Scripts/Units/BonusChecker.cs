@@ -171,8 +171,6 @@ public class BonusChecker : MonoBehaviour
 
     bool MonseterList_Rank(int rank)
     {
-        int result = 0x00000;
-
         switch (rank)
         {
             case 1:

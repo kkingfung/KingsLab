@@ -58,9 +58,9 @@ VisualEffect:
       - m_Value: 0.8
         m_Name: Max circle radius
         m_Overridden: 1
-      - m_Value: 3
+      - m_Value: 2
         m_Name: Size
-        m_Overridden: 0
+        m_Overridden: 1
       - m_Value: 16
         m_Name: Speed
         m_Overridden: 1
@@ -103,6 +103,7 @@ VFXRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

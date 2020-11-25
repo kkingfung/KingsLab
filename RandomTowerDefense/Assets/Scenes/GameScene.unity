@@ -14,7 +14,7 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 1
+  m_Fog: 0
   m_FogColor: {r: 0, g: 0, b: 0, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.025
@@ -13139,6 +13139,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de4cce722a3f3434395f3924ceaa743a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isSpawning: 0
   SpawnPointByAI: 0
   FireWork: []
   waveNumUI:
@@ -22384,6 +22385,7 @@ MonoBehaviour:
   RockCritter: {fileID: 8897753120952202049, guid: d7d0897d01f0f744eb7394a754348e4c, type: 3}
   GameObjects: []
   mapGenerator: {fileID: 2142590585}
+  agent: {fileID: 0}
 --- !u!21 &958790000
 Material:
   serializedVersion: 6

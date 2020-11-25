@@ -218,11 +218,11 @@ public class GyroscopeManager : MonoBehaviour
     {
         return -pitch;
     }
-    public void UpdateGyroYPR() 
+    public void UpdateGyroYPR()
     {
-        pitch = Input.gyro.rotationRateUnbiased.x * Mathf.Rad2Deg* sensitiveAdjustment * sensitivity;
-        yaw = Input.gyro.rotationRateUnbiased.y * Mathf.Rad2Deg * sensitiveAdjustment * sensitivity;
-        //roll = Input.gyro.rotationRateUnbiased.z * Mathf.Rad2De*0sensitiveAdjustment05f*sensitivity;
+        pitch = Input.gyro.rotationRateUnbiased.x * Mathf.Rad2Deg * sensitiveAdjustment * sensitivity * Time.deltaTime;
+        yaw = Input.gyro.rotationRateUnbiased.y * Mathf.Rad2Deg * sensitiveAdjustment * sensitivity * Time.deltaTime;
+        //roll = Input.gyro.rotationRateUnbiased.z * Mathf.Rad2De*0sensitiveAdjustment05f*sensitivity * Time.deltaTime;
 
         //rollRef += roll;
         yawRef += yaw;

@@ -72,7 +72,6 @@ public class TestingAgentScript : Agent
         else
             counter = 0;
 
-        Debug.Log(GetCumulativeReward());
     }
 
     public override void Heuristic(float[] actionsOut)

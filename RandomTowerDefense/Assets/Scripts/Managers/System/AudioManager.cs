@@ -102,6 +102,18 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    public float[] GetClipWaveform(string clipname)
+    {
+        float[] data = new float[bgmList[clipname].samples];
+        if (bgmList[clipname].GetData(data, 0) == false)
+        {
+            seList[clipname].GetData(data, 0);
+        }
+        for(int i=0;i<10000;i++)
+        Debug.Log(data[i]*1000);
+        return data;
+    }
+
     float[] GetWaveform(string clipname) 
     {
         float[] data=new float[Microphone.GetPosition("Built-in Microphone")];

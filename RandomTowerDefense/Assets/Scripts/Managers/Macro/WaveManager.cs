@@ -122,7 +122,7 @@ public class WaveManager : MonoBehaviour
             }
         }
     }
-
+    public DebugManager debugManager;
     private IEnumerator SpawnWave(WaveAttr wave)
     {
         float spawnTimer = wave.enmStartTime;
@@ -148,16 +148,24 @@ public class WaveManager : MonoBehaviour
                     {
                         for (int j = wave.enmDetail[i].enmNum; j > 0; --j)
                         {
-                            EnemyAttr attr = EnemyInfo.GetEnemyInfo(wave.enmDetail[i].enmType);
-                            enemySpawner.Spawn(wave.enmDetail[i].enmType,
-                                stageManager.GetPortalPosition()[SpawnPointByAI >= 0 ? SpawnPointByAI : wave.enmDetail[i].enmPort], new float3(),
-                                (float)(attr.health * (1 + 0.005f * (CurrentWaveNum * CurrentWaveNum))),
-                                attr.money * (CheckCustomData ? (int)StageInfo.resourceEx : 1),
-                                attr.damage, attr.radius,
-                                 (float)(attr.speed * (1 + 0.005f * (CurrentWaveNum * CurrentWaveNum) * (CheckCustomData ? (int)StageInfo.enmSpeedEx : 1))),
-                                attr.time
-                                );
-
+                            while (true) 
+                            {
+                                if (debugManager.ready)
+                                {
+                                    EnemyAttr attr = EnemyInfo.GetEnemyInfo(wave.enmDetail[i].enmType);
+                                    enemySpawner.Spawn(wave.enmDetail[i].enmType,
+                                        stageManager.GetPortalPosition()[SpawnPointByAI >= 0 ? SpawnPointByAI : wave.enmDetail[i].enmPort], new float3(),
+                                        (float)(attr.health * (1 + 0.005f * (CurrentWaveNum * CurrentWaveNum))),
+                                        attr.money * (CheckCustomData ? (int)StageInfo.resourceEx : 1),
+                                        attr.damage, attr.radius,
+                                         (float)(attr.speed * (1 + 0.005f * (CurrentWaveNum * CurrentWaveNum) * (CheckCustomData ? (int)StageInfo.enmSpeedEx : 1))),
+                                        attr.time
+                                        );
+                                    debugManager.ready = false;
+                                    break;
+                                }
+                                yield return new WaitForSeconds(0);
+                            }
                             yield return new WaitForSeconds(wave.enmSpawnPeriod / Mathf.Max(StageInfo.spawnSpeedEx, 1));
                         }
                     }

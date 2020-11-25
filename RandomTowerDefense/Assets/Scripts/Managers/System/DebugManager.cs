@@ -9,24 +9,44 @@ public class DebugManager : MonoBehaviour
     private float myTimeScale;
     private int CurrSpawningPoint;
     public WaveManager waveManager;
-
+    public AudioManager audioManager;
+    private float[] data;
+    public bool ready;
+    private float prev;
+    private int frame;
     // Start is called before the first frame update
     void Start()
     {
         init();
+        data = audioManager.GetClipWaveform("bgm_Battle");
+        audioManager.PlayAudio("bgm_Battle", true);
+        prev = data[frame % data.Length];
+        Debug.Log(-1);
     }
 
     private void init()
     {
         myTimeScale = 1.0f;
         CurrSpawningPoint = 0;
-
+        frame = 0;
         Time.timeScale = myTimeScale;
         Time.fixedDeltaTime = Time.timeScale;
+        ready = false;
     }
     // Update is called once per frame
     void Update()
     {
+        frame++;
+        if (ready == false)
+        {
+            if (Mathf.Abs(prev - data[frame % data.Length]) > 0.02f)
+            {
+                ready = true;
+            }
+            prev = data[frame % data.Length];
+        }
+        return;
+
         if (waveManager)
             CurrSpawningPoint = waveManager.SpawnPointByAI;
 

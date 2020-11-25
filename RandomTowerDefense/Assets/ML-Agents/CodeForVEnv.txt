@@ -1,0 +1,6 @@
+d:
+cd D:\course_Year3\FYP\Ref\AI\VirtualEnvironment\MLAgentsEnv\Scripts
+activate.bat   
+cd D:\GitHub\KingsLab\RandomTowerDefense\Assets\ML-Agents\ML-Agents config  
+mlagents-learn EnemySpawnerAmend.yaml --run-id=SpawnerAmend 
+--resume --force

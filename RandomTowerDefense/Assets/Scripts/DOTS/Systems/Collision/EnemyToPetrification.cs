@@ -75,8 +75,10 @@ public class EnemyToPetrification : JobComponentSystem
         public ComponentTypeHandle<BuffTime> buffType;
 
         [DeallocateOnJobCompletion]
+        [NativeDisableParallelForRestriction]
         public NativeArray<SlowRate> targetPetrify;
         [DeallocateOnJobCompletion]
+        [NativeDisableParallelForRestriction]
         public NativeArray<BuffTime> targetBuff;
 
         public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)

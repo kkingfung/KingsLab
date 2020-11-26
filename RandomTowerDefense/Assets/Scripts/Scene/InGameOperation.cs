@@ -25,8 +25,6 @@ public class InGameOperation : ISceneChange
     public List<Vector3> MainCamStayPt;
     public List<Vector3> MainCamRotationAngle;
     public GameObject StoreGp;//MainWith MainCam
-
-    [Header("OtherCamera Settings")]
     public GameObject DarkenCam;
 
     [Header("UI Settings")]
@@ -48,17 +46,24 @@ public class InGameOperation : ISceneChange
     public List<SpriteRenderer> PetrifySpr;
     public List<Material> PetrifyMat;
 
-    [Header("Other Settings")]
+    [Header("FileUpdate Settings")]
     [SerializeField]
     public bool UseFileAsset;
     [SerializeField]
     public bool UseRemoteConfig;
-    public Material FloorMat;
+
+
+    [Header("FadeObj Settings")]
     public GameObject LandscapeFadeImg;
     public GameObject PortraitFadeImg;
 
     private FadeEffect LandscapeFade;
     private FadeEffect PortraitFade;
+
+    [Header("Other Settings")]
+    public GameObject Agent;
+    public Material FloorMat;
+
 
     //public bool isDebugging;//For ingame Debugger
     private bool isTutorial;//For 1st Stage Only
@@ -73,6 +78,7 @@ public class InGameOperation : ISceneChange
     public int nextScreenShown = 0;
     private bool isScreenChanging = false;
 
+    [Header("Manager Linkages")]
     //Manager
     public AudioManager AudioManager;
     public CameraManager CameraManager;
@@ -94,9 +100,11 @@ public class InGameOperation : ISceneChange
     private readonly float maxCamPosChgTime = 0.2f;
 
     //SpawnReferringToBGM
+    [HideInInspector]
     public float timeBGM;
     private float[] dataBGM;
     private float dataBGMPrev;
+    [HideInInspector]
     public bool readyToSpawn;
 
     //RemoteConfig
@@ -226,9 +234,12 @@ public class InGameOperation : ISceneChange
         //scoreCalculation = FindObjectOfType<ScoreCalculation>();
         //tutorialManager = FindObjectOfType<TutorialManager>();
 
-        if (tutorialManager && isTutorial == false)
+        if (tutorialManager)
         {
-            tutorialManager.SetTutorialStage(TutorialManager.TutorialStageID.TutorialProgress_FreeBattle);
+            if (isTutorial == false)
+                tutorialManager.SetTutorialStage(TutorialManager.TutorialStageID.TutorialProgress_FreeBattle);
+            else
+                Destroy(Agent);
         }
 
         AudioManager.PlayAudio("bgm_Battle", true);

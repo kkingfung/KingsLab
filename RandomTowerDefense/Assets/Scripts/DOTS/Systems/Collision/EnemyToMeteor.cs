@@ -82,12 +82,16 @@ public class EnemyToMeteor : JobComponentSystem
         [ReadOnly] public ComponentTypeHandle<Translation> translationType;
 
         [DeallocateOnJobCompletion]
+        [NativeDisableParallelForRestriction]
         public NativeArray<Damage> targetDamage;
         [DeallocateOnJobCompletion]
+        [NativeDisableParallelForRestriction]
         public NativeArray<Radius> targetRadius;
         [DeallocateOnJobCompletion]
+        [NativeDisableParallelForRestriction]
         public NativeArray<Translation> targetTrans;
         [DeallocateOnJobCompletion]
+        [NativeDisableParallelForRestriction]
         public NativeArray<WaitingTime> targetWait;
 
         public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)

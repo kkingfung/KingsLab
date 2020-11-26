@@ -9,7 +9,7 @@ using Unity.Entities;
 public class Tower : MonoBehaviour
 {
     private readonly int[] MaxLevel = { 15, 30, 50, 99 };
-    private readonly int[] MaxLevelBonus = { 100, 200, 300, 400 };
+    private readonly int[] MaxLevelBonus = { 1000, 2000, 3000, 4000 };
     //private readonly int[] MaxLevel = { 1, 1, 1, 1 };
     private readonly float TowerDestroyTime = 2;
     private readonly int ActionSetNum = 2;
@@ -41,6 +41,7 @@ public class Tower : MonoBehaviour
     //GameObject defaultTarget;
 
     private Animator animator;
+    private VisualEffect auraVFXComponent;
     private VisualEffect lvupVFXComponent;
 
     private int entityID;
@@ -116,7 +117,7 @@ public class Tower : MonoBehaviour
                     audioSource.PlayOneShot(audioManager.GetAudio("se_Lighting"));
                 }
                 posAdj.z = 0.2f;
-                GainExp(ExpPerAttack * 5);
+                GainExp(ExpPerAttack * 10);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
                 if (audioManager && audioManager.enabledSE)
@@ -125,7 +126,7 @@ public class Tower : MonoBehaviour
                 }
                 posAdj.z = -0.2f;
                 atkEntityPos = transform.position;
-                GainExp(ExpPerAttack * 2);
+                GainExp(ExpPerAttack * 3);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
                 if (audioManager && audioManager.enabledSE)
@@ -134,7 +135,7 @@ public class Tower : MonoBehaviour
                 }
 
                 posAdj.z = 0.0f;
-                GainExp(ExpPerAttack*10);
+                GainExp(ExpPerAttack*15);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
                 if (audioManager && audioManager.enabledSE)
@@ -191,6 +192,7 @@ public class Tower : MonoBehaviour
         lvupVFXPrefab = LevelUpVFX;
         this.auraVFX = GameObject.Instantiate(auraVFXPrefab, this.transform.position, Quaternion.Euler(90f, 0, 0));
         this.auraVFX.transform.parent = this.transform;
+        this.auraVFXComponent = auraVFX.GetComponentInChildren<VisualEffect>();
         this.lvupVFXComponent = pillar.GetComponentInChildren<VisualEffect>();
 
         if (this.lvupVFXComponent == null)
@@ -198,12 +200,13 @@ public class Tower : MonoBehaviour
             GameObject lvupVFX = GameObject.Instantiate(lvupVFXPrefab, this.transform.position, Quaternion.identity);
             lvupVFX.transform.parent = pillar.transform;
             lvupVFXComponent = lvupVFX.GetComponentInChildren<VisualEffect>();
+            lvupVFXComponent.SetFloat("SpawnRate", level);
         }
         else
         {
             this.lvupVFXComponent.enabled = true;
         }
-        
+
         switch (type)
         {
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
@@ -219,6 +222,7 @@ public class Tower : MonoBehaviour
                 lvupVFXComponent.SetVector4("MainColor", new Vector4(1, 0, 0, 1));
                 break;
         }
+        lvupVFXComponent.SetFloat("SizeMultiplier", rank * 2);
 
         exp = 0;
         SetLevel(lv);
@@ -259,7 +263,8 @@ public class Tower : MonoBehaviour
     public void SetLevel(int lv)
     {
         level = lv;
-        lvupVFXComponent.SetFloat("SpawnRate", level);
+        auraVFXComponent.SetFloat("Spawn Rate", level * 5);
+
         UpdateAttr();
         if (level == MaxLevel[rank - 1])
             resourceManager.ChangeMaterial(MaxLevelBonus[rank - 1]);
@@ -278,7 +283,7 @@ public class Tower : MonoBehaviour
         {
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
                 attr.radius = attr.radius
-                    * (1 + (0.06f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
+                    * (1 + (0.07f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
                 attr.damage = attr.damage
                    * (1 + (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
                 attr.waitTime = attr.waitTime
@@ -286,15 +291,15 @@ public class Tower : MonoBehaviour
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
                 attr.radius = attr.radius
-                      * (1 + (0.06f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
+                      * (1 + (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
                 attr.damage = attr.damage
-                        * (1 + (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
+                        * (1 + (0.07f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
                 attr.waitTime = attr.waitTime
                    * (1 - (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
                 attr.damage = attr.damage
-                    * (1 + (0.06f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
+                    * (1 + (0.07f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
                 attr.radius = attr.radius
                      * (1 + (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
                 attr.waitTime = attr.waitTime
@@ -302,11 +307,11 @@ public class Tower : MonoBehaviour
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
                 attr.waitTime = attr.waitTime
-                    * (1 - (0.06f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
+                    * (1 - (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
                 attr.damage = attr.damage
                      * (1 + (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
                 attr.radius = attr.radius
-                   * (1 + (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
+                   * (1 + (0.07f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
                 break;
         }
 
@@ -323,6 +328,7 @@ public class Tower : MonoBehaviour
             Value = attr.waitTime
         });
 
+        this.lvupVFXComponent.transform.localScale = Vector3.one;
     }
 
     public bool CheckLevel()
@@ -362,6 +368,7 @@ public class Tower : MonoBehaviour
 
         this.gameObject.SetActive(false);
         //Destroy(this.gameObject);
+        StopCoroutine(EndAnim());
     }
 
     private IEnumerator StartAnim()

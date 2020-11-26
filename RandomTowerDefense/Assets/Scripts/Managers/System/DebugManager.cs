@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DebugManager : MonoBehaviour
 {
-    private readonly float timescaleChg = 0.5f;
+    private readonly float timescaleChg = 1f;
     private readonly float BGMSpawnThreshold = 0.1f;//0.02f;
 
     private float myTimeScale;
@@ -70,6 +70,6 @@ public class DebugManager : MonoBehaviour
         if (myTimeScale < 0) myTimeScale = 0;
         Time.timeScale = myTimeScale;
         Time.fixedDeltaTime = Time.timeScale;
-        Debug.Log(myTimeScale);
+        //Debug.Log(myTimeScale);
     }
 }

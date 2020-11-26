@@ -90,14 +90,19 @@ public class EnemyToBlizzard : JobComponentSystem
         public ComponentTypeHandle<BuffTime> buffType;
 
         [DeallocateOnJobCompletion]
+        [NativeDisableParallelForRestriction]
         public NativeArray<Damage> targetDamage;
         [DeallocateOnJobCompletion]
+        [NativeDisableParallelForRestriction]
         public NativeArray<Radius> targetRadius;
         [DeallocateOnJobCompletion]
+        [NativeDisableParallelForRestriction]
         public NativeArray<Translation> targetTrans;
         [DeallocateOnJobCompletion]
+        [NativeDisableParallelForRestriction]
         public NativeArray<SlowRate> targetSlow;
         [DeallocateOnJobCompletion]
+        [NativeDisableParallelForRestriction]
         public NativeArray<BuffTime> targetBuff;
 
         public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)

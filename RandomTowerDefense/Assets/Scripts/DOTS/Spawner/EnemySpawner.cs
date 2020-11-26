@@ -70,7 +70,7 @@ public class EnemySpawner : MonoBehaviour
 
     public FilledMapGenerator mapGenerator;
     // private CastleSpawner castleSpawner;
-    public TestingAgentScript agent;
+    public AgentScript agent;
 
     private void Awake()
     {

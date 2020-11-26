@@ -10,7 +10,6 @@ using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-
 public class EnemyToAttack : JobComponentSystem
 {
     EntityQuery enemyGroup;
@@ -78,14 +77,19 @@ public class EnemyToAttack : JobComponentSystem
         [ReadOnly] public ComponentTypeHandle<Translation> translationType;
 
         [DeallocateOnJobCompletion]
+        [NativeDisableParallelForRestriction]
         public NativeArray<Damage> targetDamage;
         [DeallocateOnJobCompletion]
+        [NativeDisableParallelForRestriction]
         public NativeArray<Radius> targetRadius;
         [DeallocateOnJobCompletion]
+        [NativeDisableParallelForRestriction]
         public NativeArray<Translation> targetTrans;
         [DeallocateOnJobCompletion]
+        [NativeDisableParallelForRestriction]
         public NativeArray<ActionTime> targetAction;
         [DeallocateOnJobCompletion]
+        [NativeDisableParallelForRestriction]
         public NativeArray<WaitingTime> targetWait;
 
         public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)

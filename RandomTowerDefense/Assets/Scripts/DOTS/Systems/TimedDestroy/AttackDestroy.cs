@@ -21,7 +21,7 @@ public class AttackDestroy : JobComponentSystem
 
 		float deltaTime = Time.DeltaTime;
 
-		return Entities.WithAll<AttackTag>().ForEach((Entity entity, int entityInQueryIndex, ref Lifetime activeTime) =>
+		JobHandle jobHandle = Entities.WithAll<AttackTag>().ForEach((Entity entity, int entityInQueryIndex, ref Lifetime activeTime) =>
 		{
 			activeTime.Value -= deltaTime;
 			if (activeTime.Value <= 0f)
@@ -31,5 +31,7 @@ public class AttackDestroy : JobComponentSystem
 			}
 
 		}).Schedule(inputDeps);
+		endSimulationEcbSystem.AddJobHandleForProducer(jobHandle);
+		return jobHandle;
 	}
 }

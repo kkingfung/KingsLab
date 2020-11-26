@@ -96,10 +96,13 @@ public class CastleToEnemy : JobComponentSystem
         [ReadOnly] public ComponentTypeHandle<Translation> translationType;
 
         [DeallocateOnJobCompletion]
+        [NativeDisableParallelForRestriction]
         public NativeArray<Damage> targetRecord;
         [DeallocateOnJobCompletion]
+        [NativeDisableParallelForRestriction]
         public NativeArray<Radius> targetRadius;
         [DeallocateOnJobCompletion]
+        [NativeDisableParallelForRestriction]
         public NativeArray<Translation> targetTrans;
 
         public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
@@ -145,23 +148,27 @@ public class CastleToEnemy : JobComponentSystem
         public ComponentTypeHandle<Health> healthType;
         public ComponentTypeHandle<Damage> damageRecord;
         [ReadOnly] public ComponentTypeHandle<Translation> translationType;
-
+    
         [DeallocateOnJobCompletion]
+        [NativeDisableParallelForRestriction]
         public NativeArray<Damage> targetDamage;
         [DeallocateOnJobCompletion]
+        [NativeDisableParallelForRestriction]
         public NativeArray<Radius> targetRadius;
         [DeallocateOnJobCompletion]
+        [NativeDisableParallelForRestriction]
         public NativeArray<Translation> targetTrans;
         [DeallocateOnJobCompletion]
+        [NativeDisableParallelForRestriction]
         public NativeArray<Health> targetHealth;
-
+    
         public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
         {
             var chunkHealths = chunk.GetNativeArray(healthType);
             var chunkTranslations = chunk.GetNativeArray(translationType);
             var chunkRadius = chunk.GetNativeArray(radius);
             var chunkDamage = chunk.GetNativeArray(damageRecord);
-
+    
             for (int i = 0; i < chunk.Count; ++i)
             {
                 Health health = chunkHealths[i];
@@ -170,19 +177,18 @@ public class CastleToEnemy : JobComponentSystem
                 Translation pos = chunkTranslations[i];
                 Damage damageRec = chunkDamage[i];
                 damageRec.Value = 0;
-
+    
                 for (int j = 0; j < targetTrans.Length; j++)
                 {
                     if (targetHealth[j].Value <= 0) continue;
                     Translation pos2 = targetTrans[j];
-
                     if (CheckCollision(pos.Value, pos2.Value, targetRadius[j].Value + radius.Value))
                     {
                         damageRec.Value += 1;
                         health.Value -= targetDamage[j].Value;
                     }
                 }
-
+    
                 chunkHealths[i] = health;
                 chunkDamage[i] = damageRec;
             }

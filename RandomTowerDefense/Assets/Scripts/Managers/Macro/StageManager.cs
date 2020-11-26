@@ -247,6 +247,11 @@ public class StageManager : MonoBehaviour
         castleSpawner.castle.AddedHealth(Val);
     }
 
+    public int GetHealth()
+    {
+        return castleSpawner.castle.CurrCastleHP;
+    }
+
     public void PlayDmgAnim()
     {
         StartCoroutine(DmgAnimation());

@@ -30,7 +30,7 @@ public class Enemy : MonoBehaviour
     private EnemySpawner enemySpawner;
     private ResourceManager resourceManager;
 
-    private TestingAgentScript agent;
+    private AgentScript agent;
     private Vector3 oriPos;
 
     private SkinnedMeshRenderer[] meshes;
@@ -112,7 +112,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void Init(EnemySpawner enemySpawner,GameObject DieEffect, GameObject DropEffect,int entityID,int money, TestingAgentScript agent=null)
+    public void Init(EnemySpawner enemySpawner,GameObject DieEffect, GameObject DropEffect,int entityID,int money, AgentScript agent=null)
     {
         this.enemySpawner = enemySpawner;
         this.DieEffect = DieEffect;

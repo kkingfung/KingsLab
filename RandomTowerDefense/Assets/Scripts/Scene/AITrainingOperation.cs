@@ -12,6 +12,9 @@ public class AITrainingOperation : InGameOperation
     public TowerSpawner towerSpawner;
     public FilledMapGenerator filledMapGenerator;
 
+    [HideInInspector]
+    public GameObject pillar;
+
     private void Awake()
     {
         //StageInfo(Base) Assignment
@@ -115,11 +118,13 @@ public class AITrainingOperation : InGameOperation
         if (resourceManager.GetCurrMaterial() >= 120)
         {
             //Random Spawn Tower
-            GameObject pillar = GetRandomFreePillar(true);
             if (pillar)
+            {
                 towerManager.BuildTower(pillar);
+                pillar = null;
+            }
         }
-        else if(Random.Range(0,100)==0){
+        else if(Random.Range(0,300)==0){
             int count;
             List<GameObject> targetList;
             //Check three in a kind to merge
@@ -180,18 +185,5 @@ public class AITrainingOperation : InGameOperation
             if (count > 2)
                 towerManager.MergeTower(targetList[Random.Range(0, count)]);
         }
-    }
-
-    private GameObject GetRandomFreePillar(bool isFree) {
-        GameObject targetPillar = null;
-
-        int cnt = 0;
-        while (targetPillar == null && cnt< filledMapGenerator.PillarList.Count) {
-            int id = Random.Range(0, filledMapGenerator.PillarList.Count);
-            if (filledMapGenerator.PillarList[id].state == (isFree?0:1))
-                return filledMapGenerator.PillarList[id].obj;
-            cnt++;
-        }
-        return null;
     }
 }

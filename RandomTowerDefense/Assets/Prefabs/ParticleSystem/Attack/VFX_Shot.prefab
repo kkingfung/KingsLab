@@ -57,13 +57,13 @@ VisualEffect:
         m_Overridden: 1
       - m_Value: 0.4
         m_Name: SizeAdj
-        m_Overridden: 1
+        m_Overridden: 0
       - m_Value: 20
         m_Name: SkullSize
         m_Overridden: 0
       - m_Value: 12
         m_Name: SkullVelocity
-        m_Overridden: 1
+        m_Overridden: 0
       - m_Value: 0.1
         m_Name: Explosion particle size
         m_Overridden: 1

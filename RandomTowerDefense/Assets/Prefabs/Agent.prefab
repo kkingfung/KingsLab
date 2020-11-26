@@ -48,9 +48,12 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
-  waveManager: {fileID: 0}
+  trainingSceneManager: {fileID: 0}
   filledMapGenerator: {fileID: 0}
+  enemySpawner: {fileID: 0}
+  stageManager: {fileID: 0}
   towerSpawner: {fileID: 0}
+  waveManager: {fileID: 0}
 --- !u!114 &5788967121297150318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,7 +67,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 8
+    VectorObservationSize: 9
     NumStackedVectorObservations: 1
     VectorActionSize: 01000000
     VectorActionDescriptions: []

@@ -44,7 +44,6 @@ public class DebugManager : MonoBehaviour
             //prev = data[(int)(time* 0.25f * 44100) % data.Length];
             time += 0.25f;
         }
-
         if (waveManager)
             CurrSpawningPoint = waveManager.SpawnPointByAI;
 

@@ -1,0 +1,24 @@
+{
+    "RandomDefAgent": {
+        "checkpoints": [
+            {
+                "steps": 96,
+                "file_path": "results\\Agent\\RandomDefAgent\\RandomDefAgent-96.onnx",
+                "reward": null,
+                "creation_time": 1606379657.7820241
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 96,
+            "file_path": "results\\Agent\\RandomDefAgent.onnx",
+            "reward": null,
+            "creation_time": 1606379657.7820241
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.2.0",
+        "mlagents_version": "0.22.0",
+        "torch_version": "1.7.0+cu110",
+        "tensorflow_version": -1
+    }
+}

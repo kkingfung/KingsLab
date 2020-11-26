@@ -4,9 +4,8 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using System.Linq;
 
-public class FilledMapGenerator : MonoBehaviour {
-	private Coord[] FixedFreeSpace;
-
+public class FilledMapGenerator : MonoBehaviour 
+{
 	public Map[] maps;
 	public int mapIndex;
 	public bool Randomize;
@@ -175,23 +174,48 @@ public class FilledMapGenerator : MonoBehaviour {
 		if(packedObstacles)
 		FillingNonNecessary(shuffledOpenTileCoords,obstacleMap);
 
+		foreach (Pillar pillar in PillarList)
+		{
+			int counter = 0;
+
+			for (int x = -1; x <= 1; x++)
+			{
+				for (int y = -1; y <= 1; y++)
+				{
+					int neighbourX = pillar.mapSize.x + x;
+					int neighbourY = pillar.mapSize.y + y;
+
+					if (x == 0 ^ y == 0)
+					{
+						if (neighbourX >= 0 && neighbourX < obstacleMap.GetLength(0) && neighbourY >= 0 && neighbourY < obstacleMap.GetLength(1))
+						{
+							if (obstacleMap[neighbourX, neighbourY] == false)
+							{
+								counter++;
+							}
+						}
+					}
+				}
+			}
+			pillar.surroundSpace = counter;
+		}
 
 		//// Creating navmesh mask
 		//Transform maskLeft = Instantiate (navmeshMaskPrefab, this.transform.position + Vector3.left * (currentMap.mapSize.x + maxMapSize.x) / 4f * tileSize, Quaternion.identity) as Transform;
 		//maskLeft.parent = mapHolder;
 		//maskLeft.localScale = new Vector3 ((maxMapSize.x - currentMap.mapSize.x) / 2f, 1, currentMap.mapSize.y) * tileSize;
 
-		//Transform maskRight = Instantiate (navmeshMaskPrefab, this.transform.position + Vector3.right * (currentMap.mapSize.x + maxMapSize.x) / 4f * tileSize, Quaternion.identity) as Transform;
-		//maskRight.parent = mapHolder;
-		//maskRight.localScale = new Vector3 ((maxMapSize.x - currentMap.mapSize.x) / 2f, 1, currentMap.mapSize.y) * tileSize;
+			//Transform maskRight = Instantiate (navmeshMaskPrefab, this.transform.position + Vector3.right * (currentMap.mapSize.x + maxMapSize.x) / 4f * tileSize, Quaternion.identity) as Transform;
+			//maskRight.parent = mapHolder;
+			//maskRight.localScale = new Vector3 ((maxMapSize.x - currentMap.mapSize.x) / 2f, 1, currentMap.mapSize.y) * tileSize;
 
-		//Transform maskTop = Instantiate (navmeshMaskPrefab, this.transform.position + Vector3.forward * (currentMap.mapSize.y + maxMapSize.y) / 4f * tileSize, Quaternion.identity) as Transform;
-		//maskTop.parent = mapHolder;
-		//maskTop.localScale = new Vector3 (maxMapSize.x, 1, (maxMapSize.y-currentMap.mapSize.y)/2f) * tileSize;
+			//Transform maskTop = Instantiate (navmeshMaskPrefab, this.transform.position + Vector3.forward * (currentMap.mapSize.y + maxMapSize.y) / 4f * tileSize, Quaternion.identity) as Transform;
+			//maskTop.parent = mapHolder;
+			//maskTop.localScale = new Vector3 (maxMapSize.x, 1, (maxMapSize.y-currentMap.mapSize.y)/2f) * tileSize;
 
-		//Transform maskBottom = Instantiate (navmeshMaskPrefab, this.transform.position + Vector3.back * (currentMap.mapSize.y + maxMapSize.y) / 4f * tileSize, Quaternion.identity) as Transform;
-		//maskBottom.parent = mapHolder;
-		//maskBottom.localScale = new Vector3 (maxMapSize.x, 1, (maxMapSize.y-currentMap.mapSize.y)/2f) * tileSize;
+			//Transform maskBottom = Instantiate (navmeshMaskPrefab, this.transform.position + Vector3.back * (currentMap.mapSize.y + maxMapSize.y) / 4f * tileSize, Quaternion.identity) as Transform;
+			//maskBottom.parent = mapHolder;
+			//maskBottom.localScale = new Vector3 (maxMapSize.x, 1, (maxMapSize.y-currentMap.mapSize.y)/2f) * tileSize;
 
 		navmeshFloor.localScale = new Vector3(maxMapSize.x, maxMapSize.y) * tileSize;
         mapFloor.localScale = new Vector3(currentMap.mapSize.x * tileSize, currentMap.mapSize.y * tileSize);
@@ -422,6 +446,7 @@ public class Pillar
 	public Coord mapSize;
 	public int state;//0: Empty 1: Occupied
 	public float height;
+	public int surroundSpace;
 	public Pillar(GameObject obj, int _x, int _y,float height, int state = 0)
 	{
 		this.obj = obj;

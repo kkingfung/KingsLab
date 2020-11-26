@@ -32,6 +32,7 @@ public class AgentScript : Agent
     {
         waveManager.SpawnPointByAI = 1;
         counter = 0;
+        HpRecord = 1;
         isPlayer = GetComponent<BehaviorParameters>().TeamId == 0 ? false : true;
     }
 
@@ -54,16 +55,19 @@ public class AgentScript : Agent
                 if (counter < 100)
                     counter++;
                 RequestDecision();
-
-
             }
         }
         else
         {
             if (trainingSceneManager && trainingSceneManager.pillar == null)
+            {
                 RequestDecision();
+            }
         }
-        if (waveManager.GetCurrentWaveNum() >= 50 || HpRecord <= 0) EndEpisode();
+        if (waveManager.GetCurrentWaveNum() >= 50)
+        {
+            EndEpisode();
+        }
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -157,7 +161,7 @@ public class AgentScript : Agent
         int CurrHp = stageManager.GetHealth();
         if (CurrHp != HpRecord)
         {
-            if (isPlayer = false)
+            if (isPlayer == false)
             {
                 if (HpRecord > CurrHp)
                     AddReward(-1);
@@ -281,10 +285,15 @@ public class AgentScript : Agent
     {
         int[] TotalRankInQuarteredMap = new int[4];
         if (enemySpawner == null) return TotalRankInQuarteredMap;
+        List<GameObject> allMonsters = enemySpawner.AllAliveMonstersList();
+        if(allMonsters.Count==0)return TotalRankInQuarteredMap;
+
         AgentCoord = filledMapGenerator.GetTileIDFromPosition(this.transform.position);
         //MaxCoord = filledMapGenerator.MapSize;
-        foreach (GameObject i in enemySpawner.GameObjects)
+
+        foreach (GameObject i in allMonsters)
         {
+            if (i.activeSelf == false) continue;
             int2 EnmCoord = filledMapGenerator.GetTileIDFromPosition(i.transform.position);
             if (EnmCoord.x <= AgentCoord.x && EnmCoord.y >= AgentCoord.y)
             {
@@ -313,21 +322,26 @@ public class AgentScript : Agent
         GameObject targetPillar = null;
 
         int cnt = 0;
-        while (targetPillar == null && cnt < filledMapGenerator.PillarList.Count)
+        while (cnt < filledMapGenerator.PillarList.Count)
         {
             int id = UnityEngine.Random.Range(0, filledMapGenerator.PillarList.Count);
             if (filledMapGenerator.PillarList[id].state == (isFree ? 0 : 1))
-                return filledMapGenerator.PillarList[id].obj;
+            {
+                if (filledMapGenerator.PillarList[id].surroundSpace > 0)
+                    return filledMapGenerator.PillarList[id].obj;
+                if (targetPillar == null)
+                    targetPillar = filledMapGenerator.PillarList[id].obj;
+            }
+      
             cnt++;
         }
-        return null;
+        return targetPillar;
     }
     private GameObject GetRandomFreePillar(int areaID)
     {
         GameObject targetPillar = null;
-
         int cnt = 0;
-        while (targetPillar == null && cnt < filledMapGenerator.PillarList.Count)
+        while (cnt < filledMapGenerator.PillarList.Count)
         {
             int id = UnityEngine.Random.Range(0, filledMapGenerator.PillarList.Count);
             switch (areaID) {
@@ -336,7 +350,12 @@ public class AgentScript : Agent
                         && filledMapGenerator.PillarList[id].mapSize.y >= AgentCoord.y)
                     {
                         if (filledMapGenerator.PillarList[id].state == 0)
-                            return filledMapGenerator.PillarList[id].obj;
+                        {
+                            if (filledMapGenerator.PillarList[id].surroundSpace > 0)
+                                return filledMapGenerator.PillarList[id].obj;
+                            if (targetPillar == null)
+                                targetPillar = filledMapGenerator.PillarList[id].obj;
+                        }
                     }
                     break;
                 case 1:
@@ -344,7 +363,12 @@ public class AgentScript : Agent
                         && filledMapGenerator.PillarList[id].mapSize.y <= AgentCoord.y)
                     {
                         if (filledMapGenerator.PillarList[id].state == 0)
-                            return filledMapGenerator.PillarList[id].obj;
+                        {
+                            if (filledMapGenerator.PillarList[id].surroundSpace > 0)
+                                return filledMapGenerator.PillarList[id].obj;
+                            if (targetPillar == null)
+                                targetPillar = filledMapGenerator.PillarList[id].obj;
+                        }
                     }
                     break;
                 case 2:
@@ -352,7 +376,12 @@ public class AgentScript : Agent
                         && filledMapGenerator.PillarList[id].mapSize.y <= AgentCoord.y)
                     {
                         if (filledMapGenerator.PillarList[id].state == 0)
-                            return filledMapGenerator.PillarList[id].obj;
+                        {
+                            if (filledMapGenerator.PillarList[id].surroundSpace > 0)
+                                return filledMapGenerator.PillarList[id].obj;
+                            if (targetPillar == null)
+                                targetPillar = filledMapGenerator.PillarList[id].obj;
+                        }
                     }
                     break;
                 case 3:
@@ -360,13 +389,18 @@ public class AgentScript : Agent
                         && filledMapGenerator.PillarList[id].mapSize.y >= AgentCoord.y)
                     {
                         if (filledMapGenerator.PillarList[id].state == 0)
-                            return filledMapGenerator.PillarList[id].obj;
+                        {
+                            if(filledMapGenerator.PillarList[id].surroundSpace>0)
+                                return filledMapGenerator.PillarList[id].obj;
+                            if (targetPillar == null)
+                                targetPillar = filledMapGenerator.PillarList[id].obj;
+                        }
                     }
                     break;
             }
             cnt++;
         }
-        return null;
+        return targetPillar;
     }
     #endregion
 }

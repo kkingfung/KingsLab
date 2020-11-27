@@ -67,7 +67,7 @@ public class AttackSpawner : MonoBehaviour
             GameObjects[i].transform.position = position;
             AutoDestroyVFX autoDestroy = GameObjects[i].GetComponent<AutoDestroyVFX>();
             if (autoDestroy) autoDestroy.Timer = lifetime;
-             GameObjects[i].transform.localRotation = rotation;
+            GameObjects[i].transform.localRotation = rotation;
            // transforms[i] = GameObjects[i].transform;
            
             //AddtoEntities

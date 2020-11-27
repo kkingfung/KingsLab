@@ -109,7 +109,7 @@ public class ScoreCalculation : MonoBehaviour
         //Remark: Special Function for extra mode
         if (currIsland != StageInfo.IslandNum - 1 && result == (int)StageManager.GameResult.Lose)
         {
-            scoreStr += "-" + (score+PlayerPrefs.GetFloat("hpMax",5)* ScoreForStartHP) + "\n";
+            scoreStr += "-" + (score+PlayerPrefs.GetFloat("hpMax",10)* ScoreForStartHP) + "\n";
             score = 0;
         }
         else {

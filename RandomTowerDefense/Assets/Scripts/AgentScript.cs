@@ -28,6 +28,9 @@ public class AgentScript : Agent
 
     private int counter;
     private int HpRecord;
+    private int WaveRecord;
+
+    private int loseCounter;
 
     int[] TowerDistribution;
     int[] EnemyDistribution;
@@ -37,6 +40,7 @@ public class AgentScript : Agent
         waveManager.SpawnPointByAI = 1;
         counter = 0;
         HpRecord = 1;
+        WaveRecord = 0;
         isTower = GetComponent<BehaviorParameters>().TeamId == 0 ? false : true;
     }
 
@@ -45,6 +49,8 @@ public class AgentScript : Agent
         waveManager.SpawnPointByAI = 1;
         waveManager.SetCurrWAveNum(0);
         counter = 0;
+        loseCounter = 0;
+        trainingSceneManager.pillar = null;
 
         foreach (GameObject enemy in enemySpawner.GameObjects)
         {
@@ -70,6 +76,8 @@ public class AgentScript : Agent
     {
         if (stageManager)
             CheckCastleHP();
+        if (waveManager)
+            CheckWave();
 
         if (isTower == false)
         {
@@ -82,15 +90,24 @@ public class AgentScript : Agent
         }
         else
         {
-            if (trainingSceneManager && trainingSceneManager.pillar == null)
+            if (trainingSceneManager)
             {
-                RequestDecision();
+                if (trainingSceneManager.pillar == null)
+                {
+                    RequestDecision();
+                }
+
+                if (loseCounter > 25)
+                {
+                    int currWaveNum = waveManager.GetCurrentWaveNum();
+                    AddReward(currWaveNum * currWaveNum);
+                    if (PathfindingGridSetup.Instance != null && PathfindingGridSetup.Instance.isActived == true)
+                    {
+                        AddReward(-1f * loseCounter);
+                        EndEpisode();
+                    }
+                }
             }
-        }
-        if (waveManager.GetCurrentWaveNum() >= 50 || Input.GetKey(KeyCode.Keypad2))
-        {
-            if (PathfindingGridSetup.Instance != null && PathfindingGridSetup.Instance.isActived == true)
-                EndEpisode();
         }
     }
 
@@ -202,14 +219,28 @@ public class AgentScript : Agent
             if (isTower == true)
             {
                 if (HpRecord > CurrHp)
+                {
+                    loseCounter += HpRecord - CurrHp;
                     AddReward(CurrHp - HpRecord);
+                }
             }
             else
                 AddReward(100);
             HpRecord = CurrHp;
         }
     }
-
+    public void CheckWave()
+    {
+        int CurrWave = waveManager.GetCurrentWaveNum();
+        if (CurrWave != WaveRecord)
+        {
+            if (isTower == true)
+            {
+                AddReward(CurrWave * CurrWave);
+            }
+            WaveRecord = CurrWave;
+        }
+    }
     #region MakingDecisionForEnemy
     // 0 | 1
     //-------

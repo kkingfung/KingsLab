@@ -41,7 +41,7 @@ public class Tower : MonoBehaviour
     //GameObject defaultTarget;
 
     private Animator animator;
-    private VisualEffect auraVFXComponent;
+    //private VisualEffect auraVFXComponent;
     private VisualEffect lvupVFXComponent;
 
     private int entityID;
@@ -194,43 +194,43 @@ public class Tower : MonoBehaviour
         this.entityID = entityID;
         auraVFXPrefab = AuraVFX;
         lvupVFXPrefab = LevelUpVFX;
-        this.auraVFX = GameObject.Instantiate(auraVFXPrefab, this.transform.position, Quaternion.Euler(90f, 0, 0));
-        this.auraVFX.transform.parent = this.transform;
-        this.auraVFX.transform.localScale = Vector3.one * 10f;
-        this.auraVFXComponent = auraVFX.GetComponentInChildren<VisualEffect>();
-        this.lvupVFXComponent = pillar.GetComponentInChildren<VisualEffect>();
+        //this.auraVFX = GameObject.Instantiate(auraVFXPrefab, this.transform.position, Quaternion.Euler(90f, 0, 0));
+        //this.auraVFX.transform.parent = this.transform;
+        //this.auraVFX.transform.localScale = Vector3.one * 10f;
+        //this.auraVFXComponent = auraVFX.GetComponentInChildren<VisualEffect>();
+        if (pillar) {
+            this.lvupVFXComponent = pillar.GetComponentInChildren<VisualEffect>();
 
-        if (this.lvupVFXComponent == null)
-        {
-            GameObject lvupVFX = GameObject.Instantiate(lvupVFXPrefab, this.transform.position, Quaternion.identity);
-            lvupVFX.transform.parent = pillar.transform;
-            lvupVFXComponent = lvupVFX.GetComponentInChildren<VisualEffect>();
-            lvupVFXComponent.SetFloat("SpawnRate", level);
-        }
-        else
-        {
-            this.lvupVFXComponent.enabled = true;
-        }
+            if (this.lvupVFXComponent == null)
+            {
+                GameObject lvupVFX = GameObject.Instantiate(lvupVFXPrefab, this.transform.position, Quaternion.identity);
+                lvupVFX.transform.parent = pillar.transform;
+                lvupVFXComponent = lvupVFX.GetComponentInChildren<VisualEffect>();
+            }
+            else
+            {
+                this.lvupVFXComponent.enabled = true;
+            }
 
-        switch (type)
-        {
-            case TowerInfo.TowerInfoID.Enum_TowerNightmare:
-                lvupVFXComponent.SetVector4("MainColor", new Vector4(1, 1, 0, 1));
-                break;
-            case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-                lvupVFXComponent.SetVector4("MainColor", new Vector4(0, 1, 0, 1));
-                break;
-            case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
-                lvupVFXComponent.SetVector4("MainColor", new Vector4(0, 0, 1, 1));
-                break;
-            case TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                lvupVFXComponent.SetVector4("MainColor", new Vector4(1, 0, 0, 1));
-                break;
+            switch (type)
+            {
+                case TowerInfo.TowerInfoID.Enum_TowerNightmare:
+                    lvupVFXComponent.SetVector4("MainColor", new Vector4(0.6f, 0.46f, 0.3f, 1));
+                    break;
+                case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
+                    lvupVFXComponent.SetVector4("MainColor", new Vector4(0, 0.4f, 0.1f, 1));
+                    break;
+                case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
+                    lvupVFXComponent.SetVector4("MainColor", new Vector4(0.5f, 0.8f, 0.9f, 1));
+                    break;
+                case TowerInfo.TowerInfoID.Enum_TowerUsurper:
+                    lvupVFXComponent.SetVector4("MainColor", new Vector4(0.8f, 0, 0.1f, 1));
+                    break;
+            }
+            lvupVFXComponent.SetFloat("GlowGroundSize", rank);
+            exp = 0;
+            SetLevel(lv);
         }
-        lvupVFXComponent.SetFloat("SizeMultiplier", rank * 0.5f);
-
-        exp = 0;
-        SetLevel(lv);
     }
 
     public void linkingManagers(TowerSpawner towerSpawner, AudioManager audioManager, AttackSpawner attackSpawner, FilledMapGenerator filledMapGenerator,ResourceManager resourceManager)
@@ -268,8 +268,8 @@ public class Tower : MonoBehaviour
     public void SetLevel(int lv)
     {
         level = lv;
-        auraVFXComponent.SetFloat("Spawn Rate", level * 5);
-
+        //auraVFXComponent.SetFloat("Spawn Rate", level * 5);
+        lvupVFXComponent.SetFloat("SizeMultiplier", 0.5f + (float)level/MaxLevelBonus[rank - 1] * 9.5f);
         UpdateAttr();
         if (level == MaxLevel[rank - 1])
             resourceManager.ChangeMaterial(MaxLevelBonus[rank - 1]);
@@ -288,25 +288,25 @@ public class Tower : MonoBehaviour
         {
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
                 attr.radius = attr.radius
-                    * (1 + (0.07f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
+                    * (1 + (0.1f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
                 attr.damage = attr.damage
-                   * (1 + (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
+                   * (1 + (0.1f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
                 attr.waitTime = attr.waitTime
                    * (1 - (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
                 attr.radius = attr.radius
-                      * (1 + (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
+                      * (1 + (0.1f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
                 attr.damage = attr.damage
-                        * (1 + (0.07f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
+                        * (1 + (0.1f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
                 attr.waitTime = attr.waitTime
                    * (1 - (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
                 attr.damage = attr.damage
-                    * (1 + (0.07f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
+                    * (1 + (0.1f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
                 attr.radius = attr.radius
-                     * (1 + (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
+                     * (1 + (0.1f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
                 attr.waitTime = attr.waitTime
                    * (1 - (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
                 break;
@@ -314,9 +314,9 @@ public class Tower : MonoBehaviour
                 attr.waitTime = attr.waitTime
                     * (1 - (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
                 attr.damage = attr.damage
-                     * (1 + (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
+                     * (1 + (0.1f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
                 attr.radius = attr.radius
-                   * (1 + (0.07f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
+                   * (1 + (0.1f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
                 break;
         }
 

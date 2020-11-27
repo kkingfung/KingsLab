@@ -105,7 +105,7 @@ public static class StageInfo
     public static readonly int[] waveNumFactor = { 30, 35, 50, 999 };
     public static readonly float[] enmNumFactor = { 0.5f, 1f, 2f, 4f, 8f };
     public static readonly float[] enmAttributeFactor = { 0.5f, 1f, 1.5f, 2f, 4f };
-    public static readonly int[] hpMaxFactor = { 1, 5, 10, 30 };
+    public static readonly int[] hpMaxFactor = { 1, 10, 25, 50 };
 
     public static readonly float[] obstacleFactor = { 0.35f, 0.45f, 0.55f, 0.65f, 1f };
     //public static readonly float[] spawnSpeedFactor = { 0.5f, 1f, 1.5f, 2f, 4f };
@@ -235,7 +235,7 @@ public static class StageInfo
             //    }
             //    break;
             case StageInfoID.Enum_hpMax:
-                tempVal = PlayerPrefs.GetFloat("hpMax", 5);
+                tempVal = PlayerPrefs.GetFloat("hpMax", 10);
                 for (; elementID < hpMaxFactor.Length; elementID++)
                 {
                     if (hpMaxFactor[elementID] > tempVal) break;

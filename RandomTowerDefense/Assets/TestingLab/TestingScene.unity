@@ -8367,10 +8367,6 @@ PrefabInstance:
       propertyPath: TeamId
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 5788967121297150318, guid: 668606ef7bd5dfc449a46d2afd2e6f90, type: 3}
-      propertyPath: m_Model
-      value: 
-      objectReference: {fileID: 5022602860645237092, guid: 20f815da625028a44bd2db3b99f60b14, type: 3}
     - target: {fileID: 8636458107982648905, guid: 668606ef7bd5dfc449a46d2afd2e6f90, type: 3}
       propertyPath: m_Name
       value: PlayerAgent
@@ -9700,6 +9696,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 650ba2e7ac9098647822ddcc8be883a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isActived: 0
 --- !u!4 &779320206
 Transform:
   m_ObjectHideFlags: 0

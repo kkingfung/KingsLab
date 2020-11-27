@@ -334,7 +334,7 @@ public class TowerManager : MonoBehaviour
         return true;
     }
 
-    private void removeTowerFromList(GameObject targetedTower)
+    public void removeTowerFromList(GameObject targetedTower)
     {
         Tower targetedTowerScript = targetedTower.GetComponent<Tower>();
         //switch (targetedTowerScript.type)

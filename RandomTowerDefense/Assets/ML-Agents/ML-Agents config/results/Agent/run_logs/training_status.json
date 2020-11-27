@@ -2,17 +2,41 @@
     "RandomDefAgent": {
         "checkpoints": [
             {
-                "steps": 96,
-                "file_path": "results\\Agent\\RandomDefAgent\\RandomDefAgent-96.onnx",
+                "steps": 2080,
+                "file_path": "results\\Agent\\RandomDefAgent\\RandomDefAgent-2080.onnx",
                 "reward": null,
-                "creation_time": 1606379657.7820241
+                "creation_time": 1606403634.4256768
+            },
+            {
+                "steps": 2560,
+                "file_path": "results\\Agent\\RandomDefAgent\\RandomDefAgent-2560.onnx",
+                "reward": null,
+                "creation_time": 1606404238.5142617
+            },
+            {
+                "steps": 2656,
+                "file_path": "results\\Agent\\RandomDefAgent\\RandomDefAgent-2656.onnx",
+                "reward": null,
+                "creation_time": 1606404407.0529892
+            },
+            {
+                "steps": 2752,
+                "file_path": "results\\Agent\\RandomDefAgent\\RandomDefAgent-2752.onnx",
+                "reward": null,
+                "creation_time": 1606404515.4655604
+            },
+            {
+                "steps": 3328,
+                "file_path": "results\\Agent\\RandomDefAgent\\RandomDefAgent-3328.onnx",
+                "reward": null,
+                "creation_time": 1606405021.1561654
             }
         ],
         "final_checkpoint": {
-            "steps": 96,
+            "steps": 3328,
             "file_path": "results\\Agent\\RandomDefAgent.onnx",
             "reward": null,
-            "creation_time": 1606379657.7820241
+            "creation_time": 1606405021.1561654
         }
     },
     "metadata": {

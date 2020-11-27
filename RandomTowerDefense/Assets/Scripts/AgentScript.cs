@@ -16,7 +16,11 @@ public class AgentScript : Agent
     public TowerSpawner towerSpawner;//GetAllTowerInfo For EnemySpawningDecision
     public WaveManager waveManager;
 
-    private bool isPlayer;
+    //For Reset Episode
+    public TowerManager towerManager;
+    public ResourceManager resourceManager;
+
+    private bool isTower;
 
     private int2 AgentCoord;
     //private int2 MaxCoord;
@@ -33,7 +37,7 @@ public class AgentScript : Agent
         waveManager.SpawnPointByAI = 1;
         counter = 0;
         HpRecord = 1;
-        isPlayer = GetComponent<BehaviorParameters>().TeamId == 0 ? false : true;
+        isTower = GetComponent<BehaviorParameters>().TeamId == 0 ? false : true;
     }
 
     private void Reset()
@@ -41,6 +45,25 @@ public class AgentScript : Agent
         waveManager.SpawnPointByAI = 1;
         waveManager.SetCurrWAveNum(0);
         counter = 0;
+
+        foreach (GameObject enemy in enemySpawner.GameObjects)
+        {
+            if (enemy == null) break;
+            if (enemy.activeSelf == false) continue;
+            enemy.GetComponent<Enemy>().Damaged(0);
+        }
+
+        foreach (GameObject tower in towerSpawner.GameObjects)
+        {
+            if (tower == null) break;
+            if (tower.activeSelf == false) continue;
+            towerManager.removeTowerFromList(tower);
+        }
+
+        filledMapGenerator.GenerateMap();
+        resourceManager.ResetMaterial();
+        if (PathfindingGridSetup.Instance != null)
+            PathfindingGridSetup.Instance.isActived = false;
     }
 
     private void FixedUpdate()
@@ -48,7 +71,7 @@ public class AgentScript : Agent
         if (stageManager)
             CheckCastleHP();
 
-        if (isPlayer == false)
+        if (isTower == false)
         {
             if (waveManager && waveManager.isSpawning && towerSpawner)
             {
@@ -64,18 +87,20 @@ public class AgentScript : Agent
                 RequestDecision();
             }
         }
-        if (waveManager.GetCurrentWaveNum() >= 50)
+        if (waveManager.GetCurrentWaveNum() >= 50 || Input.GetKey(KeyCode.Keypad2))
         {
-            EndEpisode();
+            if (PathfindingGridSetup.Instance != null && PathfindingGridSetup.Instance.isActived == true)
+                EndEpisode();
         }
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
-        sensor.AddObservation(isPlayer ? 1f : -1f);
+        sensor.AddObservation(isTower ? 1f : -1f);
 
         TowerDistribution = CntTowerRankTotal();
-        if (TowerDistribution.Length == 4) {
+        if (TowerDistribution.Length == 4)
+        {
             sensor.AddObservation((float)TowerDistribution[0]);
             sensor.AddObservation((float)TowerDistribution[1]);
             sensor.AddObservation((float)TowerDistribution[2]);
@@ -94,7 +119,7 @@ public class AgentScript : Agent
 
     public override void OnActionReceived(float[] vectorAction)
     {
-        if (isPlayer == false)
+        if (isTower == false)
         {
             int temp = waveManager.SpawnPointByAI;
 
@@ -109,8 +134,18 @@ public class AgentScript : Agent
                 AddReward(-1 * counter / 100.0f);
             else
                 counter = 0;
+
+            if (vectorAction[1] > 0)
+            {
+                waveManager.agentCallWait = true;
+                AddReward(-1);
+            }
+            else
+            {
+                waveManager.agentCallWait = false;
+            }
         }
-        else 
+        else
         {
             if (trainingSceneManager && trainingSceneManager.pillar == null)
             {
@@ -125,6 +160,8 @@ public class AgentScript : Agent
                 else
                     trainingSceneManager.pillar = GetRandomFreePillar(3);
             }
+            if (trainingSceneManager.tellMerge == false && vectorAction[1] > 0)
+                trainingSceneManager.tellMerge = true;
         }
 
     }
@@ -148,8 +185,9 @@ public class AgentScript : Agent
         Application.Quit();
     }
 
-    public void EnemyDisappear(Vector3 EnemyOriPos,Vector3 EnemyDiePos) {
-        if (isPlayer == false)
+    public void EnemyDisappear(Vector3 EnemyOriPos, Vector3 EnemyDiePos)
+    {
+        if (isTower == false)
             //Adding Reward
             AddReward((EnemyOriPos - EnemyDiePos).sqrMagnitude / 1000f);
         else
@@ -161,11 +199,13 @@ public class AgentScript : Agent
         int CurrHp = stageManager.GetHealth();
         if (CurrHp != HpRecord)
         {
-            if (isPlayer == false)
+            if (isTower == true)
             {
                 if (HpRecord > CurrHp)
-                    AddReward(-1);
+                    AddReward(CurrHp - HpRecord);
             }
+            else
+                AddReward(100);
             HpRecord = CurrHp;
         }
     }
@@ -175,7 +215,8 @@ public class AgentScript : Agent
     //-------
     // 2 | 3
 
-    int[] CntTowerRankTotal() {
+    int[] CntTowerRankTotal()
+    {
         int[] TotalRankInQuarteredMap = new int[4];
         if (towerSpawner == null) return TotalRankInQuarteredMap;
         AgentCoord = filledMapGenerator.GetTileIDFromPosition(this.transform.position);
@@ -184,7 +225,7 @@ public class AgentScript : Agent
         int[] SubTotalRankInQuarteredMap;
 
         int rank = 1;
-        SubTotalRankInQuarteredMap= CntTowerRankSubtotal(towerSpawner.TowerNightmareRank1);
+        SubTotalRankInQuarteredMap = CntTowerRankSubtotal(towerSpawner.TowerNightmareRank1);
         for (int i = 0; i < 4; ++i)
             TotalRankInQuarteredMap[i] += SubTotalRankInQuarteredMap[i] * rank;
         SubTotalRankInQuarteredMap = CntTowerRankSubtotal(towerSpawner.TowerSoulEaterRank1);
@@ -242,7 +283,8 @@ public class AgentScript : Agent
         return TotalRankInQuarteredMap;
     }
 
-    int[] CntTowerRankSubtotal(List<GameObject> towerList) {
+    int[] CntTowerRankSubtotal(List<GameObject> towerList)
+    {
         int[] SubTotalRankInQuarteredMap = new int[4];
         foreach (GameObject i in towerList)
         {
@@ -286,7 +328,7 @@ public class AgentScript : Agent
         int[] TotalRankInQuarteredMap = new int[4];
         if (enemySpawner == null) return TotalRankInQuarteredMap;
         List<GameObject> allMonsters = enemySpawner.AllAliveMonstersList();
-        if(allMonsters.Count==0)return TotalRankInQuarteredMap;
+        if (allMonsters.Count == 0) return TotalRankInQuarteredMap;
 
         AgentCoord = filledMapGenerator.GetTileIDFromPosition(this.transform.position);
         //MaxCoord = filledMapGenerator.MapSize;
@@ -317,7 +359,7 @@ public class AgentScript : Agent
     #endregion
 
     #region GetFreePillar
-    private GameObject GetRandomFreePillar(bool isFree)
+    private GameObject GetRandomFreePillar(bool isFree = true)
     {
         GameObject targetPillar = null;
 
@@ -332,29 +374,33 @@ public class AgentScript : Agent
                 if (targetPillar == null)
                     targetPillar = filledMapGenerator.PillarList[id].obj;
             }
-      
+
             cnt++;
         }
         return targetPillar;
     }
     private GameObject GetRandomFreePillar(int areaID)
     {
-        GameObject targetPillar = null;
+        Pillar targetPillar = null;
         int cnt = 0;
         while (cnt < filledMapGenerator.PillarList.Count)
         {
             int id = UnityEngine.Random.Range(0, filledMapGenerator.PillarList.Count);
-            switch (areaID) {
+            switch (areaID)
+            {
                 case 0:
-                    if(filledMapGenerator.PillarList[id].mapSize.x <= AgentCoord.x
+                    if (filledMapGenerator.PillarList[id].mapSize.x <= AgentCoord.x
                         && filledMapGenerator.PillarList[id].mapSize.y >= AgentCoord.y)
                     {
                         if (filledMapGenerator.PillarList[id].state == 0)
                         {
                             if (filledMapGenerator.PillarList[id].surroundSpace > 0)
+                            {
+                                //filledMapGenerator.PillarList[id].state = 1;
                                 return filledMapGenerator.PillarList[id].obj;
+                            }
                             if (targetPillar == null)
-                                targetPillar = filledMapGenerator.PillarList[id].obj;
+                                targetPillar = filledMapGenerator.PillarList[id];
                         }
                     }
                     break;
@@ -365,9 +411,12 @@ public class AgentScript : Agent
                         if (filledMapGenerator.PillarList[id].state == 0)
                         {
                             if (filledMapGenerator.PillarList[id].surroundSpace > 0)
+                            {
+                                //filledMapGenerator.PillarList[id].state = 1;
                                 return filledMapGenerator.PillarList[id].obj;
+                            }
                             if (targetPillar == null)
-                                targetPillar = filledMapGenerator.PillarList[id].obj;
+                                targetPillar = filledMapGenerator.PillarList[id];
                         }
                     }
                     break;
@@ -378,9 +427,12 @@ public class AgentScript : Agent
                         if (filledMapGenerator.PillarList[id].state == 0)
                         {
                             if (filledMapGenerator.PillarList[id].surroundSpace > 0)
+                            {
+                                //filledMapGenerator.PillarList[id].state = 1;
                                 return filledMapGenerator.PillarList[id].obj;
+                            }
                             if (targetPillar == null)
-                                targetPillar = filledMapGenerator.PillarList[id].obj;
+                                targetPillar = filledMapGenerator.PillarList[id];
                         }
                     }
                     break;
@@ -390,17 +442,25 @@ public class AgentScript : Agent
                     {
                         if (filledMapGenerator.PillarList[id].state == 0)
                         {
-                            if(filledMapGenerator.PillarList[id].surroundSpace>0)
+                            if (filledMapGenerator.PillarList[id].surroundSpace > 0)
+                            {
+                                //filledMapGenerator.PillarList[id].state = 1;
                                 return filledMapGenerator.PillarList[id].obj;
+                            }
                             if (targetPillar == null)
-                                targetPillar = filledMapGenerator.PillarList[id].obj;
+                                targetPillar = filledMapGenerator.PillarList[id];
                         }
                     }
                     break;
             }
             cnt++;
         }
-        return targetPillar;
+        if (targetPillar != null)
+        {
+            //    targetPillar.state = 1;
+            return targetPillar.obj;
+        }
+        return null;
     }
     #endregion
 }

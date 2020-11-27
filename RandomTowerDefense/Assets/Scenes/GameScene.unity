@@ -13150,6 +13150,7 @@ MonoBehaviour:
   tutorialManager: {fileID: 1489334543}
   stageManager: {fileID: 2137340201}
   enemySpawner: {fileID: 956912832}
+  agentCallWait: 0
   debugManager: {fileID: 0}
 --- !u!4 &575038167
 Transform:
@@ -53316,6 +53317,14 @@ PrefabInstance:
       propertyPath: stageManager
       value: 
       objectReference: {fileID: 2137340201}
+    - target: {fileID: 5788967121297150305, guid: 668606ef7bd5dfc449a46d2afd2e6f90, type: 3}
+      propertyPath: towerManager
+      value: 
+      objectReference: {fileID: 225185626}
+    - target: {fileID: 5788967121297150305, guid: 668606ef7bd5dfc449a46d2afd2e6f90, type: 3}
+      propertyPath: resourceManager
+      value: 
+      objectReference: {fileID: 1011788840}
     - target: {fileID: 5788967121297150318, guid: 668606ef7bd5dfc449a46d2afd2e6f90, type: 3}
       propertyPath: m_BehaviorType
       value: 2

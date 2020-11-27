@@ -14,7 +14,7 @@ public class AITrainingOperation : InGameOperation
 
     [HideInInspector]
     public GameObject pillar;
-
+    public bool tellMerge;
     private void Awake()
     {
         //StageInfo(Base) Assignment
@@ -22,6 +22,7 @@ public class AITrainingOperation : InGameOperation
         PlayerPrefs.SetInt("IslandNow", 3);
         PlayerPrefs.SetFloat("waveNum", 999);
         PlayerPrefs.SetFloat("stageSize", 100);
+        PlayerPrefs.SetFloat("obstaclePercent", Random.Range(0.5f,1f));
         PlayerPrefs.SetFloat("hpMax", 9999);
 
         if (UseRemoteConfig)
@@ -110,12 +111,13 @@ public class AITrainingOperation : InGameOperation
     // Start is called before the first frame update
     private void Start()
     {
+        tellMerge = false;
     }
 
     // Update is called once per frame
     private void Update()
     {
-        if (resourceManager.GetCurrMaterial() >= 120)
+        if (resourceManager.GetCurrMaterial() >= 100)
         {
             //Random Spawn Tower
             if (pillar)
@@ -124,7 +126,8 @@ public class AITrainingOperation : InGameOperation
                 pillar = null;
             }
         }
-        else if(Random.Range(0,300)==0){
+        else if(tellMerge)
+        {
             int count;
             List<GameObject> targetList;
             //Check three in a kind to merge
@@ -184,6 +187,7 @@ public class AITrainingOperation : InGameOperation
             count = targetList.Count;
             if (count > 2)
                 towerManager.MergeTower(targetList[Random.Range(0, count)]);
+            tellMerge = false;
         }
     }
 }

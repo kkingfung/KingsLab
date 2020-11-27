@@ -72,6 +72,7 @@ public class FilledMapGenerator : MonoBehaviour
 			float width = Mathf.Sqrt(StageInfo.stageSizeEx);
 			currentMap.mapSize.x = (int)(width);
 			currentMap.mapSize.y = (int)(StageInfo.stageSizeEx / width);
+			currentMap.obstaclePercent = StageInfo.obstacleEx;
 			MapSize = new int2(currentMap.mapSize.x, currentMap.mapSize.y);
 		}
 

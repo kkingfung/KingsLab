@@ -84,7 +84,7 @@ public class ScoreCalculation : MonoBehaviour
         if (result > 0) {
             score += ScoreForBase + ScoreForStage * currIsland;
             score += ((currIsland != StageInfo.IslandNum - 1) ? 0 :
-                (StageInfo.MaxMapDepth* StageInfo.MaxMapDepth - (int)StageInfo.stageSizeEx) * ScoreForStageEx);
+                (int)((StageInfo.MaxMapDepth* StageInfo.MaxMapDepth - StageInfo.stageSizeEx) * ScoreForStageEx * (1/ Mathf.Max(0.1f,StageInfo.obstacleEx))));
             scoreStr += score+"\n";
         }
 

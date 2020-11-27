@@ -10,7 +10,7 @@ public class PathfindingGridSetup : MonoBehaviour {
 
     public Grid<GridNode> pathfindingGrid;
 
-    private bool isActived;
+    public bool isActived;
     private void Awake() {
         Instance = this;
         isActived = false;

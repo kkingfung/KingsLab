@@ -154,7 +154,11 @@ public class Tower : MonoBehaviour
           attr.attackWaittime, attr.attackLifetime);
         //this.AtkVFX.Add(attackSpawner.GameObjects[entityID[0]]);
         if (type == TowerInfo.TowerInfoID.Enum_TowerNightmare || type == TowerInfo.TowerInfoID.Enum_TowerTerrorBringer)
-            attackSpawner.GameObjects[entityID[0]].GetComponent<VisualEffect>().SetVector3("TargetPos", towerSpawner.targetArray[this.entityID]);
+        {
+            VisualEffect vfx = attackSpawner.GameObjects[entityID[0]].GetComponent<VisualEffect>();
+            if (vfx.HasVector3("TargetPos"))
+                vfx.SetVector3("TargetPos", towerSpawner.targetArray[this.entityID]);
+        }
 
         atkCounter = attr.waitTime;
         animator.SetTrigger("Detected");
@@ -192,6 +196,7 @@ public class Tower : MonoBehaviour
         lvupVFXPrefab = LevelUpVFX;
         this.auraVFX = GameObject.Instantiate(auraVFXPrefab, this.transform.position, Quaternion.Euler(90f, 0, 0));
         this.auraVFX.transform.parent = this.transform;
+        this.auraVFX.transform.localScale = Vector3.one * 10f;
         this.auraVFXComponent = auraVFX.GetComponentInChildren<VisualEffect>();
         this.lvupVFXComponent = pillar.GetComponentInChildren<VisualEffect>();
 
@@ -222,7 +227,7 @@ public class Tower : MonoBehaviour
                 lvupVFXComponent.SetVector4("MainColor", new Vector4(1, 0, 0, 1));
                 break;
         }
-        lvupVFXComponent.SetFloat("SizeMultiplier", rank * 2);
+        lvupVFXComponent.SetFloat("SizeMultiplier", rank * 0.5f);
 
         exp = 0;
         SetLevel(lv);
@@ -275,8 +280,8 @@ public class Tower : MonoBehaviour
         attr = TowerInfo.GetTowerInfo(type);
 
         //Update by rank/level with factors
-        attr = new TowerAttr(attr.radius * (1 + 0.05f * rank + 0.005f * level),
-            attr.damage * (1 + 1f * rank + 0.1f * level),
+        attr = new TowerAttr(attr.radius * (1 + 0.01f * rank + 0.005f * level),
+            attr.damage * (1 + 0.2f * rank + 0.1f * level),
             attr.waitTime * (1f - (0.1f * rank)), attr.attackLifetime, attr.attackWaittime, attr.attackRadius,attr.attackSpd);
 
         switch (type)
@@ -364,7 +369,8 @@ public class Tower : MonoBehaviour
 
         if (auraVFX)
             Destroy(auraVFX);
-        lvupVFXComponent.enabled = false;
+        if(lvupVFXComponent)
+            lvupVFXComponent.enabled = false;
 
         this.gameObject.SetActive(false);
         //Destroy(this.gameObject);

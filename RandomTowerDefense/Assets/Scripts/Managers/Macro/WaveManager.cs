@@ -29,6 +29,7 @@ public class WaveManager : MonoBehaviour
     public TutorialManager tutorialManager;
     public StageManager stageManager;
     public EnemySpawner enemySpawner;
+    public bool agentCallWait;
 
     // Start is called before the first frame update
     private void Start()
@@ -42,6 +43,7 @@ public class WaveManager : MonoBehaviour
         CurrentWaveNum = 0;
         //fireworkcounter = 0;
         allSpawned = false;
+        agentCallWait = false;
 
         foreach (Text i in waveNumUI)
         {
@@ -150,35 +152,38 @@ public class WaveManager : MonoBehaviour
                         {
                             while (true) 
                             {
-                                if (sceneManager && sceneManager.readyToSpawn)
+                                if (agentCallWait == false)
                                 {
-                                    EnemyAttr attr = EnemyInfo.GetEnemyInfo(wave.enmDetail[i].enmType);
-                                    enemySpawner.Spawn(wave.enmDetail[i].enmType,
-                                        stageManager.GetPortalPosition()[SpawnPointByAI >= 0 ? SpawnPointByAI : wave.enmDetail[i].enmPort], new float3(),
-                                        (float)(attr.health * (1 + 0.005f * (CurrentWaveNum * CurrentWaveNum))),
-                                        attr.money * (CheckCustomData ? (int)StageInfo.resourceEx : 1),
-                                        attr.damage, attr.radius,
-                                         (float)(attr.speed * (1 + 0.005f * (CurrentWaveNum * CurrentWaveNum) * (CheckCustomData ? (int)StageInfo.enmSpeedEx : 1))),
-                                        attr.time
-                                        );
-                                    sceneManager.readyToSpawn = false;
-                                    sceneManager.timeBGM = Time.time;
-                                    break;
-                                }
-                                else if (debugManager && debugManager.ready)
-                                {
-                                    EnemyAttr attr = EnemyInfo.GetEnemyInfo(wave.enmDetail[i].enmType);
-                                    enemySpawner.Spawn(wave.enmDetail[i].enmType,
-                                        stageManager.GetPortalPosition()[SpawnPointByAI >= 0 ? SpawnPointByAI : wave.enmDetail[i].enmPort], new float3(),
-                                        (float)(attr.health * (1 + 0.005f * (CurrentWaveNum * CurrentWaveNum))),
-                                        attr.money * (CheckCustomData ? (int)StageInfo.resourceEx : 1),
-                                        attr.damage, attr.radius,
-                                         (float)(attr.speed * (1 + 0.005f * (CurrentWaveNum * CurrentWaveNum) * (CheckCustomData ? (int)StageInfo.enmSpeedEx : 1))),
-                                        attr.time
-                                        );
-                                    debugManager.ready = false;
-                                    debugManager.time = Time.time;
-                                    break;
+                                    if (sceneManager && sceneManager.readyToSpawn)
+                                    {
+                                        EnemyAttr attr = EnemyInfo.GetEnemyInfo(wave.enmDetail[i].enmType);
+                                        enemySpawner.Spawn(wave.enmDetail[i].enmType,
+                                            stageManager.GetPortalPosition()[SpawnPointByAI >= 0 ? SpawnPointByAI : wave.enmDetail[i].enmPort], new float3(),
+                                            (float)(attr.health * (1 + 0.005f * (CurrentWaveNum * CurrentWaveNum) * (CheckCustomData ? (int)StageInfo.enmAttributeEx : 1))),
+                                            attr.money * (CheckCustomData ? (int)StageInfo.resourceEx : 1),
+                                            attr.damage, attr.radius,
+                                             (float)(attr.speed * (1 + 0.005f * (CurrentWaveNum * CurrentWaveNum) * (CheckCustomData ? (int)StageInfo.enmAttributeEx : 1))),
+                                            attr.time
+                                            );
+                                        sceneManager.readyToSpawn = false;
+                                        sceneManager.timeBGM = Time.time;
+                                        break;
+                                    }
+                                    else if (debugManager && debugManager.ready)
+                                    {
+                                        EnemyAttr attr = EnemyInfo.GetEnemyInfo(wave.enmDetail[i].enmType);
+                                        enemySpawner.Spawn(wave.enmDetail[i].enmType,
+                                            stageManager.GetPortalPosition()[SpawnPointByAI >= 0 ? SpawnPointByAI : wave.enmDetail[i].enmPort], new float3(),
+                                            (float)(attr.health * (1 + 0.005f * (CurrentWaveNum * CurrentWaveNum) * (CheckCustomData ? (int)StageInfo.enmAttributeEx : 1))),
+                                            attr.money * (CheckCustomData ? (int)StageInfo.resourceEx : 1),
+                                            attr.damage, attr.radius,
+                                             (float)(attr.speed * (1 + 0.005f * (CurrentWaveNum * CurrentWaveNum) * (CheckCustomData ? (int)StageInfo.enmAttributeEx : 1))),
+                                            attr.time
+                                            );
+                                        debugManager.ready = false;
+                                        debugManager.time = Time.time;
+                                        break;
+                                    }
                                 }
                                 yield return new WaitForSeconds(0);
                             }

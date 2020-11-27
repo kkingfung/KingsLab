@@ -94,27 +94,30 @@ public static class StageInfo
         Enum_stageSize = 0,
         Enum_waveNum,
         Enum_enmNum,
-        Enum_enmSpeed,
+        Enum_enmAttribute,
         Enum_hpMax,
-        Enum_spawnSpeed,
-        Enum_resource
+        Enum_obstaclePercent,
+        Enum_resource,
+        //Enum_spawnSpeed,
     }
 
     public static readonly int[] stageSizeFactor = { 36, 72, 108, 144 };//6*6 + 9*8 + 12*9 + 16*9
     public static readonly int[] waveNumFactor = { 30, 35, 50, 999 };
     public static readonly float[] enmNumFactor = { 0.5f, 1f, 2f, 4f, 8f };
-    public static readonly float[] enmSpeedFactor = { 0.5f, 1f, 1.5f, 2f, 4f };
+    public static readonly float[] enmAttributeFactor = { 0.5f, 1f, 1.5f, 2f, 4f };
     public static readonly int[] hpMaxFactor = { 1, 5, 10, 30 };
 
-    public static readonly float[] spawnSpeedFactor = { 0.5f, 1f, 1.5f, 2f, 4f };
+    public static readonly float[] obstacleFactor = { 0.35f, 0.45f, 0.55f, 0.65f, 1f };
+    //public static readonly float[] spawnSpeedFactor = { 0.5f, 1f, 1.5f, 2f, 4f };
     public static readonly float[] resourceFactor = { 0.5f, 0.75f, 1f, 1.25f };
     //public static readonly float[] spawnSpeedFactor = { 4f, 2f, 1.5f, 1f, 0.5f };
     //public static readonly float[] resourceFactor = { 1.25f, 1f, 0.75f, 0.5f };
 
-    public static float stageSizeEx = 0;//Fill Map Generator
-    public static float waveNumEx = 0;//StageInfo
+    public static int stageSizeEx = 0;//Fill Map Generator
+    public static int waveNumEx = 0;//StageInfo
     public static float enmNumEx = 0;//StageInfo
-    public static float enmSpeedEx = 0;//WaveManager
+    public static float enmAttributeEx = 0;//WaveManager
+    public static float obstacleEx = 0;//Fill Map Generator
     public static int hpMaxEx = 0;//CastleSpawner
     public static float spawnSpeedEx = 0;//StageInfo
     public static float resourceEx = 0;//WaveManager
@@ -167,11 +170,14 @@ public static class StageInfo
             case StageInfoID.Enum_enmNum:
                 PlayerPrefs.SetFloat("enmNum", input);
                 break;
-            case StageInfoID.Enum_enmSpeed:
+            case StageInfoID.Enum_enmAttribute:
                 PlayerPrefs.SetFloat("enmSpeed", input);
                 break;
-            case StageInfoID.Enum_spawnSpeed:
-                PlayerPrefs.SetFloat("spawnSpeed", input);
+            //case StageInfoID.Enum_spawnSpeed:
+             //   PlayerPrefs.SetFloat("spawnSpeed", input);
+             //   break;
+            case StageInfoID.Enum_obstaclePercent:
+                PlayerPrefs.SetFloat("obstaclePercent", input);
                 break;
             case StageInfoID.Enum_hpMax:
                 PlayerPrefs.SetFloat("hpMax", input);
@@ -207,20 +213,27 @@ public static class StageInfo
                     if (enmNumFactor[elementID] > tempVal) break;
                 }
                 break;
-            case StageInfoID.Enum_enmSpeed:
+            case StageInfoID.Enum_enmAttribute:
                 tempVal = PlayerPrefs.GetFloat("enmSpeed", 1);
-                for (; elementID < enmSpeedFactor.Length; elementID++)
+                for (; elementID < enmAttributeFactor.Length; elementID++)
                 {
-                    if (enmSpeedFactor[elementID] > tempVal) break;
+                    if (enmAttributeFactor[elementID] > tempVal) break;
                 }
                 break;
-            case StageInfoID.Enum_spawnSpeed:
-                tempVal = PlayerPrefs.GetFloat("spawnSpeed", 1);
-                for (; elementID < spawnSpeedFactor.Length; elementID++)
+            case StageInfoID.Enum_obstaclePercent:
+                tempVal = PlayerPrefs.GetFloat("obstaclePercent", 1);
+                for (; elementID < obstacleFactor.Length; elementID++)
                 {
-                    if (spawnSpeedFactor[elementID] > tempVal) break;
+                    if (obstacleFactor[elementID] > tempVal) break;
                 }
                 break;
+            //case StageInfoID.Enum_spawnSpeed:
+            //    tempVal = PlayerPrefs.GetFloat("spawnSpeed", 1);
+            //    for (; elementID < spawnSpeedFactor.Length; elementID++)
+            //    {
+            //        if (spawnSpeedFactor[elementID] > tempVal) break;
+            //    }
+            //    break;
             case StageInfoID.Enum_hpMax:
                 tempVal = PlayerPrefs.GetFloat("hpMax", 5);
                 for (; elementID < hpMaxFactor.Length; elementID++)
@@ -255,14 +268,18 @@ public static class StageInfo
                 tempVal = (currentID + chg + enmNumFactor.Length) % enmNumFactor.Length;
                 PlayerPrefs.SetFloat("enmNum", enmNumFactor[(int)tempVal]);
                 return enmNumFactor[(int)tempVal];
-            case StageInfoID.Enum_enmSpeed:
-                tempVal = (currentID + chg + enmSpeedFactor.Length) % enmSpeedFactor.Length;
-                PlayerPrefs.SetFloat("enmSpeed", enmSpeedFactor[(int)tempVal]);
-                return enmSpeedFactor[(int)tempVal];
-            case StageInfoID.Enum_spawnSpeed:
-                tempVal = (currentID + chg + spawnSpeedFactor.Length) % spawnSpeedFactor.Length;
-                PlayerPrefs.SetFloat("spawnSpeed", spawnSpeedFactor[(int)tempVal]);
-                return spawnSpeedFactor[(int)tempVal];
+            case StageInfoID.Enum_enmAttribute:
+                tempVal = (currentID + chg + enmAttributeFactor.Length) % enmAttributeFactor.Length;
+                PlayerPrefs.SetFloat("enmSpeed", enmAttributeFactor[(int)tempVal]);
+                return enmAttributeFactor[(int)tempVal];
+            case StageInfoID.Enum_obstaclePercent:
+                tempVal = (currentID + chg + obstacleFactor.Length) % obstacleFactor.Length;
+                PlayerPrefs.SetFloat("obstaclePercent", obstacleFactor[(int)tempVal]);
+                return obstacleFactor[(int)tempVal];
+            //case StageInfoID.Enum_spawnSpeed:
+            //    tempVal = (currentID + chg + spawnSpeedFactor.Length) % spawnSpeedFactor.Length;
+            //    PlayerPrefs.SetFloat("spawnSpeed", spawnSpeedFactor[(int)tempVal]);
+            //    return spawnSpeedFactor[(int)tempVal];
             case StageInfoID.Enum_hpMax:
                 tempVal = (currentID + chg + hpMaxFactor.Length) % hpMaxFactor.Length;
                 PlayerPrefs.SetFloat("hpMax", hpMaxFactor[(int)tempVal]);
@@ -278,11 +295,12 @@ public static class StageInfo
     private static void UpdateCustomizedData() {
         waveNumEx = (int)PlayerPrefs.GetFloat("waveNum", 1);
         stageSizeEx = (int)PlayerPrefs.GetFloat("stageSize", 100);
-        enmNumEx = (int)PlayerPrefs.GetFloat("enmNum", 1);
-        enmSpeedEx = (int)PlayerPrefs.GetFloat("enmSpeed", 1);
-        spawnSpeedEx = (int)PlayerPrefs.GetFloat("spawnSpeed", 5);
+        enmNumEx = (float)PlayerPrefs.GetFloat("enmNum", 1);
+        enmAttributeEx = (float)PlayerPrefs.GetFloat("enmSpeed", 1);
+        obstacleEx = (float)PlayerPrefs.GetFloat("obstaclePercent", 1);
+        spawnSpeedEx = (float)PlayerPrefs.GetFloat("spawnSpeed", 5);
         hpMaxEx = (int)PlayerPrefs.GetFloat("hpMax", 1);
-        resourceEx = (int)PlayerPrefs.GetFloat("resource", 1);
+        resourceEx = (float)PlayerPrefs.GetFloat("resource", 1);
     }
 
     public static StageAttr GetStageInfo()
@@ -470,11 +488,11 @@ public static class StageInfo
        // detail.Add(new EnmDetail(1, 1 * (int)enmNumEx, 2, monsterCat0[Random.Range(0, monsterCat0.Length)]));
 
         for (int k = 1; k < waveNum; k++) {
-            if (k < 10 - 1)
+            if (k < 15 - 1)
             {
                 detail.Add(new EnmDetail(k, 10 * (int)enmNumEx, Random.Range(0,3), monsterCat0[Random.Range(0,monsterCat0.Length)]));
             }
-            else if (k < 30 - 1)
+            else if (k < 35 - 1)
             {
                 detail.Add(new EnmDetail(k, Random.Range(15, 35)* (int)enmNumEx, Random.Range(0, 3), monsterCat1[Random.Range(0, monsterCat1.Length)]));
                 detail.Add(new EnmDetail(k, Random.Range(15, 35) * (int)enmNumEx, Random.Range(0, 3), monsterCat1[Random.Range(0, monsterCat1.Length)]));

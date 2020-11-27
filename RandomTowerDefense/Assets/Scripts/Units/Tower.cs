@@ -9,11 +9,11 @@ using Unity.Entities;
 public class Tower : MonoBehaviour
 {
     private readonly int[] MaxLevel = { 15, 30, 50, 99 };
-    private readonly int[] MaxLevelBonus = { 1000, 2000, 3000, 4000 };
+    private readonly int[] MaxLevelBonus = { 200, 1000, 3000, 5000 };
     //private readonly int[] MaxLevel = { 1, 1, 1, 1 };
     private readonly float TowerDestroyTime = 2;
     private readonly int ActionSetNum = 2;
-    private readonly int ExpPerAttack = 1;
+    private readonly int ExpPerAttack = 5;
 
     public TowerAttr attr;
     public int level;
@@ -117,7 +117,7 @@ public class Tower : MonoBehaviour
                     audioSource.PlayOneShot(audioManager.GetAudio("se_Lighting"));
                 }
                 posAdj.z = 0.2f;
-                GainExp(ExpPerAttack * 10);
+                GainExp(ExpPerAttack * 8);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
                 if (audioManager && audioManager.enabledSE)
@@ -126,7 +126,7 @@ public class Tower : MonoBehaviour
                 }
                 posAdj.z = -0.2f;
                 atkEntityPos = transform.position;
-                GainExp(ExpPerAttack * 3);
+                GainExp(ExpPerAttack * 2);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
                 if (audioManager && audioManager.enabledSE)
@@ -135,7 +135,7 @@ public class Tower : MonoBehaviour
                 }
 
                 posAdj.z = 0.0f;
-                GainExp(ExpPerAttack*15);
+                GainExp(ExpPerAttack*12);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
                 if (audioManager && audioManager.enabledSE)
@@ -269,7 +269,8 @@ public class Tower : MonoBehaviour
     {
         level = lv;
         //auraVFXComponent.SetFloat("Spawn Rate", level * 5);
-        lvupVFXComponent.SetFloat("SizeMultiplier", 0.5f + (float)level/MaxLevelBonus[rank - 1] * 9.5f);
+        lvupVFXComponent.SetFloat("SizeMultiplier", 0.5f + 
+            (float)level / MaxLevel[rank - 1] * (float)level/MaxLevel[rank - 1] * 9.5f);
         UpdateAttr();
         if (level == MaxLevel[rank - 1])
             resourceManager.ChangeMaterial(MaxLevelBonus[rank - 1]);
@@ -288,7 +289,7 @@ public class Tower : MonoBehaviour
         {
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
                 attr.radius = attr.radius
-                    * (1 + (0.1f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
+                    * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
                 attr.damage = attr.damage
                    * (1 + (0.1f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
                 attr.waitTime = attr.waitTime
@@ -296,7 +297,7 @@ public class Tower : MonoBehaviour
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
                 attr.radius = attr.radius
-                      * (1 + (0.1f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
+                      * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
                 attr.damage = attr.damage
                         * (1 + (0.1f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
                 attr.waitTime = attr.waitTime
@@ -306,7 +307,7 @@ public class Tower : MonoBehaviour
                 attr.damage = attr.damage
                     * (1 + (0.1f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
                 attr.radius = attr.radius
-                     * (1 + (0.1f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
+                     * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
                 attr.waitTime = attr.waitTime
                    * (1 - (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
                 break;
@@ -316,7 +317,7 @@ public class Tower : MonoBehaviour
                 attr.damage = attr.damage
                      * (1 + (0.1f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
                 attr.radius = attr.radius
-                   * (1 + (0.1f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
+                   * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
                 break;
         }
 

@@ -13,9 +13,9 @@ public class EnemySpawner : MonoBehaviour
     private readonly int count = 100;
     public static EnemySpawner Instance { get; private set; }
     //public List<GameObject> PrefabObject;
-    [Header("MonsterVFX")]
-    public GameObject DieEffect;
-    public GameObject DropEffect;
+    //[Header("MonsterVFX")]
+    //public GameObject DieEffect;
+    //public GameObject DropEffect;
 
     [Header("MonsterAsset")]
     public GameObject MetalonGreen;
@@ -69,6 +69,8 @@ public class EnemySpawner : MonoBehaviour
     //private Transform[] transforms;
 
     public FilledMapGenerator mapGenerator;
+
+    public EffectSpawner effectManager;
     // private CastleSpawner castleSpawner;
     public AgentScript agent;
 
@@ -199,7 +201,7 @@ public class EnemySpawner : MonoBehaviour
             GameObjects[i] = Instantiate(allMonsterList[Name], transform);
             GameObjects[i].transform.position = Position;
             GameObjects[i].transform.localRotation = Quaternion.identity;
-            GameObjects[i].GetComponent<Enemy>().Init(this,DieEffect, DropEffect, i, money,agent);
+            GameObjects[i].GetComponent<Enemy>().Init(this, effectManager, i, money,agent);
             //transforms[i] = GameObjects[i].transform;
             healthArray[i] = health;
             slowArray[i] = 0;

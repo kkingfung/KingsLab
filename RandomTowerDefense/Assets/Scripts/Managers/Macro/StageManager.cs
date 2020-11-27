@@ -98,13 +98,14 @@ public class StageManager : MonoBehaviour
                 if (i == 0)
                 {
                     GameObject WaveDisplayMesh = Instantiate(WaveDisplayMeshPrefab, pos, Quaternion.Euler(90f, 0, 0));
+                    WaveDisplayMesh.transform.parent = this.transform;
                     waveManager.waveNumMesh = WaveDisplayMesh.GetComponent<TextMesh>();
                     waveManager.waveNumMesh.text = "WAVE 1";
                 }
 
                 if (sceneManager.CheckIfTutorial()&& i!=1)  continue;
                 EnemySpawnPort[i] = Instantiate(EnemySpawnPortPrefab, pos, Quaternion.identity);
-
+                EnemySpawnPort[i].transform.parent = this.transform;
             }
         }
     }

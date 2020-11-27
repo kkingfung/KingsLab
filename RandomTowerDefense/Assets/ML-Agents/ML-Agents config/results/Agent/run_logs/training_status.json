@@ -2,41 +2,41 @@
     "RandomDefAgent": {
         "checkpoints": [
             {
-                "steps": 2912,
-                "file_path": "results\\Agent\\RandomDefAgent\\RandomDefAgent-2912.onnx",
+                "steps": 6016,
+                "file_path": "results\\Agent\\RandomDefAgent\\RandomDefAgent-6016.onnx",
                 "reward": null,
-                "creation_time": 1606468449.3436863
+                "creation_time": 1606473159.1632717
             },
             {
-                "steps": 3008,
-                "file_path": "results\\Agent\\RandomDefAgent\\RandomDefAgent-3008.onnx",
+                "steps": 6112,
+                "file_path": "results\\Agent\\RandomDefAgent\\RandomDefAgent-6112.onnx",
                 "reward": null,
-                "creation_time": 1606468622.385002
+                "creation_time": 1606473391.5840983
             },
             {
-                "steps": 3104,
-                "file_path": "results\\Agent\\RandomDefAgent\\RandomDefAgent-3104.onnx",
+                "steps": 6304,
+                "file_path": "results\\Agent\\RandomDefAgent\\RandomDefAgent-6304.onnx",
                 "reward": null,
-                "creation_time": 1606468729.1087387
+                "creation_time": 1606473663.5887046
             },
             {
-                "steps": 3136,
-                "file_path": "results\\Agent\\RandomDefAgent\\RandomDefAgent-3136.onnx",
+                "steps": 6336,
+                "file_path": "results\\Agent\\RandomDefAgent\\RandomDefAgent-6336.onnx",
                 "reward": null,
-                "creation_time": 1606469379.7470555
+                "creation_time": 1606473832.0289032
             },
             {
-                "steps": 3424,
-                "file_path": "results\\Agent\\RandomDefAgent\\RandomDefAgent-3424.onnx",
+                "steps": 6464,
+                "file_path": "results\\Agent\\RandomDefAgent\\RandomDefAgent-6464.onnx",
                 "reward": null,
-                "creation_time": 1606469643.581899
+                "creation_time": 1606474006.404687
             }
         ],
         "final_checkpoint": {
-            "steps": 3424,
+            "steps": 6464,
             "file_path": "results\\Agent\\RandomDefAgent.onnx",
             "reward": null,
-            "creation_time": 1606469643.581899
+            "creation_time": 1606474006.404687
         }
     },
     "metadata": {

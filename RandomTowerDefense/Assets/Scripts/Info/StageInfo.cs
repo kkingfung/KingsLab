@@ -164,8 +164,7 @@ public static class StageInfo
                 PlayerPrefs.SetFloat("waveNum", input);
                 break;
             case StageInfoID.Enum_stageSize:
-                PlayerPrefs.SetFloat("stageSize", (input > MaxMapDepth * MaxMapDepth) ? MaxMapDepth * MaxMapDepth :
-                    (input < MinMapDepth * MinMapDepth ? MinMapDepth * MinMapDepth : input));
+                PlayerPrefs.SetFloat("stageSize", Mathf.Clamp(input, MinMapDepth * MinMapDepth, MaxMapDepth * MaxMapDepth));
                 break;
             case StageInfoID.Enum_enmNum:
                 PlayerPrefs.SetFloat("enmNum", input);
@@ -177,7 +176,7 @@ public static class StageInfo
              //   PlayerPrefs.SetFloat("spawnSpeed", input);
              //   break;
             case StageInfoID.Enum_obstaclePercent:
-                PlayerPrefs.SetFloat("obstaclePercent", input);
+                PlayerPrefs.SetFloat("obstaclePercent", Mathf.Clamp(input,0.3f,1f));
                 break;
             case StageInfoID.Enum_hpMax:
                 PlayerPrefs.SetFloat("hpMax", input);
@@ -488,20 +487,20 @@ public static class StageInfo
        // detail.Add(new EnmDetail(1, 1 * (int)enmNumEx, 2, monsterCat0[Random.Range(0, monsterCat0.Length)]));
 
         for (int k = 1; k < waveNum; k++) {
-            if (k < 15 - 1)
+            if (k < 10 - 1)
             {
-                detail.Add(new EnmDetail(k, 10 * (int)enmNumEx, Random.Range(0,3), monsterCat0[Random.Range(0,monsterCat0.Length)]));
+                detail.Add(new EnmDetail(k, 15 * (int)enmNumEx, Random.Range(0,3), monsterCat0[Random.Range(0,monsterCat0.Length)]));
             }
             else if (k < 35 - 1)
             {
-                detail.Add(new EnmDetail(k, Random.Range(15, 35)* (int)enmNumEx, Random.Range(0, 3), monsterCat1[Random.Range(0, monsterCat1.Length)]));
-                detail.Add(new EnmDetail(k, Random.Range(15, 35) * (int)enmNumEx, Random.Range(0, 3), monsterCat1[Random.Range(0, monsterCat1.Length)]));
+                detail.Add(new EnmDetail(k, Random.Range(15, 25)* (int)enmNumEx, Random.Range(0, 3), monsterCat1[Random.Range(0, monsterCat1.Length)]));
+                detail.Add(new EnmDetail(k, Random.Range(15, 25) * (int)enmNumEx, Random.Range(0, 3), monsterCat1[Random.Range(0, monsterCat1.Length)]));
             }
             else if (k < 50 - 1)
             {
-                detail.Add(new EnmDetail(k, Random.Range(15, 35)* (int)enmNumEx, Random.Range(0, 3), monsterCat2[Random.Range(0, monsterCat2.Length)]));
-                detail.Add(new EnmDetail(k, Random.Range(15, 35)* (int)enmNumEx, Random.Range(0, 3), monsterCat2[Random.Range(0, monsterCat2.Length)]));
-                detail.Add(new EnmDetail(k, Random.Range(15, 35) * (int)enmNumEx, Random.Range(0, 3), monsterCat2[Random.Range(0, monsterCat2.Length)]));
+                detail.Add(new EnmDetail(k, Random.Range(10, 15)* (int)enmNumEx, Random.Range(0, 3), monsterCat2[Random.Range(0, monsterCat2.Length)]));
+                detail.Add(new EnmDetail(k, Random.Range(10, 15) * (int)enmNumEx, Random.Range(0, 3), monsterCat2[Random.Range(0, monsterCat2.Length)]));
+                detail.Add(new EnmDetail(k, Random.Range(10, 15) * (int)enmNumEx, Random.Range(0, 3), monsterCat2[Random.Range(0, monsterCat2.Length)]));
             }
             else
             {
@@ -515,15 +514,15 @@ public static class StageInfo
                                 detail.Add(new EnmDetail(k, 1 * (int)enmNumEx, 1, "AttackBot"));
                             else
                             {
-                                detail.Add(new EnmDetail(k, Random.Range(3, 5)* (int)enmNumEx, Random.Range(0, 3), "RobotSphere"));
-                                detail.Add(new EnmDetail(k, Random.Range(3, 5)* (int)enmNumEx, Random.Range(0, 3), "RobotSphere"));
-                                detail.Add(new EnmDetail(k, Random.Range(3, 5) * (int)enmNumEx, Random.Range(0, 3), "RobotSphere"));
+                                detail.Add(new EnmDetail(k, Random.Range(1, 3)* (int)enmNumEx, Random.Range(0, 3), "RobotSphere"));
+                                detail.Add(new EnmDetail(k, Random.Range(1, 3)* (int)enmNumEx, Random.Range(0, 3), "RobotSphere"));
+                                detail.Add(new EnmDetail(k, Random.Range(1, 3) * (int)enmNumEx, Random.Range(0, 3), "RobotSphere"));
                             }
                             break;
                         default:
-                            detail.Add(new EnmDetail(k, Random.Range(20, 35)* (int)enmNumEx, Random.Range(0, 3), monsterCat3[Random.Range(0, monsterCat3.Length)]));
-                            detail.Add(new EnmDetail(k, Random.Range(20, 35)* (int)enmNumEx, Random.Range(0, 3), monsterCat3[Random.Range(0, monsterCat3.Length)]));
-                            detail.Add(new EnmDetail(k, Random.Range(20, 35) * (int)enmNumEx, Random.Range(0, 3), monsterCat3[Random.Range(0, monsterCat3.Length)]));
+                            detail.Add(new EnmDetail(k, Random.Range(10, 15)* (int)enmNumEx, Random.Range(0, 3), monsterCat3[Random.Range(0, monsterCat3.Length)]));
+                            detail.Add(new EnmDetail(k, Random.Range(10, 15) * (int)enmNumEx, Random.Range(0, 3), monsterCat3[Random.Range(0, monsterCat3.Length)]));
+                            detail.Add(new EnmDetail(k, Random.Range(10, 15) * (int)enmNumEx, Random.Range(0, 3), monsterCat3[Random.Range(0, monsterCat3.Length)]));
                             break;
                     }
                 

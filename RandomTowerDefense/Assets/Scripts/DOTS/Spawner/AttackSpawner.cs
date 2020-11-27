@@ -5,6 +5,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Jobs;
+using UnityEngine.VFX;
 
 public class AttackSpawner : MonoBehaviour
 {
@@ -13,6 +14,12 @@ public class AttackSpawner : MonoBehaviour
     public List<GameObject> PrefabObject;
 
     private EntityManager EntityManager;
+
+    //ToAttackSpawner
+    public List<GameObject> TowerNightmareAttack;
+    public List<GameObject> TowerSoulEaterAttack;
+    public List<GameObject> TowerTerrorBringerAttack;
+    public List<GameObject> TowerUsurperAttack;
 
     //Bridge
     [HideInInspector]
@@ -39,6 +46,11 @@ public class AttackSpawner : MonoBehaviour
     }
     void Start()
     {
+        TowerNightmareAttack = new List<GameObject>();
+        TowerSoulEaterAttack = new List<GameObject>();
+        TowerTerrorBringerAttack = new List<GameObject>();
+        TowerUsurperAttack = new List<GameObject>();
+
         EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
         //Prepare input
@@ -63,7 +75,73 @@ public class AttackSpawner : MonoBehaviour
         for (int i = 0; i < count && spawnCnt < num; ++i)
         {
             if (GameObjects[i] != null) continue;
-            GameObjects[i] = Instantiate(PrefabObject[prefabID], transform);
+
+            bool reuse = false;
+
+            switch (prefabID)
+            {
+                case 0:
+                    foreach (GameObject j in TowerNightmareAttack)
+                    {
+                        if (j.activeSelf) continue;
+                        GameObjects[i] = j;
+                        reuse = true;
+                        break;
+                    }
+                    break;
+                case 1:
+                    foreach (GameObject j in TowerSoulEaterAttack)
+                    {
+                        if (j.activeSelf) continue;
+                        GameObjects[i] = j;
+                        reuse = true;
+                        break;
+                    }
+                    break;
+                case 2:
+                    foreach (GameObject j in TowerTerrorBringerAttack)
+                    {
+                        if (j.activeSelf) continue;
+                        GameObjects[i] = j;
+                        reuse = true;
+                        break;
+                    }
+                    break;
+                case 3:
+                    foreach (GameObject j in TowerUsurperAttack)
+                    {
+                        if (j.activeSelf) continue;
+                        GameObjects[i] = j;
+                        reuse = true;
+                        break;
+                    }
+                    break;
+            }
+            if (reuse == false)
+            {
+                GameObjects[i] = Instantiate(PrefabObject[prefabID], transform);
+                switch (prefabID)
+                {
+                    case 0:
+                        TowerNightmareAttack.Add(GameObjects[i]);
+                        break;
+                    case 1:
+                        TowerSoulEaterAttack.Add(GameObjects[i]);
+                        break;
+                    case 2:
+                        TowerTerrorBringerAttack.Add(GameObjects[i]);
+                        break;
+                    case 3:
+                        TowerUsurperAttack.Add(GameObjects[i]);
+                        break;
+                }
+            }
+            else
+            {
+                GameObjects[i].SetActive(true);
+                GameObjects[i].GetComponent<VisualEffect>().Play();
+            }
+            //GameObjects[i] = Instantiate(PrefabObject[prefabID], transform);
             GameObjects[i].transform.position = position;
             AutoDestroyVFX autoDestroy = GameObjects[i].GetComponent<AutoDestroyVFX>();
             if (autoDestroy) autoDestroy.Timer = lifetime;

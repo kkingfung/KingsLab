@@ -53,6 +53,8 @@ public class TowerManager : MonoBehaviour
     public AudioManager audioManager;
     public AttackSpawner attackSpawner;
 
+    public EffectSpawner effectManager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -188,7 +190,7 @@ public class TowerManager : MonoBehaviour
                     break;
             }
         }
-        GameObject.Instantiate<GameObject>(TowerBuild, location, Quaternion.identity);
+        effectManager.Spawn(0, location);
     }
 
     public bool MergeTower(GameObject targetedTower)

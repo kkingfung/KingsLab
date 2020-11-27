@@ -14,9 +14,6 @@ public class Enemy : MonoBehaviour
     private readonly float ResizeScale = 0.0f;
     private readonly float EnemyDestroyTime = 0.2f;
 
-    private GameObject DieEffect;
-    private GameObject DropEffect;
-
     private Vector3 oriScale;
     private Vector3 prevPos;
     private int DamagedCount = 0;
@@ -29,6 +26,7 @@ public class Enemy : MonoBehaviour
     private int entityID=-1;
     private EnemySpawner enemySpawner;
     private ResourceManager resourceManager;
+    private EffectSpawner effectManager;
 
     private AgentScript agent;
     private Vector3 oriPos;
@@ -45,6 +43,7 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         if (enemySpawner==null) enemySpawner = FindObjectOfType<EnemySpawner>();
+        if (effectManager == null) effectManager = FindObjectOfType<EffectSpawner>();
         resourceManager = FindObjectOfType<ResourceManager>();
 
         if (animator == null) 
@@ -112,11 +111,10 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void Init(EnemySpawner enemySpawner,GameObject DieEffect, GameObject DropEffect,int entityID,int money, AgentScript agent=null)
+    public void Init(EnemySpawner enemySpawner, EffectSpawner effectManager,int entityID,int money, AgentScript agent=null)
     {
         this.enemySpawner = enemySpawner;
-        this.DieEffect = DieEffect;
-        this.DropEffect = DropEffect;
+        this.effectManager = effectManager;
         this.entityID = entityID;
         this.money = money;
         this.agent = agent;
@@ -184,10 +182,10 @@ public class Enemy : MonoBehaviour
     {
         if (animator)
             animator.SetTrigger("Dead");
-        GameObject.Instantiate(DieEffect, this.transform.position+Vector3.up*0.5f, Quaternion.identity);
+        effectManager.Spawn(1, this.transform.position + Vector3.up * 0.5f);
         yield return new WaitForSeconds(EnemyDestroyTime*0.2f);
 
-        GameObject vfx = Instantiate(DropEffect, this.transform.position, Quaternion.identity);
+        GameObject vfx = effectManager.Spawn(2, this.transform.position);
         vfx.GetComponent<VisualEffect>().SetInt("SpawnCount", money);
         resourceManager.ChangeMaterial(money);
         Die();

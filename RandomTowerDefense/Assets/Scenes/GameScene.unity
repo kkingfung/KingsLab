@@ -4894,6 +4894,7 @@ MonoBehaviour:
   castleSpawner: {fileID: 1514224463}
   audioManager: {fileID: 1450034078}
   attackSpawner: {fileID: 2090817380}
+  effectManager: {fileID: 645382831}
 --- !u!1 &231182237
 GameObject:
   m_ObjectHideFlags: 0
@@ -14849,6 +14850,55 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 642002934}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &645382829
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 645382830}
+  - component: {fileID: 645382831}
+  m_Layer: 0
+  m_Name: EffectSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &645382830
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 645382829}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1868921326}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &645382831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 645382829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f415e44020b260499f832f2a45378db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PrefabBuild: {fileID: 6818472943143042842, guid: 7212a9fa4a9ae294488522f0aad48ab3, type: 3}
+  PrefabDieVfx: {fileID: 7512688717853577802, guid: 39be8727c84159049ad4fe198163d281, type: 3}
+  PrefabMoneyDropVfx: {fileID: 150071818436365621, guid: 6fcabbe82040853469ff51f2f01199a8, type: 3}
+  BuildVFXList: []
+  DieVFXList: []
+  MoneyDropVFXList: []
 --- !u!1 &645917324
 GameObject:
   m_ObjectHideFlags: 0
@@ -18805,6 +18855,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 650ba2e7ac9098647822ddcc8be883a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isActived: 0
 --- !u!4 &779320206
 Transform:
   m_ObjectHideFlags: 0
@@ -22358,8 +22409,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a715083ea94c3684d87953ba96e59c5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DieEffect: {fileID: 7512688717853577802, guid: 39be8727c84159049ad4fe198163d281, type: 3}
-  DropEffect: {fileID: 150071818436365621, guid: 6fcabbe82040853469ff51f2f01199a8, type: 3}
   MetalonGreen: {fileID: 7901479559238845187, guid: 7f931d4b5c97d194d8726ddf5acdd440, type: 3}
   MetalonPurple: {fileID: 723633813565368450, guid: e9a03d46b76afe246a9ffd58d255bb65, type: 3}
   MetalonRed: {fileID: 3056742052324029791, guid: f88c6ad57910d8648807bcf0c131f49d, type: 3}
@@ -22387,7 +22436,8 @@ MonoBehaviour:
   RockCritter: {fileID: 8897753120952202049, guid: d7d0897d01f0f744eb7394a754348e4c, type: 3}
   GameObjects: []
   mapGenerator: {fileID: 2142590585}
-  agent: {fileID: 0}
+  effectManager: {fileID: 645382831}
+  agent: {fileID: 5788967119911407911}
 --- !u!21 &958790000
 Material:
   serializedVersion: 6
@@ -46587,6 +46637,7 @@ Transform:
   - {fileID: 124639427}
   - {fileID: 2090817379}
   - {fileID: 1514224462}
+  - {fileID: 645382830}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -51776,6 +51827,10 @@ MonoBehaviour:
   - {fileID: 4337726207909226343, guid: b5bf1474c7ebd1246a04309432a090c1, type: 3}
   - {fileID: 8509487837594905982, guid: 107c87972e78c004cb761f0fd9a564be, type: 3}
   - {fileID: 5352133900012854208, guid: 07e181fb0789cdb4abc58cd76c45b9d8, type: 3}
+  TowerNightmareAttack: []
+  TowerSoulEaterAttack: []
+  TowerTerrorBringerAttack: []
+  TowerUsurperAttack: []
   GameObjects: []
 --- !u!1 &2097896777
 GameObject:
@@ -53379,3 +53434,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 668606ef7bd5dfc449a46d2afd2e6f90, type: 3}
+--- !u!114 &5788967119911407911 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5788967121297150305, guid: 668606ef7bd5dfc449a46d2afd2e6f90, type: 3}
+  m_PrefabInstance: {fileID: 5788967119911407910}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2849747259621721967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06da0af7dd866344096b769deaab473c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

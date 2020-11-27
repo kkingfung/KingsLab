@@ -57,6 +57,7 @@ public class TowerSpawner : MonoBehaviour
         else
             Destroy(gameObject);
     }
+
     private void OnDisable()
     {
         if (Entities.IsCreated)

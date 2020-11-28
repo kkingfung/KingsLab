@@ -84,6 +84,7 @@ public class SkillSpawner : MonoBehaviour
         for (int i = 0; i < GameObjects.Length; ++i)
         {
             if (GameObjects[i] == null) continue;
+            if (GameObjects[i].activeSelf == false) continue;
             lifetimeArray[i] = EntityManager.GetComponentData<Lifetime>(Entities[i]).Value;
             if (EntityManager.HasComponent<Target>(Entities[i]))
             {
@@ -109,7 +110,7 @@ public class SkillSpawner : MonoBehaviour
         int[] spawnIndexList = new int[num];
         for (int i = 0; i < count && spawnCnt < num; ++i)
         {
-            if (GameObjects[i] != null) continue;
+            if (GameObjects[i] != null && GameObjects[i].activeSelf) continue;
             GameObjects[i] = Instantiate(PrefabObject[prefabID], transform);
             GameObjects[i].transform.position = Position;
             GameObjects[i].transform.localRotation = Quaternion.Euler(Rotation);
@@ -210,7 +211,7 @@ public class SkillSpawner : MonoBehaviour
         List<GameObject> result = new List<GameObject>();
         foreach (GameObject i in GameObjects)
         {
-            if (i != null)
+            if (i != null && i.activeSelf)
                 result.Add(i);
         }
         return result;

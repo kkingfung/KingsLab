@@ -1,49 +1,75 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Simulation.Games;
 
 public class DebugManager : MonoBehaviour
 {
     private readonly float timescaleChg = 1f;
-    private readonly float BGMSpawnThreshold = 0.1f;//0.02f;
 
     private float myTimeScale;
     private int CurrSpawningPoint;
     public WaveManager waveManager;
-    public AudioManager audioManager;
-    private float[] data;
-    public bool ready;
-    private float prev;
-    public float time;
+
+    //Simulation Parameter
+    public bool isSimulationTest;
+    [HideInInspector]
+    public bool isFetchDone;
+
+    public float towerrank_Damage = 0;
+    public float towerlvl_Damage = 0;
+    public float enemylvl_Health = 0;
+    public float enemylvl_Speed = 0;
+
+    private void Awake()
+    {
+        isFetchDone = false;
+        if (isSimulationTest)
+            GameSimManager.Instance.FetchConfig(OnFetchConfigDone);
+        else
+            isFetchDone = true;
+    }
     // Start is called before the first frame update
     void Start()
     {
         init();
-        data = audioManager.GetClipWaveform("bgm_Battle");
-        audioManager.PlayAudio("bgm_Battle", true);
-        prev = data[((int)time * 44100) % data.Length];
+    }
+
+    private void OnFetchConfigDone(GameSimConfigResponse gameSimConfigResponse)
+    {
+        towerrank_Damage = gameSimConfigResponse.GetFloat("towerrank_Damage");
+        towerlvl_Damage = gameSimConfigResponse.GetFloat("towerlvl_Damage");
+        enemylvl_Health = gameSimConfigResponse.GetFloat("enemylvl_Health");
+        enemylvl_Speed = gameSimConfigResponse.GetFloat("enemylvl_Speed");
+
+        isFetchDone = true;
+    }
+
+    public void MapResetted()
+    {
+        if (isSimulationTest == false) return;
+        GameSimManager.Instance.SetCounter("WaveArrived", waveManager.GetCurrentWaveNum());
+        Debug.Log("QuitNow");
+
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 
     private void init()
     {
         myTimeScale = 1.0f;
         CurrSpawningPoint = 0;
-        time = Time.time;
         Time.timeScale = myTimeScale;
         Time.fixedDeltaTime = Time.timeScale;
-        ready = false;
     }
+
     // Update is called once per frame
     void Update()
     {
-        if (ready == false && Time.time - time >= 0.25f)
-        {
-            //if (data[(int)(time* 0.25f * 44100) % data.Length] - prev > BGMSpawnThreshold)
-            if (data[(int)(time * 0.25f * 44100) % data.Length] > BGMSpawnThreshold)
-                ready = true;
-            //prev = data[(int)(time* 0.25f * 44100) % data.Length];
-            time += 0.25f;
-        }
+
         if (waveManager)
             CurrSpawningPoint = waveManager.SpawnPointByAI;
 

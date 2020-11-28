@@ -52,8 +52,9 @@ public class TowerManager : MonoBehaviour
 
     public AudioManager audioManager;
     public AttackSpawner attackSpawner;
-
     public EffectSpawner effectManager;
+
+    public DebugManager debugManager;
 
     // Start is called before the first frame update
     void Start()
@@ -149,7 +150,7 @@ public class TowerManager : MonoBehaviour
                         location, castleSpawner.castle.transform.position);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
                     script = tower.GetComponent<Tower>();
-                    script.linkingManagers(towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager);
+                    script.linkingManagers(towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager, debugManager);
                     script.newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerNightmareAura,
                         TowerInfo.TowerInfoID.Enum_TowerNightmare, 1, rank);
                     tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
@@ -160,7 +161,7 @@ public class TowerManager : MonoBehaviour
                         location, castleSpawner.castle.transform.position);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
                     script = tower.GetComponent<Tower>();
-                    script.linkingManagers(towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager);
+                    script.linkingManagers(towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager, debugManager);
                     script.newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerSoulEaterAura,
                         TowerInfo.TowerInfoID.Enum_TowerSoulEater, 1, rank);
                     tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
@@ -171,7 +172,7 @@ public class TowerManager : MonoBehaviour
                         location, castleSpawner.castle.transform.position);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
                     script = tower.GetComponent<Tower>();
-                    script.linkingManagers(towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager);
+                    script.linkingManagers(towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager, debugManager);
                     script.newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerTerrorBringerAura,
                         TowerInfo.TowerInfoID.Enum_TowerTerrorBringer, 1, rank);
                     tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
@@ -182,7 +183,7 @@ public class TowerManager : MonoBehaviour
                         location, castleSpawner.castle.transform.position);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
                     script = tower.GetComponent<Tower>();
-                    script.linkingManagers(towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager);
+                    script.linkingManagers(towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager, debugManager);
                     script.newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerUsurperAura,
                         TowerInfo.TowerInfoID.Enum_TowerUsurper, 1, rank);
                     tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
@@ -307,7 +308,8 @@ public class TowerManager : MonoBehaviour
             int randCandidate = Random.Range(0, candidateList.Count);
             GameObject candidate = candidateList[randCandidate];
             candidateList.Remove(candidate);
-            GameObject temp = Instantiate<GameObject>(TowerDisappear, candidate.transform.position, Quaternion.identity);
+            
+            GameObject temp = effectManager.Spawn(3, candidate.transform.position); 
             VisualEffect tempVFX = temp.GetComponent<VisualEffect>();
             Tower candidateTowerScript = candidate.GetComponent<Tower>();
             switch (candidateTowerScript.type)
@@ -325,7 +327,7 @@ public class TowerManager : MonoBehaviour
                     tempVFX.SetVector4("MainColor", new Vector4(1, 0, 0, 1));
                     break;
             }
-            tempVFX.SetVector3("TargetLocation", targetedTower.transform.position);
+            tempVFX.SetVector3("TargetLocation", targetedTower.transform.position- candidate.transform.position);
             removeTowerFromList(candidate);
         }
         removeTowerFromList(targetedTower);

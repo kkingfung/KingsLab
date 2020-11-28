@@ -8,7 +8,7 @@ using Unity.Entities;
 
 public class Tower : MonoBehaviour
 {
-    private readonly int[] MaxLevel = { 15, 30, 50, 99 };
+    private readonly int[] MaxLevel = { 10, 20, 30, 50 };
     private readonly int[] MaxLevelBonus = { 200, 1000, 3000, 5000 };
     //private readonly int[] MaxLevel = { 1, 1, 1, 1 };
     private readonly float TowerDestroyTime = 2;
@@ -26,7 +26,7 @@ public class Tower : MonoBehaviour
     private Vector3 atkEntityPos;
 
     //private List<GameObject> AtkVFX;
-    private GameObject auraVFX;
+    private GameObject auraVFX = null;
 
     private GameObject auraVFXPrefab;
     private GameObject lvupVFXPrefab;
@@ -53,6 +53,9 @@ public class Tower : MonoBehaviour
 
     private float3 oriScale;
     private bool newlySpawned;
+
+    private DebugManager debugManager;
+
     private void Awake()
     {
         atkCounter = 0;
@@ -72,6 +75,7 @@ public class Tower : MonoBehaviour
         //audioManager = FindObjectOfType<AudioManager>();
         //attackSpawner = FindObjectOfType<AttackSpawner>();
         //filledMapGenerator = FindObjectOfType<FilledMapGenerator>();
+        //debugManager = FindObjectOfType<DebugManager>();
 
         oriScale = transform.localScale;
         transform.localScale = new Vector3();
@@ -152,6 +156,7 @@ public class Tower : MonoBehaviour
           + this.transform.forward * posAdj.z + this.transform.up * posAdj.y, atkEntityPos, this.transform.localRotation,
           attr.attackSpd*transform.forward, attr.damage, attr.attackRadius,
           attr.attackWaittime, attr.attackLifetime);
+
         //this.AtkVFX.Add(attackSpawner.GameObjects[entityID[0]]);
         if (type == TowerInfo.TowerInfoID.Enum_TowerNightmare || type == TowerInfo.TowerInfoID.Enum_TowerTerrorBringer)
         {
@@ -199,17 +204,18 @@ public class Tower : MonoBehaviour
         //this.auraVFX.transform.localScale = Vector3.one * 10f;
         //this.auraVFXComponent = auraVFX.GetComponentInChildren<VisualEffect>();
         if (pillar) {
-            this.lvupVFXComponent = pillar.GetComponentInChildren<VisualEffect>();
+            this.lvupVFXComponent = GetComponentInChildren<VisualEffect>();
 
             if (this.lvupVFXComponent == null)
             {
                 GameObject lvupVFX = GameObject.Instantiate(lvupVFXPrefab, this.transform.position, Quaternion.identity);
-                lvupVFX.transform.parent = pillar.transform;
+                lvupVFX.transform.parent = transform;
                 lvupVFXComponent = lvupVFX.GetComponentInChildren<VisualEffect>();
             }
             else
             {
-                this.lvupVFXComponent.enabled = true;
+                //this.lvupVFXComponent.enabled = true;
+                //this.lvupVFXComponent.Play();
             }
 
             switch (type)
@@ -233,13 +239,16 @@ public class Tower : MonoBehaviour
         }
     }
 
-    public void linkingManagers(TowerSpawner towerSpawner, AudioManager audioManager, AttackSpawner attackSpawner, FilledMapGenerator filledMapGenerator,ResourceManager resourceManager)
+    public void linkingManagers(TowerSpawner towerSpawner, AudioManager audioManager, 
+        AttackSpawner attackSpawner, FilledMapGenerator filledMapGenerator,
+        ResourceManager resourceManager,DebugManager debugManager=null)
     {
         this.towerSpawner = towerSpawner;
         this.audioManager = audioManager;
         this.attackSpawner = attackSpawner;
         this.filledMapGenerator = filledMapGenerator;
         this.resourceManager = resourceManager;
+        this.debugManager = debugManager;
     }
 
     public void GainExp(int exp)
@@ -282,42 +291,44 @@ public class Tower : MonoBehaviour
 
         //Update by rank/level with factors
         attr = new TowerAttr(attr.radius * (1 + 0.01f * rank + 0.005f * level),
-            attr.damage * (1 + 0.2f * rank + 0.1f * level),
+            attr.damage * (1 + 0.2f * rank + 0.1f * level
+            + ((debugManager != null) ? debugManager.towerrank_Damage * rank +
+            debugManager.towerlvl_Damage * level: 0)),
             attr.waitTime * (1f - (0.1f * rank)), attr.attackLifetime, attr.attackWaittime, attr.attackRadius,attr.attackSpd);
 
         switch (type)
         {
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
                 attr.radius = attr.radius
-                    * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
+                    * (1 + (0.01f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
                 attr.damage = attr.damage
-                   * (1 + (0.1f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
+                   * (1 + (0.04f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
                 attr.waitTime = attr.waitTime
-                   * (1 - (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
+                   * (1 - (0.005f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
                 attr.radius = attr.radius
-                      * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
+                      * (1 + (0.01f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
                 attr.damage = attr.damage
                         * (1 + (0.1f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
                 attr.waitTime = attr.waitTime
-                   * (1 - (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
+                   * (1 - (0.005f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
+                attr.radius = attr.radius
+                    * (1 + (0.01f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
                 attr.damage = attr.damage
                     * (1 + (0.1f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
-                attr.radius = attr.radius
-                     * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
                 attr.waitTime = attr.waitTime
-                   * (1 - (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
+                   * (1 - (0.01f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                attr.waitTime = attr.waitTime
-                    * (1 - (0.03f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
+                attr.radius = attr.radius
+                   * (1 + (0.01f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
                 attr.damage = attr.damage
                      * (1 + (0.1f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
-                attr.radius = attr.radius
-                   * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
+                attr.waitTime = attr.waitTime
+                   * (1 - (0.005f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4))); 
                 break;
         }
 
@@ -334,7 +345,7 @@ public class Tower : MonoBehaviour
             Value = attr.waitTime
         });
 
-        this.lvupVFXComponent.transform.localScale = Vector3.one;
+        this.lvupVFXComponent.transform.localScale = Vector3.one * 10f;
     }
 
     public bool CheckLevel()
@@ -370,8 +381,8 @@ public class Tower : MonoBehaviour
 
         if (auraVFX)
             Destroy(auraVFX);
-        if(lvupVFXComponent)
-            lvupVFXComponent.enabled = false;
+        //if(lvupVFXComponent)
+        //    lvupVFXComponent.enabled = false;
 
         this.gameObject.SetActive(false);
         //Destroy(this.gameObject);

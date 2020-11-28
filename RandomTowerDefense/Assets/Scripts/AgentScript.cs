@@ -15,6 +15,7 @@ public class AgentScript : Agent
     public StageManager stageManager;
     public TowerSpawner towerSpawner;//GetAllTowerInfo For EnemySpawningDecision
     public WaveManager waveManager;
+    public DebugManager debugManager;
 
     //For Reset Episode
     public TowerManager towerManager;
@@ -74,6 +75,9 @@ public class AgentScript : Agent
 
     private void FixedUpdate()
     {
+        //if (debugManager && debugManager.isSimulationTest && debugManager.isFetchDone == false)
+        //    return;
+
         if (stageManager)
             CheckCastleHP();
         if (waveManager)
@@ -104,6 +108,8 @@ public class AgentScript : Agent
                     if (PathfindingGridSetup.Instance != null && PathfindingGridSetup.Instance.isActived == true)
                     {
                         AddReward(-1f * loseCounter);
+                        if (debugManager)
+                            debugManager.MapResetted();
                         EndEpisode();
                     }
                 }
@@ -199,7 +205,6 @@ public class AgentScript : Agent
     public override void OnEpisodeBegin()
     {
         Reset();
-        Application.Quit();
     }
 
     public void EnemyDisappear(Vector3 EnemyOriPos, Vector3 EnemyDiePos)

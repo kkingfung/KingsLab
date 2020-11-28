@@ -9,7 +9,7 @@ using UnityEngine.VFX;
 
 public class AttackSpawner : MonoBehaviour
 {
-    private readonly int count=100;
+    private readonly int count=3000;
     public static AttackSpawner Instance { get; private set; }
     public List<GameObject> PrefabObject;
 
@@ -72,10 +72,10 @@ public class AttackSpawner : MonoBehaviour
     {
         int spawnCnt = 0;
         int[] spawnIndexList = new int[num];
+
         for (int i = 0; i < count && spawnCnt < num; ++i)
         {
-            if (GameObjects[i] != null) continue;
-
+            if (GameObjects[i] != null && GameObjects[i].activeSelf) continue;
             bool reuse = false;
 
             switch (prefabID)

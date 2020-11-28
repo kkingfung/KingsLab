@@ -13,16 +13,21 @@ public class AITrainingOperation : InGameOperation
     public FilledMapGenerator filledMapGenerator;
 
     [HideInInspector]
+    public bool isFetchDone;
+
+    [HideInInspector]
     public GameObject pillar;
     public bool tellMerge;
     private void Awake()
     {
+        isFetchDone = false;
+
         //StageInfo(Base) Assignment
         IslandNow = 3;
         PlayerPrefs.SetInt("IslandNow", 3);
         PlayerPrefs.SetFloat("waveNum", 999);
         PlayerPrefs.SetFloat("stageSize", 100);
-        PlayerPrefs.SetFloat("obstaclePercent", Random.Range(0.5f,1f));
+        PlayerPrefs.SetFloat("obstaclePercent", Random.Range(0.5f, 1f));
         PlayerPrefs.SetFloat("hpMax", 9999);
 
         if (UseRemoteConfig)
@@ -120,18 +125,19 @@ public class AITrainingOperation : InGameOperation
         if (resourceManager.GetCurrMaterial() >= 100)
         {
             //Random Spawn Tower
-            if (pillar)
+            if (pillar && TowerInfo.infoUpdated)
             {
                 towerManager.BuildTower(pillar);
                 pillar = null;
             }
         }
-        else if(tellMerge)
+        else if (tellMerge)
         {
             int count;
             List<GameObject> targetList;
             //Check three in a kind to merge
-            switch (Random.Range(0, 4*4)) {
+            switch (Random.Range(0, 4 * 4))
+            {
                 case 0 + 4 * 0:
                     targetList = new List<GameObject>(towerSpawner.TowerNightmareRank1);
                     break;

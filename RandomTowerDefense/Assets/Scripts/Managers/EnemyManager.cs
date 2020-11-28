@@ -9,6 +9,8 @@ public class EnemyManager : MonoBehaviour
 
     public EnemySpawner enemySpawner;
     public WaveManager waveManager;
+    public DebugManager debugManager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,8 +31,9 @@ public class EnemyManager : MonoBehaviour
             int waveNum = waveManager.GetCurrentWaveNum();
             EnemyAttr attr = EnemyInfo.GetEnemyInfo(monsterName);
             int[] entityIDList = enemySpawner.Spawn(monsterName, SpawnPoint, new float3(),
-                attr.health * (1+ 0.5f * waveNum),attr.money,
-                attr.damage, attr.radius, attr.speed * (1 + 0.02f * waveNum ), attr.time);
+                attr.health * (waveNum * waveNum  + ((debugManager != null) ? debugManager.enemylvl_Health * waveNum : 0))
+                , attr.money,attr.damage, attr.radius, 
+                attr.speed * (1 + 0.05f * waveNum + ((debugManager != null) ? debugManager.enemylvl_Speed * waveNum : 0)), attr.time);
         }
     }
 

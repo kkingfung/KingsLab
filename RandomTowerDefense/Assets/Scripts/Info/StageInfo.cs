@@ -69,6 +69,9 @@ public static class StageInfo
     public static readonly int MaxMapDepth = 20;
     public static readonly int MinMapDepth = 6;
 
+    public static readonly float MaxObstaclePercent = 1f;
+    public static readonly float MinObstaclePercent = 0.3f;
+
     private static StageAttr stageInfo;
     public static readonly string[] monsterCat0 = {
         "Slime","Mushroom","PhoenixChick","TurtleShell"
@@ -176,7 +179,7 @@ public static class StageInfo
              //   PlayerPrefs.SetFloat("spawnSpeed", input);
              //   break;
             case StageInfoID.Enum_obstaclePercent:
-                PlayerPrefs.SetFloat("obstaclePercent", Mathf.Clamp(input,0.3f,1f));
+                PlayerPrefs.SetFloat("obstaclePercent", Mathf.Clamp(input, MinObstaclePercent, MaxObstaclePercent));
                 break;
             case StageInfoID.Enum_hpMax:
                 PlayerPrefs.SetFloat("hpMax", input);

@@ -174,7 +174,8 @@ public class EnemySpawner : MonoBehaviour
     private void Update() {
         for (int i = 0; i < GameObjects.Length; ++i) {
             if (GameObjects[i] == null) continue;
-                GameObjects[i].transform.position = EntityManager.GetComponentData<Translation>(Entities[i]).Value;
+            if (GameObjects[i].activeSelf == false) continue;
+            GameObjects[i].transform.position = EntityManager.GetComponentData<Translation>(Entities[i]).Value;
         }
         UpdateArrays();
     }
@@ -184,6 +185,7 @@ public class EnemySpawner : MonoBehaviour
         for (int i = 0; i < GameObjects.Length; ++i)
         {
             if (GameObjects[i] == null) continue;
+            if (GameObjects[i].activeSelf == false) continue;
             healthArray[i] = EntityManager.GetComponentData<Health>(Entities[i]).Value;
             slowArray[i] = EntityManager.GetComponentData<SlowRate>(Entities[i]).Value;
             petrifyArray[i] = EntityManager.GetComponentData<PetrifyAmt>(Entities[i]).Value;
@@ -197,7 +199,7 @@ public class EnemySpawner : MonoBehaviour
         int[] spawnIndexList = new int[num];
         for (int i = 0; i < count && spawnCnt < num; ++i)
         {
-            if (GameObjects[i] != null) continue;
+            if (GameObjects[i] != null && GameObjects[i].activeSelf) continue;
             GameObjects[i] = Instantiate(allMonsterList[Name], transform);
             GameObjects[i].transform.position = Position;
             GameObjects[i].transform.localRotation = Quaternion.identity;
@@ -292,7 +294,7 @@ public class EnemySpawner : MonoBehaviour
         List<GameObject> result = new List<GameObject>();
         foreach (GameObject i in GameObjects)
         {
-            if (i != null)
+            if (i != null && i.activeSelf)
                 result.Add(i);
         }
         return result;

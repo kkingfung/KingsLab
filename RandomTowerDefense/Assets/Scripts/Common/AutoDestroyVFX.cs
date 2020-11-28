@@ -24,8 +24,10 @@ public class AutoDestroyVFX : MonoBehaviour
             ps.Stop();
             //No ps.isPlaying in VFX
             tobeDestroy = true;
-            if (skill!=null)
-                Destroy(gameObject, 2f);
+            if (skill != null)
+            {
+                Destroy(gameObject, 3f);
+            }
         }
 
         if (skill == null && tobeDestroy == true && Timer > 2)

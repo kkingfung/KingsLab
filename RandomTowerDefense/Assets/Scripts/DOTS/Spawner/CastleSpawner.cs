@@ -78,6 +78,7 @@ public class CastleSpawner : MonoBehaviour
         for (int i = 0; i < GameObjects.Length; ++i)
         {
             if (GameObjects[i] == null) continue;
+            if (GameObjects[i].activeSelf == false) continue;
             castleHPArray[i] = (int)EntityManager.GetComponentData<Health>(Entities[i]).Value;
         }
     }
@@ -89,7 +90,7 @@ public class CastleSpawner : MonoBehaviour
         int[] spawnIndexList = new int[num];
         for (int i = 0; i < count && spawnCnt < num; ++i)
         {
-            if (GameObjects[i] != null) continue;
+            if (GameObjects[i] != null && GameObjects[i].activeSelf) continue;
 
             GameObjects[i] = Instantiate(PrefabObject[prefabID], transform);
             GameObjects[i].transform.position = Position;

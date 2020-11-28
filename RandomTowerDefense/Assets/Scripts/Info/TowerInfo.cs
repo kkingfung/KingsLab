@@ -6,7 +6,6 @@ using Unity.RemoteConfig;
 
 using System.IO;
 
-
 public class TowerAttr
 {
     public float damage;
@@ -35,6 +34,7 @@ public class TowerAttr
 public static class TowerInfo
 {
     static Dictionary<TowerInfoID, TowerAttr> towerInfo;
+    public static bool infoUpdated = false;
 
     public enum TowerInfoID
     {
@@ -72,6 +72,7 @@ public static class TowerInfo
                 0.2f, 1,//wait,atklife
                 0f, 0.5f,//atkwait,atkrad
                 1f,5));//atkspd,lifetime
+        infoUpdated = true;
     }
 
     public static void InitByFile(string filepath)
@@ -94,6 +95,8 @@ public static class TowerInfo
         }
 
         inp_stm.Close();
+
+        infoUpdated = true;
     }
 
     public static void InitByRemote(ConfigResponse response)
@@ -124,6 +127,8 @@ public static class TowerInfo
                 ConfigManager.appConfig.GetFloat("TowerUsurperWait"), ConfigManager.appConfig.GetFloat("TowerUsurperLife"), //wait,atklife
                ConfigManager.appConfig.GetFloat("TowerUsurperAtkWait"), ConfigManager.appConfig.GetFloat("TowerUsurperAtkRadius"),//atkwait,atkrad
                 ConfigManager.appConfig.GetFloat("TowerUsurperAtkSpd"), ConfigManager.appConfig.GetFloat("TowerUsurperAtkLife")));//atkspd,lifetime
+
+        infoUpdated = true;
     }
 
     static void Release()
@@ -133,6 +138,7 @@ public static class TowerInfo
 
     public static TowerAttr GetTowerInfo(TowerInfoID towerType)
     {
+
         if (towerInfo.ContainsKey(towerType))
         {
             return towerInfo[towerType];

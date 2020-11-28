@@ -9,6 +9,16 @@ public class WaveManager : MonoBehaviour
 {
     //private readonly float WaveChgSpeedFactor = 2.0f;
     //private readonly int FireworkMax=120;
+    private readonly float BGMSpawnThreshold = 0.1f;//0.02f;
+
+     //SpawnReferringToBGM
+    [HideInInspector]
+    public float timeBGM;
+    private float[] dataBGM;
+    private float dataBGMPrev;
+    [HideInInspector]
+    public bool readyToSpawn;
+
     private int TotalWaveNum;
     private int CurrentWaveNum;
     private float WaveTimer;
@@ -19,6 +29,7 @@ public class WaveManager : MonoBehaviour
 
     public int SpawnPointByAI;
 
+
     public List<VisualEffect> FireWork;
     public List<Text> waveNumUI;
     [HideInInspector]
@@ -28,6 +39,7 @@ public class WaveManager : MonoBehaviour
     public InGameOperation sceneManager;
     public TutorialManager tutorialManager;
     public StageManager stageManager;
+    public AudioManager audioManager;
     public EnemySpawner enemySpawner;
     public bool agentCallWait;
 
@@ -61,7 +73,14 @@ public class WaveManager : MonoBehaviour
             inTutorial = true;
         }
         WaveTimer = Time.time;
+
         SpawnPointByAI = -1;
+
+        audioManager.PlayAudio("bgm_Battle", true);
+        dataBGM = audioManager.GetClipWaveform("bgm_Battle");
+        timeBGM = Time.time;
+        dataBGMPrev = dataBGM[((int)timeBGM * 44100) % dataBGM.Length];
+        readyToSpawn = false;
     }
 
     public int GetTotalWaveNum() { return TotalWaveNum; }
@@ -94,6 +113,15 @@ public class WaveManager : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        if (readyToSpawn == false && Time.time - timeBGM >= 0.25f)
+        {
+            //if (dataBGM[(int)(timeBGM * 0.25f* 44100) % dataBGM.Length] - dataBGMPrev > BGMSpawnThreshold)
+            if (dataBGM[(int)(timeBGM * 0.25f * 44100) % dataBGM.Length] > BGMSpawnThreshold)
+                readyToSpawn = true;
+            //dataBGMPrev = dataBGM[(int)(timeBGM * 0.25f* 44100) % dataBGM.Length];
+            timeBGM += 0.25f;
+        }
+
         //if (fireworkcounter > 0) {
         //    if (--fireworkcounter == 0) {
         //        foreach (VisualEffect i in FireWork)
@@ -154,7 +182,7 @@ public class WaveManager : MonoBehaviour
                             {
                                 if (agentCallWait == false)
                                 {
-                                    if (sceneManager && sceneManager.readyToSpawn)
+                                    if (sceneManager && readyToSpawn)
                                     {
                                         EnemyAttr attr = EnemyInfo.GetEnemyInfo(wave.enmDetail[i].enmType);
                                         enemySpawner.Spawn(wave.enmDetail[i].enmType,
@@ -165,11 +193,11 @@ public class WaveManager : MonoBehaviour
                                              (float)(attr.speed * (1 + 0.005f * (CurrentWaveNum * CurrentWaveNum) * (CheckCustomData ? (int)StageInfo.enmAttributeEx : 1))),
                                             attr.time
                                             );
-                                        sceneManager.readyToSpawn = false;
-                                        sceneManager.timeBGM = Time.time;
+                                        readyToSpawn = false;
+                                        timeBGM = Time.time;
                                         break;
                                     }
-                                    else if (debugManager && debugManager.ready)
+                                    else if (debugManager && readyToSpawn)
                                     {
                                         EnemyAttr attr = EnemyInfo.GetEnemyInfo(wave.enmDetail[i].enmType);
                                         enemySpawner.Spawn(wave.enmDetail[i].enmType,
@@ -180,8 +208,8 @@ public class WaveManager : MonoBehaviour
                                              (float)(attr.speed * (1 + 0.005f * (CurrentWaveNum * CurrentWaveNum) * (CheckCustomData ? (int)StageInfo.enmAttributeEx : 1))),
                                             attr.time
                                             );
-                                        debugManager.ready = false;
-                                        debugManager.time = Time.time;
+                                        readyToSpawn = false;
+                                        timeBGM = Time.time;
                                         break;
                                     }
                                 }

@@ -124,6 +124,7 @@ public class TowerSpawner : MonoBehaviour
         for (int i = 0; i < GameObjects.Length; ++i)
         {
             if (GameObjects[i] == null) continue;
+            if (GameObjects[i].activeSelf == false) continue;
             if (EntityManager.HasComponent<Target>(Entities[i]))
             {
                 Target target = EntityManager.GetComponentData<Target>(Entities[i]);
@@ -144,7 +145,7 @@ public class TowerSpawner : MonoBehaviour
         int[] spawnIndexList = new int[num];
         for (int i = 0; i < count && spawnCnt < num; ++i)
         {
-            if (GameObjects[i] != null) continue;
+            if (GameObjects[i] != null && GameObjects[i].activeSelf) continue;
             bool reuse = false;
 
             switch (prefabID)
@@ -418,7 +419,7 @@ public class TowerSpawner : MonoBehaviour
         List<GameObject> result = new List<GameObject>();
         foreach (GameObject i in GameObjects)
         {
-            if (i != null)
+            if (i != null && i.activeSelf)
                 result.Add(i);
         }
         return result;

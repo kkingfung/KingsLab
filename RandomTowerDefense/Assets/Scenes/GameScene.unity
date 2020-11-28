@@ -4895,6 +4895,7 @@ MonoBehaviour:
   audioManager: {fileID: 1450034078}
   attackSpawner: {fileID: 2090817380}
   effectManager: {fileID: 645382831}
+  debugManager: {fileID: 0}
 --- !u!1 &231182237
 GameObject:
   m_ObjectHideFlags: 0
@@ -13140,6 +13141,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de4cce722a3f3434395f3924ceaa743a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeBGM: 0
+  readyToSpawn: 0
   isSpawning: 0
   SpawnPointByAI: 0
   FireWork: []
@@ -13150,6 +13153,7 @@ MonoBehaviour:
   sceneManager: {fileID: 1829121298}
   tutorialManager: {fileID: 1489334543}
   stageManager: {fileID: 2137340201}
+  audioManager: {fileID: 1450034078}
   enemySpawner: {fileID: 956912832}
   agentCallWait: 0
   debugManager: {fileID: 0}
@@ -14896,9 +14900,11 @@ MonoBehaviour:
   PrefabBuild: {fileID: 6818472943143042842, guid: 7212a9fa4a9ae294488522f0aad48ab3, type: 3}
   PrefabDieVfx: {fileID: 7512688717853577802, guid: 39be8727c84159049ad4fe198163d281, type: 3}
   PrefabMoneyDropVfx: {fileID: 150071818436365621, guid: 6fcabbe82040853469ff51f2f01199a8, type: 3}
+  PrefabDisappearVfx: {fileID: 8111480042943765323, guid: 126a5b0cb0e9b5348b80f6c2471dbe7a, type: 3}
   BuildVFXList: []
   DieVFXList: []
   MoneyDropVFXList: []
+  DisappearVFXList: []
 --- !u!1 &645917324
 GameObject:
   m_ObjectHideFlags: 0
@@ -25276,6 +25282,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemySpawner: {fileID: 956912832}
   waveManager: {fileID: 575038166}
+  debugManager: {fileID: 0}
 --- !u!4 &1054287607
 Transform:
   m_ObjectHideFlags: 0
@@ -45940,8 +45947,6 @@ MonoBehaviour:
   timeManager: {fileID: 647376207}
   tutorialManager: {fileID: 1489334543}
   scoreCalculation: {fileID: 1373645766}
-  timeBGM: 0
-  readyToSpawn: 0
 --- !u!1 &1830117279
 GameObject:
   m_ObjectHideFlags: 0

@@ -173,7 +173,7 @@ public static class StageInfo
                 PlayerPrefs.SetFloat("enmNum", input);
                 break;
             case StageInfoID.Enum_enmAttribute:
-                PlayerPrefs.SetFloat("enmSpeed", input);
+                PlayerPrefs.SetFloat("enmAttr", input);
                 break;
             //case StageInfoID.Enum_spawnSpeed:
              //   PlayerPrefs.SetFloat("spawnSpeed", input);
@@ -216,7 +216,7 @@ public static class StageInfo
                 }
                 break;
             case StageInfoID.Enum_enmAttribute:
-                tempVal = PlayerPrefs.GetFloat("enmSpeed", 1);
+                tempVal = PlayerPrefs.GetFloat("enmAttr", 1);
                 for (; elementID < enmAttributeFactor.Length; elementID++)
                 {
                     if (enmAttributeFactor[elementID] > tempVal) break;
@@ -272,7 +272,7 @@ public static class StageInfo
                 return enmNumFactor[(int)tempVal];
             case StageInfoID.Enum_enmAttribute:
                 tempVal = (currentID + chg + enmAttributeFactor.Length) % enmAttributeFactor.Length;
-                PlayerPrefs.SetFloat("enmSpeed", enmAttributeFactor[(int)tempVal]);
+                PlayerPrefs.SetFloat("enmAttr", enmAttributeFactor[(int)tempVal]);
                 return enmAttributeFactor[(int)tempVal];
             case StageInfoID.Enum_obstaclePercent:
                 tempVal = (currentID + chg + obstacleFactor.Length) % obstacleFactor.Length;
@@ -298,7 +298,7 @@ public static class StageInfo
         waveNumEx = (int)PlayerPrefs.GetFloat("waveNum", 1);
         stageSizeEx = (int)PlayerPrefs.GetFloat("stageSize", 100);
         enmNumEx = (float)PlayerPrefs.GetFloat("enmNum", 1);
-        enmAttributeEx = (float)PlayerPrefs.GetFloat("enmSpeed", 1);
+        enmAttributeEx = (float)PlayerPrefs.GetFloat("enmAttr", 1);
         obstacleEx = (float)PlayerPrefs.GetFloat("obstaclePercent", 1);
         spawnSpeedEx = (float)PlayerPrefs.GetFloat("spawnSpeed", 5);
         hpMaxEx = (int)PlayerPrefs.GetFloat("hpMax", 1);

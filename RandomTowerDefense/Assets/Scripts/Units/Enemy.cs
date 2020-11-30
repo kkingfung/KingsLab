@@ -10,7 +10,7 @@ using Unity.MLAgents;
 public class Enemy : MonoBehaviour
 {
     private readonly int DmgCntIncrement = 2;
-    private readonly int ResizeFactor = 3;
+    private readonly int ResizeFactor = 5;
     private readonly float ResizeScale = 0.0f;
     private readonly float EnemyDestroyTime = 0.2f;
 
@@ -102,10 +102,10 @@ public class Enemy : MonoBehaviour
         if (DamagedCount > 0 && isReady)
         {
             DamagedCount--;
-            if ((DamagedCount / ResizeFactor) % 2 == 0)
-                transform.localScale = oriScale;
+            if ((DamagedCount / ResizeFactor) % 3 == 0 && DamagedCount!=0)
+                transform.localScale = oriScale * ResizeScale; 
             else
-                transform.localScale = oriScale * ResizeScale;
+                transform.localScale = oriScale;
         }
 
         if (transform.position != prevPos)

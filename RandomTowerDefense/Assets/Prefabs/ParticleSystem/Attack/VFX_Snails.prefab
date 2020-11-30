@@ -49,7 +49,7 @@ VisualEffect:
   m_PropertySheet:
     m_Float:
       m_Array:
-      - m_Value: 1
+      - m_Value: 2
         m_Name: Spawn rate
         m_Overridden: 1
       - m_Value: 0.8
@@ -141,3 +141,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Timer: 10
+  tobeDestroy: 0
+  skill: {fileID: 0}

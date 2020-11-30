@@ -22,6 +22,7 @@ public class AgentScript : Agent
     public ResourceManager resourceManager;
 
     private bool isTower;
+    public bool isLearning;
 
     private int2 AgentCoord;
     //private int2 MaxCoord;
@@ -104,7 +105,7 @@ public class AgentScript : Agent
                     RequestDecision();
                 }
 
-                if (loseCounter > 25)
+                if (isLearning && loseCounter > 25)
                 {
                     int currWaveNum = waveManager.GetCurrentWaveNum();
                     AddReward(currWaveNum * currWaveNum);

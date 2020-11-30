@@ -57,6 +57,7 @@ MonoBehaviour:
   debugManager: {fileID: 0}
   towerManager: {fileID: 0}
   resourceManager: {fileID: 0}
+  isLearning: 0
 --- !u!114 &5788967121297150318
 MonoBehaviour:
   m_ObjectHideFlags: 0

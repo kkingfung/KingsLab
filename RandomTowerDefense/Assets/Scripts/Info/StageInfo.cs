@@ -66,7 +66,7 @@ public static class StageInfo
     public static readonly int NormalStageWaveNum = 15;
     public static readonly int HardStageWaveNum = 30;
 
-    public static readonly int MaxMapDepth = 20;
+    public static readonly int MaxMapDepth = 15;
     public static readonly int MinMapDepth = 6;
 
     public static readonly float MaxObstaclePercent = 1f;

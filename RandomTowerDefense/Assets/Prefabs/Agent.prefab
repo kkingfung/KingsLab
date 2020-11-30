@@ -54,6 +54,7 @@ MonoBehaviour:
   stageManager: {fileID: 0}
   towerSpawner: {fileID: 0}
   waveManager: {fileID: 0}
+  debugManager: {fileID: 0}
   towerManager: {fileID: 0}
   resourceManager: {fileID: 0}
 --- !u!114 &5788967121297150318
@@ -69,14 +70,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 9
+    VectorObservationSize: 13
     NumStackedVectorObservations: 1
     VectorActionSize: 02000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
   m_Model: {fileID: 5022602860645237092, guid: 20f815da625028a44bd2db3b99f60b14, type: 3}
   m_InferenceDevice: 0
-  m_BehaviorType: 0
+  m_BehaviorType: 2
   m_BehaviorName: RandomDefAgent
   TeamId: 0
   m_UseChildSensors: 1

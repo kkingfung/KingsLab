@@ -126,6 +126,7 @@ public class TowerManager : MonoBehaviour
 
     public void BuildTower(GameObject pillar, int rank = 1)
     {
+        if (pillar == null) return;
         if (rank == 1 && filledMapGenerator.ChkPillarStatusEmpty(pillar) == false) return;
 
         Vector3 location = pillar.transform.position + Vector3.up * filledMapGenerator.UpdatePillarStatus(pillar);

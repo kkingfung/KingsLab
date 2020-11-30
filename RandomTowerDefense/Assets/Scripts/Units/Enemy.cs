@@ -9,7 +9,7 @@ using Unity.MLAgents;
 
 public class Enemy : MonoBehaviour
 {
-    private readonly int DamageCounterMax = 5;
+    private readonly int DmgCntIncrement = 2;
     private readonly int ResizeFactor = 3;
     private readonly float ResizeScale = 0.0f;
     private readonly float EnemyDestroyTime = 0.2f;
@@ -53,22 +53,27 @@ public class Enemy : MonoBehaviour
             animator = GetComponentInChildren<Animator>();
         }
 
-        HealthRecord = 1;
-
         if (HpBar == null)
             HpBar = GetComponentInChildren<Slider>();
         if (HpBar != null)
             HpBarRot = HpBar.gameObject.GetComponent<RectTransform>();
-        prevPos = transform.position;
-        oriPos = prevPos;
-        isDead = false;
 
         meshes = GetComponentsInChildren<SkinnedMeshRenderer>();
-        isReady = false;
+   
     }
 
     private void Start() 
     {
+
+    }
+
+    private void MyStart()
+    {
+        HealthRecord = 1;
+        prevPos = transform.position;
+        oriPos = prevPos;
+        isDead = false;
+        isReady = false;
 
         oriScale = transform.localScale;
         transform.localScale = new Vector3();
@@ -111,8 +116,10 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void Init(EnemySpawner enemySpawner, EffectSpawner effectManager,int entityID,int money, AgentScript agent=null)
+    public void Init(EnemySpawner enemySpawner, EffectSpawner effectManager, int entityID, int money, AgentScript agent = null)
     {
+        MyStart();
+
         this.enemySpawner = enemySpawner;
         this.effectManager = effectManager;
         this.entityID = entityID;
@@ -120,11 +127,21 @@ public class Enemy : MonoBehaviour
         this.agent = agent;
         HpBar.maxValue = 1;
         HpBar.value = 1;
+
+        if (animator == null)
+            animator = GetComponent<Animator>();
+
+        if (animator == null)
+        {
+            animator = GetComponentInChildren<Animator>();
+        }
+        if (animator)
+            animator.SetTrigger("Reused");
     }
 
     public void Damaged(float currHP)
     {
-        DamagedCount += DamageCounterMax;
+        DamagedCount += DmgCntIncrement;
         if (currHP <= 0) {
             isDead = true;
             StartCoroutine(DieAnimation());
@@ -186,7 +203,7 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(EnemyDestroyTime*0.2f);
 
         GameObject vfx = effectManager.Spawn(2, this.transform.position);
-        vfx.GetComponent<VisualEffect>().SetInt("SpawnCount", money);
+        vfx.GetComponent<VisualEffect>().SetInt("SpawnCount", Mathf.Max(money /10,1));
         resourceManager.ChangeMaterial(money);
         Die();
     }
@@ -205,7 +222,9 @@ public class Enemy : MonoBehaviour
         }
 
         transform.localScale = new Vector3();
-        Destroy(this.gameObject);
+
+        this.gameObject.SetActive(false);
+        //Destroy(this.gameObject);
     }
 
     private IEnumerator StartAnim()

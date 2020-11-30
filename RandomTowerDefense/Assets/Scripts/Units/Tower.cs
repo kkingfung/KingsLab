@@ -8,7 +8,7 @@ using Unity.Entities;
 
 public class Tower : MonoBehaviour
 {
-    private readonly int[] MaxLevel = { 10, 20, 30, 50 };
+    private readonly int[] MaxLevel = { 5, 15, 30, 50 };
     private readonly int[] MaxLevelBonus = { 200, 1000, 3000, 5000 };
     //private readonly int[] MaxLevel = { 1, 1, 1, 1 };
     private readonly float TowerDestroyTime = 2;
@@ -35,7 +35,7 @@ public class Tower : MonoBehaviour
     private ResourceManager resourceManager;
     public GameObject pillar;
 
-    private AudioSource audioSource;
+    //private AudioSource audioSource;
 
     //Testing
     //GameObject defaultTarget;
@@ -62,7 +62,7 @@ public class Tower : MonoBehaviour
         entityID = -1;
         //AtkVFX = new List<GameObject>();
         animator = GetComponent<Animator>();
-        audioSource = GetComponent<AudioSource>();
+       // audioSource = GetComponent<AudioSource>();
 
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         //defaultTarget = GameObject.FindGameObjectWithTag("DefaultTag");
@@ -116,36 +116,35 @@ public class Tower : MonoBehaviour
         switch (type)
         {
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
-                if (audioManager && audioManager.enabledSE)
-                {
-                    audioSource.PlayOneShot(audioManager.GetAudio("se_Lighting"));
-                }
+                //if (audioManager && audioManager.enabledSE)
+                //{
+                //    audioManager.PlayAudio("se_Lighting");
+                //}
                 posAdj.z = 0.2f;
                 GainExp(ExpPerAttack * 8);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-                if (audioManager && audioManager.enabledSE)
-                {
-                    audioSource.PlayOneShot(audioManager.GetAudio("se_Snail"));
-                }
+                //if (audioManager && audioManager.enabledSE)
+                //{
+                //    audioManager.PlayAudio("se_Snail");
+                //}
                 posAdj.z = -0.2f;
                 atkEntityPos = transform.position;
                 GainExp(ExpPerAttack * 2);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
-                if (audioManager && audioManager.enabledSE)
-                {
-                    audioSource.PlayOneShot(audioManager.GetAudio("se_Shot"));
-                }
-
+               //if (audioManager && audioManager.enabledSE)
+               //{
+               //    audioManager.PlayAudio("se_Shot");
+               //}
                 posAdj.z = 0.0f;
                 GainExp(ExpPerAttack*12);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                if (audioManager && audioManager.enabledSE)
-                {
-                    audioSource.PlayOneShot(audioManager.GetAudio("se_MagicFire"));
-                }
+               //if (audioManager && audioManager.enabledSE)
+               //{
+               //    audioManager.PlayAudio("se_MagicFire");
+               //}
                 posAdj.z = 0.5f;
                 posAdj.y = 0.15f;
                 atkEntityPos = transform.position;
@@ -203,7 +202,7 @@ public class Tower : MonoBehaviour
         //this.auraVFX.transform.parent = this.transform;
         //this.auraVFX.transform.localScale = Vector3.one * 10f;
         //this.auraVFXComponent = auraVFX.GetComponentInChildren<VisualEffect>();
-        if (pillar) {
+
             this.lvupVFXComponent = GetComponentInChildren<VisualEffect>();
 
             if (this.lvupVFXComponent == null)
@@ -236,7 +235,6 @@ public class Tower : MonoBehaviour
             lvupVFXComponent.SetFloat("GlowGroundSize", rank);
             exp = 0;
             SetLevel(lv);
-        }
     }
 
     public void linkingManagers(TowerSpawner towerSpawner, AudioManager audioManager, 
@@ -278,8 +276,8 @@ public class Tower : MonoBehaviour
     {
         level = lv;
         //auraVFXComponent.SetFloat("Spawn Rate", level * 5);
-        lvupVFXComponent.SetFloat("SizeMultiplier", 0.5f + 
-            (float)level / MaxLevel[rank - 1] * (float)level/MaxLevel[rank - 1] * 9.5f);
+        lvupVFXComponent.SetFloat("SizeMultiplier", 
+            (float)level / MaxLevel[rank - 1] * (float)level/MaxLevel[rank - 1] * 5.0f);
         UpdateAttr();
         if (level == MaxLevel[rank - 1])
             resourceManager.ChangeMaterial(MaxLevelBonus[rank - 1]);
@@ -291,10 +289,12 @@ public class Tower : MonoBehaviour
 
         //Update by rank/level with factors
         attr = new TowerAttr(attr.radius * (1 + 0.01f * rank + 0.005f * level),
-            attr.damage * (1 + 0.2f * rank + 0.1f * level
+            attr.damage * (1 + (rank-1) + 0.1f * level
             + ((debugManager != null) ? debugManager.towerrank_Damage * rank +
             debugManager.towerlvl_Damage * level: 0)),
-            attr.waitTime * (1f - (0.1f * rank)), attr.attackLifetime, attr.attackWaittime, attr.attackRadius,attr.attackSpd);
+            attr.waitTime * (1f - (0.1f * rank)), 
+            attr.attackLifetime, attr.attackWaittime, 
+            attr.attackRadius,attr.attackSpd);
 
         switch (type)
         {

@@ -13154,7 +13154,7 @@ MonoBehaviour:
   tutorialManager: {fileID: 1489334543}
   stageManager: {fileID: 2137340201}
   audioManager: {fileID: 1450034078}
-  enemySpawner: {fileID: 956912832}
+  enemyManager: {fileID: 1054287606}
   agentCallWait: 0
   debugManager: {fileID: 0}
 --- !u!4 &575038167
@@ -25280,6 +25280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a1352df445f01d4a9152a85a0a72d01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneManager: {fileID: 0}
   enemySpawner: {fileID: 956912832}
   waveManager: {fileID: 575038166}
   debugManager: {fileID: 0}
@@ -53385,10 +53386,6 @@ PrefabInstance:
       propertyPath: resourceManager
       value: 
       objectReference: {fileID: 1011788840}
-    - target: {fileID: 5788967121297150318, guid: 668606ef7bd5dfc449a46d2afd2e6f90, type: 3}
-      propertyPath: m_BehaviorType
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 8636458107982648905, guid: 668606ef7bd5dfc449a46d2afd2e6f90, type: 3}
       propertyPath: m_Name
       value: Agent

@@ -13,7 +13,7 @@ public class TowerCheckTargetSystem : ComponentSystem
         Entities.WithAll<PlayerTag>().ForEach((Entity unitEntity, ref Target target, ref Translation transform, ref WaitingTime wait, ref Radius radius) => 
         {
 
-            if (entityManager.Exists(target.targetEntity) && target.targetEntity!=Entity.Null)
+            if (entityManager.Exists(target.targetEntity) && target.targetEntity != Entity.Null)
             {
                 if (entityManager.HasComponent<EnemyTag>(target.targetEntity))
                 {

@@ -804,7 +804,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Parent: {fileID: 114350483966674976}
   m_Children: []
-  m_UIPosition: {x: -470, y: 453}
+  m_UIPosition: {x: -494, y: 278}
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots: []
@@ -1296,7 +1296,7 @@ MonoBehaviour:
   - {fileID: 8926484042661615246}
   - {fileID: 8926484042661615256}
   dataType: 0
-  capacity: 64
+  capacity: 8
   stripCapacity: 16
   particlePerStripCount: 16
   m_Space: 0
@@ -2362,7 +2362,7 @@ MonoBehaviour:
   - {fileID: 8926484042661615309}
   - {fileID: 8926484042661615348}
   dataType: 0
-  capacity: 64
+  capacity: 8
   stripCapacity: 16
   particlePerStripCount: 16
   m_Space: 0
@@ -6056,7 +6056,7 @@ MonoBehaviour:
   - {fileID: 8926484042661615575}
   - {fileID: 8926484042661615577}
   dataType: 0
-  capacity: 64
+  capacity: 32
   stripCapacity: 16
   particlePerStripCount: 16
   m_Space: 0

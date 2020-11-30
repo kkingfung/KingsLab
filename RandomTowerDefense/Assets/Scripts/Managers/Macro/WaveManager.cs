@@ -40,7 +40,7 @@ public class WaveManager : MonoBehaviour
     public TutorialManager tutorialManager;
     public StageManager stageManager;
     public AudioManager audioManager;
-    public EnemySpawner enemySpawner;
+    public EnemyManager enemyManager;
     public bool agentCallWait;
 
     // Start is called before the first frame update
@@ -113,7 +113,7 @@ public class WaveManager : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (readyToSpawn == false && Time.time - timeBGM >= 0.25f)
+        if (readyToSpawn == false && Time.time - timeBGM >= 0.35f)
         {
             //if (dataBGM[(int)(timeBGM * 0.25f* 44100) % dataBGM.Length] - dataBGMPrev > BGMSpawnThreshold)
             if (dataBGM[(int)(timeBGM * 0.25f * 44100) % dataBGM.Length] > BGMSpawnThreshold)
@@ -128,7 +128,7 @@ public class WaveManager : MonoBehaviour
         //            i.Stop();
         //    }
         //}
-        if (allSpawned && enemySpawner.AllAliveMonstersList().Count == 0)
+        if (allSpawned && enemyManager.AllAliveMonstersList().Count == 0)
         {
             stageManager.SetWin();
             return;
@@ -180,38 +180,13 @@ public class WaveManager : MonoBehaviour
                         {
                             while (true) 
                             {
-                                if (agentCallWait == false)
+                                if (agentCallWait == false && readyToSpawn)
                                 {
-                                    if (sceneManager && readyToSpawn)
-                                    {
-                                        EnemyAttr attr = EnemyInfo.GetEnemyInfo(wave.enmDetail[i].enmType);
-                                        enemySpawner.Spawn(wave.enmDetail[i].enmType,
-                                            stageManager.GetPortalPosition()[SpawnPointByAI >= 0 ? SpawnPointByAI : wave.enmDetail[i].enmPort], new float3(),
-                                            (float)(attr.health * (1 + 0.005f * (CurrentWaveNum * CurrentWaveNum) * (CheckCustomData ? (int)StageInfo.enmAttributeEx : 1))),
-                                            attr.money * (CheckCustomData ? (int)StageInfo.resourceEx : 1),
-                                            attr.damage, attr.radius,
-                                             (float)(attr.speed * (1 + 0.005f * (CurrentWaveNum * CurrentWaveNum) * (CheckCustomData ? (int)StageInfo.enmAttributeEx : 1))),
-                                            attr.time
-                                            );
-                                        readyToSpawn = false;
-                                        timeBGM = Time.time;
-                                        break;
-                                    }
-                                    else if (debugManager && readyToSpawn)
-                                    {
-                                        EnemyAttr attr = EnemyInfo.GetEnemyInfo(wave.enmDetail[i].enmType);
-                                        enemySpawner.Spawn(wave.enmDetail[i].enmType,
-                                            stageManager.GetPortalPosition()[SpawnPointByAI >= 0 ? SpawnPointByAI : wave.enmDetail[i].enmPort], new float3(),
-                                            (float)(attr.health * (1 + 0.005f * (CurrentWaveNum * CurrentWaveNum) * (CheckCustomData ? (int)StageInfo.enmAttributeEx : 1))),
-                                            attr.money * (CheckCustomData ? (int)StageInfo.resourceEx : 1),
-                                            attr.damage, attr.radius,
-                                             (float)(attr.speed * (1 + 0.005f * (CurrentWaveNum * CurrentWaveNum) * (CheckCustomData ? (int)StageInfo.enmAttributeEx : 1))),
-                                            attr.time
-                                            );
-                                        readyToSpawn = false;
-                                        timeBGM = Time.time;
-                                        break;
-                                    }
+                                    enemyManager.SpawnMonster(wave.enmDetail[i].enmType,
+                                        stageManager.GetPortalPosition()[SpawnPointByAI >= 0 ? SpawnPointByAI : wave.enmDetail[i].enmPort], CheckCustomData);
+                                    readyToSpawn = false;
+                                    timeBGM = Time.time;
+                                    break;
                                 }
                                 yield return new WaitForSeconds(0);
                             }

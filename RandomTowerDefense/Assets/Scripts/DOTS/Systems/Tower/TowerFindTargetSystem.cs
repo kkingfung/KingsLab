@@ -72,22 +72,28 @@ public class TowerFindTargetSystem : JobComponentSystem
             float3 closestTargetPosition = transform.Value;
             int hashMapKey = QuadrantSystem.GetPositionHashMapKey(transform.Value);
 
-            FindTarget(hashMapKey, unitPosition, radius.Value,quadrantEntity, castle.Value, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
-
+            FindTarget(hashMapKey - 1 - QuadrantSystem.quadrantYMultiplier, unitPosition, radius.Value, quadrantEntity, castle.Value, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
             if (closestTargetEntity == Entity.Null)
             {
-                FindTarget(hashMapKey + 1, unitPosition, radius.Value, quadrantEntity, castle.Value, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
                 FindTarget(hashMapKey - 1, unitPosition, radius.Value, quadrantEntity, castle.Value, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
-                FindTarget(hashMapKey + QuadrantSystem.quadrantYMultiplier, unitPosition, radius.Value, quadrantEntity, castle.Value, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
                 FindTarget(hashMapKey - QuadrantSystem.quadrantYMultiplier, unitPosition, radius.Value, quadrantEntity, castle.Value, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
             }
             if (closestTargetEntity == Entity.Null)
             {
-                FindTarget(hashMapKey + 1 + QuadrantSystem.quadrantYMultiplier, unitPosition, radius.Value, quadrantEntity, castle.Value, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
+                FindTarget(hashMapKey, unitPosition, radius.Value, quadrantEntity, castle.Value, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
                 FindTarget(hashMapKey - 1 + QuadrantSystem.quadrantYMultiplier, unitPosition, radius.Value, quadrantEntity, castle.Value, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
                 FindTarget(hashMapKey + 1 - QuadrantSystem.quadrantYMultiplier, unitPosition, radius.Value, quadrantEntity, castle.Value, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
-                FindTarget(hashMapKey - 1 - QuadrantSystem.quadrantYMultiplier, unitPosition, radius.Value, quadrantEntity, castle.Value, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
             }
+            if (closestTargetEntity == Entity.Null)
+            {
+                FindTarget(hashMapKey + 1, unitPosition, radius.Value, quadrantEntity, castle.Value, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
+                FindTarget(hashMapKey + QuadrantSystem.quadrantYMultiplier, unitPosition, radius.Value, quadrantEntity, castle.Value, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition); 
+            }
+            if (closestTargetEntity == Entity.Null)
+            {
+                FindTarget(hashMapKey + 1 + QuadrantSystem.quadrantYMultiplier, unitPosition, radius.Value, quadrantEntity, castle.Value, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
+            }
+
             EntityWithPosition targetDetail = new EntityWithPosition { entity = closestTargetEntity, position = closestTargetPosition };
             closestTargetEntityArray[index] = targetDetail;
         }
@@ -104,7 +110,8 @@ public class TowerFindTargetSystem : JobComponentSystem
                     if (quadrantData.quadrantEntity.typeEnum == QuadrantEntity.TypeEnum.EnemyTag)
                     {
                         float distCastleSq = math.distancesq(castlePos, quadrantData.position);
-                        if (distCastleSq < closestTargetDistance && CheckCollision(unitPosition, quadrantData.position, maxdist * maxdist))
+                        if (distCastleSq < closestTargetDistance && 
+                            CheckCollision(unitPosition, quadrantData.position, maxdist * maxdist / 1.21f))
                         {
                             // This target is closer
                             closestTargetEntity = quadrantData.entity;

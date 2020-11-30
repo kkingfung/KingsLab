@@ -35,6 +35,7 @@ public class AgentScript : Agent
 
     int[] TowerDistribution;
     int[] EnemyDistribution;
+    int[] PillarDistribution;
 
     public override void Initialize()
     {
@@ -66,6 +67,8 @@ public class AgentScript : Agent
             if (tower.activeSelf == false) continue;
             towerManager.removeTowerFromList(tower);
         }
+
+        PillarDistribution = null;
 
         filledMapGenerator.GenerateMap();
         resourceManager.ResetMaterial();
@@ -132,6 +135,16 @@ public class AgentScript : Agent
 
         EnemyDistribution = CntEnemyTotal();
         if (EnemyDistribution.Length == 4)
+        {
+            sensor.AddObservation((float)EnemyDistribution[0]);
+            sensor.AddObservation((float)EnemyDistribution[1]);
+            sensor.AddObservation((float)EnemyDistribution[2]);
+            sensor.AddObservation((float)EnemyDistribution[3]);
+        }
+
+        if ((PillarDistribution == null))
+            PillarDistribution = CntPillarTotal();
+        if (PillarDistribution.Length == 4)
         {
             sensor.AddObservation((float)EnemyDistribution[0]);
             sensor.AddObservation((float)EnemyDistribution[1]);
@@ -353,6 +366,39 @@ public class AgentScript : Agent
         return SubTotalRankInQuarteredMap;
     }
     #endregion
+
+    int[] CntPillarTotal()
+    {
+        int[] TotalRankInQuarteredMap = new int[4];
+        if (filledMapGenerator == null) return TotalRankInQuarteredMap;
+        List<Pillar> allPillar = filledMapGenerator.PillarList;
+        if (allPillar.Count == 0) return TotalRankInQuarteredMap;
+
+        AgentCoord = filledMapGenerator.GetTileIDFromPosition(this.transform.position);
+        //MaxCoord = filledMapGenerator.MapSize;
+
+        foreach (Pillar i in allPillar)
+        {
+            int2 PillarCoord = new int2 (i.mapSize.x, i.mapSize.y);
+            if (PillarCoord.x <= AgentCoord.x && PillarCoord.y >= AgentCoord.y)
+            {
+                TotalRankInQuarteredMap[0]++;
+            }
+            else if (PillarCoord.x <= AgentCoord.x && PillarCoord.y >= AgentCoord.y)
+            {
+                TotalRankInQuarteredMap[1]++;
+            }
+            else if (PillarCoord.x <= AgentCoord.x && PillarCoord.y <= AgentCoord.y)
+            {
+                TotalRankInQuarteredMap[2]++;
+            }
+            else if (PillarCoord.x >= AgentCoord.x && PillarCoord.y >= AgentCoord.y)
+            {
+                TotalRankInQuarteredMap[3]++;
+            }
+        }
+        return TotalRankInQuarteredMap;
+    }
 
     #region MakingDecisionForTower
     // 0 | 1

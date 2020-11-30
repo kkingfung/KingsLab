@@ -8,13 +8,14 @@ using UnityEngine.Jobs;
 
 public class BoidSpawnerDots : MonoBehaviour
 {
-    private readonly int count = 100;
+    private readonly int count = 50;
 
     public static BoidSpawnerDots Instance { get; private set; }
     public List<GameObject> prefab;
     public BoidSettings settings;
 
     public float spawnRadius = 10;
+    [Range(0,50)]
     public int spawnCount = 10;
     public float BoundingRadius = 100;
 

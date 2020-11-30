@@ -107,13 +107,30 @@ public class ScoreCalculation : MonoBehaviour
         scoreStr += "+" + scoreChg + "\n";
 
         //Remark: Special Function for extra mode
-        if (currIsland != StageInfo.IslandNum - 1 && result == (int)StageManager.GameResult.Lose)
+        if (currIsland != StageInfo.IslandNum - 1)
         {
-            scoreStr += "-" + (score+PlayerPrefs.GetFloat("hpMax",10)* ScoreForStartHP) + "\n";
-            score = 0;
+            if (result == (int)StageManager.GameResult.Lose)
+            {
+                scoreStr += "-" + score + "\n";
+                score = 0;
+            }
+            else 
+            {
+                score -= StageInfo.hpMaxEx * ScoreForStartHPEx;
+                scoreStr += "-" + StageInfo.hpMaxEx * ScoreForStartHPEx + "\n";
+            }
         }
         else {
-            scoreStr += "-" + ((currIsland != StageInfo.IslandNum - 1) ? 0 : StageInfo.hpMaxEx * ScoreForStartHPEx).ToString() + "\n";
+            if (StageInfo.waveNumEx > 50 || (result == (int)StageManager.GameResult.Won))
+            {
+                score -= StageInfo.hpMaxEx * ScoreForStartHPEx;
+                scoreStr += "-" + StageInfo.hpMaxEx * ScoreForStartHPEx + "\n";
+            }
+            else 
+            {
+                scoreStr += "-" + score + "\n";
+                score = 0;
+            }
         }
 
         scoreStr += "=" + score;

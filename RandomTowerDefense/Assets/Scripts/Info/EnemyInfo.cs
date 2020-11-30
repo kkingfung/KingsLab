@@ -29,6 +29,15 @@ public class EnemyAttr {
 {
     //Remark: Money Carried is now Amended to WaveId except bosses/bonus
     static Dictionary<string, EnemyAttr> enemyInfo;
+    public static string[] allName = {
+            "MetalonGreen", "MetalonPurple", "MetalonRed", "AttackBot" , "RobotSphere",
+                        "Dragon", "Bull", "StoneMonster", "FreeLichS" , "FreeLich",
+                            "GolemS", "Golem", "SkeletonArmed", "SpiderGhost" , "Skeleton",
+                              "GruntS", "FootmanS", "Grunt", "Footman" , "TurtleShell",
+                               "Mushroom" , "Slime", "PigChef", "PhoenixChick" , "RockCritter"
+
+        };
+
     public static void Init()
     {
         enemyInfo = new Dictionary<string, EnemyAttr>();
@@ -99,14 +108,6 @@ public class EnemyAttr {
     {
         enemyInfo = new Dictionary<string, EnemyAttr>();
 
-        string[] allName = {
-            "MetalonGreen", "MetalonPurple", "MetalonRed", "AttackBot" , "RobotSphere",
-                        "Dragon", "Bull", "StoneMonster", "FreeLichS" , "FreeLich",
-                            "GolemS", "Golem", "SkeletonArmed", "SpiderGhost" , "Skeleton",
-                              "GruntS", "FootmanS", "Grunt", "Footman" , "TurtleShell",
-                               "Mushroom" , "Slime", "PigChef", "PhoenixChick" , "RockCritter"
-
-        };
         foreach (string name in allName)
         {
             enemyInfo.Add(name, new EnemyAttr(

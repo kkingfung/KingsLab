@@ -116,8 +116,8 @@ public class ScoreCalculation : MonoBehaviour
             }
             else 
             {
-                score -= StageInfo.hpMaxEx * ScoreForStartHPEx;
-                scoreStr += "-" + StageInfo.hpMaxEx * ScoreForStartHPEx + "\n";
+                score -= StageInfo.hpMaxEx * ScoreForStartHP;
+                scoreStr += "-" + StageInfo.hpMaxEx * ScoreForStartHP + "\n";
             }
         }
         else {

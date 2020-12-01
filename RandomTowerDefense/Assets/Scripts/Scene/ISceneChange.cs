@@ -28,7 +28,7 @@ public class ISceneChange : MonoBehaviour
     public bool OrientationLand;
     public bool OrientationLock;
 
-    protected void Awake()
+    protected virtual void Awake()
     {
         isSceneFinished = false;
         toDrag = 0;
@@ -76,7 +76,7 @@ public class ISceneChange : MonoBehaviour
         //}
     }
 
-    protected void Update()
+    protected virtual void Update()
     {
         if (!OrientationLock)
         {

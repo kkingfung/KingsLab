@@ -16,10 +16,10 @@ namespace SimplestMeshBaker
 
         private const int MAX_VERTEX_COUNT_PER_ONE_OBJECT = 65000;
 
-        private static Resolving colorResolving;
-        private static Resolving normalsResolving;
-        private static Resolving tangentsResolving;
-        private static Resolving uvResolving;
+        private static Resolving colorResolving = Resolving.Not;
+        private static Resolving normalsResolving = Resolving.Not;
+        private static Resolving tangentsResolving = Resolving.Not;
+        private static Resolving uvResolving = Resolving.Not;
 
         private static int objectNum;
         

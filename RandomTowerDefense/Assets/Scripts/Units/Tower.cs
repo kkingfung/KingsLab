@@ -293,8 +293,8 @@ public class Tower : MonoBehaviour
             + ((debugManager != null) ? debugManager.towerrank_Damage * rank +
             debugManager.towerlvl_Damage * level: 0)),
             attr.waitTime * (1f - (0.1f * rank)), 
-            attr.attackLifetime, attr.attackWaittime, 
-            attr.attackRadius,attr.attackSpd);
+            3f, attr.attackWaittime, 
+            attr.attackRadius,attr.attackSpd, attr.attackLifetime);
 
         switch (type)
         {

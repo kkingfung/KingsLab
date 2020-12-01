@@ -1,5 +1,5 @@
 SkillInfo,radius,damage,spawn cycle,wait to action,lifetime,slowrate(include petrify),bufftime
-SkillMeteor:5:8:2.5:1:15:0:0
-SkillBlizzard:20:0.1:5:0:15:0.01:3.0
-SkillMinions:1:0.2:0.1:1:10:0:0
+SkillMeteor:2.5:8:2.5:0.5:15:0:0
+SkillBlizzard:5:1:5:0:15:0.01:3:1
+SkillMinions:1:3:0.1:1:10:0:0
 SkillPetrification:1000:0:0.2:0:5:1:0.0015

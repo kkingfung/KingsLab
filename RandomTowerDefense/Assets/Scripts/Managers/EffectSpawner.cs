@@ -34,83 +34,81 @@ public class EffectSpawner : MonoBehaviour
         DisappearVFXList = new List<GameObject>();
     }
 
-    public GameObject Spawn(int prefabID, float3 Position, int num = 1)
+    public GameObject Spawn(int prefabID, float3 Position)
     {
-        for (int i = 0; i < num; ++i)
+        bool reuse = false;
+        GameObject newObj = null;
+        switch (prefabID)
         {
-            bool reuse = false;
-            GameObject newObj=null;
-            switch (prefabID) {
+            case 0:
+                foreach (GameObject j in BuildVFXList)
+                {
+                    if (j.activeSelf) continue;
+                    newObj = j;
+                    reuse = true;
+                    break;
+                }
+                break;
+            case 1:
+                foreach (GameObject j in DieVFXList)
+                {
+                    if (j.activeSelf) continue;
+                    newObj = j;
+                    reuse = true;
+                    break;
+                }
+                break;
+            case 2:
+                foreach (GameObject j in MoneyDropVFXList)
+                {
+                    if (j.activeSelf) continue;
+                    newObj = j;
+                    reuse = true;
+                    break;
+                }
+                break;
+            case 3:
+                foreach (GameObject j in DisappearVFXList)
+                {
+                    if (j.activeSelf) continue;
+                    newObj = j;
+                    reuse = true;
+                    break;
+                }
+                break;
+        }
+
+        if (reuse == false)
+        {
+            switch (prefabID)
+            {
                 case 0:
-                    foreach (GameObject j in BuildVFXList)
-                    {
-                        if (j.activeSelf) continue;
-                        newObj = j;
-                        reuse = true;
-                        break;
-                    }
+                    newObj = Instantiate(PrefabBuild, transform);
+                    BuildVFXList.Add(newObj);
                     break;
                 case 1:
-                    foreach (GameObject j in DieVFXList)
-                    {
-                        if (j.activeSelf) continue;
-                        newObj = j;
-                        reuse = true;
-                        break;
-                    }
+                    newObj = Instantiate(PrefabDieVfx, transform);
+                    DieVFXList.Add(newObj);
                     break;
                 case 2:
-                    foreach (GameObject j in MoneyDropVFXList)
-                    {
-                        if (j.activeSelf) continue;
-                        newObj = j;
-                        reuse = true;
-                        break;
-                    }
+                    newObj = Instantiate(PrefabMoneyDropVfx, transform);
+                    MoneyDropVFXList.Add(newObj);
                     break;
                 case 3:
-                    foreach (GameObject j in DisappearVFXList)
-                    {
-                        if (j.activeSelf) continue;
-                        newObj = j;
-                        reuse = true;
-                        break;
-                    }
+                    newObj = Instantiate(PrefabDisappearVfx, transform);
+                    DisappearVFXList.Add(newObj);
                     break;
             }
-            
-            if (reuse == false)
-            {
-                switch (prefabID)
-                {
-                    case 0:
-                        newObj = Instantiate(PrefabBuild, transform);
-                        BuildVFXList.Add(newObj);
-                        break;
-                    case 1:
-                        newObj = Instantiate(PrefabDieVfx, transform);
-                        DieVFXList.Add(newObj);
-                        break;
-                    case 2:
-                        newObj = Instantiate(PrefabMoneyDropVfx, transform);
-                        MoneyDropVFXList.Add(newObj);
-                        break;
-                    case 3:
-                        newObj = Instantiate(PrefabDisappearVfx, transform);
-                        DisappearVFXList.Add(newObj);
-                        break;
-                }
-            }
-            else
-            {
-                newObj.SetActive(true);
-                newObj.GetComponent<VisualEffect>().Play();
-            }
-            newObj.transform.position = Position;
-            newObj.transform.localRotation = Quaternion.identity;
-            return newObj;
         }
-        return null;
+        else
+        {
+            newObj.SetActive(true);
+            newObj.GetComponent<VisualEffect>().Play();
+        }
+        newObj.transform.position = Position;
+        newObj.transform.localRotation = Quaternion.identity;
+
+        return newObj;
     }
 
 }

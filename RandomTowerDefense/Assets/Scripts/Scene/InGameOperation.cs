@@ -107,7 +107,7 @@ public class InGameOperation : ISceneChange
     {
         PlayerPrefs.Save();
     }
-    private void Awake()
+    protected override void Awake()
     {
         base.Awake();
 
@@ -284,7 +284,7 @@ public class InGameOperation : ISceneChange
     }
 
     // Update is called once per frame
-    private void Update()
+    protected override void Update()
     {
         base.Update();
 

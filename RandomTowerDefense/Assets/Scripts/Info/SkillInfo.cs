@@ -46,21 +46,22 @@ public static class SkillInfo
 
         //Wait time Refer to ParticleSystem Lifetime
         skillInfo.Add("SkillMeteor", new SkillAttr(
-            5, 8f,//radius,damage
-            2.5f, 1f,//respawn cycle,wait to action
+            2.5f, 8f,//radius,damage
+            2.5f, 0.5f,//respawn cycle,wait to action
             15, 0,//lifetime,slowrate(include petrify)
-            0));//bufftime
-        skillInfo.Add("SkillMinions", new SkillAttr(
-            1, 0.2f,//radius,damage
-            0.1f, 1f, //respawn cycle,wait to action
-            10, 0, //lifetime,slowrate(include petrify)
             0));//bufftime
 
         skillInfo.Add("SkillBlizzard", new SkillAttr(
-            20, 0.1f,//radius,damage
+            5, 0.1f,//radius,damage
             5, 0f, //respawn cycle,wait to action
             15, 0.01f,//lifetime,slowrate(include petrify)
             3.0f));//bufftime
+
+        skillInfo.Add("SkillMinions", new SkillAttr(
+            1, 3f,//radius,damage
+            0.1f, 1f, //respawn cycle,wait to action
+            10, 0, //lifetime,slowrate(include petrify)
+            0));//bufftime
 
         skillInfo.Add("SkillPetrification", new SkillAttr(
             1000, 0,//radius,damage

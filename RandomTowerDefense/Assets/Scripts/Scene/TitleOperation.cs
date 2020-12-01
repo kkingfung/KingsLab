@@ -91,7 +91,7 @@ public class TitleOperation: ISceneChange
         //BoidSpawn.SetActive(true);
         Time.timeScale = 1;
     }
-    private void Awake()
+    protected override void Awake()
     {
         base.Awake();
 
@@ -178,7 +178,7 @@ public class TitleOperation: ISceneChange
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
         base.Update();
 

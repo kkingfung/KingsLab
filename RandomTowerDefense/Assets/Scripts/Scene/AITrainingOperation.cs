@@ -18,7 +18,7 @@ public class AITrainingOperation : InGameOperation
     [HideInInspector]
     public GameObject pillar;
     public bool tellMerge;
-    private void Awake()
+    protected override void Awake()
     {
         isFetchDone = false;
 
@@ -120,7 +120,7 @@ public class AITrainingOperation : InGameOperation
     }
 
     // Update is called once per frame
-    private void Update()
+    protected override void Update()
     {
         if (resourceManager.GetCurrMaterial() >= 100)
         {

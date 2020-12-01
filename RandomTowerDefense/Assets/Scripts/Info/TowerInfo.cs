@@ -17,8 +17,8 @@ public class TowerAttr
     public float attackRadius;
     public float attackSpd;
 
-    public TowerAttr(float radius, float damage, float waitTime, float attackLifetime, float attackWaittime,
-        float attackRadius, float attackSpd, float lifetime =0.5f)
+    public TowerAttr(float radius, float damage, float waitTime, float lifetime, float attackWaittime,
+        float attackRadius, float attackSpd, float attackLifetime)
     {
         this.damage = damage;
         this.waitTime = waitTime;
@@ -50,28 +50,28 @@ public static class TowerInfo
 
         towerInfo.Add(TowerInfoID.Enum_TowerNightmare, 
             new TowerAttr(
-                20, 1, //radius,damage
-                2.0f, 3, //wait,atklife
-                0.01f, 1,//atkwait,atkrad
-                0,5));//atkspd,lifetime
+                3.5f, 25, //radius,damage
+                3f, 5f, //wait,lifetime
+                0.01f, 0.3f,//atkwait,atkrad
+                0,3));//atkspd,atklife
         towerInfo.Add(TowerInfoID.Enum_TowerSoulEater,
             new TowerAttr(
-                13, 8,//radius,damage
-                0.5f, 3, //wait,atklife
-                0f, 0.5f, //atkwait,atkrad
-                1f, 5));//atkspd,lifetime
+                2.5f, 7,//radius,damage
+                0.3f, 5, //wait,lifetime
+                0f, 0.8f, //atkwait,atkrad
+                5f, 3));//atkspd,atklife
         towerInfo.Add(TowerInfoID.Enum_TowerTerrorBringer,
             new TowerAttr(
-                40, 20,//radius,damage
-                3.0f, 3,//wait,atklife
-                0.01f, 1,//atkwait,atkrad
-                0,5));//atkspd,lifetime
+                4, 50,//radius,damage
+                5f, 5,//wait,lifetime
+                0.01f, 0.2f,//atkwait,atkrad
+                0,3));//atkspd,atklife
         towerInfo.Add(TowerInfoID.Enum_TowerUsurper,
             new TowerAttr(
-                8, 2f,//radius,damage
-                0.2f, 1,//wait,atklife
+                2, 5f,//radius,damage
+                0.2f, 5,//wait,lifetime
                 0f, 0.5f,//atkwait,atkrad
-                1f,5));//atkspd,lifetime
+                3.5f,1));//atkspd,atklife
         infoUpdated = true;
     }
 
@@ -109,18 +109,21 @@ public static class TowerInfo
                 ConfigManager.appConfig.GetFloat("TowerNightmareWait"), ConfigManager.appConfig.GetFloat("TowerNightmareLife"), //wait,atklife
                ConfigManager.appConfig.GetFloat("TowerNightmareAtkWait"), ConfigManager.appConfig.GetFloat("TowerNightmareAtkRadius"),//atkwait,atkrad
                 ConfigManager.appConfig.GetFloat("TowerNightmareAtkSpd"), ConfigManager.appConfig.GetFloat("TowerNightmareAtkLife")));//atkspd,lifetime
+       
         towerInfo.Add(TowerInfoID.Enum_TowerSoulEater,
             new TowerAttr(
   ConfigManager.appConfig.GetFloat("TowerSoulEaterRadius"), ConfigManager.appConfig.GetFloat("TowerSoulEaterDamage"), //radius,damage
                 ConfigManager.appConfig.GetFloat("TowerSoulEaterWait"), ConfigManager.appConfig.GetFloat("TowerSoulEaterLife"), //wait,atklife
                ConfigManager.appConfig.GetFloat("TowerSoulEaterAtkWait"), ConfigManager.appConfig.GetFloat("TowerSoulEaterAtkRadius"),//atkwait,atkrad
                 ConfigManager.appConfig.GetFloat("TowerSoulEaterAtkSpd"), ConfigManager.appConfig.GetFloat("TowerSoulEaterAtkLife")));//atkspd,lifetime
+        
         towerInfo.Add(TowerInfoID.Enum_TowerTerrorBringer,
             new TowerAttr(
   ConfigManager.appConfig.GetFloat("TowerTerrorBringerRadius"), ConfigManager.appConfig.GetFloat("TowerTerrorBringerDamage"), //radius,damage
                 ConfigManager.appConfig.GetFloat("TowerTerrorBringerWait"), ConfigManager.appConfig.GetFloat("TowerTerrorBringerLife"), //wait,atklife
                ConfigManager.appConfig.GetFloat("TowerTerrorBringerAtkWait"), ConfigManager.appConfig.GetFloat("TowerTerrorBringerAtkRadius"),//atkwait,atkrad
                 ConfigManager.appConfig.GetFloat("TowerTerrorBringerAtkSpd"), ConfigManager.appConfig.GetFloat("TowerTerrorBringerAtkLife")));//atkspd,lifetime
+        
         towerInfo.Add(TowerInfoID.Enum_TowerUsurper,
             new TowerAttr(
   ConfigManager.appConfig.GetFloat("TowerUsurperRadius"), ConfigManager.appConfig.GetFloat("TowerUsurperDamage"), //radius,damage

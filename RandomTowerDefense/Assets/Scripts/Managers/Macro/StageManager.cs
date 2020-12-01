@@ -120,7 +120,6 @@ public class StageManager : MonoBehaviour
             {
                 if (result > 0)
                 {
-                    Debug.Log(0);
                     GameOverCanva[0].SetActive(false);
                     GameOverCanva[1].SetActive(false);
                     GameClearCanva[0].SetActive(false);
@@ -128,7 +127,6 @@ public class StageManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log(1);
                     GameOverCanva[0].SetActive(false);
                     GameOverCanva[1].SetActive(true);
                     GameClearCanva[0].SetActive(false);
@@ -139,7 +137,6 @@ public class StageManager : MonoBehaviour
             {
                 if (result > 0)
                 {
-                    Debug.Log(2);
                     GameOverCanva[0].SetActive(false);
                     GameOverCanva[1].SetActive(false);
                     GameClearCanva[0].SetActive(true);
@@ -147,7 +144,6 @@ public class StageManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log(3);
                     GameOverCanva[0].SetActive(true);
                     GameOverCanva[1].SetActive(false);
                     GameClearCanva[0].SetActive(false);

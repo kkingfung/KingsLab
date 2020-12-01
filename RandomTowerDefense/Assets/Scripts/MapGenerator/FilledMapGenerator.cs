@@ -427,8 +427,17 @@ public struct Coord
 		x = _x;
 		y = _y;
 	}
+    public override bool Equals(object obj)
+    {
+        return base.Equals(obj);
+    }
 
-	public static bool operator ==(Coord c1, Coord c2)
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
+
+    public static bool operator ==(Coord c1, Coord c2)
 	{
 		return c1.x == c2.x && c1.y == c2.y;
 	}
@@ -437,6 +446,7 @@ public struct Coord
 	{
 		return !(c1 == c2);
 	}
+
 
 }
 

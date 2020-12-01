@@ -139,7 +139,7 @@ public class StageSelectOperation : ISceneChange
     }
 
     // Update is called once per frame
-    private void Update()
+    protected override void Update()
     {
         base.Update();
 

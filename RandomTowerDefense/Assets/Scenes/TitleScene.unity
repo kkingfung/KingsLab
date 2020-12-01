@@ -544,7 +544,7 @@ TextMesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 69842240}
-  m_Text: "\u6700\u9AD8\u8A18\u9332 - \u65C5\u7ACB\u3064\n   \u540D\u524D               
+  m_Text: "\u9038\u306E\u7AE0\u3000\u30D2\u30B8\u30EA\u30AB\u5CF6\n   \u540D\u524D               
     \u3000\u6226\u7E3E\n"
   m_OffsetZ: 0
   m_CharacterSize: 0.7
@@ -3252,7 +3252,7 @@ TextMesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 565693952}
-  m_Text: "\u6700\u9AD8\u8A18\u9332 - \u8A13\u7DF4\u306E\u5730\n   \u540D\u524D               
+  m_Text: "\u60E8\u306E\u7AE0\u3000\u30CB\u30E2\u30CF\u30B5\u5CF6\n   \u540D\u524D               
     \u3000\u6226\u7E3E\n"
   m_OffsetZ: 0
   m_CharacterSize: 0.7
@@ -6795,7 +6795,7 @@ TextMesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1243831924}
-  m_Text: "\u6700\u9AD8\u8A18\u9332 - \u6700\u521D\u306E\u8A66\u7DF4\n   \u540D\u524D               
+  m_Text: "\u4EC1\u306E\u7AE0\u3000\u30C6\u30F3\u30B7\u30E5\u30AD\u5CF6\n   \u540D\u524D               
     \u3000\u6226\u7E3E\n"
   m_OffsetZ: 0
   m_CharacterSize: 0.7
@@ -12771,7 +12771,7 @@ TextMesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2068376091}
-  m_Text: "\u6700\u9AD8\u8A18\u9332 - \u6EC5\u4EA1\u306E\u9053\n   \u540D\u524D               
+  m_Text: "\u52C7\u306E\u7AE0\u3000\u30AE\u30A4\u30B7\u30AB\u5CF6\n   \u540D\u524D               
     \u3000\u6226\u7E3E\n"
   m_OffsetZ: 0
   m_CharacterSize: 0.7

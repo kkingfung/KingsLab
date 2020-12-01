@@ -9,6 +9,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Rendering;
+using Unity.Collections.LowLevel.Unsafe;
 
 public class BoidDataUpdateSystem : ComponentSystem
 {
@@ -32,8 +33,8 @@ public class BoidDataUpdateSystem : ComponentSystem
             {
                 NativeArray<BoidData> targetData = new NativeArray<BoidData>(targetDataArray, Allocator.TempJob);
 
-                var dataType = GetComponentTypeHandle<BoidData>(true);
-                var settingType = GetComponentTypeHandle<BoidSettingDots>(false);
+                var dataType = GetComponentTypeHandle<BoidData>(false);
+                var settingType = GetComponentTypeHandle<BoidSettingDots>(true);
 
                 var jobData = new UpdateBoidData()
                 {
@@ -52,7 +53,7 @@ public class BoidDataUpdateSystem : ComponentSystem
     [BurstCompile]
     struct UpdateBoidData : IJobChunk
     {
-        public ComponentTypeHandle<BoidData> dataType;
+        [NativeDisableContainerSafetyRestriction] public ComponentTypeHandle<BoidData> dataType;
         [ReadOnly] public ComponentTypeHandle<BoidSettingDots> settingType;
 
         [DeallocateOnJobCompletion]

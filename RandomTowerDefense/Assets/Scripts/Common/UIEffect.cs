@@ -111,7 +111,7 @@ public class UIEffect : MonoBehaviour
                 }
 
                 float temp;
-                if (Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("RecordBroad")))
+                if (Physics.Raycast(ray, out hit, 200, LayerMask.GetMask("RecordBroad")))
                 {
                     for (int i= 0; i < relatedObjs.Count; ++i)
                     {
@@ -142,7 +142,7 @@ public class UIEffect : MonoBehaviour
                 if (text) text.color =new Color (text.color.r, text.color.g, text.color.b,Mathf.Abs(Mathf.Sin(Time.time* magnitude)));
                 break;
             case 1://for Selection Scene Arrow Vertical
-                rectTrans.localPosition = oriPosRect + Mathf.Sin(Time.time) * magnitude * targetCam.transform.up;   
+                rectTrans.localPosition = oriPosRect + Mathf.Sin(Time.time) * magnitude * targetCam.transform.forward;   
                 break;
             case 2://for Selection Scene Arrow Horizontal
                 rectTrans.localPosition = oriPosRect + Mathf.Sin(Time.time) * magnitude * targetCam.transform.right;

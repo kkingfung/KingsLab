@@ -161,10 +161,11 @@ public class StageManager : MonoBehaviour
             result = (int)GameResult.Lose;
             isReady = false;
             sceneManager.SetOptionStatus(false);
+            audioManager.StopBGM();
             audioManager.PlayAudio("se_Lose");
             timeManager.SetTimeScale(0);
-            foreach(MeshDestroy i in castleDestroy)
-                i.DestroyMesh();
+            //foreach(MeshDestroy i in castleDestroy)
+            //    i.DestroyMesh();
             scoreCalculation.CalculationScore();
             StartCoroutine(FadeInRoutine());
             return true;

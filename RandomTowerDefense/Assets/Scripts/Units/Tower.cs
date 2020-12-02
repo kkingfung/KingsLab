@@ -278,7 +278,7 @@ public class Tower : MonoBehaviour
     }
 
     public int RequiredExp() {
-        return 25 * level * (1 + level) * rank;
+        return 100 * level * (1 + level) * rank;
     }
 
     public void LevelUp(int chg = 1)

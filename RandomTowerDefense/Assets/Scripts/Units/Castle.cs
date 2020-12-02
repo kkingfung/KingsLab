@@ -38,8 +38,8 @@ public class Castle : MonoBehaviour
         {
             AddedHealth(0);
             stageManager.PlayDmgAnim();
-            if (audioManager.enabledSE)
-                audioSource.PlayOneShot(audioManager.GetAudio("se_Hitted"));
+            //if (audioManager.enabledSE)
+            //    audioSource.PlayOneShot(audioManager.GetAudio("se_Hitted"));
         }
 
         Shield.SetActive(CurrCastleHP > 1);

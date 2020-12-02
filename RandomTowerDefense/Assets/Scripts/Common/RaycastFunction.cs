@@ -216,7 +216,7 @@ public class RaycastFunction : MonoBehaviour
         float reqTime =0;
         while (reqTime < 1f)
         {
-            reqTime += Time.deltaTime;
+            reqTime += Time.deltaTime * 3f;
             color.r = reqTime * oriColor.r;
             color.g = reqTime * oriColor.g;
             color.b = reqTime * oriColor.b;

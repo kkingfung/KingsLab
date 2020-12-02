@@ -11,65 +11,12 @@ using Unity.Burst;
 [UpdateAfter(typeof(QuadrantSystem))]
 public class TowerFindTargetSystem : JobComponentSystem
 {
-    private struct EntityWithPosition
-    {
-        public Entity entity;
-        public float3 position;
-    }
-
-    //[RequireComponentTag(typeof(EnemyTag))]
-    //[BurstCompile]
-    //// Fill single array with Target Entity and Position
-    //private struct FillArrayEntityWithPositionJob : IJobForEachWithEntity<Translation>
-    //{
-    //    public NativeArray<EntityWithPosition> targetArray;
-    //
-    //    public void Execute(Entity entity, int index, ref Translation transform)
-    //    {
-    //            targetArray[index] = new EntityWithPosition
-    //            {
-    //                entity = entity,
-    //                position = transform.Value
-    //            };
-    //    }
-    //}
-
-    [RequireComponentTag(typeof(PlayerTag), typeof(Translation))]
-    [ExcludeComponent(typeof(Target))]
-    // Add HasTarget Component to Entities that have a Closest Target
-    private struct AddComponentJob : IJobChunk
-    {
-        [ReadOnly] public EntityTypeHandle entityType;
-        [ReadOnly] public ComponentTypeHandle<Translation> translationType;
-
-        [DeallocateOnJobCompletion] [ReadOnly] public NativeArray<EntityWithPosition> closestTargetEntityArray;
-        public EntityCommandBuffer.ParallelWriter entityCommandBuffer;
-
-        public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
-        {
-            var chunkTranslation = chunk.GetNativeArray(translationType);
-            var chunkEntity = chunk.GetNativeArray(entityType);
-
-            for (int i = 0; i < chunk.Count; ++i)
-            {
-                if (closestTargetEntityArray[i].entity != Entity.Null)
-                {
-                    entityCommandBuffer.AddComponent(i, chunkEntity[i], new Target
-                    {
-                        targetEntity = closestTargetEntityArray[i].entity,
-                        targetPos = closestTargetEntityArray[i].position
-                    });
-                }
-            }
-        }
-    }
-
-
     [RequireComponentTag(typeof(PlayerTag), typeof(Translation), typeof(Radius), typeof(QuadrantEntity), typeof(CastlePos))]
     [ExcludeComponent(typeof(Target))]
     [BurstCompile]
     private struct FindTargetQuadrantSystemJob : IJobChunk
     {
+        [ReadOnly] public EntityTypeHandle entityType;
         [ReadOnly] public ComponentTypeHandle<Translation> translationType;
         [ReadOnly] public ComponentTypeHandle<Radius> radiusType;
         [ReadOnly] public ComponentTypeHandle<QuadrantEntity> quadrantEntityType;
@@ -78,8 +25,7 @@ public class TowerFindTargetSystem : JobComponentSystem
 
         [ReadOnly] public NativeMultiHashMap<int, QuadrantData> quadrantMultiHashMap;
 
-        [NativeDisableParallelForRestriction]
-        public NativeArray<EntityWithPosition> closestTargetEntityArray;
+        public EntityCommandBuffer.ParallelWriter entityCommandBuffer;
 
         public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
         {
@@ -87,6 +33,7 @@ public class TowerFindTargetSystem : JobComponentSystem
             var chunkRadius = chunk.GetNativeArray(radiusType);
             var chunkQuadrantEntity = chunk.GetNativeArray(quadrantEntityType);
             var chunkCastlePos = chunk.GetNativeArray(castlePosType);
+            var chunkEntity = chunk.GetNativeArray(entityType);
 
             for (int i = 0; i < chunk.Count; ++i)
             {
@@ -118,8 +65,11 @@ public class TowerFindTargetSystem : JobComponentSystem
                     FindTarget(hashMapKey + 1 + QuadrantSystem.quadrantYMultiplier, unitPosition, chunkRadius[i].Value, chunkQuadrantEntity[i], chunkCastlePos[i].Value, ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
                 }
 
-                EntityWithPosition targetDetail = new EntityWithPosition { entity = closestTargetEntity, position = closestTargetPosition };
-                closestTargetEntityArray[i] = targetDetail;
+                entityCommandBuffer.AddComponent(i, chunkEntity[i], new Target
+                {
+                    targetEntity = closestTargetEntity,
+                    targetPos = closestTargetPosition
+                });
             }
         }
 
@@ -135,7 +85,7 @@ public class TowerFindTargetSystem : JobComponentSystem
                     if (quadrantData.quadrantEntity.typeEnum == QuadrantEntity.TypeEnum.EnemyTag)
                     {
                         float distCastleSq = math.distancesq(castlePos, quadrantData.position);
-                        if (distCastleSq < closestTargetDistance && 
+                        if (distCastleSq < closestTargetDistance &&
                             CheckCollision(unitPosition, quadrantData.position, maxdist * maxdist / 1.21f))
                         {
                             // This target is closer
@@ -164,7 +114,6 @@ public class TowerFindTargetSystem : JobComponentSystem
         if (GetEntityQuery(typeof(EnemyTag)).CalculateEntityCount() == 0) return inputDeps;
 
         EntityQuery unitQuery = GetEntityQuery(typeof(PlayerTag), typeof(Radius)/*, ComponentType.Exclude<Target>()*/);
-        NativeArray<EntityWithPosition> closestTargetEntityArray = new NativeArray<EntityWithPosition>(unitQuery.CalculateEntityCount(), Allocator.TempJob);
 
         var entityType = GetEntityTypeHandle();
         var translationType = GetComponentTypeHandle<Translation>(true);
@@ -174,24 +123,15 @@ public class TowerFindTargetSystem : JobComponentSystem
 
         var findTargetQuadrantSystemJob = new FindTargetQuadrantSystemJob
         {
+            entityType = entityType,
             translationType = translationType,
             radiusType = radiusType,
             quadrantEntityType = quadrantEntityType,
             castlePosType = castlePosType,
             quadrantMultiHashMap = QuadrantSystem.quadrantMultiHashMap,
-            closestTargetEntityArray = closestTargetEntityArray,
-        };
-        JobHandle jobHandle = findTargetQuadrantSystemJob.Schedule(unitQuery, inputDeps);
-
-        // Add HasTarget Component to Entities that have a Closest Target
-        var addComponentJob = new AddComponentJob
-        {
-            entityType = entityType,
-            translationType = translationType,
-            closestTargetEntityArray = closestTargetEntityArray,
             entityCommandBuffer = endSimulationEntityCommandBufferSystem.CreateCommandBuffer().AsParallelWriter(),
         };
-        jobHandle = addComponentJob.Schedule(unitQuery, jobHandle);
+        JobHandle jobHandle = findTargetQuadrantSystemJob.Schedule(unitQuery, inputDeps);
 
         endSimulationEntityCommandBufferSystem.AddJobHandleForProducer(jobHandle);
 
@@ -199,7 +139,7 @@ public class TowerFindTargetSystem : JobComponentSystem
     }
 
     //Common Function
-   static private float GetDistance(float3 posA, float3 posB)
+    static private float GetDistance(float3 posA, float3 posB)
     {
         float3 delta = posA - posB;
         return delta.x * delta.x + delta.z * delta.z;

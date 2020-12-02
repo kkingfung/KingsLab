@@ -93,7 +93,7 @@ Material:
     - _DissolveAmount: 2
     - _DstBlend: 0
     - _EnvironmentReflections: 1
-    - _FadeThreshold: 1
+    - _FadeThreshold: -0.019999612
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0

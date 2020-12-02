@@ -89,7 +89,7 @@ MonoBehaviour:
   mapFloor: {fileID: 2786186500453849820}
   navmeshFloor: {fileID: 2786186499764198953}
   navmeshMaskPrefab: {fileID: 404898, guid: 2819726a480fa46419aec4f76b1268e7, type: 3}
-  maxMapSize: {x: 20, y: 20}
+  maxMapSize: {x: 8, y: 8}
   MapSize:
     x: 0
     y: 0

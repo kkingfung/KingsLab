@@ -59,6 +59,11 @@ public class AudioManager : MonoBehaviour
         PlayerPrefs.SetInt("SE", enabledSE ? 1 : 0);
     }
 
+    public void StopBGM()
+    {
+        audioSource[0].Stop();
+    }
+
     private void Awake()
     {
         audioSource = GetComponents<AudioSource>();

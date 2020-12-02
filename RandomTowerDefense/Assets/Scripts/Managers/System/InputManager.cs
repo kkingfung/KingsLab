@@ -431,20 +431,33 @@ public class InputManager : MonoBehaviour
                 {
                     if (Buttons.Count > 0)
                     {
-                        if ((Physics.Raycast(ray2, out hit2, 100, LayerMask.GetMask("ButtonLayer")) &&
-                            Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("ButtonLayer")))
-                        && Buttons.Contains(hit.transform.gameObject))
+                        if (sceneManager)
                         {
-                            RaycastFunction raycastFunction = hit.transform.GetComponent<RaycastFunction>();
-                            if (hit.transform == hit2.transform && raycastFunction)
-                                raycastFunction.ActionFunc();
-                            break;
+                            if ((Physics.Raycast(ray2, out hit2, 200, LayerMask.GetMask("ButtonLayer")) &&
+                            Physics.Raycast(ray, out hit, 200, LayerMask.GetMask("ButtonLayer")))
+                        && Buttons.Contains(hit.transform.gameObject))
+                            {
+                                RaycastFunction raycastFunction = hit.transform.GetComponent<RaycastFunction>();
+                                if (hit.transform == hit2.transform && raycastFunction)
+                                    raycastFunction.ActionFunc();
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            if (Physics.Raycast(ray, out hit, 200, LayerMask.GetMask("ButtonLayer"))&& Buttons.Contains(hit.transform.gameObject))
+                            {
+                                RaycastFunction raycastFunction = hit.transform.GetComponent<RaycastFunction>();
+                                if (raycastFunction)
+                                    raycastFunction.ActionFunc();
+                                break;
+                            }
                         }
                     }
                     if (ButtonsCenter.Count > 0 && sceneManager.currScreenShown!=0)
                     {
                         if ((Input.GetTouch(t.fingerId).position - posTap).sqrMagnitude < touchTapDiff &&
-                         Physics.Raycast(ray3, out hit3, 100, LayerMask.GetMask("StoreLayer"))
+                         Physics.Raycast(ray3, out hit3, 200, LayerMask.GetMask("StoreLayer"))
                          && ButtonsCenter.Contains(hit3.transform.gameObject))
                         {
                             hit3.transform.GetComponent<RaycastFunction>().ActionFunc();
@@ -471,7 +484,14 @@ public class InputManager : MonoBehaviour
                 (Buttons.Contains(hit.transform.gameObject)|| ButtonsCenter.Contains(hit.transform.gameObject)))
             {
                 RaycastFunction raycastFunction = hit.transform.GetComponent<RaycastFunction>();
-                if (hit.transform == hit2.transform && raycastFunction)
+                if (sceneManager)
+                {
+                    if (hit.transform == hit2.transform && raycastFunction)
+                    {
+                        raycastFunction.ActionFunc();
+                    }
+                }
+                else
                 {
                     raycastFunction.ActionFunc();
                 }

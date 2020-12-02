@@ -379,8 +379,28 @@ public class StageSelectOperation : ISceneChange
 
         if (keyboard != null)
         {
-            keyboard.characterLimit = 2;
-            StartCoroutine(TouchScreenInputUpdate(infoID));
+            switch (infoID)
+            {
+                case 0:
+                    keyboard.characterLimit = 3;
+                    break;
+                case 1:
+                    keyboard.characterLimit = 2;
+                    break;
+                case 2:
+                case 3:
+                    keyboard.characterLimit = 1;
+                    break;
+                case 4:
+                    keyboard.characterLimit = 2;
+                    break;
+                case 5:
+                case 6:
+                    keyboard.characterLimit = 3;
+                    break;
+            }
+
+                    StartCoroutine(TouchScreenInputUpdate(infoID));
             CancelKeybroad = false;
         }
     }
@@ -401,12 +421,12 @@ public class StageSelectOperation : ISceneChange
                     case 0:
                     case 1:
                     case 4:
-                        int Input_int;
-                        if (int.TryParse(keyboard.text, out Input_int))
+                        int InputValue;
+                        if (int.TryParse(keyboard.text, out InputValue))
                         {
-                            if (infoID == 0 && Input_int < 5) Input_int = 5;
-                             StageCustomText[infoID].text = Input_int.ToString();
-                            StageInfo.SaveDataInPrefs_DirectInput(infoID, Input_int);
+                            if (infoID == 0) InputValue = Mathf.Clamp(InputValue, StageInfo.MinMapDepth * StageInfo.MinMapDepth, StageInfo.MaxMapDepth * StageInfo.MaxMapDepth);
+                            StageCustomText[infoID].text = InputValue.ToString();
+                            StageInfo.SaveDataInPrefs_DirectInput(infoID, InputValue);
                         }
                         else
                         {
@@ -417,11 +437,12 @@ public class StageSelectOperation : ISceneChange
                     case 3:
                     case 5:
                     case 6:
-                        float Output_int;
-                        if (float.TryParse(keyboard.text, out Output_int))
+                        float OutputValue;
+                        if (float.TryParse(keyboard.text, out OutputValue))
                         {
-                            StageCustomText[infoID].text = Output_int.ToString();
-                            StageInfo.SaveDataInPrefs_DirectInput(infoID, Output_int);
+                            if (infoID == 5) OutputValue = Mathf.Clamp(OutputValue, StageInfo.MinObstaclePercent, StageInfo.MaxObstaclePercent);
+                            StageCustomText[infoID].text = OutputValue.ToString();
+                            StageInfo.SaveDataInPrefs_DirectInput(infoID, OutputValue);
                         }
                         else
                         {

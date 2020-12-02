@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class GyroscopeManager : MonoBehaviour
 {
-    readonly Vector2 shakeThreshold = new Vector2(5,8); // horizontal
+    readonly Vector2 shakeThreshold = new Vector2(5, 3); // horizontal
     readonly Vector2 shakeThresholdV = new Vector2(5, 5); // vertical
     readonly float timeInterval = 2f;
-    readonly float sensitiveAdjustment = 0.05f;
+    readonly float sensitiveAdjustment = 0.5f;
 
     public bool isFunctioning;
     public List<GameObject> gyroDiffUI;
@@ -222,7 +222,7 @@ public class GyroscopeManager : MonoBehaviour
     {
         pitch = Input.gyro.rotationRateUnbiased.x * Mathf.Rad2Deg * sensitiveAdjustment * sensitivity * Time.deltaTime;
         yaw = Input.gyro.rotationRateUnbiased.y * Mathf.Rad2Deg * sensitiveAdjustment * sensitivity * Time.deltaTime;
-        //roll = Input.gyro.rotationRateUnbiased.z * Mathf.Rad2De*0sensitiveAdjustment05f*sensitivity * Time.deltaTime;
+        //roll = Input.gyro.rotationRateUnbiased.z * Mathf.Rad2Deg*sensitiveAdjustment*sensitivity * Time.deltaTime;
 
         //rollRef += roll;
         yawRef += yaw;

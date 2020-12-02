@@ -44,14 +44,15 @@ public class EffectSpawner : MonoBehaviour
         switch (prefabID)
         {
             case 0:
-                foreach (GameObject j in BuildVFXList)
-                {
-                    if (j.activeSelf) continue;
-                    newObj = j;
-                    reuse = true;
-                    break;
-                }
-                break;
+                return null;
+                //foreach (GameObject j in BuildVFXList)
+                //{
+                //    if (j.activeSelf) continue;
+                //    newObj = j;
+                //    reuse = true;
+                //    break;
+                //}
+                //break;
             case 1:
                 foreach (GameObject j in DieVFXList)
                 {

@@ -14331,10 +14331,12 @@ MonoBehaviour:
   PrefabDieVfx: {fileID: 7512688717853577802, guid: 39be8727c84159049ad4fe198163d281, type: 3}
   PrefabMoneyDropVfx: {fileID: 150071818436365621, guid: 6fcabbe82040853469ff51f2f01199a8, type: 3}
   PrefabDisappearVfx: {fileID: 8111480042943765323, guid: 126a5b0cb0e9b5348b80f6c2471dbe7a, type: 3}
+  PrefabImpactVfx: {fileID: 2082874572749238533, guid: 126cef81ccef7b14095722bc06daa579, type: 3}
   BuildVFXList: []
   DieVFXList: []
   MoneyDropVFXList: []
   DisappearVFXList: []
+  ImpactVFXList: []
 --- !u!1 &1245727226
 GameObject:
   m_ObjectHideFlags: 0
@@ -24040,7 +24042,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2080974650}
   m_LocalRotation: {x: 0.7071069, y: 0.000000029802322, z: 0.0000000661239, w: 0.70710677}
-  m_LocalPosition: {x: 52.575016, y: 42.769157, z: 8.069003}
+  m_LocalPosition: {x: 52.575016, y: 48.62, z: 8.07}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

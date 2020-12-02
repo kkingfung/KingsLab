@@ -40,8 +40,8 @@ public class MinionsFindTargetSystem : JobComponentSystem
     // Add HasTarget Component to Entities that have a Closest Target
     private struct AddComponentJob : IJobChunk
     {
-        public EntityTypeHandle entityType;
-        public ComponentTypeHandle<Translation> translationType;
+        [ReadOnly] public EntityTypeHandle entityType;
+        [ReadOnly] public ComponentTypeHandle<Translation> translationType;
 
         [DeallocateOnJobCompletion] [ReadOnly] public NativeArray<EntityWithPosition> closestTargetEntityArray;
         public EntityCommandBuffer.ParallelWriter entityCommandBuffer;
@@ -75,6 +75,8 @@ public class MinionsFindTargetSystem : JobComponentSystem
         [ReadOnly] public ComponentTypeHandle<QuadrantEntity> quadrantEntityType;
 
         [ReadOnly] public NativeMultiHashMap<int, QuadrantData> quadrantMultiHashMap;
+
+        [NativeDisableParallelForRestriction]
         public NativeArray<EntityWithPosition> closestTargetEntityArray;
 
         public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
@@ -161,6 +163,7 @@ public class MinionsFindTargetSystem : JobComponentSystem
 
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
+        if (GetEntityQuery(typeof(EnemyTag)).CalculateEntityCount() == 0) return inputDeps;
         EntityQuery unitQuery = GetEntityQuery(typeof(MinionsTag), typeof(Radius)/*, ComponentType.Exclude<Target>()*/);
         NativeArray<EntityWithPosition> closestTargetEntityArray = new NativeArray<EntityWithPosition>(unitQuery.CalculateEntityCount(), Allocator.TempJob);
 

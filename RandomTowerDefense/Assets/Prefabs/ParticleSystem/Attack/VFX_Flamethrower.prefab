@@ -55,7 +55,7 @@ VisualEffect:
       - m_Value: 2
         m_Name: LifetimeMultiplier
         m_Overridden: 0
-      - m_Value: 1
+      - m_Value: 0.2
         m_Name: SizeMultiplier
         m_Overridden: 0
     m_Vector2f:
@@ -100,7 +100,6 @@ VFXRenderer:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -133,4 +132,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc86c37caf7b03a40af4512d32b93355, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Timer: 15
+  Timer: 10
+  tobeDestroy: 0
+  skill: {fileID: 0}

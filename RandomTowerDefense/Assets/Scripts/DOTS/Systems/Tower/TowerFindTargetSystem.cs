@@ -39,8 +39,8 @@ public class TowerFindTargetSystem : JobComponentSystem
     // Add HasTarget Component to Entities that have a Closest Target
     private struct AddComponentJob : IJobChunk
     {
-        public EntityTypeHandle entityType;
-        public ComponentTypeHandle<Translation> translationType;
+        [ReadOnly] public EntityTypeHandle entityType;
+        [ReadOnly] public ComponentTypeHandle<Translation> translationType;
 
         [DeallocateOnJobCompletion] [ReadOnly] public NativeArray<EntityWithPosition> closestTargetEntityArray;
         public EntityCommandBuffer.ParallelWriter entityCommandBuffer;
@@ -77,6 +77,8 @@ public class TowerFindTargetSystem : JobComponentSystem
         [ReadOnly] public ComponentTypeHandle<CastlePos> castlePosType;
 
         [ReadOnly] public NativeMultiHashMap<int, QuadrantData> quadrantMultiHashMap;
+
+        [NativeDisableParallelForRestriction]
         public NativeArray<EntityWithPosition> closestTargetEntityArray;
 
         public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
@@ -159,6 +161,8 @@ public class TowerFindTargetSystem : JobComponentSystem
 
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
+        if (GetEntityQuery(typeof(EnemyTag)).CalculateEntityCount() == 0) return inputDeps;
+
         EntityQuery unitQuery = GetEntityQuery(typeof(PlayerTag), typeof(Radius)/*, ComponentType.Exclude<Target>()*/);
         NativeArray<EntityWithPosition> closestTargetEntityArray = new NativeArray<EntityWithPosition>(unitQuery.CalculateEntityCount(), Allocator.TempJob);
 

@@ -142,6 +142,10 @@ public class Enemy : MonoBehaviour
     public void Damaged(float currHP)
     {
         DamagedCount += DmgCntIncrement;
+        if (DamagedCount % 5 == 0)
+        {
+            effectManager.Spawn(4, this.transform.position);
+        }
         if (currHP <= 0) {
             isDead = true;
             StartCoroutine(DieAnimation());

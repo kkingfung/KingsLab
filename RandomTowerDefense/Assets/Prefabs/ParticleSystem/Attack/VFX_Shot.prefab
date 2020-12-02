@@ -58,9 +58,9 @@ VisualEffect:
       - m_Value: 0.4
         m_Name: SizeAdj
         m_Overridden: 0
-      - m_Value: 20
+      - m_Value: 10
         m_Name: SkullSize
-        m_Overridden: 0
+        m_Overridden: 1
       - m_Value: 12
         m_Name: SkullVelocity
         m_Overridden: 0
@@ -214,3 +214,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Timer: 10
+  tobeDestroy: 0
+  skill: {fileID: 0}

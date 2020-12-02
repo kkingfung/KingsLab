@@ -10,11 +10,13 @@ public class EffectSpawner : MonoBehaviour
     public GameObject PrefabDieVfx;
     public GameObject PrefabMoneyDropVfx;
     public GameObject PrefabDisappearVfx;
+    public GameObject PrefabImpactVfx;
 
     public List<GameObject> BuildVFXList;
     public List<GameObject> DieVFXList;
     public List<GameObject> MoneyDropVFXList;
     public List<GameObject> DisappearVFXList;
+    public List<GameObject> ImpactVFXList;
 
     public static EffectSpawner Instance { get; private set; }
 
@@ -32,6 +34,7 @@ public class EffectSpawner : MonoBehaviour
         DieVFXList = new List<GameObject>();
         MoneyDropVFXList = new List<GameObject>();
         DisappearVFXList = new List<GameObject>();
+        ImpactVFXList = new List<GameObject>();
     }
 
     public GameObject Spawn(int prefabID, float3 Position)
@@ -76,6 +79,15 @@ public class EffectSpawner : MonoBehaviour
                     break;
                 }
                 break;
+            case 4:
+                foreach (GameObject j in ImpactVFXList)
+                {
+                    if (j.activeSelf) continue;
+                    newObj = j;
+                    reuse = true;
+                    break;
+                }
+                break;
         }
 
         if (reuse == false)
@@ -97,6 +109,10 @@ public class EffectSpawner : MonoBehaviour
                 case 3:
                     newObj = Instantiate(PrefabDisappearVfx, transform);
                     DisappearVFXList.Add(newObj);
+                    break;
+                case 4:
+                    newObj = Instantiate(PrefabImpactVfx, transform);
+                    ImpactVFXList.Add(newObj);
                     break;
             }
         }

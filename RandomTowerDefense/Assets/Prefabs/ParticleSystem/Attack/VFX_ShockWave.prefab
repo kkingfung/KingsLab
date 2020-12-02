@@ -58,9 +58,9 @@ VisualEffect:
       - m_Value: 12
         m_Name: SizeMultipier
         m_Overridden: 1
-      - m_Value: 0.5
+      - m_Value: 5
         m_Name: Portal radius
-        m_Overridden: 0
+        m_Overridden: 1
       - m_Value: 0
         m_Name: Tangent speed
         m_Overridden: 0
@@ -121,9 +121,6 @@ VFXRenderer:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -157,3 +154,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Timer: 10
+  tobeDestroy: 0
+  skill: {fileID: 0}

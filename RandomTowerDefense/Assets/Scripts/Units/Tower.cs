@@ -157,11 +157,25 @@ public class Tower : MonoBehaviour
           attr.attackWaittime, attr.attackLifetime);
 
         //this.AtkVFX.Add(attackSpawner.GameObjects[entityID[0]]);
-        if (type == TowerInfo.TowerInfoID.Enum_TowerNightmare || type == TowerInfo.TowerInfoID.Enum_TowerTerrorBringer)
+        VisualEffect vfx = attackSpawner.GameObjects[entityID[0]].GetComponent<VisualEffect>();
+
+        switch (type)
         {
-            VisualEffect vfx = attackSpawner.GameObjects[entityID[0]].GetComponent<VisualEffect>();
-            if (vfx.HasVector3("TargetPos"))
+            case TowerInfo.TowerInfoID.Enum_TowerNightmare:
                 vfx.SetVector3("TargetPos", towerSpawner.targetArray[this.entityID]);
+                vfx.SetFloat("StarSize", rank * 10f);
+                vfx.SetFloat("AuraSize", rank);
+                break;
+            case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
+                vfx.SetFloat("Spawn rate", rank * 2f);
+                break;
+            case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
+                vfx.SetVector3("TargetPos", towerSpawner.targetArray[this.entityID]);
+                vfx.SetFloat("SkullSize", rank * 10f + 10f);
+                break;
+            case TowerInfo.TowerInfoID.Enum_TowerUsurper:
+                vfx.SetFloat("SizeMultiplier", rank*0.1f);
+                break;
         }
 
         atkCounter = attr.waitTime;

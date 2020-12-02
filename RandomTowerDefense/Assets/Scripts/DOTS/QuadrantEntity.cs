@@ -50,9 +50,9 @@ public class QuadrantSystem : JobComponentSystem
     [BurstCompile]
     private struct SetQuadrantDataHashMapJob : IJobChunk
     {
-        public EntityTypeHandle entityType;
-        public ComponentTypeHandle<Translation> translationType;
-        public ComponentTypeHandle<QuadrantEntity> quadrantEntityType;
+        [ReadOnly] public EntityTypeHandle entityType;
+        [ReadOnly] public ComponentTypeHandle<Translation> translationType;
+        [ReadOnly] public ComponentTypeHandle<QuadrantEntity> quadrantEntityType;
 
         public NativeMultiHashMap<int, QuadrantData>.ParallelWriter quadrantMultiHashMap;
 

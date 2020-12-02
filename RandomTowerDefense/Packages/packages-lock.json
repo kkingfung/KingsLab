@@ -164,7 +164,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.nuget.newtonsoft-json": {
-      "version": "2.0.0",
+      "version": "2.0.0-preview",
       "depth": 2,
       "source": "registry",
       "dependencies": {},
@@ -221,12 +221,10 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.remote-config": {
-      "version": "1.4.0-preview.1",
-      "depth": 1,
+      "version": "1.0.9",
+      "depth": 0,
       "source": "registry",
-      "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "2.0.0"
-      },
+      "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.render-pipelines.core": {
@@ -284,13 +282,6 @@
       },
       "url": "https://packages.unity.com"
     },
-    "com.unity.settings-manager": {
-      "version": "1.0.3",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://packages.unity.com"
-    },
     "com.unity.shadergraph": {
       "version": "8.2.0",
       "depth": 1,
@@ -298,24 +289,6 @@
       "dependencies": {
         "com.unity.render-pipelines.core": "8.2.0",
         "com.unity.searcher": "4.0.9"
-      },
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.simulation.core": {
-      "version": "0.0.10-preview.18",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {},
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.simulation.games": {
-      "version": "0.4.5-preview.2",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.remote-config": "1.4.0-preview.1",
-        "com.unity.simulation.core": "0.0.10-preview.18",
-        "com.unity.settings-manager": "1.0.3"
       },
       "url": "https://packages.unity.com"
     },

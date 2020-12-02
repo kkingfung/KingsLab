@@ -107,14 +107,11 @@ public class UIEffect : MonoBehaviour
                         if (Input.touchCount > 0)
                             ray = subCam.ScreenPointToRay(Input.GetTouch(0).position);
                     }
-                    else { ray = subCam.ScreenPointToRay(Input.mousePosition); }
+                    else { ray = subCam.ScreenPointToRay(Input.mousePosition);}
                 }
 
                 float temp;
-                if (((inputManager.GetUseTouch()&&Input.touchCount > 0) || 
-                    (inputManager.GetUseTouch()==false && Input.mousePosition.x > 0 && Input.mousePosition.y > 0 && 
-                    Input.mousePosition.x < Screen.width && Input.mousePosition.y < Screen.height)) &&
-                        Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("RecordBroad")))
+                if (Physics.Raycast(ray, out hit, 100, LayerMask.GetMask("RecordBroad")))
                 {
                     for (int i= 0; i < relatedObjs.Count; ++i)
                     {
@@ -167,7 +164,8 @@ public class UIEffect : MonoBehaviour
                 break;
             case 6://for Selection Scene Boss Spr
                 if (selectionSceneManager == null || spr == null) break;
-                spr.color = (selectionSceneManager.EnabledtIslandNum()  -1 > uiID) ? oriColour : new Color(0, 0, 0, 1);
+                //spr.color = (selectionSceneManager.EnabledtIslandNum()  -1 > uiID) ? oriColour : new Color(0, 0, 0, 1);
+                spr.color = new Color(0, 0, 0, 1);
                 break;
             case 7://for Selection Scene Clear Mark
                 if (selectionSceneManager == null || image == null) break;

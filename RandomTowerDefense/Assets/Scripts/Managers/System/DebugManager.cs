@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Simulation.Games;
+//using Unity.Simulation.Games;
 
 public class DebugManager : MonoBehaviour
 {
@@ -25,7 +25,9 @@ public class DebugManager : MonoBehaviour
     {
         isFetchDone = false;
         if (isSimulationTest)
-            GameSimManager.Instance.FetchConfig(OnFetchConfigDone);
+        {
+            //GameSimManager.Instance.FetchConfig(OnFetchConfigDone);
+        }
         else
             isFetchDone = true;
     }
@@ -35,20 +37,20 @@ public class DebugManager : MonoBehaviour
         init();
     }
 
-    private void OnFetchConfigDone(GameSimConfigResponse gameSimConfigResponse)
-    {
-        towerrank_Damage = gameSimConfigResponse.GetFloat("towerrank_Damage");
-        towerlvl_Damage = gameSimConfigResponse.GetFloat("towerlvl_Damage");
-        enemylvl_Health = gameSimConfigResponse.GetFloat("enemylvl_Health");
-        enemylvl_Speed = gameSimConfigResponse.GetFloat("enemylvl_Speed");
-
-        isFetchDone = true;
-    }
+    //private void OnFetchConfigDone(GameSimConfigResponse gameSimConfigResponse)
+    //{
+    //    towerrank_Damage = gameSimConfigResponse.GetFloat("towerrank_Damage");
+    //    towerlvl_Damage = gameSimConfigResponse.GetFloat("towerlvl_Damage");
+    //    enemylvl_Health = gameSimConfigResponse.GetFloat("enemylvl_Health");
+    //    enemylvl_Speed = gameSimConfigResponse.GetFloat("enemylvl_Speed");
+    //
+    //    isFetchDone = true;
+    //}
 
     public void MapResetted()
     {
         if (isSimulationTest == false) return;
-        GameSimManager.Instance.SetCounter("WaveArrived", waveManager.GetCurrentWaveNum());
+    //    GameSimManager.Instance.SetCounter("WaveArrived", waveManager.GetCurrentWaveNum());
         Debug.Log("QuitNow");
 
 #if UNITY_EDITOR

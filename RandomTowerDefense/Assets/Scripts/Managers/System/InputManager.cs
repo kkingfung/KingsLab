@@ -38,8 +38,8 @@ public class InputManager : MonoBehaviour
 
     public GameObject ClickPrefab;
     //TouchButton
-    public List<GameObject> Buttons;
-    public List<GameObject> ButtonsCenter;
+    public List<GameObject> ButtonsOtr;
+    public List<GameObject> ButtonsInGame;
 
     //Input Test
     public LBM LBMTest;
@@ -97,12 +97,12 @@ public class InputManager : MonoBehaviour
         //if (tutorialManager && tutorialManager.WaitingResponds) return;
         if (sceneManager) {
             if (sceneManager.currScreenShown != 0 && 
-                Buttons.Count + ButtonsCenter.Count > 0) 
+                ButtonsOtr.Count + ButtonsInGame.Count > 0) 
             { 
                 RaycastTest();
             }
         }
-        else if (Buttons.Count+ButtonsCenter.Count > 0)
+        else if (ButtonsOtr.Count+ButtonsInGame.Count > 0)
             RaycastTest(); 
 
         if (useTouch) 
@@ -410,32 +410,33 @@ public class InputManager : MonoBehaviour
         RaycastHit hit2 = new RaycastHit();
         RaycastHit hit3 = new RaycastHit();
 
+        if (Screen.width > Screen.height)
+        {
+            ray2 = refCamL.ScreenPointToRay(posTap);
+            ray3 = refCamL.ScreenPointToRay(new Vector2(Screen.width * 0.5f, Screen.height * 0.5f));
+        }
+        else 
+        {
+            ray2 = refCamP.ScreenPointToRay(posTap);
+            ray3 = refCamP.ScreenPointToRay(new Vector2(Screen.width * 0.5f, Screen.height * 0.5f));
+        }
+
         if (useTouch && Input.touchCount > 0)
         {
             foreach (Touch t in Input.touches)
             {
-                if (Screen.width > Screen.height)
-                {
-                    ray = refCamL.ScreenPointToRay(Input.GetTouch(t.fingerId).position);
-                    ray2 = refCamL.ScreenPointToRay(posTap);
-                    ray3 = refCamL.ScreenPointToRay(new Vector2(Screen.width * 0.5f, Screen.height * 0.5f));
-                }
-                else
-                {
-                    ray = refCamP.ScreenPointToRay(Input.GetTouch(t.fingerId).position);
-                    ray2 = refCamP.ScreenPointToRay(posTap);
-                    ray3 = refCamP.ScreenPointToRay(new Vector2(Screen.width * 0.5f, Screen.height * 0.5f));
-                }
-              
                 if (Input.GetTouch(t.fingerId).phase == TouchPhase.Ended)
                 {
-                    if (Buttons.Count > 0)
+                    ray = (Screen.width > Screen.height)? refCamL.ScreenPointToRay(Input.GetTouch(t.fingerId).position):
+                        refCamP.ScreenPointToRay(Input.GetTouch(t.fingerId).position);
+
+                    if (ButtonsOtr.Count > 0)
                     {
                         if (sceneManager)
                         {
                             if ((Physics.Raycast(ray2, out hit2, 200, LayerMask.GetMask("ButtonLayer")) &&
                             Physics.Raycast(ray, out hit, 200, LayerMask.GetMask("ButtonLayer")))
-                        && Buttons.Contains(hit.transform.gameObject))
+                                && ButtonsOtr.Contains(hit.transform.gameObject))
                             {
                                 RaycastFunction raycastFunction = hit.transform.GetComponent<RaycastFunction>();
                                 if (hit.transform == hit2.transform && raycastFunction)
@@ -445,7 +446,8 @@ public class InputManager : MonoBehaviour
                         }
                         else
                         {
-                            if (Physics.Raycast(ray, out hit, 200, LayerMask.GetMask("ButtonLayer"))&& Buttons.Contains(hit.transform.gameObject))
+                            if (Physics.Raycast(ray, out hit, 200, LayerMask.GetMask("ButtonLayer"))&& 
+                                ButtonsOtr.Contains(hit.transform.gameObject))
                             {
                                 RaycastFunction raycastFunction = hit.transform.GetComponent<RaycastFunction>();
                                 if (raycastFunction)
@@ -454,11 +456,11 @@ public class InputManager : MonoBehaviour
                             }
                         }
                     }
-                    if (ButtonsCenter.Count > 0 && sceneManager.currScreenShown!=0)
+                    if (ButtonsInGame.Count > 0 && sceneManager.currScreenShown!=0)
                     {
                         if ((Input.GetTouch(t.fingerId).position - posTap).sqrMagnitude < touchTapDiff &&
                          Physics.Raycast(ray3, out hit3, 200, LayerMask.GetMask("StoreLayer"))
-                         && ButtonsCenter.Contains(hit3.transform.gameObject))
+                         && ButtonsInGame.Contains(hit3.transform.gameObject))
                         {
                             hit3.transform.GetComponent<RaycastFunction>().ActionFunc();
                             break;
@@ -469,31 +471,45 @@ public class InputManager : MonoBehaviour
         }
         else if (!useTouch && Input.GetMouseButtonUp(0))
         {
-            if (Screen.width > Screen.height)
-            {
-                ray = refCamL.ScreenPointToRay(Input.mousePosition);
-                ray2 = refCamL.ScreenPointToRay(posTap);
-            }
-            else
-            {
-                ray = refCamP.ScreenPointToRay(Input.mousePosition);
-                ray2 = refCamP.ScreenPointToRay(posTap);
-            }
+            ray = (Screen.width > Screen.height) ? refCamL.ScreenPointToRay(Input.mousePosition) :
+                    refCamP.ScreenPointToRay(Input.mousePosition);
 
-            if ((Physics.Raycast(ray2, out hit2, 100) && Physics.Raycast(ray, out hit,100)) && 
-                (Buttons.Contains(hit.transform.gameObject)|| ButtonsCenter.Contains(hit.transform.gameObject)))
+            if (ButtonsOtr.Count > 0)
             {
-                RaycastFunction raycastFunction = hit.transform.GetComponent<RaycastFunction>();
                 if (sceneManager)
                 {
-                    if (hit.transform == hit2.transform && raycastFunction)
+                    if ((Physics.Raycast(ray2, out hit2, 200, LayerMask.GetMask("ButtonLayer")) &&
+                    Physics.Raycast(ray, out hit, 200, LayerMask.GetMask("ButtonLayer")))
+                && ButtonsOtr.Contains(hit.transform.gameObject))
                     {
-                        raycastFunction.ActionFunc();
+                        RaycastFunction raycastFunction = hit.transform.GetComponent<RaycastFunction>();
+                        if (hit.transform == hit2.transform && raycastFunction)
+                            raycastFunction.ActionFunc();
                     }
                 }
                 else
                 {
-                    raycastFunction.ActionFunc();
+                    if (Physics.Raycast(ray, out hit, 200, LayerMask.GetMask("ButtonLayer")) && 
+                        ButtonsOtr.Contains(hit.transform.gameObject))
+                    {
+                        RaycastFunction raycastFunction = hit.transform.GetComponent<RaycastFunction>();
+                        if (raycastFunction)
+                            raycastFunction.ActionFunc();
+                    }
+                }
+            }
+
+            if (ButtonsInGame.Count > 0 && sceneManager && sceneManager.currScreenShown != 0)
+            {
+    
+                if ((Physics.Raycast(ray2, out hit2, 200) && Physics.Raycast(ray, out hit, 200)) &&
+                    ButtonsInGame.Contains(hit.transform.gameObject))
+                {
+                    RaycastFunction raycastFunction = hit.transform.GetComponent<RaycastFunction>();
+                    if (hit.transform == hit2.transform && raycastFunction)
+                    {
+                        raycastFunction.ActionFunc();
+                    }
                 }
             }
         }

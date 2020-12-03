@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4626390214331530}
   - component: {fileID: 33283243407640938}
   - component: {fileID: 23450358156907978}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: BishopLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}

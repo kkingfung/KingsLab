@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4967576429096158}
   - component: {fileID: 33961714295525734}
   - component: {fileID: 23756955892116760}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: KnightLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}

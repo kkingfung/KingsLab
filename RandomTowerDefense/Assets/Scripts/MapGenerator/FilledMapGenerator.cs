@@ -79,6 +79,7 @@ public class FilledMapGenerator : MonoBehaviour
 		if (Randomize)
 			currentMap.seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
 		tileMap = new Transform[currentMap.mapSize.x,currentMap.mapSize.y];
+
 		prng = new System.Random (currentMap.seed);
 
 		// Generating coords

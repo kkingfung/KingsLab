@@ -21,7 +21,7 @@ public class SkillDestroy : JobComponentSystem
 
 		float deltaTime = Time.DeltaTime;
 
-		return Entities.WithAll<SkillTag>().ForEach((Entity entity, int entityInQueryIndex, ref Lifetime activeTime) =>
+		JobHandle jobHandle = Entities.WithAll<SkillTag>().ForEach((Entity entity, int entityInQueryIndex, ref Lifetime activeTime) =>
 		{
 			activeTime.Value -= deltaTime;
 			if (activeTime.Value <= 0f)
@@ -30,5 +30,9 @@ public class SkillDestroy : JobComponentSystem
 				//ecbc.DestroyEntity(entityInQueryIndex, entity);
 			}
 		}).Schedule(inputDeps);
+
+		endSimulationEcbSystem.AddJobHandleForProducer(jobHandle);
+
+		return jobHandle;
 	}
 }

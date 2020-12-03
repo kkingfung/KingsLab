@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4684522381995130}
   - component: {fileID: 33847774386592710}
   - component: {fileID: 23238399111400190}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: RookDark
   m_TagString: Untagged
   m_Icon: {fileID: 0}

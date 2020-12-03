@@ -81,7 +81,7 @@ public class StageManager : MonoBehaviour
             }
             else
             {
-                float TotalSize = PlayerPrefs.GetFloat("stageSize",100);
+                float TotalSize = PlayerPrefs.GetFloat("stageSize", 64);
                 TotalSize = Mathf.Sqrt(TotalSize);
                 mapGenerator.CustomizeMapAndCreate((int)(TotalSize + 0.9f), (int)(TotalSize + 0.9f));
             }

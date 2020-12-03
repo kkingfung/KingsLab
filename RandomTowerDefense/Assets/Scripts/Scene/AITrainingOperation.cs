@@ -18,16 +18,20 @@ public class AITrainingOperation : InGameOperation
     [HideInInspector]
     public GameObject pillar;
     public bool tellMerge;
+
+    private System.Random prng;
+
     protected override void Awake()
     {
-        isFetchDone = false;
+        prng = new System.Random((int)Time.time);
 
+        isFetchDone = false;
         //StageInfo(Base) Assignment
         IslandNow = 3;
         PlayerPrefs.SetInt("IslandNow", 3);
         PlayerPrefs.SetFloat("waveNum", 999);
-        PlayerPrefs.SetFloat("stageSize", 100);
-        PlayerPrefs.SetFloat("obstaclePercent", Random.Range(0.5f, 1f));
+        PlayerPrefs.SetFloat("stageSize", 64);
+        PlayerPrefs.SetFloat("obstaclePercent", prng.Next(5, 10) * 0.1f);
         PlayerPrefs.SetFloat("hpMax", 9999);
 
         if (UseRemoteConfig)
@@ -136,7 +140,7 @@ public class AITrainingOperation : InGameOperation
             int count;
             List<GameObject> targetList;
             //Check three in a kind to merge
-            switch (Random.Range(0, 4 * 4))
+            switch (prng.Next(0, 4 * 4))
             {
                 case 0 + 4 * 0:
                     targetList = new List<GameObject>(towerSpawner.TowerNightmareRank1);
@@ -192,7 +196,7 @@ public class AITrainingOperation : InGameOperation
             }
             count = targetList.Count;
             if (count > 2)
-                towerManager.MergeTower(targetList[Random.Range(0, count)]);
+                towerManager.MergeTower(targetList[prng.Next(0, count)]);
             tellMerge = false;
         }
     }

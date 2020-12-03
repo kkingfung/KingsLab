@@ -38,6 +38,8 @@ public class AgentScript : Agent
     int[] EnemyDistribution;
     int[] PillarDistribution;
 
+    private System.Random prng;
+
     public override void Initialize()
     {
         waveManager.SpawnPointByAI = 1;
@@ -45,6 +47,7 @@ public class AgentScript : Agent
         HpRecord = 1;
         WaveRecord = 0;
         isTower = GetComponent<BehaviorParameters>().TeamId == 0 ? false : true;
+        prng = new System.Random((int)Time.time);
     }
 
     private void Reset()
@@ -268,8 +271,9 @@ public class AgentScript : Agent
     int[] CntTowerRankTotal()
     {
         int[] TotalRankInQuarteredMap = new int[4];
-        if (towerSpawner == null) return TotalRankInQuarteredMap;
-        AgentCoord = filledMapGenerator.GetTileIDFromPosition(this.transform.position);
+        if (towerSpawner == null || filledMapGenerator == null) return TotalRankInQuarteredMap;
+        //AgentCoord = filledMapGenerator.GetTileIDFromPosition(this.transform.position);
+        AgentCoord = new int2(StageInfo.stageSizeEx / 2, StageInfo.stageSizeEx / 2);
         //MaxCoord = filledMapGenerator.MapSize;
 
         int[] SubTotalRankInQuarteredMap;
@@ -373,7 +377,7 @@ public class AgentScript : Agent
         int[] TotalRankInQuarteredMap = new int[4];
         if (filledMapGenerator == null) return TotalRankInQuarteredMap;
         List<Pillar> allPillar = filledMapGenerator.PillarList;
-        if (allPillar.Count == 0) return TotalRankInQuarteredMap;
+        if (allPillar==null || allPillar.Count == 0) return TotalRankInQuarteredMap;
 
         AgentCoord = filledMapGenerator.GetTileIDFromPosition(this.transform.position);
         //MaxCoord = filledMapGenerator.MapSize;
@@ -449,7 +453,7 @@ public class AgentScript : Agent
         int cnt = 0;
         while (cnt < filledMapGenerator.PillarList.Count)
         {
-            int id = UnityEngine.Random.Range(0, filledMapGenerator.PillarList.Count);
+            int id = prng.Next(0, filledMapGenerator.PillarList.Count);
             if (filledMapGenerator.PillarList[id].state == (isFree ? 0 : 1))
             {
                 if (filledMapGenerator.PillarList[id].surroundSpace > 0)
@@ -468,7 +472,7 @@ public class AgentScript : Agent
         int cnt = 0;
         while (cnt < filledMapGenerator.PillarList.Count)
         {
-            int id = UnityEngine.Random.Range(0, filledMapGenerator.PillarList.Count);
+            int id = prng.Next(0, filledMapGenerator.PillarList.Count);
             switch (areaID)
             {
                 case 0:

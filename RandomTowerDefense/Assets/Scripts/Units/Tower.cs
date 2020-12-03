@@ -180,7 +180,7 @@ public class Tower : MonoBehaviour
 
         atkCounter = attr.waitTime;
         animator.SetTrigger("Detected");
-        animator.SetInteger("ActionID", UnityEngine.Random.Range(0, ActionSetNum-1));
+        animator.SetInteger("ActionID", StageInfo.prng.Next(0, ActionSetNum-1));
     }
 
     /// <summary>

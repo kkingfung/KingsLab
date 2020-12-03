@@ -338,8 +338,8 @@ public class InGameOperation : ISceneChange
             return;
         }
 
-        if (tutorialManager == null || (tutorialManager.GetTutorialStage()> TutorialManager.TutorialStageID.TutorialProgress_StoreSkill
-            ||(tutorialManager.GetTutorialStage() == TutorialManager.TutorialStageID.TutorialProgress_StoreSkill && tutorialManager.GetTutorialStageProgress() > 8)))//8:referred to TutorialManager(varies)
+        //if (tutorialManager == null || (tutorialManager.GetTutorialStage()> TutorialManager.TutorialStageID.TutorialProgress_StoreSkill
+        //    ||(tutorialManager.GetTutorialStage() == TutorialManager.TutorialStageID.TutorialProgress_StoreSkill && tutorialManager.GetTutorialStageProgress() > 8)))//8:referred to TutorialManager(varies)
         if (isScreenChanging == false)
         {
             Vector3 angle = CameraManager.GyroCamGp[0].transform.rotation.eulerAngles;

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4607164402640316}
   - component: {fileID: 33386584874682660}
   - component: {fileID: 23714218359197728}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: QueenLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -31,7 +31,8 @@ public class Enemy : MonoBehaviour
     private AgentScript agent;
     private Vector3 oriPos;
 
-    private SkinnedMeshRenderer[] meshes;
+    //private SkinnedMeshRenderer[] meshes;
+    private MeshRenderer[] meshes;
     public Animator animator;
     public Slider HpBar;
     private RectTransform HpBarRot;
@@ -58,8 +59,7 @@ public class Enemy : MonoBehaviour
         if (HpBar != null)
             HpBarRot = HpBar.gameObject.GetComponent<RectTransform>();
 
-        meshes = GetComponentsInChildren<SkinnedMeshRenderer>();
-   
+        meshes = GetComponentsInChildren<MeshRenderer>();
     }
 
     private void Start() 

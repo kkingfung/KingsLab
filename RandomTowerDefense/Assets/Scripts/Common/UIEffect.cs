@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class UIEffect : MonoBehaviour
 {
+    private readonly Vector3 enlargeVec = new Vector3(0.03f, 0.03f, 0);
+
     public int EffectID = 0;
     public int uiID = 0;//For any purposes
     public float magnitude = 0;
@@ -164,15 +166,15 @@ public class UIEffect : MonoBehaviour
                 break;
             case 6://for Selection Scene Boss Spr
                 if (selectionSceneManager == null || spr == null) break;
-                //spr.color = (selectionSceneManager.EnabledtIslandNum()  -1 > uiID) ? oriColour : new Color(0, 0, 0, 1);
-                spr.color = new Color(0, 0, 0, 1);
+                //spr.color = (selectionSceneManager.EnabledtIslandNum()  -1 > uiID) ? oriColour : Color.black;
+                spr.color = Color.black;
                 break;
             case 7://for Selection Scene Clear Mark
                 if (selectionSceneManager == null || image == null) break;
-                image.color = (selectionSceneManager.EnabledtIslandNum() - 1 > uiID) ? oriColour : new Color(0, 0, 0, 0);
+                image.color = (selectionSceneManager.EnabledtIslandNum() - 1 > uiID) ? oriColour : Color.clear;
                 break;
             case 8://for Selection Scene Boss Frame
-                this.transform.localScale = oriScale - Mathf.Sin(Time.time*12.0f) * new Vector3(0.1f, 0.1f, 0);
+                //this.transform.localScale = oriScale - Mathf.Sin(Time.time*12.0f) * enlargeVec;
                 break;
             case 9://for Game Scene SellingMark
                 if (playerManager.isSelling && gameSceneManager.GetOptionStatus()!=true && gameSceneManager.currScreenShown == (int)InGameOperation.ScreenShownID.SSIDArena)

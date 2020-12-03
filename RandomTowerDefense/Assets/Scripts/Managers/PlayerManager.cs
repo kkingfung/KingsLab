@@ -46,6 +46,7 @@ public class PlayerManager : MonoBehaviour
     public GameObject TowerRaycastResult;
     private UnityEngine.RaycastHit hitPillar;
     private Vector3 hitArena;
+    public Transform hitStore;
 
     private void Start()
     {
@@ -67,11 +68,18 @@ public class PlayerManager : MonoBehaviour
 
         if (sceneManager)
         {
-            if (sceneManager.GetOptionStatus() == false && sceneManager.currScreenShown==0)
+            if (sceneManager.GetOptionStatus() == false)
             {
-                TowerRaycastResult = CheckTowerRaycast();
-                towerManager.UpdateInfo(TowerRaycastResult);
-            }
+                if (sceneManager.currScreenShown == 0)
+                {
+                    TowerRaycastResult = CheckTowerRaycast();
+                    towerManager.UpdateInfo(TowerRaycastResult);
+                }
+                else
+                {
+                    RaycastTest(LayerMask.GetMask("StoreLayer"));
+                }
+            }    
         }
     }
 
@@ -157,13 +165,13 @@ public class PlayerManager : MonoBehaviour
         switch (SkillStack.UseStock(StockSelected))
         {
             case (int)Upgrades.StoreItems.BonusBoss1:
-                enemyManager.SpawnBonusBoss(0, mapGenerator.CoordToPosition(stageManager.SpawnPoint[UnityEngine.Random.Range(1, 3)]));
+                enemyManager.SpawnBonusBoss(0, mapGenerator.CoordToPosition(stageManager.SpawnPoint[StageInfo.prng.Next(1, 3)]));
                 break;
             case (int)Upgrades.StoreItems.BonusBoss2:
-                enemyManager.SpawnBonusBoss(1, mapGenerator.CoordToPosition(stageManager.SpawnPoint[UnityEngine.Random.Range(1, 3)]));
+                enemyManager.SpawnBonusBoss(1, mapGenerator.CoordToPosition(stageManager.SpawnPoint[StageInfo.prng.Next(1, 3)]));
                 break;
             case (int)Upgrades.StoreItems.BonusBoss3:
-                enemyManager.SpawnBonusBoss(2, mapGenerator.CoordToPosition(stageManager.SpawnPoint[UnityEngine.Random.Range(1, 3)]));
+                enemyManager.SpawnBonusBoss(2, mapGenerator.CoordToPosition(stageManager.SpawnPoint[StageInfo.prng.Next(1, 3)]));
                 break;
             case (int)Upgrades.StoreItems.MagicMeteor:
                 //CurrentSkill = 
@@ -230,7 +238,7 @@ public class PlayerManager : MonoBehaviour
     {
         if (layer == LayerMask.GetMask("Arena") && hitArena.y != float.MinValue)
             return hitArena;
-            
+
         UnityEngine.Ray ray = new UnityEngine.Ray();
         UnityEngine.RaycastHit hit = new UnityEngine.RaycastHit();
 
@@ -244,9 +252,11 @@ public class PlayerManager : MonoBehaviour
             ray = refCamP.ScreenPointToRay(new Vector2(Screen.width * 0.5f, Screen.height * 0.5f));
         }
 
-        Physics.Raycast(ray, out hit, 100, layer);
+        Physics.Raycast(ray, out hit, 200, layer);
         if (layer == LayerMask.GetMask("Arena"))
             hitArena = hit.point;
+        if (layer == LayerMask.GetMask("StoreLayer"))
+             hitStore= hit.transform;
         return hit.point;
     }
 

@@ -144,7 +144,7 @@ public class TowerManager : MonoBehaviour
         {
             Tower script;
 
-            switch (UnityEngine.Random.Range(0, NumTowerType))
+            switch (StageInfo.prng.Next(0, NumTowerType))
             {
                 case (int)TowerInfo.TowerInfoID.Enum_TowerNightmare:
                     entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerNightmare,
@@ -286,8 +286,7 @@ public class TowerManager : MonoBehaviour
         tempList.Remove(targetedTower);
         while (tempList.Count > 0)
         {
-            int randNum = Random.Range(0, tempList.Count);
-            GameObject chkTarget = tempList[randNum];
+            GameObject chkTarget = tempList[StageInfo.prng.Next(0, tempList.Count)];
             tempList.Remove(chkTarget);
             if (chkTarget.activeSelf)
             {
@@ -306,8 +305,7 @@ public class TowerManager : MonoBehaviour
 
         //Remove Candidates
         while (count-- > 0) {
-            int randCandidate = Random.Range(0, candidateList.Count);
-            GameObject candidate = candidateList[randCandidate];
+            GameObject candidate = candidateList[StageInfo.prng.Next(0, candidateList.Count)];
             candidateList.Remove(candidate);
             
             GameObject temp = effectManager.Spawn(3, candidate.transform.position); 

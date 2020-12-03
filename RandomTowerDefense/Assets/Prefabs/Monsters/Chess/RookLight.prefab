@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4656301317612888}
   - component: {fileID: 33667145997053058}
   - component: {fileID: 23923637149797032}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: RookLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -17,6 +17,7 @@ public class RaycastFunction : MonoBehaviour
     private EnumRenderType rendertype;
     private StageSelectOperation SelectionSceneManager;
     private InGameOperation sceneManager;
+    private PlayerManager playerManager;
 
     private StoreManager storeManager;
     private AudioManager audioManager;
@@ -26,6 +27,8 @@ public class RaycastFunction : MonoBehaviour
     private SpriteRenderer chkSprRender;
 
     private Color oriColor;
+    private bool ColorRoutineRunning;
+
     private enum ActionTypeID {
         StageSelection_Keybroad=0,
         StageSelection_PreviousStage,
@@ -56,18 +59,78 @@ public class RaycastFunction : MonoBehaviour
     {
         rendertype = EnumRenderType.NotChecked;
         oriColor = Color.white;
+        ColorRoutineRunning = false;
 
     }
     private void Start()
     {
         SelectionSceneManager = FindObjectOfType<StageSelectOperation>();
         sceneManager = FindObjectOfType<InGameOperation>();
-
+        playerManager = FindObjectOfType<PlayerManager>();
         storeManager = FindObjectOfType<StoreManager>();
         audioManager = FindObjectOfType<AudioManager>();
 
         if (rendertype == EnumRenderType.NotChecked)
             GetColor();
+    }
+
+    private void DarkenStoreSpr() {
+        if (playerManager.hitStore == null || this.transform != playerManager.hitStore)
+        {
+            switch (rendertype)
+            {
+                case EnumRenderType.FoundMeshRenderer:
+                    chkMeshRender.material.color = new Color(Mathf.Clamp(chkMeshRender.material.color.r, 0, 0.3f),
+                        Mathf.Clamp(chkMeshRender.material.color.g, 0, 0.3f), Mathf.Clamp(chkMeshRender.material.color.b, 0, 0.3f)); break;
+                case EnumRenderType.FoundRawImg:
+                    chkRawImg.color = new Color(Mathf.Clamp(chkRawImg.color.r, 0, 0.3f), 
+                        Mathf.Clamp(chkRawImg.color.g, 0, 0.3f), Mathf.Clamp(chkRawImg.color.b, 0, 0.3f)); break;
+                case EnumRenderType.FoundSprRenderer:
+                    chkSprRender.color = new Color(Mathf.Clamp(chkSprRender.color.r, 0, 0.3f), 
+                        Mathf.Clamp(chkSprRender.color.g, 0, 0.3f), Mathf.Clamp(chkSprRender.color.b, 0, 0.3f)); break;
+            }
+        }
+        else 
+        {
+            if (ColorRoutineRunning==false) 
+            {
+                switch (rendertype)
+                {
+                    case EnumRenderType.FoundMeshRenderer:
+                        chkMeshRender.material.color = oriColor; break;
+                    case EnumRenderType.FoundRawImg:
+                        chkRawImg.color = oriColor; break;
+                    case EnumRenderType.FoundSprRenderer:
+                        chkSprRender.color = oriColor; break;
+                }
+            }
+        }
+    }
+
+    private void LateUpdate()
+    {
+        switch ((ActionTypeID)ActionID)
+        {
+            //For Game Scene (Store Left)
+            case ActionTypeID.GameScene_StoreArmy1:
+            case ActionTypeID.GameScene_StoreArmy2:
+            case ActionTypeID.GameScene_StoreArmy3:
+            case ActionTypeID.GameScene_StoreArmy4:
+                DarkenStoreSpr();break;
+            //For Game Scene (Store Top)
+            case ActionTypeID.GameScene_StoreCastleHP:
+            case ActionTypeID.GameScene_StoreBonusBoss1:
+            case ActionTypeID.GameScene_StoreBonusBoss2:
+            case ActionTypeID.GameScene_StoreBonusBoss3:
+                DarkenStoreSpr(); break;
+
+            //For Game Scene (Store Right)
+            case ActionTypeID.GameScene_StoreMagicMeteor:
+            case ActionTypeID.GameScene_StoreMagicBlizzard:
+            case ActionTypeID.GameScene_StoreMagicMinions:
+            case ActionTypeID.GameScene_StoreMagicPetrification:
+                DarkenStoreSpr(); break;
+        }
     }
 
     public Color GetColor() {
@@ -200,7 +263,8 @@ public class RaycastFunction : MonoBehaviour
 
     private IEnumerator ColorRoutine()
     {
-        Color color=new Color();
+        ColorRoutineRunning = true;
+           Color color=new Color();
         switch (rendertype) {
             case EnumRenderType.NotChecked:
                 color=GetColor();break;
@@ -241,5 +305,6 @@ public class RaycastFunction : MonoBehaviour
             case EnumRenderType.FoundSprRenderer:
                 chkSprRender.color = oriColor; break;
         }
+        ColorRoutineRunning = false;
     }
 }

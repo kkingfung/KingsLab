@@ -18,10 +18,10 @@ static public class Upgrades
        BonusBoss2,//Purple Metalon
        BonusBoss3,//Red Metalon
 
-       MagicMeteor = 40,//Fire
-       MagicBlizzard,//Ice
-       MagicMinions,//Metal
-       MagicPetrification,//Mind
+        MagicMeteor = 40,//Fire
+        MagicBlizzard,//Ice
+        MagicPetrification,//Mind
+        MagicMinions,//Metal
     }
 
     static public Dictionary<StoreItems, int> StoreLevel;

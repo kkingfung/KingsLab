@@ -15,6 +15,21 @@ public class Pathfinding : ComponentSystem {
     private static int gridWidth;
     private static int gridHeight;
 
+    private static Dictionary<int2, PathNode[]> PathNodeArrayList;
+    private static NativeArray<PathNode> pathNodeArray;
+
+    //Adjuest in source code ONLY
+    private bool goalFixed=true;
+    protected override void OnCreate()
+    {
+        PathNodeArrayList = new Dictionary<int2, PathNode[]>();
+    }
+
+    protected override void OnDestroy()
+    {
+        if (pathNodeArray.IsCreated)
+            pathNodeArray.Dispose();
+    }
     protected override void OnUpdate() {
         if (PathfindingGridSetup.Instance == null) return;
 
@@ -24,27 +39,70 @@ public class Pathfinding : ComponentSystem {
 
         List<FindPathJob> findPathJobList = new List<FindPathJob>();
         NativeList<JobHandle> jobHandleList = new NativeList<JobHandle>(Allocator.Temp);
-        
-        NativeArray<PathNode> pathNodeArray = GetPathNodeArray();
 
-        Entities.WithAll<EnemyTag>().ForEach((Entity entity, ref PathfindingParams pathfindingParams) => {
+        Entities.WithAll<EnemyTag>().ForEach((Entity entity, ref PathfindingParams pathfindingParams) =>
+        {
+            FindPathJob findPathJob;
+            if (goalFixed == false)
+            {
+                pathNodeArray = GetPathNodeArray();
+                NativeArray<PathNode> tmpPathNodeArray = new NativeArray<PathNode>(pathNodeArray, Allocator.TempJob);
 
-            NativeArray<PathNode> tmpPathNodeArray = new NativeArray<PathNode>(pathNodeArray, Allocator.TempJob);
+                findPathJob = new FindPathJob
+                {
+                    gridSize = gridSize,
+                    pathNodeArray = tmpPathNodeArray,
+                    startPosition = pathfindingParams.startPosition,
+                    endPosition = pathfindingParams.endPosition,
+                    entity = entity,
+                };
+                findPathJobList.Add(findPathJob);
+                jobHandleList.Add(findPathJob.Schedule());
+                JobHandle.CompleteAll(jobHandleList);
 
-            FindPathJob findPathJob = new FindPathJob {
-                gridSize = gridSize,
-                pathNodeArray = tmpPathNodeArray,
-                startPosition = pathfindingParams.startPosition,
-                endPosition = pathfindingParams.endPosition,
-                entity = entity,
-            };
-            findPathJobList.Add(findPathJob);
-            jobHandleList.Add(findPathJob.Schedule());
+                PathNode[] array = findPathJob.pathNodeArray.ToArray();
+                PathNodeArrayList.Add(pathfindingParams.startPosition, array);
+            }
+            else 
+            {
+                if (PathNodeArrayList.ContainsKey(pathfindingParams.startPosition))
+                {
+                    NativeArray<PathNode> tmpPathNodeArray = new NativeArray<PathNode>(PathNodeArrayList[pathfindingParams.startPosition], Allocator.TempJob);
 
+                    findPathJob = new FindPathJob
+                    {
+                        gridSize = gridSize,
+                        pathNodeArray = tmpPathNodeArray,
+                        startPosition = pathfindingParams.startPosition,
+                        endPosition = pathfindingParams.endPosition,
+                        entity = entity,
+                    };
+                    findPathJobList.Add(findPathJob);
+                }
+                else 
+                {
+                    pathNodeArray = GetPathNodeArray();
+                    NativeArray<PathNode> tmpPathNodeArray = new NativeArray<PathNode>(pathNodeArray, Allocator.TempJob);
+
+                    findPathJob = new FindPathJob
+                    {
+                        gridSize = gridSize,
+                        pathNodeArray = tmpPathNodeArray,
+                        startPosition = pathfindingParams.startPosition,
+                        endPosition = pathfindingParams.endPosition,
+                        entity = entity,
+                    };
+                    findPathJobList.Add(findPathJob);
+                    jobHandleList.Add(findPathJob.Schedule());
+                    JobHandle.CompleteAll(jobHandleList);
+
+                    PathNode[] array = findPathJob.pathNodeArray.ToArray();
+                    PathNodeArrayList.Add(pathfindingParams.startPosition, array);
+                }
+            }
             PostUpdateCommands.RemoveComponent<PathfindingParams>(entity);
-        });
 
-        JobHandle.CompleteAll(jobHandleList);
+        });
 
         foreach (FindPathJob findPathJob in findPathJobList) {
             new SetBufferPathJob {
@@ -57,7 +115,7 @@ public class Pathfinding : ComponentSystem {
             }.Run();
         }
 
-        pathNodeArray.Dispose();
+        //pathNodeArray.Dispose();
     }
     
     private NativeArray<PathNode> GetPathNodeArray() {

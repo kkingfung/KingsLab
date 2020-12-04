@@ -60,7 +60,7 @@ VisualEffect:
         m_Overridden: 1
       - m_Value: 5
         m_Name: Portal radius
-        m_Overridden: 1
+        m_Overridden: 0
       - m_Value: 0
         m_Name: Tangent speed
         m_Overridden: 0

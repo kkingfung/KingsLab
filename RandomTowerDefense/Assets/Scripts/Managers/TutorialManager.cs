@@ -130,7 +130,7 @@ public class TutorialManager : MonoBehaviour
         switch (StageProgress)
         {
             case 0:
-                ChangeText("新人，Kは第九師団団長だぞ");
+                ChangeText("新人，Kは第九師団団長なのだ");
                 StageProgress++;
                 reviewStage = 0;
                 break;
@@ -138,7 +138,7 @@ public class TutorialManager : MonoBehaviour
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount>0 && Input.touches[0].phase==TouchPhase.Ended))
                 {
-                    ChangeText("今日は初任務だけど、\n心配要らないだぞ");
+                    ChangeText("今日は初任務だけど、\n心配要らないのだ");
                     StageProgress++;
                 }
                 break;
@@ -146,7 +146,7 @@ public class TutorialManager : MonoBehaviour
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
-                    ChangeText("Kは傍にいるだぞ");
+                    ChangeText("Kは傍にいるのだ");
                     StageProgress++;
                 }
                 break;
@@ -154,7 +154,7 @@ public class TutorialManager : MonoBehaviour
                 if (Input.GetMouseButtonUp(0) ||
                  (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
-                    ChangeText("自分を信じなくていい、\nKを信じるだぞ");
+                    ChangeText("自分を信じなくていい、\nKを信じるのだ");
                     StageProgress++;
                 }
                 break;
@@ -162,7 +162,7 @@ public class TutorialManager : MonoBehaviour
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
-                    ChangeText("では早速準備するだぞ");
+                    ChangeText("では早速準備するのだ");
                     StageProgress++;
                 }
                 break;
@@ -170,7 +170,7 @@ public class TutorialManager : MonoBehaviour
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
-                    ChangeText("真中の印で柱に狙って、\n2回押すだぞ");
+                    ChangeText("真中の印で柱に狙って、\n2回押すのだ");
                     StageProgress++;
                 }
                 break;
@@ -191,7 +191,7 @@ public class TutorialManager : MonoBehaviour
                 }
                 break;
             case 8:
-                ChangeText("それは新人の部隊だぞ");
+                ChangeText("それは新人の部隊のだ");
                 StageProgress++;
                 reviewStage = 7;
                 break;
@@ -199,7 +199,7 @@ public class TutorialManager : MonoBehaviour
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
-                    ChangeText("同じ種類を3つ集まるだぞ");
+                    ChangeText("同じ種類を3つ集まるのだ");
                     StageProgress++;
                 }
                 break;
@@ -215,7 +215,7 @@ public class TutorialManager : MonoBehaviour
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
-                    ChangeText("更に強くなれるだぞ");
+                    ChangeText("更に強くなれるのだ");
                     StageProgress++;
                 }
                 break;
@@ -223,7 +223,7 @@ public class TutorialManager : MonoBehaviour
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
-                    ChangeText("静かに、敵が来た");
+                    ChangeText("静かに、敵が来たのだ");
                     StageProgress++;
                 }
                 break;
@@ -272,7 +272,7 @@ public class TutorialManager : MonoBehaviour
         switch (StageProgress)
         {
             case 0:
-                ChangeText("悪くない\n褒めてやるだぞ");
+                ChangeText("悪くない\n褒めてやるのだ");
                 StageProgress++;
                 reviewStage = 0;
                 break;
@@ -280,47 +280,44 @@ public class TutorialManager : MonoBehaviour
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
-                    ChangeText("画面矢印を押すか、\n指示のよう振るだぞ");
+                    ChangeText("画面矢印を押すか、\n上をみるのだ");
                     StageProgress++;
                 }
                 break;
             case 2:
+                reviewStage = 0;
+                ChangeText("上は基地通信だぞ、\n追加ミッションを要求");
+                StageProgress++;
+                break;
+            case 3:
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
-                    ChangeText("");
-                    StageProgress++;
-                }
-                break;
-            case 3:
-                WaitingResponds = false;
-                if (SceneManager.currScreenShown== (int)InGameOperation.ScreenShownID.SSIDTop)
-                {
-                    ChangeText("");
+                    ChangeText("お金で、兵士の訓練、\n道具の購入もできるのだ");
                     StageProgress++;
                 }
                 break;
             case 4:
-                reviewStage = 0;
-                ChangeText("これは基地通信だぞ、\n追加ミッションを要求");
-                StageProgress++;
+                if (Input.GetMouseButtonUp(0) ||
+                    (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
+                {
+                    ChangeText("けど、今回は私の道具を\n貸してやるのだ");
+                    SkillStack.AddStock(Upgrades.StoreItems.MagicMeteor);
+                    StageProgress++;
+                }
                 break;
             case 5:
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
-                    ChangeText("お金で、兵士の訓練、\n道具の購入もできるだぞ");
+                    ChangeText("");
                     StageProgress++;
                 }
                 break;
             case 6:
-                if (Input.GetMouseButtonUp(0) ||
-                    (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
-                {
-                    ChangeText("けど、今回は私の道具を\n貸してやるだぞ");
-                    SkillStack.AddStock(Upgrades.StoreItems.MagicMeteor);
-                    StageProgress++;
-                }
+                reviewStage = 6;
+                ChangeText("道具の使用は長押しながら、\nアイテムを選ぶのだ");
+                StageProgress++;
                 break;
             case 7:
                 if (Input.GetMouseButtonUp(0) ||
@@ -331,40 +328,6 @@ public class TutorialManager : MonoBehaviour
                 }
                 break;
             case 8:
-                reviewStage = 8;
-                ChangeText("早く戦場に戻るだぞ");
-                StageProgress++;
-                break;
-            case 9:
-                if (Input.GetMouseButtonUp(0) ||
-                    (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
-                {
-                    ChangeText("");
-                    StageProgress++;
-                }
-                break;
-            case 10:
-                WaitingResponds = false;
-                if (SceneManager.currScreenShown == (int)InGameOperation.ScreenShownID.SSIDArena)
-                {
-                    ChangeText("");
-                    StageProgress++;
-                }
-                break;
-            case 11:
-                reviewStage = 11;
-                ChangeText("道具の使用は長押しながら、\nアイテムを選ぶだぞ");
-                StageProgress++;
-                break;
-            case 12:
-                if (Input.GetMouseButtonUp(0) ||
-                    (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
-                {
-                    ChangeText("");
-                    StageProgress++;
-                }
-                break;
-            case 13:
                 WaitingResponds = false;
                 if (skillSpawner.AllAliveSkillsList().Count>0)
                 {
@@ -395,7 +358,7 @@ public class TutorialManager : MonoBehaviour
                 WaitingResponds = false;
                 if (enemySpawner.AllAliveMonstersList().Count <= 0)
                 {
-                    ChangeText("Kのおかけで、\nどうやら大丈夫だ");
+                    ChangeText("Kのおかけで、\nどうやら大丈夫のだ");
                     StageProgress++;
                 }
                 break;
@@ -403,7 +366,7 @@ public class TutorialManager : MonoBehaviour
                 if (Input.GetMouseButtonUp(0) ||
                      (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
-                    ChangeText("Kは忙しいから、\n雑魚は新人に任すだぞ");
+                    ChangeText("Kは忙しいから、\n雑魚は新人に任すのだ");
                     StageProgress++;
                 }
                 break;
@@ -443,15 +406,15 @@ public class TutorialManager : MonoBehaviour
 
     public void DestroyAllRelated() {
         foreach (Text i in InstructionText_Landscape)
-            Destroy(i.gameObject);
+            if (i) Destroy(i.gameObject);
         foreach (GameObject i in InstructionSprite_Landscape)
-            Destroy(i);
+            if (i) Destroy(i);
         foreach (Text i in InstructionText_Protrait)
-            Destroy(i.gameObject);
+            if (i) Destroy(i.gameObject);
         foreach (GameObject i in InstructionSprite_Protrait)
-            Destroy(i);
+            if (i) Destroy(i);
         foreach (Button i in HistoryIcons)
-            Destroy(i.gameObject);
+            if (i) Destroy(i.gameObject);
         Destroy(this);
     }
 

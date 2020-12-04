@@ -1,10 +1,10 @@
 waveID,enmNum,enmPort,enmType
-1:5:1:Slime
-2:5:1:Mushroom
+1:10:1:Slime
+2:15:1:Mushroom
 3:10:2:TurtleShell
-4:10:2:Footman
+4:15:2:Footman
 5:10:0:Mushroom
-6:10:0:Grunt
+6:15:0:Grunt
 7:20:1:Skeleton
 8:20:2:Slime
 9:30:0:Grunt

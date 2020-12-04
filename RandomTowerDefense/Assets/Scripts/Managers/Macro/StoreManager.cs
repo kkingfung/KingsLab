@@ -65,8 +65,8 @@ public class StoreManager : MonoBehaviour
 
         ItemPrice.Add(Upgrades.StoreItems.MagicMeteor, PriceForMagicMeteor);
         ItemPrice.Add(Upgrades.StoreItems.MagicBlizzard, PriceForMagicBlizzard);
-        ItemPrice.Add(Upgrades.StoreItems.MagicMinions, PriceForMagicMinions);
         ItemPrice.Add(Upgrades.StoreItems.MagicPetrification, PriceForMagicPetrification);
+        ItemPrice.Add(Upgrades.StoreItems.MagicMinions, PriceForMagicMinions);
     }
 
     private void Update()

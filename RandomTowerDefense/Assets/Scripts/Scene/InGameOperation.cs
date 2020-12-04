@@ -205,8 +205,6 @@ public class InGameOperation : ISceneChange
     private void Start()
     {
         base.SceneIn();
-
-        FloorMat.SetFloat("ShapesSides", BasicFloorMatSize + IslandNow);
         MainCam.transform.position = MainCamStayPt[0];
         MainCam.transform.rotation = Quaternion.Euler(MainCamRotationAngle[0]);
 
@@ -255,6 +253,7 @@ public class InGameOperation : ISceneChange
                 i.material.SetFloat("_Progress", 0);
         }
 
+        FloorMat.SetFloat("ShapesSides", BasicFloorMatSize + IslandNow);
         foreach (Text i in UIIslandName)
         {
             switch (IslandNow)

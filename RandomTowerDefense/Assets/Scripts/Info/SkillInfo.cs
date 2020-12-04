@@ -52,22 +52,22 @@ public static class SkillInfo
             0));//bufftime
 
         skillInfo.Add("SkillBlizzard", new SkillAttr(
-            5, 0.1f,//radius,damage
+            5, 0f,//radius,damage
             5, 0f, //respawn cycle,wait to action
             15, 0.01f,//lifetime,slowrate(include petrify)
             3.0f));//bufftime
-
-        skillInfo.Add("SkillMinions", new SkillAttr(
-            1, 3f,//radius,damage
-            0.1f, 1f, //respawn cycle,wait to action
-            10, 0, //lifetime,slowrate(include petrify)
-            0));//bufftime
 
         skillInfo.Add("SkillPetrification", new SkillAttr(
             1000, 0,//radius,damage
             0.2f, 0f,//respawn cycle,wait to action
             5, 1.0f,//lifetime,slowrate(include petrify)
             0.0015f));//bufftime
+
+        skillInfo.Add("SkillMinions", new SkillAttr(
+            1, 3f,//radius,damage
+            0.1f, 1f, //respawn cycle,wait to action
+            10, 0, //lifetime,slowrate(include petrify)
+            0));//bufftime
     }
 
     public static void InitByFile(string filepath)
@@ -96,7 +96,7 @@ public static class SkillInfo
     {
         skillInfo = new Dictionary<string, SkillAttr>();
 
-        string[] allName = { "SkillMeteor", "SkillMinions", "SkillBlizzard" , "SkillPetrification" };
+        string[] allName = { "SkillMeteor", "SkillBlizzard" , "SkillPetrification", "SkillMinions"};
         foreach (string name in allName)
         {
             skillInfo.Add(name, new SkillAttr(

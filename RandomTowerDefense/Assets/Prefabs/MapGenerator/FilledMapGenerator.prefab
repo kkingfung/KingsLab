@@ -52,8 +52,8 @@ MonoBehaviour:
       y: 8
     obstaclePercent: 1
     seed: -1808409572
-    minObstacleHeight: 0.2
-    maxObstacleHeight: 0.3
+    minObstacleHeight: 0.3
+    maxObstacleHeight: 0.35
     foregroundColour: {r: 0.4117647, g: 0, b: 0, a: 0}
     backgroundColour: {r: 0.9098039, g: 0.05882353, b: 0.25490198, a: 0}
   - mapSize:
@@ -61,8 +61,8 @@ MonoBehaviour:
       y: 8
     obstaclePercent: 1
     seed: -1845046005
-    minObstacleHeight: 0.15
-    maxObstacleHeight: 0.25
+    minObstacleHeight: 0.25
+    maxObstacleHeight: 0.3
     foregroundColour: {r: 0.4117647, g: 0, b: 0, a: 0}
     backgroundColour: {r: 0.9098039, g: 0.05882353, b: 0.25490198, a: 0}
   - mapSize:
@@ -70,8 +70,8 @@ MonoBehaviour:
       y: 8
     obstaclePercent: 0.7
     seed: 140959198
-    minObstacleHeight: 0.1
-    maxObstacleHeight: 0.2
+    minObstacleHeight: 0.2
+    maxObstacleHeight: 0.25
     foregroundColour: {r: 0.4117647, g: 0, b: 0, a: 0}
     backgroundColour: {r: 0.9098039, g: 0.05882353, b: 0.25490198, a: 0}
   - mapSize:
@@ -79,8 +79,8 @@ MonoBehaviour:
       y: 8
     obstaclePercent: 0.5
     seed: 984440186
-    minObstacleHeight: 0.05
-    maxObstacleHeight: 0.15
+    minObstacleHeight: 0.15
+    maxObstacleHeight: 0.2
     foregroundColour: {r: 0.4117647, g: 0, b: 0, a: 0}
     backgroundColour: {r: 0.9098039, g: 0.05882353, b: 0.25490198, a: 0}
   mapIndex: 3

@@ -3724,8 +3724,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClickPrefab: {fileID: 4650432991836946194, guid: 40b1dc16cbf53a64b928dd91b5454d85, type: 3}
-  Buttons: []
-  ButtonsCenter: []
+  ButtonsOtr: []
+  ButtonsInGame: []
   LBMTest: {fileID: 0}
   ApplyClickEfc: 0
   isDragging: 0

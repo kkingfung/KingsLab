@@ -56,6 +56,7 @@ public class AgentScript : Agent
         waveManager.SetCurrWAveNum(0);
         counter = 0;
         loseCounter = 0;
+        if(trainingSceneManager)
         trainingSceneManager.pillar = null;
 
         foreach (GameObject enemy in enemySpawner.GameObjects)

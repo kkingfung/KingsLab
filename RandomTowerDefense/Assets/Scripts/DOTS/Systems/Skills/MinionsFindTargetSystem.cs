@@ -11,15 +11,16 @@ using Unity.Burst;
 [UpdateAfter(typeof(QuadrantSystem))]
 public class MinionsFindTargetSystem : JobComponentSystem
 {
-    [RequireComponentTag(typeof(MinionsTag), typeof(Translation), typeof(Radius), typeof(QuadrantEntity))]
-    [ExcludeComponent(typeof(HasTarget))]
-    [BurstCompile]
+    [RequireComponentTag(typeof(MinionsTag), typeof(Translation), typeof(Lifetime), typeof(Radius), typeof(QuadrantEntity))]
+    [ExcludeComponent(typeof(Target))]
+    //[BurstCompile]
     private struct FindTargetQuadrantSystemJob : IJobChunk
     {
         [ReadOnly] public EntityTypeHandle entityType;
         [ReadOnly] public ComponentTypeHandle<Translation> translationType;
         [ReadOnly] public ComponentTypeHandle<Radius> radiusType;
         [ReadOnly] public ComponentTypeHandle<QuadrantEntity> quadrantEntityType;
+        [ReadOnly] public ComponentTypeHandle<Lifetime> activeType;
 
         [ReadOnly] public NativeMultiHashMap<int, QuadrantData> quadrantMultiHashMap;
 
@@ -31,11 +32,14 @@ public class MinionsFindTargetSystem : JobComponentSystem
             var chunkRadius = chunk.GetNativeArray(radiusType);
             var chunkQuadrantEntity = chunk.GetNativeArray(quadrantEntityType);
             var chunkEntity = chunk.GetNativeArray(entityType);
+            var chunkActive = chunk.GetNativeArray(activeType);
 
             for (int i = 0; i < chunk.Count; ++i)
             {
-                float3 unitPosition = chunkTranslation[i].Value;
+                float activeTime = chunkActive[i].Value;
+                if (activeTime <= 0) continue;
 
+                float3 unitPosition = chunkTranslation[i].Value;
                 Entity closestTargetEntity = Entity.Null;
                 float closestTargetDistance = float.MaxValue;
                 float3 closestTargetPosition = chunkTranslation[i].Value;
@@ -120,12 +124,14 @@ public class MinionsFindTargetSystem : JobComponentSystem
         var translationType = GetComponentTypeHandle<Translation>(true);
         var radiusType = GetComponentTypeHandle<Radius>(true);
         var quadrantEntityType = GetComponentTypeHandle<QuadrantEntity>(true);
+        var activeType = GetComponentTypeHandle<Lifetime>(true);
 
         var findTargetQuadrantSystemJob = new FindTargetQuadrantSystemJob
         {
             entityType = entityType,
             translationType = translationType,
             radiusType = radiusType,
+            activeType = activeType,
             quadrantEntityType = quadrantEntityType,
             quadrantMultiHashMap = QuadrantSystem.quadrantMultiHashMap,
             entityCommandBuffer = endSimulationEntityCommandBufferSystem.CreateCommandBuffer().AsParallelWriter(),

@@ -23,8 +23,7 @@ public class EnemyToBlizzard : JobComponentSystem
 
     protected override JobHandle OnUpdate(JobHandle inputDependencies)
     {
-        enemyGroup = GetEntityQuery(typeof(Health), typeof(Radius), typeof(Damage), typeof(SlowRate),
-            typeof(PetrifyAmt), typeof(BuffTime),
+        enemyGroup = GetEntityQuery(typeof(Health), typeof(Radius), typeof(Damage), typeof(SlowRate), typeof(BuffTime),
             ComponentType.ReadOnly<Translation>(), ComponentType.ReadOnly<EnemyTag>());
 
         BlizzardGroup = GetEntityQuery(typeof(Radius), typeof(Damage), typeof(WaitingTime), typeof(SlowRate), typeof(BuffTime), typeof(SkillTag),
@@ -32,14 +31,13 @@ public class EnemyToBlizzard : JobComponentSystem
 
         var transformType = GetComponentTypeHandle<Translation>(true);
 
-        var healthType = GetComponentTypeHandle<Health>(false);
+        var healthType = GetComponentTypeHandle<Health>(true);
         var radiusType = GetComponentTypeHandle<Radius>(true);
 
         var slowType = GetComponentTypeHandle<SlowRate>(false);
         var buffType = GetComponentTypeHandle<BuffTime>(false);
 
         JobHandle jobHandle = inputDependencies;
-
         //enemy by blizzard
         if (BlizzardGroup.CalculateEntityCount() > 0 && enemyGroup.CalculateEntityCount() > 0)
         {
@@ -84,7 +82,7 @@ public class EnemyToBlizzard : JobComponentSystem
     {
 
         [ReadOnly] public ComponentTypeHandle<Radius> radiusType;
-        public ComponentTypeHandle<Health> healthType;
+        [ReadOnly] public ComponentTypeHandle<Health> healthType;
         [ReadOnly] public ComponentTypeHandle<Translation> translationType;
         public ComponentTypeHandle<SlowRate> slowType;
         public ComponentTypeHandle<BuffTime> buffType;
@@ -131,10 +129,11 @@ public class EnemyToBlizzard : JobComponentSystem
                     if (CheckCollision(pos.Value, pos2.Value, targetRadius[j].Value + radius.Value))
                     {
                         //Debug.DrawLine(pos.Value, pos.Value + new float3(0, 1, 0), Color.red);
-                        damage += targetDamage[j].Value;
+                        damage += 1;
                         slow.Value = Mathf.Clamp(slow.Value + targetSlow[j].Value, 0, 0.95f);
                         if (buff.Value < targetBuff[j].Value) buff.Value = targetBuff[j].Value;
                         //Debug.Log("Slowed");
+                        break;
                     }
                     //else 
                     //Debug.DrawLine(pos.Value, pos.Value + new float3(0, 1, 0), Color.green);
@@ -142,8 +141,8 @@ public class EnemyToBlizzard : JobComponentSystem
 
                 if (damage > 0)
                 {
-                    health.Value -= damage;
-                    chunkHealths[i] = health;
+                    //health.Value -= damage;
+                    //chunkHealths[i] = health;
                     chunkSlow[i] = slow;
                     chunkBuff[i] = buff;
                 }

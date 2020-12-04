@@ -81,11 +81,15 @@ public class ScoreCalculation : MonoBehaviour
         int currIsland = sceneManager.GetCurrIsland();
 
         //Clear
-        if (result > 0) {
+        if (result > 0)
+        {
             score += ScoreForBase + ScoreForStage * currIsland;
             score += ((currIsland != StageInfo.IslandNum - 1) ? 0 :
-                (int)((StageInfo.MaxMapDepth* StageInfo.MaxMapDepth - StageInfo.stageSizeEx) * ScoreForStageEx * (1/ Mathf.Max(0.1f,StageInfo.obstacleEx))));
-            scoreStr += score+"\n";
+                (int)((StageInfo.MaxMapDepth * StageInfo.MaxMapDepth - StageInfo.stageSizeEx) * ScoreForStageEx * (1 / Mathf.Max(0.1f, StageInfo.obstacleEx))));
+            scoreStr += score + "\n";
+        }
+        else {
+            scoreStr += 0 + "\n";
         }
 
         //CastleHP
@@ -93,16 +97,15 @@ public class ScoreCalculation : MonoBehaviour
          score += scoreChg;
         scoreStr += "+" + scoreChg + "\n";
 
-
-        //Upgrades
-        scoreChg = ScoreForUpgrades * Upgrades.allLevel();
-        score += scoreChg;
-        scoreStr += "+" + scoreChg + "\n";
-
         //Resource
         scoreChg = resourceManager.GetCurrMaterial();
         scoreChg = (int)(scoreChg*((currIsland != StageInfo.IslandNum - 1) ? 1f :
                 (1f/Mathf.Max(StageInfo.resourceEx,0.5f))));
+        score += scoreChg;
+        scoreStr += "+" + scoreChg + "\n";
+
+        //Upgrades
+        scoreChg = ScoreForUpgrades * Upgrades.allLevel();
         score += scoreChg;
         scoreStr += "+" + scoreChg + "\n";
 

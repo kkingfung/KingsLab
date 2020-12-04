@@ -39,7 +39,6 @@ public class EffectSpawner : MonoBehaviour
 
     public GameObject Spawn(int prefabID, float3 Position)
     {
-        bool reuse = false;
         GameObject newObj = null;
         switch (prefabID)
         {
@@ -49,7 +48,6 @@ public class EffectSpawner : MonoBehaviour
                 //{
                 //    if (j.activeSelf) continue;
                 //    newObj = j;
-                //    reuse = true;
                 //    break;
                 //}
                 //break;
@@ -58,7 +56,6 @@ public class EffectSpawner : MonoBehaviour
                 {
                     if (j.activeSelf) continue;
                     newObj = j;
-                    reuse = true;
                     break;
                 }
                 break;
@@ -67,7 +64,6 @@ public class EffectSpawner : MonoBehaviour
                 {
                     if (j.activeSelf) continue;
                     newObj = j;
-                    reuse = true;
                     break;
                 }
                 break;
@@ -76,7 +72,6 @@ public class EffectSpawner : MonoBehaviour
                 {
                     if (j.activeSelf) continue;
                     newObj = j;
-                    reuse = true;
                     break;
                 }
                 break;
@@ -85,13 +80,12 @@ public class EffectSpawner : MonoBehaviour
                 {
                     if (j.activeSelf) continue;
                     newObj = j;
-                    reuse = true;
                     break;
                 }
                 break;
         }
 
-        if (reuse == false)
+        if (newObj == null)
         {
             switch (prefabID)
             {

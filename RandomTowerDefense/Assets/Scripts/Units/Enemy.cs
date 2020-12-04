@@ -33,12 +33,16 @@ public class Enemy : MonoBehaviour
 
     //private SkinnedMeshRenderer[] meshes;
     private MeshRenderer[] meshes;
+    private List<Material> matsPetrify;
+    private List<Material> matsSlow;
+
     public Animator animator;
     public Slider HpBar;
     private RectTransform HpBarRot;
 
     private bool isDead;
     private bool isReady;
+    private bool useScaleChg;
 
     // Start is called before the first frame update
     private void Awake()
@@ -60,6 +64,27 @@ public class Enemy : MonoBehaviour
             HpBarRot = HpBar.gameObject.GetComponent<RectTransform>();
 
         meshes = GetComponentsInChildren<MeshRenderer>();
+
+        matsPetrify = new List<Material>();
+        matsSlow = new List<Material>();
+
+        for (int i = 0; i < meshes.Length; ++i)
+        {
+            List<Material> mats = new List<Material>();
+            meshes[i].GetMaterials(mats);
+            foreach (Material j in mats)
+            {
+                if (j.name == "FreezingMat (Instance)")
+                {
+                    matsSlow.Add(j);
+                }
+                else if (j.name == "Desertification (Instance)")
+                {
+                    matsPetrify.Add(j);
+                }
+            }
+        }
+        useScaleChg = false;
     }
 
     private void Start() 
@@ -99,7 +124,7 @@ public class Enemy : MonoBehaviour
             Slowed();
         }
 
-        if (DamagedCount > 0 && isReady)
+        if (DamagedCount > 0 && isReady && useScaleChg)
         {
             DamagedCount--;
             if ((DamagedCount / ResizeFactor) % 3 == 0 && DamagedCount!=0)
@@ -165,38 +190,20 @@ public class Enemy : MonoBehaviour
         if (PetrifyRecord == petrifyAmt) return;
         else PetrifyRecord = petrifyAmt;
 
-            for (int i = 0; i < meshes.Length; ++i)
-            {
-                List<Material> mats = new List<Material>();
-                meshes[i].GetMaterials(mats);
-                foreach (Material j in mats)
-                {
-                    if (j.name == "Desertification (Instance)")
-                    {
-                        j.SetFloat("_Progress", petrifyAmt);
-                    }
-                }
-            }
+        foreach (Material j in matsPetrify)
+        {
+            j.SetFloat("_Progress", petrifyAmt);
+        }
     }
     public void Slowed() {
         float slow = enemySpawner.slowArray[entityID];
-        if (SlowRecord == slow) return;
+        if (Mathf.Abs(SlowRecord- slow)<0.1f) return;
         else SlowRecord = slow;
 
-        for (int i = 0; i < meshes.Length; ++i)
+        foreach (Material j in matsSlow)
         {
-            List<Material> mats = new List<Material>();
-            meshes[i].GetMaterials(mats);
-            foreach (Material j in mats)
-            {
-                if (j.name == "FreezingMat (Instance)")
-                {
-                    //Debug.Log(slow);
-                    j.SetFloat("_Progress", slow);
-                }
-            }
+            j.SetFloat("_Progress", slow);
         }
-
     }
 
     private IEnumerator DieAnimation()

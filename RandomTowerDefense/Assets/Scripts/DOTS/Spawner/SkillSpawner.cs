@@ -5,12 +5,17 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Jobs;
-
+using UnityEngine.VFX;
 public class SkillSpawner : MonoBehaviour
 {
-    private readonly int count = 30;
+    private readonly int count = 500;
     public static SkillSpawner Instance { get; private set; }
     public List<GameObject> PrefabObject;
+
+    public List<GameObject> MeteorList;
+    public List<GameObject> BlizzardList;
+    public List<GameObject> PetrificationList;
+    public List<GameObject> MinionsList;
 
     private EntityManager EntityManager;
 
@@ -59,6 +64,10 @@ public class SkillSpawner : MonoBehaviour
         //Prepare input
         GameObjects = new GameObject[count];
         //transforms = new Transform[count];
+        MeteorList = new List<GameObject>();
+        BlizzardList = new List<GameObject>();
+        PetrificationList = new List<GameObject>();
+        MinionsList = new List<GameObject>();
 
         Entities = new NativeArray<Entity>(count, Allocator.Persistent);
         var archetype = EntityManager.CreateArchetype(
@@ -111,7 +120,72 @@ public class SkillSpawner : MonoBehaviour
         for (int i = 0; i < count && spawnCnt < num; ++i)
         {
             if (GameObjects[i] != null && GameObjects[i].activeSelf) continue;
-            GameObjects[i] = Instantiate(PrefabObject[prefabID], transform);
+            bool reuse = false;
+            switch (prefabID)
+            {
+                case 0:
+                    foreach (GameObject j in MeteorList)
+                    {
+                        if (j.activeSelf) continue;
+                        GameObjects[i] = j;
+                        reuse = true;
+                        break;
+                    }
+                    break;
+                case 1:
+                    foreach (GameObject j in BlizzardList)
+                    {
+                        if (j.activeSelf) continue;
+                        GameObjects[i] = j;
+                        reuse = true;
+                        break;
+                    }
+                    break;
+                case 2:
+                    foreach (GameObject j in PetrificationList)
+                    {
+                        if (j.activeSelf) continue;
+                        GameObjects[i] = j;
+                        reuse = true;
+                        break;
+                    }
+                    break;
+                case 3:
+                    foreach (GameObject j in MinionsList)
+                    {
+                        if (j.activeSelf) continue;
+                        GameObjects[i] = j;
+                        reuse = true;
+                        break;
+                    }
+                    break;
+            }
+            if (reuse == false)
+            {
+                GameObjects[i] = Instantiate(PrefabObject[prefabID], transform);
+                switch (prefabID)
+                {
+                    case 0:
+                        MeteorList.Add(GameObjects[i]);
+                        break;
+                    case 1:
+                        BlizzardList.Add(GameObjects[i]);
+                        break;
+                    case 2:
+                        PetrificationList.Add(GameObjects[i]);
+                        break;
+                    case 3:
+                        MinionsList.Add(GameObjects[i]);
+                        break;
+                }
+            }
+            else
+            {
+                GameObjects[i].SetActive(true);
+                GameObjects[i].GetComponent<VisualEffect>().Play();
+            }
+
+            //GameObjects[i] = Instantiate(PrefabObject[prefabID], transform);
             GameObjects[i].transform.position = Position;
             GameObjects[i].transform.localRotation = Quaternion.Euler(Rotation);
             //transforms[i] = GameObjects[i].transform;
@@ -157,6 +231,9 @@ public class SkillSpawner : MonoBehaviour
                 EntityManager.RemoveComponent(Entities[i], typeof(PetrificationTag));
             if (EntityManager.HasComponent<MinionsTag>(Entities[i]))
                 EntityManager.RemoveComponent(Entities[i], typeof(MinionsTag));
+
+            if (EntityManager.HasComponent<Target>(Entities[i]))
+                EntityManager.RemoveComponent(Entities[i], typeof(Target));
 
             switch (prefabID) {
                 case 0:

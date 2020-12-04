@@ -115,7 +115,7 @@ public class SkillManager : MonoBehaviour
        
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillBlizzard");
         attr.radius = attr.radius * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * 0.3f);
-        attr.damage = attr.damage * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * 0.3f);
+        //attr.damage = attr.damage * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * 0.3f);
         GainExp(Upgrades.StoreItems.MagicBlizzard, ExpPerActivation);
 
         StartCoroutine(BlizzardSkillCoroutine(attr));

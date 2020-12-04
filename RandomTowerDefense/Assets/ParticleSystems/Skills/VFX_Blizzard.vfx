@@ -167,7 +167,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 100
+      m_SerializableObject: 50
     m_Space: 2147483647
   m_Property:
     name: Rate
@@ -570,7 +570,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614583}
   - {fileID: 8926484042661614585}
   dataType: 0
-  capacity: 10000
+  capacity: 200
   stripCapacity: 16
   particlePerStripCount: 16
   m_Space: 0
@@ -4166,7 +4166,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614710}
   - {fileID: 8926484042661614712}
   dataType: 0
-  capacity: 250
+  capacity: 1
   stripCapacity: 16
   particlePerStripCount: 16
   m_Space: 0
@@ -4937,7 +4937,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 5
+      m_SerializableObject: 2
     m_Space: 2147483647
   m_Property:
     name: Rate
@@ -5404,8 +5404,8 @@ MonoBehaviour:
   - {fileID: 8926484042661614913}
   - {fileID: 8926484042661614935}
   dataType: 1
-  capacity: 90000
-  stripCapacity: 1000
+  capacity: 9000
+  stripCapacity: 100
   particlePerStripCount: 90
   m_Space: 0
 --- !u!114 &8926484042661614909
@@ -7117,7 +7117,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614993}
   - {fileID: 8926484042661614994}
   m_OutputSlots: []
-  m_Disabled: 0
+  m_Disabled: 1
   Mode: 0
   NoiseType: 1
 --- !u!114 &8926484042661614976
@@ -8397,7 +8397,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Parent: {fileID: 114350483966674976}
   m_Children: []
-  m_UIPosition: {x: 398, y: 904}
+  m_UIPosition: {x: 368, y: 925}
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots: []
@@ -8453,7 +8453,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Parent: {fileID: 114350483966674976}
   m_Children: []
-  m_UIPosition: {x: 526, y: 887}
+  m_UIPosition: {x: 516, y: 936}
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots:

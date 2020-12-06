@@ -130,15 +130,15 @@ public class TowerManager : MonoBehaviour
         if (rank == 1 && filledMapGenerator.ChkPillarStatusEmpty(pillar) == false) return;
 
         Vector3 location = pillar.transform.position + Vector3.up * filledMapGenerator.UpdatePillarStatus(pillar);
-        BuildTower(pillar, location, rank);
+        filledMapGenerator.UpdatePillarStatus(pillar,BuildTower(pillar, location, rank)?1:0);
     }
-    public void BuildTower(GameObject pillar, Vector3 location, int rank = 1)
+    public bool BuildTower(GameObject pillar, Vector3 location, int rank = 1)
     {
         GameObject tower;
         int[] entityIDList;
         if (resourceManager.ChkAndBuild(rank) == false)
         {
-            return;
+            return false;
         }
 
         {
@@ -193,6 +193,7 @@ public class TowerManager : MonoBehaviour
             }
         }
         effectManager.Spawn(0, location);
+        return true;
     }
 
     public bool MergeTower(GameObject targetedTower)

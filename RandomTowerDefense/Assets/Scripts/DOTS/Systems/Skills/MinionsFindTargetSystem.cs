@@ -33,12 +33,10 @@ public class MinionsFindTargetSystem : JobComponentSystem
             var chunkQuadrantEntity = chunk.GetNativeArray(quadrantEntityType);
             var chunkEntity = chunk.GetNativeArray(entityType);
             var chunkActive = chunk.GetNativeArray(activeType);
-
             for (int i = 0; i < chunk.Count; ++i)
             {
                 float activeTime = chunkActive[i].Value;
                 if (activeTime <= 0) continue;
-
                 float3 unitPosition = chunkTranslation[i].Value;
                 Entity closestTargetEntity = Entity.Null;
                 float closestTargetDistance = float.MaxValue;

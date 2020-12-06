@@ -59,7 +59,7 @@ MonoBehaviour:
   - mapSize:
       x: 8
       y: 8
-    obstaclePercent: 1
+    obstaclePercent: 0.7
     seed: -1845046005
     minObstacleHeight: 0.25
     maxObstacleHeight: 0.3
@@ -68,7 +68,7 @@ MonoBehaviour:
   - mapSize:
       x: 8
       y: 8
-    obstaclePercent: 0.7
+    obstaclePercent: 0.5
     seed: 140959198
     minObstacleHeight: 0.2
     maxObstacleHeight: 0.25

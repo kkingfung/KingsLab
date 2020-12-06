@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class StoreManager : MonoBehaviour
 {
     private readonly int MaxItemPerCategory = 4;
-    private readonly int[] cdCounter = {60,180,300 };
+    private readonly int[] cdCounter = { 60 * 60, 90 * 60, 150 * 60 };
     private readonly Color OriColor = new Color(1, 0.675f, 0, 1 );
     private Dictionary<Upgrades.StoreItems, int[]> ItemPrice;
 
@@ -29,10 +29,10 @@ public class StoreManager : MonoBehaviour
 
     private int[] bonusBossCooldown = { 0, 0, 0};
 
-    private readonly int[] PriceForArmy1 = { 100, 200, 300, 400, 550, 700, 850, 1000, 1200, 1500 };
-    private readonly int[] PriceForArmy2 = { 100, 200, 300, 400, 550, 700, 850, 1000, 1200, 1500 };
-    private readonly int[] PriceForArmy3 = { 100, 200, 300, 400, 550, 700, 850, 1000, 1200, 1500 };
-    private readonly int[] PriceForArmy4 = { 100, 200, 300, 400, 550, 700, 850, 1000, 1200, 1500 };
+    private readonly int[] PriceForArmy1 = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
+    private readonly int[] PriceForArmy2 = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
+    private readonly int[] PriceForArmy3 = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
+    private readonly int[] PriceForArmy4 = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
 
     private readonly int[] PriceForCastleHP = { 50, 50, 50, 50, 50, 50, 50, 50, 50, 50 };
     private readonly int[] PriceForBonusBoss1 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -105,7 +105,7 @@ public class StoreManager : MonoBehaviour
         //Bonus Boss Items
         for (int i = 0; i < MonsterCDTextObj.Count; ++i)
         {
-            int cd = bonusBossCooldown[i % bonusBossCooldown.Length];
+            int cd = bonusBossCooldown[i % bonusBossCooldown.Length] / 60;
             MonsterCDTextObj[i].text = "CD" + cd.ToString();
             MonsterCDTextObj[i].color = (cd > 0 || SkillStack.CheckFullStocks()) ? new Color(1, 0, 0, 1) : OriColor;
         }
@@ -250,7 +250,7 @@ public class StoreManager : MonoBehaviour
         int price = GetPrice(itemID);
         if (price < 0) return -1;
         if (price == 0) return 0;
-        if (resourceManager.GetCurrMaterial() - totalCosttoPurchase > price)
+        if (resourceManager.GetCurrMaterial() - totalCosttoPurchase >= price)
             return price;
         return -1;
     }

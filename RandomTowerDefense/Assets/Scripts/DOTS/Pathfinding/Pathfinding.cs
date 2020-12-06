@@ -15,8 +15,8 @@ public class Pathfinding : ComponentSystem {
     private static int gridWidth;
     private static int gridHeight;
 
-    private static Dictionary<int2, PathNode[]> PathNodeArrayList;
-    private static NativeArray<PathNode> pathNodeArray;
+    private Dictionary<int2, PathNode[]> PathNodeArrayList;
+    private NativeArray<PathNode> pathNodeArray;
 
     //Adjuest in source code ONLY
     private bool goalFixed=true;
@@ -32,7 +32,13 @@ public class Pathfinding : ComponentSystem {
     }
     protected override void OnUpdate() {
         if (PathfindingGridSetup.Instance == null) return;
-
+        if (PathfindingGridSetup.Instance.Reset)
+        {
+            PathNodeArrayList = new Dictionary<int2, PathNode[]>();
+            if (pathNodeArray.IsCreated)
+                pathNodeArray.Dispose();
+            PathfindingGridSetup.Instance.Reset = false;
+        }
         gridWidth = PathfindingGridSetup.Instance.pathfindingGrid.GetWidth();
         gridHeight = PathfindingGridSetup.Instance.pathfindingGrid.GetHeight();
         int2 gridSize = new int2(gridWidth, gridHeight);

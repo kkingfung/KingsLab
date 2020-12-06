@@ -18,6 +18,12 @@ behaviors:
       extrinsic:
         gamma: 0.99
         strength: 1.0
+      gail:
+        strength: 0.5
+	demo_path: Demos/SetSpawnPointDemo.demo
+    behavioral_cloning:
+      strength: 0.5
+      demo_path: Demos/SetSpawnPointDemo.demo
     keep_checkpoints: 5
     max_steps: 10000000
     time_horizon: 32

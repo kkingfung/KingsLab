@@ -367,7 +367,7 @@ public class InputManager : MonoBehaviour
     private void HandleZoom()
     {
         if (cameraManager == null) return;
-
+        isDragging = false;
         Touch touchZero = Input.GetTouch(0);
         Touch touchOne = Input.GetTouch(1);
 

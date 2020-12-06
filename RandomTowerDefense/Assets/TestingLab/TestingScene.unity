@@ -5639,6 +5639,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerAgent
       objectReference: {fileID: 0}
+    - target: {fileID: 8636458107982648905, guid: 668606ef7bd5dfc449a46d2afd2e6f90, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8636458107982648908, guid: 668606ef7bd5dfc449a46d2afd2e6f90, type: 3}
       propertyPath: m_LocalPosition.x
       value: 52.74
@@ -6156,6 +6160,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isActived: 0
+  Reset: 0
 --- !u!4 &779320206
 Transform:
   m_ObjectHideFlags: 0
@@ -11030,11 +11035,15 @@ PrefabInstance:
       objectReference: {fileID: 1711985865}
     - target: {fileID: 5788967121297150318, guid: 668606ef7bd5dfc449a46d2afd2e6f90, type: 3}
       propertyPath: m_BehaviorType
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8636458107982648905, guid: 668606ef7bd5dfc449a46d2afd2e6f90, type: 3}
       propertyPath: m_Name
       value: Agent
+      objectReference: {fileID: 0}
+    - target: {fileID: 8636458107982648905, guid: 668606ef7bd5dfc449a46d2afd2e6f90, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8636458107982648908, guid: 668606ef7bd5dfc449a46d2afd2e6f90, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11087,12 +11096,33 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5788967121297150305, guid: 668606ef7bd5dfc449a46d2afd2e6f90, type: 3}
   m_PrefabInstance: {fileID: 1666813454}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1666813456}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 06da0af7dd866344096b769deaab473c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1666813456 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8636458107982648905, guid: 668606ef7bd5dfc449a46d2afd2e6f90, type: 3}
+  m_PrefabInstance: {fileID: 1666813454}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1666813457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666813456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2902496c0120472b90269f94a0aec7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Record: 1
+  NumStepsToRecord: 5
+  DemonstrationName: SetSpawnPointDemo
+  DemonstrationDirectory: Demos
 --- !u!1 &1688587539
 GameObject:
   m_ObjectHideFlags: 0

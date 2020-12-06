@@ -11,28 +11,32 @@ static public class SkillStack
 
     static public void init()
     {
+        for (int i = 0; i < stackDetail.Length; ++i)
+            stackDetail[i] = 0;
     }
 
-    static public bool AddStock(Upgrades.StoreItems itemID) {
+    static public bool AddStock(Upgrades.StoreItems itemID)
+    {
         if (CheckFullStocks())
             return false;
         int emptySlot = -1;
         for (int i = 0; i < maxStackNum; ++i)
         {
-            if (GetStock(i) == 0) {
+            if (GetStock(i) == 0)
+            {
                 emptySlot = i;
                 break;
             }
         }
 
-        stackDetail[emptySlot] =(int)itemID;
+        stackDetail[emptySlot] = (int)itemID;
         currStackNum++;
         return true;
     }
 
     static public int UseStock(int StockID)
     {
-        if (stackDetail[StockID]==0)
+        if (stackDetail[StockID] == 0)
             return -1;
 
         int selectedItem = stackDetail[StockID];
@@ -48,6 +52,6 @@ static public class SkillStack
 
     static public bool CheckFullStocks()
     {
-        return currStackNum>=maxStackNum;
+        return currStackNum >= maxStackNum;
     }
 }

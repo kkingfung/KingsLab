@@ -33,6 +33,7 @@ public class Enemy : MonoBehaviour
 
     //private SkinnedMeshRenderer[] meshes;
     private MeshRenderer[] meshes;
+    private SkinnedMeshRenderer[] meshesSkinned;
     private List<Material> matsPetrify;
     private List<Material> matsSlow;
 
@@ -64,6 +65,7 @@ public class Enemy : MonoBehaviour
             HpBarRot = HpBar.gameObject.GetComponent<RectTransform>();
 
         meshes = GetComponentsInChildren<MeshRenderer>();
+        meshesSkinned = GetComponentsInChildren<SkinnedMeshRenderer>();
 
         matsPetrify = new List<Material>();
         matsSlow = new List<Material>();
@@ -84,6 +86,24 @@ public class Enemy : MonoBehaviour
                 }
             }
         }
+
+        for (int i = 0; i < meshesSkinned.Length; ++i)
+        {
+            List<Material> mats = new List<Material>();
+            meshesSkinned[i].GetMaterials(mats);
+            foreach (Material j in mats)
+            {
+                if (j.name == "FreezingMat (Instance)")
+                {
+                    matsSlow.Add(j);
+                }
+                else if (j.name == "Desertification (Instance)")
+                {
+                    matsPetrify.Add(j);
+                }
+            }
+        }
+
         useScaleChg = false;
     }
 

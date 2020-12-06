@@ -86,19 +86,22 @@ public class EnemyToPetrification : JobComponentSystem
             var chunkHP = chunk.GetNativeArray(healthType);
             var chunkPetrify = chunk.GetNativeArray(petrifyType);
             var chunkBuff = chunk.GetNativeArray(buffType);
-
             for (int i = 0; i < chunk.Count; ++i)
             {
                 Health health = chunkHP[i];
                 if (health.Value <= 0) continue;
                 PetrifyAmt petrifyAmt = chunkPetrify[i];
                 BuffTime buff = chunkBuff[i];
-                for (int j = 0; j < targetPetrify.Length; j++)
-                {
-                    petrifyAmt.Value = targetPetrify[j].Value;
-                    buff.Value += targetBuff[j].Value;
-                    //Debug.Log("Petrified");
-                }
+                if (buff.Value >= 1) continue;
+
+                petrifyAmt.Value = targetPetrify[0].Value;
+                buff.Value += targetBuff[0].Value;
+
+                //Constraint according to FPS
+                if (buff.Value > 1)
+                    buff.Value = 1;
+                //Debug.Log("Petrified");
+
                 chunkPetrify[i] = petrifyAmt;
                 chunkBuff[i] = buff;
             }

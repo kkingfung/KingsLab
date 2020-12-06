@@ -17,7 +17,8 @@ public class Skill : MonoBehaviour
 
     private PlayerManager playerManager;//For Raycasting target Position
 
-    private Vector3 targetEnm;
+    [HideInInspector]
+    public Vector3 targetEnm;
 
     private AudioManager audioManager;
     private AudioSource audioSource;
@@ -74,6 +75,9 @@ public class Skill : MonoBehaviour
         }
     }
 
+    private void OnEnable() {
+        targetEnm = new Vector3();
+    }
     // Update is called once per frame
     private void Update()
     {
@@ -107,8 +111,7 @@ public class Skill : MonoBehaviour
                     attr.lifeTime -= Time.deltaTime;
                     if (!ActionEnded && attr.lifeTime < 0)
                     {
-                            
-                        Destroy(this.gameObject);
+                        this.gameObject.SetActive(false);
                         ActionEnded = true;
                     }
                 }
@@ -152,7 +155,7 @@ public class Skill : MonoBehaviour
         //if (defaultTarget == null)
         //    defaultTarget = GameObject.FindGameObjectWithTag("DebugTag");
   
-        if ( skillSpawner.hastargetArray[entityID])
+        if (skillSpawner.hastargetArray[entityID])
         {
                 targetEnm = skillSpawner.targetArray[entityID];
                 return true;

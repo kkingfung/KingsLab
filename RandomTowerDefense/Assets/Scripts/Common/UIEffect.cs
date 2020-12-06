@@ -28,7 +28,7 @@ public class UIEffect : MonoBehaviour
     private float alpha;
 
     private string fullText;
-    private int textCnt;
+    private float textCnt;
 
     [HideInInspector]
     public bool LandscapeOrientation;
@@ -162,7 +162,7 @@ public class UIEffect : MonoBehaviour
             case 5://for Selection Scene Island Information
                 if (selectionSceneManager == null || textMesh==null) break;
                 textCnt = (selectionSceneManager.CurrentIslandNum()==uiID) ? Mathf.Min( textCnt + 1,fullText.Length) : 0;
-                textMesh.text = fullText.Substring(0, textCnt);
+                textMesh.text = fullText.Substring(0, (int)textCnt);
                 break;
             case 6://for Selection Scene Boss Spr
                 if (selectionSceneManager == null || spr == null) break;
@@ -192,8 +192,8 @@ public class UIEffect : MonoBehaviour
                 break;
             case 11://for Game Scene Score Information
                 if (text == null) break;
-                textCnt =  Mathf.Min(textCnt + 1, fullText.Length);
-                text.text = fullText.Substring(0, textCnt);
+                textCnt =  Mathf.Min(textCnt + 0.1f, fullText.Length);
+                text.text = fullText.Substring(0, (int)textCnt);
                 break;
         }
     }

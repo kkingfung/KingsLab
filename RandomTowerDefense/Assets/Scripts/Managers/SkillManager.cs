@@ -34,7 +34,7 @@ public class SkillManager : MonoBehaviour
 
     private VisualEffect SkillAuraSnow;
     private VisualEffect SkillAuraFire;
-
+    private Skill skillScript;
     void Start()
     {
         //playerManager = FindObjectOfType<PlayerManager>();
@@ -160,16 +160,16 @@ public class SkillManager : MonoBehaviour
                 int[] entityID = skillSpawner.Spawn(0, pos,
                     pos, new float3(),
                     attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime);
-
-                skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
-                    .Init(skillSpawner, Upgrades.StoreItems.MagicMeteor, attr, entityID[0]);
+                if (skillScript == null) 
+                    skillScript = skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>();
+                skillScript.Init(skillSpawner, Upgrades.StoreItems.MagicMeteor, attr, entityID[0]);
                 frameToNext = Time.time;
             }
 
             currActiveTime = Mathf.Max(0, currActiveTime - Time.deltaTime);
             yield return new WaitForSeconds(0f);
         }
-
+        skillScript = null;
         currActiveTime = 0;
         GainExp(Upgrades.StoreItems.MagicMeteor,
             SkillExp[Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor)]);
@@ -186,10 +186,10 @@ public class SkillManager : MonoBehaviour
         int[] entityID = skillSpawner.Spawn(1, pos, pos, new float3(),
             attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime,
             attr.slowRate, attr.buffTime);
-        skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
-            .Init(skillSpawner, Upgrades.StoreItems.MagicBlizzard, attr, entityID[0]);
-        skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
-            .SetConstantForVFX(attr.waitTime);
+
+        skillScript = skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>();
+        skillScript.Init(skillSpawner, Upgrades.StoreItems.MagicBlizzard, attr, entityID[0]);
+        skillScript.SetConstantForVFX(attr.waitTime);
 
         while (frame - Time.time > 0)
         {
@@ -197,10 +197,12 @@ public class SkillManager : MonoBehaviour
             yield return new WaitForSeconds(0f);
         }
 
+        skillScript = null;
         currActiveTime = 0;
         GainExp(Upgrades.StoreItems.MagicBlizzard,
             SkillExp[Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard)]);
         SkillAuraSnow.enabled = false;
+        skillSpawner.GameObjects[entityID[0]].SetActive(false);
         SkillEnd();
     }
 
@@ -220,17 +222,17 @@ public class SkillManager : MonoBehaviour
                 int[] entityID = skillSpawner.Spawn(2, pos, pos, new float3(),
                     attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime,
                     attr.slowRate, attr.buffTime);
-                skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
-                    .Init(skillSpawner, Upgrades.StoreItems.MagicPetrification, attr, entityID[0]);
-                skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
-                    .SetConstantForVFX((Time.time - record) / attr.lifeTime * 10);
+                if (skillScript == null) 
+                    skillScript = skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>();
+                skillScript.Init(skillSpawner, Upgrades.StoreItems.MagicPetrification, attr, entityID[0]);
+                skillScript.SetConstantForVFX((Time.time - record) / attr.lifeTime * 10);
 
                 frameToNext = Time.time;
             }
             currActiveTime = Mathf.Max(0, currActiveTime - Time.deltaTime);
             yield return new WaitForSeconds(0f);
         }
-
+        skillScript = null;
         currActiveTime = 0;
         GainExp(Upgrades.StoreItems.MagicPetrification,
             SkillExp[Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification)]);
@@ -254,16 +256,15 @@ public class SkillManager : MonoBehaviour
 
                     int[] entityID = skillSpawner.Spawn(3, Camera.main.transform.position, pos, new float3(),
                         attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime);
-
-                    skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>()
-                        .Init(skillSpawner, Upgrades.StoreItems.MagicMinions, attr, entityID[0]);
+                    if(skillScript==null) skillScript = skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>();
+                    skillScript.Init(skillSpawner, Upgrades.StoreItems.MagicMinions, attr, entityID[0]);
                 }
                 frameToNext = Time.time;
             }
             currActiveTime = Mathf.Max(0, currActiveTime - Time.deltaTime);
             yield return new WaitForSeconds(0f);
         }
-
+        skillScript = null;
         currActiveTime = 0;
         GainExp(Upgrades.StoreItems.MagicMinions,
             SkillExp[Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions)]);

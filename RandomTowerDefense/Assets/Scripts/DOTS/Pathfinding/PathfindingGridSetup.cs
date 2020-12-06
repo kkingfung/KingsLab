@@ -11,9 +11,12 @@ public class PathfindingGridSetup : MonoBehaviour {
     public Grid<GridNode> pathfindingGrid;
 
     public bool isActived;
+    public bool Reset;
+
     private void Awake() {
         Instance = this;
         isActived = false;
+        Reset = true;
         mapGenerator = FindObjectOfType<FilledMapGenerator>();
     }
 

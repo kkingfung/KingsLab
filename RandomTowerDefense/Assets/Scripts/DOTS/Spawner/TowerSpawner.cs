@@ -9,7 +9,7 @@ using UnityEngine.Jobs;
 public class TowerSpawner : MonoBehaviour
 {
     public const int MonsterMaxRank = 4;
-    private readonly int count = 200;
+    private readonly int count = 100;
     public static TowerSpawner Instance { get; private set; }
     public List<GameObject> PrefabObject;
 

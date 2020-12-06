@@ -148,15 +148,15 @@ public class PlayerManager : MonoBehaviour
             AngleCalculation = (-90f + Mathf.Rad2Deg * Mathf.Atan2(Input.mousePosition.y - StockPos.y, Input.mousePosition.x - StockPos.x));
         while (AngleCalculation < 0) AngleCalculation += 360f;
 
-        if (AngleCalculation >= 18f && AngleCalculation < 90f)
-            StockSelected = 1;
-        else if (AngleCalculation >= 90f && AngleCalculation < 162f)
+        if (AngleCalculation >= 72f && AngleCalculation < 144f)
             StockSelected = 0;
-        else if (AngleCalculation >= 162f && AngleCalculation < 234f)
-            isSelling = true;
-        else if (AngleCalculation >= 234f && AngleCalculation < 306f)
+        else if (AngleCalculation >= 0f && AngleCalculation < 72f)
+            StockSelected = 1;
+        else if (AngleCalculation >= 288f && AngleCalculation < 360f)
+            StockSelected = 2;
+        else if (AngleCalculation >= 216f && AngleCalculation < 288f)
             StockSelected = 3;
-        else StockSelected = 2;
+        else isSelling = true;
         //Raycast test ground and camera ray
         Vector3 hitPosition = RaycastTest(LayerMask.GetMask("Arena"));
         if (isSelling) return;
@@ -165,13 +165,13 @@ public class PlayerManager : MonoBehaviour
         switch (SkillStack.UseStock(StockSelected))
         {
             case (int)Upgrades.StoreItems.BonusBoss1:
-                enemyManager.SpawnBonusBoss(0, mapGenerator.CoordToPosition(stageManager.SpawnPoint[StageInfo.prng.Next(1, 3)]));
+                enemyManager.SpawnBonusBoss(0, stageManager.GetPortalPosition()[StageInfo.prng.Next(0, 2)]);
                 break;
             case (int)Upgrades.StoreItems.BonusBoss2:
-                enemyManager.SpawnBonusBoss(1, mapGenerator.CoordToPosition(stageManager.SpawnPoint[StageInfo.prng.Next(1, 3)]));
+                enemyManager.SpawnBonusBoss(1, stageManager.GetPortalPosition()[StageInfo.prng.Next(0, 2)]);
                 break;
             case (int)Upgrades.StoreItems.BonusBoss3:
-                enemyManager.SpawnBonusBoss(2, mapGenerator.CoordToPosition(stageManager.SpawnPoint[StageInfo.prng.Next(1, 3)]));
+                enemyManager.SpawnBonusBoss(2, stageManager.GetPortalPosition()[StageInfo.prng.Next(0, 2)]);
                 break;
             case (int)Upgrades.StoreItems.MagicMeteor:
                 //CurrentSkill = 

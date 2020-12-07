@@ -52,7 +52,6 @@ public class AgentScript : Agent
 
     private void Reset()
     {
-        waveManager.SpawnPointByAI = 1;
         waveManager.SetCurrWAveNum(0);
         counter = 0;
         loseCounter = 0;
@@ -93,11 +92,11 @@ public class AgentScript : Agent
 
         if (isTower == false)
         {
+            RequestDecision();
             if (waveManager && waveManager.isSpawning && towerSpawner)
             {
                 if (counter < 100)
                     counter++;
-                RequestDecision();
             }
         }
         else
@@ -162,19 +161,18 @@ public class AgentScript : Agent
     {
         if (isTower == false)
         {
-            int temp = waveManager.SpawnPointByAI;
-
-            if (vectorAction[0] < -0.3)
-                waveManager.SpawnPointByAI = 0;
-            else if (vectorAction[0] > 0.3)
-                waveManager.SpawnPointByAI = 2;
-            else
-                waveManager.SpawnPointByAI = 1;
-
-            if (temp == waveManager.SpawnPointByAI)
-                AddReward(-1 * counter / 100.0f);
-            else
-                counter = 0;
+            //int temp = waveManager.SpawnPointByAI;
+            //if (vectorAction[0] < -0.3)
+            //    waveManager.SpawnPointByAI = 0;
+            //else if (vectorAction[0] > 0.3)
+            //    waveManager.SpawnPointByAI = 2;
+            //else
+            //    waveManager.SpawnPointByAI = 1;
+            //
+            //if (temp == waveManager.SpawnPointByAI)
+            //    AddReward(-1 * counter / 100.0f);
+            //else
+            //    counter = 0;
 
             if (vectorAction[1] > 0)
             {
@@ -209,14 +207,29 @@ public class AgentScript : Agent
 
     public override void Heuristic(float[] actionsOut)
     {
-        if (Input.GetKey(KeyCode.Keypad4))
-            waveManager.SpawnPointByAI = 0;
-        else if (Input.GetKey(KeyCode.Keypad5))
-            waveManager.SpawnPointByAI = 1;
-        else if (Input.GetKey(KeyCode.Keypad6))
-            waveManager.SpawnPointByAI = 2;
-
-        if (Input.GetKey(KeyCode.Keypad0))
+        if (!isTower)
+        {
+            if (Input.GetKey(KeyCode.Keypad4))
+            {
+                waveManager.SpawnPointByAI = 0;
+                Debug.Log(waveManager.SpawnPointByAI);
+            }
+            else if (Input.GetKey(KeyCode.Keypad5))
+            {
+                waveManager.SpawnPointByAI = 1;
+                Debug.Log(waveManager.SpawnPointByAI);
+            }
+            else if (Input.GetKey(KeyCode.Keypad6))
+            {
+                waveManager.SpawnPointByAI = 2;
+                Debug.Log(waveManager.SpawnPointByAI);
+            }
+            if (Input.GetKey(KeyCode.Keypad8))
+            {
+                Debug.Log(waveManager.SpawnPointByAI);
+            }
+        }
+        if (isTower && Input.GetKey(KeyCode.Keypad0))
             trainingSceneManager.pillar = GetRandomFreePillar(true);
     }
 

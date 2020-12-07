@@ -5631,6 +5631,10 @@ PrefabInstance:
       propertyPath: debugManager
       value: 
       objectReference: {fileID: 1711985865}
+    - target: {fileID: 5788967121297150305, guid: 668606ef7bd5dfc449a46d2afd2e6f90, type: 3}
+      propertyPath: isLearning
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5788967121297150318, guid: 668606ef7bd5dfc449a46d2afd2e6f90, type: 3}
       propertyPath: TeamId
       value: 1
@@ -7021,9 +7025,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a715083ea94c3684d87953ba96e59c5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MetalonGreen: {fileID: 7901479559238845187, guid: 7f931d4b5c97d194d8726ddf5acdd440, type: 3}
-  MetalonPurple: {fileID: 723633813565368450, guid: e9a03d46b76afe246a9ffd58d255bb65, type: 3}
-  MetalonRed: {fileID: 3056742052324029791, guid: f88c6ad57910d8648807bcf0c131f49d, type: 3}
+  MetalonGreen: {fileID: 2570952413636400629, guid: d67474ba76708294db84c9247cb95263, type: 3}
+  MetalonPurple: {fileID: 4900706377517056187, guid: f5509c5455b39ce4182d50f4c6cf86d6, type: 3}
+  MetalonRed: {fileID: 5669043131045751726, guid: 0225c53efeb8bc14ea83a3d97b0dc483, type: 3}
   AttackBot: {fileID: 1928244954057134, guid: 4efdc095f88074e53a4f28617077b108, type: 3}
   RobotSphere: {fileID: 1528915638184230, guid: 8e0f285c21cdcf14e8d5c06c57ba936b, type: 3}
   Dragon: {fileID: 6851798782412821971, guid: ff3dd417bb566b849b752ce57810bbf5, type: 3}
@@ -7041,7 +7045,7 @@ MonoBehaviour:
   Grunt: {fileID: 100050, guid: aad05534a7ba0dd49b8c54ce188308ec, type: 3}
   Footman: {fileID: 100048, guid: 272ec112bddec644a8af6599107e74f7, type: 3}
   TurtleShell: {fileID: 1774625739149480, guid: 38efdaadbfe1d624bbee439cb02e7661, type: 3}
-  Mushroom: {fileID: 2631848584822103140, guid: cfcf3b04716cb8840b7e586750ece7e6, type: 3}
+  Mushroom: {fileID: 2631848584822103140, guid: 8edb2fa3dc2112246b53357be701f37b, type: 3}
   Slime: {fileID: 1919012471076396, guid: 55776efecb0cd134ea5f418c2f97a705, type: 3}
   PigChef: {fileID: 6419245120869018127, guid: 680fdf2ddf622744a8b36b1ecd3c7bd5, type: 3}
   PhoenixChick: {fileID: 6480850551505543868, guid: 26685682233edd647ae2bc8882474f2e, type: 3}
@@ -11033,9 +11037,13 @@ PrefabInstance:
       propertyPath: debugManager
       value: 
       objectReference: {fileID: 1711985865}
+    - target: {fileID: 5788967121297150305, guid: 668606ef7bd5dfc449a46d2afd2e6f90, type: 3}
+      propertyPath: isLearning
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5788967121297150318, guid: 668606ef7bd5dfc449a46d2afd2e6f90, type: 3}
       propertyPath: m_BehaviorType
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8636458107982648905, guid: 668606ef7bd5dfc449a46d2afd2e6f90, type: 3}
       propertyPath: m_Name
@@ -11114,14 +11122,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1666813456}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2902496c0120472b90269f94a0aec7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Record: 1
-  NumStepsToRecord: 5
-  DemonstrationName: SetSpawnPointDemo
+  NumStepsToRecord: 0
+  DemonstrationName: SpawnPointDemo
   DemonstrationDirectory: Demos
 --- !u!1 &1688587539
 GameObject:

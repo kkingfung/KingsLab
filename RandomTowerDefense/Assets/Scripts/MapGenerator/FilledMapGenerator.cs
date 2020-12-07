@@ -223,6 +223,8 @@ public class FilledMapGenerator : MonoBehaviour
         mapFloor.localScale = new Vector3(currentMap.mapSize.x * tileSize, currentMap.mapSize.y * tileSize);
 
 		originPos = this.transform.position + CoordToPosition(0, 0);
+
+		PathfindingGridSetup.Instance.isActived = false;
 	}
 
 	void FillingNonNecessary(Queue<Coord> openTileList, bool[,] obstacleMap) {

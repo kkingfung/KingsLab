@@ -36,6 +36,7 @@ public class PathfindingGridSetup : MonoBehaviour {
                 }
             }
             isActived = true;
+            Reset = true;
         }
 
         if (isActived) {

@@ -18,7 +18,7 @@ public class Pathfinding : ComponentSystem {
     private Dictionary<int2, PathNode[]> PathNodeArrayList;
     private NativeArray<PathNode> pathNodeArray;
 
-    //Adjuest in source code ONLY
+    //Adjust in source code ONLY
     private bool goalFixed=true;
     protected override void OnCreate()
     {

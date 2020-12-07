@@ -13,7 +13,7 @@ public class MinionsFindTargetSystem : JobComponentSystem
 {
     [RequireComponentTag(typeof(MinionsTag), typeof(Translation), typeof(Lifetime), typeof(Radius), typeof(QuadrantEntity))]
     [ExcludeComponent(typeof(Target))]
-    //[BurstCompile]
+    [BurstCompile]
     private struct FindTargetQuadrantSystemJob : IJobChunk
     {
         [ReadOnly] public EntityTypeHandle entityType;
@@ -33,34 +33,41 @@ public class MinionsFindTargetSystem : JobComponentSystem
             var chunkQuadrantEntity = chunk.GetNativeArray(quadrantEntityType);
             var chunkEntity = chunk.GetNativeArray(entityType);
             var chunkActive = chunk.GetNativeArray(activeType);
+
+            Entity closestTargetEntity = Entity.Null;
+            float3 closestTargetPosition = new float3();
+
             for (int i = 0; i < chunk.Count; ++i)
             {
                 float activeTime = chunkActive[i].Value;
                 if (activeTime <= 0) continue;
-                float3 unitPosition = chunkTranslation[i].Value;
-                Entity closestTargetEntity = Entity.Null;
-                float closestTargetDistance = float.MaxValue;
-                float3 closestTargetPosition = chunkTranslation[i].Value;
-                int hashMapKey = QuadrantSystem.GetPositionHashMapKey(chunkTranslation[i].Value);
-
-                FindTarget(hashMapKey, unitPosition, chunkRadius[i].Value, chunkQuadrantEntity[i], ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
 
                 if (closestTargetEntity == Entity.Null)
                 {
-                    FindTarget(hashMapKey + 1, unitPosition, chunkRadius[i].Value, chunkQuadrantEntity[i], ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
-                    FindTarget(hashMapKey - 1, unitPosition, chunkRadius[i].Value, chunkQuadrantEntity[i], ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
-                    FindTarget(hashMapKey + QuadrantSystem.quadrantYMultiplier, unitPosition, chunkRadius[i].Value, chunkQuadrantEntity[i], ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
-                    FindTarget(hashMapKey - QuadrantSystem.quadrantYMultiplier, unitPosition, chunkRadius[i].Value, chunkQuadrantEntity[i], ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
-                }
+                    float3 unitPosition = chunkTranslation[i].Value;
+                    float closestTargetDistance = float.MaxValue;
+                    closestTargetPosition = chunkTranslation[i].Value;
+                    int hashMapKey = QuadrantSystem.GetPositionHashMapKey(chunkTranslation[i].Value);
 
-                if (closestTargetEntity == Entity.Null)
-                {
-                    FindTarget(hashMapKey + 1 + QuadrantSystem.quadrantYMultiplier, unitPosition, chunkRadius[i].Value, chunkQuadrantEntity[i], ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
-                    FindTarget(hashMapKey - 1 + QuadrantSystem.quadrantYMultiplier, unitPosition, chunkRadius[i].Value, chunkQuadrantEntity[i], ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
-                    FindTarget(hashMapKey + 1 - QuadrantSystem.quadrantYMultiplier, unitPosition, chunkRadius[i].Value, chunkQuadrantEntity[i], ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
-                    FindTarget(hashMapKey - 1 - QuadrantSystem.quadrantYMultiplier, unitPosition, chunkRadius[i].Value, chunkQuadrantEntity[i], ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
-                }
+                    FindTarget(hashMapKey, unitPosition, chunkRadius[i].Value, chunkQuadrantEntity[i], ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
 
+                    if (closestTargetEntity == Entity.Null)
+                    {
+                        FindTarget(hashMapKey + 1, unitPosition, chunkRadius[i].Value, chunkQuadrantEntity[i], ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
+                        FindTarget(hashMapKey - 1, unitPosition, chunkRadius[i].Value, chunkQuadrantEntity[i], ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
+                        FindTarget(hashMapKey + QuadrantSystem.quadrantYMultiplier, unitPosition, chunkRadius[i].Value, chunkQuadrantEntity[i], ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
+                        FindTarget(hashMapKey - QuadrantSystem.quadrantYMultiplier, unitPosition, chunkRadius[i].Value, chunkQuadrantEntity[i], ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
+                    }
+
+                    if (closestTargetEntity == Entity.Null)
+                    {
+                        FindTarget(hashMapKey + 1 + QuadrantSystem.quadrantYMultiplier, unitPosition, chunkRadius[i].Value, chunkQuadrantEntity[i], ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
+                        FindTarget(hashMapKey - 1 + QuadrantSystem.quadrantYMultiplier, unitPosition, chunkRadius[i].Value, chunkQuadrantEntity[i], ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
+                        FindTarget(hashMapKey + 1 - QuadrantSystem.quadrantYMultiplier, unitPosition, chunkRadius[i].Value, chunkQuadrantEntity[i], ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
+                        FindTarget(hashMapKey - 1 - QuadrantSystem.quadrantYMultiplier, unitPosition, chunkRadius[i].Value, chunkQuadrantEntity[i], ref closestTargetEntity, ref closestTargetDistance, ref closestTargetPosition);
+                    }
+                }
+                //Debug.Log(i + ":"+ closestTargetPosition);
                 entityCommandBuffer.AddComponent(i, chunkEntity[i], new Target
                 {
                     targetEntity = closestTargetEntity,
@@ -72,7 +79,7 @@ public class MinionsFindTargetSystem : JobComponentSystem
         private void FindTarget(int hashMapKey, float3 unitPosition, float maxdist, QuadrantEntity quadrantEntity, ref Entity closestTargetEntity, ref float closestTargetDistance, ref float3 closestTargetPosition)
         {
             QuadrantData quadrantData;
-            NativeMultiHashMapIterator<int> nativeMultiHashMapIterator;
+            NativeMultiHashMapIterator<int> nativeMultiHashMapIterator; 
             if (quadrantMultiHashMap.TryGetFirstValue(hashMapKey, out quadrantData, out nativeMultiHashMapIterator))
             {
                 do

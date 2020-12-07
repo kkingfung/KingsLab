@@ -99,7 +99,10 @@ static public class Upgrades
 
     static public bool CheckTopLevel(StoreItems itemID)
     {
-        return StoreLevel[itemID] < MaxLevel;
+        if (itemID == StoreItems.Army1 || itemID == StoreItems.Army2
+            || itemID == StoreItems.Army3 || itemID == StoreItems.Army4)
+            return StoreLevel[itemID] < MaxLevel;
+        return true;
     }
 
     static public int allLevel() 

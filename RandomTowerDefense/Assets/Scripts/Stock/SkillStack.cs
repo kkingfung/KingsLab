@@ -11,6 +11,7 @@ static public class SkillStack
 
     static public void init()
     {
+        currStackNum = 0;
         for (int i = 0; i < stackDetail.Length; ++i)
             stackDetail[i] = 0;
     }

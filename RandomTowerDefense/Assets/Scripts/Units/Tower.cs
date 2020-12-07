@@ -302,8 +302,8 @@ public class Tower : MonoBehaviour
         attr = TowerInfo.GetTowerInfo(type);
 
         //Update by rank/level with factors
-        attr = new TowerAttr(attr.radius * (1 + 0.01f * rank + 0.005f * level),
-            attr.damage * (1 + (rank-1) + 0.1f * level
+        attr = new TowerAttr(attr.radius * (1 + 0.02f * rank + 0.005f * level),
+            attr.damage * (1 + (rank-1)*2f + 0.2f * level
             + ((debugManager != null) ? debugManager.towerrank_Damage * rank +
             debugManager.towerlvl_Damage * level: 0)),
             attr.waitTime * (1f - (0.1f * rank)), 
@@ -316,7 +316,7 @@ public class Tower : MonoBehaviour
                 attr.radius = attr.radius
                     * (1 + (0.01f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
                 attr.damage = attr.damage
-                   * (1 + (0.04f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
+                   * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
                 attr.waitTime = attr.waitTime
                    * (1 - (0.005f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
                 break;
@@ -324,7 +324,7 @@ public class Tower : MonoBehaviour
                 attr.radius = attr.radius
                       * (1 + (0.01f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
                 attr.damage = attr.damage
-                        * (1 + (0.1f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
+                        * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
                 attr.waitTime = attr.waitTime
                    * (1 - (0.005f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
                 break;
@@ -334,7 +334,7 @@ public class Tower : MonoBehaviour
                 attr.damage = attr.damage
                     * (1 + (0.1f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
                 attr.waitTime = attr.waitTime
-                   * (1 - (0.01f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
+                   * (1 - (0.02f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
                 attr.radius = attr.radius
@@ -342,7 +342,7 @@ public class Tower : MonoBehaviour
                 attr.damage = attr.damage
                      * (1 + (0.1f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
                 attr.waitTime = attr.waitTime
-                   * (1 - (0.005f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4))); 
+                   * (1 - (0.02f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4))); 
                 break;
         }
 

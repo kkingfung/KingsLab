@@ -13,7 +13,7 @@ public class Skill : MonoBehaviour
 
     private bool ActionEnded;
 
-    private int entityID;
+    public int entityID;
 
     private PlayerManager playerManager;//For Raycasting target Position
 
@@ -87,7 +87,8 @@ public class Skill : MonoBehaviour
             case Upgrades.StoreItems.MagicPetrification:
                 break;
             case Upgrades.StoreItems.MagicMinions:
-                if (targetEnm == new Vector3() && findEnm())
+                //Debug.Log(entityID + ":" + skillSpawner.hastargetArray[entityID]);
+                if (targetEnm.y == 0 && findEnm())
                 {
                     VFX.SetVector3("TargetLocation",
                         targetEnm - this.transform.position);
@@ -125,7 +126,6 @@ public class Skill : MonoBehaviour
         this.attr = new SkillAttr(attr);
         this.entityID = entityID;
         this.skillSpawner = skillSpawner;
-
         switch (actionID)
         {
             case Upgrades.StoreItems.MagicMinions:
@@ -154,7 +154,7 @@ public class Skill : MonoBehaviour
     {
         //if (defaultTarget == null)
         //    defaultTarget = GameObject.FindGameObjectWithTag("DebugTag");
-  
+
         if (skillSpawner.hastargetArray[entityID])
         {
                 targetEnm = skillSpawner.targetArray[entityID];

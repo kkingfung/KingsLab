@@ -96,7 +96,7 @@ public class SkillManager : MonoBehaviour
             SkillAuraFire.enabled = true;
         }
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillMeteor");
-        attr.damage = attr.damage * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor) * Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor) * 0.6f);
+        attr.damage = attr.damage * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor) * Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor) * 1.5f);
         GainExp(Upgrades.StoreItems.MagicMeteor, ExpPerActivation);
         StartCoroutine(MeteorSkillCoroutine(attr));
     }
@@ -114,7 +114,7 @@ public class SkillManager : MonoBehaviour
         }
        
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillBlizzard");
-        attr.radius = attr.radius * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * 0.3f);
+        attr.radius = attr.radius * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * 0.5f);
         //attr.damage = attr.damage * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * 0.3f);
         GainExp(Upgrades.StoreItems.MagicBlizzard, ExpPerActivation);
 
@@ -123,7 +123,7 @@ public class SkillManager : MonoBehaviour
     public void PetrificationSkill(Vector3 hitPos)
     {
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillPetrification");
-        attr.buffTime = attr.buffTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification) * Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification) * 0.6f);
+        attr.buffTime = attr.buffTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification) * Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification) * 0.2f);
         GainExp(Upgrades.StoreItems.MagicPetrification, ExpPerActivation);
 
         StartCoroutine(PetrificationCoroutine(attr));
@@ -131,8 +131,8 @@ public class SkillManager : MonoBehaviour
     public void MinionsSkill(Vector3 hitPos)
     {
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillMinions");
-        attr.cycleTime = attr.cycleTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * 0.4f);
-        attr.damage = attr.damage * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * 0.2f);
+        attr.cycleTime = attr.cycleTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * 0.5f);
+        attr.damage = attr.damage * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * 1.0f);
         GainExp(Upgrades.StoreItems.MagicMinions, ExpPerActivation);
 
         StartCoroutine(MinionsSkillCoroutine(attr));
@@ -160,8 +160,7 @@ public class SkillManager : MonoBehaviour
                 int[] entityID = skillSpawner.Spawn(0, pos,
                     pos, new float3(),
                     attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime);
-                if (skillScript == null) 
-                    skillScript = skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>();
+                skillScript = skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>();
                 skillScript.Init(skillSpawner, Upgrades.StoreItems.MagicMeteor, attr, entityID[0]);
                 frameToNext = Time.time;
             }
@@ -222,8 +221,7 @@ public class SkillManager : MonoBehaviour
                 int[] entityID = skillSpawner.Spawn(2, pos, pos, new float3(),
                     attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime,
                     attr.slowRate, attr.buffTime);
-                if (skillScript == null) 
-                    skillScript = skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>();
+                skillScript = skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>();
                 skillScript.Init(skillSpawner, Upgrades.StoreItems.MagicPetrification, attr, entityID[0]);
                 skillScript.SetConstantForVFX((Time.time - record) / attr.lifeTime * 10);
 
@@ -256,7 +254,7 @@ public class SkillManager : MonoBehaviour
 
                     int[] entityID = skillSpawner.Spawn(3, Camera.main.transform.position, pos, new float3(),
                         attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime);
-                    if(skillScript==null) skillScript = skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>();
+                    skillScript = skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>();
                     skillScript.Init(skillSpawner, Upgrades.StoreItems.MagicMinions, attr, entityID[0]);
                 }
                 frameToNext = Time.time;

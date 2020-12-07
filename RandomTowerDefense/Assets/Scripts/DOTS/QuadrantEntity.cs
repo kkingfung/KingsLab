@@ -21,11 +21,6 @@ public struct QuadrantEntity : IComponentData
     }
 }
 
-public struct HasTarget : IComponentData
-{
-    public Entity targetEntity;
-}
-
 public struct QuadrantData
 {
     public Entity entity;
@@ -40,7 +35,7 @@ public class QuadrantSystem : JobComponentSystem
     public static NativeMultiHashMap<int, QuadrantData> quadrantMultiHashMap;
 
     public const int quadrantYMultiplier = 100;
-    private const int quadrantCellSize =10;
+    private const int quadrantCellSize =20;
 
     public static int GetPositionHashMapKey(float3 position)
     {
@@ -53,15 +48,15 @@ public class QuadrantSystem : JobComponentSystem
         [ReadOnly] public EntityTypeHandle entityType;
         [ReadOnly] public ComponentTypeHandle<Translation> translationType;
         [ReadOnly] public ComponentTypeHandle<QuadrantEntity> quadrantEntityType;
-
+    
         public NativeMultiHashMap<int, QuadrantData>.ParallelWriter quadrantMultiHashMap;
-
+    
         public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
         {
             var chunkTranslation = chunk.GetNativeArray(translationType);
             var chunkQuadrant = chunk.GetNativeArray(quadrantEntityType);
             var chunkEntity = chunk.GetNativeArray(entityType);
-
+    
             for (int i = 0; i < chunk.Count; ++i)
             {
                 int hashMapKey = GetPositionHashMapKey(chunkTranslation[i].Value);
@@ -73,8 +68,23 @@ public class QuadrantSystem : JobComponentSystem
                 });
             }
         }
-
     }
+
+    //[BurstCompile]
+    //private struct SetQuadrantDataHashMapJob : IJobForEachWithEntity<Translation, QuadrantEntity>
+    //{
+    //    public NativeMultiHashMap<int, QuadrantData>.ParallelWriter quadrantMultiHashMap;
+    //    public void Execute(Entity entity, int index, ref Translation translation, ref QuadrantEntity quadrantEntity)
+    //    {
+    //        int hashMapKey = GetPositionHashMapKey(translation.Value);
+    //        quadrantMultiHashMap.Add(hashMapKey, new QuadrantData
+    //        {
+    //            entity = entity,
+    //            position = translation.Value,
+    //            quadrantEntity = quadrantEntity
+    //        });
+    //    }
+    //}
 
     protected override void OnCreate()
     {
@@ -88,7 +98,7 @@ public class QuadrantSystem : JobComponentSystem
         base.OnDestroy();
     }
 
-    protected override JobHandle OnUpdate(JobHandle inputDependencies)
+    protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
         entityQuery = GetEntityQuery(typeof(Translation), typeof(QuadrantEntity));
 
@@ -96,21 +106,13 @@ public class QuadrantSystem : JobComponentSystem
         var translationType = GetComponentTypeHandle<Translation>(true);
         var quadrantEntityType = GetComponentTypeHandle<QuadrantEntity>(true);
 
-        JobHandle jobHandle = inputDependencies;
+        JobHandle jobHandle = inputDeps;
 
         quadrantMultiHashMap.Clear();
         if (entityQuery.CalculateEntityCount() > quadrantMultiHashMap.Capacity)
         {
             quadrantMultiHashMap.Capacity = entityQuery.CalculateEntityCount();
         }
-
-        //SetQuadrantDataHashMapJob setQuadrantDataHashMapJob = new SetQuadrantDataHashMapJob
-        //{
-        //    quadrantMultiHashMap = quadrantMultiHashMap.AsParallelWriter(),
-        //};
-
-        //JobHandle jobHandle = JobForEachExtensions.Schedule(setQuadrantDataHashMapJob, entityQuery);
-        //jobHandle.Complete();
 
         var setQuadrantDataHashMapJob = new SetQuadrantDataHashMapJob()
         {
@@ -120,8 +122,9 @@ public class QuadrantSystem : JobComponentSystem
             quadrantEntityType = quadrantEntityType,
         };
 
-        jobHandle = setQuadrantDataHashMapJob.Schedule(entityQuery, inputDependencies);
-
+        jobHandle = setQuadrantDataHashMapJob.Schedule(entityQuery, inputDeps);
+        //JobHandle jobHandle = JobForEachExtensions.Schedule(setQuadrantDataHashMapJob, entityQuery);
+        jobHandle.Complete();
         return jobHandle;
     }
 

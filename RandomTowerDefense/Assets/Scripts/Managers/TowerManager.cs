@@ -43,6 +43,7 @@ public class TowerManager : MonoBehaviour
     private List<Text> TargetInfoText;
     public List<Slider> TargetInfoSlider;
 
+    public StageManager stageManager;
     public ResourceManager resourceManager;
     public FilledMapGenerator filledMapGenerator;
     //public InGameOperation sceneManager;
@@ -151,7 +152,7 @@ public class TowerManager : MonoBehaviour
                         location, castleSpawner.castle.transform.position);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
                     script = tower.GetComponent<Tower>();
-                    script.linkingManagers(towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager, bonusChecker, debugManager);
+                    script.linkingManagers(stageManager,towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager, bonusChecker, debugManager);
                     script.newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerNightmareAura,
                         TowerInfo.TowerInfoID.Enum_TowerNightmare, 1, rank);
                     tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
@@ -163,7 +164,7 @@ public class TowerManager : MonoBehaviour
                         location, castleSpawner.castle.transform.position);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
                     script = tower.GetComponent<Tower>();
-                    script.linkingManagers(towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager, bonusChecker, debugManager);
+                    script.linkingManagers(stageManager, towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager, bonusChecker, debugManager);
                     script.newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerSoulEaterAura,
                         TowerInfo.TowerInfoID.Enum_TowerSoulEater, 1, rank);
                     tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
@@ -175,7 +176,7 @@ public class TowerManager : MonoBehaviour
                         location, castleSpawner.castle.transform.position);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
                     script = tower.GetComponent<Tower>();
-                    script.linkingManagers(towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager, bonusChecker, debugManager);
+                    script.linkingManagers(stageManager, towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager, bonusChecker, debugManager);
                     script.newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerTerrorBringerAura,
                         TowerInfo.TowerInfoID.Enum_TowerTerrorBringer, 1, rank);
                     tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
@@ -187,7 +188,7 @@ public class TowerManager : MonoBehaviour
                         location, castleSpawner.castle.transform.position);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
                     script = tower.GetComponent<Tower>();
-                    script.linkingManagers(towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager,bonusChecker, debugManager);
+                    script.linkingManagers(stageManager, towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager,bonusChecker, debugManager);
                     script.newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerUsurperAura,
                         TowerInfo.TowerInfoID.Enum_TowerUsurper, 1, rank);
                     tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);

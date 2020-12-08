@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class StoreManager : MonoBehaviour
 {
     private readonly int MaxItemPerCategory = 4;
-    private readonly int[] cdCounter = { 60 * 60, 90 * 60, 150 * 60 };
+    private readonly int[] cdCounter = { 60 , 90 , 150 };
     private readonly Color OriColor = new Color(1, 0.675f, 0, 1 );
     private Dictionary<Upgrades.StoreItems, int[]> ItemPrice;
 
@@ -27,7 +27,7 @@ public class StoreManager : MonoBehaviour
     private int[] pendToKart= { 0,0,0,0};
     private int[] costToKart = { 0, 0, 0, 0 };
 
-    private int[] bonusBossCooldown = { 0, 0, 0};
+    private float[] bonusBossCooldown = { 0, 0, 0};
 
     private readonly int[] PriceForArmy1 = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
     private readonly int[] PriceForArmy2 = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
@@ -77,7 +77,7 @@ public class StoreManager : MonoBehaviour
             {
                 if (bonusBossCooldown[i] > 0)
                 {
-                    bonusBossCooldown[i]--;
+                    bonusBossCooldown[i]-=Time.deltaTime;
                 }
                 if (sceneManager.CheckIfTutorial())
                     bonusBossCooldown[i] = 99;
@@ -105,7 +105,7 @@ public class StoreManager : MonoBehaviour
         //Bonus Boss Items
         for (int i = 0; i < MonsterCDTextObj.Count; ++i)
         {
-            int cd = bonusBossCooldown[i % bonusBossCooldown.Length] / 60;
+            int cd = (int)(bonusBossCooldown[i % bonusBossCooldown.Length]);
             MonsterCDTextObj[i].text = "CD" + cd.ToString();
             MonsterCDTextObj[i].color = (cd > 0 || SkillStack.CheckFullStocks()) ? new Color(1, 0, 0, 1) : OriColor;
         }
@@ -114,7 +114,7 @@ public class StoreManager : MonoBehaviour
         {
             Upgrades.StoreItems itemID = Upgrades.StoreItems.Army1 + i % MaxItemPerCategory;
             int price = ItemPrice[itemID][Upgrades.GetLevel(itemID)];
-            if (Upgrades.CheckTopLevel(itemID))
+            if (Upgrades.CheckArmyTopLevel(itemID))
             {
                 ArmyPriceTextObj[i].text = price.ToString() + "G";
                 ArmyPriceTextObj[i].color = (price > resourceManager.GetCurrMaterial()) ? new Color(1, 0, 0, 1) : OriColor;
@@ -130,10 +130,14 @@ public class StoreManager : MonoBehaviour
         {
             switch (i % MaxItemPerCategory)
             {
-                case 0: ArmyLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army1).ToString(); break;
-                case 1: ArmyLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army2).ToString(); break;
-                case 2: ArmyLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army3).ToString(); break;
-                case 3: ArmyLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.Army4).ToString(); break;
+                case 0: ArmyLvTextObj[i].text = "LV." + (Upgrades.CheckTopLevel(Upgrades.StoreItems.Army1) ? "MAX" :
+                        (Upgrades.GetLevel(Upgrades.StoreItems.Army1)+1).ToString()); break;
+                case 1: ArmyLvTextObj[i].text = "LV." + (Upgrades.CheckTopLevel(Upgrades.StoreItems.Army2) ? "MAX" :
+                        (Upgrades.GetLevel(Upgrades.StoreItems.Army2) + 1).ToString()); break;
+                case 2: ArmyLvTextObj[i].text = "LV." + (Upgrades.CheckTopLevel(Upgrades.StoreItems.Army3) ? "MAX" :
+                        (Upgrades.GetLevel(Upgrades.StoreItems.Army3) + 1).ToString()); break;
+                case 3: ArmyLvTextObj[i].text = "LV." + (Upgrades.CheckTopLevel(Upgrades.StoreItems.Army4) ? "MAX" :
+                        (Upgrades.GetLevel(Upgrades.StoreItems.Army4) + 1).ToString()); break;
             }
         }
 
@@ -149,10 +153,18 @@ public class StoreManager : MonoBehaviour
         {
             switch (i % MaxItemPerCategory)
             {
-                case 0: SkillLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor).ToString(); break;
-                case 1: SkillLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard).ToString(); break;
-                case 2: SkillLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification).ToString(); break;
-                case 3: SkillLvTextObj[i].text = "LV." + Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions).ToString(); break;
+                case 0:
+                    SkillLvTextObj[i].text = "LV." + (Upgrades.CheckTopLevel(Upgrades.StoreItems.MagicMeteor) ? "MAX" :
+                       (Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor) + 1).ToString()); break;
+                case 1:
+                    SkillLvTextObj[i].text = "LV." + (Upgrades.CheckTopLevel(Upgrades.StoreItems.MagicBlizzard) ? "MAX" :
+                    (Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) + 1).ToString()); break;
+                case 2:
+                    SkillLvTextObj[i].text = "LV." + (Upgrades.CheckTopLevel(Upgrades.StoreItems.MagicPetrification) ? "MAX" :
+                   (Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification) + 1).ToString()); break; 
+                case 3:
+                    SkillLvTextObj[i].text = "LV." + (Upgrades.CheckTopLevel(Upgrades.StoreItems.MagicMinions) ? "MAX" :
+                   (Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) + 1).ToString()); break; 
             }
         }
     }
@@ -269,7 +281,7 @@ public class StoreManager : MonoBehaviour
         bonusBossCooldown[bossID] = cdCounter[bossID];
     }
 
-    public int GetBossCD(int bossID) {
+    public float GetBossCD(int bossID) {
         return bonusBossCooldown[bossID];
     }
 

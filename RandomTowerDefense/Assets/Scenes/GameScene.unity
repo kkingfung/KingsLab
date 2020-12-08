@@ -4220,6 +4220,7 @@ MonoBehaviour:
   TargetInfoSlider:
   - {fileID: 1750889543}
   - {fileID: 1418809002}
+  stageManager: {fileID: 2137340201}
   resourceManager: {fileID: 1011788840}
   filledMapGenerator: {fileID: 2142590585}
   towerSpawner: {fileID: 124639428}
@@ -4228,6 +4229,7 @@ MonoBehaviour:
   attackSpawner: {fileID: 2090817380}
   effectManager: {fileID: 645382831}
   debugManager: {fileID: 0}
+  bonusChecker: {fileID: 1829121297}
 --- !u!1 &231182237
 GameObject:
   m_ObjectHideFlags: 0
@@ -15233,6 +15235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isActived: 0
+  Reset: 0
 --- !u!4 &779320206
 Transform:
   m_ObjectHideFlags: 0
@@ -37224,6 +37227,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resourceManager: {fileID: 1011788840}
   towerSpawner: {fileID: 124639428}
+  TowerNewlyBuilt: 0
+  TowerLevelChg: 0
 --- !u!114 &1829121298
 MonoBehaviour:
   m_ObjectHideFlags: 0

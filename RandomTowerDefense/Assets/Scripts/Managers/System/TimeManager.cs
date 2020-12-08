@@ -14,7 +14,7 @@ public class TimeManager : MonoBehaviour
 	private float OriTimeScale;
 	private float OriFixedTimeScale;
 
-	private int[] timeScaleFactor = { 1, 2, 3 };
+	private float[] timeScaleFactor = { 1f, 2.5f, 3.9f };
 	private int timeScaleId;
 
 	private bool isControl = false;

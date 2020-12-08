@@ -8,7 +8,7 @@ using Unity.Entities;
 
 public class Tower : MonoBehaviour
 {
-    private readonly int[] MaxLevel = { 5, 15, 30, 50 };
+    private readonly int[] MaxLevel = { 5, 10, 20, 40 };
     private readonly int[] MaxLevelBonus = { 200, 1000, 3000, 5000 };
     //private readonly int[] MaxLevel = { 1, 1, 1, 1 };
     private readonly float TowerDestroyTime = 2;
@@ -33,6 +33,7 @@ public class Tower : MonoBehaviour
 
     private AudioManager audioManager;
     private ResourceManager resourceManager;
+    private StageManager stageManager;
     public GameObject pillar;
 
     //private AudioSource audioSource;
@@ -100,13 +101,17 @@ public class Tower : MonoBehaviour
         if (atkCounter > 0) atkCounter -= Time.deltaTime;
         if (atkCounter <= 0 && towerSpawner.hastargetArray[entityID])
         {
-            if (entityManager.HasComponent<Target>(towerSpawner.Entities[entityID])) {
-                Target target = entityManager.GetComponentData<Target>(towerSpawner.Entities[entityID]);
-                Vector3 targetPos = target.targetPos;
-                targetPos.y = transform.position.y;
-                transform.forward = (targetPos - transform.position).normalized;
-                atkEntityPos = targetPos;
-                Attack();
+            if (stageManager && stageManager.GetResult() == 0)
+            {
+                if (entityManager.HasComponent<Target>(towerSpawner.Entities[entityID]))
+                {
+                    Target target = entityManager.GetComponentData<Target>(towerSpawner.Entities[entityID]);
+                    Vector3 targetPos = target.targetPos;
+                    targetPos.y = transform.position.y;
+                    transform.forward = (targetPos - transform.position).normalized;
+                    atkEntityPos = targetPos;
+                    Attack();
+                }
             }
         }
     }
@@ -165,7 +170,7 @@ public class Tower : MonoBehaviour
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
                 vfx.SetVector3("TargetPos", towerSpawner.targetArray[this.entityID]);
                 vfx.SetFloat("StarSize", rank * 10f);
-                vfx.SetFloat("AuraSize", rank);
+                vfx.SetFloat("AuraSize", rank * 0.5f);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
                 vfx.SetFloat("Spawn rate", rank * 2f);
@@ -252,10 +257,11 @@ public class Tower : MonoBehaviour
             SetLevel(lv);
     }
 
-    public void linkingManagers(TowerSpawner towerSpawner, AudioManager audioManager, 
+    public void linkingManagers(StageManager stageManager,TowerSpawner towerSpawner, AudioManager audioManager, 
         AttackSpawner attackSpawner, FilledMapGenerator filledMapGenerator,
         ResourceManager resourceManager,BonusChecker bonusChecker=null,DebugManager debugManager=null)
     {
+        this.stageManager = stageManager;
         this.towerSpawner = towerSpawner;
         this.audioManager = audioManager;
         this.attackSpawner = attackSpawner;
@@ -309,7 +315,7 @@ public class Tower : MonoBehaviour
 
         //Update by rank/level with factors
         attr = new TowerAttr(attr.radius * (1 + 0.02f * rank + 0.005f * level),
-            attr.damage * (1 + (rank-1)*2f + 0.2f * level
+            attr.damage * (rank + 0.5f * level
             + ((debugManager != null) ? debugManager.towerrank_Damage * rank +
             debugManager.towerlvl_Damage * level: 0)),
             attr.waitTime * (1f - (0.1f * rank)), 

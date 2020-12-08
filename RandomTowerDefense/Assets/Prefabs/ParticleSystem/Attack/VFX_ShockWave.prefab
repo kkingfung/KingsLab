@@ -52,9 +52,9 @@ VisualEffect:
       - m_Value: 3000
         m_Name: StarSize
         m_Overridden: 0
-      - m_Value: 0.8
+      - m_Value: 0.4
         m_Name: AuraSize
-        m_Overridden: 0
+        m_Overridden: 1
       - m_Value: 12
         m_Name: SizeMultipier
         m_Overridden: 1
@@ -154,5 +154,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Timer: 10
-  tobeDestroy: 0
-  skill: {fileID: 0}

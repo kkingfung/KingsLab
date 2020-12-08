@@ -4,7 +4,7 @@ using UnityEngine;
 
 static public class Upgrades
 {
-    static public readonly int MaxLevel = 10;
+    static public readonly int MaxLevel = 9;
     static public readonly int MaxItemPerSlot = 10;
 
     public enum StoreItems {
@@ -97,12 +97,17 @@ static public class Upgrades
         return true;
     }
 
-    static public bool CheckTopLevel(StoreItems itemID)
+    static public bool CheckArmyTopLevel(StoreItems itemID)
     {
         if (itemID == StoreItems.Army1 || itemID == StoreItems.Army2
             || itemID == StoreItems.Army3 || itemID == StoreItems.Army4)
             return StoreLevel[itemID] < MaxLevel;
         return true;
+    }
+
+    static public bool CheckTopLevel(StoreItems itemID)
+    {
+            return StoreLevel[itemID] == MaxLevel;
     }
 
     static public int allLevel() 

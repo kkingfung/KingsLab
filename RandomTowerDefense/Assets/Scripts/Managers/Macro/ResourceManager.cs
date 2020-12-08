@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ResourceManager : MonoBehaviour
 {
-    private readonly int StartingMaterialNum = 30000;
+    private readonly int StartingMaterialNum = 300;
     private readonly int[] BuildPrice = { 120, 0,0,0,0};
     private readonly int[] SellPrice = { 50, 100, 150, 200, 250 };
 

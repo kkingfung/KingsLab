@@ -1894,6 +1894,7 @@ MonoBehaviour:
   TowerUsurperAura: {fileID: 525118464522439101, guid: 58cfea8fa8ad8bd42ac163f121a8dbeb, type: 3}
   TargetInfo: []
   TargetInfoSlider: []
+  stageManager: {fileID: 2137340201}
   resourceManager: {fileID: 1011788840}
   filledMapGenerator: {fileID: 2142590585}
   towerSpawner: {fileID: 124639428}
@@ -13973,6 +13974,7 @@ GameObject:
   - component: {fileID: 2080974654}
   - component: {fileID: 2080974653}
   - component: {fileID: 2080974651}
+  - component: {fileID: 2080974652}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -14011,6 +14013,14 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!81 &2080974652
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080974650}
+  m_Enabled: 1
 --- !u!20 &2080974653
 Camera:
   m_ObjectHideFlags: 0

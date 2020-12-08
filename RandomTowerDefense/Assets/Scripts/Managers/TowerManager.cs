@@ -55,7 +55,7 @@ public class TowerManager : MonoBehaviour
     public EffectSpawner effectManager;
 
     public DebugManager debugManager;
-
+    public BonusChecker bonusChecker;
     // Start is called before the first frame update
     void Start()
     {
@@ -151,44 +151,48 @@ public class TowerManager : MonoBehaviour
                         location, castleSpawner.castle.transform.position);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
                     script = tower.GetComponent<Tower>();
-                    script.linkingManagers(towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager, debugManager);
+                    script.linkingManagers(towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager, bonusChecker, debugManager);
                     script.newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerNightmareAura,
                         TowerInfo.TowerInfoID.Enum_TowerNightmare, 1, rank);
                     tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
                     //TowerNightmareList.Add(tower);
+                    if (bonusChecker) bonusChecker.TowerNewlyBuilt = 0;
                     break;
                 case (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater:
                     entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater,
                         location, castleSpawner.castle.transform.position);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
                     script = tower.GetComponent<Tower>();
-                    script.linkingManagers(towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager, debugManager);
+                    script.linkingManagers(towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager, bonusChecker, debugManager);
                     script.newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerSoulEaterAura,
                         TowerInfo.TowerInfoID.Enum_TowerSoulEater, 1, rank);
                     tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
                     //TowerSoulEaterList.Add(tower);
+                    if (bonusChecker) bonusChecker.TowerNewlyBuilt = 1;
                     break;
                 case (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
                     entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer,
                         location, castleSpawner.castle.transform.position);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
                     script = tower.GetComponent<Tower>();
-                    script.linkingManagers(towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager, debugManager);
+                    script.linkingManagers(towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager, bonusChecker, debugManager);
                     script.newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerTerrorBringerAura,
                         TowerInfo.TowerInfoID.Enum_TowerTerrorBringer, 1, rank);
                     tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
                     //TowerTerrorBringerList.Add(tower);
+                    if (bonusChecker) bonusChecker.TowerNewlyBuilt = 2;
                     break;
                 case (int)TowerInfo.TowerInfoID.Enum_TowerUsurper:
                     entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerUsurper,
                         location, castleSpawner.castle.transform.position);
                     tower = towerSpawner.GameObjects[entityIDList[0]];
                     script = tower.GetComponent<Tower>();
-                    script.linkingManagers(towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager, debugManager);
+                    script.linkingManagers(towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager,bonusChecker, debugManager);
                     script.newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerUsurperAura,
                         TowerInfo.TowerInfoID.Enum_TowerUsurper, 1, rank);
                     tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
                     //TowerUsurperList.Add(tower);
+                    if (bonusChecker) bonusChecker.TowerNewlyBuilt = 3;
                     break;
             }
         }

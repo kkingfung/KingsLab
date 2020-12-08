@@ -12,37 +12,50 @@ public class BonusChecker : MonoBehaviour
     bool[] AllMonstersByRankBonus= { false,false,false,false};
     bool[] AllRanksByMonsterBonus= { false,false,false,false};
 
+    public int TowerNewlyBuilt;
+    public bool TowerLevelChg;
+
     // Start is called before the first frame update
     void Start()
     {
         //towerSpawner = FindObjectOfType<TowerSpawner>();
         //resourceManager = FindObjectOfType<ResourceManager>();
+
+        TowerNewlyBuilt = -1;
+        TowerLevelChg = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        if (!AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerNightmare])
-            AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerNightmare] 
-                = MonsterList_Type(TowerInfo.TowerInfoID.Enum_TowerNightmare);
-
-        if (!AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerSoulEater])
-            AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerSoulEater]
-                = MonsterList_Type(TowerInfo.TowerInfoID.Enum_TowerSoulEater);
-
-        if (!AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer])
-            AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer]
-                = MonsterList_Type(TowerInfo.TowerInfoID.Enum_TowerTerrorBringer);
-
-        if (!AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerUsurper])
-            AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerUsurper]
-               = MonsterList_Type(TowerInfo.TowerInfoID.Enum_TowerUsurper);
-
-        for (int i = 0; i < AllMonstersByRankBonus.Length; ++i)
+        if (TowerNewlyBuilt >= 0)
         {
-            if (!AllMonstersByRankBonus[i])
-                AllMonstersByRankBonus[i] = MonseterList_Rank(i + 1);
+            if (TowerNewlyBuilt==0 && !AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerNightmare])
+                AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerNightmare]
+                    = MonsterList_Type(TowerInfo.TowerInfoID.Enum_TowerNightmare);
+
+            if (TowerNewlyBuilt == 1 && !AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerSoulEater])
+                AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerSoulEater]
+                    = MonsterList_Type(TowerInfo.TowerInfoID.Enum_TowerSoulEater);
+
+            if (TowerNewlyBuilt == 2 && !AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer])
+                AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer]
+                    = MonsterList_Type(TowerInfo.TowerInfoID.Enum_TowerTerrorBringer);
+
+            if (TowerNewlyBuilt == 3 && !AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerUsurper])
+                AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerUsurper]
+                   = MonsterList_Type(TowerInfo.TowerInfoID.Enum_TowerUsurper);
+
+            TowerNewlyBuilt = -1;
+        }
+        if (TowerLevelChg)
+        {
+            for (int i = 0; i < AllMonstersByRankBonus.Length; ++i)
+            {
+                if (!AllMonstersByRankBonus[i])
+                    AllMonstersByRankBonus[i] = MonseterList_Rank(i + 1);
+            }
+            TowerLevelChg = false;
         }
     }
 

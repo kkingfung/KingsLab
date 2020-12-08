@@ -255,4 +255,54 @@ public class Chance
 		value -= t;
 		return value <= 0;
 	}
+
+	public int StackOverflowNoise(int seed) {
+		int n = (seed << 13) ^ seed;
+		n *= n * 15731;
+		n += 789221;
+		n *= n;
+		n += 1376312589;
+		return n;
+	}
+
+	public int LibNoise(int seed)
+	{
+		int n = (seed >> 13) ^ seed;
+		n *= n * 60493;
+		n += 19990303;
+		n *= n;
+		n += 1376312589;
+		return n;
+	}
+
+	//Fastest Noise
+	public uint Squirrel3_1D(int position, int seed=0)
+	{
+		const uint BIT_NOISE1 = 0xB5297A4D;
+		const uint BIT_NOISE2 = 0x68E31DA4;
+		const uint BIT_NOISE3 = 0x1B56C4E9;
+
+		uint n = (uint)position;
+		n *= BIT_NOISE1;
+		n += (uint)seed;
+		n ^= (n >> 8);
+		n += BIT_NOISE2;
+		n ^= (n << 8);
+		n *= BIT_NOISE3;
+		n ^= (n >> 8);
+		return n;
+	}
+
+	public uint Squirrel3_2D(int posX, int posY, int seed = 0)
+	{
+		const int PRIME_NUM = 198491317;
+		return Squirrel3_1D(posX+ PRIME_NUM* posY, seed);
+	}
+
+	public uint Squirrel3_3D(int posX, int posY, int posZ, int seed = 0)
+	{
+		const int PRIME_NUM1 = 198491317;
+		const int PRIME_NUM2 = 6542989;
+		return Squirrel3_1D(posX + PRIME_NUM1 * posY+ PRIME_NUM2* posZ, seed);
+	}
 }

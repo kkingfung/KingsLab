@@ -50,6 +50,7 @@ public class Tower : MonoBehaviour
 
     private EntityManager entityManager;
     private FilledMapGenerator filledMapGenerator;
+    private BonusChecker bonusChecker;
 
     private float3 oriScale;
     private bool newlySpawned;
@@ -253,7 +254,7 @@ public class Tower : MonoBehaviour
 
     public void linkingManagers(TowerSpawner towerSpawner, AudioManager audioManager, 
         AttackSpawner attackSpawner, FilledMapGenerator filledMapGenerator,
-        ResourceManager resourceManager,DebugManager debugManager=null)
+        ResourceManager resourceManager,BonusChecker bonusChecker=null,DebugManager debugManager=null)
     {
         this.towerSpawner = towerSpawner;
         this.audioManager = audioManager;
@@ -261,6 +262,7 @@ public class Tower : MonoBehaviour
         this.filledMapGenerator = filledMapGenerator;
         this.resourceManager = resourceManager;
         this.debugManager = debugManager;
+        this.bonusChecker = bonusChecker;
     }
 
     public void GainExp(int exp)
@@ -273,7 +275,11 @@ public class Tower : MonoBehaviour
             this.exp -= reqExp;
             reqExp = RequiredExp();
             if (level < MaxLevel[rank - 1])
+            {
                 LevelUp();
+                if (bonusChecker)
+                    bonusChecker.TowerLevelChg = true;
+            }
         }
     }
 

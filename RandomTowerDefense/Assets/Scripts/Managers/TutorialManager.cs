@@ -191,7 +191,7 @@ public class TutorialManager : MonoBehaviour
                 }
                 break;
             case 8:
-                ChangeText("それは新人の部隊のだ");
+                ChangeText("よくできた、\n120Gだが兵士が必要なのだ");
                 StageProgress++;
                 reviewStage = 7;
                 break;
@@ -199,7 +199,7 @@ public class TutorialManager : MonoBehaviour
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
-                    ChangeText("同じ種類を3つ集まるのだ");
+                    ChangeText("最高レベルになると、\n支援金がもらえるのだ");
                     StageProgress++;
                 }
                 break;
@@ -207,7 +207,7 @@ public class TutorialManager : MonoBehaviour
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
-                    ChangeText("そしてもう一回狙って\n2回押すと");
+                    ChangeText("その他にも支援金が\nもらえる方法が…");
                     StageProgress++;
                 }
                 break;
@@ -215,7 +215,7 @@ public class TutorialManager : MonoBehaviour
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
-                    ChangeText("更に強くなれるのだ");
+                    ChangeText("…がある…\n…ある……あ…");
                     StageProgress++;
                 }
                 break;
@@ -223,11 +223,51 @@ public class TutorialManager : MonoBehaviour
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
-                    ChangeText("静かに、敵が来たのだ");
+                    ChangeText("自分で色んな事を\n試せばいいのだ");
                     StageProgress++;
                 }
                 break;
             case 13:
+                if (Input.GetMouseButtonUp(0) ||
+                    (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
+                {
+                    ChangeText("そして、\n同じ種類を3つ集まり");
+                    StageProgress++;
+                }
+                break;
+            case 14:
+                if (Input.GetMouseButtonUp(0) ||
+                    (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
+                {
+                    ChangeText("もう一回狙って\n2回押すと");
+                    StageProgress++;
+                }
+                break;
+            case 15:
+                if (Input.GetMouseButtonUp(0) ||
+                    (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
+                {
+                    ChangeText("更に強くなれるのだ");
+                    StageProgress++;
+                }
+                break;
+            case 16:
+                if (Input.GetMouseButtonUp(0) ||
+                    (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
+                {
+                    ChangeText("…ちょっと静かに");
+                    StageProgress++;
+                }
+                break;
+            case 17:
+                if (Input.GetMouseButtonUp(0) ||
+                    (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
+                {
+                    ChangeText("敵が来たのだ");
+                    StageProgress++;
+                }
+                break;
+            case 18:
                 if (Input.GetMouseButtonUp(0) ||
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {

@@ -121,7 +121,7 @@ public class StoreManager : MonoBehaviour
             }
             else
             {
-                ArmyPriceTextObj[i].text = "-";
+                ArmyPriceTextObj[i].text = "";
                 ArmyPriceTextObj[i].color = new Color(0, 0, 0, 1);
             }
         }

@@ -18,10 +18,13 @@ public class Pathfinding : ComponentSystem {
     private Dictionary<int2, PathNode[]> PathNodeArrayList;
     private NativeArray<PathNode> pathNodeArray;
 
+    private bool chgPath;
+
     //Adjust in source code ONLY
     private bool goalFixed=true;
     protected override void OnCreate()
     {
+        chgPath = false;
         PathNodeArrayList = new Dictionary<int2, PathNode[]>();
     }
 
@@ -61,6 +64,7 @@ public class Pathfinding : ComponentSystem {
                     startPosition = pathfindingParams.startPosition,
                     endPosition = pathfindingParams.endPosition,
                     entity = entity,
+                    chgPath = chgPath
                 };
                 findPathJobList.Add(findPathJob);
                 jobHandleList.Add(findPathJob.Schedule());
@@ -68,6 +72,7 @@ public class Pathfinding : ComponentSystem {
 
                 PathNode[] array = findPathJob.pathNodeArray.ToArray();
                 PathNodeArrayList.Add(pathfindingParams.startPosition, array);
+                chgPath = !chgPath;
             }
             else 
             {
@@ -82,6 +87,7 @@ public class Pathfinding : ComponentSystem {
                         startPosition = pathfindingParams.startPosition,
                         endPosition = pathfindingParams.endPosition,
                         entity = entity,
+                        chgPath = chgPath
                     };
                     findPathJobList.Add(findPathJob);
                 }
@@ -97,6 +103,7 @@ public class Pathfinding : ComponentSystem {
                         startPosition = pathfindingParams.startPosition,
                         endPosition = pathfindingParams.endPosition,
                         entity = entity,
+                        chgPath = chgPath
                     };
                     findPathJobList.Add(findPathJob);
                     jobHandleList.Add(findPathJob.Schedule());
@@ -104,6 +111,7 @@ public class Pathfinding : ComponentSystem {
 
                     PathNode[] array = findPathJob.pathNodeArray.ToArray();
                     PathNodeArrayList.Add(pathfindingParams.startPosition, array);
+                    chgPath = !chgPath;
                 }
             }
             PostUpdateCommands.RemoveComponent<PathfindingParams>(entity);
@@ -194,6 +202,8 @@ public class Pathfinding : ComponentSystem {
         public int2 startPosition;
         public int2 endPosition;
 
+        public bool chgPath;
+
         public Entity entity;
         
         //public BufferFromEntity<PathPosition> pathPositionBuffer;
@@ -208,14 +218,27 @@ public class Pathfinding : ComponentSystem {
             }
 
             NativeArray<int2> neighbourOffsetArray = new NativeArray<int2>(4, Allocator.Temp);
-            neighbourOffsetArray[0] = new int2(-1, 0); // Left
-            neighbourOffsetArray[1] = new int2(+1, 0); // Right
-            neighbourOffsetArray[2] = new int2(0, +1); // Up
-            neighbourOffsetArray[3] = new int2(0, -1); // Down
-            //neighbourOffsetArray[4] = new int2(-1, -1); // Left Down
-            //neighbourOffsetArray[5] = new int2(-1, +1); // Left Up
-            //neighbourOffsetArray[6] = new int2(+1, -1); // Right Down
-            //neighbourOffsetArray[7] = new int2(+1, +1); // Right Up
+            if (chgPath)
+            {
+                neighbourOffsetArray[0] = new int2(-1, 0); // Left
+                neighbourOffsetArray[1] = new int2(+1, 0); // Right
+                neighbourOffsetArray[2] = new int2(0, +1); // Up
+                neighbourOffsetArray[3] = new int2(0, -1); // Down
+                //neighbourOffsetArray[4] = new int2(-1, -1); // Left Down
+                //neighbourOffsetArray[5] = new int2(-1, +1); // Left Up
+                //neighbourOffsetArray[6] = new int2(+1, -1); // Right Down
+                //neighbourOffsetArray[7] = new int2(+1, +1); // Right Up
+            }
+            else {
+                neighbourOffsetArray[0] = new int2(+1, 0); // Right
+                neighbourOffsetArray[1] = new int2(-1, 0); // Left
+                neighbourOffsetArray[2] = new int2(0, -1); // Down
+                neighbourOffsetArray[3] = new int2(0, +1); // Up
+                //neighbourOffsetArray[4] = new int2(+1, +1); // Right Up
+                //neighbourOffsetArray[5] = new int2(+1, -1); // Right Down
+                //neighbourOffsetArray[6] = new int2(-1, +1); // Left Up
+                //neighbourOffsetArray[7] = new int2(-1, -1); // Left Down
+            }
 
             int endNodeIndex = CalculateIndex(endPosition.x, endPosition.y, gridSize.x);
             PathNode startNode = pathNodeArray[CalculateIndex(startPosition.x, startPosition.y, gridSize.x)];

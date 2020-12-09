@@ -9,7 +9,7 @@ using Unity.Entities;
 public class Tower : MonoBehaviour
 {
     private readonly int[] MaxLevel = { 5, 10, 20, 40 };
-    private readonly int[] MaxLevelBonus = { 200, 1000, 3000, 5000 };
+    private readonly int[] MaxLevelBonus = { 100, 300, 500, 1000 };
     //private readonly int[] MaxLevel = { 1, 1, 1, 1 };
     private readonly float TowerDestroyTime = 2;
     private readonly int ActionSetNum = 2;
@@ -57,14 +57,15 @@ public class Tower : MonoBehaviour
     private bool newlySpawned;
 
     private DebugManager debugManager;
-
+    private BoxCollider boxCollider;
     private void Awake()
     {
         atkCounter = 0;
         entityID = -1;
         //AtkVFX = new List<GameObject>();
         animator = GetComponent<Animator>();
-       // audioSource = GetComponent<AudioSource>();
+        boxCollider = GetComponent<BoxCollider>();
+        // audioSource = GetComponent<AudioSource>();
 
         entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         //defaultTarget = GameObject.FindGameObjectWithTag("DefaultTag");
@@ -115,6 +116,7 @@ public class Tower : MonoBehaviour
             }
         }
     }
+    public GameObject debug;
     public void Attack()
     {
         Vector3 posAdj = new Vector3();
@@ -127,6 +129,7 @@ public class Tower : MonoBehaviour
                 //    audioManager.PlayAudio("se_Lighting");
                 //}
                 posAdj.z = 0.2f;
+                if (CheckMaxLevel() == false)
                 GainExp(ExpPerAttack * 8);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
@@ -136,7 +139,8 @@ public class Tower : MonoBehaviour
                 //}
                 posAdj.z = -0.2f;
                 atkEntityPos = transform.position;
-                GainExp(ExpPerAttack * 2);
+                if (CheckMaxLevel() == false)
+                    GainExp(ExpPerAttack * 2);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
                //if (audioManager && audioManager.enabledSE)
@@ -144,7 +148,8 @@ public class Tower : MonoBehaviour
                //    audioManager.PlayAudio("se_Shot");
                //}
                 posAdj.z = 0.0f;
-                GainExp(ExpPerAttack*12);
+                if (CheckMaxLevel() == false)
+                    GainExp(ExpPerAttack*12);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
                //if (audioManager && audioManager.enabledSE)
@@ -154,7 +159,8 @@ public class Tower : MonoBehaviour
                 posAdj.z = 0.5f;
                 posAdj.y = 0.15f;
                 atkEntityPos = transform.position;
-                GainExp(ExpPerAttack);
+                if (CheckMaxLevel() == false)
+                    GainExp(ExpPerAttack);
                 break;
         }
         int[] entityID=attackSpawner.Spawn((int)type, this.transform.position
@@ -168,19 +174,41 @@ public class Tower : MonoBehaviour
         switch (type)
         {
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
+                //if (vfx.HasFloat("AuraSize") == false || vfx.HasVector3("TargetPos") == false || vfx.HasFloat("StarSize") == false)
+                //{
+                //    debug = vfx.gameObject;
+                //    Debug.Log(-1);
+                //}
+
                 vfx.SetVector3("TargetPos", towerSpawner.targetArray[this.entityID]);
                 vfx.SetFloat("StarSize", rank * 10f);
                 vfx.SetFloat("AuraSize", rank * 0.5f);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-                vfx.SetFloat("Spawn rate", rank * 2f);
+                //if (vfx.HasFloat("Spawn rate") == false)
+                //{
+                //    debug = vfx.gameObject;
+                //    Debug.Log(-1);
+                //}
+
+                vfx.SetFloat("Spawn rate", rank * 1f);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
+                //if (vfx.HasFloat("SkullSize") == false || vfx.HasVector3("TargetPos") == false)
+                //{
+                //    debug = vfx.gameObject;
+                //    Debug.Log(-1);
+                //}
                 vfx.SetVector3("TargetPos", towerSpawner.targetArray[this.entityID]);
                 vfx.SetFloat("SkullSize", rank * 10f + 10f);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                vfx.SetFloat("SizeMultiplier", rank*0.1f);
+                //if (vfx.HasFloat("SizeMultiplier") == false)
+                //{
+                //    debug = vfx.gameObject;
+                //    Debug.Log(-1);
+                //}
+                vfx.SetFloat("SizeMultiplier", rank * 0.1f);
                 break;
         }
 
@@ -307,6 +335,9 @@ public class Tower : MonoBehaviour
         UpdateAttr();
         if (level == MaxLevel[rank - 1])
             resourceManager.ChangeMaterial(MaxLevelBonus[rank - 1]);
+
+        if (CheckMaxLevel())
+            exp = 0;
     }
 
     private void UpdateAttr()
@@ -392,6 +423,8 @@ public class Tower : MonoBehaviour
 
     private IEnumerator EndAnim()
     {
+        if (boxCollider) boxCollider.enabled = false;
+
         float timeCounter = 0;
         float spd = transform.localScale.x / (TowerDestroyTime);
         while (timeCounter < TowerDestroyTime)
@@ -409,7 +442,6 @@ public class Tower : MonoBehaviour
             Destroy(auraVFX);
         //if(lvupVFXComponent)
         //    lvupVFXComponent.enabled = false;
-
         this.gameObject.SetActive(false);
         //Destroy(this.gameObject);
         StopCoroutine(EndAnim());
@@ -429,5 +461,6 @@ public class Tower : MonoBehaviour
         }
         
         transform.localScale = oriScale;
+        boxCollider.enabled = true;
     }
 }

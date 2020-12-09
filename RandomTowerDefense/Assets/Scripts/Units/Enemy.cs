@@ -37,7 +37,7 @@ public class Enemy : MonoBehaviour
     private List<Material> matsPetrify;
     private List<Material> matsSlow;
 
-    public Animator animator;
+    //public Animator animator;
     public Slider HpBar;
     private RectTransform HpBarRot;
 
@@ -48,16 +48,16 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        if (enemySpawner==null) enemySpawner = FindObjectOfType<EnemySpawner>();
-        if (effectManager == null) effectManager = FindObjectOfType<EffectSpawner>();
-        resourceManager = FindObjectOfType<ResourceManager>();
+        //if (enemySpawner==null) enemySpawner = FindObjectOfType<EnemySpawner>();
+        //if (effectManager == null) effectManager = FindObjectOfType<EffectSpawner>();
+        //if (resourceManager == null) resourceManager = FindObjectOfType<ResourceManager>();
 
-        if (animator == null) 
-            animator = GetComponent<Animator>();
-
-        if (animator == null) {
-            animator = GetComponentInChildren<Animator>();
-        }
+        //if (animator == null) 
+        //    animator = GetComponent<Animator>();
+        //
+        //if (animator == null) {
+        //    animator = GetComponentInChildren<Animator>();
+        //}
 
         if (HpBar == null)
             HpBar = GetComponentInChildren<Slider>();
@@ -160,28 +160,34 @@ public class Enemy : MonoBehaviour
             prevPos = transform.position;
         }
     }
+    public void linkingManagers(EnemySpawner enemySpawner, EffectSpawner effectManager, 
+    ResourceManager resourceManager)
+    {
+        this.enemySpawner = enemySpawner;
+        this.effectManager = effectManager;
+        this.resourceManager = resourceManager;
+    }
 
-    public void Init(EnemySpawner enemySpawner, EffectSpawner effectManager, int entityID, int money, AgentScript agent = null)
+
+    public void Init(int entityID, int money, AgentScript agent = null)
     {
         MyStart();
 
-        this.enemySpawner = enemySpawner;
-        this.effectManager = effectManager;
         this.entityID = entityID;
         this.money = money;
         this.agent = agent;
         HpBar.maxValue = 1;
         HpBar.value = 1;
 
-        if (animator == null)
-            animator = GetComponent<Animator>();
-
-        if (animator == null)
-        {
-            animator = GetComponentInChildren<Animator>();
-        }
-        if (animator)
-            animator.SetTrigger("Reused");
+        //if (animator == null)
+        //    animator = GetComponent<Animator>();
+        //
+        //if (animator == null)
+        //{
+        //    animator = GetComponentInChildren<Animator>();
+        //}
+        //if (animator)
+        //    animator.SetTrigger("Reused");
     }
 
     public void Damaged(float currHP)
@@ -228,8 +234,9 @@ public class Enemy : MonoBehaviour
 
     private IEnumerator DieAnimation()
     {
-        if (animator)
-            animator.SetTrigger("Dead");
+        //if (animator)
+        //    animator.SetTrigger("Dead");
+
         effectManager.Spawn(1, this.transform.position + Vector3.up * 0.5f);
         yield return new WaitForSeconds(EnemyDestroyTime*0.2f);
 
@@ -261,8 +268,8 @@ public class Enemy : MonoBehaviour
     private IEnumerator StartAnim()
     {
         float timeCounter = 0;
-        float spd = oriScale.x / (EnemyDestroyTime * 0.1f);
-        while (timeCounter < EnemyDestroyTime * 0.1f)
+        float spd = oriScale.x / (EnemyDestroyTime);
+        while (timeCounter < EnemyDestroyTime)
         {
             float delta = Time.deltaTime;
             timeCounter += delta;

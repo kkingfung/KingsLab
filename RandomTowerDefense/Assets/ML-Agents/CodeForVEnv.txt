@@ -1,9 +1,15 @@
 D:\course_Year3\FYP\Ref\AI\VirtualEnvironment\MLAgentsEnv\Scripts\activate.bat
 d:
 cd D:\GitHub\KingsLab\RandomTowerDefense\Assets\ML-Agents\ML-Agents config  
-mlagents-learn RandomDefAgent.yaml --run-id=Agent
---resume --force
 
+mlagents-learn RandomDefAgent.yaml --run-id=Agent --force
 mlagents-learn RandomDefAgent.yaml --run-id=Agent --resume
+
+OR
+
+[Only in Windows] 
+RandomDefAgent.yaml --env=Build/RandomDefenderSimulation --num-envs=5 --run-id=Agent
+**serverbuild
+**stop by ctrl+c
 
 tensorboard --logdir results

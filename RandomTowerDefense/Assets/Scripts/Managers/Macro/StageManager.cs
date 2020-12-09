@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class StageManager : MonoBehaviour
 {
     private readonly float timerForDmgVFX = 0.05f;
-
+    private readonly Vector3 displayPos = new Vector3(57.5f, 31f, 3.5f);
     public enum GameResult
     {
         Lose = -1,
@@ -94,10 +94,10 @@ public class StageManager : MonoBehaviour
 
             for (int i = 0; i < EnemySpawnPtNum; ++i)
             {
-                Vector3 pos = mapGenerator.CoordToPosition(SpawnPoint[i + 1]) + mapGenerator.transform.position;
+                Vector3 pos =mapGenerator.CoordToPosition(SpawnPoint[i + 1]) + mapGenerator.transform.position;
                 if (i == 0)
                 {
-                    GameObject WaveDisplayMesh = Instantiate(WaveDisplayMeshPrefab, pos, Quaternion.Euler(90f, 0, 0));
+                    GameObject WaveDisplayMesh = Instantiate(WaveDisplayMeshPrefab, displayPos, Quaternion.Euler(90f, 0, 0)) ;
                     WaveDisplayMesh.transform.parent = this.transform;
                     waveManager.waveNumMesh = WaveDisplayMesh.GetComponent<TextMesh>();
                     waveManager.waveNumMesh.text = "WAVE 1";

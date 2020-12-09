@@ -6282,7 +6282,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -138, y: 748}
+  m_AnchoredPosition: {x: -143.9, y: 748}
   m_SizeDelta: {x: 600, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &366202345
@@ -18318,6 +18318,7 @@ MonoBehaviour:
   RockCritter: {fileID: 8897753120952202049, guid: d7d0897d01f0f744eb7394a754348e4c, type: 3}
   GameObjects: []
   mapGenerator: {fileID: 2142590585}
+  resourceManager: {fileID: 1011788840}
   effectManager: {fileID: 645382831}
   agent: {fileID: 5788967119911407911}
 --- !u!1 &962465932
@@ -30254,7 +30255,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -314.2, y: 662.4}
+  m_AnchoredPosition: {x: -308.2, y: 662.4}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1517405762
@@ -33362,7 +33363,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -361.3, y: 136.2}
+  m_AnchoredPosition: {x: -355.9, y: 136.2}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1624377339

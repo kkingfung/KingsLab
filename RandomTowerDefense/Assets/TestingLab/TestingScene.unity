@@ -7054,6 +7054,7 @@ MonoBehaviour:
   RockCritter: {fileID: 8897753120952202049, guid: d7d0897d01f0f744eb7394a754348e4c, type: 3}
   GameObjects: []
   mapGenerator: {fileID: 2142590585}
+  resourceManager: {fileID: 1011788840}
   effectManager: {fileID: 1232795750}
   agent: {fileID: 1666813455}
 --- !u!1 &964360988

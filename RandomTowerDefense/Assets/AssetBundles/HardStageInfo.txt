@@ -15,7 +15,7 @@ waveID,enmNum,enmPort,enmType
 14:20:2:Footman
 15:10:0:StoneMonster
 16:20:2:SpiderGhost
-17:20:1:Golem
+17:10:1:Golem
 18:25:1:SkeletonArmed
 19:30:1:FreeLich
 20:35:0:SpiderGhost

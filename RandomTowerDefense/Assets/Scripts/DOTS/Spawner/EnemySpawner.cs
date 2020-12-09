@@ -69,6 +69,7 @@ public class EnemySpawner : MonoBehaviour
     //private Transform[] transforms;
 
     public FilledMapGenerator mapGenerator;
+    public ResourceManager resourceManager;
 
     public EffectSpawner effectManager;
     // private CastleSpawner castleSpawner;
@@ -206,7 +207,9 @@ public class EnemySpawner : MonoBehaviour
             GameObjects[i] = Instantiate(allMonsterList[Name], transform);
             GameObjects[i].transform.position = Position;
             GameObjects[i].transform.localRotation = Quaternion.identity;
-            GameObjects[i].GetComponent<Enemy>().Init(this, effectManager, i, money, agent);
+            Enemy script = GameObjects[i].GetComponent<Enemy>();
+            script.Init( i, money, agent);
+            script.linkingManagers(this, effectManager, resourceManager);
             //transforms[i] = GameObjects[i].transform;
             healthArray[i] = health;
             slowArray[i] = 0;

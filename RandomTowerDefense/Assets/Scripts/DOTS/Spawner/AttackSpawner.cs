@@ -9,7 +9,7 @@ using UnityEngine.VFX;
 
 public class AttackSpawner : MonoBehaviour
 {
-    private readonly int count=200;
+    private readonly int count=300;
     public static AttackSpawner Instance { get; private set; }
     public List<GameObject> PrefabObject;
 

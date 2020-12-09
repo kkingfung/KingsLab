@@ -31,8 +31,8 @@ public class InputManager : MonoBehaviour
         DragToUp = 2,
         DragToRight = 3,
     }
-    readonly float tapStayTime = 0.3f;
-    readonly float tapDoubleTime = 0.2f;
+    readonly float tapStayTime = 0.15f;
+    readonly float tapDoubleTime = 0.4f;
     readonly float dragDiff = 40.0f;//cooperate with Scene Script(toDrag)
     readonly float touchTapDiff = 5.0f;//Check Buy Store/Switch Focus
 

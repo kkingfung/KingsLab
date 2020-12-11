@@ -20673,7 +20673,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1036917021
 Transform:
   m_ObjectHideFlags: 0
@@ -20999,7 +20999,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a1352df445f01d4a9152a85a0a72d01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneManager: {fileID: 0}
+  sceneManager: {fileID: 1829121298}
   enemySpawner: {fileID: 956912832}
   waveManager: {fileID: 575038166}
   debugManager: {fileID: 0}
@@ -37323,11 +37323,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LandscapeObjs:
-  - {fileID: 6607376}
+  - {fileID: 1464141590}
   - {fileID: 20255778}
   - {fileID: 1464141590}
   PortraitObjs:
-  - {fileID: 1036917020}
+  - {fileID: 1593161645}
   - {fileID: 674649942}
   - {fileID: 1593161645}
   toDrag: 0

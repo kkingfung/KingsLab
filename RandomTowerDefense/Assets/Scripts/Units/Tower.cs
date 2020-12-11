@@ -13,7 +13,7 @@ public class Tower : MonoBehaviour
     //private readonly int[] MaxLevel = { 1, 1, 1, 1 };
     private readonly float TowerDestroyTime = 2;
     private readonly int ActionSetNum = 2;
-    private readonly int ExpPerAttack = 5;
+    private readonly int ExpPerAttack = 10;
 
     public TowerAttr attr;
     public int level;
@@ -130,7 +130,7 @@ public class Tower : MonoBehaviour
                 //}
                 posAdj.z = 0.2f;
                 if (CheckMaxLevel() == false)
-                GainExp(ExpPerAttack * 8);
+                GainExp(ExpPerAttack * 3);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
                 //if (audioManager && audioManager.enabledSE)
@@ -149,7 +149,7 @@ public class Tower : MonoBehaviour
                //}
                 posAdj.z = 0.0f;
                 if (CheckMaxLevel() == false)
-                    GainExp(ExpPerAttack*12);
+                    GainExp(ExpPerAttack*5);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
                //if (audioManager && audioManager.enabledSE)
@@ -160,7 +160,7 @@ public class Tower : MonoBehaviour
                 posAdj.y = 0.15f;
                 atkEntityPos = transform.position;
                 if (CheckMaxLevel() == false)
-                    GainExp(ExpPerAttack);
+                    GainExp(ExpPerAttack * 1);
                 break;
         }
         int[] entityID=attackSpawner.Spawn((int)type, this.transform.position
@@ -346,7 +346,7 @@ public class Tower : MonoBehaviour
 
         //Update by rank/level with factors
         attr = new TowerAttr(attr.radius * (1 + 0.02f * rank + 0.005f * level),
-            attr.damage * (rank + 0.5f * level
+            attr.damage * (rank + 0.25f * level
             + ((debugManager != null) ? debugManager.towerrank_Damage * rank +
             debugManager.towerlvl_Damage * level: 0)),
             attr.waitTime * (1f - (0.1f * rank)), 

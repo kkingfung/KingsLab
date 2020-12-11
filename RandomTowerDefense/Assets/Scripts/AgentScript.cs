@@ -161,18 +161,18 @@ public class AgentScript : Agent
     {
         if (isTower == false)
         {
-            //int temp = waveManager.SpawnPointByAI;
-            //if (vectorAction[0] < -0.3)
-            //    waveManager.SpawnPointByAI = 0;
-            //else if (vectorAction[0] > 0.3)
-            //    waveManager.SpawnPointByAI = 2;
-            //else
-            //    waveManager.SpawnPointByAI = 1;
-            //
-            //if (temp == waveManager.SpawnPointByAI)
-            //    AddReward(-1 * counter / 100.0f);
-            //else
-            //    counter = 0;
+            int temp = waveManager.SpawnPointByAI;
+            if (vectorAction[0] < -0.3)
+                waveManager.SpawnPointByAI = 0;
+            else if (vectorAction[0] > 0.3)
+                waveManager.SpawnPointByAI = 2;
+            else
+                waveManager.SpawnPointByAI = 1;
+            
+            if (temp == waveManager.SpawnPointByAI)
+                AddReward(-1 * counter / 100.0f);
+            else
+                counter = 0;
 
             if (vectorAction[1] > 0)
             {

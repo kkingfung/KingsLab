@@ -212,21 +212,17 @@ public class AgentScript : Agent
             if (Input.GetKey(KeyCode.Keypad4))
             {
                 waveManager.SpawnPointByAI = 0;
-                Debug.Log(waveManager.SpawnPointByAI);
+                //Debug.Log(waveManager.SpawnPointByAI);
             }
             else if (Input.GetKey(KeyCode.Keypad5))
             {
                 waveManager.SpawnPointByAI = 1;
-                Debug.Log(waveManager.SpawnPointByAI);
+                //Debug.Log(waveManager.SpawnPointByAI);
             }
             else if (Input.GetKey(KeyCode.Keypad6))
             {
                 waveManager.SpawnPointByAI = 2;
-                Debug.Log(waveManager.SpawnPointByAI);
-            }
-            if (Input.GetKey(KeyCode.Keypad8))
-            {
-                Debug.Log(waveManager.SpawnPointByAI);
+                //Debug.Log(waveManager.SpawnPointByAI);
             }
         }
         if (isTower && Input.GetKey(KeyCode.Keypad0))

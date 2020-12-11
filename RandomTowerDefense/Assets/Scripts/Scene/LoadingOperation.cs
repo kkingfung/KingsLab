@@ -18,6 +18,9 @@ public class LoadingOperation : ISceneChange
     // Start is called before the first frame update
     private void Start()
     {
+        Resources.UnloadUnusedAssets();
+        System.GC.Collect();
+
         base.SceneIn();
         LoadingIconRenderer = new List<MeshRenderer>();
         for (int i=0;i< LoadingIcon.Count;++i)

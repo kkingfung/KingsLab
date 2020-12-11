@@ -144,7 +144,7 @@ public class PRNG {
 			case Weight.Ends: // Bias towards smaller and larger values
 				return (Value () < 0.5f) ? smallestValue : 1 - smallestValue;
 			default:
-				Debug.LogError ("Missing weight implementation");
+				//Debug.LogError ("Missing weight implementation");
 				return 0;
 		}
 	}

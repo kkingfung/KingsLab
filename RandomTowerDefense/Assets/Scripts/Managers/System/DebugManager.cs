@@ -51,7 +51,7 @@ public class DebugManager : MonoBehaviour
     {
         if (isSimulationTest == false) return;
     //    GameSimManager.Instance.SetCounter("WaveArrived", waveManager.GetCurrentWaveNum());
-        Debug.Log("QuitNow");
+        //Debug.Log("QuitNow");
 
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;

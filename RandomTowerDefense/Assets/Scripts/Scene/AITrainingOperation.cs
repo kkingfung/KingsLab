@@ -50,7 +50,7 @@ public class AITrainingOperation : InGameOperation
             {
                 StageInfo.Init(false, null);
             }
-            Debug.Log("UpdatedByRemoteConfig");
+            //Debug.Log("UpdatedByRemoteConfig");
         }
         else if (UseFileAsset)
         {
@@ -60,7 +60,7 @@ public class AITrainingOperation : InGameOperation
                 TowerInfo.InitByFile("Assets/AssetBundles/TowerInfo.txt");
                 EnemyInfo.InitByFile("Assets/AssetBundles/EnemyInfo.txt");
                 SkillInfo.InitByFile("Assets/AssetBundles/SkillInfo.txt");
-                Debug.Log("UpdatedByFileAsset");
+               // Debug.Log("UpdatedByFileAsset");
             }
             else
             {
@@ -68,7 +68,7 @@ public class AITrainingOperation : InGameOperation
                 TowerInfo.Init();
                 EnemyInfo.Init();
                 SkillInfo.Init();
-                Debug.Log("UpdatedByScriptInput");
+                //Debug.Log("UpdatedByScriptInput");
             }
         }
         else
@@ -77,7 +77,7 @@ public class AITrainingOperation : InGameOperation
             TowerInfo.Init();
             EnemyInfo.Init();
             SkillInfo.Init();
-            Debug.Log("UpdatedByScriptInput");
+            //Debug.Log("UpdatedByScriptInput");
         }
 
         Upgrades.init();

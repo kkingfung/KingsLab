@@ -230,10 +230,10 @@ public class Pathfinding : ComponentSystem {
                 //neighbourOffsetArray[7] = new int2(+1, +1); // Right Up
             }
             else {
-                neighbourOffsetArray[0] = new int2(+1, 0); // Right
-                neighbourOffsetArray[1] = new int2(-1, 0); // Left
-                neighbourOffsetArray[2] = new int2(0, -1); // Down
-                neighbourOffsetArray[3] = new int2(0, +1); // Up
+                neighbourOffsetArray[0] = new int2(0, -1); // Down
+                neighbourOffsetArray[1] = new int2(0, +1); // Up
+                neighbourOffsetArray[2] = new int2(+1, 0); // Right
+                neighbourOffsetArray[3] = new int2(-1, 0); // Left
                 //neighbourOffsetArray[4] = new int2(+1, +1); // Right Up
                 //neighbourOffsetArray[5] = new int2(+1, -1); // Right Down
                 //neighbourOffsetArray[6] = new int2(-1, +1); // Left Up

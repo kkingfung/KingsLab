@@ -34,7 +34,7 @@ public static class LoadBundle
     public static void LoadAssetBundle(string bundleUrl, string filename, string filepath)
     {
         bundle = AssetBundle.LoadFromFile(bundleUrl);
-        Debug.Log(bundle == null ? "Fail to Load Bundle" : "Bundle loaded");
+        //Debug.Log(bundle == null ? "Fail to Load Bundle" : "Bundle loaded");
 
         TextAsset charDataFile = bundle.LoadAsset(filename) as TextAsset;
         //string[] linesFromfile = charDataFile.text.Split('\n');

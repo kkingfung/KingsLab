@@ -502,7 +502,8 @@ public class InputManager : MonoBehaviour
             if (ButtonsInGame.Count > 0 && sceneManager && sceneManager.currScreenShown != 0)
             {
     
-                if ((Physics.Raycast(ray2, out hit2, 200) && Physics.Raycast(ray, out hit, 200)) &&
+                if ((Physics.Raycast(ray2, out hit2, 200, LayerMask.GetMask("StoreLayer")) &&
+                    Physics.Raycast(ray, out hit, 200, LayerMask.GetMask("StoreLayer"))) &&
                     ButtonsInGame.Contains(hit.transform.gameObject))
                 {
                     RaycastFunction raycastFunction = hit.transform.GetComponent<RaycastFunction>();

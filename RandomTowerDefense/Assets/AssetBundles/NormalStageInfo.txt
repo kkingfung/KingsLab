@@ -13,4 +13,6 @@ waveID,enmNum,enmPort,enmType
 12:30:1:Skeleton
 13:20:0:GruntS
 14:30:2:TurtleShell
-15:2:1:Bull
+15:1:0:Bull
+16:1:2:Bull
+17:1:1:Bull

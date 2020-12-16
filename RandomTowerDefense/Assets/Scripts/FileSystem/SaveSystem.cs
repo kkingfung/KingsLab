@@ -108,7 +108,7 @@ public static class SaveSystem {
     public static void SaveObject(string fileName, SaveObject saveObject, bool overwrite)
     {
         string json = JsonUtility.ToJson(saveObject);
-        Debug.Log(json);
+        //Debug.Log(json);
         Save(fileName, json, overwrite);
     }
 

@@ -354,11 +354,11 @@ public static class StageInfo
 
         List<EnmDetail> detail = new List<EnmDetail>();
         int waveIDCnt = 1;
+        detail.Add(new EnmDetail(waveIDCnt++, 5, 1, "Slime"));
+        detail.Add(new EnmDetail(waveIDCnt++, 5, 1, "Mushroom"));
         detail.Add(new EnmDetail(waveIDCnt++, 10, 1, "Slime"));
-        detail.Add(new EnmDetail(waveIDCnt++, 10, 1, "Mushroom"));
-        detail.Add(new EnmDetail(waveIDCnt++, 20, 1, "Slime"));
-        detail.Add(new EnmDetail(waveIDCnt++, 20, 1, "TurtleShell"));
-        detail.Add(new EnmDetail(waveIDCnt++, 3, 1, "StoneMonster"));
+        detail.Add(new EnmDetail(waveIDCnt++, 10, 1, "TurtleShell"));
+        detail.Add(new EnmDetail(waveIDCnt++, 1, 1, "StoneMonster"));
 
         int j = 0;
 
@@ -387,20 +387,20 @@ public static class StageInfo
         int waveIDCnt = 1;
         detail.Add(new EnmDetail(waveIDCnt++, 10, 1, "Slime"));
         detail.Add(new EnmDetail(waveIDCnt++, 10, 1, "Mushroom"));
-        detail.Add(new EnmDetail(waveIDCnt++, 20, 2, "Slime"));
-        detail.Add(new EnmDetail(waveIDCnt++, 20, 1, "Mushroom"));
+        detail.Add(new EnmDetail(waveIDCnt++, 15, 2, "Slime"));
+        detail.Add(new EnmDetail(waveIDCnt++, 15, 1, "Mushroom"));
         detail.Add(new EnmDetail(waveIDCnt++, 20, 0, "TurtleShell"));
 
-        detail.Add(new EnmDetail(waveIDCnt++, 30, 1, "Footman"));
-        detail.Add(new EnmDetail(waveIDCnt++, 30, 1, "Slime"));
-        detail.Add(new EnmDetail(waveIDCnt++, 30, 2, "Grunt"));
+        detail.Add(new EnmDetail(waveIDCnt++, 20, 1, "Footman"));
+        detail.Add(new EnmDetail(waveIDCnt++, 25, 1, "Slime"));
+        detail.Add(new EnmDetail(waveIDCnt++, 25, 2, "Grunt"));
         detail.Add(new EnmDetail(waveIDCnt++, 30, 2, "Skeleton"));
-        detail.Add(new EnmDetail(waveIDCnt++, 40, 0, "Footman"));
+        detail.Add(new EnmDetail(waveIDCnt++, 30, 0, "Footman"));
 
-        detail.Add(new EnmDetail(waveIDCnt++, 40, 0, "FootmanS"));
-        detail.Add(new EnmDetail(waveIDCnt++, 40, 1, "Skeleton"));
-        detail.Add(new EnmDetail(waveIDCnt++, 30, 0, "GruntS"));
-        detail.Add(new EnmDetail(waveIDCnt++, 40, 2, "TurtleShell"));
+        detail.Add(new EnmDetail(waveIDCnt++, 20, 0, "FootmanS"));
+        detail.Add(new EnmDetail(waveIDCnt++, 30, 1, "Skeleton"));
+        detail.Add(new EnmDetail(waveIDCnt++, 20, 0, "GruntS"));
+        detail.Add(new EnmDetail(waveIDCnt++, 30, 2, "TurtleShell"));
         detail.Add(new EnmDetail(waveIDCnt, 1, 0, "Bull"));
         detail.Add(new EnmDetail(waveIDCnt, 1, 2, "Bull"));
         detail.Add(new EnmDetail(waveIDCnt, 1, 1, "Bull"));
@@ -428,37 +428,37 @@ public static class StageInfo
         List<EnmDetail> detail = new List<EnmDetail>();
         int waveIDCnt = 1;
         detail.Add(new EnmDetail(waveIDCnt++, 10, 1, "Slime"));
-        detail.Add(new EnmDetail(waveIDCnt++, 10, 1, "Mushroom"));
-        detail.Add(new EnmDetail(waveIDCnt++, 20, 2, "TurtleShell"));
-        detail.Add(new EnmDetail(waveIDCnt++, 20, 2, "Footman"));
-        detail.Add(new EnmDetail(waveIDCnt++, 20, 0, "Mushroom"));
+        detail.Add(new EnmDetail(waveIDCnt++, 15, 1, "Mushroom"));
+        detail.Add(new EnmDetail(waveIDCnt++, 10, 2, "TurtleShell"));
+        detail.Add(new EnmDetail(waveIDCnt++, 15, 2, "Footman"));
+        detail.Add(new EnmDetail(waveIDCnt++, 10, 0, "Mushroom"));
 
-        detail.Add(new EnmDetail(waveIDCnt++, 20, 0, "Grunt"));
-        detail.Add(new EnmDetail(waveIDCnt++, 25, 1, "Skeleton"));
-        detail.Add(new EnmDetail(waveIDCnt++, 30, 2, "Slime"));
-        detail.Add(new EnmDetail(waveIDCnt++, 35, 0, "Grunt"));
-        detail.Add(new EnmDetail(waveIDCnt++, 35, 0, "TurtleShell"));
+        detail.Add(new EnmDetail(waveIDCnt++, 15, 0, "Grunt"));
+        detail.Add(new EnmDetail(waveIDCnt++, 20, 1, "Skeleton"));
+        detail.Add(new EnmDetail(waveIDCnt++, 20, 2, "Slime"));
+        detail.Add(new EnmDetail(waveIDCnt++, 30, 0, "Grunt"));
+        detail.Add(new EnmDetail(waveIDCnt++, 30, 0, "TurtleShell"));
 
-        detail.Add(new EnmDetail(waveIDCnt++, 25, 1, "Mushroom"));
+        detail.Add(new EnmDetail(waveIDCnt++, 20, 1, "Mushroom"));
         detail.Add(new EnmDetail(waveIDCnt++, 30, 1, "Grunt"));
-        detail.Add(new EnmDetail(waveIDCnt++, 30, 2, "Skeleton"));
-        detail.Add(new EnmDetail(waveIDCnt++, 35, 2, "Footman"));
-        detail.Add(new EnmDetail(waveIDCnt, 10, 2, "StoneMonster"));
-        detail.Add(new EnmDetail(waveIDCnt, 10, 1, "StoneMonster"));
-        detail.Add(new EnmDetail(waveIDCnt++, 10, 0, "StoneMonster"));
+        detail.Add(new EnmDetail(waveIDCnt++, 20, 2, "Skeleton"));
+        detail.Add(new EnmDetail(waveIDCnt++, 20, 2, "Footman"));
+        detail.Add(new EnmDetail(waveIDCnt, 5, 2, "StoneMonster"));
+        detail.Add(new EnmDetail(waveIDCnt, 5, 0, "StoneMonster"));
+        detail.Add(new EnmDetail(waveIDCnt++, 5, 1, "StoneMonster"));
 
-        detail.Add(new EnmDetail(waveIDCnt++, 30, 2, "SpiderGhost"));
-        detail.Add(new EnmDetail(waveIDCnt++, 30, 1, "Golem"));
-        detail.Add(new EnmDetail(waveIDCnt++, 30, 1, "SkeletonArmed"));
-        detail.Add(new EnmDetail(waveIDCnt++, 25, 1, "FreeLich"));
+        detail.Add(new EnmDetail(waveIDCnt++, 20, 2, "SpiderGhost"));
+        detail.Add(new EnmDetail(waveIDCnt++, 10, 1, "Golem"));
+        detail.Add(new EnmDetail(waveIDCnt++, 25, 1, "SkeletonArmed"));
+        detail.Add(new EnmDetail(waveIDCnt++, 30, 1, "FreeLich"));
         detail.Add(new EnmDetail(waveIDCnt++, 35, 0, "SpiderGhost"));
 
-        detail.Add(new EnmDetail(waveIDCnt++, 20, 0, "Golem"));
+        detail.Add(new EnmDetail(waveIDCnt++, 15, 0, "Golem"));
         detail.Add(new EnmDetail(waveIDCnt++, 30, 2, "SkeletonArmed"));
-        detail.Add(new EnmDetail(waveIDCnt++, 30, 2, "FreeLich"));
-        detail.Add(new EnmDetail(waveIDCnt++, 50, 1, "Slime"));
-        detail.Add(new EnmDetail(waveIDCnt, 3, 0, "Bull"));
-        detail.Add(new EnmDetail(waveIDCnt++, 3, 2, "Bull"));
+        detail.Add(new EnmDetail(waveIDCnt++, 20, 2, "FreeLich"));
+        detail.Add(new EnmDetail(waveIDCnt++, 40, 1, "Slime"));
+        detail.Add(new EnmDetail(waveIDCnt, 5, 0, "Bull"));
+        detail.Add(new EnmDetail(waveIDCnt++, 5, 2, "Bull"));
 
         detail.Add(new EnmDetail(waveIDCnt++, 20, 1, "FootmanS"));
         detail.Add(new EnmDetail(waveIDCnt++, 30, 1, "SpiderGhost"));

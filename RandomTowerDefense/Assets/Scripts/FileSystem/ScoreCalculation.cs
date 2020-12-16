@@ -51,6 +51,11 @@ public class ScoreCalculation : MonoBehaviour
         for (int i = 0; i < ScoreObj.Count; ++i)
             uiEffect.Add(ScoreObj[i].gameObject.GetComponent<UIEffect>());
     }
+
+    private void OnDisable()
+    {
+        recordManager.UpdateRecordName(recordManager.rank, playerName);
+    }
     private void LateUpdate()
     {
         if (rank <= RecordCharNum)
@@ -151,7 +156,7 @@ public class ScoreCalculation : MonoBehaviour
         rank =recordManager.RecordComparison(currIsland, "ZYXWV", score);
     }
 
-    public void TouchKeybroad(int infoID)
+    public void TouchKeybroad()
     {
         if (rank > RecordCharNum)
         {
@@ -165,27 +170,26 @@ public class ScoreCalculation : MonoBehaviour
         if (keyboard != null)
         {
             keyboard.characterLimit = RecordCharNum;
-            StartCoroutine(TouchScreenInputUpdate(infoID));
+            StartCoroutine(TouchScreenInputUpdate());
             CancelKeybroad = false;
         }
     }
 
-    private IEnumerator TouchScreenInputUpdate(int infoID)
+    private IEnumerator TouchScreenInputUpdate()
     {
         if (keyboard != null)
         {
             while (keyboard.status == TouchScreenKeyboard.Status.Visible && CancelKeybroad == false)
             {
-                foreach(Text i in NameObj)
-                    i.text = keyboard.text;
+                playerName = keyboard.text;
+                foreach (Text i in NameObj)
+                    i.text = playerName;
                 yield return new WaitForSeconds(0f);
             }
+            //if (keyboard.status == TouchScreenKeyboard.Status.Done || keyboard.status == TouchScreenKeyboard.Status.Canceled)
 
-           //if (keyboard.status == TouchScreenKeyboard.Status.Done || keyboard.status == TouchScreenKeyboard.Status.Canceled)
-             
             keyboard = null;
         }
-
         recordManager.UpdateRecordName(rank, playerName);
         Inputting = false;
     }

@@ -90,6 +90,7 @@ public class InGameOperation : ISceneChange
     public TimeManager timeManager;
     public TutorialManager tutorialManager;
     public ScoreCalculation scoreCalculation;
+    public RecordManager recordManager;
 
     //Prevent DoubleHit
     private float TimeRecord = 0;
@@ -398,6 +399,7 @@ public class InGameOperation : ISceneChange
         WaitSceneChg = true;
         StartCoroutine(PetrifyAnimation(SceneID));
         TimeRecord = Time.time;
+
     }
 
     public void OptionStatus()
@@ -447,6 +449,7 @@ public class InGameOperation : ISceneChange
         isSceneFinished = true;
     }
     #endregion
+
 
     #region CameraOperation
     public void ChangeScreenShownByButton(int chgValue)

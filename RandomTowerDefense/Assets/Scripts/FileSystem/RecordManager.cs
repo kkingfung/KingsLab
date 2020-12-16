@@ -14,6 +14,7 @@ public class RecordManager : MonoBehaviour
 
     List<SaveObject> stageRecords;
     public InGameOperation sceneManager;
+    public int rank;
     private void OnEnable()
     {
         stageRecords = new List<SaveObject>();
@@ -43,11 +44,11 @@ public class RecordManager : MonoBehaviour
     }
     public int RecordComparison(int stageID, string name, int score)
     {
-        int rank = stageRecords[stageID].InsertObject(stageID, name, score);
+        rank = stageRecords[stageID].InsertObject(stageID, name, score);
  
         if (AllRecords.Count > 0)
             updateUI();
-        UpdateRecordName(rank,name);
+
         return rank;
     }
 

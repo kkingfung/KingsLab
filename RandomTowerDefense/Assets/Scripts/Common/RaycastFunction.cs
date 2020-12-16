@@ -256,7 +256,6 @@ public class RaycastFunction : MonoBehaviour
                 storeManager.raycastAction(Upgrades.StoreItems.MagicPetrification, InfoID);
                 audioManager.PlayAudio("se_Button");
                 break;
-
         }
         StartCoroutine(ColorRoutine());
     }

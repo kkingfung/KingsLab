@@ -189,6 +189,7 @@ public class StageSelectOperation : ISceneChange
     }
     public void MoveToStage()
     {
+        if (!((LandscapeFade && LandscapeFade.isReady) || (PortraitFade && PortraitFade.isReady))) return;
         if (Time.time - TimeRecord < TimeWait) return;
         StartCoroutine(PetrifyAnimation());
         TimeRecord = Time.time;

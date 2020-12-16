@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: TestingMaterial
-  m_Shader: {fileID: -6465566751694194690, guid: 7c47ef6eb90bd094ea6e7a915c282fb3, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 56703d172b326794cba7d562b6fb295f, type: 3}
   m_ShaderKeywords: BOOLEAN_6C4164AC_ON ETC1_EXTERNAL_ALPHA
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -31,7 +31,27 @@ Material:
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs: []
+    m_TexEnvs:
+    - Texture2D_118B723E:
+        m_Texture: {fileID: 2800000, guid: 17d856e5d14ccee4a9e8b9d9be77d433, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_46F3E715:
+        m_Texture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_677F3D80:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_CD02DE2:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - Texture2D_CED3E523:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
     - Foam_Amount: 5
     - Foam_Cutoff: 3.5
@@ -42,13 +62,39 @@ Material:
     - Refaction_Scale: 5
     - Refraction_Evolution_Speed: 1.5
     - Refraction_Height: 0.2
+    - Vector1_123C884D: 5
+    - Vector1_2B5DA55E: 7
+    - Vector1_3DB9C579: 50
+    - Vector1_4C95508E: 0.1
+    - Vector1_4D7D0677: 1
     - Vector1_77A997E: 0.5
+    - Vector1_792F8137: 0
+    - Vector1_83FAABA6: 5
+    - Vector1_95FF06EE: 0
+    - Vector1_C8C5D060: 10
+    - Vector1_D4E4B39C: 24
+    - Vector1_F69E8A36: 15
+    - Vector1_F8CDF900: 24
+    - Vector1_FA5AD10A: 2
     - Water_Depth: 1.5
     - Wave_Height: 0.25
     - Wave_Scale: 10
     - Wave_Speed: 2
+    - _Brightness: 5
+    - _Intensity: 3
+    - _NoiseBlend: 3
+    - _NoisePower: 2
+    - _NoiseScale: 20
+    - _Thickness: 3
     m_Colors:
+    - Color_20EC2C4C: {r: 1, g: 1, b: 1, a: 0}
+    - Color_65C60255: {r: 0.30525967, g: 0, b: 1, a: 0}
+    - Color_96DB49F0: {r: 1, g: 0.31603768, b: 0.31603768, a: 0}
     - Foam_Color: {r: 1, g: 1, b: 1, a: 0.5450981}
     - Shallow_Water_Color: {r: 1, g: 1, b: 1, a: 0.3176471}
     - Trough_Color: {r: 1, g: 1, b: 1, a: 0.4627451}
+    - Vector4_686A2C37: {r: 1, g: 1, b: 0, a: 0}
+    - _BaseColor: {r: 0.9293728, g: 1, b: 0, a: 0}
+    - _Speed: {r: 0, g: 0.5, b: 0, a: 0}
+    - _Speed2: {r: 0.1, g: -0.5, b: 0, a: 0}
   m_BuildTextureStacks: []

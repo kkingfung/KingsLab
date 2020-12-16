@@ -31,9 +31,9 @@ public class Tower : MonoBehaviour
     private GameObject auraVFXPrefab;
     private GameObject lvupVFXPrefab;
 
-    private AudioManager audioManager;
-    private ResourceManager resourceManager;
-    private StageManager stageManager;
+    public AudioManager audioManager;
+    public ResourceManager resourceManager;
+    public StageManager stageManager;
     public GameObject pillar;
 
     //private AudioSource audioSource;
@@ -43,7 +43,7 @@ public class Tower : MonoBehaviour
 
     private Animator animator;
     //private VisualEffect auraVFXComponent;
-    private VisualEffect lvupVFXComponent;
+    public VisualEffect lvupVFXComponent;
 
     private int entityID;
     private TowerSpawner towerSpawner;
@@ -251,18 +251,17 @@ public class Tower : MonoBehaviour
         //this.auraVFX.transform.localScale = Vector3.one * 10f;
         //this.auraVFXComponent = auraVFX.GetComponentInChildren<VisualEffect>();
 
-            this.lvupVFXComponent = GetComponentInChildren<VisualEffect>();
+            //this.lvupVFXComponent = GetComponentInChildren<VisualEffect>();
 
             if (this.lvupVFXComponent == null)
             {
-                GameObject lvupVFX = GameObject.Instantiate(lvupVFXPrefab, this.transform.position, Quaternion.identity);
+            GameObject lvupVFX = GameObject.Instantiate(lvupVFXPrefab, this.transform.position, Quaternion.identity);
                 lvupVFX.transform.parent = transform;
                 lvupVFXComponent = lvupVFX.GetComponentInChildren<VisualEffect>();
             }
             else
-            {
-                //this.lvupVFXComponent.enabled = true;
-                //this.lvupVFXComponent.Play();
+        {
+                this.lvupVFXComponent.gameObject.transform.position = this.transform.position;
             }
 
             switch (type)
@@ -346,46 +345,43 @@ public class Tower : MonoBehaviour
 
         //Update by rank/level with factors
         attr = new TowerAttr(attr.radius * (1 + 0.02f * rank + 0.005f * level),
-            attr.damage * (rank + 0.25f * level
+            attr.damage * (2f * rank + 0.5f * level
             + ((debugManager != null) ? debugManager.towerrank_Damage * rank +
             debugManager.towerlvl_Damage * level: 0)),
             attr.waitTime * (1f - (0.1f * rank)), 
             3f, attr.attackWaittime, 
             attr.attackRadius,attr.attackSpd, attr.attackLifetime);
 
+        int upgradeLv = 0;
         switch (type)
         {
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
-                attr.radius = attr.radius
-                    * (1 + (0.01f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
+                upgradeLv = Upgrades.GetLevel(Upgrades.StoreItems.Army1);
                 attr.damage = attr.damage
-                   * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
+                   * (1 + (0.1f * upgradeLv * upgradeLv));
                 attr.waitTime = attr.waitTime
-                   * (1 - (0.005f * Upgrades.GetLevel(Upgrades.StoreItems.Army1) * Upgrades.GetLevel(Upgrades.StoreItems.Army1)));
+                   * (1 - (0.01f * upgradeLv * upgradeLv));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-                attr.radius = attr.radius
-                      * (1 + (0.01f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
+                upgradeLv = Upgrades.GetLevel(Upgrades.StoreItems.Army2);
                 attr.damage = attr.damage
-                        * (1 + (0.05f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
+                   * (1 + (0.1f * upgradeLv * upgradeLv));
                 attr.waitTime = attr.waitTime
-                   * (1 - (0.005f * Upgrades.GetLevel(Upgrades.StoreItems.Army2) * Upgrades.GetLevel(Upgrades.StoreItems.Army2)));
+                   * (1 - (0.01f * upgradeLv * upgradeLv));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
-                attr.radius = attr.radius
-                    * (1 + (0.01f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
+                upgradeLv = Upgrades.GetLevel(Upgrades.StoreItems.Army3);
                 attr.damage = attr.damage
-                    * (1 + (0.1f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
+                    * (1 + (0.2f * upgradeLv * upgradeLv));
                 attr.waitTime = attr.waitTime
-                   * (1 - (0.02f * Upgrades.GetLevel(Upgrades.StoreItems.Army3) * Upgrades.GetLevel(Upgrades.StoreItems.Army3)));
+                   * (1 - (0.005f * upgradeLv * upgradeLv));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                attr.radius = attr.radius
-                   * (1 + (0.01f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
+                upgradeLv = Upgrades.GetLevel(Upgrades.StoreItems.Army4);
                 attr.damage = attr.damage
-                     * (1 + (0.1f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4)));
+                    * (1 + (0.2f * upgradeLv * upgradeLv));
                 attr.waitTime = attr.waitTime
-                   * (1 - (0.02f * Upgrades.GetLevel(Upgrades.StoreItems.Army4) * Upgrades.GetLevel(Upgrades.StoreItems.Army4))); 
+                   * (1 - (0.005f * upgradeLv * upgradeLv));
                 break;
         }
 

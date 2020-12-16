@@ -46,10 +46,10 @@ public class AttackSpawner : MonoBehaviour
     }
     void Start()
     {
-        TowerNightmareAttack = new List<GameObject>();
-        TowerSoulEaterAttack = new List<GameObject>();
-        TowerTerrorBringerAttack = new List<GameObject>();
-        TowerUsurperAttack = new List<GameObject>();
+        //TowerNightmareAttack = new List<GameObject>();
+        //TowerSoulEaterAttack = new List<GameObject>();
+        //TowerTerrorBringerAttack = new List<GameObject>();
+        //TowerUsurperAttack = new List<GameObject>();
 
         EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 

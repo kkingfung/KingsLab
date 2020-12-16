@@ -29,14 +29,14 @@ TagManager:
   - Ground
   - Pillar
   - Terrain
+  - GroundExtra
+  - SeeThrough
+  - Board
   - 
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - BoardEffectLayer
   - CoveringLayer
   - EffectLayer
   - ButtonLayer

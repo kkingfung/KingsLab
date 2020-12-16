@@ -54,7 +54,10 @@ VisualEffect:
     m_Vector3f:
       m_Array: []
     m_Vector4f:
-      m_Array: []
+      m_Array:
+      - m_Value: {x: 0, y: 0, z: 0, w: 0}
+        m_Name: ParticleColor
+        m_Overridden: 1
     m_Uint:
       m_Array: []
     m_Int:
@@ -124,6 +127,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc86c37caf7b03a40af4512d32b93355, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Timer: 3
-  tobeDestroy: 0
-  skill: {fileID: 0}
+  Timer: 1

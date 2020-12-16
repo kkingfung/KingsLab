@@ -74,25 +74,25 @@ public class TowerSpawner : MonoBehaviour
     }
     private void Start()
     {
-        TowerNightmareRank1 = new List<GameObject>();
-        TowerNightmareRank2 = new List<GameObject>();
-        TowerNightmareRank3 = new List<GameObject>();
-        TowerNightmareRank4 = new List<GameObject>();
-
-        TowerSoulEaterRank1 = new List<GameObject>();
-        TowerSoulEaterRank2 = new List<GameObject>();
-        TowerSoulEaterRank3 = new List<GameObject>();
-        TowerSoulEaterRank4 = new List<GameObject>();
-
-        TowerTerrorBringerRank1 = new List<GameObject>();
-        TowerTerrorBringerRank2 = new List<GameObject>();
-        TowerTerrorBringerRank3 = new List<GameObject>();
-        TowerTerrorBringerRank4 = new List<GameObject>();
-
-        TowerUsurperRank1 = new List<GameObject>();
-        TowerUsurperRank2 = new List<GameObject>();
-        TowerUsurperRank3 = new List<GameObject>();
-        TowerUsurperRank4 = new List<GameObject>();
+       // TowerNightmareRank1 = new List<GameObject>();
+       // TowerNightmareRank2 = new List<GameObject>();
+       // TowerNightmareRank3 = new List<GameObject>();
+       // TowerNightmareRank4 = new List<GameObject>();
+       //
+       // TowerSoulEaterRank1 = new List<GameObject>();
+       // TowerSoulEaterRank2 = new List<GameObject>();
+       // TowerSoulEaterRank3 = new List<GameObject>();
+       // TowerSoulEaterRank4 = new List<GameObject>();
+       //
+       // TowerTerrorBringerRank1 = new List<GameObject>();
+       // TowerTerrorBringerRank2 = new List<GameObject>();
+       // TowerTerrorBringerRank3 = new List<GameObject>();
+       // TowerTerrorBringerRank4 = new List<GameObject>();
+       //
+       // TowerUsurperRank1 = new List<GameObject>();
+       // TowerUsurperRank2 = new List<GameObject>();
+       // TowerUsurperRank3 = new List<GameObject>();
+       // TowerUsurperRank4 = new List<GameObject>();
 
         EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 

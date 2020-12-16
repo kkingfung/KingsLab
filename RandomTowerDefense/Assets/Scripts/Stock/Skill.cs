@@ -15,17 +15,17 @@ public class Skill : MonoBehaviour
 
     public int entityID;
 
-    private PlayerManager playerManager;//For Raycasting target Position
+    public PlayerManager playerManager;//For Raycasting target Position
 
     [HideInInspector]
     public Vector3 targetEnm;
 
-    private AudioManager audioManager;
+    public AudioManager audioManager;
     private AudioSource audioSource;
 
-   // private EnemySpawner enemySpawner;
+    // private EnemySpawner enemySpawner;
 
-    private SkillSpawner skillSpawner;
+    public SkillSpawner skillSpawner;
 
     private GameObject defaultTarget;
     private VisualEffect VFX;

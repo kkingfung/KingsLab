@@ -7279,6 +7279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 820054c22f81f3f42896a2578da1c49f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CurrentMaterial: 0
 --- !u!4 &1011788841
 Transform:
   m_ObjectHideFlags: 0
@@ -13526,6 +13527,10 @@ PrefabInstance:
     - target: {fileID: 2786186500453849823, guid: 40c0e058dbecc4e42bb7845e50b86d65, type: 3}
       propertyPath: m_Layer
       value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 3346423800265756499, guid: 40c0e058dbecc4e42bb7845e50b86d65, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3348984855025646201, guid: 40c0e058dbecc4e42bb7845e50b86d65, type: 3}
       propertyPath: m_RootOrder

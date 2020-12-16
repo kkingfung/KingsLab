@@ -128,6 +128,14 @@ public class WaveManager : MonoBehaviour
         //            i.Stop();
         //    }
         //}
+
+        //For testing ONLY
+        if (Input.touchCount >1)
+        {
+            stageManager.SetWin();
+            return;
+        }
+
         if (allSpawned && enemyManager.AllAliveMonstersList().Count == 0)
         {
             stageManager.SetWin();

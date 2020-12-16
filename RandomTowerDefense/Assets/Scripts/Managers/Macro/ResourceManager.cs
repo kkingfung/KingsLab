@@ -8,7 +8,7 @@ public class ResourceManager : MonoBehaviour
     private readonly int[] BuildPrice = { 120, 0,0,0,0};
     private readonly int[] SellPrice = { 50, 100, 150, 200, 250 };
 
-    private int CurrentMaterial;
+    public int CurrentMaterial;
 
     // Start is called before the first frame update
     void Start()

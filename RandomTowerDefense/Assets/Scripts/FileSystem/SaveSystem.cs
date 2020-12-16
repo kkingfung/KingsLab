@@ -7,22 +7,38 @@ using System;
 
 public static class SaveSystem {
 
-    private static readonly string SAVE_FOLDER = Application.dataPath + "/Saves/";
+    //private static readonly string SAVE_FOLDER = Application.dataPath + "/Saves/";
+    private static readonly string SAVE_FOLDER = Application.persistentDataPath + "/RandomDefender/";
     private const string SAVE_EXTENSION = "txt";
 
-    public static void Init() {
+    public static void Init(string fileName) {
         // Test if Save Folder exists
         if (!Directory.Exists(SAVE_FOLDER)) {
             // Create Save Folder
             Directory.CreateDirectory(SAVE_FOLDER);
         }
+
+        if (File.Exists(SAVE_FOLDER + fileName + "." + SAVE_EXTENSION) == false)
+        {
+            SaveObject defaultRecord = new SaveObject();
+
+            for (int i = 0; i < 4; ++i)
+            {
+                defaultRecord.stageID = i;
+                defaultRecord.record1 = new Record("AAAAA", 5000);
+                defaultRecord.record2 = new Record("BBBBB", 1000);
+                defaultRecord.record3 = new Record("CCCCC", 500);
+                defaultRecord.record4 = new Record("DDDDD", 300);
+                defaultRecord.record5 = new Record("EEEEE", 100);
+                SaveObject("Record" + i.ToString(), defaultRecord, true);
+            }
+        }
     }
 
-    public static void Save(string fileName, string saveString, bool overwrite)
+    public static void Save(string fileName, string saveString, bool overwrite=true)
     {
-        Init();
-        
         string saveFileName = fileName;
+
         if (!overwrite)
         {
             // Make sure the Save Number is unique so it doesnt overwrite a previous save file
@@ -39,7 +55,6 @@ public static class SaveSystem {
 
     public static string Load(string fileName)
     {
-        Init();
         if (File.Exists(SAVE_FOLDER + fileName + "." + SAVE_EXTENSION))
         {
             string saveString = File.ReadAllText(SAVE_FOLDER + fileName + "." + SAVE_EXTENSION);
@@ -53,7 +68,6 @@ public static class SaveSystem {
 
     public static string LoadMostRecentFile()
     {
-        Init();
         DirectoryInfo directoryInfo = new DirectoryInfo(SAVE_FOLDER);
         // Get all save files
         FileInfo[] saveFiles = directoryInfo.GetFiles("*." + SAVE_EXTENSION);
@@ -93,14 +107,13 @@ public static class SaveSystem {
 
     public static void SaveObject(string fileName, SaveObject saveObject, bool overwrite)
     {
-        Init();
         string json = JsonUtility.ToJson(saveObject);
+        Debug.Log(json);
         Save(fileName, json, overwrite);
     }
 
     public static TSaveObject LoadMostRecentObject<TSaveObject>()
     {
-        Init();
         string saveString = LoadMostRecentFile();
         if (saveString != null)
         {
@@ -115,7 +128,6 @@ public static class SaveSystem {
 
     public static TSaveObject LoadObject<TSaveObject>(string fileName)
     {
-        Init();
         string saveString = Load(fileName);
         if (saveString != null)
         {
@@ -149,37 +161,70 @@ public class SaveObject
     public Record record4;
     public Record record5;
 
-    public SaveObject InsertObject(int stageID, string name, int score)
+    public int InsertObject(int stageID, string name, int score)
     {
-        if (stageID != this.stageID) return null;
-        List<Record> recordHolder = new List<Record>();
-        recordHolder.Add(record1);
-        recordHolder.Add(record2);
-        recordHolder.Add(record3);
-        recordHolder.Add(record4);
-        recordHolder.Add(record5);
-
-        Record newRecord= new Record(name, score);
-        recordHolder.Add(newRecord);
-
-        recordHolder = recordHolder.OrderByDescending(x => x.score).ToList();
-
-        for (int i = recordHolder.Count; i>0;--i) {
-            if (recordHolder[i-1].name == name && recordHolder[i-1].score == score) {
-                PlayerPrefs.SetInt("PlayerRank",i);
+        var recordList = new Record[] { record1, record2, record3, record4, record5 };
+        int rank;
+        for (rank = recordList.Length; rank > 0; --rank)
+        {
+            if (recordList[rank-1].score >= score)
+            {
                 break;
             }
         }
+        
+        PlayerPrefs.SetInt("PlayerRank", rank + 1);
 
-        record1 = recordHolder[0];
-        record2 = recordHolder[1];
-        record3 = recordHolder[2];
-        record4 = recordHolder[3];
-        record5 = recordHolder[4];
+        if (rank >= recordList.Length) return rank + 1;
+        
+        for (int sortID = recordList.Length-2; sortID >=rank; --sortID)
+        {
+            recordList[sortID + 1] = new Record(recordList[sortID].name, recordList[sortID].score);
+        }
+        recordList[rank].name = name;
+        recordList[rank].score = score;
 
-        recordHolder.Clear();
+        record1.name = recordList[0].name;
+        record1.score = recordList[0].score;
+        record2.name = recordList[1].name;
+        record2.score = recordList[1].score;
+        record3.name = recordList[2].name;
+        record3.score = recordList[2].score;
+        record4.name = recordList[3].name;
+        record4.score = recordList[3].score;
+        record5.name = recordList[4].name;
+        record5.score = recordList[4].score;
 
-        return this;
+        return rank + 1;
+
+        ////Alternative
+        //if (stageID != this.stageID) return null;
+        //List<Record> recordHolder = new List<Record>();
+        //recordHolder.Add(record1);
+        //recordHolder.Add(record2);
+        //recordHolder.Add(record3);
+        //recordHolder.Add(record4);
+        //recordHolder.Add(record5);
+        //
+        //Record newRecord= new Record(name, score);
+        //recordHolder.Add(newRecord);
+        //
+        //recordHolder = recordHolder.OrderByDescending(x => x.score).ToList();
+        //
+        //for (int i = recordHolder.Count; i>0;--i) {
+        //    if (recordHolder[i-1].name == name && recordHolder[i-1].score == score) {
+        //        PlayerPrefs.SetInt("PlayerRank",i);
+        //        break;
+        //    }
+        //}
+        //
+        //record1 = recordHolder[0];
+        //record2 = recordHolder[1];
+        //record3 = recordHolder[2];
+        //record4 = recordHolder[3];
+        //record5 = recordHolder[4];
+
+        //recordHolder.Clear();
     }
 }
 

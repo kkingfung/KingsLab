@@ -64,10 +64,10 @@ public class SkillSpawner : MonoBehaviour
         //Prepare input
         GameObjects = new GameObject[count];
         //transforms = new Transform[count];
-        MeteorList = new List<GameObject>();
-        BlizzardList = new List<GameObject>();
-        PetrificationList = new List<GameObject>();
-        MinionsList = new List<GameObject>();
+        //MeteorList = new List<GameObject>();
+        //BlizzardList = new List<GameObject>();
+        //PetrificationList = new List<GameObject>();
+        //MinionsList = new List<GameObject>();
 
         Entities = new NativeArray<Entity>(count, Allocator.Persistent);
         var archetype = EntityManager.CreateArchetype(

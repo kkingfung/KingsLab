@@ -369,7 +369,8 @@ public class TowerManager : MonoBehaviour
         if (resourceManager.SellTower(targetedTower))
         {
             filledMapGenerator.UpdatePillarStatus(targetedTower.gameObject,0);
-            GameObject.Instantiate(TowerSell, targetedTower.transform.position, Quaternion.identity);
+            effectManager.Spawn(5, targetedTower.transform.position);
+            //GameObject.Instantiate(TowerSell, targetedTower.transform.position, Quaternion.identity);
             removeTowerFromList(targetedTower.gameObject);
         }
     }

@@ -115,39 +115,56 @@ public class StageManager : MonoBehaviour
     {
         if (result != (int)GameResult.NotEndedYet && isReady)
         {
+            if (sceneManager.DarkenCam.activeSelf == false)
             sceneManager.DarkenCam.SetActive(true);
             if (Screen.width > Screen.height)
             {
                 if (result > 0)
                 {
-                    GameOverCanva[0].SetActive(false);
-                    GameOverCanva[1].SetActive(false);
-                    GameClearCanva[0].SetActive(false);
-                    GameClearCanva[1].SetActive(true);
+                    if (GameOverCanva[0].activeSelf == true)
+                        GameOverCanva[0].SetActive(false);
+                    if (GameOverCanva[1].activeSelf == true)
+                        GameOverCanva[1].SetActive(false);
+                    if (GameClearCanva[0].activeSelf == true)
+                        GameClearCanva[0].SetActive(false);
+                    if (GameClearCanva[1].activeSelf == false)
+                        GameClearCanva[1].SetActive(true);
                 }
                 else
                 {
-                    GameOverCanva[0].SetActive(false);
-                    GameOverCanva[1].SetActive(true);
-                    GameClearCanva[0].SetActive(false);
-                    GameClearCanva[1].SetActive(false);
+                    if (GameOverCanva[0].activeSelf == true)
+                        GameOverCanva[0].SetActive(false);
+                    if (GameOverCanva[1].activeSelf == false)
+                        GameOverCanva[1].SetActive(true);
+                    if (GameClearCanva[0].activeSelf == true)
+                        GameClearCanva[0].SetActive(false);
+                    if (GameClearCanva[1].activeSelf == true)
+                        GameClearCanva[1].SetActive(false);
                 }
             }
             else
             {
                 if (result > 0)
                 {
-                    GameOverCanva[0].SetActive(false);
-                    GameOverCanva[1].SetActive(false);
-                    GameClearCanva[0].SetActive(true);
-                    GameClearCanva[1].SetActive(false);
+                    if (GameOverCanva[0].activeSelf == true)
+                        GameOverCanva[0].SetActive(false);
+                    if (GameOverCanva[1].activeSelf == true)
+                        GameOverCanva[1].SetActive(false);
+                    if (GameClearCanva[0].activeSelf == false)
+                        GameClearCanva[0].SetActive(true);
+                    if (GameClearCanva[1].activeSelf == true)
+                        GameClearCanva[1].SetActive(false);
                 }
                 else
                 {
-                    GameOverCanva[0].SetActive(true);
-                    GameOverCanva[1].SetActive(false);
-                    GameClearCanva[0].SetActive(false);
-                    GameClearCanva[1].SetActive(false);
+                    if (GameOverCanva[0].activeSelf == false)
+                        GameOverCanva[0].SetActive(true);
+                    if (GameOverCanva[1].activeSelf == true)
+                        GameOverCanva[1].SetActive(false);
+                    if (GameClearCanva[0].activeSelf == true)
+                        GameClearCanva[0].SetActive(false);
+                    if (GameClearCanva[1].activeSelf == true)
+                        GameClearCanva[1].SetActive(false);
                 }
             }
 
@@ -180,15 +197,19 @@ public class StageManager : MonoBehaviour
 
         result = (int)GameResult.Won;
 
-        scoreCalculation.CalculationScore();
         if (sceneManager.GetEnabledIsland() == sceneManager.GetCurrIsland() && sceneManager.GetEnabledIsland() < StageInfo.IslandNum - 1)
             PlayerPrefs.SetInt("IslandEnabled", sceneManager.GetCurrIsland() + 1);
 
         isReady = false;
         sceneManager.SetOptionStatus(false);
+        audioManager.StopBGM();
         audioManager.PlayAudio("se_Clear");
         timeManager.SetTimeScale(0);
+        //foreach(MeshDestroy i in castleDestroy)
+        //    i.DestroyMesh();
+        scoreCalculation.CalculationScore();
         StartCoroutine(FadeInRoutine());
+
         return true;
     }
     public int GetMaxHP() {

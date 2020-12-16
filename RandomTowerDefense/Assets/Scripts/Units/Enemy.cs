@@ -24,9 +24,9 @@ public class Enemy : MonoBehaviour
     private float PetrifyRecord;
 
     private int entityID=-1;
-    private EnemySpawner enemySpawner;
-    private ResourceManager resourceManager;
-    private EffectSpawner effectManager;
+    public EnemySpawner enemySpawner;
+    public ResourceManager resourceManager;
+    public EffectSpawner effectManager;
 
     private AgentScript agent;
     private Vector3 oriPos;

@@ -22,7 +22,7 @@ public class TutorialManager : MonoBehaviour
     private int StageProgress;
 
     private string fullText;
-    private int textCnt;
+    private float textCnt;
 
     private int reviewStage;
 
@@ -37,7 +37,9 @@ public class TutorialManager : MonoBehaviour
     public EnemySpawner enemySpawner;
     public SkillSpawner skillSpawner;
     public TimeManager timeManager;
+    public ResourceManager resourceManager;
 
+    private float timeWait;
     // Start is called before the first frame update
     void Start()
     {
@@ -48,7 +50,7 @@ public class TutorialManager : MonoBehaviour
         textCnt = 0;
         fullText = "";
         reviewStage = 0;
- 
+        timeWait = 0;
         //SceneManager = FindObjectOfType<InGameOperation>();
         //towerSpawner = FindObjectOfType<TowerSpawner>();
         //enemySpawner = FindObjectOfType<EnemySpawner>();
@@ -114,15 +116,15 @@ public class TutorialManager : MonoBehaviour
 
     private void FixedUpdateText()
     {
-        textCnt = Mathf.Min(textCnt + 1, fullText.Length);
+        textCnt = Mathf.Min(textCnt + 0.2f, fullText.Length);
         foreach (Text i in InstructionText_Landscape)
         {
-            i.text = fullText.Substring(0, textCnt);
+            i.text = fullText.Substring(0, (int)textCnt);
 
         }
         foreach (Text i in InstructionText_Protrait)
         {
-            i.text = fullText.Substring(0, textCnt);
+            i.text = fullText.Substring(0, (int)textCnt);
         }
     }
 
@@ -130,6 +132,7 @@ public class TutorialManager : MonoBehaviour
         switch (StageProgress)
         {
             case 0:
+                resourceManager.CurrentMaterial = 0;
                 ChangeText("新人，Kは第九師団団長なのだ");
                 StageProgress++;
                 reviewStage = 0;
@@ -180,6 +183,7 @@ public class TutorialManager : MonoBehaviour
                 {
                     ChangeText("");
                     StageProgress++;
+                    resourceManager.ResetMaterial();
                 }
                 break;
             case 7:
@@ -188,12 +192,17 @@ public class TutorialManager : MonoBehaviour
                 {
                     ChangeText("");
                     StageProgress++;
+                    timeWait = Time.time;
                 }
                 break;
             case 8:
-                ChangeText("よくできた、\n120Gだが兵士が必要なのだ");
-                StageProgress++;
-                reviewStage = 7;
+                WaitingResponds = false;
+                if (Time.time - timeWait > 1)
+                {
+                    ChangeText("よくできた、\n120Gだが兵士が必要なのだ");
+                    StageProgress++;
+                    reviewStage = 7;
+                }
                 break;
             case 9:
                 if (Input.GetMouseButtonUp(0) ||

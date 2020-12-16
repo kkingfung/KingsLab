@@ -28,7 +28,7 @@ public class CameraManager : MonoBehaviour
 
     GyroscopeManager GyroscopeManager;
     ISceneChange SceneManager;
-
+    TutorialManager tutorialManager;
     private void OnEnable()
     {
         isGyroEnabled = false;
@@ -91,7 +91,8 @@ public class CameraManager : MonoBehaviour
             {
                 if (GyroscopeManager.isFunctioning)
                 {
-                    for (int i = 0; i < GyroCamGp.Count; ++i)
+                    if (Time.timeScale != 0)
+                        for (int i = 0; i < GyroCamGp.Count; ++i)
                     {
                         GyroCamGp[i].transform.Rotate(new Vector3(GyroscopeManager.GetLocalPitch() * yawAdj,
                             0, 0), Space.Self);
@@ -102,12 +103,13 @@ public class CameraManager : MonoBehaviour
                 else
                 {
                     GyroscopeManager.SetYawChg(Input.GetAxis("Horizontal") * Time.deltaTime * -50f);
+                    if (Time.timeScale!=0)
                     for (int i = 0; i < GyroCamGp.Count; ++i)
                     {
-                        GyroCamGp[i].transform.Rotate(new Vector3(Input.GetAxis("Vertical") * Time.deltaTime * -50f,
+                        GyroCamGp[i].transform.Rotate(new Vector3(Input.GetAxis("Vertical") * Time.deltaTime * -50f / Time.timeScale,
                             0, 0), Space.Self);
                         GyroCamGp[i].transform.Rotate(new Vector3(0,
-                            Input.GetAxis("Horizontal") * Time.deltaTime * 50f, 0), Space.World);
+                            Input.GetAxis("Horizontal") * Time.deltaTime * 50f / Time.timeScale, 0), Space.World);
                     }
                 }
             }

@@ -6,16 +6,17 @@ using UnityEngine.UI;
 public class GyroscopeManager : MonoBehaviour
 {
     readonly Vector2 shakeThreshold = new Vector2(5, 3); // horizontal
-    readonly Vector2 shakeThresholdV = new Vector2(5, 5); // vertical
+    readonly Vector2 shakeThresholdV = new Vector2(3, 5); // vertical
     readonly float timeInterval = 2f;
-    readonly float sensitiveAdjustment = 0.5f;
+    readonly float sensitiveAdjustment = 10f;
+    readonly float SensitiveRatioPitchToYaw = 0.1f;
 
     public bool isFunctioning;
     public List<GameObject> gyroDiffUI;
 
     //For Slightly Changes
-    [Range(0,1)]
-    float sensitivity=0f;
+    [Range(0, 1)]
+    float sensitivity = 0f;
     public List<Slider> senseSlider;
 
     //For SuddenChange
@@ -28,7 +29,7 @@ public class GyroscopeManager : MonoBehaviour
 
     private Gyroscope Gyro;
 
-   // private float roll;//z axis
+    // private float roll;//z axis
     private float pitch;//x axis
     private float yaw;//y axis
 
@@ -55,7 +56,7 @@ public class GyroscopeManager : MonoBehaviour
     private void Start()
     {
         isFunctioning = inputManager.GetUseTouch();
-        sensitivity = PlayerPrefs.GetFloat("Gyro",0);
+        sensitivity = PlayerPrefs.GetFloat("Gyro", 0);
         foreach (Slider i in senseSlider)
             i.value = sensitivity;
 
@@ -95,7 +96,8 @@ public class GyroscopeManager : MonoBehaviour
         }
     }
 
-    public void setTempInactive() {
+    public void setTempInactive()
+    {
         isActive = false;
         StartCoroutine(WaitToResume());
     }
@@ -114,7 +116,8 @@ public class GyroscopeManager : MonoBehaviour
 
         isActive = true;
     }
-    public void SetGyro(float value) {
+    public void SetGyro(float value)
+    {
         sensitivity = value;
         foreach (Slider i in senseSlider)
             i.value = sensitivity;
@@ -210,20 +213,28 @@ public class GyroscopeManager : MonoBehaviour
         pitchRef = 0;
     }
 
-    public float GetWorldYaw() {
+    public float GetWorldYaw()
+    {
+        if (Time.timeScale != 0)
+            return -yaw / Time.timeScale;
         return -yaw;
     }
 
     public float GetLocalPitch()
     {
+        if (Time.timeScale != 0)
+            return -pitch / Time.timeScale;
         return -pitch;
     }
     public void UpdateGyroYPR()
     {
-        pitch = Input.gyro.rotationRateUnbiased.x * Mathf.Rad2Deg * sensitiveAdjustment * sensitivity * Time.deltaTime;
-        yaw = Input.gyro.rotationRateUnbiased.y * Mathf.Rad2Deg * sensitiveAdjustment * sensitivity * Time.deltaTime;
+        pitch = Input.gyro.rotationRateUnbiased.x * Mathf.Rad2Deg;
+        yaw = Input.gyro.rotationRateUnbiased.y * Mathf.Rad2Deg;
         //roll = Input.gyro.rotationRateUnbiased.z * Mathf.Rad2Deg*sensitiveAdjustment*sensitivity * Time.deltaTime;
-
+        if (pitch > 1f || pitch < -2f) pitch = pitch * sensitiveAdjustment * sensitivity * Time.deltaTime * SensitiveRatioPitchToYaw;
+        else pitch = 0;
+        if (yaw > 1f || yaw < -2f) yaw = yaw * sensitiveAdjustment * sensitivity * Time.deltaTime; 
+        else yaw = 0;
         //rollRef += roll;
         yawRef += yaw;
         pitchRef += pitch;

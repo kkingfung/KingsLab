@@ -11,12 +11,14 @@ public class EffectSpawner : MonoBehaviour
     public GameObject PrefabMoneyDropVfx;
     public GameObject PrefabDisappearVfx;
     public GameObject PrefabImpactVfx;
+    public GameObject PrefabSellVfx;
 
     public List<GameObject> BuildVFXList;
     public List<GameObject> DieVFXList;
     public List<GameObject> MoneyDropVFXList;
     public List<GameObject> DisappearVFXList;
     public List<GameObject> ImpactVFXList;
+    public List<GameObject> SellVFXList;
 
     public static EffectSpawner Instance { get; private set; }
 
@@ -30,11 +32,12 @@ public class EffectSpawner : MonoBehaviour
 
     private void Start()
     {
-        BuildVFXList = new List<GameObject>();
-        DieVFXList = new List<GameObject>();
-        MoneyDropVFXList = new List<GameObject>();
-        DisappearVFXList = new List<GameObject>();
-        ImpactVFXList = new List<GameObject>();
+        //BuildVFXList = new List<GameObject>();
+        //DieVFXList = new List<GameObject>();
+        //MoneyDropVFXList = new List<GameObject>();
+        //DisappearVFXList = new List<GameObject>();
+        //ImpactVFXList = new List<GameObject>();
+        //SellVFXList = new List<GameObject>();
     }
 
     public GameObject Spawn(int prefabID, float3 Position)
@@ -83,6 +86,14 @@ public class EffectSpawner : MonoBehaviour
                     break;
                 }
                 break;
+            case 5:
+                foreach (GameObject j in SellVFXList)
+                {
+                    if (j.activeSelf) continue;
+                    newObj = j;
+                    break;
+                }
+                break;
         }
 
         if (newObj == null)
@@ -108,6 +119,10 @@ public class EffectSpawner : MonoBehaviour
                 case 4:
                     newObj = Instantiate(PrefabImpactVfx, transform);
                     ImpactVFXList.Add(newObj);
+                    break;
+                case 5:
+                    newObj = Instantiate(PrefabSellVfx, transform);
+                    SellVFXList.Add(newObj);
                     break;
             }
         }

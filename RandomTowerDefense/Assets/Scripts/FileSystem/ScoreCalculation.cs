@@ -81,7 +81,7 @@ public class ScoreCalculation : MonoBehaviour
         int currIsland = sceneManager.GetCurrIsland();
 
         //Clear
-        if (result > 0)
+        if (result == (int)StageManager.GameResult.Won)
         {
             score += ScoreForBase + ScoreForStage * currIsland;
             score += ((currIsland != StageInfo.IslandNum - 1) ? 0 :
@@ -112,15 +112,15 @@ public class ScoreCalculation : MonoBehaviour
         //Remark: Special Function for extra mode
         if (currIsland != StageInfo.IslandNum - 1)
         {
-            if (result == (int)StageManager.GameResult.Lose)
-            {
-                scoreStr += "-" + score + "\n";
-                score = 0;
-            }
-            else 
+            if (result == (int)StageManager.GameResult.Won)
             {
                 score -= StageInfo.hpMaxEx * ScoreForStartHP;
                 scoreStr += "-" + StageInfo.hpMaxEx * ScoreForStartHP + "\n";
+            }
+            else 
+            {
+                scoreStr += "-" + score + "\n";
+                score = 0;
             }
         }
         else {
@@ -147,7 +147,8 @@ public class ScoreCalculation : MonoBehaviour
         }
 
         if (score <= 0) return;
-        rank=recordManager.RecordComparison(currIsland, "ZYXWV", score);
+
+        rank =recordManager.RecordComparison(currIsland, "ZYXWV", score);
     }
 
     public void TouchKeybroad(int infoID)

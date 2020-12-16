@@ -303,14 +303,6 @@ public class InGameOperation : ISceneChange
         {
             if (tutorialManager.WaitingResponds)
             {
-                if (timeManager.timeFactor != 0.00001f)
-                {
-                    timeManager.timeFactor = 0.00001f;
-                    timeManager.TimeControl();
-                }
-            }
-            else
-            {
                 if (timeManager.timeFactor != tutorialTimeFactor)
                 {
                     timeManager.timeFactor = tutorialTimeFactor;

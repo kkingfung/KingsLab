@@ -14,7 +14,8 @@ public class TimeManager : MonoBehaviour
 	private float OriTimeScale;
 	private float OriFixedTimeScale;
 
-	private float[] timeScaleFactor = { 1f, 2.5f, 3.9f };
+	private float[] timeScaleFactor = { .5f, 2f, 4f };
+	private int[] timeScaleShow = { 1, 2, 3 };
 	private int timeScaleId;
 
 	private bool isControl = false;
@@ -69,7 +70,7 @@ public class TimeManager : MonoBehaviour
 		Time.timeScale = timeScaleFactor[timeScaleId];
 		OriTimeScale = Time.timeScale;
 		foreach (Text i in text)
-			i.text = "X" + (int)Time.timeScale;
+			i.text = "X" + timeScaleShow[timeScaleId];
 	}
 	public bool GetControl() { return isControl; }
 }

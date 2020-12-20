@@ -346,9 +346,9 @@ public class Tower : MonoBehaviour
         //Update by rank/level with factors
         attr = new TowerAttr(attr.radius * (1 + 0.02f * rank + 0.005f * level),
             attr.damage * (2f * rank + 0.5f * level
-            + ((debugManager != null) ? debugManager.towerrank_Damage * rank +
-            debugManager.towerlvl_Damage * level: 0)),
-            attr.waitTime * (1f - (0.1f * rank)), 
+            //+ ((debugManager != null) ? debugManager.towerrank_Damage * rank +
+            //debugManager.towerlvl_Damage * level: 0)
+            ), attr.waitTime * (1f - (0.1f * rank)), 
             3f, attr.attackWaittime, 
             attr.attackRadius,attr.attackSpd, attr.attackLifetime);
 

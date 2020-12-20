@@ -16,10 +16,10 @@ public class DebugManager : MonoBehaviour
     [HideInInspector]
     public bool isFetchDone;
 
-    public float towerrank_Damage = 0;
-    public float towerlvl_Damage = 0;
-    public float enemylvl_Health = 0;
-    public float enemylvl_Speed = 0;
+    //public float towerrank_Damage = 0;
+    //public float towerlvl_Damage = 0;
+    //public float enemylvl_Health = 0;
+    //public float enemylvl_Speed = 0;
 
     private void Awake()
     {

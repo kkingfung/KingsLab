@@ -10,7 +10,11 @@ public class ISceneChange : MonoBehaviour
 
     [Header("Gyro Settings")]
     public List<GameObject> LandscapeObjs;
+    private SpriteRenderer[] LandscapeSpr;
+    private MeshRenderer[] LandscapeMesh;
     public List<GameObject> PortraitObjs;
+    private SpriteRenderer[] PortraitSpr;
+    private MeshRenderer[] PortraitMesh;
 
     protected FadeEffect[] fadeQuad;
 
@@ -46,7 +50,25 @@ public class ISceneChange : MonoBehaviour
 
         EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
         entityManager.DestroyEntity(entityManager.GetAllEntities(Allocator.Temp));
+
+        LandscapeSpr = new SpriteRenderer[LandscapeObjs.Count];
+        LandscapeMesh = new MeshRenderer[LandscapeObjs.Count];
+
+        PortraitSpr = new SpriteRenderer[PortraitObjs.Count];
+        PortraitMesh = new MeshRenderer[PortraitObjs.Count];
+
+        for (int i = 0; i < LandscapeObjs.Count; ++i)
+        {
+            LandscapeSpr[i] = LandscapeObjs[i].GetComponent<SpriteRenderer>();
+            LandscapeMesh[i] = LandscapeObjs[i].GetComponent<MeshRenderer>();
+        }
+        for (int i = 0; i < PortraitObjs.Count; ++i)
+        {
+            PortraitSpr[i] = PortraitObjs[i].GetComponent<SpriteRenderer>();
+            PortraitMesh[i] = PortraitObjs[i].GetComponent<MeshRenderer>();
+        }
     }
+
     protected void OnDisable()
     {
         if (fadeQuad!=null && fadeQuad.Length > 0)
@@ -86,41 +108,26 @@ public class ISceneChange : MonoBehaviour
         //{
         //    Screen.orientation = OrientationLand? ScreenOrientation.Landscape: ScreenOrientation.Portrait;
         //}
-        foreach (GameObject i in LandscapeObjs)
+
+
+        for (int i = 0; i < LandscapeObjs.Count; ++i)
         {
-            SpriteRenderer spr = i.GetComponent<SpriteRenderer>();
-            if (spr)
-            {
-                spr.enabled = OrientationLand;
-            }
+            if(LandscapeSpr[i])
+                LandscapeSpr[i].enabled = OrientationLand;
+            else if(LandscapeMesh[i])
+                LandscapeMesh[i].enabled = OrientationLand;
             else
-            {
-                MeshRenderer mesh = i.GetComponent<MeshRenderer>();
-                if (mesh)
-                    mesh.enabled = OrientationLand;
-                else
-                {
-                    i.SetActive(OrientationLand);
-                }
-            }
+                LandscapeObjs[i].SetActive(OrientationLand);
         }
-        foreach (GameObject i in PortraitObjs)
+
+        for (int i = 0; i < PortraitObjs.Count; ++i)
         {
-            SpriteRenderer spr = i.GetComponent<SpriteRenderer>();
-            if (spr)
-            {
-                spr.enabled = !OrientationLand;
-            }
+            if (PortraitSpr[i])
+                PortraitSpr[i].enabled = !OrientationLand;
+            else if (PortraitMesh[i])
+                PortraitMesh[i].enabled = !OrientationLand;
             else
-            {
-                MeshRenderer mesh = i.GetComponent<MeshRenderer>();
-                if (mesh)
-                    mesh.enabled = !OrientationLand;
-                else
-                {
-                    i.SetActive(!OrientationLand);
-                }
-            }
+                PortraitObjs[i].SetActive(!OrientationLand);
         }
     }
 

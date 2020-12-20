@@ -32,10 +32,11 @@ public class EnemyManager : MonoBehaviour
             EnemyAttr attr = EnemyInfo.GetEnemyInfo(monsterName);
             int[] entityIDList = enemySpawner.Spawn(monsterName, SpawnPoint, new float3(),
                 attr.health * (waveNum * 0.5f * (CustomData ? (int)StageInfo.enmAttributeEx : 1)
-                + ((debugManager != null) ? debugManager.enemylvl_Health * waveNum : 0))
-                , attr.money * (CustomData ? (int)StageInfo.resourceEx : 1), attr.damage, attr.radius, 
+                //+ ((debugManager != null) ? debugManager.enemylvl_Health * waveNum : 0)
+                ), attr.money * (CustomData ? (int)StageInfo.resourceEx : 1), attr.damage, attr.radius, 
                 attr.speed * (1 + 0.1f * waveNum * (CustomData ? (int)StageInfo.enmAttributeEx : 1)
-                + ((debugManager != null) ? debugManager.enemylvl_Speed * waveNum : 0)), attr.time);
+                //+ ((debugManager != null) ? debugManager.enemylvl_Speed * waveNum : 0)
+                ), attr.time);
         }
     }
 

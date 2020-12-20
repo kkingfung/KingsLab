@@ -184,7 +184,7 @@ public class WaveManager : MonoBehaviour
                                 if (agentCallWait == false && readyToSpawn)
                                 {
                                     enemyManager.SpawnMonster(wave.enmDetail[i].enmType,
-                                        stageManager.GetPortalPosition()[SpawnPointByAI >= 0 ? SpawnPointByAI : wave.enmDetail[i].enmPort], CheckCustomData);
+                                        stageManager.GetPortalPosition(SpawnPointByAI >= 0 ? SpawnPointByAI : wave.enmDetail[i].enmPort), CheckCustomData);
                                     readyToSpawn = false;
                                     timeBGM = Time.time;
                                     break;

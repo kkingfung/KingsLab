@@ -10,7 +10,7 @@
 //
 //public class EnemySpawner : MonoBehaviour
 //{
-//    private readonly int count = 100;
+//    private readonly int count = 50;
 //    public static EnemySpawner Instance { get; private set; }
 //    //public List<GameObject> PrefabObject;
 //    //[Header("MonsterVFX")]
@@ -320,7 +320,7 @@ using Unity.MLAgents;
 
 public class EnemySpawner : MonoBehaviour
 {
-    private readonly int count = 100;
+    private readonly int count = 50;
     public static EnemySpawner Instance { get; private set; }
     //public List<GameObject> PrefabObject;
     //[Header("MonsterVFX")]

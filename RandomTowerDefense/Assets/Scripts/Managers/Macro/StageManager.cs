@@ -94,7 +94,7 @@ public class StageManager : MonoBehaviour
 
             for (int i = 0; i < EnemySpawnPtNum; ++i)
             {
-                Vector3 pos =mapGenerator.CoordToPosition(SpawnPoint[i + 1]) + mapGenerator.transform.position;
+                Vector3 pos =mapGenerator.CoordToPosition(SpawnPoint[i + 1]) + mapGenerator.transform.position + Vector3.up;
                 if (i == 0)
                 {
                     GameObject WaveDisplayMesh = Instantiate(WaveDisplayMeshPrefab, displayPos, Quaternion.Euler(90f, 0, 0)) ;
@@ -248,17 +248,12 @@ public class StageManager : MonoBehaviour
 
     public int GetResult() { return result; }
 
-    public Vector3[] GetPortalPosition()
+    public Vector3 GetPortalPosition(int index)
     {
-        Vector3[] pos = new Vector3[EnemySpawnPort.Length];
+        if (index >= EnemySpawnPort.Length || EnemySpawnPort[index] != null)
+            return new Vector3();
 
-        for (int i = 0; i < EnemySpawnPort.Length; ++i)
-        {
-            if(EnemySpawnPort[i]!=null)
-            pos[i] = EnemySpawnPort[i].transform.position;
-        }
-
-        return pos;
+        return EnemySpawnPort[index].transform.position;
     }
 
     public void AddedHealth(int Val = 1)

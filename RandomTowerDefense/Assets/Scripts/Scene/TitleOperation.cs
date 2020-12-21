@@ -380,7 +380,7 @@ public class TitleOperation: ISceneChange
         if (showCredit)
         {
             while (showCredit && currentRecStatusBottomCam == 0)
-                yield return new WaitForSeconds(0f);
+                yield return new WaitForSeconds(1f);
         }
         else
         {
@@ -427,7 +427,7 @@ public class TitleOperation: ISceneChange
 
         isOpening = false;
 
-        AudioManager.PlayAudio("bgm_Title",true);
+        //AudioManager.PlayAudio("bgm_Title",true);
         AudioManager.PlayAudio("se_Button");
     }
 

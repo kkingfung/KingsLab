@@ -240,6 +240,7 @@ public class StageSelectOperation : ISceneChange
     #region ChangeIsland
     public void ChangeIslandByButton(int chgValue)
     {
+        AudioManager.PlayAudio("se_Button");
         IslandNext = Mathf.Clamp(IslandNow + chgValue, 0, IslandEnabled);
         if(GyroscopeManager) GyroscopeManager.ResetReference();
     }

@@ -124,38 +124,38 @@ public class Tower : MonoBehaviour
         switch (type)
         {
             case TowerInfo.TowerInfoID.Enum_TowerNightmare:
-                //if (audioManager && audioManager.enabledSE)
-                //{
-                //    audioManager.PlayAudio("se_Lighting");
-                //}
+                if (audioManager && audioManager.enabledSE)
+                {
+                    audioManager.PlayAudio("se_Lighting");
+                }
                 posAdj.z = 0.2f;
                 if (CheckMaxLevel() == false)
                 GainExp(ExpPerAttack * 3);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-                //if (audioManager && audioManager.enabledSE)
-                //{
-                //    audioManager.PlayAudio("se_Snail");
-                //}
+                if (audioManager && audioManager.enabledSE)
+                {
+                    audioManager.PlayAudio("se_Snail");
+                }
                 posAdj.z = -0.2f;
                 atkEntityPos = transform.position;
                 if (CheckMaxLevel() == false)
                     GainExp(ExpPerAttack * 2);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
-               //if (audioManager && audioManager.enabledSE)
-               //{
-               //    audioManager.PlayAudio("se_Shot");
-               //}
+               if (audioManager && audioManager.enabledSE)
+               {
+                   audioManager.PlayAudio("se_Shot");
+               }
                 posAdj.z = 0.0f;
                 if (CheckMaxLevel() == false)
                     GainExp(ExpPerAttack*5);
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
-               //if (audioManager && audioManager.enabledSE)
-               //{
-               //    audioManager.PlayAudio("se_MagicFire");
-               //}
+               if (audioManager && audioManager.enabledSE)
+               {
+                   audioManager.PlayAudio("se_Flame");
+               }
                 posAdj.z = 0.5f;
                 posAdj.y = 0.15f;
                 atkEntityPos = transform.position;

@@ -8,9 +8,9 @@ public class GyroscopeManager : MonoBehaviour
     readonly Vector2 shakeThreshold = new Vector2(5, 3); // horizontal
     readonly Vector2 shakeThresholdV = new Vector2(3, 5); // vertical
     readonly float timeInterval = 2f;
-    readonly float sensitiveAdjustment = .5f;
-    readonly float yawMultiplier = 3f;
-    readonly float PreventShaking = 0.03f;
+    readonly float sensitiveAdjustment = 3f;
+    readonly float pitchMultiplier = 3f;
+    readonly float PreventShaking = 1f;
 
     public bool isFunctioning;
     public List<GameObject> gyroDiffUI;
@@ -232,10 +232,21 @@ public class GyroscopeManager : MonoBehaviour
         pitch = Input.gyro.rotationRateUnbiased.x * Mathf.Rad2Deg;
         yaw = Input.gyro.rotationRateUnbiased.y * Mathf.Rad2Deg;
         //roll = Input.gyro.rotationRateUnbiased.z * Mathf.Rad2Deg*sensitiveAdjustment*sensitivity * Time.deltaTime;
-        if (pitch > PreventShaking || pitch < -1f* PreventShaking) pitch = pitch * sensitiveAdjustment * sensitivity * Time.deltaTime;
-        else pitch = 0;
-        if (yaw > PreventShaking || yaw < -1f * PreventShaking) yaw = yaw * sensitiveAdjustment * sensitivity * Time.deltaTime * yawMultiplier; 
-        else yaw = 0;
+
+        if (pitch > PreventShaking)
+            pitch = (pitch- PreventShaking) * sensitiveAdjustment * sensitivity * Time.deltaTime * pitchMultiplier;
+        else if (pitch < -1f * PreventShaking)
+            pitch = (pitch + PreventShaking) * sensitiveAdjustment * sensitivity * Time.deltaTime * pitchMultiplier;
+        else 
+            pitch = 0;
+
+        if (yaw > PreventShaking)
+            yaw = (yaw - PreventShaking) * sensitiveAdjustment * sensitivity * Time.deltaTime;
+        else if (yaw < -1f * PreventShaking)
+            yaw = (yaw + PreventShaking) * sensitiveAdjustment * sensitivity * Time.deltaTime;
+        else
+            yaw = 0;
+
         //rollRef += roll;
         yawRef += yaw;
         pitchRef += pitch;

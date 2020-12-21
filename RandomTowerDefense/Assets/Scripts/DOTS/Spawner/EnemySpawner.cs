@@ -714,6 +714,7 @@ public class EnemySpawner : MonoBehaviour
 
         //Change Whenever Spawned (Not Needed?)
         //TransformAccessArray = new TransformAccessArray(transforms);
+
         return spawnIndexList;
     }
 

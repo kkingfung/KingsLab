@@ -94,7 +94,7 @@ public class StageManager : MonoBehaviour
 
             for (int i = 0; i < EnemySpawnPtNum; ++i)
             {
-                Vector3 pos =mapGenerator.CoordToPosition(SpawnPoint[i + 1]) + mapGenerator.transform.position + Vector3.up;
+                Vector3 pos =mapGenerator.CoordToPosition(SpawnPoint[i + 1]) + mapGenerator.transform.position + Vector3.up*0.01f;
                 if (i == 0)
                 {
                     GameObject WaveDisplayMesh = Instantiate(WaveDisplayMeshPrefab, displayPos, Quaternion.Euler(90f, 0, 0)) ;
@@ -250,8 +250,10 @@ public class StageManager : MonoBehaviour
 
     public Vector3 GetPortalPosition(int index)
     {
-        if (index >= EnemySpawnPort.Length || EnemySpawnPort[index] != null)
+        if (index >= EnemySpawnPort.Length)
             return new Vector3();
+        else if (EnemySpawnPort[index] == null)
+            return EnemySpawnPort[0].transform.position;
 
         return EnemySpawnPort[index].transform.position;
     }

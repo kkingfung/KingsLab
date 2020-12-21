@@ -10,7 +10,8 @@ public class UIRecordList {
 }
 public class RecordManager : MonoBehaviour
 {
-    public List<UIRecordList> AllRecords;
+    public List<UIRecordList> AllRecordsName;
+    public List<UIRecordList> AllRecordsScore;
 
     List<SaveObject> stageRecords;
     public InGameOperation sceneManager;
@@ -25,7 +26,7 @@ public class RecordManager : MonoBehaviour
             SaveSystem.Init("Record" + i.ToString());
             stageRecords.Add(SaveSystem.LoadObject<SaveObject>("Record" + i.ToString()));
         }
-        if (AllRecords.Count > 0)
+        if (AllRecordsName.Count > 0)
             updateUI();
     }
 
@@ -46,7 +47,7 @@ public class RecordManager : MonoBehaviour
     {
         rank = stageRecords[stageID].InsertObject(stageID, name, score);
  
-        if (AllRecords.Count > 0)
+        if (AllRecordsName.Count > 0)
             updateUI();
 
         return rank;
@@ -56,11 +57,17 @@ public class RecordManager : MonoBehaviour
     {
         for (int i = 0; i < StageInfo.IslandNum; ++i)
         {
-            AllRecords[i].Records[0].text = "1." + stageRecords[i].record1.name.Substring(0, 5).ToUpper() + "\t\t" + stageRecords[i].record1.score.ToString("000000");
-            AllRecords[i].Records[1].text = "2." + stageRecords[i].record2.name.Substring(0, 5).ToUpper() + "\t\t" + stageRecords[i].record2.score.ToString("000000");
-            AllRecords[i].Records[2].text = "3." + stageRecords[i].record3.name.Substring(0, 5).ToUpper() + "\t\t" + stageRecords[i].record3.score.ToString("000000");
-            AllRecords[i].Records[3].text = "4." + stageRecords[i].record4.name.Substring(0, 5).ToUpper() + "\t\t" + stageRecords[i].record4.score.ToString("000000");
-            AllRecords[i].Records[4].text = "5." + stageRecords[i].record5.name.Substring(0, 5).ToUpper() + "\t\t" + stageRecords[i].record5.score.ToString("000000");
+            AllRecordsName[i].Records[0].text = "1." + stageRecords[i].record1.name.Substring(0, 5).ToUpper();
+            AllRecordsName[i].Records[1].text = "2." + stageRecords[i].record2.name.Substring(0, 5).ToUpper();
+            AllRecordsName[i].Records[2].text = "3." + stageRecords[i].record3.name.Substring(0, 5).ToUpper();
+            AllRecordsName[i].Records[3].text = "4." + stageRecords[i].record4.name.Substring(0, 5).ToUpper();
+            AllRecordsName[i].Records[4].text = "5." + stageRecords[i].record5.name.Substring(0, 5).ToUpper();
+
+            AllRecordsScore[i].Records[0].text = stageRecords[i].record1.score.ToString("000000");
+            AllRecordsScore[i].Records[1].text = stageRecords[i].record2.score.ToString("000000");
+            AllRecordsScore[i].Records[2].text = stageRecords[i].record3.score.ToString("000000");
+            AllRecordsScore[i].Records[3].text = stageRecords[i].record4.score.ToString("000000");
+            AllRecordsScore[i].Records[4].text = stageRecords[i].record5.score.ToString("000000");
         }
     }
 

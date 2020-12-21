@@ -192,7 +192,7 @@ public class UIEffect : MonoBehaviour
                 break;
             case 11://for Game Scene Score Information
                 if (text == null) break;
-                textCnt =  Mathf.Min(textCnt + 0.1f, fullText.Length);
+                textCnt =  Mathf.Min(textCnt + 0.5f, fullText.Length);
                 text.text = fullText.Substring(0, (int)textCnt);
                 break;
         }

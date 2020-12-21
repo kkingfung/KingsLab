@@ -20,6 +20,11 @@ public class AudioManager : MonoBehaviour
     [HideInInspector]
     public bool enabledSE;
 
+    public TitleOperation titleOperation;
+    public StageSelectOperation stageSelectOperation;
+    public InGameOperation inGameOperation;
+
+    private float pausedPos = 0f;
     public void EnableBGM(bool enable)
     {
         enabledBGM = enable;
@@ -28,9 +33,19 @@ public class AudioManager : MonoBehaviour
             i.isOn = enabledBGM;
 
         if (enabledBGM)
-            audioSource[0].Play();
+        {
+            //audioSource[0].Play();
+            //audioSource[0].UnPause();
+            if (titleOperation) PlayAudio("bgm_Opening");
+            else if (stageSelectOperation) PlayAudio("bgm_Title");
+            else if (inGameOperation) PlayAudio("bgm_Battle");
+        }
         else
-            audioSource[0].Stop();
+        {
+            pausedPos = audioSource[0].time;
+            audioSource[0].Pause();
+            //audioSource[0].Stop();
+        }
     }
 
     public void EnableSE(bool enable)
@@ -66,6 +81,9 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
+        enabledBGM = PlayerPrefs.GetInt("BGM", 1) == 1;
+        enabledSE = PlayerPrefs.GetInt("SE", 1) == 1;
+
         audioSource = GetComponents<AudioSource>();
 
         bgmList = new Dictionary<string, AudioClip>();
@@ -91,8 +109,23 @@ public class AudioManager : MonoBehaviour
         seList.Add("se_Lose", seSource[i++]);
 
         seList.Add("se_Hitted", seSource[i++]);
+
+        seList.Add("se_Flame", seSource[i++]);
+
+        pausedPos = 0f;
     }
 
+    private void Start()
+    {
+        foreach (Toggle j in bgmUI)
+            j.isOn = enabledBGM;
+        foreach (Toggle j in seUI)
+            j.isOn = enabledSE;
+
+        if (titleOperation) PlayAudio("bgm_Opening");
+        else if (stageSelectOperation) PlayAudio("bgm_Title");
+        else if (inGameOperation) PlayAudio("bgm_Battle");
+    }
     void Record()
     {
         if (audioSource == null) return;
@@ -137,9 +170,12 @@ public class AudioManager : MonoBehaviour
         {
             if (enabledBGM == false) return;
             audioSource[0].pitch = 1;
-            audioSource[0].clip = bgmList[clipname];
             audioSource[0].loop = isLoop;
+            audioSource[0].clip = bgmList[clipname];
             audioSource[0].Play();
+
+            if (pausedPos != 0f)
+                audioSource[0].time = pausedPos;
         }
         else
         {

@@ -44,8 +44,8 @@ public class TitleOperation: ISceneChange
     public List<string> bundleName;
 
     public GameObject BoidSpawn;
-    public GameObject LandscapeFadeImg;
-    public GameObject PortraitFadeImg;
+    public RawImage LandscapeFadeImg;
+    public RawImage PortraitFadeImg;
 
     private FadeEffect LandscapeFade;
     private FadeEffect PortraitFade;
@@ -128,8 +128,8 @@ public class TitleOperation: ISceneChange
         //CanvaManager = FindObjectOfType<CanvaManager>();
         //GyroscopeManager = FindObjectOfType<GyroscopeManager>();
 
-        LandscapeFade = LandscapeFadeImg.GetComponent<FadeEffect>();
-        PortraitFade = PortraitFadeImg.GetComponent<FadeEffect>();
+        LandscapeFade = LandscapeFadeImg.gameObject.GetComponent<FadeEffect>();
+        PortraitFade = PortraitFadeImg.gameObject.GetComponent<FadeEffect>();
 
         AudioManager.PlayAudio("bgm_Opening");
         PlayerPrefs.SetFloat("zoomRate", 0f);

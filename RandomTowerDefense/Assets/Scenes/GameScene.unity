@@ -879,7 +879,6 @@ MonoBehaviour:
   magnitude: -5
   targetCam: {fileID: 1005906875}
   subCam: {fileID: 0}
-  LandscapeOrientation: 0
   relatedObjs: []
 --- !u!114 &19928504
 MonoBehaviour:
@@ -1969,7 +1968,6 @@ MonoBehaviour:
   magnitude: 1
   targetCam: {fileID: 0}
   subCam: {fileID: 0}
-  LandscapeOrientation: 0
   relatedObjs: []
 --- !u!114 &52621220
 MonoBehaviour:
@@ -4436,7 +4434,6 @@ MonoBehaviour:
   magnitude: 1
   targetCam: {fileID: 0}
   subCam: {fileID: 0}
-  LandscapeOrientation: 0
   relatedObjs: []
 --- !u!114 &110453699
 MonoBehaviour:
@@ -8615,7 +8612,6 @@ MonoBehaviour:
   magnitude: 0
   targetCam: {fileID: 0}
   subCam: {fileID: 0}
-  LandscapeOrientation: 0
   relatedObjs: []
 --- !u!114 &186320827
 MonoBehaviour:
@@ -23562,7 +23558,6 @@ MonoBehaviour:
   magnitude: -5
   targetCam: {fileID: 1005906875}
   subCam: {fileID: 0}
-  LandscapeOrientation: 0
   relatedObjs: []
 --- !u!114 &489073559
 MonoBehaviour:
@@ -37922,7 +37917,6 @@ MonoBehaviour:
   magnitude: 0
   targetCam: {fileID: 0}
   subCam: {fileID: 0}
-  LandscapeOrientation: 0
   relatedObjs: []
 --- !u!1001 &754690401
 PrefabInstance:
@@ -39722,7 +39716,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 650ba2e7ac9098647822ddcc8be883a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isActived: 0
+  isActivated: 0
   Reset: 0
 --- !u!4 &779320206
 Transform:
@@ -44699,7 +44693,6 @@ MonoBehaviour:
   magnitude: 0.008
   targetCam: {fileID: 0}
   subCam: {fileID: 0}
-  LandscapeOrientation: 0
   relatedObjs: []
 --- !u!1 &906969229
 GameObject:
@@ -50605,7 +50598,6 @@ MonoBehaviour:
   magnitude: -5
   targetCam: {fileID: 1713982453}
   subCam: {fileID: 0}
-  LandscapeOrientation: 0
   relatedObjs: []
 --- !u!114 &1003141011
 MonoBehaviour:
@@ -54317,7 +54309,6 @@ MonoBehaviour:
   magnitude: 0
   targetCam: {fileID: 0}
   subCam: {fileID: 0}
-  LandscapeOrientation: 0
   relatedObjs: []
 --- !u!1001 &1096317170
 PrefabInstance:
@@ -57386,7 +57377,6 @@ MonoBehaviour:
   magnitude: 0
   targetCam: {fileID: 0}
   subCam: {fileID: 0}
-  LandscapeOrientation: 0
   relatedObjs: []
 --- !u!114 &1152759594
 MonoBehaviour:
@@ -65302,7 +65292,6 @@ MonoBehaviour:
   magnitude: 5
   targetCam: {fileID: 1005906875}
   subCam: {fileID: 0}
-  LandscapeOrientation: 0
   relatedObjs: []
 --- !u!114 &1337027581
 MonoBehaviour:
@@ -65709,7 +65698,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1348691710}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.41}
+  m_LocalPosition: {x: 0, y: -0.054, z: 0.41}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 577329366}
@@ -65748,7 +65737,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e03253132fda940449c55d41831e2eba, type: 2}
+  - {fileID: 2100000, guid: 14c52846529536d4a8630c0ab44573f8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -69233,7 +69222,6 @@ MonoBehaviour:
   magnitude: 0.008
   targetCam: {fileID: 0}
   subCam: {fileID: 0}
-  LandscapeOrientation: 0
   relatedObjs: []
 --- !u!1 &1414329114
 GameObject:
@@ -75148,7 +75136,6 @@ MonoBehaviour:
   magnitude: -5
   targetCam: {fileID: 1713982453}
   subCam: {fileID: 0}
-  LandscapeOrientation: 0
   relatedObjs: []
 --- !u!114 &1536610724
 MonoBehaviour:
@@ -76394,7 +76381,6 @@ MonoBehaviour:
   magnitude: 0
   targetCam: {fileID: 0}
   subCam: {fileID: 0}
-  LandscapeOrientation: 0
   relatedObjs: []
 --- !u!114 &1558218931
 MonoBehaviour:
@@ -76724,7 +76710,6 @@ MonoBehaviour:
   magnitude: 5
   targetCam: {fileID: 1713982453}
   subCam: {fileID: 0}
-  LandscapeOrientation: 0
   relatedObjs: []
 --- !u!114 &1560242231
 MonoBehaviour:
@@ -79106,6 +79091,7 @@ MonoBehaviour:
   inputManager: {fileID: 986103182}
   cameraManager: {fileID: 912783845409816688}
   sceneManager: {fileID: 1829121298}
+  gamesceneManager: {fileID: 1829121298}
 --- !u!4 &1609452956
 Transform:
   m_ObjectHideFlags: 0
@@ -83690,7 +83676,6 @@ MonoBehaviour:
   magnitude: 0
   targetCam: {fileID: 0}
   subCam: {fileID: 0}
-  LandscapeOrientation: 0
   relatedObjs: []
 --- !u!1001 &1723451394
 PrefabInstance:
@@ -84355,7 +84340,6 @@ MonoBehaviour:
   magnitude: 0
   targetCam: {fileID: 0}
   subCam: {fileID: 0}
-  LandscapeOrientation: 0
   relatedObjs: []
 --- !u!114 &1740439763
 MonoBehaviour:
@@ -87719,7 +87703,6 @@ MonoBehaviour:
   magnitude: 5
   targetCam: {fileID: 1005906875}
   subCam: {fileID: 0}
-  LandscapeOrientation: 0
   relatedObjs: []
 --- !u!114 &1796032692
 MonoBehaviour:
@@ -89420,10 +89403,13 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 6d15660ef52c48049aa818171abb59b2, type: 2}
   UseFileAsset: 1
   UseRemoteConfig: 1
-  LandscapeFadeImg: {fileID: 161518851}
-  PortraitFadeImg: {fileID: 675521869}
+  LandscapeFadeImg: {fileID: 161518854}
+  PortraitFadeImg: {fileID: 675521872}
   Agent: {fileID: 2849747259621721967}
   FloorMat: {fileID: 2100000, guid: b719b607c9865b042a1c2082dbd6ae98, type: 2}
+  AimMarkImg:
+  - {fileID: 186320827}
+  - {fileID: 1740439763}
   currScreenShown: 0
   nextScreenShown: 0
   AudioManager: {fileID: 1450034078}
@@ -93838,7 +93824,6 @@ MonoBehaviour:
   magnitude: 5
   targetCam: {fileID: 1713982453}
   subCam: {fileID: 0}
-  LandscapeOrientation: 0
   relatedObjs: []
 --- !u!114 &1918738922
 MonoBehaviour:
@@ -99360,7 +99345,6 @@ MonoBehaviour:
   magnitude: 0
   targetCam: {fileID: 0}
   subCam: {fileID: 0}
-  LandscapeOrientation: 0
   relatedObjs: []
 --- !u!114 &2038967787
 MonoBehaviour:
@@ -102574,7 +102558,6 @@ MonoBehaviour:
   magnitude: 0
   targetCam: {fileID: 0}
   subCam: {fileID: 0}
-  LandscapeOrientation: 0
   relatedObjs: []
 --- !u!1001 &2113422854
 PrefabInstance:
@@ -102902,7 +102885,6 @@ MonoBehaviour:
   magnitude: 0
   targetCam: {fileID: 0}
   subCam: {fileID: 0}
-  LandscapeOrientation: 0
   relatedObjs: []
 --- !u!114 &2114636517
 MonoBehaviour:

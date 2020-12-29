@@ -13,7 +13,7 @@ public class Tower : MonoBehaviour
     //private readonly int[] MaxLevel = { 1, 1, 1, 1 };
     private readonly float TowerDestroyTime = 2;
     private readonly int ActionSetNum = 2;
-    private readonly int ExpPerAttack = 10;
+    private readonly int ExpPerAttack = 2;
 
     public TowerAttr attr;
     public int level;
@@ -130,7 +130,7 @@ public class Tower : MonoBehaviour
                 }
                 posAdj.z = 0.2f;
                 if (CheckMaxLevel() == false)
-                GainExp(ExpPerAttack * 3);
+                GainExp(ExpPerAttack * 3 * (stageManager.GetCurrIsland()+1));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
                 if (audioManager && audioManager.enabledSE)
@@ -140,7 +140,7 @@ public class Tower : MonoBehaviour
                 posAdj.z = -0.2f;
                 atkEntityPos = transform.position;
                 if (CheckMaxLevel() == false)
-                    GainExp(ExpPerAttack * 2);
+                    GainExp(ExpPerAttack * 2 * (stageManager.GetCurrIsland() + 1));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
                if (audioManager && audioManager.enabledSE)
@@ -149,7 +149,7 @@ public class Tower : MonoBehaviour
                }
                 posAdj.z = 0.0f;
                 if (CheckMaxLevel() == false)
-                    GainExp(ExpPerAttack*5);
+                    GainExp(ExpPerAttack* 5 * (stageManager.GetCurrIsland() + 1));
                 break;
             case TowerInfo.TowerInfoID.Enum_TowerUsurper:
                if (audioManager && audioManager.enabledSE)
@@ -160,7 +160,7 @@ public class Tower : MonoBehaviour
                 posAdj.y = 0.15f;
                 atkEntityPos = transform.position;
                 if (CheckMaxLevel() == false)
-                    GainExp(ExpPerAttack * 1);
+                    GainExp(ExpPerAttack * 1 * (stageManager.GetCurrIsland() + 1));
                 break;
         }
         int[] entityID=attackSpawner.Spawn((int)type, this.transform.position

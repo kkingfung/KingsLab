@@ -32,14 +32,13 @@ public class CanvaManager : MonoBehaviour
             i.SetActive(isOpening && (SceneManager.OrientationLand));
         foreach (GameObject i in LandscapeCanva_Sub)
             i.SetActive(!isOpening && (SceneManager.OrientationLand));
+        foreach (GameObject i in LandscapeCanva_Opt)
+            i.SetActive(isOption && (SceneManager.OrientationLand));
 
         foreach (GameObject i in PortraitCanva_Main)
             i.SetActive(isOpening && (!SceneManager.OrientationLand));
         foreach (GameObject i in PortraitCanva_Sub)
             i.SetActive(!isOpening && (!SceneManager.OrientationLand));
-
-        foreach (GameObject i in LandscapeCanva_Opt)
-            i.SetActive(isOption && (SceneManager.OrientationLand));
         foreach (GameObject i in PortraitCanva_Opt)
             i.SetActive(isOption && (!SceneManager.OrientationLand));
     }

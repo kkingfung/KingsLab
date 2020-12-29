@@ -34,15 +34,15 @@ public class BonusChecker : MonoBehaviour
                 AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerNightmare]
                     = MonsterList_Type(TowerInfo.TowerInfoID.Enum_TowerNightmare);
 
-            if (TowerNewlyBuilt == 1 && !AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerSoulEater])
+            else if (TowerNewlyBuilt == 1 && !AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerSoulEater])
                 AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerSoulEater]
                     = MonsterList_Type(TowerInfo.TowerInfoID.Enum_TowerSoulEater);
 
-            if (TowerNewlyBuilt == 2 && !AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer])
+            else if (TowerNewlyBuilt == 2 && !AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer])
                 AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer]
                     = MonsterList_Type(TowerInfo.TowerInfoID.Enum_TowerTerrorBringer);
 
-            if (TowerNewlyBuilt == 3 && !AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerUsurper])
+            else if (TowerNewlyBuilt == 3 && !AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerUsurper])
                 AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerUsurper]
                    = MonsterList_Type(TowerInfo.TowerInfoID.Enum_TowerUsurper);
 

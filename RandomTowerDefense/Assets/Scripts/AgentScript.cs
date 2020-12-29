@@ -77,7 +77,7 @@ public class AgentScript : Agent
         filledMapGenerator.GenerateMap();
         resourceManager.ResetMaterial();
         if (PathfindingGridSetup.Instance != null)
-            PathfindingGridSetup.Instance.isActived = false;
+            PathfindingGridSetup.Instance.isActivated = false;
     }
 
     private void FixedUpdate()
@@ -112,7 +112,7 @@ public class AgentScript : Agent
                 {
                     int currWaveNum = waveManager.GetCurrentWaveNum();
                     AddReward(currWaveNum * currWaveNum);
-                    if (PathfindingGridSetup.Instance != null && PathfindingGridSetup.Instance.isActived == true)
+                    if (PathfindingGridSetup.Instance != null && PathfindingGridSetup.Instance.isActivated == true)
                     {
                         AddReward(-1f * loseCounter);
                         if (debugManager)

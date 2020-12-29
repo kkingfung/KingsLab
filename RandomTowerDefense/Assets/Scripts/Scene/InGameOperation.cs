@@ -54,8 +54,8 @@ public class InGameOperation : ISceneChange
 
 
     [Header("FadeObj Settings")]
-    public GameObject LandscapeFadeImg;
-    public GameObject PortraitFadeImg;
+    public MeshRenderer LandscapeFadeImg;
+    public MeshRenderer PortraitFadeImg;
 
     private FadeEffect LandscapeFade;
     private FadeEffect PortraitFade;
@@ -63,7 +63,7 @@ public class InGameOperation : ISceneChange
     [Header("Other Settings")]
     public GameObject Agent;
     public Material FloorMat;
-
+    public List<Image> AimMarkImg;
 
     //public bool isDebugging;//For ingame Debugger
     private bool isTutorial;//For 1st Stage Only
@@ -73,7 +73,7 @@ public class InGameOperation : ISceneChange
     protected int IslandEnabled = 0;//Check when win
 
     [HideInInspector]
-    public int currScreenShown = (int)InGameOperation.ScreenShownID.SSIDArena;//0:Main, 1:Top-Left, 2:Top, 3:Top-Right
+    public int currScreenShown;//0:Main, 1:Top-Left, 2:Top, 3:Top-Right
     [HideInInspector]
     public int nextScreenShown = 0;
     private bool isScreenChanging = false;
@@ -111,6 +111,7 @@ public class InGameOperation : ISceneChange
     protected override void Awake()
     {
         base.Awake();
+        currScreenShown = (int)ScreenShownID.SSIDArena;
 
         if (UseRemoteConfig)
         {
@@ -211,8 +212,8 @@ public class InGameOperation : ISceneChange
 
         DarkenCam.SetActive(false);
 
-        LandscapeFade = LandscapeFadeImg.GetComponent<FadeEffect>();
-        PortraitFade = PortraitFadeImg.GetComponent<FadeEffect>();
+        LandscapeFade = LandscapeFadeImg.gameObject.GetComponent<FadeEffect>();
+        PortraitFade = PortraitFadeImg.gameObject.GetComponent<FadeEffect>();
 
         //InputManager = FindObjectOfType<InputManager>();
         //AudioManager = FindObjectOfType<AudioManager>();
@@ -337,7 +338,7 @@ public class InGameOperation : ISceneChange
             Vector3 angle = CameraManager.GyroCamGp[0].transform.rotation.eulerAngles;
             while (angle.x > 180) angle.x -= 360;
             while (angle.x < -180) angle.x += 360;
-            if (angle.x > 30) { currScreenShown = (int)ScreenShownID.SSIDArena; nextScreenShown = (int)ScreenShownID.SSIDArena; }
+            if (angle.x > 0) { currScreenShown = (int)ScreenShownID.SSIDArena; nextScreenShown = (int)ScreenShownID.SSIDArena; }
             else
             {
                 while (angle.y > 180) angle.y -= 360;
@@ -358,6 +359,16 @@ public class InGameOperation : ISceneChange
         }
     }
 
+    public void autoResetGyro()
+    {
+        MainCam.transform.localEulerAngles = MainCamRotationAngle[currScreenShown];
+    }
+
+    private void LateUpdate()
+    {
+        foreach (Image i in AimMarkImg)
+            i.enabled = !isOption;
+    }
     #region CommonOperation
     public void ArrowOperation()
     {

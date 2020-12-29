@@ -116,7 +116,7 @@ public class TutorialManager : MonoBehaviour
 
     private void FixedUpdateText()
     {
-        textCnt = Mathf.Min(textCnt + 0.2f, fullText.Length);
+        textCnt = Mathf.Min(textCnt + 0.5f, fullText.Length);
         foreach (Text i in InstructionText_Landscape)
         {
             i.text = fullText.Substring(0, (int)textCnt);

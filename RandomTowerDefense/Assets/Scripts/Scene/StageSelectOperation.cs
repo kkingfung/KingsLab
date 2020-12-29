@@ -43,8 +43,8 @@ public class StageSelectOperation : ISceneChange
 
     public List<GameObject> Terrains;
 
-    public GameObject LandscapeFadeImg;
-    public GameObject PortraitFadeImg;
+    public MeshRenderer LandscapeFadeImg;
+    public MeshRenderer PortraitFadeImg;
 
     private FadeEffect LandscapeFade;
     private FadeEffect PortraitFade;
@@ -100,8 +100,8 @@ public class StageSelectOperation : ISceneChange
         for (int i = 0; i < StageCustomText.Count; ++i)
             StageInfoOperation(i, 0);
 
-        LandscapeFade = LandscapeFadeImg.GetComponent<FadeEffect>();
-        PortraitFade = PortraitFadeImg.GetComponent<FadeEffect>();
+        LandscapeFade = LandscapeFadeImg.gameObject.GetComponent<FadeEffect>();
+        PortraitFade = PortraitFadeImg.gameObject.GetComponent<FadeEffect>();
 
         //InputManager = FindObjectOfType<InputManager>();
         //AudioManager = FindObjectOfType<AudioManager>();
@@ -176,7 +176,7 @@ public class StageSelectOperation : ISceneChange
         if (!isOption) ChangeIsland();
         DarkenCam.SetActive(isOption);
 
-        OrientationLock = false;
+        //OrientationLock = false;
     }
 
     #region CommonOperation

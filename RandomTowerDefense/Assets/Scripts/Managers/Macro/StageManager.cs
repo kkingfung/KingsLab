@@ -46,13 +46,14 @@ public class StageManager : MonoBehaviour
 
     private int result = 0;
     private bool isReady = false;
+    //private bool OrientationRecord = false;
 
     public VisualEffect dmgVFX;
     void Awake()
     {
         SpawnPoint = new Coord[EnemySpawnPtNum + 1];
         EnemySpawnPort = new GameObject[EnemySpawnPtNum];
-        if(dmgVFX) dmgVFX.Stop();
+        if (dmgVFX) dmgVFX.Stop();
     }
     // Start is called before the first frame update
     void Start()
@@ -75,7 +76,7 @@ public class StageManager : MonoBehaviour
 
         if (mapGenerator)
         {
-            if (sceneManager.GetCurrIsland() != StageInfo.IslandNum-1)
+            if (sceneManager.GetCurrIsland() != StageInfo.IslandNum - 1)
             {
                 mapGenerator.OnNewStage(sceneManager.GetCurrIsland());
             }
@@ -87,23 +88,23 @@ public class StageManager : MonoBehaviour
             }
 
             //Fixed CastleMapPos
-            int[] entityID = castleSpawner.Spawn(mapGenerator.CoordToPosition(SpawnPoint[0]) + mapGenerator.transform.position, 
-                Quaternion.Euler(0f, 90f, 0f), (int)PlayerPrefs.GetFloat("hpMax",5), 0f);
+            int[] entityID = castleSpawner.Spawn(mapGenerator.CoordToPosition(SpawnPoint[0]) + mapGenerator.transform.position,
+                Quaternion.Euler(0f, 90f, 0f), (int)PlayerPrefs.GetFloat("hpMax", 5), 0f);
             CastleEntityID = entityID[0];
             castleDestroy = castleSpawner.GameObjects[CastleEntityID].GetComponentsInChildren<MeshDestroy>();
 
             for (int i = 0; i < EnemySpawnPtNum; ++i)
             {
-                Vector3 pos =mapGenerator.CoordToPosition(SpawnPoint[i + 1]) + mapGenerator.transform.position + Vector3.up*0.01f;
+                Vector3 pos = mapGenerator.CoordToPosition(SpawnPoint[i + 1]) + mapGenerator.transform.position + Vector3.up * 0.01f;
                 if (i == 0)
                 {
-                    GameObject WaveDisplayMesh = Instantiate(WaveDisplayMeshPrefab, displayPos, Quaternion.Euler(90f, 0, 0)) ;
+                    GameObject WaveDisplayMesh = Instantiate(WaveDisplayMeshPrefab, displayPos, Quaternion.Euler(90f, 0, 0));
                     WaveDisplayMesh.transform.parent = this.transform;
                     waveManager.waveNumMesh = WaveDisplayMesh.GetComponent<TextMesh>();
                     waveManager.waveNumMesh.text = "WAVE 1";
                 }
 
-                if (sceneManager.CheckIfTutorial()&& i!=1)  continue;
+                if (sceneManager.CheckIfTutorial() && i != 1) continue;
                 EnemySpawnPort[i] = Instantiate(EnemySpawnPortPrefab, pos, Quaternion.identity);
                 EnemySpawnPort[i].transform.parent = this.transform;
             }
@@ -116,58 +117,64 @@ public class StageManager : MonoBehaviour
         if (result != (int)GameResult.NotEndedYet && isReady)
         {
             if (sceneManager.DarkenCam.activeSelf == false)
-            sceneManager.DarkenCam.SetActive(true);
-            if (Screen.width > Screen.height)
+                sceneManager.DarkenCam.SetActive(true);
+            //bool OrientationChk = OrientationRecord;
+            //OrientationRecord = sceneManager.OrientationLand;
+            //if (OrientationRecord != OrientationChk)
+                GameEndCanvaUpdate();
+        }
+    }
+
+    private void GameEndCanvaUpdate() {
+        if (sceneManager.OrientationLand)
+        {
+            if (result > 0)
             {
-                if (result > 0)
-                {
-                    if (GameOverCanva[0].activeSelf == true)
-                        GameOverCanva[0].SetActive(false);
-                    if (GameOverCanva[1].activeSelf == true)
-                        GameOverCanva[1].SetActive(false);
-                    if (GameClearCanva[0].activeSelf == true)
-                        GameClearCanva[0].SetActive(false);
-                    if (GameClearCanva[1].activeSelf == false)
-                        GameClearCanva[1].SetActive(true);
-                }
-                else
-                {
-                    if (GameOverCanva[0].activeSelf == true)
-                        GameOverCanva[0].SetActive(false);
-                    if (GameOverCanva[1].activeSelf == false)
-                        GameOverCanva[1].SetActive(true);
-                    if (GameClearCanva[0].activeSelf == true)
-                        GameClearCanva[0].SetActive(false);
-                    if (GameClearCanva[1].activeSelf == true)
-                        GameClearCanva[1].SetActive(false);
-                }
+                if (GameOverCanva[0].activeSelf == true)
+                    GameOverCanva[0].SetActive(false);
+                if (GameOverCanva[1].activeSelf == true)
+                    GameOverCanva[1].SetActive(false);
+                if (GameClearCanva[0].activeSelf == true)
+                    GameClearCanva[0].SetActive(false);
+                if (GameClearCanva[1].activeSelf == false)
+                    GameClearCanva[1].SetActive(true);
             }
             else
             {
-                if (result > 0)
-                {
-                    if (GameOverCanva[0].activeSelf == true)
-                        GameOverCanva[0].SetActive(false);
-                    if (GameOverCanva[1].activeSelf == true)
-                        GameOverCanva[1].SetActive(false);
-                    if (GameClearCanva[0].activeSelf == false)
-                        GameClearCanva[0].SetActive(true);
-                    if (GameClearCanva[1].activeSelf == true)
-                        GameClearCanva[1].SetActive(false);
-                }
-                else
-                {
-                    if (GameOverCanva[0].activeSelf == false)
-                        GameOverCanva[0].SetActive(true);
-                    if (GameOverCanva[1].activeSelf == true)
-                        GameOverCanva[1].SetActive(false);
-                    if (GameClearCanva[0].activeSelf == true)
-                        GameClearCanva[0].SetActive(false);
-                    if (GameClearCanva[1].activeSelf == true)
-                        GameClearCanva[1].SetActive(false);
-                }
+                if (GameOverCanva[0].activeSelf == true)
+                    GameOverCanva[0].SetActive(false);
+                if (GameOverCanva[1].activeSelf == false)
+                    GameOverCanva[1].SetActive(true);
+                if (GameClearCanva[0].activeSelf == true)
+                    GameClearCanva[0].SetActive(false);
+                if (GameClearCanva[1].activeSelf == true)
+                    GameClearCanva[1].SetActive(false);
             }
-
+        }
+        else
+        {
+            if (result > 0)
+            {
+                if (GameOverCanva[0].activeSelf == true)
+                    GameOverCanva[0].SetActive(false);
+                if (GameOverCanva[1].activeSelf == true)
+                    GameOverCanva[1].SetActive(false);
+                if (GameClearCanva[0].activeSelf == false)
+                    GameClearCanva[0].SetActive(true);
+                if (GameClearCanva[1].activeSelf == true)
+                    GameClearCanva[1].SetActive(false);
+            }
+            else
+            {
+                if (GameOverCanva[0].activeSelf == false)
+                    GameOverCanva[0].SetActive(true);
+                if (GameOverCanva[1].activeSelf == true)
+                    GameOverCanva[1].SetActive(false);
+                if (GameClearCanva[0].activeSelf == true)
+                    GameClearCanva[0].SetActive(false);
+                if (GameClearCanva[1].activeSelf == true)
+                    GameClearCanva[1].SetActive(false);
+            }
         }
     }
 
@@ -176,6 +183,7 @@ public class StageManager : MonoBehaviour
         if (GetCurrHP() <= 0 && result == (int)GameResult.NotEndedYet)
         {
             result = (int)GameResult.Lose;
+           
             isReady = false;
             sceneManager.SetOptionStatus(false);
             audioManager.StopBGM();
@@ -197,6 +205,7 @@ public class StageManager : MonoBehaviour
 
         result = (int)GameResult.Won;
 
+
         if (sceneManager.GetEnabledIsland() == sceneManager.GetCurrIsland() && sceneManager.GetEnabledIsland() < StageInfo.IslandNum - 1)
             PlayerPrefs.SetInt("IslandEnabled", sceneManager.GetCurrIsland() + 1);
 
@@ -209,11 +218,10 @@ public class StageManager : MonoBehaviour
         //    i.DestroyMesh();
         scoreCalculation.CalculationScore();
         StartCoroutine(FadeInRoutine());
-
         return true;
     }
     public int GetMaxHP() {
-        if(castleSpawner && castleSpawner.castle)
+        if (castleSpawner && castleSpawner.castle)
             return castleSpawner.castle.MaxCastleHP;
         return 1;
     }
@@ -273,18 +281,23 @@ public class StageManager : MonoBehaviour
         StartCoroutine(DmgAnimation());
     }
 
-    
+
     private IEnumerator DmgAnimation()
     {
         if (dmgVFX)
             dmgVFX.Play();
         float timerCount = timerForDmgVFX;
-        while (timerCount >0)
+        while (timerCount > 0)
         {
             timerCount -= Time.deltaTime;
             yield return new WaitForSeconds(0f);
         }
         if (dmgVFX)
             dmgVFX.Stop();
+    }
+
+    public int GetCurrIsland()
+    {
+        return sceneManager.GetCurrIsland();
     }
 }

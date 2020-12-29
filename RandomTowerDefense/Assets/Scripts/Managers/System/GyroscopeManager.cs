@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class GyroscopeManager : MonoBehaviour
 {
-    readonly Vector2 shakeThreshold = new Vector2(5, 3); // horizontal
-    readonly Vector2 shakeThresholdV = new Vector2(3, 5); // vertical
+    readonly Vector2 shakeThreshold = new Vector2(3, 2f); // horizontal
+    readonly Vector2 shakeThresholdV = new Vector2(3f, 5f); // vertical
     readonly float timeInterval = 2f;
     readonly float sensitiveAdjustment = 3f;
     readonly float pitchMultiplier = 3f;
@@ -43,6 +43,8 @@ public class GyroscopeManager : MonoBehaviour
     public InputManager inputManager;
     public CameraManager cameraManager;
     public ISceneChange sceneManager;
+    public InGameOperation gamesceneManager;
+
     private bool isActive;
     private void Awake()
     {
@@ -207,6 +209,8 @@ public class GyroscopeManager : MonoBehaviour
     public void ResetReference()
     {
         if (sceneManager.GetOptionStatus()) return;
+        if (gamesceneManager)
+            gamesceneManager.autoResetGyro();
         cameraManager.ResetGyroCam();
 
         //rollRef = 0;

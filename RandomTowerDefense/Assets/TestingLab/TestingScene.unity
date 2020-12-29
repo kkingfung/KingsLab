@@ -1232,7 +1232,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &126537988
 Light:
   m_ObjectHideFlags: 0
@@ -1518,7 +1518,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &152240436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5070,6 +5070,9 @@ MonoBehaviour:
   seUI: []
   enabledBGM: 0
   enabledSE: 0
+  titleOperation: {fileID: 0}
+  stageSelectOperation: {fileID: 0}
+  inGameOperation: {fileID: 0}
 --- !u!82 &602770022
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5647,7 +5650,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8636458107982648905, guid: 668606ef7bd5dfc449a46d2afd2e6f90, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8636458107982648908, guid: 668606ef7bd5dfc449a46d2afd2e6f90, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6152,7 +6155,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &779320205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7052,9 +7055,33 @@ MonoBehaviour:
   PigChef: {fileID: 6419245120869018127, guid: 680fdf2ddf622744a8b36b1ecd3c7bd5, type: 3}
   PhoenixChick: {fileID: 6480850551505543868, guid: 26685682233edd647ae2bc8882474f2e, type: 3}
   RockCritter: {fileID: 8897753120952202049, guid: d7d0897d01f0f744eb7394a754348e4c, type: 3}
+  ListMetalonGreen: []
+  ListMetalonPurple: []
+  ListMetalonRed: []
+  ListAttackBot: []
+  ListRobotSphere: []
+  ListDragon: []
+  ListBull: []
+  ListStoneMonster: []
+  ListFreeLichS: []
+  ListFreeLich: []
+  ListGolemS: []
+  ListGolem: []
+  ListSkeletonArmed: []
+  ListSpiderGhost: []
+  ListSkeleton: []
+  ListGruntS: []
+  ListFootmanS: []
+  ListGrunt: []
+  ListFootman: []
+  ListTurtleShell: []
+  ListMushroom: []
+  ListSlime: []
+  ListPigChef: []
+  ListPhoenixChick: []
+  ListRockCritter: []
   GameObjects: []
   mapGenerator: {fileID: 2142590585}
-  resourceManager: {fileID: 1011788840}
   effectManager: {fileID: 1232795750}
   agent: {fileID: 1666813455}
 --- !u!1 &964360988
@@ -8570,7 +8597,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1184052120
 Transform:
   m_ObjectHideFlags: 0
@@ -8866,11 +8893,13 @@ MonoBehaviour:
   PrefabMoneyDropVfx: {fileID: 150071818436365621, guid: 6fcabbe82040853469ff51f2f01199a8, type: 3}
   PrefabDisappearVfx: {fileID: 8111480042943765323, guid: 126a5b0cb0e9b5348b80f6c2471dbe7a, type: 3}
   PrefabImpactVfx: {fileID: 2082874572749238533, guid: 126cef81ccef7b14095722bc06daa579, type: 3}
+  PrefabSellVfx: {fileID: 0}
   BuildVFXList: []
   DieVFXList: []
   MoneyDropVFXList: []
   DisappearVFXList: []
   ImpactVFXList: []
+  SellVFXList: []
 --- !u!1 &1236586095
 GameObject:
   m_ObjectHideFlags: 0
@@ -11055,7 +11084,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8636458107982648905, guid: 668606ef7bd5dfc449a46d2afd2e6f90, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8636458107982648908, guid: 668606ef7bd5dfc449a46d2afd2e6f90, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11379,10 +11408,6 @@ MonoBehaviour:
   waveManager: {fileID: 575038166}
   isSimulationTest: 0
   isFetchDone: 0
-  towerrank_Damage: 0
-  towerlvl_Damage: 0
-  enemylvl_Health: 0
-  enemylvl_Speed: 0
 --- !u!1 &1713439348
 GameObject:
   m_ObjectHideFlags: 0
@@ -12277,6 +12302,7 @@ MonoBehaviour:
   timeManager: {fileID: 0}
   tutorialManager: {fileID: 0}
   scoreCalculation: {fileID: 0}
+  recordManager: {fileID: 0}
   towerManager: {fileID: 225185626}
   towerSpawner: {fileID: 124639428}
   filledMapGenerator: {fileID: 2142590585}
@@ -12460,7 +12486,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1868921326
 Transform:
   m_ObjectHideFlags: 0
@@ -13218,7 +13244,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2786186499629642720, guid: 40c0e058dbecc4e42bb7845e50b86d65, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2786186499629642720, guid: 40c0e058dbecc4e42bb7845e50b86d65, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -13987,7 +14013,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2080974651
 MonoBehaviour:
   m_ObjectHideFlags: 0

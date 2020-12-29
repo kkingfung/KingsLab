@@ -10,18 +10,18 @@ public class PathfindingGridSetup : MonoBehaviour {
 
     public Grid<GridNode> pathfindingGrid;
 
-    public bool isActived;
+    public bool isActivated;
     public bool Reset;
 
     private void Awake() {
         Instance = this;
-        isActived = false;
+        isActivated = false;
         Reset = true;
         mapGenerator = FindObjectOfType<FilledMapGenerator>();
     }
 
     private void Update() {
-        if (isActived == false)
+        if (isActivated == false)
         {
             pathfindingGrid = new Grid<GridNode>(mapGenerator.CurrMapX(),
                 mapGenerator.CurrMapY(), mapGenerator.tileSize, mapGenerator.originPos,
@@ -35,11 +35,11 @@ public class PathfindingGridSetup : MonoBehaviour {
                     pathfindingGrid.GetGridObject(x, y).SetIsWalkable(mapGenerator.GetMapWalkable(x, y));
                 }
             }
-            isActived = true;
+            isActivated = true;
             Reset = true;
         }
 
-        if (isActived) {
+        if (isActivated) {
             for (int y = 0; y < mapGenerator.CurrMapY(); ++y)
             {
                 for (int x = 0; x < mapGenerator.CurrMapX(); ++x)

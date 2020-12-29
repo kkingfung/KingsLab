@@ -37,7 +37,7 @@ public class EnvironmentManager : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if (stageID == 3) {
+        if (stageID == maxSkyboxCubemap) {
             shaderInput += Time.deltaTime / daytimeFactor;
             while (shaderInput > maxSkyboxCubemap) shaderInput -= maxSkyboxCubemap;
              skyboxMat[stageID].SetFloat("SkyboxFactor", shaderInput);

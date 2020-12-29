@@ -30,6 +30,7 @@ public class ISceneChange : MonoBehaviour
 
     [HideInInspector]
     public bool OrientationLand;
+    private bool OrientationLandCheck;
     public bool OrientationLock;
 
     protected virtual void Awake()
@@ -38,6 +39,7 @@ public class ISceneChange : MonoBehaviour
         toDrag = 0;
 
         OrientationLock = false;
+
         fadeQuad = FindObjectsOfType<FadeEffect>();
         if (fadeQuad != null && fadeQuad.Length > 0)
         {
@@ -67,6 +69,29 @@ public class ISceneChange : MonoBehaviour
             PortraitSpr[i] = PortraitObjs[i].GetComponent<SpriteRenderer>();
             PortraitMesh[i] = PortraitObjs[i].GetComponent<MeshRenderer>();
         }
+
+        OrientationLand = Screen.width > Screen.height;
+        OrientationLandCheck = OrientationLand;
+
+        for (int i = 0; i < LandscapeObjs.Count; ++i)
+        {
+            if (LandscapeSpr[i])
+                LandscapeSpr[i].enabled = OrientationLand;
+            else if (LandscapeMesh[i])
+                LandscapeMesh[i].enabled = OrientationLand;
+            else
+                LandscapeObjs[i].SetActive(OrientationLand);
+        }
+
+        for (int i = 0; i < PortraitObjs.Count; ++i)
+        {
+            if (PortraitSpr[i])
+                PortraitSpr[i].enabled = !OrientationLand;
+            else if (PortraitMesh[i])
+                PortraitMesh[i].enabled = !OrientationLand;
+            else
+                PortraitObjs[i].SetActive(!OrientationLand);
+        }
     }
 
     protected void OnDisable()
@@ -83,10 +108,7 @@ public class ISceneChange : MonoBehaviour
     protected void SceneIn()
     {
         FadeInDelegate?.Invoke();
-        //if (FadeInDelegate != null)
-        //{
-        //    FadeInDelegate();
-        //}
+
     }
     protected void SceneOut()
     {
@@ -100,34 +122,43 @@ public class ISceneChange : MonoBehaviour
 
     protected virtual void Update()
     {
+        //for orientataion change delay (2 stages)
+        //1st stage for Raycasting and Click Effect ONLY
+        //2nd stage for Canvas, Active Cameras, etc
+
+        bool prevOrientation= OrientationLand;
         if (!OrientationLock)
         {
-            OrientationLand = Screen.width > Screen.height;
+            if (OrientationLand != OrientationLandCheck)
+                OrientationLand = OrientationLandCheck;
+            OrientationLandCheck = Screen.width > Screen.height;
         }
         //else 
         //{
-        //    Screen.orientation = OrientationLand? ScreenOrientation.Landscape: ScreenOrientation.Portrait;
+        //    Screen.orientation = OrientationLandCheck? ScreenOrientation.Landscape: ScreenOrientation.Portrait;
         //}
 
-
-        for (int i = 0; i < LandscapeObjs.Count; ++i)
+        if (prevOrientation != OrientationLand)
         {
-            if(LandscapeSpr[i])
-                LandscapeSpr[i].enabled = OrientationLand;
-            else if(LandscapeMesh[i])
-                LandscapeMesh[i].enabled = OrientationLand;
-            else
-                LandscapeObjs[i].SetActive(OrientationLand);
-        }
+            for (int i = 0; i < LandscapeObjs.Count; ++i)
+            {
+                if (LandscapeSpr[i])
+                    LandscapeSpr[i].enabled = OrientationLand;
+                else if (LandscapeMesh[i])
+                    LandscapeMesh[i].enabled = OrientationLand;
+                else
+                    LandscapeObjs[i].SetActive(OrientationLand);
+            }
 
-        for (int i = 0; i < PortraitObjs.Count; ++i)
-        {
-            if (PortraitSpr[i])
-                PortraitSpr[i].enabled = !OrientationLand;
-            else if (PortraitMesh[i])
-                PortraitMesh[i].enabled = !OrientationLand;
-            else
-                PortraitObjs[i].SetActive(!OrientationLand);
+            for (int i = 0; i < PortraitObjs.Count; ++i)
+            {
+                if (PortraitSpr[i])
+                    PortraitSpr[i].enabled = !OrientationLand;
+                else if (PortraitMesh[i])
+                    PortraitMesh[i].enabled = !OrientationLand;
+                else
+                    PortraitObjs[i].SetActive(!OrientationLand);
+            }
         }
     }
 

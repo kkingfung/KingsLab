@@ -3333,12 +3333,12 @@ GameObject:
   - component: {fileID: 491296029}
   - component: {fileID: 491296028}
   m_Layer: 0
-  m_Name: Quad
+  m_Name: MovingSpr
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &491296027
 Transform:
   m_ObjectHideFlags: 0
@@ -3386,7 +3386,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e03253132fda940449c55d41831e2eba, type: 2}
+  - {fileID: 2100000, guid: a1001f019ca89ca47bc598cd713f82c7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3986,7 +3986,6 @@ MonoBehaviour:
   magnitude: 0
   targetCam: {fileID: 0}
   subCam: {fileID: 0}
-  LandscapeOrientation: 0
   relatedObjs: []
 --- !u!1 &654067873
 GameObject:
@@ -5396,7 +5395,6 @@ MonoBehaviour:
   magnitude: 0
   targetCam: {fileID: 0}
   subCam: {fileID: 0}
-  LandscapeOrientation: 0
   relatedObjs: []
 --- !u!1 &928263306
 GameObject:
@@ -5626,8 +5624,8 @@ MonoBehaviour:
   bundleUrl: []
   bundleName: []
   BoidSpawn: {fileID: 1563674594}
-  LandscapeFadeImg: {fileID: 548952175}
-  PortraitFadeImg: {fileID: 100818823}
+  LandscapeFadeImg: {fileID: 548952177}
+  PortraitFadeImg: {fileID: 100818825}
   AudioManager: {fileID: 219264886}
   CameraManager: {fileID: 1216493098}
   CanvaManager: {fileID: 2046766742}
@@ -6014,7 +6012,6 @@ MonoBehaviour:
   magnitude: 2
   targetCam: {fileID: 0}
   subCam: {fileID: 0}
-  LandscapeOrientation: 0
   relatedObjs: []
 --- !u!1 &1075983730
 GameObject:
@@ -9782,7 +9779,6 @@ MonoBehaviour:
   magnitude: 0
   targetCam: {fileID: 1285845746}
   subCam: {fileID: 852089974}
-  LandscapeOrientation: 0
   relatedObjs:
   - {fileID: 1709115085}
   - {fileID: 69842240}
@@ -9832,6 +9828,102 @@ MonoBehaviour:
   - {fileID: 928263306}
   - {fileID: 1336775906}
   - {fileID: 1742267421}
+--- !u!1 &1481758546
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1481758547}
+  - component: {fileID: 1481758550}
+  - component: {fileID: 1481758549}
+  - component: {fileID: 1481758548}
+  m_Layer: 0
+  m_Name: RippleQuad
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1481758547
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1481758546}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.41}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1537512928}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!64 &1481758548
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1481758546}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &1481758549
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1481758546}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: e03253132fda940449c55d41831e2eba, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1481758550
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1481758546}
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1499995179
 GameObject:
   m_ObjectHideFlags: 0
@@ -10346,6 +10438,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 491296027}
+  - {fileID: 1481758547}
   m_Father: {fileID: 0}
   m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -10583,7 +10676,6 @@ MonoBehaviour:
   magnitude: 2
   targetCam: {fileID: 0}
   subCam: {fileID: 0}
-  LandscapeOrientation: 0
   relatedObjs: []
 --- !u!114 &1578533422
 MonoBehaviour:

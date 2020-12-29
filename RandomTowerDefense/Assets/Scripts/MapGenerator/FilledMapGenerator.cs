@@ -224,7 +224,7 @@ public class FilledMapGenerator : MonoBehaviour
 
 		originPos = this.transform.position + CoordToPosition(0, 0);
 
-		PathfindingGridSetup.Instance.isActived = false;
+		PathfindingGridSetup.Instance.isActivated = false;
 	}
 
 	void FillingNonNecessary(Queue<Coord> openTileList, bool[,] obstacleMap) {

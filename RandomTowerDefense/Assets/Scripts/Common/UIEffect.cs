@@ -30,9 +30,6 @@ public class UIEffect : MonoBehaviour
     private string fullText;
     private float textCnt;
 
-    [HideInInspector]
-    public bool LandscapeOrientation;
-
     public List<GameObject> relatedObjs;
 
     private List<TextMesh> relatedObjsTextMesh;
@@ -68,7 +65,6 @@ public class UIEffect : MonoBehaviour
         textCnt = 0;
         if (textMesh) fullText = textMesh.text;
         else if(text) fullText = text.text;
-        LandscapeOrientation = Screen.width > Screen.height;
 
         relatedObjsTextMesh = new List<TextMesh>();
         relatedObjsSpriteRenderer = new List<SpriteRenderer>();

@@ -69,15 +69,15 @@ public class BoidSpawnerDots : MonoBehaviour
             });
         }
 
-        Debug.DrawLine(this.transform.position + new Vector3(-BoundingRadius, BoundingRadius, BoundingRadius),
-            this.transform.position + new Vector3(BoundingRadius, BoundingRadius, BoundingRadius));
-        Debug.DrawLine(this.transform.position + new Vector3(-BoundingRadius, -BoundingRadius, BoundingRadius),
-                   this.transform.position + new Vector3(BoundingRadius, -BoundingRadius, BoundingRadius));
-
-        Debug.DrawLine(this.transform.position + new Vector3(-BoundingRadius, BoundingRadius, -BoundingRadius),
-            this.transform.position + new Vector3(BoundingRadius, BoundingRadius, -BoundingRadius));
-        Debug.DrawLine(this.transform.position + new Vector3(-BoundingRadius, -BoundingRadius, -BoundingRadius),
-                   this.transform.position + new Vector3(BoundingRadius, -BoundingRadius, -BoundingRadius));
+        //Debug.DrawLine(this.transform.position + new Vector3(-BoundingRadius, BoundingRadius, BoundingRadius),
+        //    this.transform.position + new Vector3(BoundingRadius, BoundingRadius, BoundingRadius));
+        //Debug.DrawLine(this.transform.position + new Vector3(-BoundingRadius, -BoundingRadius, BoundingRadius),
+        //           this.transform.position + new Vector3(BoundingRadius, -BoundingRadius, BoundingRadius));
+        //
+        //Debug.DrawLine(this.transform.position + new Vector3(-BoundingRadius, BoundingRadius, -BoundingRadius),
+        //    this.transform.position + new Vector3(BoundingRadius, BoundingRadius, -BoundingRadius));
+        //Debug.DrawLine(this.transform.position + new Vector3(-BoundingRadius, -BoundingRadius, -BoundingRadius),
+        //           this.transform.position + new Vector3(BoundingRadius, -BoundingRadius, -BoundingRadius));
     }
 
     void OnDisable()

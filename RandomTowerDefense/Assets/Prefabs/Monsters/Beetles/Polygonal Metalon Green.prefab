@@ -764,7 +764,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9d1b861040189346bc7f6f4c9cc8bed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 2520090770568443761}
+  enemySpawner: {fileID: 0}
+  resourceManager: {fileID: 0}
+  effectManager: {fileID: 0}
   HpBar: {fileID: 4423873312369161638}
 --- !u!1 &2570962448922183597
 GameObject:
@@ -1924,7 +1926,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4803348990156081659
 Transform:
   m_ObjectHideFlags: 0
@@ -1994,7 +1996,7 @@ VFXRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8834810393609611769}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1

@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: GreenHP
-  m_Shader: {fileID: -6465566751694194690, guid: bf36778a400a0894b86a1f49c422fa62, type: 3}
+  m_Shader: {fileID: 10752, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: _EMISSION _SPECULAR_SETUP
   m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
@@ -19,6 +19,14 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Texture2D_4036A321:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 4ef9c4d0fc5de6a47a24a3f2185af46b, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTexture:
         m_Texture: {fileID: 2800000, guid: 4ef9c4d0fc5de6a47a24a3f2185af46b, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -28,13 +36,39 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Foam_Amount: 5
+    - Foam_Cutoff: 3.5
+    - Foam_Evolution_Speed: 1.25
+    - Foam_Scale: 5
+    - Global_Fading: 30
+    - Light_Probe_Contribution: 2.5
+    - Refaction_Scale: 5
+    - Refraction_Evolution_Speed: 1.5
+    - Refraction_Height: 0.2
+    - Vector1_77A997E: 0.5
+    - Water_Depth: 1.5
+    - Wave_Height: 0.25
+    - Wave_Scale: 10
+    - Wave_Speed: 2
     - _LightProbeContribution: 3.5
+    - _MainTint_VariationIntensity: 0
     - _OutlineDepthSensitivity: 0.4
     - _OutlineNormalsSensitivity: 0.5
     - _OutlineThickness: 2
     - _Smoothness: 0.5
+    - _Wind_Density: 0
+    - _Wind_Direction: 0
+    - _Wind_Speed: 0
+    - _Wind_Strength: 0
     m_Colors:
+    - Color_551FE3E8: {r: 0, g: 0, b: 0, a: 0}
+    - Color_5678DAF5: {r: 0, g: 0, b: 0, a: 0}
+    - Color_BD765EA0: {r: 0, g: 0, b: 0, a: 0}
+    - Foam_Color: {r: 1, g: 1, b: 1, a: 0.5450981}
+    - Shallow_Water_Color: {r: 0.44313726, g: 0.8750768, b: 0.8980392, a: 0.3176471}
+    - Trough_Color: {r: 0, g: 0.03410326, b: 0.7215686, a: 0.4627451}
     - _MainColor: {r: 1, g: 1, b: 1, a: 0}
+    - _MainTint: {r: 1, g: 1, b: 1, a: 0}
     - _Offset: {r: 0, g: 0, b: 0, a: 0}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 0}
     - _Tiling: {r: 1, g: 1, b: 0, a: 0}

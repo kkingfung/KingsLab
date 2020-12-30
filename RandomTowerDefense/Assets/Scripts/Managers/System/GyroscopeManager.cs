@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class GyroscopeManager : MonoBehaviour
 {
-    readonly Vector2 shakeThreshold = new Vector2(3, 2f); // horizontal
-    readonly Vector2 shakeThresholdV = new Vector2(3f, 5f); // vertical
+    readonly float shakeThresholdH = 3f; // horizontal shake
+    readonly float shakeThresholdV = 2f; // vertical shake
     readonly float timeInterval = 2f;
     readonly float sensitiveAdjustment = 3f;
     readonly float pitchMultiplier = 3f;
@@ -144,35 +144,35 @@ public class GyroscopeManager : MonoBehaviour
         switch (Input.deviceOrientation)
         {
             case DeviceOrientation.Portrait:
-                if (rotRate.x > shakeThresholdV.x || rotRate.x < -shakeThresholdV.x)
+                if (rotRate.x > shakeThresholdV || rotRate.x < -shakeThresholdV)
                     VerticalShake = true;
-                if (rotRate.y < -shakeThreshold.y)
+                if (rotRate.y < -shakeThresholdH)
                     LeftShake = true;
-                if (rotRate.y > shakeThreshold.y)
+                if (rotRate.y > shakeThresholdH)
                     RightShake = true;
                 break;
             case DeviceOrientation.PortraitUpsideDown:
-                if (rotRate.x > shakeThresholdV.x || rotRate.x < -shakeThresholdV.x)
+                if (rotRate.x > shakeThresholdV || rotRate.x < -shakeThresholdV)
                     VerticalShake = true;
-                if (rotRate.y < -shakeThreshold.y)
+                if (rotRate.y < -shakeThresholdH)
                     RightShake = true;
-                if (rotRate.y > shakeThreshold.y)
+                if (rotRate.y > shakeThresholdH)
                     LeftShake = true;
                 break;
             case DeviceOrientation.LandscapeLeft:
-                if (rotRate.x > shakeThresholdV.y || rotRate.x < -shakeThresholdV.y)
+                if (rotRate.x > shakeThresholdV || rotRate.x < -shakeThresholdV)
                     VerticalShake = true;
-                if (rotRate.y < -shakeThreshold.x)
+                if (rotRate.y < -shakeThresholdH)
                     LeftShake = true;
-                if (rotRate.y > shakeThreshold.x)
+                if (rotRate.y > shakeThresholdH)
                     RightShake = true;
                 break;
             case DeviceOrientation.LandscapeRight:
-                if (rotRate.x > shakeThresholdV.y || rotRate.x < -shakeThresholdV.y)
+                if (rotRate.x > shakeThresholdV || rotRate.x < -shakeThresholdV)
                     VerticalShake = true;
-                if (rotRate.y < -shakeThreshold.x)
+                if (rotRate.y < -shakeThresholdH)
                     LeftShake = true;
-                if (rotRate.y > shakeThreshold.x)
+                if (rotRate.y > shakeThresholdH)
                     RightShake = true;
                 break;
         }

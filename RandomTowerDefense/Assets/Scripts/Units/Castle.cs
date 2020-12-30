@@ -25,7 +25,7 @@ public class Castle : MonoBehaviour
         tutorialManager = FindObjectOfType<TutorialManager>();
         MaxCastleHP = (int)PlayerPrefs.GetFloat("hpMax",10);
         CurrCastleHP = MaxCastleHP;
-        Shield.SetActive(CurrCastleHP>1);
+
     }
 
     // Update is called once per frame
@@ -42,10 +42,11 @@ public class Castle : MonoBehaviour
             //if (audioManager.enabledSE)
             //    audioSource.PlayOneShot(audioManager.GetAudio("se_Hitted"));
         }
-        if (PreviousCastleHP > 1 && CurrCastleHP < 1)
-            Shield.SetActive(false);
-        else if(PreviousCastleHP < 1 && CurrCastleHP > 1)
-            Shield.SetActive(true);
+        Shield.SetActive(CurrCastleHP > 1);
+        //if (PreviousCastleHP > 1 && CurrCastleHP < 1)
+        //    Shield.SetActive(false);
+        //else if(PreviousCastleHP < 1 && CurrCastleHP > 1)
+        //    Shield.SetActive(true);
     }
 
     public bool AddedHealth(int Val = 1)

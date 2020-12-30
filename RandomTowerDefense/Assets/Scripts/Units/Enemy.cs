@@ -195,7 +195,7 @@ public class Enemy : MonoBehaviour
         DamagedCount += DmgCntIncrement;
         if (DamagedCount % 5 == 0)
         {
-            effectManager.Spawn(4, this.transform.position);
+            //effectManager.Spawn(4, this.transform.position);
         }
         if (currHP <= 0) {
             isDead = true;

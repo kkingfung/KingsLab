@@ -125,7 +125,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff4c4990b458e1e48b9794793f415e6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  entityID: 0
+  playerManager: {fileID: 0}
   targetEnm: {x: 0, y: 0, z: 0}
+  audioManager: {fileID: 0}
+  skillSpawner: {fileID: 0}
 --- !u!82 &-2902608663836481688
 AudioSource:
   m_ObjectHideFlags: 0
@@ -234,4 +238,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc86c37caf7b03a40af4512d32b93355, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Timer: 3
+  Timer: 10

@@ -11,14 +11,14 @@ public static class SaveSystem {
     private static readonly string SAVE_FOLDER = Application.persistentDataPath + "/RandomDefender/";
     private const string SAVE_EXTENSION = "txt";
 
-    public static void Init(string fileName) {
+    public static void Init(string fileName, bool newBuild) {
         // Test if Save Folder exists
         if (!Directory.Exists(SAVE_FOLDER)) {
             // Create Save Folder
             Directory.CreateDirectory(SAVE_FOLDER);
         }
 
-        if (File.Exists(SAVE_FOLDER + fileName + "." + SAVE_EXTENSION) == false)
+        if (newBuild || File.Exists(SAVE_FOLDER + fileName + "." + SAVE_EXTENSION) == false)
         {
             SaveObject defaultRecord = new SaveObject();
 

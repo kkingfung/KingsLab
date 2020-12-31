@@ -85,16 +85,17 @@ public class SkillManager : MonoBehaviour
 
     public void MeteorSkill(Vector3 hitPos)
     {
-        if (SkillAuraFire == null)
-        {
-            GameObject SkillAura = Instantiate(FireFieldSkAura, hitPos, Quaternion.identity);
-            SkillAura.transform.parent = this.transform;
-            SkillAuraFire = SkillAura.GetComponent<VisualEffect>();
-        }
-        else
-        {
-            SkillAuraFire.enabled = true;
-        }
+        //if (SkillAuraFire == null)
+        //{
+        //    GameObject SkillAura = Instantiate(FireFieldSkAura, hitPos, Quaternion.identity);
+        //    SkillAura.transform.parent = this.transform;
+        //    SkillAuraFire = SkillAura.GetComponent<VisualEffect>();
+        //}
+        //else
+        //{
+        //    SkillAuraFire.enabled = true;
+        //}
+
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillMeteor");
         attr.damage = attr.damage * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor) * Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor) * 1.5f);
         GainExp(Upgrades.StoreItems.MagicMeteor, ExpPerActivation);
@@ -102,16 +103,16 @@ public class SkillManager : MonoBehaviour
     }
     public void BlizzardSkill(Vector3 hitPos)
     {
-        if (SkillAuraSnow == null)
-        {
-            GameObject SkillAura = Instantiate(BlizzardFieldSkAura, hitPos, Quaternion.identity);
-            SkillAura.transform.parent = this.transform;
-            SkillAuraSnow = SkillAura.GetComponent<VisualEffect>();
-        }
-        else
-        {
-            SkillAuraSnow.enabled = true;
-        }
+        //if (SkillAuraSnow == null)
+        //{
+        //    GameObject SkillAura = Instantiate(BlizzardFieldSkAura, hitPos, Quaternion.identity);
+        //    SkillAura.transform.parent = this.transform;
+        //    SkillAuraSnow = SkillAura.GetComponent<VisualEffect>();
+        //}
+        //else
+        //{
+        //    SkillAuraSnow.enabled = true;
+        //}
        
         SkillAttr attr = SkillInfo.GetSkillInfo("SkillBlizzard");
         attr.radius = attr.radius * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * 0.5f);

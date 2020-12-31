@@ -42,18 +42,20 @@ public class EffectSpawner : MonoBehaviour
 
     public GameObject Spawn(int prefabID, float3 Position)
     {
+        if (prefabID != 3)
+            return null;
+
         GameObject newObj = null;
         switch (prefabID)
         {
             case 0:
-                return null;
-                //foreach (GameObject j in BuildVFXList)
-                //{
-                //    if (j.activeSelf) continue;
-                //    newObj = j;
-                //    break;
-                //}
-                //break;
+                foreach (GameObject j in BuildVFXList)
+                {
+                    if (j.activeSelf) continue;
+                    newObj = j;
+                    break;
+                }
+                break;
             case 1:
                 foreach (GameObject j in DieVFXList)
                 {

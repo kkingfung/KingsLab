@@ -126,14 +126,14 @@ public class Enemy : MonoBehaviour
     }
 
     // Update is called once per frame
-    private void Update()
+    private void LateUpdate()
     {
         if (isDead) return;
         if (entityID >= 0 && HealthRecord>0) {
             float currHP = enemySpawner.healthArray[entityID];
             if (currHP > HpBar.maxValue)
                 HpBar.maxValue = currHP;
-            if (currHP != HealthRecord && HealthRecord >= 0) {
+            if (currHP != HealthRecord && HealthRecord > 0) {
                 Damaged(currHP);
                 HealthRecord = currHP;
                 HpBar.value = Mathf.Max(currHP, 0);
@@ -195,7 +195,7 @@ public class Enemy : MonoBehaviour
         DamagedCount += DmgCntIncrement;
         if (DamagedCount % 5 == 0)
         {
-            //effectManager.Spawn(4, this.transform.position);
+            effectManager.Spawn(4, this.transform.position);
         }
         if (currHP <= 0) {
             isDead = true;
@@ -241,7 +241,8 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(EnemyDestroyTime*0.2f);
 
         GameObject vfx = effectManager.Spawn(2, this.transform.position);
-        vfx.GetComponent<VisualEffect>().SetInt("SpawnCount", Mathf.Max(money /10,1));
+        if (vfx)
+            vfx.GetComponent<VisualEffect>().SetInt("SpawnCount", Mathf.Max(money / 10, 1));
         resourceManager.ChangeMaterial(money);
         Die();
     }
@@ -249,6 +250,7 @@ public class Enemy : MonoBehaviour
     private IEnumerator EndAnim()
     {
         float timeCounter = 0;
+        yield return new WaitForSeconds(.8f);
         float spd = transform.localScale.x / (EnemyDestroyTime);
         while (timeCounter < EnemyDestroyTime)
         {

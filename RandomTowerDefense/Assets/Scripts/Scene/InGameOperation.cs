@@ -8,7 +8,7 @@ using System.IO;
 
 public class InGameOperation : ISceneChange
 {
-    private readonly float tutorialTimeFactor = 0.2f;
+    private readonly float tutorialTimeFactor = 1f;//0.2f;
     private readonly int BasicFloorMatSize = 3;
 
     public enum ScreenShownID

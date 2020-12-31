@@ -16,6 +16,8 @@ public class RecordManager : MonoBehaviour
     List<SaveObject> stageRecords;
     public InGameOperation sceneManager;
     public int rank;
+    [SerializeField]
+    public bool newRecordList;
     private void OnEnable()
     {
         stageRecords = new List<SaveObject>();
@@ -23,9 +25,11 @@ public class RecordManager : MonoBehaviour
 
         for (int i = 0; i < StageInfo.IslandNum; ++i)
         {
-            SaveSystem.Init("Record" + i.ToString());
+            SaveSystem.Init("Record" + i.ToString(), newRecordList);
             stageRecords.Add(SaveSystem.LoadObject<SaveObject>("Record" + i.ToString()));
         }
+        newRecordList = false;
+
         if (AllRecordsName.Count > 0)
             updateUI();
     }

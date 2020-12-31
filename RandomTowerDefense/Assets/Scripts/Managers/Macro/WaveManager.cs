@@ -42,7 +42,7 @@ public class WaveManager : MonoBehaviour
     public AudioManager audioManager;
     public EnemyManager enemyManager;
     public bool agentCallWait;
-
+    public AgentScript agent;
     // Start is called before the first frame update
     private void Start()
     {
@@ -181,7 +181,7 @@ public class WaveManager : MonoBehaviour
                         {
                             while (true) 
                             {
-                                if (agentCallWait == false && readyToSpawn)
+                                if ((agent == null || agentCallWait == false) && readyToSpawn)
                                 {
                                     enemyManager.SpawnMonster(wave.enmDetail[i].enmType,
                                         stageManager.GetPortalPosition(SpawnPointByAI >= 0 ? SpawnPointByAI : wave.enmDetail[i].enmPort), CheckCustomData);

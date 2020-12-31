@@ -317,22 +317,25 @@ public class TowerManager : MonoBehaviour
             GameObject temp = effectManager.Spawn(3, candidate.transform.position); 
             VisualEffect tempVFX = temp.GetComponent<VisualEffect>();
             Tower candidateTowerScript = candidate.GetComponent<Tower>();
-            switch (candidateTowerScript.type)
+            if (tempVFX != null)
             {
-                case TowerInfo.TowerInfoID.Enum_TowerNightmare:
-                    tempVFX.SetVector4("MainColor", new Vector4(1, 1, 0, 1));
-                    break;
-                case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-                    tempVFX.SetVector4("MainColor", new Vector4(0, 1, 0, 1));
-                    break;
-                case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
-                    tempVFX.SetVector4("MainColor", new Vector4(0, 0, 1, 1));
-                    break;
-                case TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                    tempVFX.SetVector4("MainColor", new Vector4(1, 0, 0, 1));
-                    break;
+                switch (candidateTowerScript.type)
+                {
+                    case TowerInfo.TowerInfoID.Enum_TowerNightmare:
+                        tempVFX.SetVector4("MainColor", new Vector4(1, 1, 0, 1));
+                        break;
+                    case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
+                        tempVFX.SetVector4("MainColor", new Vector4(0, 1, 0, 1));
+                        break;
+                    case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
+                        tempVFX.SetVector4("MainColor", new Vector4(0, 0, 1, 1));
+                        break;
+                    case TowerInfo.TowerInfoID.Enum_TowerUsurper:
+                        tempVFX.SetVector4("MainColor", new Vector4(1, 0, 0, 1));
+                        break;
+                }
+                tempVFX.SetVector3("TargetLocation", targetedTower.transform.position - candidate.transform.position);
             }
-            tempVFX.SetVector3("TargetLocation", targetedTower.transform.position- candidate.transform.position);
             removeTowerFromList(candidate);
         }
         removeTowerFromList(targetedTower);

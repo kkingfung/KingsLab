@@ -18,6 +18,8 @@ public class WaveManager : MonoBehaviour
     private float dataBGMPrev;
     [HideInInspector]
     public bool readyToSpawn;
+    [HideInInspector]
+    public bool doneDownloading=false;
 
     private int TotalWaveNum;
     private int CurrentWaveNum;
@@ -88,6 +90,7 @@ public class WaveManager : MonoBehaviour
 
     public bool WaveChg()
     {
+        if (doneDownloading == false) return false;
         CurrentWaveNum++;
 
         //fireworkcounter = FireworkMax;

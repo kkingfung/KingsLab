@@ -86,7 +86,7 @@ public class InGameOperation : ISceneChange
     public InputManager InputManager;
     public GyroscopeManager GyroscopeManager;
     public ResourceManager resourceManager;
-    //public WaveManager waveManager;
+    public WaveManager waveManager;
     public TimeManager timeManager;
     public TutorialManager tutorialManager;
     public ScoreCalculation scoreCalculation;
@@ -117,9 +117,9 @@ public class InGameOperation : ISceneChange
         {
             ConfigManager.FetchCompleted += ApplyRemoteSettings;
             //ConfigManager.FetchCompleted += StageInfo.InitByRemote;
-            ConfigManager.FetchCompleted += TowerInfo.InitByRemote;
-            ConfigManager.FetchCompleted += EnemyInfo.InitByRemote;
-            ConfigManager.FetchCompleted += SkillInfo.InitByRemote;
+            //ConfigManager.FetchCompleted += TowerInfo.InitByRemote;
+            //ConfigManager.FetchCompleted += EnemyInfo.InitByRemote;
+            //ConfigManager.FetchCompleted += SkillInfo.InitByRemote;
             ConfigManager.FetchConfigs<userAttributes, appAttributes>(new userAttributes(), new appAttributes());
             if (Directory.Exists("Assets/AssetBundles"))
             {
@@ -131,15 +131,27 @@ public class InGameOperation : ISceneChange
             }
             //Debug.Log("UpdatedByRemoteConfig");
         }
-        else if (UseFileAsset)
+        else
         {
-            if (Directory.Exists("Assets/AssetBundles"))
+            waveManager.doneDownloading = true;
+            if (UseFileAsset)
             {
-                StageInfo.Init(true, "Assets/AssetBundles");
-                TowerInfo.InitByFile("Assets/AssetBundles/TowerInfo.txt");
-                EnemyInfo.InitByFile("Assets/AssetBundles/EnemyInfo.txt");
-                SkillInfo.InitByFile("Assets/AssetBundles/SkillInfo.txt");
-                //Debug.Log("UpdatedByFileAsset");
+                if (Directory.Exists("Assets/AssetBundles"))
+                {
+                    StageInfo.Init(true, "Assets/AssetBundles");
+                    TowerInfo.InitByFile("Assets/AssetBundles/TowerInfo.txt");
+                    EnemyInfo.InitByFile("Assets/AssetBundles/EnemyInfo.txt");
+                    SkillInfo.InitByFile("Assets/AssetBundles/SkillInfo.txt");
+                    //Debug.Log("UpdatedByFileAsset");
+                }
+                else
+                {
+                    StageInfo.Init(false, null);
+                    TowerInfo.Init();
+                    EnemyInfo.Init();
+                    SkillInfo.Init();
+                    //Debug.Log("UpdatedByScriptInput");
+                }
             }
             else
             {
@@ -149,14 +161,6 @@ public class InGameOperation : ISceneChange
                 SkillInfo.Init();
                 //Debug.Log("UpdatedByScriptInput");
             }
-        }
-        else
-        {
-            StageInfo.Init(false, null);
-            TowerInfo.Init();
-            EnemyInfo.Init();
-            SkillInfo.Init();
-            //Debug.Log("UpdatedByScriptInput");
         }
 
         SkillStack.init();
@@ -201,6 +205,8 @@ public class InGameOperation : ISceneChange
             StageInfo.Init(true, "Assets/AssetBundles");
         else
             StageInfo.Init(false, null);
+
+        waveManager.doneDownloading = true;
     }
 
     // Start is called before the first frame update

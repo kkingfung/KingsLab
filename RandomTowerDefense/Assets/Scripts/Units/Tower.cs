@@ -107,11 +107,15 @@ public class Tower : MonoBehaviour
                 if (entityManager.HasComponent<Target>(towerSpawner.Entities[entityID]))
                 {
                     Target target = entityManager.GetComponentData<Target>(towerSpawner.Entities[entityID]);
-                    Vector3 targetPos = target.targetPos;
-                    targetPos.y = transform.position.y;
-                    transform.forward = (targetPos - transform.position).normalized;
-                    atkEntityPos = targetPos;
-                    Attack();
+                    float targetHealth = target.targetHealth;
+                    if (targetHealth > 0)
+                    {
+                        Vector3 targetPos = target.targetPos;
+                        targetPos.y = transform.position.y;
+                        transform.forward = (targetPos - transform.position).normalized;
+                        atkEntityPos = targetPos;
+                        Attack();
+                    }
                 }
             }
         }
@@ -148,6 +152,7 @@ public class Tower : MonoBehaviour
                    audioManager.PlayAudio("se_Shot");
                }
                 posAdj.z = 0.0f;
+                posAdj.y = 0.1f;
                 if (CheckMaxLevel() == false)
                     GainExp(ExpPerAttack* 5 * (stageManager.GetCurrIsland() + 1));
                 break;

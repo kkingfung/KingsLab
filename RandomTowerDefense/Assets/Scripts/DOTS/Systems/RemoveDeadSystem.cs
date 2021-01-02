@@ -19,11 +19,9 @@ public class RemoveDeadSystem : JobComponentSystem
 		EntityCommandBuffer ecb = endSimulationEcbSystem.CreateCommandBuffer();
 		EntityCommandBuffer.ParallelWriter ecbc = ecb.AsParallelWriter();
 
-		float deltaTime = Time.DeltaTime;
-
 		return Entities.WithAll<EnemyTag>().ForEach((Entity entity, int entityInQueryIndex, ref Health health) =>
 		{
-			if (health.Value <= 0)
+			if (health.Value < 0)
 			{
 				ecbc.RemoveComponent<QuadrantEntity>(entityInQueryIndex, entity);
 				ecbc.RemoveComponent<EnemyTag>(entityInQueryIndex, entity);

@@ -41,6 +41,7 @@ public class Enemy : MonoBehaviour
     public Slider HpBar;
     private RectTransform HpBarRot;
 
+    private bool isSync;
     private bool isDead;
     private bool isReady;
     private bool useScaleChg;
@@ -107,10 +108,6 @@ public class Enemy : MonoBehaviour
         useScaleChg = false;
     }
 
-    private void Start() 
-    {
-
-    }
 
     private void MyStart()
     {
@@ -119,7 +116,8 @@ public class Enemy : MonoBehaviour
         oriPos = prevPos;
         isDead = false;
         isReady = false;
-
+        isSync = false;
+        DamagedCount = 30;
         oriScale = transform.localScale;
         transform.localScale = new Vector3();
         StartCoroutine(StartAnim());
@@ -142,6 +140,7 @@ public class Enemy : MonoBehaviour
             //CheckingStatus
             Petrified();
             Slowed();
+            if (isSync == false && currHP > 1) isSync = true;
         }
 
         if (DamagedCount > 0 && isReady && useScaleChg)
@@ -192,6 +191,7 @@ public class Enemy : MonoBehaviour
 
     public void Damaged(float currHP)
     {
+        if (isSync == false) return;
         DamagedCount += DmgCntIncrement;
         if (DamagedCount % 5 == 0)
         {

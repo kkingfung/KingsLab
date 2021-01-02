@@ -130,7 +130,7 @@ public class TowerSpawner : MonoBehaviour
                 Target target = EntityManager.GetComponentData<Target>(Entities[i]);
                 targetArray[i] = target.targetPos;
                 hastargetArray[i] = EntityManager.HasComponent<EnemyTag>(target.targetEntity);
-                Debug.DrawLine(target.targetPos, GameObjects[i].transform.position, Color.cyan);
+                //Debug.DrawLine(target.targetPos, GameObjects[i].transform.position, Color.cyan);
             }
             else
             {

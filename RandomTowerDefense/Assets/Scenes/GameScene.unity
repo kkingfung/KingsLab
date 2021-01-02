@@ -14557,7 +14557,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3466139010921764683, guid: 3f94676e2913eb24aa64140859db0348, type: 3}
       propertyPath: m_Materials.Array.size
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3466139010921764683, guid: 3f94676e2913eb24aa64140859db0348, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -28459,6 +28459,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeBGM: 0
   readyToSpawn: 0
+  doneDownloading: 0
   isSpawning: 0
   SpawnPointByAI: 0
   FireWork: []
@@ -40484,7 +40485,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3466139010921764683, guid: 3f94676e2913eb24aa64140859db0348, type: 3}
       propertyPath: m_Materials.Array.size
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3466139010921764683, guid: 3f94676e2913eb24aa64140859db0348, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -67923,6 +67924,7 @@ MonoBehaviour:
   AllRecordsScore: []
   sceneManager: {fileID: 1829121298}
   rank: 0
+  newRecordList: 0
 --- !u!4 &1373645765
 Transform:
   m_ObjectHideFlags: 0
@@ -89717,8 +89719,8 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 4d93790961dd39a459a75c097276ce5d, type: 2}
   - {fileID: 2100000, guid: 9919e3e59f3c21d429837f7bf20c2357, type: 2}
   - {fileID: 2100000, guid: 6d15660ef52c48049aa818171abb59b2, type: 2}
-  UseFileAsset: 1
-  UseRemoteConfig: 1
+  UseFileAsset: 0
+  UseRemoteConfig: 0
   LandscapeFadeImg: {fileID: 161518854}
   PortraitFadeImg: {fileID: 675521872}
   Agent: {fileID: 2849747259621721967}
@@ -89734,6 +89736,7 @@ MonoBehaviour:
   InputManager: {fileID: 986103182}
   GyroscopeManager: {fileID: 1609452955}
   resourceManager: {fileID: 1011788840}
+  waveManager: {fileID: 575038166}
   timeManager: {fileID: 647376207}
   tutorialManager: {fileID: 1489334543}
   scoreCalculation: {fileID: 1373645766}
@@ -103231,7 +103234,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3466139010921764683, guid: 3f94676e2913eb24aa64140859db0348, type: 3}
       propertyPath: m_Materials.Array.size
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3466139010921764683, guid: 3f94676e2913eb24aa64140859db0348, type: 3}
       propertyPath: m_Materials.Array.data[0]

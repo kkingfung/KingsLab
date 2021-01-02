@@ -68,7 +68,8 @@ public class TowerFindTargetSystem : JobComponentSystem
                 entityCommandBuffer.AddComponent(i, chunkEntity[i], new Target
                 {
                     targetEntity = closestTargetEntity,
-                    targetPos = closestTargetPosition
+                    targetPos = closestTargetPosition,
+                    targetHealth = 1,
                 });
             }
         }

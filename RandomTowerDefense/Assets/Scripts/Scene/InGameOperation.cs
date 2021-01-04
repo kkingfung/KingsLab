@@ -63,6 +63,9 @@ public class InGameOperation : ISceneChange
     [Header("Other Settings")]
     public GameObject Agent;
     public Material FloorMat;
+    public Material ObstacleMat;
+    public MeshRenderer ArenaEffectQuad;
+    private Material ArenaEffectMat;
     public List<Image> AimMarkImg;
 
     //public bool isDebugging;//For ingame Debugger
@@ -221,6 +224,8 @@ public class InGameOperation : ISceneChange
         LandscapeFade = LandscapeFadeImg.gameObject.GetComponent<FadeEffect>();
         PortraitFade = PortraitFadeImg.gameObject.GetComponent<FadeEffect>();
 
+        ArenaEffectMat = ArenaEffectQuad.material;
+
         //InputManager = FindObjectOfType<InputManager>();
         //AudioManager = FindObjectOfType<AudioManager>();
         //CameraManager = FindObjectOfType<CameraManager>();
@@ -261,7 +266,7 @@ public class InGameOperation : ISceneChange
                 i.material.SetFloat("_Progress", 0);
         }
 
-        FloorMat.SetFloat("ShapesSides", BasicFloorMatSize + IslandNow);
+        FloorMat.SetFloat("_ShapesSides", BasicFloorMatSize + IslandNow);
         foreach (Text i in UIIslandName)
         {
             switch (IslandNow)
@@ -269,18 +274,26 @@ public class InGameOperation : ISceneChange
                 case 0:
                     i.text = "ヒジリカ島";
                     FloorMat.SetColor("_Color", new Color(0.34f, 1f, 0f));
+                    ObstacleMat.SetColor("_Color", new Color(0.34f, 1f, 0f));
+                    ArenaEffectMat.SetColor("_BaseColor", new Color(0.34f, 1f, 0f));
                     break;
                 case 1:
                     i.text = "テンシュキ島";
                     FloorMat.SetColor("_Color", new Color(0.82f, 0.47f, 1f));
+                    ObstacleMat.SetColor("_Color", new Color(0.82f, 0.47f, 1f));
+                    ArenaEffectMat.SetColor("_BaseColor", new Color(0.82f, 0.47f, 1f));
                     break;
                 case 2:
                     i.text = "ニモハサ島";
                     FloorMat.SetColor("_Color", new Color(1f, 0.2f, 0f));
+                    ObstacleMat.SetColor("_Color", new Color(1f, 0.2f, 0f));
+                    ArenaEffectMat.SetColor("_BaseColor", new Color(1f, 0.2f, 0f));
                     break;
                 case 3:
                     i.text = "ギイシカ島";
                     FloorMat.SetColor("_Color", new Color(1f, 0.7f, 0f));
+                    ObstacleMat.SetColor("_Color", new Color(1f, 0.7f, 0f));
+                    ArenaEffectMat.SetColor("_BaseColor", new Color(1f, 0.7f, 0f));
                     break;
             }
         }

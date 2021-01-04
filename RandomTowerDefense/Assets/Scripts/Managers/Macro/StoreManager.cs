@@ -39,10 +39,10 @@ public class StoreManager : MonoBehaviour
     private readonly int[] PriceForBonusBoss2 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     private readonly int[] PriceForBonusBoss3 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-    private readonly int[] PriceForMagicMeteor = { 10, 15, 20, 25, 30, 35, 40, 45, 50, 55 };
-    private readonly int[] PriceForMagicBlizzard = { 10, 15, 20, 25, 30, 35, 40, 45, 50, 55 };
-    private readonly int[] PriceForMagicMinions = { 10, 15, 20, 25, 30, 35, 40, 45, 50, 55 };
-    private readonly int[] PriceForMagicPetrification = { 10, 15, 20, 25, 30, 35, 40, 45, 50, 55 };
+    private readonly int[] PriceForMagicMeteor = { 5, 10, 15, 20, 25, 30, 35, 40, 45, 50 };
+    private readonly int[] PriceForMagicBlizzard = { 8, 16, 24, 32, 40, 48, 56, 64, 72, 80 };
+    private readonly int[] PriceForMagicMinions = { 5, 10, 15, 20, 25, 30, 35, 40, 45, 50 };
+    private readonly int[] PriceForMagicPetrification = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 };
 
     // Start is called before the first frame update
     private void Start()

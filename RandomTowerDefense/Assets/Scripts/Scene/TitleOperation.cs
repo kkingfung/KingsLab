@@ -10,6 +10,7 @@ public class TitleOperation: ISceneChange
     //Camera Start/Stay/End Point
     [Header("Camera Settings")]
     public GameObject DarkenCam;
+    public List<GameObject> EggCam;
 
     public GameObject RightCam;
     public Camera RightCamComponent;
@@ -453,6 +454,9 @@ public class TitleOperation: ISceneChange
                     Lower.transform.localPosition.y + posChgsbyFrame, Lower.transform.localPosition.z);
             yield return new WaitForSeconds(0f);
         }
+
+        foreach (GameObject i in EggCam)
+            i.SetActive(false);
     }
     private IEnumerator PreparationToMain()
     {

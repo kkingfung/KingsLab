@@ -38,7 +38,7 @@ Material:
     m_Floats:
     - Vector1_1053584E: 0.731
     - _FadeThreshold: 0
-    - _Progress: 0
+    - _Progress: 1
     m_Colors:
     - Color_E1A7676C: {r: 0.4339623, g: 0.4339623, b: 0.4339623, a: 1}
   m_BuildTextureStacks: []

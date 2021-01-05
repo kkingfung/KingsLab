@@ -43,9 +43,9 @@ public class EnemyAttr {
         enemyInfo = new Dictionary<string, EnemyAttr>();
 
         //Bonus
-        enemyInfo.Add("MetalonGreen", new EnemyAttr(200, 600, 1.2f, 0.5f, 5, 0.5f));
-        enemyInfo.Add("MetalonPurple", new EnemyAttr(350, 1200, 1.2f, 0.5f, 5, 0.5f));
-        enemyInfo.Add("MetalonRed", new EnemyAttr(500, 1800, 1.2f, 0.5f, 5, 0.5f));
+        enemyInfo.Add("MetalonGreen", new EnemyAttr(200, 2000, 1.2f, 0.5f, 5, 0.5f));
+        enemyInfo.Add("MetalonPurple", new EnemyAttr(350, 5000, 1.2f, 0.5f, 5, 0.5f));
+        enemyInfo.Add("MetalonRed", new EnemyAttr(500, 10000, 1.2f, 0.5f, 5, 0.5f));
 
         //Stage 4
         enemyInfo.Add("AttackBot", new EnemyAttr(1000, 5000, 0.05f, 0.5f, 5, 0.5f));

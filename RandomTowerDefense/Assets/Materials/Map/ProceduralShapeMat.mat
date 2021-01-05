@@ -43,11 +43,11 @@ Material:
     - Vector1_BA84848C: 0.1
     - _ColorBrightness: 6.05
     - _MaxRotationSpd: 0.5
-    - _ShapesSides: 5
+    - _ShapesSides: 4
     - _Tiling: 1
     m_Colors:
     - Color_F96D4F09: {r: 1, g: 0, b: 0, a: 0}
     - Vector4_11DF4BD3: {r: 0.25, g: 1, b: 1.09, a: 1}
-    - _Color: {r: 1, g: 0.2, b: 0, a: 1}
+    - _Color: {r: 0.82, g: 0.47, b: 1, a: 1}
     - _WidthHeight: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

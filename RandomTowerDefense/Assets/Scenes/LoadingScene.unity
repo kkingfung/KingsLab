@@ -1146,7 +1146,6 @@ MonoBehaviour:
   m_CameraType: 0
   m_Cameras:
   - {fileID: 84682717}
-  - {fileID: 2071277378}
   - {fileID: 29766356}
   m_RendererIndex: -1
   m_VolumeLayerMask:

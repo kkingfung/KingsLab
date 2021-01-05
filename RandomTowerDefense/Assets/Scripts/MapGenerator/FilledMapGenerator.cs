@@ -154,7 +154,7 @@ public class FilledMapGenerator : MonoBehaviour
 				Renderer obstacleRenderer = newObstacle.GetComponent<Renderer>();
 				Material obstacleMaterial = new Material(obstacleRenderer.sharedMaterial);
 				float colourPercent = randomCoord.y / (float)currentMap.mapSize.y;
-				obstacleMaterial.color = Color.Lerp(currentMap.foregroundColour,currentMap.backgroundColour,colourPercent);
+				//obstacleMaterial.color = Color.Lerp(currentMap.foregroundColour,currentMap.backgroundColour,colourPercent);
 				obstacleRenderer.sharedMaterial = obstacleMaterial;
 
 				allOpenCoords.Remove(randomCoord);
@@ -276,7 +276,7 @@ public class FilledMapGenerator : MonoBehaviour
 					Renderer obstacleRenderer = newObstacle.GetComponent<Renderer>();
 					Material obstacleMaterial = new Material(obstacleRenderer.sharedMaterial);
 					float colourPercent = i.y / (float)currentMap.mapSize.y;
-					obstacleMaterial.color = Color.Lerp(currentMap.foregroundColour, currentMap.backgroundColour, colourPercent);
+					//obstacleMaterial.color = Color.Lerp(currentMap.foregroundColour, currentMap.backgroundColour, colourPercent);
 					obstacleRenderer.sharedMaterial = obstacleMaterial;
 
 					//Restart Processing

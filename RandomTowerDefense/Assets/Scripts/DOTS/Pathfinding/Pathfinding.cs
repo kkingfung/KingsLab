@@ -34,7 +34,7 @@ public class Pathfinding : ComponentSystem {
             pathNodeArray.Dispose();
     }
     protected override void OnUpdate() {
-        if (PathfindingGridSetup.Instance == null) return;
+        //if (PathfindingGridSetup.Instance == null) return;
         if (PathfindingGridSetup.Instance.Reset)
         {
             PathNodeArrayList = new Dictionary<int2, PathNode[]>();
@@ -107,14 +107,16 @@ public class Pathfinding : ComponentSystem {
                     };
                     findPathJobList.Add(findPathJob);
                     jobHandleList.Add(findPathJob.Schedule());
-                    JobHandle.CompleteAll(jobHandleList);
 
-                    PathNode[] array = findPathJob.pathNodeArray.ToArray();
-                    PathNodeArrayList.Add(pathfindingParams.startPosition, array);
+                    JobHandle.CompleteAll(jobHandleList);
+                    
+                    //PathNode[] array = findPathJob.pathNodeArray.ToArray();
+                    //PathNodeArrayList.Add(pathfindingParams.startPosition, array);
                     chgPath = !chgPath;
                 }
             }
             PostUpdateCommands.RemoveComponent<PathfindingParams>(entity);
+            
 
         });
 
@@ -129,7 +131,7 @@ public class Pathfinding : ComponentSystem {
             }.Run();
         }
 
-        //pathNodeArray.Dispose();
+        pathNodeArray.Dispose();
     }
     
     private NativeArray<PathNode> GetPathNodeArray() {

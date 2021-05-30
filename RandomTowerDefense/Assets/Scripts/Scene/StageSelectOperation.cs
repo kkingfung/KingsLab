@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -189,12 +189,14 @@ public class StageSelectOperation : ISceneChange
     }
     public void MoveToStage()
     {
+
         if (!((LandscapeFade && LandscapeFade.isReady) || (PortraitFade && PortraitFade.isReady))) return;
         if (Time.time - TimeRecord < TimeWait) return;
         StartCoroutine(PetrifyAnimation());
         TimeRecord = Time.time;
         AudioManager.PlayAudio("se_Button");
-    }
+  
+}
 
     public void OptionStatus()
     {

@@ -167,6 +167,7 @@ public class SkillManager : MonoBehaviour
             }
 
             currActiveTime = Mathf.Max(0, currActiveTime - Time.deltaTime);
+
             yield return new WaitForSeconds(0f);
         }
         skillScript = null;

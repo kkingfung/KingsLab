@@ -54,6 +54,20 @@ public class StageManager : MonoBehaviour
         SpawnPoint = new Coord[EnemySpawnPtNum + 1];
         EnemySpawnPort = new GameObject[EnemySpawnPtNum];
         if (dmgVFX) dmgVFX.Stop();
+
+        if (mapGenerator)
+        {
+            if (sceneManager.GetCurrIsland() != StageInfo.IslandNum - 1)
+            {
+                mapGenerator.OnNewStage(sceneManager.GetCurrIsland());
+            }
+            else
+            {
+                float TotalSize = PlayerPrefs.GetFloat("stageSize", 64);
+                TotalSize = Mathf.Sqrt(TotalSize);
+                mapGenerator.CustomizeMapAndCreate((int)(TotalSize + 0.9f), (int)(TotalSize + 0.9f));
+            }
+        }
     }
     // Start is called before the first frame update
     void Start()
@@ -76,17 +90,6 @@ public class StageManager : MonoBehaviour
 
         if (mapGenerator)
         {
-            if (sceneManager.GetCurrIsland() != StageInfo.IslandNum - 1)
-            {
-                mapGenerator.OnNewStage(sceneManager.GetCurrIsland());
-            }
-            else
-            {
-                float TotalSize = PlayerPrefs.GetFloat("stageSize", 64);
-                TotalSize = Mathf.Sqrt(TotalSize);
-                mapGenerator.CustomizeMapAndCreate((int)(TotalSize + 0.9f), (int)(TotalSize + 0.9f));
-            }
-
             //Fixed CastleMapPos
             int[] entityID = castleSpawner.Spawn(mapGenerator.CoordToPosition(SpawnPoint[0]) + mapGenerator.transform.position,
                 Quaternion.Euler(0f, 90f, 0f), (int)PlayerPrefs.GetFloat("hpMax", 5), 0f);

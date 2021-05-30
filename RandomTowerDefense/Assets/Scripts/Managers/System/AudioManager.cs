@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -128,18 +128,18 @@ public class AudioManager : MonoBehaviour
     }
     void Record()
     {
-        if (audioSource == null) return;
-        audioSource[1].clip = Microphone.Start("Built-in Microphone", true, 10, 44100);
-        audioSource[1].Play();
+        //if (audioSource == null) return;
+        //audioSource[1].clip = Microphone.Start("Built-in Microphone", true, 10, 44100);
+        //audioSource[1].Play();
     }
 
     void Release()
     {
-        foreach (var device in Microphone.devices)
-        {
-            if (Microphone.IsRecording(device))
-                Microphone.End(device);
-        }
+        //foreach (var device in Microphone.devices)
+        //{
+        //    if (Microphone.IsRecording(device))
+         //       Microphone.End(device);
+        //}
     }
 
     public float[] GetClipWaveform(string clipname)
@@ -156,12 +156,13 @@ public class AudioManager : MonoBehaviour
 
     float[] GetWaveform(string clipname)
     {
-        float[] data = new float[Microphone.GetPosition("Built-in Microphone")];
-        if (bgmList[clipname].GetData(data, 0) == false)
-        {
-            seList[clipname].GetData(data, 0);
-        }
-        return data;
+        //float[] data = new float[Microphone.GetPosition("Built-in Microphone")];
+        //if (bgmList[clipname].GetData(data, 0) == false)
+        //{
+        //    seList[clipname].GetData(data, 0);
+        //}
+        //return data;
+return null;
     }
 
     public void PlayAudio(string clipname, bool isLoop = false)

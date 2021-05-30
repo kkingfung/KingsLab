@@ -699,6 +699,9 @@ public class EnemySpawner : MonoBehaviour
             if (EntityManager.HasComponent<EnemyTag>(Entities[i]) == false)
                 EntityManager.AddComponent<EnemyTag>(Entities[i]);
 
+            if (EntityManager.HasComponent<PathFollow>(Entities[i]) == false)
+                EntityManager.AddComponent<PathFollow>(Entities[i]);
+
             if (EntityManager.HasComponent<PathfindingParams>(Entities[i]) == false)
             {
                 EntityManager.AddComponentData(Entities[i], new PathfindingParams

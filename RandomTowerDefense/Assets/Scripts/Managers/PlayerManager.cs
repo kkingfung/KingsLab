@@ -61,6 +61,7 @@ public class PlayerManager : MonoBehaviour
 
     private void Update()
     {
+        isSkillActive = false;
         Physics.Simulate(Time.fixedDeltaTime);
         TowerRaycastResult = null;
         hitPillar = new UnityEngine.RaycastHit();

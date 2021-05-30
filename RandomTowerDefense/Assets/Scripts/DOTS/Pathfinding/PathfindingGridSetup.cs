@@ -20,7 +20,8 @@ public class PathfindingGridSetup : MonoBehaviour {
         mapGenerator = FindObjectOfType<FilledMapGenerator>();
     }
 
-    private void Update() {
+    private void Start()
+    {
         if (isActivated == false)
         {
             pathfindingGrid = new Grid<GridNode>(mapGenerator.CurrMapX(),

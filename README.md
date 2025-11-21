@@ -1,6 +1,6 @@
 # RandomTowerDefense
 
-A technically advanced tower defense game with AI-driven gameplay, built with Unity DOTS and ML-Agents. Created by KingsLab as a third-year university project.
+A technically advanced tower defense game with AI-driven gameplay, built with Unity DOTS and ML-Agents. Created by KingsLab as a school final year project.
 
 ## Overview
 
@@ -170,12 +170,12 @@ Before building for production:
 ## Credits
 
 **Created by:** KingsLab
-**Project Type:** Third-Year University Project
+**Project Type:** School Final Year Project
 **Development Period:** 3 months
 
 ## License
 
-This project is created for educational purposes as part of university coursework.
+This project is created for educational purposes as part of school coursework.
 
 ---
 

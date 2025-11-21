@@ -322,10 +322,10 @@ public class EnemySpawner : MonoBehaviour
 {
     private readonly int count = 50;
     public static EnemySpawner Instance { get; private set; }
-    //public List<GameObject> PrefabObject;
-    //[Header("MonsterVFX")]
-    //public GameObject DieEffect;
-    //public GameObject DropEffect;
+    public List<GameObject> PrefabObject;
+    [Header("MonsterVFX")]
+    public GameObject DieEffect;
+    public GameObject DropEffect;
 
     [Header("MonsterAsset")]
     public GameObject MetalonGreen;
@@ -399,7 +399,7 @@ public class EnemySpawner : MonoBehaviour
     //Array
     [HideInInspector]
     public GameObject[] GameObjects;
-    //public TransformAccessArray TransformAccessArray;
+    public TransformAccessArray TransformAccessArray;
     public NativeArray<float> healthArray;
     public NativeArray<float> petrifyArray;
     public NativeArray<float> slowArray;
@@ -408,12 +408,12 @@ public class EnemySpawner : MonoBehaviour
     public NativeArray<Entity> Entities;
 
     //For input
-    //private Transform[] transforms;
+    private Transform[] transforms;
 
     public FilledMapGenerator mapGenerator;
 
     public EffectSpawner effectManager;
-    // private CastleSpawner castleSpawner;
+    private CastleSpawner castleSpawner;
     public AgentScript agent;
 
     private void Awake()
@@ -469,8 +469,8 @@ public class EnemySpawner : MonoBehaviour
         if (Entities.IsCreated)
             Entities.Dispose();
 
-        //if (TransformAccessArray.isCreated)
-        //    TransformAccessArray.Dispose();
+        if (TransformAccessArray.isCreated)
+            TransformAccessArray.Dispose();
 
         //Disposing Array
         if (healthArray.IsCreated)
@@ -483,37 +483,37 @@ public class EnemySpawner : MonoBehaviour
 
     private void Start()
     {
-        //ListMetalonGreen = new List<GameObject>();
-        //ListMetalonPurple = new List<GameObject>();
-        //ListMetalonRed = new List<GameObject>();
-        //
-        //ListAttackBot = new List<GameObject>();
-        //ListRobotSphere = new List<GameObject>();
-        //
-        //ListDragon = new List<GameObject>();
-        //ListBull = new List<GameObject>();
-        //ListStoneMonster = new List<GameObject>();
-        //
-        //ListFreeLichS = new List<GameObject>();
-        //ListFreeLich = new List<GameObject>();
-        //ListGolemS = new List<GameObject>();
-        //ListGolem = new List<GameObject>();
-        //ListSkeletonArmed = new List<GameObject>();
-        //ListSpiderGhost = new List<GameObject>();
-        //
-        //ListSkeleton = new List<GameObject>();
-        //ListGruntS = new List<GameObject>();
-        //ListFootmanS = new List<GameObject>();
-        //ListGrunt = new List<GameObject>();
-        //ListFootman = new List<GameObject>();
-        //
-        //ListTurtleShell = new List<GameObject>();
-        //ListMushroom = new List<GameObject>();
-        //ListSlime = new List<GameObject>();
-        //
-        //ListPigChef = new List<GameObject>();
-        //ListPhoenixChick = new List<GameObject>();
-        //ListRockCritter = new List<GameObject>();
+        ListMetalonGreen = new List<GameObject>();
+        ListMetalonPurple = new List<GameObject>();
+        ListMetalonRed = new List<GameObject>();
+        
+        ListAttackBot = new List<GameObject>();
+        ListRobotSphere = new List<GameObject>();
+        
+        ListDragon = new List<GameObject>();
+        ListBull = new List<GameObject>();
+        ListStoneMonster = new List<GameObject>();
+        
+        ListFreeLichS = new List<GameObject>();
+        ListFreeLich = new List<GameObject>();
+        ListGolemS = new List<GameObject>();
+        ListGolem = new List<GameObject>();
+        ListSkeletonArmed = new List<GameObject>();
+        ListSpiderGhost = new List<GameObject>();
+        
+        ListSkeleton = new List<GameObject>();
+        ListGruntS = new List<GameObject>();
+        ListFootmanS = new List<GameObject>();
+        ListGrunt = new List<GameObject>();
+        ListFootman = new List<GameObject>();
+        
+        ListTurtleShell = new List<GameObject>();
+        ListMushroom = new List<GameObject>();
+        ListSlime = new List<GameObject>();
+        
+        ListPigChef = new List<GameObject>();
+        ListPhoenixChick = new List<GameObject>();
+        ListRockCritter = new List<GameObject>();
 
         allMonsterList = new Dictionary<string, List<GameObject>>();
 
@@ -557,12 +557,12 @@ public class EnemySpawner : MonoBehaviour
         allMonsterList.Add("RockCritter", ListRockCritter);
 
         EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-        //castleSpawner = FindObjectOfType<CastleSpawner>();
-        // mapGenerator = FindObjectOfType<FilledMapGenerator>();
+        castleSpawner = FindObjectOfType<CastleSpawner>();
+         mapGenerator = FindObjectOfType<FilledMapGenerator>();
 
         //Prepare input
         GameObjects = new GameObject[count];
-        //transforms = new Transform[count];
+        transforms = new Transform[count];
 
         Entities = new NativeArray<Entity>(count, Allocator.Persistent);
         var archetype = EntityManager.CreateArchetype(
@@ -570,9 +570,9 @@ public class EnemySpawner : MonoBehaviour
            typeof(Radius), typeof(PetrifyAmt), typeof(Lifetime), typeof(SlowRate),
             typeof(BuffTime), typeof(PathFollow), typeof(LocalToWorld),
             ComponentType.ReadOnly<Translation>()
-            //ComponentType.ReadOnly<Translation>(),
-            //    ComponentType.ReadOnly<RotationEulerXYZ>(),
-            //ComponentType.ReadOnly<Hybrid>()
+            ComponentType.ReadOnly<Translation>(),
+                ComponentType.ReadOnly<RotationEulerXYZ>(),
+            ComponentType.ReadOnly<Hybrid>()
             );
         EntityManager.CreateEntity(archetype, Entities);
 
@@ -581,7 +581,7 @@ public class EnemySpawner : MonoBehaviour
             EntityManager.AddBuffer<PathPosition>(Entities[i]);
         }
 
-        // TransformAccessArray = new TransformAccessArray(transforms);
+        TransformAccessArray = new TransformAccessArray(transforms);
         healthArray = new NativeArray<float>(count, Allocator.Persistent);
         slowArray = new NativeArray<float>(count, Allocator.Persistent);
         petrifyArray = new NativeArray<float>(count, Allocator.Persistent);
@@ -632,7 +632,7 @@ public class EnemySpawner : MonoBehaviour
             GameObjects[i].transform.localScale = allMonsterPrefabList[Name].transform.localScale;
             GameObjects[i].transform.localRotation = Quaternion.identity;
             GameObjects[i].GetComponent<Enemy>().Init(i, money, agent);
-            //transforms[i] = GameObjects[i].transform;
+            transforms[i] = GameObjects[i].transform;
             healthArray[i] = health;
             slowArray[i] = 0;
             petrifyArray[i] = 0;
@@ -681,20 +681,18 @@ public class EnemySpawner : MonoBehaviour
             {
                 typeEnum = QuadrantEntity.TypeEnum.EnemyTag
             });
-            //EntityManager.SetComponentData(Entities[i], new RotationEulerXYZ
-            //{
-            //    Value = Rotation,
-            //});
-
-            //EntityManager.SetComponentData(Entities[i], new Translation
-            //{
-            //    Value = Position,
-            //});
-
-            //EntityManager.SetComponentData(Entities[i], new Hybrid
-            //{
-            //    Index = i,
-            //});
+            EntityManager.SetComponentData(Entities[i], new RotationEulerXYZ
+            {
+                Value = Rotation,
+            })
+            EntityManager.SetComponentData(Entities[i], new Translation
+            {
+                Value = Position,
+            })
+            EntityManager.SetComponentData(Entities[i], new Hybrid
+            {
+                Index = i,
+            });
 
             if (EntityManager.HasComponent<EnemyTag>(Entities[i]) == false)
                 EntityManager.AddComponent<EnemyTag>(Entities[i]);
@@ -716,7 +714,7 @@ public class EnemySpawner : MonoBehaviour
         }
 
         //Change Whenever Spawned (Not Needed?)
-        //TransformAccessArray = new TransformAccessArray(transforms);
+        TransformAccessArray = new TransformAccessArray(transforms);
 
         return spawnIndexList;
     }

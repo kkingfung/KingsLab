@@ -7,8 +7,8 @@ using UnityEngine.VFX;
 
 public class WaveManager : MonoBehaviour
 {
-    //private readonly float WaveChgSpeedFactor = 2.0f;
-    //private readonly int FireworkMax=120;
+    private readonly float WaveChgSpeedFactor = 2.0f;
+    private readonly int FireworkMax=120;
     private readonly float BGMSpawnThreshold = 0.1f;//0.02f;
 
      //SpawnReferringToBGM
@@ -37,7 +37,7 @@ public class WaveManager : MonoBehaviour
     [HideInInspector]
     public TextMesh waveNumMesh;
 
-    //private int fireworkcounter;
+    private int fireworkcounter;
     public InGameOperation sceneManager;
     public TutorialManager tutorialManager;
     public StageManager stageManager;
@@ -49,13 +49,13 @@ public class WaveManager : MonoBehaviour
     private void Start()
     {
         CurrAttr = StageInfo.GetStageInfo();
-        //sceneManager = FindObjectOfType<InGameOperation>();
-        //stageManager = FindObjectOfType<StageManager>();
-        //enemySpawner = FindObjectOfType<EnemySpawner>();
-        //tutorialManager = FindObjectOfType<TutorialManager>();
+        sceneManager = FindObjectOfType<InGameOperation>();
+        stageManager = FindObjectOfType<StageManager>();
+        enemySpawner = FindObjectOfType<EnemySpawner>();
+        tutorialManager = FindObjectOfType<TutorialManager>();
         TotalWaveNum = CurrAttr.waveNum;
         CurrentWaveNum = 0;
-        //fireworkcounter = 0;
+        fireworkcounter = 0;
         allSpawned = false;
         agentCallWait = false;
 
@@ -93,9 +93,9 @@ public class WaveManager : MonoBehaviour
         if (doneDownloading == false) return false;
         CurrentWaveNum++;
 
-        //fireworkcounter = FireworkMax;
-        //foreach (VisualEffect i in FireWork)
-        //    i.Play();
+        fireworkcounter = FireworkMax;
+        foreach (VisualEffect i in FireWork)
+            i.Play();
 
         if (CurrentWaveNum > TotalWaveNum)
         {
@@ -113,24 +113,24 @@ public class WaveManager : MonoBehaviour
         StartCoroutine(SpawnWave(CurrAttr.waveDetail[CurrentWaveNum - 1]));
         return false;
     }
+
     // Update is called once per frame
     private void Update()
     {
         if (readyToSpawn == false && Time.time - timeBGM >= 0.35f)
         {
-            //if (dataBGM[(int)(timeBGM * 0.25f* 44100) % dataBGM.Length] - dataBGMPrev > BGMSpawnThreshold)
             if (dataBGM[(int)(timeBGM * 0.25f * 44100) % dataBGM.Length] > BGMSpawnThreshold)
                 readyToSpawn = true;
-            //dataBGMPrev = dataBGM[(int)(timeBGM * 0.25f* 44100) % dataBGM.Length];
+            dataBGMPrev = dataBGM[(int)(timeBGM * 0.25f* 44100) % dataBGM.Length];
             timeBGM += 0.25f;
         }
 
-        //if (fireworkcounter > 0) {
-        //    if (--fireworkcounter == 0) {
-        //        foreach (VisualEffect i in FireWork)
-        //            i.Stop();
-        //    }
-        //}
+        if (fireworkcounter > 0) {
+            if (--fireworkcounter == 0) {
+                foreach (VisualEffect i in FireWork)
+                    i.Stop();
+            }
+        }
 
         if (allSpawned && enemyManager.AllAliveMonstersList().Count == 0)
         {
@@ -152,7 +152,7 @@ public class WaveManager : MonoBehaviour
             if (isSpawning==false && Time.time - WaveTimer > CurrAttr.waveWaitTime)
             {
                 WaveChg();
-                //WaveTimer = Time.time;
+                WaveTimer = Time.time;
             }
         }
     }

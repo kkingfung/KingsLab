@@ -10,7 +10,7 @@ using UnityEngine.Rendering;
 public class StageSelectOperation : ISceneChange
 {
     private readonly float bloomInt_Default = 0.25f;
-    //private readonly float bloomInt_Max = 60.0f;
+    private readonly float bloomInt_Max = 60.0f;
 
     //Camera Start/Stay/End Point
     [Header("MainCamera Settings")]
@@ -58,9 +58,9 @@ public class StageSelectOperation : ISceneChange
 
     //Manager
     public AudioManager AudioManager;
-    //public CameraManager CameraManager;
+    public CameraManager CameraManager;
     public CanvaManager CanvaManager;
-    //public InputManager InputManager;
+    public InputManager InputManager;
     public GyroscopeManager GyroscopeManager;
 
     private TouchScreenKeyboard keyboard;
@@ -103,19 +103,19 @@ public class StageSelectOperation : ISceneChange
         LandscapeFade = LandscapeFadeImg.gameObject.GetComponent<FadeEffect>();
         PortraitFade = PortraitFadeImg.gameObject.GetComponent<FadeEffect>();
 
-        //InputManager = FindObjectOfType<InputManager>();
-        //AudioManager = FindObjectOfType<AudioManager>();
-        //CameraManager = FindObjectOfType<CameraManager>();
-        //CanvaManager = FindObjectOfType<CanvaManager>();
-        //GyroscopeManager = FindObjectOfType<GyroscopeManager>();
+        InputManager = FindObjectOfType<InputManager>();
+        AudioManager = FindObjectOfType<AudioManager>();
+        CameraManager = FindObjectOfType<CameraManager>();
+        CanvaManager = FindObjectOfType<CanvaManager>();
+        GyroscopeManager = FindObjectOfType<GyroscopeManager>();
 
         AudioManager.PlayAudio("bgm_Title",true);
 
-        //UnityEngine.Rendering.Universal.Bloom bloom;
-        //volumeProfile.TryGet<UnityEngine.Rendering.Universal.Bloom>(out bloom);
-        //bloom.intensity.value = bloomInt_Max;
+        UnityEngine.Rendering.Universal.Bloom bloom;
+        volumeProfile.TryGet<UnityEngine.Rendering.Universal.Bloom>(out bloom);
+        bloom.intensity.value = bloomInt_Max;
 
-       // StartCoroutine("SceneChgAnimation");
+        StartCoroutine("SceneChgAnimation");
 
         foreach (Material mat in PetrifyMat)
         {
@@ -176,7 +176,7 @@ public class StageSelectOperation : ISceneChange
         if (!isOption) ChangeIsland();
         DarkenCam.SetActive(isOption);
 
-        //OrientationLock = false;
+        OrientationLock = false;
     }
 
     #region CommonOperation
@@ -217,17 +217,17 @@ public class StageSelectOperation : ISceneChange
             progress += rate;
             foreach (Image i in PetrifyImgs)
             {
-                //i.material.EnableKeyword("_Progress");
+                i.material.EnableKeyword("_Progress");
                 i.material.SetFloat("_Progress", progress);
             }
             foreach (RawImage i in PetrifyRImgs)
             {
-                //i.material.EnableKeyword("_Progress");
+                i.material.EnableKeyword("_Progress");
                 i.material.SetFloat("_Progress", progress);
             }
             foreach (SpriteRenderer i in PetrifySpr)
             {
-                //i.material.EnableKeyword("_Progress");
+                i.material.EnableKeyword("_Progress");
                 i.material.SetFloat("_Progress", progress);
             }
             yield return new WaitForSeconds(0f);

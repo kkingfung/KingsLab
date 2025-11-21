@@ -45,7 +45,7 @@ public class RecordManager : MonoBehaviour
 
     private void Start()
     {
-        //sceneManager = FindObjectOfType<InGameOperation>();
+        sceneManager = FindObjectOfType<InGameOperation>();
     }
     public int RecordComparison(int stageID, string name, int score)
     {

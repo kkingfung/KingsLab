@@ -114,10 +114,10 @@ public class ISceneChange : MonoBehaviour
     {
         OrientationLock = true;
         FadeOutDelegate?.Invoke();
-        //if (FadeOutDelegate != null)
-        //{
-        //    FadeOutDelegate();
-        //}
+        if (FadeOutDelegate != null)
+        {
+            FadeOutDelegate();
+        }
     }
 
     protected virtual void Update()
@@ -133,10 +133,10 @@ public class ISceneChange : MonoBehaviour
                 OrientationLand = OrientationLandCheck;
             OrientationLandCheck = Screen.width > Screen.height;
         }
-        //else 
-        //{
-        //    Screen.orientation = OrientationLandCheck? ScreenOrientation.Landscape: ScreenOrientation.Portrait;
-        //}
+        else 
+        {
+            Screen.orientation = OrientationLandCheck? ScreenOrientation.Landscape: ScreenOrientation.Portrait;
+        }
 
         if (prevOrientation != OrientationLand)
         {

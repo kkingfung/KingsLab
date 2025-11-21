@@ -8,12 +8,12 @@ public class AutoDestroyVFX : MonoBehaviour
     private VisualEffect ps;
     public float Timer;
     private bool tobeDestroy;
-    //public Skill skill;
+    public Skill skill;
     private void OnEnable()
     {
         ps = GetComponent<VisualEffect>();
         ps.Play();
-        //skill = gameObject.GetComponent<Skill>();
+        skill = gameObject.GetComponent<Skill>();
         tobeDestroy = false;
     }
     private void Update()
@@ -24,13 +24,13 @@ public class AutoDestroyVFX : MonoBehaviour
             ps.Stop();
             //No ps.isPlaying in VFX
             tobeDestroy = true;
-            //if (skill != null)
-            //{
-            //    Destroy(gameObject, 3f);
-            //}
+            if (skill != null)
+            {
+                Destroy(gameObject, 3f);
+            }
         }
 
-        if (//skill == null && 
+        if (skill == null && 
             tobeDestroy == true && Timer > 2)
         {
             gameObject.SetActive(false);

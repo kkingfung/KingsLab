@@ -5,15 +5,15 @@ using UnityEngine.UI;
 
 public class FadeEffect : MonoBehaviour
 {
-    //private enum EnumRenderType
-    //{
-    //    NotChecked = 0,
-    //    FoundMeshRenderer,
-    //    FoundRawImg,
-    //    FoundSprRenderer,
-    //    FoundImage,
-    //}
-    //private EnumRenderType rendertype;
+    private enum EnumRenderType
+    {
+        NotChecked = 0,
+        FoundMeshRenderer,
+        FoundRawImg,
+        FoundSprRenderer,
+        FoundImage,
+    }
+    private EnumRenderType rendertype;
 
     private float Threshold = 0.0f;
     private readonly float FadeRate = 0.02f;

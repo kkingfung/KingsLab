@@ -25,8 +25,8 @@ public class AgentScript : Agent
     public bool isLearning;
 
     private int2 AgentCoord;
-    //private int2 MaxCoord;
-    //private Vector3 CastlePos;
+    private int2 MaxCoord;
+    private Vector3 CastlePos;
 
     private int counter;
     private int HpRecord;
@@ -82,8 +82,8 @@ public class AgentScript : Agent
 
     private void FixedUpdate()
     {
-        //if (debugManager && debugManager.isSimulationTest && debugManager.isFetchDone == false)
-        //    return;
+        if (debugManager && debugManager.isSimulationTest && debugManager.isFetchDone == false)
+            return;
 
         if (stageManager)
             CheckCastleHP();
@@ -282,9 +282,9 @@ public class AgentScript : Agent
     {
         int[] TotalRankInQuarteredMap = new int[4];
         if (towerSpawner == null || filledMapGenerator == null) return TotalRankInQuarteredMap;
-        //AgentCoord = filledMapGenerator.GetTileIDFromPosition(this.transform.position);
+        AgentCoord = filledMapGenerator.GetTileIDFromPosition(this.transform.position);
         AgentCoord = new int2(StageInfo.stageSizeEx / 2, StageInfo.stageSizeEx / 2);
-        //MaxCoord = filledMapGenerator.MapSize;
+        MaxCoord = filledMapGenerator.MapSize;
 
         int[] SubTotalRankInQuarteredMap;
 
@@ -390,7 +390,7 @@ public class AgentScript : Agent
         if (allPillar==null || allPillar.Count == 0) return TotalRankInQuarteredMap;
 
         AgentCoord = filledMapGenerator.GetTileIDFromPosition(this.transform.position);
-        //MaxCoord = filledMapGenerator.MapSize;
+        MaxCoord = filledMapGenerator.MapSize;
 
         foreach (Pillar i in allPillar)
         {
@@ -428,7 +428,7 @@ public class AgentScript : Agent
         if (allMonsters.Count == 0) return TotalRankInQuarteredMap;
 
         AgentCoord = filledMapGenerator.GetTileIDFromPosition(this.transform.position);
-        //MaxCoord = filledMapGenerator.MapSize;
+        MaxCoord = filledMapGenerator.MapSize;
 
         foreach (GameObject i in allMonsters)
         {
@@ -493,7 +493,7 @@ public class AgentScript : Agent
                         {
                             if (filledMapGenerator.PillarList[id].surroundSpace > 0)
                             {
-                                //filledMapGenerator.PillarList[id].state = 1;
+                                filledMapGenerator.PillarList[id].state = 1;
                                 return filledMapGenerator.PillarList[id].obj;
                             }
                             if (targetPillar == null)
@@ -509,7 +509,7 @@ public class AgentScript : Agent
                         {
                             if (filledMapGenerator.PillarList[id].surroundSpace > 0)
                             {
-                                //filledMapGenerator.PillarList[id].state = 1;
+                                filledMapGenerator.PillarList[id].state = 1;
                                 return filledMapGenerator.PillarList[id].obj;
                             }
                             if (targetPillar == null)
@@ -525,7 +525,7 @@ public class AgentScript : Agent
                         {
                             if (filledMapGenerator.PillarList[id].surroundSpace > 0)
                             {
-                                //filledMapGenerator.PillarList[id].state = 1;
+                                filledMapGenerator.PillarList[id].state = 1;
                                 return filledMapGenerator.PillarList[id].obj;
                             }
                             if (targetPillar == null)
@@ -541,7 +541,7 @@ public class AgentScript : Agent
                         {
                             if (filledMapGenerator.PillarList[id].surroundSpace > 0)
                             {
-                                //filledMapGenerator.PillarList[id].state = 1;
+                                filledMapGenerator.PillarList[id].state = 1;
                                 return filledMapGenerator.PillarList[id].obj;
                             }
                             if (targetPillar == null)
@@ -554,7 +554,7 @@ public class AgentScript : Agent
         }
         if (targetPillar != null)
         {
-            //    targetPillar.state = 1;
+            targetPillar.state = 1;
             return targetPillar.obj;
         }
         return null;

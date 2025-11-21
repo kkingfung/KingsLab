@@ -47,9 +47,9 @@ public class StoreManager : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        //sceneManager = FindObjectOfType<InGameOperation>();
-        //resourceManager = FindObjectOfType<ResourceManager>();
-        //stageManager = FindObjectOfType<StageManager>();
+        sceneManager = FindObjectOfType<InGameOperation>();
+        resourceManager = FindObjectOfType<ResourceManager>();
+        stageManager = FindObjectOfType<StageManager>();
 
         ItemPrice = new Dictionary<Upgrades.StoreItems, int[]>();
 
@@ -89,7 +89,7 @@ public class StoreManager : MonoBehaviour
 
     private void UpdatePrice() {
 
-        //int fullitemID = (sceneManager.currScreenShown + 1) * Upgrades.MaxItemPerSlot;
+        int fullitemID = (sceneManager.currScreenShown + 1) * Upgrades.MaxItemPerSlot;
 
         //Tower Items
         for (int i = 0; i < TowerPriceTextObj.Count; ++i)
@@ -291,17 +291,17 @@ public class StoreManager : MonoBehaviour
         ItemSold(itemID);
 
         //-1 :subtract 0:purchase 1:add
-        //switch (infoID) {
-        //    case -1:
-        //        ItemPendingSubtract(itemID);
-        //        break;
-        //    case 0:
-        //        ItemSold(itemID);
-        //        break;
-        //    case 1:
-        //        ItemPendingAdd(itemID);
-        //        break;
-        //}
+        switch (infoID) {
+            case -1:
+                ItemPendingSubtract(itemID);
+                break;
+            case 0:
+                ItemSold(itemID);
+                break;
+            case 1:
+                ItemPendingAdd(itemID);
+                break;
+        }
     }
 
     public void raycastAction(int fullitemID,int infoID) { //-1 :subtract 0:purchase 1:add

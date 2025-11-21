@@ -34,7 +34,7 @@ public class Pathfinding : ComponentSystem {
             pathNodeArray.Dispose();
     }
     protected override void OnUpdate() {
-        //if (PathfindingGridSetup.Instance == null) return;
+        if (PathfindingGridSetup.Instance == null) return;
         if (PathfindingGridSetup.Instance.Reset)
         {
             PathNodeArrayList = new Dictionary<int2, PathNode[]>();

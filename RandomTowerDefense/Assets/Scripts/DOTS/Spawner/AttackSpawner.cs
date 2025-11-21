@@ -27,7 +27,7 @@ public class AttackSpawner : MonoBehaviour
     public NativeArray<Entity> Entities;
 
     //For input
-    //private Transform[] transforms;
+    private Transform[] transforms;
     private void Update()
     {
     }
@@ -46,16 +46,16 @@ public class AttackSpawner : MonoBehaviour
     }
     void Start()
     {
-        //TowerNightmareAttack = new List<GameObject>();
-        //TowerSoulEaterAttack = new List<GameObject>();
-        //TowerTerrorBringerAttack = new List<GameObject>();
-        //TowerUsurperAttack = new List<GameObject>();
+        TowerNightmareAttack = new List<GameObject>();
+        TowerSoulEaterAttack = new List<GameObject>();
+        TowerTerrorBringerAttack = new List<GameObject>();
+        TowerUsurperAttack = new List<GameObject>();
 
         EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
         //Prepare input
         GameObjects = new GameObject[count];
-        //transforms = new Transform[count];
+        transforms = new Transform[count];
 
         Entities = new NativeArray<Entity>(count, Allocator.Persistent);
         var archetype = EntityManager.CreateArchetype(
@@ -141,12 +141,12 @@ public class AttackSpawner : MonoBehaviour
                 GameObjects[i].SetActive(true);
                 GameObjects[i].GetComponent<VisualEffect>().Play();
             }
-            //GameObjects[i] = Instantiate(PrefabObject[prefabID], transform);
+            GameObjects[i] = Instantiate(PrefabObject[prefabID], transform);
             GameObjects[i].transform.position = position;
             AutoDestroyVFX autoDestroy = GameObjects[i].GetComponent<AutoDestroyVFX>();
             if (autoDestroy) autoDestroy.Timer = lifetime;
             GameObjects[i].transform.localRotation = rotation;
-           // transforms[i] = GameObjects[i].transform;
+            transforms[i] = GameObjects[i].transform;
            
             //AddtoEntities
             EntityManager.SetComponentData(Entities[i], new Damage
@@ -179,10 +179,10 @@ public class AttackSpawner : MonoBehaviour
                Value= entityposition,
             });
 
-            //EntityManager.SetComponentData(Entities[i], new Hybrid
-            //{
-            //    Index = i,
-            //});
+            EntityManager.SetComponentData(Entities[i], new Hybrid
+            {
+                Index = i,
+            });
 
             if (EntityManager.HasComponent<AttackTag>(Entities[i]) == false)
                 EntityManager.AddComponent<AttackTag>(Entities[i]);
@@ -191,7 +191,7 @@ public class AttackSpawner : MonoBehaviour
         }
 
         //Change Whenever Spawned (Not Needed?)
-        //TransformAccessArray = new TransformAccessArray(transforms);
+        TransformAccessArray = new TransformAccessArray(transforms);
         return spawnIndexList;
     }
 }

@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-/*
+
 public class IKCCD : MonoBehaviour
 {
     public int ChainLength = 2;
@@ -21,7 +21,7 @@ public class IKCCD : MonoBehaviour
     {
         //initial length
         Bones = new Transform[ChainLength + 1];
-        //InitialRotation = new Quaternion[ChainLength + 1];
+        InitialRotation = new Quaternion[ChainLength + 1];
         TargetInitialRotation = Target.rotation;
         EndInitialRotation = transform.rotation;
 
@@ -32,8 +32,8 @@ public class IKCCD : MonoBehaviour
             CompleteLength += (current.position - current.parent.position).magnitude;
             Bones[i + 1] = current;
             Bones[i] = current.parent;
-            //InitialRotation[i + 1] = current.rotation;
-            //InitialRotation[i] = current.parent.rotation;
+            InitialRotation[i + 1] = current.rotation;
+            InitialRotation[i] = current.parent.rotation;
             current = current.parent;
         }
         if (Bones[0] == null)
@@ -46,8 +46,8 @@ public class IKCCD : MonoBehaviour
         //CCD
         var lastBone = Bones[Bones.Length - 1];
 
-        //for (var i = 0; i < Bones.Length; ++i)
-        //  Bones[i].rotation = InitialRotation[i];
+        for (var i = 0; i < Bones.Length; ++i)
+          Bones[i].rotation = InitialRotation[i];
 
         for (int iteration = 0; iteration < Iterations; iteration++)
         {
@@ -64,8 +64,8 @@ public class IKCCD : MonoBehaviour
                     Bones[i].rotation = Quaternion.FromToRotation(lastBone.position - Bones[i].position, Target.position - Bones[i].position) * Bones[i].rotation;
 
                     //jitter to solve strait line
-                    //if (iteration == 5 && i == 0 && (Target.position - lastBone.position).sqrMagnitude > 0.01f && (Target.position - Bones[i].position).sqrMagnitude < CompleteLength * CompleteLength)
-                    //    Bones[i].rotation = Quaternion.AngleAxis(10, Vector3.up) * Bones[i].rotation;
+                    if (iteration == 5 && i == 0 && (Target.position - lastBone.position).sqrMagnitude > 0.01f && (Target.position - Bones[i].position).sqrMagnitude < CompleteLength * CompleteLength)
+                        Bones[i].rotation = Quaternion.AngleAxis(10, Vector3.up) * Bones[i].rotation;
 
                     //move towards pole
                     if (Pole != null && i + 2 <= Bones.Length - 1)
@@ -80,16 +80,10 @@ public class IKCCD : MonoBehaviour
                         }
                     }
                 }
-
-
                 //close enough?
                 if ((lastBone.position - Target.position).sqrMagnitude < Delta * Delta)
                     break;
             }
         }
-
     }
-    
-
 }
-*/

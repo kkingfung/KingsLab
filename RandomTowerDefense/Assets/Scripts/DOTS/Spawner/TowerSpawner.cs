@@ -38,7 +38,7 @@ public class TowerSpawner : MonoBehaviour
 
     //Array
     [HideInInspector]
-    //public TransformAccessArray TransformAccessArray;
+    public TransformAccessArray TransformAccessArray;
     public NativeArray<float3> targetArray;
     public NativeArray<bool> hastargetArray;
 
@@ -48,7 +48,7 @@ public class TowerSpawner : MonoBehaviour
     public NativeArray<Entity> Entities;
 
     //For input
-    //private Transform[] transforms;
+    private Transform[] transforms;
 
     private void Awake()
     {
@@ -63,8 +63,8 @@ public class TowerSpawner : MonoBehaviour
         if (Entities.IsCreated)
             Entities.Dispose();
 
-        //if (TransformAccessArray.isCreated)
-        //TransformAccessArray.Dispose();
+        if (TransformAccessArray.isCreated)
+        TransformAccessArray.Dispose();
 
         //Disposing Array
         if (targetArray.IsCreated)
@@ -74,31 +74,31 @@ public class TowerSpawner : MonoBehaviour
     }
     private void Start()
     {
-       // TowerNightmareRank1 = new List<GameObject>();
-       // TowerNightmareRank2 = new List<GameObject>();
-       // TowerNightmareRank3 = new List<GameObject>();
-       // TowerNightmareRank4 = new List<GameObject>();
-       //
-       // TowerSoulEaterRank1 = new List<GameObject>();
-       // TowerSoulEaterRank2 = new List<GameObject>();
-       // TowerSoulEaterRank3 = new List<GameObject>();
-       // TowerSoulEaterRank4 = new List<GameObject>();
-       //
-       // TowerTerrorBringerRank1 = new List<GameObject>();
-       // TowerTerrorBringerRank2 = new List<GameObject>();
-       // TowerTerrorBringerRank3 = new List<GameObject>();
-       // TowerTerrorBringerRank4 = new List<GameObject>();
-       //
-       // TowerUsurperRank1 = new List<GameObject>();
-       // TowerUsurperRank2 = new List<GameObject>();
-       // TowerUsurperRank3 = new List<GameObject>();
-       // TowerUsurperRank4 = new List<GameObject>();
+        TowerNightmareRank1 = new List<GameObject>();
+        TowerNightmareRank2 = new List<GameObject>();
+        TowerNightmareRank3 = new List<GameObject>();
+         TowerNightmareRank4 = new List<GameObject>();
+       
+        TowerSoulEaterRank1 = new List<GameObject>();
+        TowerSoulEaterRank2 = new List<GameObject>();
+        TowerSoulEaterRank3 = new List<GameObject>();
+        TowerSoulEaterRank4 = new List<GameObject>();
+       
+        TowerTerrorBringerRank1 = new List<GameObject>();
+        TowerTerrorBringerRank2 = new List<GameObject>();
+        TowerTerrorBringerRank3 = new List<GameObject>();
+        TowerTerrorBringerRank4 = new List<GameObject>();
+       
+        TowerUsurperRank1 = new List<GameObject>();
+        TowerUsurperRank2 = new List<GameObject>();
+        TowerUsurperRank3 = new List<GameObject>();
+        TowerUsurperRank4 = new List<GameObject>();
 
         EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
         //Prepare input
         GameObjects = new GameObject[count];
-        //transforms = new Transform[count];
+        transforms = new Transform[count];
 
         Entities = new NativeArray<Entity>(count, Allocator.Persistent);
         var archetype = EntityManager.CreateArchetype(
@@ -109,7 +109,7 @@ public class TowerSpawner : MonoBehaviour
         EntityManager.CreateEntity(archetype, Entities);
 
 
-        //TransformAccessArray = new TransformAccessArray(transforms);
+        TransformAccessArray = new TransformAccessArray(transforms);
         targetArray = new NativeArray<float3>(count, Allocator.Persistent);
         hastargetArray = new NativeArray<bool>(count, Allocator.Persistent);
     }
@@ -159,7 +159,7 @@ public class TowerSpawner : MonoBehaviour
             }
             GameObjects[i].transform.position = Position;
             GameObjects[i].transform.localRotation = Quaternion.identity;
-            //transforms[i] = GameObjects[i].transform;
+            transforms[i] = GameObjects[i].transform;
             hastargetArray[i] = false;
             targetArray[i] = Position;
 
@@ -191,20 +191,18 @@ public class TowerSpawner : MonoBehaviour
                 Value = CastlePosition,
             });
 
-            //EntityManager.SetComponentData(Entities[i], new RotationEulerXYZ
-            //{
-            //    Value = Rotation,
-            //});
-
-            //EntityManager.SetComponentData(Entities[i], new Translation
-            //{
-            //    Value = Position,
-            //});
-
-            //EntityManager.SetComponentData(Entities[i], new Hybrid
-            //{
-            //    Index = i,
-            //});
+            EntityManager.SetComponentData(Entities[i], new RotationEulerXYZ
+            {
+                Value = Rotation,
+            })
+            EntityManager.SetComponentData(Entities[i], new Translation
+            {
+                Value = Position,
+            })
+            EntityManager.SetComponentData(Entities[i], new Hybrid
+            {
+                Index = i,
+            });
 
             if (EntityManager.HasComponent<PlayerTag>(Entities[i]) == false)
                 EntityManager.AddComponent<PlayerTag>(Entities[i]);
@@ -214,7 +212,7 @@ public class TowerSpawner : MonoBehaviour
         }
 
         //Change Whenever Spawned (Not Needed?)
-        //TransformAccessArray = new TransformAccessArray(transforms);
+        TransformAccessArray = new TransformAccessArray(transforms);
         return spawnIndexList;
     }
 

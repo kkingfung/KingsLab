@@ -31,13 +31,13 @@ public class Enemy : MonoBehaviour
     private AgentScript agent;
     private Vector3 oriPos;
 
-    //private SkinnedMeshRenderer[] meshes;
+    private SkinnedMeshRenderer[] meshes;
     private MeshRenderer[] meshes;
     private SkinnedMeshRenderer[] meshesSkinned;
     private List<Material> matsPetrify;
     private List<Material> matsSlow;
 
-    //public Animator animator;
+    public Animator animator;
     public Slider HpBar;
     private RectTransform HpBarRot;
 
@@ -49,16 +49,15 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        //if (enemySpawner==null) enemySpawner = FindObjectOfType<EnemySpawner>();
-        //if (effectManager == null) effectManager = FindObjectOfType<EffectSpawner>();
-        //if (resourceManager == null) resourceManager = FindObjectOfType<ResourceManager>();
-
-        //if (animator == null) 
-        //    animator = GetComponent<Animator>();
-        //
-        //if (animator == null) {
-        //    animator = GetComponentInChildren<Animator>();
-        //}
+        if (enemySpawner==null) enemySpawner = FindObjectOfType<EnemySpawner>();
+        if (effectManager == null) effectManager = FindObjectOfType<EffectSpawner>();
+        if (resourceManager == null) resourceManager = FindObjectOfType<ResourceManager>()
+        if (animator == null) 
+            animator = GetComponent<Animator>();
+        
+        if (animator == null) {
+            animator = GetComponentInChildren<Animator>();
+        }
 
         if (HpBar == null)
             HpBar = GetComponentInChildren<Slider>();
@@ -178,15 +177,15 @@ public class Enemy : MonoBehaviour
         HpBar.maxValue = 1;
         HpBar.value = 1;
 
-        //if (animator == null)
-        //    animator = GetComponent<Animator>();
-        //
-        //if (animator == null)
-        //{
-        //    animator = GetComponentInChildren<Animator>();
-        //}
-        //if (animator)
-        //    animator.SetTrigger("Reused");
+        if (animator == null)
+            animator = GetComponent<Animator>();
+        
+        if (animator == null)
+        {
+            animator = GetComponentInChildren<Animator>();
+        }
+        if (animator)
+            animator.SetTrigger("Reused");
     }
 
     public void Damaged(float currHP)
@@ -234,8 +233,8 @@ public class Enemy : MonoBehaviour
 
     private IEnumerator DieAnimation()
     {
-        //if (animator)
-        //    animator.SetTrigger("Dead");
+        if (animator)
+            animator.SetTrigger("Dead");
 
         effectManager.Spawn(1, this.transform.position + Vector3.up * 0.5f);
         yield return new WaitForSeconds(EnemyDestroyTime*0.2f);
@@ -264,7 +263,7 @@ public class Enemy : MonoBehaviour
         transform.localScale = new Vector3();
 
         this.gameObject.SetActive(false);
-        //Destroy(this.gameObject);
+        Destroy(this.gameObject);
     }
 
     private IEnumerator StartAnim()

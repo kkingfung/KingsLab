@@ -53,17 +53,7 @@ public class EnemyToPetrification : JobComponentSystem
         return jobHandle;
     }
 
-    //Common Function
-    static float GetDistance(float3 posA, float3 posB)
-    {
-        float3 delta = posA - posB;
-        return delta.x * delta.x + delta.z * delta.z;
-    }
 
-    static bool CheckCollision(float3 posA, float3 posB, float radiusSqr)
-    {
-        return GetDistance(posA, posB) <= radiusSqr;
-    }
 
     //enemy by petrification
     #region JobEvSP

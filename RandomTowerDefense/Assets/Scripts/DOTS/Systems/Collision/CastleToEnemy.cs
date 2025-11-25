@@ -74,17 +74,6 @@ public class CastleToEnemy : JobComponentSystem
         return jobHandle;
     }
 
-    //Common Function
-    static float GetDistance(float3 posA, float3 posB)
-    {
-        float3 delta = posA - posB;
-        return delta.x * delta.x + delta.z * delta.z;
-    }
-
-    static bool CheckCollision(float3 posA, float3 posB, float radius)
-    {
-        return GetDistance(posA, posB) <= radius * radius;
-    }
 
     //Collision Job
     #region JobEvC
@@ -124,7 +113,7 @@ public class CastleToEnemy : JobComponentSystem
                     if (health.Value <= 0) continue;
                     Radius radius = chunkRadius[i];
                     Translation pos = chunkTranslations[i];
-                    if (CheckCollision(pos.Value, pos2.Value, targetRadius[j].Value*0.5f + radius.Value))
+                    if (CollisionUtilities.CheckCollision(pos.Value, pos2.Value, (targetRadius[j].Value*0.5f + radius.Value) * (targetRadius[j].Value*0.5f + radius.Value)))
                     {
                         counter--;
                         health.Value = 0;
@@ -182,7 +171,7 @@ public class CastleToEnemy : JobComponentSystem
                 {
                     if (targetHealth[j].Value <= 0) continue;
                     Translation pos2 = targetTrans[j];
-                    if (CheckCollision(pos.Value, pos2.Value, targetRadius[j].Value + radius.Value))
+                    if (CollisionUtilities.CheckCollision(pos.Value, pos2.Value, targetRadius[j].Value + radius.Value))
                     {
                         damageRec.Value += 1;
                         health.Value -= targetDamage[j].Value;

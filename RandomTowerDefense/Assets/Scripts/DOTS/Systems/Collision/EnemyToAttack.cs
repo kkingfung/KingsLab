@@ -56,17 +56,6 @@ public class EnemyToAttack : JobComponentSystem
         return jobHandle;
     }
 
-    //Common Function
-    static float GetDistance(float3 posA, float3 posB)
-    {
-        float3 delta = posA - posB;
-        return delta.x * delta.x + delta.z * delta.z;
-    }
-
-    static bool CheckCollision(float3 posA, float3 posB, float radiusSqr)
-    {
-        return GetDistance(posA, posB) <= radiusSqr;
-    }
 
     #region JobEvA
     [BurstCompile]
@@ -113,7 +102,7 @@ public class EnemyToAttack : JobComponentSystem
 
                     Translation pos2 = targetTrans[j];
 
-                    if (CheckCollision(pos.Value, pos2.Value, targetRadius[j].Value + radius.Value))
+                    if (CollisionUtilities.CheckCollision(pos.Value, pos2.Value, targetRadius[j].Value + radius.Value))
                     {
                         //Debug.DrawLine(pos.Value, pos.Value + new float3(0, 1, 0), Color.red);
                         damage += targetDamage[j].Value;

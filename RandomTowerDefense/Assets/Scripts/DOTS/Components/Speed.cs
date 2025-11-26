@@ -1,9 +1,17 @@
 ﻿using System;
 using Unity.Entities;
 
-[Serializable]
-public struct Speed : IComponentData
+namespace RandomTowerDefense.DOTS.Components
 {
-	public float Value;
+    /// <summary>
+    /// エンティティの移動速度を管理するコンポーネント
+    /// </summary>
+    [Serializable]
+    public struct Speed : IComponentData
+    {
+        #region Public Fields
+        public float Value;
+        #endregion
+    }
 }
 

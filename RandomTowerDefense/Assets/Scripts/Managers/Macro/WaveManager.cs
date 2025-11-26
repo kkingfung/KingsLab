@@ -5,7 +5,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.VFX;
 
-public class WaveManager : MonoBehaviour
+namespace RandomTowerDefense.Managers.Macro
+{
+    /// <summary>
+    /// ウェーブ管理システム - エネミーウェーブの生成と管理
+    /// </summary>
+    public class WaveManager : MonoBehaviour
 {
     private readonly float WaveChgSpeedFactor = 2.0f;
     private readonly int FireworkMax=120;
@@ -210,4 +215,5 @@ public class WaveManager : MonoBehaviour
     public void SetCurrWAveNum(int num) {
         CurrentWaveNum = num;
     }
+}
 }

@@ -158,7 +158,13 @@ public class Enemy : MonoBehaviour
             prevPos = transform.position;
         }
     }
-    public void linkingManagers(EnemySpawner enemySpawner, EffectSpawner effectManager, 
+    /// <summary>
+    /// 敵エンティティに必要な管理クラスの参照を設定
+    /// </summary>
+    /// <param name="enemySpawner">敵スポーナーの参照</param>
+    /// <param name="effectManager">エフェクト管理の参照</param>
+    /// <param name="resourceManager">リソース管理の参照</param>
+    public void LinkingManagers(EnemySpawner enemySpawner, EffectSpawner effectManager,
     ResourceManager resourceManager)
     {
         this.enemySpawner = enemySpawner;
@@ -167,6 +173,12 @@ public class Enemy : MonoBehaviour
     }
 
 
+    /// <summary>
+    /// 敵エンティティを指定したパラメータで初期化
+    /// </summary>
+    /// <param name="entityID">エンティティID</param>
+    /// <param name="money">撃破時の報酬金額</param>
+    /// <param name="agent">ML-Agentsスクリプト（オプション）</param>
     public void Init(int entityID, int money, AgentScript agent = null)
     {
         MyStart();

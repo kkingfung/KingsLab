@@ -5,8 +5,17 @@ using Unity.Mathematics;
 using Unity.Jobs;
 
 //[DisableAutoCreation]
+/// <summary>
+/// A*パスフィンディングに基づいて敵エンティティの移動を処理するシステム
+/// 敵の速度、スロー効果、石化効果を考慮した移動計算を行う
+/// </summary>
 public class EnemyPathFollowSystem : JobComponentSystem
 {
+    /// <summary>
+    /// 敵エンティティのパス追従処理を更新
+    /// </summary>
+    /// <param name="inputDeps">入力依存関係</param>
+    /// <returns>ジョブハンドル</returns>
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
         float deltaTime = Time.DeltaTime;
@@ -46,6 +55,11 @@ public class EnemyPathFollowSystem : JobComponentSystem
             }).WithoutBurst().Schedule(inputDeps);
     }
 
+    /// <summary>
+    /// グリッド位置を有効な範囲内に制限
+    /// </summary>
+    /// <param name="x">X座標（参照渡し）</param>
+    /// <param name="y">Y座標（参照渡し）</param>
     private void ValidateGridPosition(ref int x, ref int y)
     {
         x = math.clamp(x, 0, PathfindingGridSetup.Instance.pathfindingGrid.GetWidth() - 1);
@@ -56,6 +70,10 @@ public class EnemyPathFollowSystem : JobComponentSystem
 
 [UpdateAfter(typeof(EnemyPathFollowSystem))]
 [DisableAutoCreation]
+/// <summary>
+/// 新しいパスが必要な敵エンティティにパスフィンディングパラメータを追加するシステム
+/// 城に向かう経路計算の開始点を設定
+/// </summary>
 public class PathFollowGetNewPathSystem : JobComponentSystem
 {
     private EndSimulationEntityCommandBufferSystem endSimulationEntityCommandBufferSystem;
@@ -65,6 +83,11 @@ public class PathFollowGetNewPathSystem : JobComponentSystem
         endSimulationEntityCommandBufferSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
     }
 
+    /// <summary>
+    /// 新しいパスが必要なエンティティにパスフィンディングパラメータを追加
+    /// </summary>
+    /// <param name="inputDeps">入力依存関係</param>
+    /// <returns>ジョブハンドル</returns>
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
         int mapWidth = PathfindingGridSetup.Instance.pathfindingGrid.GetWidth();
@@ -99,12 +122,27 @@ public class PathFollowGetNewPathSystem : JobComponentSystem
         return jobHandle;
     }
 
+    /// <summary>
+    /// グリッド位置を指定した範囲内に制限
+    /// </summary>
+    /// <param name="x">X座標（参照渡し）</param>
+    /// <param name="y">Y座標（参照渡し）</param>
+    /// <param name="width">グリッドの幅</param>
+    /// <param name="height">グリッドの高さ</param>
     private static void ValidateGridPosition(ref int x, ref int y, int width, int height)
     {
         x = math.clamp(x, 0, width - 1);
         y = math.clamp(y, 0, height - 1);
     }
 
+    /// <summary>
+    /// ワールド座標をグリッド座標に変換
+    /// </summary>
+    /// <param name="worldPosition">ワールド位置</param>
+    /// <param name="originPosition">原点位置</param>
+    /// <param name="cellSize">セルサイズ</param>
+    /// <param name="x">出力X座標</param>
+    /// <param name="y">出力Y座標</param>
     private static void GetXY(float3 worldPosition, float3 originPosition, float cellSize, out int x, out int y)
     {
         x = (int)math.floor((worldPosition - originPosition).x / cellSize);

@@ -4,7 +4,13 @@ using UnityEngine;
 using Unity.RemoteConfig;
 
 using System.IO;
-public class EnemyAttr {
+
+namespace RandomTowerDefense.Info
+{
+    /// <summary>
+    /// エネミーの属性情報を格納するクラス
+    /// </summary>
+    public class EnemyAttr {
     public float health;
     public float speed;
     public float damage;
@@ -127,4 +133,5 @@ public class EnemyAttr {
              return enemyInfo[enmName];
         return null;
     }
+}
 }

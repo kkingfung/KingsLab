@@ -1,19 +1,22 @@
 using Unity.Mathematics;
 
-/// <summary>
-/// DOTSシステム用の共有衝突検出ユーティリティ
-/// 最適化された距離と衝突チェックメソッドを提供
-/// </summary>
-public static class CollisionUtilities
+namespace RandomTowerDefense.DOTS.Systems
 {
     /// <summary>
-    /// 2つの3D位置間の距離の二乗を計算
-    /// コストの高い平方根演算を避けるため距離の二乗を使用
+    /// DOTSシステム用の共有衝突検出ユーティリティ
+    /// 最適化された距離と衝突チェックメソッドを提供
     /// </summary>
-    /// <param name="posA">最初の位置</param>
-    /// <param name="posB">2番目の位置</param>
-    /// <returns>位置間の距離の二乗</returns>
-    public static float GetDistance(float3 posA, float3 posB)
+    public static class CollisionUtilities
+    {
+        #region Distance Calculations
+        /// <summary>
+        /// 2つの3D位置間の距離の二乗を計算
+        /// コストの高い平方根演算を避けるため距離の二乗を使用
+        /// </summary>
+        /// <param name="posA">最初の位置</param>
+        /// <param name="posB">2番目の位置</param>
+        /// <returns>位置間の距離の二乗</returns>
+        public static float GetDistance(float3 posA, float3 posB)
     {
         float3 delta = posA - posB;
         return delta.x * delta.x + delta.z * delta.z;

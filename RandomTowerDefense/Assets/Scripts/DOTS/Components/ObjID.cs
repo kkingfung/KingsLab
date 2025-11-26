@@ -1,8 +1,16 @@
 ﻿using System;
 using Unity.Entities;
 
-[Serializable]
-public struct ObjID : IComponentData
+namespace RandomTowerDefense.DOTS.Components
 {
-    public int Value;
+    /// <summary>
+    /// エンティティのオブジェクトIDを管理するコンポーネント
+    /// </summary>
+    [Serializable]
+    public struct ObjID : IComponentData
+    {
+        #region Public Fields
+        public int Value;
+        #endregion
+    }
 }

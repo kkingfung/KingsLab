@@ -6,12 +6,21 @@ using Unity.Mathematics;
 using UnityEngine;
 
 
+/// <summary>
+/// 敵エンティティのバフ/デバフ効果の継続時間と回復を管理するシステム
+/// スロー効果と石化効果の時間経過による減少を処理
+/// </summary>
 public class EnemyBuffCntSystem : JobComponentSystem
 {
     protected override void OnCreate()
     {
     }
 
+    /// <summary>
+    /// 敵のバフ/デバフ効果の時間減少と回復処理を更新
+    /// </summary>
+    /// <param name="inputDeps">入力依存関係</param>
+    /// <returns>ジョブハンドル</returns>
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
         float recoveryRate = 0.2f;

@@ -1,5 +1,11 @@
 ﻿using System;
 using Unity.Entities;
 
-[Serializable]
-public struct AttackTag : IComponentData { }
+namespace RandomTowerDefense.DOTS.Tags
+{
+    /// <summary>
+    /// アタックエンティティを識別するためのタグ
+    /// </summary>
+    [Serializable]
+    public struct AttackTag : IComponentData { }
+}

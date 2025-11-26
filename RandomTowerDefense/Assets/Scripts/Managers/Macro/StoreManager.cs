@@ -3,7 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class StoreManager : MonoBehaviour
+namespace RandomTowerDefense.Managers.Macro
+{
+    /// <summary>
+    /// ストア管理システム - アップグレード購入とアイテム管理を処理
+    /// </summary>
+    public class StoreManager : MonoBehaviour
 {
     private readonly int MaxItemPerCategory = 4;
     private readonly int[] cdCounter = { 60 , 90 , 150 };
@@ -285,7 +290,7 @@ public class StoreManager : MonoBehaviour
         return bonusBossCooldown[bossID];
     }
 
-    public void raycastAction(Upgrades.StoreItems itemID, int infoID)
+    public void RaycastAction(Upgrades.StoreItems itemID, int infoID)
     {
         if(ItemPendingAdd(itemID))
         ItemSold(itemID);
@@ -304,7 +309,13 @@ public class StoreManager : MonoBehaviour
         }
     }
 
-    public void raycastAction(int fullitemID,int infoID) { //-1 :subtract 0:purchase 1:add
+    /// <summary>
+    /// レイキャストアクション - ストアアイテムとの相互作用を処理
+    /// </summary>
+    /// <param name="fullitemID">アイテムID</param>
+    /// <param name="infoID">情報ID (-1: 減算, 0: 購入, 1: 追加)</param>
+    public void RaycastAction(int fullitemID,int infoID) { //-1 :subtract 0:purchase 1:add
         raycastAction((Upgrades.StoreItems)fullitemID, infoID);
     }
+}
 }

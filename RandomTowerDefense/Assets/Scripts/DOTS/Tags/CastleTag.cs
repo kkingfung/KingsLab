@@ -1,5 +1,11 @@
 ﻿using System;
 using Unity.Entities;
 
-[Serializable]
-public struct CastleTag : IComponentData { }
+namespace RandomTowerDefense.DOTS.Tags
+{
+    /// <summary>
+    /// 城エンティティを識別するためのタグ
+    /// </summary>
+    [Serializable]
+    public struct CastleTag : IComponentData { }
+}

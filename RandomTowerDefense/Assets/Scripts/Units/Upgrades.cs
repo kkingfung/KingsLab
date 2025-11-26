@@ -2,12 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-static public class Upgrades
+namespace RandomTowerDefense.Units
 {
-    static public readonly int MaxLevel = 9;
-    static public readonly int MaxItemPerSlot = 10;
+    /// <summary>
+    /// アップグレードシステム管理クラス - タワー、城、スキルのアップグレードを統括
+    /// </summary>
+    static public class Upgrades
+    {
+        #region Constants
+        static public readonly int MaxLevel = 9;
+        static public readonly int MaxItemPerSlot = 10;
+        #endregion
 
-    public enum StoreItems {
+        #region Enums
+        /// <summary>
+        /// ストアで購入可能なアイテムの種類
+        /// </summary>
+        public enum StoreItems {
        Army1 = 20, //SoulEater
        Army2,//Nightmare
        Army3,//TerrorBringer
@@ -28,7 +39,7 @@ static public class Upgrades
     static private CastleSpawner castleSpawner;
     static private StoreManager StoreManager;
     // Start is called before the first frame update
-    static public void init()
+    static public void Init()
     {
         StoreLevel = new Dictionary<StoreItems, int>();
 
@@ -117,4 +128,6 @@ static public class Upgrades
         totalLv += GetLevel(StoreItems.MagicMeteor) + GetLevel(StoreItems.MagicBlizzard) + GetLevel(StoreItems.MagicMinions) + GetLevel(StoreItems.MagicPetrification);
         return totalLv;
     }
+    #endregion
+}
 }

@@ -10,7 +10,11 @@ using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-
+/// <summary>
+/// 城と敵の双方向衝突を処理するECSシステム
+/// 敵の接触による城のダメージと城の近接による敵の排除を両方処理
+/// ダメージ記録システムを使用して城との敵の相互作用を追跡・制限
+/// </summary>
 public class CastleToEnemy : JobComponentSystem
 {
     EntityQuery castleGroup;
@@ -38,7 +42,7 @@ public class CastleToEnemy : JobComponentSystem
             var radiusType = GetComponentTypeHandle<Radius>(true);
             var damageType = GetComponentTypeHandle<Damage>(false);
 
-            //castle by enemy
+            // 敵の衝突による城のダメージを処理
             var jobCvE = new CollisionJobCvE()
             {
                 healthType = healthType,
@@ -53,8 +57,8 @@ public class CastleToEnemy : JobComponentSystem
             jobHandle = jobCvE.Schedule(castleGroup, inputDependencies);
             jobHandle.Complete();
 
-            //enemy by castle
 
+            // 城の衝突による敵のダメージを処理
             var jobEvC = new CollisionJobEvC()
             {
                 healthType = healthType,
@@ -75,7 +79,9 @@ public class CastleToEnemy : JobComponentSystem
     }
 
 
-    //Collision Job
+    /// <summary>
+    /// 敵対城の衝突を処理するジョブ
+    /// </summary>
     #region JobEvC
     [BurstCompile]
     struct CollisionJobEvC : IJobChunk
@@ -129,6 +135,9 @@ public class CastleToEnemy : JobComponentSystem
     }
     #endregion
 
+    /// <summary>
+    /// 城対敵の衝突を処理するジョブ
+    /// </summary>
     #region JobCvE
     [BurstCompile]
     struct CollisionJobCvE : IJobChunk

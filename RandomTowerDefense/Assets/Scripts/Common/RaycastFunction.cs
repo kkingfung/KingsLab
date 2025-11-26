@@ -4,7 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Experimental.TerrainAPI;
 
-public class RaycastFunction : MonoBehaviour
+namespace RandomTowerDefense.Common
+{
+    /// <summary>
+    /// レイキャストベースのインタラクションとUIエフェクトを管理
+    /// </summary>
+    public class RaycastFunction : MonoBehaviour
 {
     private enum EnumRenderType {
         NotChecked = 0,
@@ -306,4 +311,5 @@ public class RaycastFunction : MonoBehaviour
         }
         ColorRoutineRunning = false;
     }
+}
 }

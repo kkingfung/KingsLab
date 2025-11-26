@@ -2,9 +2,17 @@
 using Unity.Entities;
 using Unity.Mathematics;
 
-[Serializable]
-public struct CastlePos : IComponentData
+namespace RandomTowerDefense.DOTS.Components
 {
-    public float3 Value;
+    /// <summary>
+    /// 城の位置情報を管理するコンポーネント
+    /// </summary>
+    [Serializable]
+    public struct CastlePos : IComponentData
+    {
+        #region Public Fields
+        public float3 Value;
+        #endregion
+    }
 }
 

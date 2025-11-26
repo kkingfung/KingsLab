@@ -1,10 +1,18 @@
 ﻿using System;
 using Unity.Entities;
 
-[Serializable]
-public struct PetrifyAmt : IComponentData
+namespace RandomTowerDefense.DOTS.Components
 {
-    public float Value;
+    /// <summary>
+    /// 石化効果の量を管理するコンポーネント
+    /// </summary>
+    [Serializable]
+    public struct PetrifyAmt : IComponentData
+    {
+        #region Public Fields
+        public float Value;
+        #endregion
+    }
 }
 
 

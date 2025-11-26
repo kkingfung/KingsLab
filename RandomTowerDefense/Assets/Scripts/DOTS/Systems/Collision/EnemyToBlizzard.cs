@@ -10,7 +10,11 @@ using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-
+/// <summary>
+/// 敵に対するブリザードスキル効果を処理するECSシステム
+/// ブリザード範囲内の敵にスロー効果とバフ持続時間を適用
+/// 完全な麿痺を防ぐためスロー率を最大0.95に制限
+/// </summary>
 public class EnemyToBlizzard : JobComponentSystem
 {
     EntityQuery enemyGroup;
@@ -38,7 +42,7 @@ public class EnemyToBlizzard : JobComponentSystem
         var buffType = GetComponentTypeHandle<BuffTime>(false);
 
         JobHandle jobHandle = inputDependencies;
-        //enemy by blizzard
+        // 両方のグループにエンティティがある場合、敵にブリザード効果を処理
         if (BlizzardGroup.CalculateEntityCount() > 0 && enemyGroup.CalculateEntityCount() > 0)
         {
             var jobEvSB = new CollisionJobEvSB()
@@ -64,7 +68,9 @@ public class EnemyToBlizzard : JobComponentSystem
     }
 
 
-    //enemy by blizzard
+    /// <summary>
+    /// 敵にブリザードのスロー効果を適用するジョブ
+    /// </summary>
     #region JobEvSB
     [BurstCompile]
     struct CollisionJobEvSB : IJobChunk

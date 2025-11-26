@@ -8,6 +8,12 @@ using Unity.Mathematics;
 using Unity.Jobs;
 using Unity.Burst;
 
+/// <summary>
+/// 空間分割を使用してタワーの最適ターゲットを探すECSシステム
+/// 効率的な近働クエリのためにクアドラントベースの空間ハッシュを使用
+/// 戦略的ターゲッティングのため城に最も近い敵を優先
+/// 新しい空間データを確保するためQuadrantSystemの後に更新
+/// </summary>
 [UpdateAfter(typeof(QuadrantSystem))]
 public class TowerFindTargetSystem : JobComponentSystem
 {
@@ -89,7 +95,7 @@ public class TowerFindTargetSystem : JobComponentSystem
                         if (distCastleSq < closestTargetDistance &&
                             CheckCollision(unitPosition, quadrantData.position, maxdist * maxdist / 1.21f))
                         {
-                            // This target is closer
+                            // 現在の最適ターゲットよりも近いターゲットを発見
                             closestTargetEntity = quadrantData.entity;
                             closestTargetDistance = distCastleSq;
                             closestTargetPosition = quadrantData.position;
@@ -139,13 +145,25 @@ public class TowerFindTargetSystem : JobComponentSystem
         return jobHandle;
     }
 
-    //Common Function
+    /// <summary>
+    /// パフォーマンスのためで2つの位置間の距離の二乗を計算
+    /// </summary>
+    /// <param name="posA">最初の位置</param>
+    /// <param name="posB">2番目の位置</param>
+    /// <returns>位置間の距離の二乗</returns>
     static private float GetDistance(float3 posA, float3 posB)
     {
         float3 delta = posA - posB;
         return delta.x * delta.x + delta.z * delta.z;
     }
 
+    /// <summary>
+    /// 距離の二乗を使用して2つの位置が衝突範囲内にあるかチェック
+    /// </summary>
+    /// <param name="posA">最初の位置</param>
+    /// <param name="posB">2番目の位置</param>
+    /// <param name="radiusSqr">衝突半径の二乗</param>
+    /// <returns>位置が衝突範囲内にある場合true</returns>
     static private bool CheckCollision(float3 posA, float3 posB, float radiusSqr)
     {
         return GetDistance(posA, posB) <= radiusSqr;

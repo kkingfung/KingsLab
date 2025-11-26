@@ -2,28 +2,48 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 擬似乱数生成器クラス - 決定論的なランダム値生成を提供
+/// </summary>
 public class PRNG {
 
+    /// <summary>
+    /// 重み付け戦略の列挙
+    /// </summary>
 	public enum Weight { None, Lower, Upper, Centre, Ends }
 	System.Random prng;
 	int seed;
 
+    /// <summary>
+    /// 現在使用中の乱数シード値
+    /// </summary>
 	public int Seed {
 		get {
 			return seed;
 		}
 	}
 
+    /// <summary>
+    /// 整数シードで初期化
+    /// </summary>
+    /// <param name="seed">乱数生成用のシード値</param>
 	public PRNG (int seed) {
 		this.seed = seed;
 		prng = new System.Random (this.seed);
 	}
 
+    /// <summary>
+    /// 文字列シードで初期化（ハッシュ値を使用）
+    /// </summary>
+    /// <param name="seed">文字列シード</param>
 	public PRNG (string seed) {
 		this.seed = seed.GetHashCode ();
 		prng = new System.Random (this.seed);
 	}
 
+    /// <summary>
+    /// システム時間ベースのランダムシードで初期化
+    /// </summary>
 	public PRNG () {
 		prng = new System.Random ();
 	}

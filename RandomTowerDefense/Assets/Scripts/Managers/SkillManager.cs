@@ -5,7 +5,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.VFX;
 
-public class SkillManager : MonoBehaviour
+namespace RandomTowerDefense.Managers
+{
+    /// <summary>
+    /// スキル（魔法）システムの管理とアクティベーションを処理
+    /// </summary>
+    public class SkillManager : MonoBehaviour
 {
     [Header("Skill Settings")]
     public GameObject FireFieldSkAura;
@@ -270,4 +275,5 @@ public class SkillManager : MonoBehaviour
             SkillExp[Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions)]);
         SkillEnd();
     }
+}
 }

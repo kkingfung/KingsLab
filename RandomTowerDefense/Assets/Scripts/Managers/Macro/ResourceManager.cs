@@ -2,7 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResourceManager : MonoBehaviour
+namespace RandomTowerDefense.Managers.Macro
+{
+    /// <summary>
+    /// リソース管理システム - ゲーム内通貨と材料の管理
+    /// </summary>
+    public class ResourceManager : MonoBehaviour
 {
     private readonly int StartingMaterialNum = 300;
     private readonly int[] BuildPrice = { 120, 0,0,0,0};
@@ -42,4 +47,5 @@ public class ResourceManager : MonoBehaviour
         CurrentMaterial += SellPrice[targetTower.rank - 1];
         return true;
     }
+}
 }

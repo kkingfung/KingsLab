@@ -2,9 +2,18 @@
 using Unity.Entities;
 using Unity.Mathematics;
 
-public struct Target : IComponentData
+namespace RandomTowerDefense.DOTS.Components
 {
-    public Entity targetEntity;
-    public float3 targetPos;
-    public float targetHealth;
+    /// <summary>
+    /// ターゲッティング情報を管理するコンポーネント
+    /// </summary>
+    [Serializable]
+    public struct Target : IComponentData
+    {
+        #region Public Fields
+        public Entity targetEntity;
+        public float3 targetPos;
+        public float targetHealth;
+        #endregion
+    }
 }

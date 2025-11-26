@@ -11,6 +11,10 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 
+/// <summary>
+/// 敵エンティティとメテオールスキルエンティティの衝突を検出し処理するシステム
+/// メテオールの待機時間が終了した後にダメージを適用
+/// </summary>
 public class EnemyToMeteor : JobComponentSystem
 {
     EntityQuery enemyGroup;
@@ -21,6 +25,11 @@ public class EnemyToMeteor : JobComponentSystem
     {
     }
 
+    /// <summary>
+    /// 敵エンティティとメテオール攻撃の衝突を処理
+    /// </summary>
+    /// <param name="inputDependencies">入力依存関係</param>
+    /// <returns>ジョブハンドル</returns>
     protected override JobHandle OnUpdate(JobHandle inputDependencies)
     {
         enemyGroup = GetEntityQuery(typeof(Health), typeof(Radius), typeof(Damage), typeof(SlowRate),
@@ -83,6 +92,12 @@ public class EnemyToMeteor : JobComponentSystem
         [NativeDisableParallelForRestriction]
         public NativeArray<WaitingTime> targetWait;
 
+        /// <summary>
+        /// エンティティチャンクの敵とメテオール間の衝突を実行
+        /// </summary>
+        /// <param name="chunk">処理するエンティティチャンク</param>
+        /// <param name="chunkIndex">チャンクインデックス</param>
+        /// <param name="firstEntityIndex">最初のエンティティインデックス</param>
         public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
         {
             var chunkHealths = chunk.GetNativeArray(healthType);

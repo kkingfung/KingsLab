@@ -3,7 +3,12 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class EnemyManager : MonoBehaviour
+namespace RandomTowerDefense.Managers
+{
+    /// <summary>
+    /// エネミーのスポーンとライフサイクル管理を行うマネージャークラス
+    /// </summary>
+    public class EnemyManager : MonoBehaviour
 {
     //[SerializeField] private List<AnimationCurve> SpawnRateCurves;
     public InGameOperation sceneManager;
@@ -74,4 +79,5 @@ public class EnemyManager : MonoBehaviour
                 break;
         }
     }
+}
 }

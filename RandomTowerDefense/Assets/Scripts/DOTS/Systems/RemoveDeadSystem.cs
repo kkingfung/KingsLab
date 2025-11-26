@@ -6,6 +6,10 @@ using Unity.Burst;
 using Unity.Collections;
 using System.Linq;
 
+/// <summary>
+/// ヘルスが0以下になった敵エンティティを処理するシステム
+/// エンティティから敵タグとクアドラントコンポーネントを削除
+/// </summary>
 [UpdateInGroup(typeof(InitializationSystemGroup))]
 public class RemoveDeadSystem : JobComponentSystem
 {
@@ -14,6 +18,11 @@ public class RemoveDeadSystem : JobComponentSystem
     {
         endSimulationEcbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
     }
+	/// <summary>
+	/// 死亡した敵エンティティの削除処理を更新
+	/// </summary>
+	/// <param name="inputDeps">入力依存関係</param>
+	/// <returns>ジョブハンドル</returns>
 	protected override JobHandle OnUpdate(JobHandle inputDeps)
 	{
 		EntityCommandBuffer ecb = endSimulationEcbSystem.CreateCommandBuffer();

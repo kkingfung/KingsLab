@@ -1,11 +1,17 @@
 ﻿using System;
 using Unity.Entities;
 
-//Wait until First Collision Check
-
-[Serializable]
-public struct ActionTime : IComponentData
+namespace RandomTowerDefense.DOTS.Components
 {
-    public float Value;
+    /// <summary>
+    /// 最初の衝突チェックまでの待機時間を管理するコンポーネント
+    /// </summary>
+    [Serializable]
+    public struct ActionTime : IComponentData
+    {
+        #region Public Fields
+        public float Value;
+        #endregion
+    }
 }
 

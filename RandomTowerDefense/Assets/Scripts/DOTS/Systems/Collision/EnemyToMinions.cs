@@ -11,6 +11,10 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 
+/// <summary>
+/// 敵エンティティとミニオンスキルエンティティの衝突を検出し処理するシステム
+/// ミニオンによる敵へのダメージ適用を管理
+/// </summary>
 public class EnemyToMinions : JobComponentSystem
 {
     EntityQuery enemyGroup;
@@ -20,6 +24,11 @@ public class EnemyToMinions : JobComponentSystem
     {
     }
 
+    /// <summary>
+    /// 敵エンティティとミニオンスキルの衝突を処理
+    /// </summary>
+    /// <param name="inputDependencies">入力依存関係</param>
+    /// <returns>ジョブハンドル</returns>
     protected override JobHandle OnUpdate(JobHandle inputDependencies)
     {
         enemyGroup = GetEntityQuery(typeof(Health), typeof(Radius), typeof(Damage), typeof(SlowRate),

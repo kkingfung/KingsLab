@@ -8,6 +8,10 @@ using Unity.Mathematics;
 using Unity.Jobs;
 using Unity.Burst;
 
+/// <summary>
+/// ミニオンエンティティのターゲット探索を処理するシステム
+/// クアドラント空間分割を使って最近の敵エンティティを検索
+/// </summary>
 [UpdateAfter(typeof(QuadrantSystem))]
 public class MinionsFindTargetSystem : JobComponentSystem
 {
@@ -26,6 +30,12 @@ public class MinionsFindTargetSystem : JobComponentSystem
 
         public EntityCommandBuffer.ParallelWriter entityCommandBuffer;
 
+        /// <summary>
+        /// ミニオンエンティティチャンクのターゲット検索を実行
+        /// </summary>
+        /// <param name="chunk">処理するエンティティチャンク</param>
+        /// <param name="chunkIndex">チャンクインデックス</param>
+        /// <param name="firstEntityIndex">最初のエンティティインデックス</param>
         public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
         {
             var chunkTranslation = chunk.GetNativeArray(translationType);
@@ -120,6 +130,11 @@ public class MinionsFindTargetSystem : JobComponentSystem
         base.OnCreate();
     }
 
+    /// <summary>
+    /// ミニオンのターゲット探索処理を更新
+    /// </summary>
+    /// <param name="inputDeps">入力依存関係</param>
+    /// <returns>ジョブハンドル</returns>
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
         if (GetEntityQuery(typeof(EnemyTag)).CalculateEntityCount() == 0) return inputDeps;

@@ -6,7 +6,12 @@ using Unity.RemoteConfig;
 
 using System.IO;
 
-public class TowerAttr
+namespace RandomTowerDefense.Info
+{
+    /// <summary>
+    /// タワーの戦闘属性情報を格納するクラス
+    /// </summary>
+    public class TowerAttr
 {
     public float damage;
     public float waitTime;
@@ -148,4 +153,5 @@ public static class TowerInfo
         }
         return null;
     }
+}
 }

@@ -4,7 +4,12 @@ using UnityEngine;
 using UnityEngine.VFX;
 using UnityEngine.UI;
 
-public class StageManager : MonoBehaviour
+namespace RandomTowerDefense.Managers.Macro
+{
+    /// <summary>
+    /// ステージ管理システム - ゲーム進行とステージ状態の管理
+    /// </summary>
+    public class StageManager : MonoBehaviour
 {
     private readonly float timerForDmgVFX = 0.05f;
     private readonly Vector3 displayPos = new Vector3(57.5f, 31f, 3.5f);
@@ -303,4 +308,5 @@ public class StageManager : MonoBehaviour
     {
         return sceneManager.GetCurrIsland();
     }
+}
 }

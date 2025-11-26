@@ -1,9 +1,17 @@
 ﻿using System;
 using Unity.Entities;
 
-[Serializable]
-public struct Exp : IComponentData
+namespace RandomTowerDefense.DOTS.Components
 {
-    public int Value;
+    /// <summary>
+    /// 経験値情報を管理するコンポーネント
+    /// </summary>
+    [Serializable]
+    public struct Exp : IComponentData
+    {
+        #region Public Fields
+        public int Value;
+        #endregion
+    }
 }
 

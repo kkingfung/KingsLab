@@ -10,7 +10,10 @@ using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-
+/// <summary>
+/// 敵に対する石化スキル効果を処理するECSシステム
+/// 石化スキルの範囲内の敵に石化量とバフ持続時間を適用
+/// </summary>
 public class EnemyToPetrification : JobComponentSystem
 {
     EntityQuery enemyGroup;
@@ -54,8 +57,9 @@ public class EnemyToPetrification : JobComponentSystem
     }
 
 
-
-    //enemy by petrification
+    /// <summary>
+    /// 範囲内の敵に石化効果を適用するジョブ
+    /// </summary>
     #region JobEvSP
     [BurstCompile]
     struct CollisionJobEvSP : IJobChunk
@@ -87,7 +91,7 @@ public class EnemyToPetrification : JobComponentSystem
                 petrifyAmt.Value = targetPetrify[0].Value;
                 buff.Value += targetBuff[0].Value;
 
-                //Constraint according to FPS
+                // バフ持続時間を最大1秒に制限
                 if (buff.Value > 1)
                     buff.Value = 1;
                 //Debug.Log("Petrified");

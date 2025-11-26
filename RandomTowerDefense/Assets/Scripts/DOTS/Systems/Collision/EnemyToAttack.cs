@@ -10,6 +10,10 @@ using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Rendering;
 
+/// <summary>
+/// 敵エンティティとタワーの攻撃エンティティの衝突を検出し処理するシステム
+/// タワー攻撃による敵へのダメージ適用を管理
+/// </summary>
 public class EnemyToAttack : JobComponentSystem
 {
     EntityQuery enemyGroup;
@@ -19,6 +23,11 @@ public class EnemyToAttack : JobComponentSystem
     {
     }
 
+    /// <summary>
+    /// 敵エンティティとタワー攻撃の衝突を処理
+    /// </summary>
+    /// <param name="inputDependencies">入力依存関係</param>
+    /// <returns>ジョブハンドル</returns>
     protected override JobHandle OnUpdate(JobHandle inputDependencies)
     {
         enemyGroup = GetEntityQuery(typeof(Health), typeof(Radius), typeof(Damage), typeof(SlowRate),

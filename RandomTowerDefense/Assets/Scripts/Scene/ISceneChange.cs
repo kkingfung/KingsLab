@@ -4,7 +4,20 @@ using UnityEngine;
 using Unity.Entities;
 using Unity.Collections;
 
-public class ISceneChange : MonoBehaviour
+namespace RandomTowerDefense.Scene
+{
+    /// <summary>
+    /// シーン変更ベースクラス - シーン遷移とレスポンシブデザインの統合管理
+    ///
+    /// 主な機能:
+    /// - クロスプラットフォーム回転対応（縦横用UI自動切替）
+    /// - フェードエフェクトの統合管理と自動適用
+    /// - ECSエンティティのシーン間クリーンアップ
+    /// - ジャイロセンサー連携とタッチ入力統合
+    /// - オプション状態管理とシーン状態トラッキング
+    /// - デリゲートパターンによるフェードイベント管理
+    /// </summary>
+    public class ISceneChange : MonoBehaviour
 {
     protected struct LatiosSceneChangeDummyTag : IComponentData { }
 
@@ -169,5 +182,5 @@ public class ISceneChange : MonoBehaviour
 
     public bool GetOptionStatus() { return isOption; }
     public void SetOptionStatus(bool enabled) { isOption = enabled; }
-
+    }
 }

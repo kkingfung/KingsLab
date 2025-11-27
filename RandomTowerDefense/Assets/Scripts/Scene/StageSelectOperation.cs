@@ -7,7 +7,19 @@ using UnityEngine.SceneManagement;
 using UnityEngine.VFX;
 using UnityEngine.Rendering;
 
-public class StageSelectOperation : ISceneChange
+namespace RandomTowerDefense.Scene
+{
+    /// <summary>
+    /// ステージ選択オペレーションクラス - ステージ選択シーンのUI制御と島管理
+    ///
+    /// 主な機能:
+    /// - 4島ステージ選択システム（Easy、Normal、Hard、Ultra）
+    /// - 動的ポストプロセッシング効果（ブルーム、視覚エフェクト）
+    /// - マルチカメラ制御とUI統合（メイン、右、下カメラ）
+    /// - ステージ解放状態管理とプログレス追跡
+    /// - VFXエフェクト統合とシーン演出制御
+    /// </summary>
+    public class StageSelectOperation : ISceneChange
 {
     private readonly float bloomInt_Default = 0.25f;
     private readonly float bloomInt_Max = 60.0f;
@@ -481,4 +493,5 @@ public class StageSelectOperation : ISceneChange
     public int CurrentIslandNum() { return IslandNow; }
     public int EnabledtIslandNum() { return IslandEnabled; }
     public int NextIslandNum() { return IslandNext; }
+    }
 }

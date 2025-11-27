@@ -3,7 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class FadeEffect : MonoBehaviour
+namespace RandomTowerDefense.Common
+{
+    /// <summary>
+    /// フェードエフェクトユーティリティ - シーン長移時のフェードイン・アウト処理
+    ///
+    /// 主な機能:
+    /// - マルチレンダラー対応（MeshRenderer、RawImage、SpriteRenderer、Image）
+    /// - シェーダーベースフェード効果とPlayerPrefs連携
+    /// - コルーチンベーススムーズアニメーション
+    /// - フェード完了状態追跡とコールバック連携
+    /// - 動的マテリアル検出とシェーダーパラメーター制御
+    /// </summary>
+    public class FadeEffect : MonoBehaviour
 {
     private enum EnumRenderType
     {
@@ -121,5 +133,6 @@ public class FadeEffect : MonoBehaviour
             yield return new WaitForSeconds(0f);
         }
         isReady = true;
+    }
     }
 }

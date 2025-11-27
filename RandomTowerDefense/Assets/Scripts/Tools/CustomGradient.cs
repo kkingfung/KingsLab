@@ -2,64 +2,65 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public class CustomGradient
+namespace RandomTowerDefense.Tools
 {
-
-    public enum BlendMode { Linear, Discrete };
-    public BlendMode blendMode;
-    public bool randomizeColour;
-
-    [SerializeField]
-    List<ColourKey> keys = new List<ColourKey>();
-
-    public CustomGradient()
+    [System.Serializable]
+    public class CustomGradient
     {
-        AddKey(Color.white, 0);
-        AddKey(Color.black, 1);
-    }
+        public enum BlendMode { Linear, Discrete };
+        public BlendMode blendMode;
+        public bool randomizeColour;
 
-    public Color Evaluate(float time)
-    {
-        ColourKey keyLeft = keys[0];
-        ColourKey keyRight = keys[keys.Count - 1];
+        [SerializeField]
+        List<ColourKey> keys = new List<ColourKey>();
 
-        for (int i = 0; i < keys.Count; ++i)
+        public CustomGradient()
         {
-            if (keys[i].Time < time)
-            {
-                keyLeft = keys[i];
-            }
-            if (keys[i].Time > time)
-            {
-                keyRight = keys[i];
-                break;
-            }
+            AddKey(Color.white, 0);
+            AddKey(Color.black, 1);
         }
 
-        if (blendMode == BlendMode.Linear)
+        public Color Evaluate(float time)
         {
-            float blendTime = Mathf.InverseLerp(keyLeft.Time, keyRight.Time, time);
-            return Color.Lerp(keyLeft.Colour, keyRight.Colour, blendTime);
-        }
-        return keyRight.Colour;
-    }
+            ColourKey keyLeft = keys[0];
+            ColourKey keyRight = keys[keys.Count - 1];
 
-    public int AddKey(Color colour, float time)
-    {
-        ColourKey newKey = new ColourKey(colour, time);
-        for (int i = 0; i < keys.Count; ++i)
-        {
-            if (newKey.Time < keys[i].Time)
+            for (int i = 0; i < keys.Count; ++i)
             {
-                keys.Insert(i, newKey);
-                return i;
+                if (keys[i].Time < time)
+                {
+                    keyLeft = keys[i];
+                }
+                if (keys[i].Time > time)
+                {
+                    keyRight = keys[i];
+                    break;
+                }
             }
+
+            if (blendMode == BlendMode.Linear)
+            {
+                float blendTime = Mathf.InverseLerp(keyLeft.Time, keyRight.Time, time);
+                return Color.Lerp(keyLeft.Colour, keyRight.Colour, blendTime);
+            }
+            return keyRight.Colour;
         }
 
-        keys.Add(newKey);
-        return keys.Count - 1;
-    }
+        public int AddKey(Color colour, float time)
+        {
+            ColourKey newKey = new ColourKey(colour, time);
+            for (int i = 0; i < keys.Count; ++i)
+            {
+                if (newKey.Time < keys[i].Time)
+                {
+                    keys.Insert(i, newKey);
+                    return i;
+                }
+            }
+
+            keys.Add(newKey);
+            return keys.Count - 1;
+        }
 
     public void RemoveKey(int index)
     {
@@ -137,5 +138,4 @@ public class CustomGradient
             }
         }
     }
-
 }

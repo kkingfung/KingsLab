@@ -1,11 +1,13 @@
 ﻿using System;
 using Unity.Entities;
 
-/// <summary>
-/// エンティティの半径を表すECSコンポーネント
-/// </summary>
-[Serializable]
-public struct Radius : IComponentData
+namespace RandomTowerDefense.DOTS.Components
+{
+    /// <summary>
+    /// エンティティの半径を表すECSコンポーネント
+    /// </summary>
+    [Serializable]
+    public struct Radius : IComponentData
 {
     public float Value;
 
@@ -36,6 +38,7 @@ public struct Radius : IComponentData
     public static implicit operator Radius(float value)
     {
         return new Radius(value);
+    }
     }
 }
 

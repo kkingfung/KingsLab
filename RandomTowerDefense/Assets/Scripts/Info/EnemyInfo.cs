@@ -31,7 +31,17 @@ namespace RandomTowerDefense.Info
     }
 }
 
- public static class EnemyInfo
+    /// <summary>
+    /// 敵情報静的クラス - 25種類敵キャラクターのステータスデータ管理
+    ///
+    /// 主な機能:
+    /// - 25種類敵タイプ（ボーナス敵、ロボット、ドラゴン、アンデッド、人型、生物系）のステータス管理
+    /// - 敵属性（体力、移動速度、ダメージ、サイズ、持続時間、報酬金額）設定
+    /// - JSON設定読み込みとリモート設定統合システム
+    /// - ステージ別敵強化倍率とバランス調整機能
+    /// - 敵名前配列とハッシュマップによる効率的データアクセス
+    /// </summary>
+    public static class EnemyInfo
 {
     //Remark: Money Carried is now Amended to WaveId except bosses/bonus
     static Dictionary<string, EnemyAttr> enemyInfo;

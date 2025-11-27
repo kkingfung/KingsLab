@@ -1,36 +1,39 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class LBM : MonoBehaviour {
-	[SerializeField] Shader initShader = null;
-	[SerializeField] Shader compShader= null;
-	[SerializeField] Shader stepShader= null;
-	[SerializeField] Shader copyShader = null;
-	[SerializeField] Shader bounceBackShader = null;
-	[SerializeField] Shader showShader = null;
-	[SerializeField] Shader paintShader = null;
+namespace RandomTowerDefense.Tools
+{
+    public class LBM : MonoBehaviour
+    {
+        [SerializeField] Shader initShader = null;
+        [SerializeField] Shader compShader = null;
+        [SerializeField] Shader stepShader = null;
+        [SerializeField] Shader copyShader = null;
+        [SerializeField] Shader bounceBackShader = null;
+        [SerializeField] Shader showShader = null;
+        [SerializeField] Shader paintShader = null;
 
-	Material initMat;
-	Material compMat;
-	Material stepMat;
-	Material copyMat;
-	Material bounceBackMat;
-	Material paintMat;
-	Material showMat;
+        Material initMat;
+        Material compMat;
+        Material stepMat;
+        Material copyMat;
+        Material bounceBackMat;
+        Material paintMat;
+        Material showMat;
 
-	RenderTexture rt1;
-	RenderTexture rt2;
-	RenderTexture rt3;
-	RenderTexture rt1c;
-	RenderTexture rt2c;
-	RenderTexture rt3c;
-	RenderTexture rtMask;
+        RenderTexture rt1;
+        RenderTexture rt2;
+        RenderTexture rt3;
+        RenderTexture rt1c;
+        RenderTexture rt2c;
+        RenderTexture rt3c;
+        RenderTexture rtMask;
 
-	public Camera LandscapeCam;
-	public Camera ProtraitCam;
+        public Camera LandscapeCam;
+        public Camera ProtraitCam;
 
-	bool isDragging=false;
-	Vector2 interactPos;
+        bool isDragging = false;
+        Vector2 interactPos;
 
     void Awake()
     {
@@ -187,6 +190,6 @@ public class LBM : MonoBehaviour {
 		{
 			Graphics.Blit(null, rtMask, initMat);
 			isDragging = false; 
-		}
-	}
+        }
+    }
 }

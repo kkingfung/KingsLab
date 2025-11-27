@@ -5,7 +5,19 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.VFX;
 
-public class TitleOperation: ISceneChange
+namespace RandomTowerDefense.Scene
+{
+    /// <summary>
+    /// タイトル画面オペレーションクラス - タイトルシーンのUI制御とメニュー管理
+    ///
+    /// 主な機能:
+    /// - マルチカメラシステム制御（右カメラ、下カメラ、エッグカメラ）
+    /// - タイトルメニューボタン管理（スタート、オプション、クレジット）
+    /// - VFXエフェクト制御とタイトル画面演出
+    /// - クロスプラットフォーム対応UI切り替え（縦横画面）
+    /// - シーン遷移とフェードエフェクト統合
+    /// </summary>
+    public class TitleOperation : ISceneChange
 {
     //Camera Start/Stay/End Point
     [Header("Camera Settings")]
@@ -481,4 +493,5 @@ public class TitleOperation: ISceneChange
         if (CanvaManager) CanvaManager.isOpening = isOpening;
     }
     #endregion
+    }
 }

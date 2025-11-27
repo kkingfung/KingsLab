@@ -4,7 +4,19 @@ using UnityEngine;
 using Unity.Mathematics;
 using UnityEngine.VFX;
 
-public class EffectSpawner : MonoBehaviour
+namespace RandomTowerDefense.Managers.System
+{
+    /// <summary>
+    /// エフェクトスポーナーシステム - VFXエフェクトの動的生成と管理
+    ///
+    /// 主な機能:
+    /// - 6種類エフェクトタイプ（ビルド、デス、マネードロップ、消失、インパクト、売却）
+    /// - VFXグラフコンポーネント統合と自動再生システム
+    /// - ゲームオブジェクトプールでパフォーマンス最適化
+    /// - シングルトンパターンでグローバルアクセス管理
+    /// - 位置指定でエフェクトスポーンシステム
+    /// </summary>
+    public class EffectSpawner : MonoBehaviour
 {
     public GameObject PrefabBuild;
     public GameObject PrefabDieVfx;
@@ -138,5 +150,5 @@ public class EffectSpawner : MonoBehaviour
 
         return newObj;
     }
-
+    }
 }

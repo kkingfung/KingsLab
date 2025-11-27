@@ -6,7 +6,20 @@ using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Jobs;
 using UnityEngine.VFX;
-public class SkillSpawner : MonoBehaviour
+
+namespace RandomTowerDefense.DOTS.Spawner
+{
+    /// <summary>
+    /// スキルエンティティスポーナーシステム - 魔法スキルの動的生成と管理
+    ///
+    /// 主な機能:
+    /// - 4種類魔法スキル（Meteor、Blizzard、Petrification、Minions）対応
+    /// - ハイブリッドMonoBehaviour-ECS統合スキル管理システム
+    /// - スキルエリアエフェクト処理とリアルタイム効果適用
+    /// - VFXグラフ統合とスキル持続時間管理
+    /// - スキル種別リストとゲームオブジェクトプール最適化
+    /// </summary>
+    public class SkillSpawner : MonoBehaviour
 {
     private readonly int count = 10;
     public static SkillSpawner Instance { get; private set; }

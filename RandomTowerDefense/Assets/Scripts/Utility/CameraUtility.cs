@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public static class CameraUtility {
+namespace RandomTowerDefense.Utility
+{
+    public static class CameraUtility
+    {
     static readonly Vector3[] cubeCornerOffsets = {
         new Vector3 (1, 1, 1),
         new Vector3 (-1, 1, 1),
@@ -99,5 +102,4 @@ public static class CameraUtility {
             zMax = Mathf.Max (zMax, point.z);
         }
     }
-
 }

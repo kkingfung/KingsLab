@@ -1,11 +1,13 @@
 ﻿using System;
 using Unity.Entities;
 
-/// <summary>
-/// エンティティのダメージ値を表すECSコンポーネント
-/// </summary>
-[Serializable]
-public struct Damage : IComponentData
+namespace RandomTowerDefense.DOTS.Components
+{
+    /// <summary>
+    /// エンティティのダメージ値を表すECSコンポーネント
+    /// </summary>
+    [Serializable]
+    public struct Damage : IComponentData
 {
     public float Value;
 
@@ -36,6 +38,7 @@ public struct Damage : IComponentData
     public static implicit operator Damage(float value)
     {
         return new Damage(value);
+    }
     }
 }
 

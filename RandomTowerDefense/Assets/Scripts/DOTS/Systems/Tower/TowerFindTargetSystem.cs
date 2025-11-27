@@ -8,14 +8,16 @@ using Unity.Mathematics;
 using Unity.Jobs;
 using Unity.Burst;
 
-/// <summary>
-/// 空間分割を使用してタワーの最適ターゲットを探すECSシステム
-/// 効率的な近働クエリのためにクアドラントベースの空間ハッシュを使用
-/// 戦略的ターゲッティングのため城に最も近い敵を優先
-/// 新しい空間データを確保するためQuadrantSystemの後に更新
-/// </summary>
-[UpdateAfter(typeof(QuadrantSystem))]
-public class TowerFindTargetSystem : JobComponentSystem
+namespace RandomTowerDefense.DOTS.Systems.Tower
+{
+    /// <summary>
+    /// 空間分割を使用してタワーの最適ターゲットを探すECSシステム
+    /// 効率的な近働クエリのためにクアドラントベースの空間ハッシュを使用
+    /// 戦略的ターゲッティングのため城に最も近い敵を優先
+    /// 新しい空間データを確保するためQuadrantSystemの後に更新
+    /// </summary>
+    [UpdateAfter(typeof(QuadrantSystem))]
+    public class TowerFindTargetSystem : JobComponentSystem
 {
     [RequireComponentTag(typeof(PlayerTag), typeof(Translation), typeof(Radius), typeof(QuadrantEntity), typeof(CastlePos))]
     [ExcludeComponent(typeof(Target))]
@@ -167,6 +169,7 @@ public class TowerFindTargetSystem : JobComponentSystem
     static private bool CheckCollision(float3 posA, float3 posB, float radiusSqr)
     {
         return GetDistance(posA, posB) <= radiusSqr;
+    }
     }
 }
 

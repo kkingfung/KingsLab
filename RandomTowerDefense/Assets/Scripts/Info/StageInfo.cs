@@ -9,7 +9,12 @@ using Unity.RemoteConfig;
 
 using System.IO;
 
-public class EnmDetail
+namespace RandomTowerDefense.Info
+{
+    /// <summary>
+    /// 敵詳細情報クラス - ウェーブ内の敵スポーン設定データ
+    /// </summary>
+    public class EnmDetail
 {
     public int waveID;
     public int enmNum;
@@ -25,7 +30,10 @@ public class EnmDetail
     }
 }
 
-public class WaveAttr
+    /// <summary>
+    /// ウェーブ属性クラス - 敵ウェーブのタイミングとスポーン設定
+    /// </summary>
+    public class WaveAttr
 {
     public float enmStartTime;
     public float enmSpawnPeriod;
@@ -44,7 +52,10 @@ public class WaveAttr
     }
 }
 
-public class StageAttr
+    /// <summary>
+    /// ステージ属性クラス - ステージ全体のウェーブ設定と難易度設定
+    /// </summary>
+    public class StageAttr
 {
     public int waveNum;
     public float waveWaitTime;
@@ -58,7 +69,17 @@ public class StageAttr
     }
 }
 
-public static class StageInfo
+    /// <summary>
+    /// ステージ情報静的クラス - ゲーム全体のステージ設定と敵配置データ管理
+    ///
+    /// 主な機能:
+    /// - 4島（Easy、Normal、Hard、Ultra）のウェーブ設定管理
+    /// - 動的敵強化システムとランダムボーナス敵配置
+    /// - JSON設定読み込みとリモート設定統合
+    /// - ステージ難易度曲線と敵タイプバランス調整
+    /// - プロシージャル敵配置とカスタムステージ対応
+    /// </summary>
+    public static class StageInfo
 {
     public static System.Random prng;
 
@@ -551,5 +572,6 @@ public static class StageInfo
             waveArray[i] = new WaveAttr(detailPerWave);
         }
         return waveArray;
+    }
     }
 }

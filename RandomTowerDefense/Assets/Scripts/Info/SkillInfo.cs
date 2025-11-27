@@ -5,7 +5,12 @@ using Unity.RemoteConfig;
 
 using System.IO;
 
-public class SkillAttr
+namespace RandomTowerDefense.Info
+{
+    /// <summary>
+    /// スキル属性情報クラス - 魔法スキルのパラメーター情報
+    /// </summary>
+    public class SkillAttr
 {
     public float radius;
     public float damage;
@@ -36,7 +41,17 @@ public class SkillAttr
     }
 }
 
-public static class SkillInfo
+    /// <summary>
+    /// スキル情報静的クラス - 4種類魔法スキルのデータ定義と管理
+    ///
+    /// 主な機能:
+    /// - 4種類魔法スキル（Meteor、Blizzard、Petrification、Minions）のステータス管理
+    /// - スキル属性（範囲、ダメージ、クールタイム、持続時間、減速率、バフ時間）設定
+    /// - JSONファイル読み込みとリモート設定統合システム
+    /// - スキルバランス調整とゲームプレイ最適化
+    /// - 辞書ベースの高速スキルデータアクセス
+    /// </summary>
+    public static class SkillInfo
 {
     static Dictionary<string, SkillAttr> skillInfo;
 
@@ -117,5 +132,6 @@ public static class SkillInfo
         if (skillInfo.ContainsKey(skillName))
             return skillInfo[skillName];
         return null;
+    }
     }
 }

@@ -4,7 +4,19 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Unity.Entities;
 
-public class LoadingOperation : ISceneChange
+namespace RandomTowerDefense.Scene
+{
+    /// <summary>
+    /// ローディングオペレーションクラス - シーン間遷移時のローディング画面制御
+    ///
+    /// 主な機能:
+    /// - 非同期シーンローディングと進行状況表示
+    /// - ローディングアイコンディゾルブエフェクト制御
+    /// - ランダムローディングオブジェクト表示システム
+    /// - フェードエフェクト統合とシーン遷移管理
+    /// - メモリクリーンアップとリソース解放
+    /// </summary>
+    public class LoadingOperation : ISceneChange
 {
     private readonly float LoadingSpd = 0.02f;
     [HideInInspector]
@@ -99,5 +111,6 @@ public class LoadingOperation : ISceneChange
         }
 
         loadingOperation.allowSceneActivation = true;
+    }
     }
 }

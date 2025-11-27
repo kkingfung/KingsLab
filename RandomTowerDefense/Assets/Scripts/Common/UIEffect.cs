@@ -3,7 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIEffect : MonoBehaviour
+namespace RandomTowerDefense.Common
+{
+    /// <summary>
+    /// UIエフェクトユーティリティ - 汎用UIアニメーションとインタラクション効果
+    ///
+    /// 主な機能:
+    /// - 12種類UIエフェクト（タイトル、矢印、アニメーション、フェード等）
+    /// - マルチレンダラー対応（Text、Image、TextMesh、SpriteRenderer等）
+    /// - クロスプラットフォームタッチ・マウス入力対応
+    /// - シーン固有UIアニメーション（タイトル、ステージ選択、ゲーム）
+    /// - レイキャストベースインタラクション検知
+    /// - 動的テキストアニメーションとタイプライター効果
+    /// </summary>
+    public class UIEffect : MonoBehaviour
 {
     private readonly Vector3 enlargeVec = new Vector3(0.03f, 0.03f, 0);
 
@@ -198,5 +211,6 @@ public class UIEffect : MonoBehaviour
     {
         textCnt = 0;
         if (text) fullText = text.text;
+    }
     }
 }

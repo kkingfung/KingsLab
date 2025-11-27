@@ -3,7 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 
-public class AutoDestroyVFX : MonoBehaviour
+namespace RandomTowerDefense.Common
+{
+    /// <summary>
+    /// VFX自動破棄ユーティリティ - ビジュアルエフェクトの自動ライフサイクル管理
+    ///
+    /// 主な機能:
+    /// - タイマーベースVFX自動停止とオブジェクト非アクティブ化
+    /// - VisualEffect Graph統合とパーティクルシステム制御
+    /// - スキル連携VFXの特別処理（3秒遅延破棄）
+    /// - ゲームオブジェクトプール最適化とメモリ管理
+    /// - エフェクト再生状態追跡と適切なクリーンアップ
+    /// </summary>
+    public class AutoDestroyVFX : MonoBehaviour
 {
     private VisualEffect ps;
     public float Timer;

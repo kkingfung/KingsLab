@@ -6,7 +6,20 @@ using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Jobs;
 
-public class TowerSpawner : MonoBehaviour
+namespace RandomTowerDefense.DOTS.Spawner
+{
+    /// <summary>
+    /// タワーエンティティスポーナーシステム - 4種類タワーの動的生成と管理
+    ///
+    /// 主な機能:
+    /// - 4種類タワー（Nightmare、SoulEater、TerrorBringer、Usurper）各ランク1-4対応
+    /// - ハイブリッドMonoBehaviour-ECS統合管理システム
+    /// - リアルタイムタワーターゲッティング配列同期
+    /// - タワー合成システムとランクアップ処理
+    /// - 座標変換アクセス配列とネイティブ配列最適化
+    /// - タワー種別・ランク別リスト管理システム
+    /// </summary>
+    public class TowerSpawner : MonoBehaviour
 {
     public const int MonsterMaxRank = 4;
     private readonly int count = 45;
@@ -398,6 +411,5 @@ public class TowerSpawner : MonoBehaviour
                 TowerUsurperRank4.Add(obj);
                 break;
         }
-
     }
 }

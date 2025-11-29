@@ -6,6 +6,7 @@ using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Jobs;
 using RandomTowerDefense.Boids.DOTS;
+using RandomTowerDefense.DOTS.Components;
 
 namespace RandomTowerDefense.Boids.DOTS
 {
@@ -40,19 +41,25 @@ namespace RandomTowerDefense.Boids.DOTS
         #region Serialized Fields
 
         [Header("スポーン設定")]
-        [SerializeField] [Tooltip("生成するボイドのプレファブリスト")]
+        [SerializeField]
+        [Tooltip("生成するボイドのプレファブリスト")]
         public List<GameObject> prefab;
 
-        [SerializeField] [Tooltip("ボイド動作設定")]
+        [SerializeField]
+        [Tooltip("ボイド動作設定")]
         public BoidSettings settings;
 
-        [SerializeField] [Tooltip("生成範囲の半径")]
+        [SerializeField]
+        [Tooltip("生成範囲の半径")]
         public float spawnRadius = 10f;
 
-        [SerializeField] [Range(0, 50)] [Tooltip("生成するボイドの数")]
+        [SerializeField]
+        [Range(0, 50)]
+        [Tooltip("生成するボイドの数")]
         public int spawnCount = 10;
 
-        [SerializeField] [Tooltip("境界範囲の半径")]
+        [SerializeField]
+        [Tooltip("境界範囲の半径")]
         public float BoundingRadius = 100f;
 
         [Header("DOTSブリッジ")]

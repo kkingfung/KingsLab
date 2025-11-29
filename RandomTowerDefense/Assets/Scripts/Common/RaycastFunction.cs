@@ -6,6 +6,7 @@ using UnityEngine.Experimental.TerrainAPI;
 using RandomTowerDefense.Scene;
 using RandomTowerDefense.Managers.Macro;
 using RandomTowerDefense.Managers.System;
+using RandomTowerDefense.Units;
 
 namespace RandomTowerDefense.Common
 {
@@ -245,55 +246,55 @@ namespace RandomTowerDefense.Common
 
                 // ゲームシーンストア（軍隊購入）
                 case ActionTypeID.GameScene_StoreArmy1:
-                    _storeManager.raycastAction(Upgrades.StoreItems.Army1, InfoID);
+                    _storeManager.RaycastAction(Upgrades.StoreItems.Army1, InfoID);
                     _audioManager.PlayAudio("se_Button");
                     break;
                 case ActionTypeID.GameScene_StoreArmy2:
-                    _storeManager.raycastAction(Upgrades.StoreItems.Army2, InfoID);
+                    _storeManager.RaycastAction(Upgrades.StoreItems.Army2, InfoID);
                     _audioManager.PlayAudio("se_Button");
                     break;
                 case ActionTypeID.GameScene_StoreArmy3:
-                    _storeManager.raycastAction(Upgrades.StoreItems.Army3, InfoID);
+                    _storeManager.RaycastAction(Upgrades.StoreItems.Army3, InfoID);
                     _audioManager.PlayAudio("se_Button");
                     break;
                 case ActionTypeID.GameScene_StoreArmy4:
-                    _storeManager.raycastAction(Upgrades.StoreItems.Army4, InfoID);
+                    _storeManager.RaycastAction(Upgrades.StoreItems.Army4, InfoID);
                     _audioManager.PlayAudio("se_Button");
                     break;
 
                 // ゲームシーンストア（城とボーナスボス）
                 case ActionTypeID.GameScene_StoreCastleHP:
-                    _storeManager.raycastAction(Upgrades.StoreItems.CastleHP, InfoID);
+                    _storeManager.RaycastAction(Upgrades.StoreItems.CastleHP, InfoID);
                     _audioManager.PlayAudio("se_Button");
                     break;
                 case ActionTypeID.GameScene_StoreBonusBoss1:
-                    _storeManager.raycastAction(Upgrades.StoreItems.BonusBoss1, InfoID);
+                    _storeManager.RaycastAction(Upgrades.StoreItems.BonusBoss1, InfoID);
                     _audioManager.PlayAudio("se_Button");
                     break;
                 case ActionTypeID.GameScene_StoreBonusBoss2:
-                    _storeManager.raycastAction(Upgrades.StoreItems.BonusBoss2, InfoID);
+                    _storeManager.RaycastAction(Upgrades.StoreItems.BonusBoss2, InfoID);
                     _audioManager.PlayAudio("se_Button");
                     break;
                 case ActionTypeID.GameScene_StoreBonusBoss3:
-                    _storeManager.raycastAction(Upgrades.StoreItems.BonusBoss3, InfoID);
+                    _storeManager.RaycastAction(Upgrades.StoreItems.BonusBoss3, InfoID);
                     _audioManager.PlayAudio("se_Button");
                     break;
 
                 // ゲームシーンストア（魔法スキル）
                 case ActionTypeID.GameScene_StoreMagicMeteor:
-                    _storeManager.raycastAction(Upgrades.StoreItems.MagicMeteor, InfoID);
+                    _storeManager.RaycastAction(Upgrades.StoreItems.MagicMeteor, InfoID);
                     _audioManager.PlayAudio("se_Button");
                     break;
                 case ActionTypeID.GameScene_StoreMagicBlizzard:
-                    _storeManager.raycastAction(Upgrades.StoreItems.MagicBlizzard, InfoID);
+                    _storeManager.RaycastAction(Upgrades.StoreItems.MagicBlizzard, InfoID);
                     _audioManager.PlayAudio("se_Button");
                     break;
                 case ActionTypeID.GameScene_StoreMagicMinions:
-                    _storeManager.raycastAction(Upgrades.StoreItems.MagicMinions, InfoID);
+                    _storeManager.RaycastAction(Upgrades.StoreItems.MagicMinions, InfoID);
                     _audioManager.PlayAudio("se_Button");
                     break;
                 case ActionTypeID.GameScene_StoreMagicPetrification:
-                    _storeManager.raycastAction(Upgrades.StoreItems.MagicPetrification, InfoID);
+                    _storeManager.RaycastAction(Upgrades.StoreItems.MagicPetrification, InfoID);
                     _audioManager.PlayAudio("se_Button");
                     break;
             }

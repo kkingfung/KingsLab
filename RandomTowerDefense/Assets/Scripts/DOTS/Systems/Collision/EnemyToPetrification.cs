@@ -10,6 +10,7 @@ using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Rendering;
 using RandomTowerDefense.DOTS.Components;
+using RandomTowerDefense.DOTS.Tags;
 
 /// <summary>
 /// 敵に対する石化スキル効果を処理するECSシステム

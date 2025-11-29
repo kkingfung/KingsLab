@@ -7,6 +7,7 @@ using RandomTowerDefense.Scene;
 using RandomTowerDefense.DOTS.Spawner;
 using RandomTowerDefense.MapGenerator;
 using RandomTowerDefense.Managers.System;
+using RandomTowerDefense.Info;
 
 namespace RandomTowerDefense.Managers.Macro
 {

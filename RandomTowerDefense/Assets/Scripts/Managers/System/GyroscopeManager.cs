@@ -164,7 +164,7 @@ namespace RandomTowerDefense.Managers.System
             if (sceneManager && sceneManager.GetOptionStatus()) return;
             if (gamesceneManager)
             {
-                gamesceneManager.autoResetGyro();
+                gamesceneManager.AutoResetGyro();
             }
             if (cameraManager)
             {
@@ -225,7 +225,7 @@ namespace RandomTowerDefense.Managers.System
         /// <summary>
         /// Process gyroscope input and detect shake gestures
         /// </summary>
-        private void GyroModify()
+        public void GyroModify()
         {
             //Reset Shake
             LeftShake = false;

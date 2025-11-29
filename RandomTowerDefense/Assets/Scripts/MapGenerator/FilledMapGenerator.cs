@@ -5,6 +5,8 @@ using Unity.Mathematics;
 using System.Linq;
 using RandomTowerDefense.Scene;
 using RandomTowerDefense.Managers.Macro;
+using RandomTowerDefense.Info;
+using RandomTowerDefense.Utilities;
 
 namespace RandomTowerDefense.MapGenerator
 {
@@ -145,7 +147,7 @@ namespace RandomTowerDefense.MapGenerator
                 stageManager.SpawnPoint[3] = new Coord(0, _currentMap.mapSize.y - 1);
             }
 
-            _shuffledTileCoords = new Queue<Coord>(Utility.ShuffleArray(_allTileCoords.ToArray(), _currentMap.seed));
+            _shuffledTileCoords = new Queue<Coord>(RandomTowerDefense.Utilities.Utility.ShuffleArray<Coord>(_allTileCoords.ToArray(), _currentMap.seed));
 
             // Create map holder object
             string holderName = "Generated Map";
@@ -188,7 +190,7 @@ namespace RandomTowerDefense.MapGenerator
                 obstacleMap[randomCoord.x, randomCoord.y] = true;
                 currentObstacleCount++;
 
-                if (randomCoord != _currentMap.mapCentre && MapIsFullyAccessible(obstacleMap, currentObstacleCount))
+                if (randomCoord != _currentMap.MapCentre && MapIsFullyAccessible(obstacleMap, currentObstacleCount))
                 {
                     float obstacleHeight = Mathf.Lerp(_currentMap.minObstacleHeight, _currentMap.maxObstacleHeight, (float)_prng.NextDouble());
                     Vector3 obstaclePosition = CoordToPosition(randomCoord.x, randomCoord.y);
@@ -213,7 +215,7 @@ namespace RandomTowerDefense.MapGenerator
                 }
             }
 
-            _shuffledOpenTileCoords = new Queue<Coord>(Utility.ShuffleArray(allOpenCoords.ToArray(), _currentMap.seed));
+            _shuffledOpenTileCoords = new Queue<Coord>(RandomTowerDefense.Utilities.Utility.ShuffleArray<Coord>(allOpenCoords.ToArray(), _currentMap.seed));
             _shuffledOpenTileCoords.Enqueue(new Coord(0, 0));
 
             _shuffledOpenTileCoords.Enqueue(new Coord(_currentMap.mapSize.x - 1, _currentMap.mapSize.y - 1));
@@ -344,8 +346,8 @@ namespace RandomTowerDefense.MapGenerator
             bool[,] mapFlags = new bool[obstacleMap.GetLength(0), obstacleMap.GetLength(1)];
 
             Queue<Coord> queue = new Queue<Coord>();
-            queue.Enqueue(_currentMap.mapCentre);
-            mapFlags[_currentMap.mapCentre.x, _currentMap.mapCentre.y] = true;
+            queue.Enqueue(_currentMap.MapCentre);
+            mapFlags[_currentMap.MapCentre.x, _currentMap.MapCentre.y] = true;
 
             int accessibleTileCount = 1;
 
@@ -476,7 +478,7 @@ namespace RandomTowerDefense.MapGenerator
             /// <summary>
             /// マップ中心座標の自動計算
             /// </summary>
-            public Coord mapCentre
+            public Coord MapCentre
             {
                 get
                 {
@@ -485,6 +487,75 @@ namespace RandomTowerDefense.MapGenerator
             }
         }
 
+        public int CurrMapX()
+        {
+            return _currentMap.mapSize.x;
+        }
+        public int CurrMapY()
+        {
+            return _currentMap.mapSize.y;
+        }
+
+        public bool GetMapWalkable(int x, int y)
+        {
+            if (_shuffledOpenTileCoords.Contains(new Coord(x, y)))
+                return true;
+            return false;
+        }
+
         #endregion
+    }
+
+
+    [System.Serializable]
+    public struct Coord
+    {
+        public int x;
+        public int y;
+
+        public Coord(int _x, int _y)
+        {
+            x = _x;
+            y = _y;
+        }
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public static bool operator ==(Coord c1, Coord c2)
+        {
+            return c1.x == c2.x && c1.y == c2.y;
+        }
+
+        public static bool operator !=(Coord c1, Coord c2)
+        {
+            return !(c1 == c2);
+        }
+
+
+    }
+
+
+    public class Pillar
+    {
+        public GameObject obj;
+        public Coord mapSize;
+        public int state;//0: Empty 1: Occupied
+        public float height;
+        public int surroundSpace;
+        public Pillar(GameObject obj, int _x, int _y, float height, int state = 0)
+        {
+            this.obj = obj;
+            mapSize.x = _x;
+            mapSize.y = _y;
+            this.state = state;
+            this.height = height;
+        }
     }
 }

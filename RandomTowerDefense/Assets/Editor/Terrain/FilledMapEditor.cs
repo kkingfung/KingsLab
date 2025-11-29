@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEditor;
+using RandomTowerDefense.MapGenerator;
 
 [CustomEditor(typeof(FilledMapGenerator))]
 public class FilledMapEditor : Editor
 {
-
     public override void OnInspectorGUI()
     {
 
@@ -20,8 +20,5 @@ public class FilledMapEditor : Editor
         {
             map.GenerateMap();
         }
-
-
     }
-
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 using Unity.Transforms;
 using Unity.Entities;
 using Unity.Mathematics;
+using RandomTowerDefense.DOTS.Tags;
+using RandomTowerDefense.DOTS.Components;
 
 namespace RandomTowerDefense.DOTS.Systems.Tower
 {
@@ -17,42 +19,42 @@ namespace RandomTowerDefense.DOTS.Systems.Tower
     /// - ターゲット情報のリアルタイム更新
     /// </summary>
     public class TowerCheckTargetSystem : ComponentSystem
-{
-    protected override void OnUpdate()
     {
-        EntityManager entityManager = World.EntityManager;
-        Entities.WithAll<PlayerTag>().ForEach((Entity unitEntity, ref Target target, ref Translation transform, ref WaitingTime wait, ref Radius radius) => 
+        protected override void OnUpdate()
         {
-
-            if (entityManager.Exists(target.targetEntity) && target.targetEntity != Entity.Null)
+            EntityManager entityManager = World.EntityManager;
+            Entities.WithAll<PlayerTag>().ForEach((Entity unitEntity, ref Target target, ref Translation transform, ref WaitingTime wait, ref Radius radius) =>
             {
-                if (entityManager.HasComponent<EnemyTag>(target.targetEntity))
+
+                if (entityManager.Exists(target.targetEntity) && target.targetEntity != Entity.Null)
                 {
-                    Translation targetpos = entityManager.GetComponentData<Translation>(target.targetEntity);
-                    Health targetHealth = entityManager.GetComponentData<Health>(target.targetEntity);
-                    target.targetPos = targetpos.Value;
-                    targetpos.Value.y = transform.Value.y;
-                    target.targetHealth = targetHealth.Value;
-                    if (CheckCollision(transform.Value, targetpos.Value, radius.Value * radius.Value)==false)
+                    if (entityManager.HasComponent<EnemyTag>(target.targetEntity))
                     {
-                        // far to target, destroy it
-                        //PostUpdateCommands.DestroyEntity(hasTarget.targetEntity);
-                        //PostUpdateCommands.RemoveComponent(unitEntity, typeof(Target));
+                        Translation targetpos = entityManager.GetComponentData<Translation>(target.targetEntity);
+                        Health targetHealth = entityManager.GetComponentData<Health>(target.targetEntity);
+                        target.targetPos = targetpos.Value;
+                        targetpos.Value.y = transform.Value.y;
+                        target.targetHealth = targetHealth.Value;
+                        if (CheckCollision(transform.Value, targetpos.Value, radius.Value * radius.Value) == false)
+                        {
+                            // far to target, destroy it
+                            //PostUpdateCommands.DestroyEntity(hasTarget.targetEntity);
+                            //PostUpdateCommands.RemoveComponent(unitEntity, typeof(Target));
+                            target.targetEntity = Entity.Null;
+                            target.targetHealth = 0;
+                            entityManager.RemoveComponent<Target>(unitEntity);
+                        }
+                    }
+                    else
+                    {
                         target.targetEntity = Entity.Null;
                         target.targetHealth = 0;
+                        target.targetPos = new Vector3();
                         entityManager.RemoveComponent<Target>(unitEntity);
                     }
                 }
-                else
-                {
-                    target.targetEntity = Entity.Null;
-                    target.targetHealth = 0;
-                    target.targetPos = new Vector3();
-                    entityManager.RemoveComponent<Target>(unitEntity);
-                }
-            }
-        });
-    }
+            });
+        }
 
         #region Private Methods
         /// <summary>

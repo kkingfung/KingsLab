@@ -7,6 +7,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 using RandomTowerDefense.DOTS.Components;
+using RandomTowerDefense.DOTS.Tags;
 
 namespace RandomTowerDefense.DOTS.Systems
 {

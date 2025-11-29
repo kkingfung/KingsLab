@@ -10,6 +10,8 @@ using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Rendering;
 using RandomTowerDefense.DOTS.Components;
+using RandomTowerDefense.DOTS.Tags;
+using RandomTowerDefense.DOTS.Systems;
 
 /// <summary>
 /// 城と敵の双方向衝突を処理するECSシステム

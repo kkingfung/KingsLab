@@ -8,6 +8,9 @@ using System.IO;
 using RandomTowerDefense.Managers.System;
 using RandomTowerDefense.Common;
 using RandomTowerDefense.Managers.Macro;
+using RandomTowerDefense.Info;
+using RandomTowerDefense.Systems;
+using RandomTowerDefense.Units;
 
 namespace RandomTowerDefense.Scene
 {
@@ -619,7 +622,7 @@ namespace RandomTowerDefense.Scene
 
             currScreenShown = nextScreenShown;
             isScreenChanging = false;
-            GyroscopeManager.setTempInactive();
+            GyroscopeManager.SetTempInactive();
         }
 
         #endregion

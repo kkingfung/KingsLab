@@ -4,6 +4,8 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
+using RandomTowerDefense.DOTS.Tags;
+using RandomTowerDefense.DOTS.Components;
 
 namespace RandomTowerDefense.DOTS.Systems.Enemy
 {
@@ -29,15 +31,18 @@ namespace RandomTowerDefense.DOTS.Systems.Enemy
 
             return Entities.WithAll<EnemyTag>().ForEach((Entity entity, ref SlowRate slowRate, ref PetrifyAmt petrifyAmt, ref BuffTime buffTime) =>
             {
-                if (buffTime.Value > 0) {
+                if (buffTime.Value > 0)
+                {
                     buffTime.Value -= deltaTime;
                 }
                 else
                 {
-                    if (slowRate.Value > 0) {
+                    if (slowRate.Value > 0)
+                    {
                         slowRate.Value = Mathf.Max(slowRate.Value - recoveryRate * deltaTime, 0f);
                     }
-                    if (petrifyAmt.Value > 0) {
+                    if (petrifyAmt.Value > 0)
+                    {
                         petrifyAmt.Value = Mathf.Max(petrifyAmt.Value - recoveryRate * deltaTime, 0f);
                     }
                 }

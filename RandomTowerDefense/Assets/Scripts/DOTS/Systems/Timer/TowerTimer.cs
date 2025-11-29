@@ -2,6 +2,8 @@
 using Unity.Jobs;
 using Unity.Transforms;
 using UnityEngine;
+using RandomTowerDefense.DOTS.Tags;
+using RandomTowerDefense.DOTS.Components;
 
 public class TowerTimer : JobComponentSystem
 {

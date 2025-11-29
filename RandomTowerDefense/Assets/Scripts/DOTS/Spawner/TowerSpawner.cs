@@ -5,6 +5,9 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Jobs;
+using RandomTowerDefense.DOTS.Tags;
+using RandomTowerDefense.DOTS.Components;
+using RandomTowerDefense.Info;
 
 namespace RandomTowerDefense.DOTS.Spawner
 {
@@ -203,19 +206,6 @@ namespace RandomTowerDefense.DOTS.Spawner
                 EntityManager.SetComponentData(Entities[i], new CastlePos
                 {
                     Value = CastlePosition,
-                });
-
-                EntityManager.SetComponentData(Entities[i], new RotationEulerXYZ
-                {
-                    Value = Rotation,
-                });
-                EntityManager.SetComponentData(Entities[i], new Translation
-                {
-                    Value = Position,
-                });
-                EntityManager.SetComponentData(Entities[i], new Hybrid
-                {
-                    Index = i,
                 });
 
                 if (EntityManager.HasComponent<PlayerTag>(Entities[i]) == false)

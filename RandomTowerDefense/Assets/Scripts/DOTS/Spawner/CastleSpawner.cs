@@ -6,6 +6,8 @@ using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Jobs;
 using RandomTowerDefense.Units;
+using RandomTowerDefense.DOTS.Tags;
+using RandomTowerDefense.DOTS.Components;
 
 namespace RandomTowerDefense.DOTS.Spawner
 {

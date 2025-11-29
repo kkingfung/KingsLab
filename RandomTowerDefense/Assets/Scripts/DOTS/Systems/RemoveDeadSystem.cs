@@ -5,6 +5,8 @@ using UnityEngine;
 using Unity.Burst;
 using Unity.Collections;
 using System.Linq;
+using RandomTowerDefense.DOTS.Tags;
+using RandomTowerDefense.DOTS.Components;
 
 namespace RandomTowerDefense.DOTS.Systems
 {

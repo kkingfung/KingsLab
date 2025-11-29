@@ -10,6 +10,7 @@ using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Rendering;
 using RandomTowerDefense.Boids.DOTS;
+using RandomTowerDefense.DOTS.Components;
 
 namespace RandomTowerDefense.Boids.DOTS.Systems
 {

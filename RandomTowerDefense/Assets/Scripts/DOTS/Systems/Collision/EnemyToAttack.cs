@@ -10,6 +10,8 @@ using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Rendering;
 using RandomTowerDefense.DOTS.Components;
+using RandomTowerDefense.DOTS.Tags;
+using RandomTowerDefense.DOTS.Systems;
 
 /// <summary>
 /// 敵エンティティとタワーの攻撃エンティティの衝突を検出し処理するシステム

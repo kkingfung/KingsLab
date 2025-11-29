@@ -70,17 +70,17 @@ namespace RandomTowerDefense.Units
         #endregion
 
         #region Private Fields
-        private Vector3 __oriScale;
-        private Vector3 __prevPos;
+        private Vector3 _oriScale;
+        private Vector3 _prevPos;
         private int _damagedCount = 0;
         private int _money;
         private float _healthRecord;
         private float _slowRecord;
         private float _petrifyRecord;
-        private int __entityID = INVALID_ENTITY_ID;
+        private int _entityID = INVALID_ENTITY_ID;
         #endregion
 
-        private AgentScript agent;
+        private AgentScript _agent;
         private Vector3 oriPos;
 
         private MeshRenderer[] meshes;
@@ -238,8 +238,8 @@ namespace RandomTowerDefense.Units
             MyStart();
 
             this._entityID = _entityID;
-            this.money = money;
-            this.agent = agent;
+            this._money = money;
+            this._agent = agent;
             HpBar.maxValue = INITIAL_HP_BAR_VALUE;
             HpBar.value = INITIAL_HP_BAR_VALUE;
 
@@ -273,7 +273,7 @@ namespace RandomTowerDefense.Units
         {
             transform.localScale = _oriScale;
             isReady = false;
-            if (agent) agent.EnemyDisappear(oriPos, this.transform.position);
+            if (_agent) _agent.EnemyDisappear(oriPos, this.transform.position);
             StartCoroutine(EndAnim());
         }
 
@@ -310,8 +310,8 @@ namespace RandomTowerDefense.Units
 
             GameObject vfx = effectManager.Spawn(DESTROY_VFX_ID, this.transform.position);
             if (vfx)
-                vfx.GetComponent<VisualEffect>().SetInt("SpawnCount", Mathf.Max(money / VFX_SPAWN_COUNT_DIVISOR, MIN_VFX_SPAWN_COUNT));
-            resourceManager.ChangeMaterial(money);
+                vfx.GetComponent<VisualEffect>().SetInt("SpawnCount", Mathf.Max(_money / VFX_SPAWN_COUNT_DIVISOR, MIN_VFX_SPAWN_COUNT));
+            resourceManager.ChangeMaterial(_money);
             Die();
         }
 

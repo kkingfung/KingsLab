@@ -1,6 +1,8 @@
 using Unity.Entities;
 using Unity.Jobs;
 using UnityEngine;
+using RandomTowerDefense.DOTS.Tags;
+using RandomTowerDefense.DOTS.Components;
 
 namespace RandomTowerDefense.DOTS.Systems.Timer
 {

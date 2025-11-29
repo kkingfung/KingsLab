@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using RandomTowerDefense.Managers.Macro;
 using RandomTowerDefense.Scene;
 using RandomTowerDefense.Common;
+using RandomTowerDefense.Info;
+using RandomTowerDefense.Units;
 
 public class ScoreCalculation : MonoBehaviour
 {

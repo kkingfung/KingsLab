@@ -9,6 +9,7 @@ using RandomTowerDefense.DOTS.Spawner;
 using RandomTowerDefense.MapGenerator;
 using RandomTowerDefense.Managers.System;
 using RandomTowerDefense.Units;
+using RandomTowerDefense.Info;
 
 namespace RandomTowerDefense.Scene
 {

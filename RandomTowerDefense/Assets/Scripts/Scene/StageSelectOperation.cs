@@ -9,6 +9,7 @@ using UnityEngine.Rendering;
 using RandomTowerDefense.Managers.Macro;
 using RandomTowerDefense.Managers.System;
 using RandomTowerDefense.Common;
+using RandomTowerDefense.Info;
 
 namespace RandomTowerDefense.Scene
 {
@@ -330,7 +331,6 @@ namespace RandomTowerDefense.Scene
             }
             MainCam.transform.position = MainCamStayPt[IslandNext];
             IslandNow = IslandNext;
-            GyroscopeManager.setTempInactive();
         }
 
         private IEnumerator RecRightCamOperation()

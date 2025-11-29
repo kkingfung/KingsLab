@@ -4,6 +4,7 @@ using System.Collections;
 using RandomTowerDefense.DOTS.Spawner;
 using RandomTowerDefense.Managers.Macro;
 using RandomTowerDefense.Managers.System;
+using RandomTowerDefense.DOTS.Components;
 
 namespace RandomTowerDefense.Units
 {

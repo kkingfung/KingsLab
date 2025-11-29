@@ -6,6 +6,8 @@ using RandomTowerDefense.DOTS.Spawner;
 using RandomTowerDefense.Scene;
 using RandomTowerDefense.Managers.System;
 using RandomTowerDefense.Managers.Macro;
+using RandomTowerDefense.Systems;
+using RandomTowerDefense.Units;
 
 public class TutorialManager : MonoBehaviour
 {

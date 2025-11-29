@@ -26,7 +26,6 @@ namespace RandomTowerDefense.Managers.Macro
     public class WaveManager : MonoBehaviour
     {
         #region Constants
-        private readonly float WaveChgSpeedFactor = 2.0f;
         private readonly int FireworkMax = 120;
         private readonly float BGMSpawnThreshold = 0.1f; // BGM amplitude threshold for spawning
 
@@ -69,16 +68,16 @@ namespace RandomTowerDefense.Managers.Macro
 
         #region Private Fields
         // Audio analysis data
-        private float[] __dataBGM;
-        private float ___dataBGMPrev;
+        private float[] _dataBGM;
+        private float _dataBGMPrev;
 
         // Wave management
         private int _totalWaveNum;
         private int _currentWaveNum;
         private float _waveTimer;
         private StageAttr _currAttr;
-        private bool __inTutorial;
-        private bool __allSpawned;
+        private bool _inTutorial;
+        private bool _allSpawned;
         private int _fireworkCounter;
         #endregion
 
@@ -109,7 +108,7 @@ namespace RandomTowerDefense.Managers.Macro
             _currAttr = StageInfo.GetStageInfo();
             sceneManager = FindObjectOfType<InGameOperation>();
             stageManager = FindObjectOfType<StageManager>();
-            enemySpawner = FindObjectOfType<EnemySpawner>();
+            enemyManager = FindObjectOfType<EnemyManager>();
             tutorialManager = FindObjectOfType<TutorialManager>();
             _totalWaveNum = _currAttr.waveNum;
             _currentWaveNum = INITIAL_WAVE_NUMBER;
@@ -139,12 +138,12 @@ namespace RandomTowerDefense.Managers.Macro
             audioManager.PlayAudio("bgm_Battle", true);
             _dataBGM = audioManager.GetClipWaveform("bgm_Battle");
             timeBGM = Time.time;
-            __dataBGMPrev = _dataBGM[((int)timeBGM * AUDIO_SAMPLE_RATE) % _dataBGM.Length];
+            _dataBGMPrev = _dataBGM[((int)timeBGM * AUDIO_SAMPLE_RATE) % _dataBGM.Length];
             readyToSpawn = false;
         }
 
-        public int Get_totalWaveNum() { return _totalWaveNum; }
-        public int Get_currentWaveNum() { return _currentWaveNum; }
+        public int GetTotalWaveNum() { return _totalWaveNum; }
+        public int GetCurrentWaveNum() { return _currentWaveNum; }
 
         public bool WaveChg()
         {
@@ -179,7 +178,7 @@ namespace RandomTowerDefense.Managers.Macro
             {
                 if (_dataBGM[(int)(timeBGM * BGM_TIME_SCALE * AUDIO_SAMPLE_RATE) % _dataBGM.Length] > BGMSpawnThreshold)
                     readyToSpawn = true;
-                __dataBGMPrev = _dataBGM[(int)(timeBGM * BGM_TIME_SCALE * AUDIO_SAMPLE_RATE) % _dataBGM.Length];
+                _dataBGMPrev = _dataBGM[(int)(timeBGM * BGM_TIME_SCALE * AUDIO_SAMPLE_RATE) % _dataBGM.Length];
                 timeBGM += BGM_TIME_SCALE;
             }
 

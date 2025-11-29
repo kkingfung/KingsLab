@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using RandomTowerDefense.Scene;
 using RandomTowerDefense.Managers.Macro;
 using RandomTowerDefense.Units;
+using RandomTowerDefense.Systems;
 
 namespace RandomTowerDefense.Managers.Macro
 {
@@ -66,9 +67,9 @@ namespace RandomTowerDefense.Managers.Macro
 
         #region Private Fields
         private Dictionary<Upgrades.StoreItems, int[]> _itemPrice;
-        private readonly int[] __pendToKart = { 0, 0, 0, 0 };
-        private readonly int[] __costToKart = { 0, 0, 0, 0 };
-        private readonly float[] __bonusBossCooldown = { 0, 0, 0 };
+        private readonly int[] _pendToKart = { 0, 0, 0, 0 };
+        private readonly int[] _costToKart = { 0, 0, 0, 0 };
+        private readonly float[] _bonusBossCooldown = { 0, 0, 0 };
         #endregion
 
         #region Unity Lifecycle
@@ -122,15 +123,15 @@ namespace RandomTowerDefense.Managers.Macro
         /// </summary>
         private void UpdateBonusBossCooldowns()
         {
-            for (int i = 0, s = __bonusBossCooldown.Length; i < s; ++i)
+            for (int i = 0, s = _bonusBossCooldown.Length; i < s; ++i)
             {
-                if (__bonusBossCooldown[i] > 0)
+                if (_bonusBossCooldown[i] > 0)
                 {
-                    __bonusBossCooldown[i] -= Time.deltaTime;
+                    _bonusBossCooldown[i] -= Time.deltaTime;
                 }
                 if (sceneManager.CheckIfTutorial())
                 {
-                    __bonusBossCooldown[i] = 99;
+                    _bonusBossCooldown[i] = 99;
                 }
             }
         }
@@ -157,7 +158,7 @@ namespace RandomTowerDefense.Managers.Macro
             //Bonus Boss Items
             for (int i = 0; i < MonsterCDTextObj.Count; ++i)
             {
-                int cd = (int)(__bonusBossCooldown[i % __bonusBossCooldown.Length]);
+                int cd = (int)(_bonusBossCooldown[i % _bonusBossCooldown.Length]);
                 MonsterCDTextObj[i].text = "CD" + cd.ToString();
                 MonsterCDTextObj[i].color = (cd > 0 || SkillStack.CheckFullStocks()) ? new Color(1, 0, 0, 1) : OriColor;
             }
@@ -318,6 +319,16 @@ namespace RandomTowerDefense.Managers.Macro
             return false;
         }
 
+
+        public bool ItemPendingSubtract(Upgrades.StoreItems itemID)
+        {
+            if (_pendToKart[(int)itemID % 10] < 0) return false;
+
+            _pendToKart[(int)itemID % 10]--;
+            _costToKart[(int)itemID % 10] -= GetCost((int)itemID);
+            return true;
+        }
+
         public int CheckEnoughResource(Upgrades.StoreItems itemID)
         {
             int totalCosttoPurchase = CosttoPurchaseCalculation();
@@ -327,15 +338,6 @@ namespace RandomTowerDefense.Managers.Macro
             if (resourceManager.GetCurrMaterial() - totalCosttoPurchase >= price)
                 return price;
             return -1;
-        }
-
-        public bool ItemPendingSubtract(int itemID)
-        {
-            if (_pendToKart[itemID % 10] < 0) return false;
-
-            _pendToKart[itemID % 10]--;
-            _costToKart[itemID % 10] -= GetCost(itemID);
-            return true;
         }
 
         public void SetBossCD(int bossID)
@@ -376,7 +378,7 @@ namespace RandomTowerDefense.Managers.Macro
         public void RaycastAction(int fullitemID, int infoID)
         {
             //-1 :subtract 0:purchase 1:add
-            raycastAction((Upgrades.StoreItems)fullitemID, infoID);
+            RaycastAction((Upgrades.StoreItems)fullitemID, infoID);
         }
 
         #endregion

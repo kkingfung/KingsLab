@@ -11,6 +11,10 @@ using RandomTowerDefense.Managers.Macro;
 using RandomTowerDefense.Managers.System;
 using RandomTowerDefense.Scene;
 using RandomTowerDefense.MapGenerator;
+using RandomTowerDefense.Info;
+using RandomTowerDefense.Systems;
+using RandomTowerDefense.Units;
+
 public class PlayerManager : MonoBehaviour
 {
     private readonly float CancelDist = 30f;

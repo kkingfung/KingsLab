@@ -5,6 +5,7 @@ using UnityEngine;
 using RandomTowerDefense.Scene;
 using RandomTowerDefense.Managers.Macro;
 using RandomTowerDefense.DOTS.Spawner;
+using RandomTowerDefense.Info;
 
 namespace RandomTowerDefense.Managers.System
 {

@@ -4,6 +4,8 @@ using UnityEngine;
 using Unity.Transforms;
 using Unity.Entities;
 using Unity.Mathematics;
+using RandomTowerDefense.DOTS.Tags;
+using RandomTowerDefense.DOTS.Components;
 
 public class AttackUpdateSystem : ComponentSystem
 {

@@ -10,6 +10,8 @@ using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Rendering;
 using RandomTowerDefense.DOTS.Components;
+using RandomTowerDefense.DOTS.Tags;
+using RandomTowerDefense.DOTS.Systems;
 
 /// <summary>
 /// 敵に対するブリザードスキル効果を処理するECSシステム

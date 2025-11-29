@@ -11,6 +11,8 @@ using RandomTowerDefense.DOTS.Spawner;
 using RandomTowerDefense.Managers.Macro;
 using RandomTowerDefense.Managers.System;
 using RandomTowerDefense.Managers;
+using RandomTowerDefense.Info;
+using RandomTowerDefense.Units;
 
 namespace RandomTowerDefense.AI
 {
@@ -87,7 +89,7 @@ namespace RandomTowerDefense.AI
             {
                 if (tower == null) break;
                 if (tower.activeSelf == false) continue;
-                towerManager.removeTowerFromList(tower);
+                towerManager.RemoveTowerFromList(tower);
             }
 
             PillarDistribution = null;

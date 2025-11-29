@@ -9,6 +9,9 @@ using Unity.MLAgents;
 using RandomTowerDefense.Managers.System;
 using RandomTowerDefense.MapGenerator;
 using RandomTowerDefense.AI;
+using RandomTowerDefense.DOTS.Tags;
+using RandomTowerDefense.DOTS.Components;
+using RandomTowerDefense.Units;
 
 namespace RandomTowerDefense.DOTS.Spawner
 {
@@ -273,10 +276,7 @@ namespace RandomTowerDefense.DOTS.Spawner
             var archetype = EntityManager.CreateArchetype(
                  typeof(Health), typeof(Damage), typeof(Speed),
                typeof(Radius), typeof(PetrifyAmt), typeof(Lifetime), typeof(SlowRate),
-                typeof(BuffTime), typeof(PathFollow), typeof(LocalToWorld),
-                ComponentType.ReadOnly<Translation>(),
-                    ComponentType.ReadOnly<RotationEulerXYZ>(),
-                ComponentType.ReadOnly<Hybrid>()
+                typeof(BuffTime), typeof(PathFollow), typeof(LocalToWorld)
                 );
             EntityManager.CreateEntity(archetype, Entities);
 
@@ -384,18 +384,6 @@ namespace RandomTowerDefense.DOTS.Spawner
                 EntityManager.SetComponentData(Entities[i], new QuadrantEntity
                 {
                     typeEnum = QuadrantEntity.TypeEnum.EnemyTag
-                });
-                EntityManager.SetComponentData(Entities[i], new RotationEulerXYZ
-                {
-                    Value = Rotation,
-                });
-                EntityManager.SetComponentData(Entities[i], new Translation
-                {
-                    Value = Position,
-                });
-                EntityManager.SetComponentData(Entities[i], new Hybrid
-                {
-                    Index = i,
                 });
 
                 if (EntityManager.HasComponent<EnemyTag>(Entities[i]) == false)

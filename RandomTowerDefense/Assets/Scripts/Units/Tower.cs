@@ -10,6 +10,8 @@ using RandomTowerDefense.MapGenerator;
 using RandomTowerDefense.Managers.Macro;
 using RandomTowerDefense.Managers.System;
 using RandomTowerDefense.Info;
+using RandomTowerDefense.DOTS.Tags;
+using RandomTowerDefense.DOTS.Components;
 
 namespace RandomTowerDefense.Units
 {
@@ -119,8 +121,11 @@ namespace RandomTowerDefense.Units
         /// </summary>
         public GameObject pillar;
 
-        #endregion        private Animator animator;
-        //private VisualEffect auraVFXComponent;
+        #endregion
+
+        private Animator animator;
+        private VisualEffect auraVFXComponent;
+
         public VisualEffect lvupVFXComponent;
 
         private int entityID;
@@ -389,12 +394,12 @@ namespace RandomTowerDefense.Units
         public void GainExp(int exp)
         {
             this.exp += exp;
-            int reqExp = RequiredExp();
+            int reqExp = GetRequiredExp();
             //Level Lv Formula
             while (this.exp > reqExp)
             {
                 this.exp -= reqExp;
-                reqExp = RequiredExp();
+                reqExp = GetRequiredExp();
                 if (level < MaxLevel[rank - 1])
                 {
                     LevelUp();

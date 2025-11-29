@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using RandomTowerDefense.Scene;
+using RandomTowerDefense.Info;
 
 [System.Serializable]
 public class UIRecordList

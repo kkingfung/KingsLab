@@ -3,6 +3,8 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Transforms;
 using UnityEngine;
+using RandomTowerDefense.DOTS.Tags;
+using RandomTowerDefense.DOTS.Components;
 
 /// <summary>
 /// 攻撃エンティティの生存時間管理と破棄を処理するシステム

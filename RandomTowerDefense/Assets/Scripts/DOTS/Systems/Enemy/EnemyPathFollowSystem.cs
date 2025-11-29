@@ -3,6 +3,8 @@ using Unity.Entities;
 using Unity.Transforms;
 using Unity.Mathematics;
 using Unity.Jobs;
+using RandomTowerDefense.DOTS.Tags;
+using RandomTowerDefense.DOTS.Components;
 
 //[DisableAutoCreation]
 /// <summary>
@@ -22,37 +24,38 @@ public class EnemyPathFollowSystem : JobComponentSystem
 
         return Entities.WithAll<EnemyTag>().ForEach((Entity entity, DynamicBuffer<PathPosition> pathPositionBuffer,
             ref Translation transform, ref Health health, ref Speed speed, ref SlowRate slow, ref PetrifyAmt petrifyAmt,
-            ref PathFollow pathFollow) => {
-                if (health.Value > 0)
+            ref PathFollow pathFollow) =>
+        {
+            if (health.Value > 0)
+            {
+                // Has path to follow
+                PathPosition pathPosition = pathPositionBuffer[pathFollow.pathIndex];
+                float3 pathActualPos = PathfindingGridSetup.Instance.pathfindingGrid.GetWorldPosition((int)pathPosition.position.x, (int)pathPosition.position.y);
+
+                float3 targetPosition = new float3(pathActualPos.x, transform.Value.y, pathActualPos.z);
+                // Debug.DrawLine(targetPosition, targetPosition + new float3(0,1,0), Color.green);
+
+                float3 moveDir = math.normalizesafe(targetPosition - transform.Value);
+                float moveSpeed = speed.Value * (1 - slow.Value) * (1 - petrifyAmt.Value);
+                //Debug.DrawLine(transform.translation, targetPosition);
+
+                transform.Value += moveDir * moveSpeed * deltaTime;
+
+                //float2 dirXZ = math.normalizesafe(new float2(moveDir.x, moveDir.z));
+                //if (moveDir.x == 0) moveDir.x = 0.0001f;
+                //bool isFront = Mathf.Acos(Vector2.Dot(new float2(0, 1),dirXZ))>0;
+                //transform.angle = 90f + Mathf.Acos(Vector2.Dot(new float2(1, 0),dirXZ)) * Mathf.Rad2Deg;
+                //if (isFront == false)
+                //    transform.angle *= -1f;
+                //Mathf.Atan(-moveDir.z / moveDir.x) * Mathf.Rad2Deg;
+
+                if (math.distance(transform.Value, targetPosition) < .1f)
                 {
-                    // Has path to follow
-                    PathPosition pathPosition = pathPositionBuffer[pathFollow.pathIndex];
-                    float3 pathActualPos = PathfindingGridSetup.Instance.pathfindingGrid.GetWorldPosition((int)pathPosition.position.x, (int)pathPosition.position.y);
-
-                    float3 targetPosition = new float3(pathActualPos.x, transform.Value.y, pathActualPos.z);
-                    // Debug.DrawLine(targetPosition, targetPosition + new float3(0,1,0), Color.green);
-
-                        float3 moveDir = math.normalizesafe(targetPosition - transform.Value);
-                        float moveSpeed = speed.Value * (1 - slow.Value) * (1 - petrifyAmt.Value);
-                        //Debug.DrawLine(transform.translation, targetPosition);
-
-                        transform.Value += moveDir * moveSpeed * deltaTime;
-
-                        //float2 dirXZ = math.normalizesafe(new float2(moveDir.x, moveDir.z));
-                        //if (moveDir.x == 0) moveDir.x = 0.0001f;
-                        //bool isFront = Mathf.Acos(Vector2.Dot(new float2(0, 1),dirXZ))>0;
-                        //transform.angle = 90f + Mathf.Acos(Vector2.Dot(new float2(1, 0),dirXZ)) * Mathf.Rad2Deg;
-                        //if (isFront == false)
-                        //    transform.angle *= -1f;
-                        //Mathf.Atan(-moveDir.z / moveDir.x) * Mathf.Rad2Deg;
-
-                        if (math.distance(transform.Value, targetPosition) < .1f)
-                        {
-                            // Next waypoint
-                            pathFollow.pathIndex--;
-                        }
+                    // Next waypoint
+                    pathFollow.pathIndex--;
                 }
-            }).WithoutBurst().Schedule(inputDeps);
+            }
+        }).WithoutBurst().Schedule(inputDeps);
     }
 
     /// <summary>
@@ -92,7 +95,7 @@ public class PathFollowGetNewPathSystem : JobComponentSystem
     {
         int mapWidth = PathfindingGridSetup.Instance.pathfindingGrid.GetWidth();
         int mapHeight = PathfindingGridSetup.Instance.pathfindingGrid.GetHeight();
-        float3 originPosition = PathfindingGridSetup.Instance.pathfindingGrid.GetWorldPosition(0,0);
+        float3 originPosition = PathfindingGridSetup.Instance.pathfindingGrid.GetWorldPosition(0, 0);
         float cellSize = PathfindingGridSetup.Instance.pathfindingGrid.GetCellSize();
 
         EntityCommandBuffer.ParallelWriter entityCommandBuffer = endSimulationEntityCommandBufferSystem.CreateCommandBuffer().AsParallelWriter();

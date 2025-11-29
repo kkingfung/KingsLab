@@ -9,6 +9,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Rendering;
+using RandomTowerDefense.DOTS.Components;
 
 /// <summary>
 /// 敵に対するブリザードスキル効果を処理するECSシステム
@@ -61,7 +62,6 @@ public class EnemyToBlizzard : JobComponentSystem
                 targetBuff = BlizzardGroup.ToComponentDataArray<BuffTime>(Allocator.TempJob)
             };
             jobHandle = jobEvSB.Schedule(enemyGroup, inputDependencies);
-            jobHandle.Complete();
         }
 
         return jobHandle;
@@ -123,21 +123,15 @@ public class EnemyToBlizzard : JobComponentSystem
 
                     if (CollisionUtilities.CheckCollision(pos.Value, pos2.Value, targetRadius[j].Value + radius.Value))
                     {
-                        //Debug.DrawLine(pos.Value, pos.Value + new float3(0, 1, 0), Color.red);
                         damage += 1;
                         slow.Value = Mathf.Clamp(slow.Value + targetSlow[j].Value, 0, 0.95f);
                         if (buff.Value < targetBuff[j].Value) buff.Value = targetBuff[j].Value;
-                        //Debug.Log("Slowed");
                         break;
                     }
-                    //else 
-                    //Debug.DrawLine(pos.Value, pos.Value + new float3(0, 1, 0), Color.green);
                 }
 
                 if (damage > 0)
                 {
-                    //health.Value -= damage;
-                    //chunkHealths[i] = health;
                     chunkSlow[i] = slow;
                     chunkBuff[i] = buff;
                 }

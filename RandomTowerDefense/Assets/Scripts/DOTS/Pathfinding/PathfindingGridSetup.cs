@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Entities;
+using RandomTowerDefense.MapGenerator;
 
-public class PathfindingGridSetup : MonoBehaviour {
+public class PathfindingGridSetup : MonoBehaviour
+{
 
     private FilledMapGenerator mapGenerator;
     public static PathfindingGridSetup Instance { private set; get; }
@@ -13,7 +15,8 @@ public class PathfindingGridSetup : MonoBehaviour {
     public bool isActivated;
     public bool Reset;
 
-    private void Awake() {
+    private void Awake()
+    {
         Instance = this;
         isActivated = false;
         Reset = true;
@@ -40,14 +43,15 @@ public class PathfindingGridSetup : MonoBehaviour {
             Reset = true;
         }
 
-        if (isActivated) {
+        if (isActivated)
+        {
             for (int y = 0; y < mapGenerator.CurrMapY(); ++y)
             {
                 for (int x = 0; x < mapGenerator.CurrMapX(); ++x)
                 {
                     Vector3 temp = pathfindingGrid.GetWorldPosition(x, y);
                     temp.y = mapGenerator.transform.position.y;
-                  //  Debug.DrawLine(temp, temp+Vector3.up,(pathfindingGrid.GetGridObject(x, y).IsWalkable())?Color.white:Color.red);
+                    //  Debug.DrawLine(temp, temp+Vector3.up,(pathfindingGrid.GetGridObject(x, y).IsWalkable())?Color.white:Color.red);
                 }
             }
         }

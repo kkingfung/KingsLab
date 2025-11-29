@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using RandomTowerDefense.DOTS.Spawner;
+using RandomTowerDefense.Scene;
+using RandomTowerDefense.Managers.System;
+using RandomTowerDefense.Managers.Macro;
 
 public class TutorialManager : MonoBehaviour
 {
-    public enum TutorialStageID {
+    public enum TutorialStageID
+    {
         TutorialProgress_Info = 0,
         TutorialProgress_FirstWave,
         TutorialProgress_StoreSkill,
@@ -56,7 +61,8 @@ public class TutorialManager : MonoBehaviour
         //enemySpawner = FindObjectOfType<EnemySpawner>();
         //skillSpawner = FindObjectOfType<SkillSpawner>();
         //timeManager = FindObjectOfType<TimeManager>();
-        if (SceneManager.CheckIfTutorial() == false) {
+        if (SceneManager.CheckIfTutorial() == false)
+        {
             DestroyAllRelated();
         }
     }
@@ -64,7 +70,8 @@ public class TutorialManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        switch (tutorialStage) { 
+        switch (tutorialStage)
+        {
             case TutorialStageID.TutorialProgress_Info:
                 WaitingResponds = true;
                 Update_TutorialInfo();
@@ -90,17 +97,18 @@ public class TutorialManager : MonoBehaviour
                 return;
         }
         foreach (Button i in HistoryIcons)
-            i.interactable = !WaitingResponds && tutorialStage< TutorialStageID.TutorialProgress_FreeBattle;
+            i.interactable = !WaitingResponds && tutorialStage < TutorialStageID.TutorialProgress_FreeBattle;
 
         FixedUpdateText();
         UpdateActiveness();
     }
 
-    private void UpdateActiveness() {
+    private void UpdateActiveness()
+    {
         foreach (Text i in InstructionText_Landscape)
-            i.enabled = SceneManager.OrientationLand && WaitingResponds && fullText!="";
+            i.enabled = SceneManager.OrientationLand && WaitingResponds && fullText != "";
         foreach (GameObject i in InstructionSprite_Landscape)
-            i.SetActive(SceneManager.OrientationLand && WaitingResponds && fullText != "") ;
+            i.SetActive(SceneManager.OrientationLand && WaitingResponds && fullText != "");
 
         foreach (Text i in InstructionText_Protrait)
             i.enabled = !SceneManager.OrientationLand && WaitingResponds && fullText != "";
@@ -128,7 +136,8 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-    private void Update_TutorialInfo() {
+    private void Update_TutorialInfo()
+    {
         switch (StageProgress)
         {
             case 0:
@@ -139,7 +148,7 @@ public class TutorialManager : MonoBehaviour
                 break;
             case 1:
                 if (Input.GetMouseButtonUp(0) ||
-                    (Input.touchCount>0 && Input.touches[0].phase==TouchPhase.Ended))
+                    (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
                     ChangeText("今日は初任務だけど、\n心配要らないのだ");
                     StageProgress++;
@@ -188,7 +197,7 @@ public class TutorialManager : MonoBehaviour
                 break;
             case 7:
                 WaitingResponds = false;
-                if ( towerSpawner.AllAliveObjList().Count>0)
+                if (towerSpawner.AllAliveObjList().Count > 0)
                 {
                     ChangeText("");
                     StageProgress++;
@@ -299,7 +308,7 @@ public class TutorialManager : MonoBehaviour
             case 1:
                 WaitingResponds = false;
                 reviewStage = 1;
-                if (enemySpawner.AllAliveMonstersList().Count>0)
+                if (enemySpawner.AllAliveMonstersList().Count > 0)
                 {
                     StageProgress++;
                 }
@@ -307,7 +316,8 @@ public class TutorialManager : MonoBehaviour
             case 2:
                 WaitingResponds = false;
                 reviewStage = 2;
-                if (enemySpawner.AllAliveMonstersList().Count <= 0) {
+                if (enemySpawner.AllAliveMonstersList().Count <= 0)
+                {
                     StageProgress = 0;
                     tutorialStage++;
                     reviewStage = 0;
@@ -378,7 +388,7 @@ public class TutorialManager : MonoBehaviour
                 break;
             case 8:
                 WaitingResponds = false;
-                if (skillSpawner.AllAliveSkillsList().Count>0)
+                if (skillSpawner.AllAliveSkillsList().Count > 0)
                 {
                     StageProgress = 0;
                     tutorialStage++;
@@ -453,7 +463,8 @@ public class TutorialManager : MonoBehaviour
         return StageProgress;
     }
 
-    public void DestroyAllRelated() {
+    public void DestroyAllRelated()
+    {
         foreach (Text i in InstructionText_Landscape)
             if (i) Destroy(i.gameObject);
         foreach (GameObject i in InstructionSprite_Landscape)
@@ -467,7 +478,8 @@ public class TutorialManager : MonoBehaviour
         Destroy(this);
     }
 
-    public void ViewHistory() {
+    public void ViewHistory()
+    {
         StageProgress = reviewStage;
     }
 

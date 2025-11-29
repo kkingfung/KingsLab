@@ -38,7 +38,7 @@ public class StockOperator : MonoBehaviour
 
         for (int i = 0; i < StockSlot.Count; ++i)
         {
-            switch (SkillStack.GetStock(i))
+            switch (SkillStack.RetrieveStock(i))
             {
                 default:
                     StockSlot[i].sprite = null;

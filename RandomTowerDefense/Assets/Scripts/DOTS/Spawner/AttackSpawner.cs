@@ -7,7 +7,19 @@ using UnityEngine;
 using UnityEngine.Jobs;
 using UnityEngine.VFX;
 
-public class AttackSpawner : MonoBehaviour
+namespace RandomTowerDefense.DOTS.Spawner
+{
+    /// <summary>
+    /// 攻撃エンティティスポーナーシステム - タワー攻撃プロジェクタイルの動的生成と管理
+    ///
+    /// 主な機能:
+    /// - 4種類タワー攻撃タイプ対応プールシステム
+    /// - ハイブリッドMonoBehaviour-ECS攻撃エンティティ管理
+    /// - プロジェクタイル物理演算と衝突検知システム
+    /// - VFXエフェクトと自動破棄タイマー管理
+    /// - ゲームオブジェクトリユースとメモリ効率化
+    /// </summary>
+    public class AttackSpawner : MonoBehaviour
 {
     private readonly int count=200;
     public static AttackSpawner Instance { get; private set; }
@@ -28,6 +40,8 @@ public class AttackSpawner : MonoBehaviour
 
     //For input
     private Transform[] transforms;
+    public TransformAccessArray TransformAccessArray;
+
     private void Update()
     {
     }
@@ -179,10 +193,8 @@ public class AttackSpawner : MonoBehaviour
                Value= entityposition,
             });
 
-            EntityManager.SetComponentData(Entities[i], new Hybrid
-            {
-                Index = i,
-            });
+            // Note: Hybrid component not available in this version
+            // EntityManager.SetComponentData(Entities[i], new Hybrid { Index = i });
 
             if (EntityManager.HasComponent<AttackTag>(Entities[i]) == false)
                 EntityManager.AddComponent<AttackTag>(Entities[i]);
@@ -193,5 +205,6 @@ public class AttackSpawner : MonoBehaviour
         //Change Whenever Spawned (Not Needed?)
         TransformAccessArray = new TransformAccessArray(transforms);
         return spawnIndexList;
+    }
     }
 }

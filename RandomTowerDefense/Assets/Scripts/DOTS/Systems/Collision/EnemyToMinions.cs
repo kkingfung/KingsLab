@@ -9,7 +9,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Rendering;
-
+using RandomTowerDefense.DOTS.Components;
 
 /// <summary>
 /// 敵エンティティとミニオンスキルエンティティの衝突を検出し処理するシステム
@@ -67,7 +67,6 @@ public class EnemyToMinions : JobComponentSystem
                 targetWait = MinionsGroup.ToComponentDataArray<WaitingTime>(Allocator.TempJob)
             };
             jobHandle = JobEvSM2.Schedule(enemyGroup, inputDependencies);
-            jobHandle.Complete();
         }
         return jobHandle;
     }
@@ -118,17 +117,10 @@ public class EnemyToMinions : JobComponentSystem
 
                     if (CollisionUtilities.CheckCollision(pos.Value, pos2.Value, targetRadius[j].Value + radius.Value))
                     {
-                        //Debug.DrawLine(pos.Value, pos.Value + new float3(0, 1, 0), Color.red);
                         damage += targetDamage[j].Value;
-                        //Debug.Log("Damaged");
                     }
                     else
                     {
-                        //Debug.DrawLine(pos.Value, pos.Value + new float3(0, 1, 0), Color.green);
-                        //Debug.Log(GetDistance(pos.Value, pos2.Value));
-                        //Debug.Log(pos.Value);
-                        //Debug.Log(pos2.Value);
-                        //Debug.Log("NotHitted");
                     }
                 }
 

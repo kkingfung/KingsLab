@@ -16,36 +16,37 @@ namespace RandomTowerDefense.Common
     /// - エフェクト再生状態追跡と適切なクリーンアップ
     /// </summary>
     public class AutoDestroyVFX : MonoBehaviour
-{
-    private VisualEffect ps;
-    public float Timer;
-    private bool tobeDestroy;
-    public Skill skill;
-    private void OnEnable()
     {
-        ps = GetComponent<VisualEffect>();
-        ps.Play();
-        skill = gameObject.GetComponent<Skill>();
-        tobeDestroy = false;
-    }
-    private void Update()
-    {
-        Timer = Timer + (tobeDestroy ? Time.deltaTime : -1 * Time.deltaTime);
-        if (tobeDestroy == false && Timer < 0)
+        private VisualEffect ps;
+        public float Timer;
+        private bool tobeDestroy;
+        public Skill skill;
+        private void OnEnable()
         {
-            ps.Stop();
-            //No ps.isPlaying in VFX
-            tobeDestroy = true;
-            if (skill != null)
-            {
-                Destroy(gameObject, 3f);
-            }
+            ps = GetComponent<VisualEffect>();
+            ps.Play();
+            skill = gameObject.GetComponent<Skill>();
+            tobeDestroy = false;
         }
-
-        if (skill == null && 
-            tobeDestroy == true && Timer > 2)
+        private void Update()
         {
-            gameObject.SetActive(false);
+            Timer = Timer + (tobeDestroy ? Time.deltaTime : -1 * Time.deltaTime);
+            if (tobeDestroy == false && Timer < 0)
+            {
+                ps.Stop();
+                //No ps.isPlaying in VFX
+                tobeDestroy = true;
+                if (skill != null)
+                {
+                    Destroy(gameObject, 3f);
+                }
+            }
+
+            if (skill == null && 
+                tobeDestroy == true && Timer > 2)
+            {
+                gameObject.SetActive(false);
+            }
         }
     }
 }

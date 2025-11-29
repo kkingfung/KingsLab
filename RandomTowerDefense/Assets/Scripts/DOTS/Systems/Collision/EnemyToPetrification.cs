@@ -9,6 +9,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Rendering;
+using RandomTowerDefense.DOTS.Components;
 
 /// <summary>
 /// 敵に対する石化スキル効果を処理するECSシステム
@@ -94,7 +95,6 @@ public class EnemyToPetrification : JobComponentSystem
                 // バフ持続時間を最大1秒に制限
                 if (buff.Value > 1)
                     buff.Value = 1;
-                //Debug.Log("Petrified");
 
                 chunkPetrify[i] = petrifyAmt;
                 chunkBuff[i] = buff;

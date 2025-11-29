@@ -62,79 +62,80 @@ namespace RandomTowerDefense.Tools
             return keys.Count - 1;
         }
 
-    public void RemoveKey(int index)
-    {
-        if (keys.Count >= 2)
+        public void RemoveKey(int index)
         {
-            keys.RemoveAt(index);
-        }
-    }
-
-    public int UpdateKeyTime(int index, float time)
-    {
-        Color col = keys[index].Colour;
-        RemoveKey(index);
-        return AddKey(col, time);
-    }
-
-    public void UpdateKeyColour(int index, Color col)
-    {
-        keys[index] = new ColourKey(col, keys[index].Time);
-    }
-
-    public int NumKeys
-    {
-        get
-        {
-            return keys.Count;
-        }
-    }
-
-    public ColourKey GetKey(int i)
-    {
-        return keys[i];
-    }
-
-    public Texture2D GetTexture(int width)
-    {
-        Texture2D texture = new Texture2D(width, 1);
-        Color[] colours = new Color[width];
-        for (int i = 0; i < width; ++i)
-        {
-            colours[i] = Evaluate((float)i / (width - 1));
-        }
-        texture.SetPixels(colours);
-        texture.Apply();
-        return texture;
-    }
-
-    [System.Serializable]
-    public struct ColourKey
-    {
-        [SerializeField]
-        Color colour;
-        [SerializeField]
-        float time;
-
-        public ColourKey(Color colour, float time)
-        {
-            this.colour = colour;
-            this.time = time;
-        }
-
-        public Color Colour
-        {
-            get
+            if (keys.Count >= 2)
             {
-                return colour;
+                keys.RemoveAt(index);
             }
         }
 
-        public float Time
+        public int UpdateKeyTime(int index, float time)
+        {
+            Color col = keys[index].Colour;
+            RemoveKey(index);
+            return AddKey(col, time);
+        }
+
+        public void UpdateKeyColour(int index, Color col)
+        {
+            keys[index] = new ColourKey(col, keys[index].Time);
+        }
+
+        public int NumKeys
         {
             get
             {
-                return time;
+                return keys.Count;
+            }
+        }
+
+        public ColourKey GetKey(int i)
+        {
+            return keys[i];
+        }
+
+        public Texture2D GetTexture(int width)
+        {
+            Texture2D texture = new Texture2D(width, 1);
+            Color[] colours = new Color[width];
+            for (int i = 0; i < width; ++i)
+            {
+                colours[i] = Evaluate((float)i / (width - 1));
+            }
+            texture.SetPixels(colours);
+            texture.Apply();
+            return texture;
+        }
+
+        [System.Serializable]
+        public struct ColourKey
+        {
+            [SerializeField]
+            Color colour;
+            [SerializeField]
+            float time;
+
+            public ColourKey(Color colour, float time)
+            {
+                this.colour = colour;
+                this.time = time;
+            }
+
+            public Color Colour
+            {
+                get
+                {
+                    return colour;
+                }
+            }
+
+            public float Time
+            {
+                get
+                {
+                    return time;
+                }
             }
         }
     }

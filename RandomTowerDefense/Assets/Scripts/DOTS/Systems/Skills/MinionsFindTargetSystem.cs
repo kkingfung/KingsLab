@@ -7,6 +7,8 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Jobs;
 using Unity.Burst;
+using RandomTowerDefense.DOTS.Components;
+using RandomTowerDefense.DOTS.Tags;
 
 /// <summary>
 /// ミニオンエンティティのターゲット探索を処理するシステム
@@ -89,7 +91,7 @@ public class MinionsFindTargetSystem : JobComponentSystem
         private void FindTarget(int hashMapKey, float3 unitPosition, float maxdist, QuadrantEntity quadrantEntity, ref Entity closestTargetEntity, ref float closestTargetDistance, ref float3 closestTargetPosition)
         {
             QuadrantData quadrantData;
-            NativeMultiHashMapIterator<int> nativeMultiHashMapIterator; 
+            NativeMultiHashMapIterator<int> nativeMultiHashMapIterator;
             if (quadrantMultiHashMap.TryGetFirstValue(hashMapKey, out quadrantData, out nativeMultiHashMapIterator))
             {
                 do

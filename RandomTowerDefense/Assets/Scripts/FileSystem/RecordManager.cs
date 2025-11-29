@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using RandomTowerDefense.Scene;
 
 [System.Serializable]
-public class UIRecordList {
+public class UIRecordList
+{
     public List<TextMesh> Records;
 
 }
@@ -50,7 +52,7 @@ public class RecordManager : MonoBehaviour
     public int RecordComparison(int stageID, string name, int score)
     {
         rank = stageRecords[stageID].InsertObject(stageID, name, score);
- 
+
         if (AllRecordsName.Count > 0)
             updateUI();
 
@@ -85,7 +87,7 @@ public class RecordManager : MonoBehaviour
             case 3: stageRecords[currIsland].record3.name = name; break;
             case 4: stageRecords[currIsland].record4.name = name; break;
             case 5: stageRecords[currIsland].record5.name = name; break;
-            default:return;
+            default: return;
         }
         SaveSystem.SaveObject("Record" + currIsland.ToString(), stageRecords[currIsland], true);
     }

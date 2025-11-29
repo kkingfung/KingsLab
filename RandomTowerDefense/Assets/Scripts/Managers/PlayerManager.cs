@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using UnityEngine;
-
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Physics;
 using Unity.Physics.Systems;
-
+using RandomTowerDefense.Managers.Macro;
+using RandomTowerDefense.Managers.System;
+using RandomTowerDefense.Scene;
+using RandomTowerDefense.MapGenerator;
 public class PlayerManager : MonoBehaviour
 {
     private readonly float CancelDist = 30f;
@@ -80,11 +82,12 @@ public class PlayerManager : MonoBehaviour
                 {
                     RaycastTest(LayerMask.GetMask("StoreLayer"));
                 }
-            }    
+            }
         }
     }
 
-    private GameObject CheckTowerRaycast() {
+    private GameObject CheckTowerRaycast()
+    {
 
         UnityEngine.Ray ray;
         UnityEngine.RaycastHit hit = new UnityEngine.RaycastHit();
@@ -92,7 +95,7 @@ public class PlayerManager : MonoBehaviour
         //Get Ray according to orientation
         if (Screen.width > Screen.height)
         {
-            if (refCamL==null) return null;
+            if (refCamL == null) return null;
             ray = refCamL.ScreenPointToRay(new Vector2(Screen.width * 0.5f, Screen.height * 0.5f));
         }
         else
@@ -111,8 +114,8 @@ public class PlayerManager : MonoBehaviour
         if (StockOperator != null) return;
         if (isSkillActive) return;
         isSelling = false;
-         //if (sceneManager.currScreenShown != (int)InGameOperation.ScreenShownID.SSIDArena || sceneManager.nextScreenShown != (int)InGameOperation.ScreenShownID.SSIDArena) return;
-         isChecking = true;
+        //if (sceneManager.currScreenShown != (int)InGameOperation.ScreenShownID.SSIDArena || sceneManager.nextScreenShown != (int)InGameOperation.ScreenShownID.SSIDArena) return;
+        isChecking = true;
 
         Camera targetCam = (Screen.width > Screen.height) ? refCamL : refCamP;
         StockOperator = Instantiate(StockOperatorPrefab, targetCam.transform);
@@ -191,7 +194,7 @@ public class PlayerManager : MonoBehaviour
                 break;
             case (int)Upgrades.StoreItems.MagicPetrification:
                 //CurrentSkill = 
-                    skillManager.PetrificationSkill(hitPosition);
+                skillManager.PetrificationSkill(hitPosition);
                 isSkillActive = true;
                 break;
             default:
@@ -199,7 +202,7 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public Vector3 RaycastTestDOTS(float3 fromPosition, float3 toPosition,int layer)
+    public Vector3 RaycastTestDOTS(float3 fromPosition, float3 toPosition, int layer)
     {
         if (layer == LayerMask.GetMask("Arena") && hitArena.z != float.MinValue)
         {
@@ -234,7 +237,7 @@ public class PlayerManager : MonoBehaviour
 
         return raycastHit.Position;
     }
-    
+
     public Vector3 RaycastTest(int layer)
     {
         if (layer == LayerMask.GetMask("Arena") && hitArena.y != float.MinValue)
@@ -257,7 +260,7 @@ public class PlayerManager : MonoBehaviour
         if (layer == LayerMask.GetMask("Arena"))
             hitArena = hit.point;
         if (layer == LayerMask.GetMask("StoreLayer"))
-             hitStore= hit.transform;
+            hitStore = hit.transform;
         return hit.point;
     }
 
@@ -302,7 +305,7 @@ public class PlayerManager : MonoBehaviour
             {
                 towerManager.MergeTower(TowerRaycastResult);
             }
-            else 
+            else
             {
                 if (hitPillar.transform == null)
                     Physics.Raycast(ray, out hitPillar, 100, LayerMask.GetMask("Pillar"));

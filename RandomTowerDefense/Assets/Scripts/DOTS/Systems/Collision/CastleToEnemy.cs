@@ -9,6 +9,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Rendering;
+using RandomTowerDefense.DOTS.Components;
 
 /// <summary>
 /// 城と敵の双方向衝突を処理するECSシステム
@@ -55,8 +56,6 @@ public class CastleToEnemy : JobComponentSystem
                 targetHealth = enemyGroup.ToComponentDataArray<Health>(Allocator.TempJob)
             };
             jobHandle = jobCvE.Schedule(castleGroup, inputDependencies);
-            jobHandle.Complete();
-
 
             // 城の衝突による敵のダメージを処理
             var jobEvC = new CollisionJobEvC()
@@ -68,13 +67,9 @@ public class CastleToEnemy : JobComponentSystem
                 targetRadius = castleGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
                 targetTrans = castleGroup.ToComponentDataArray<Translation>(Allocator.TempJob)
             };
-            jobHandle = jobEvC.Schedule(enemyGroup, inputDependencies);
-            jobHandle.Complete();
+            jobHandle = jobEvC.Schedule(enemyGroup, jobHandle);
         }
 
-        //For GameOver
-        //if (Settings.IsPlayerDead())
-        //	return jobHandle;
         return jobHandle;
     }
 
@@ -119,7 +114,7 @@ public class CastleToEnemy : JobComponentSystem
                     if (health.Value <= 0) continue;
                     Radius radius = chunkRadius[i];
                     Translation pos = chunkTranslations[i];
-                    if (CollisionUtilities.CheckCollision(pos.Value, pos2.Value, (targetRadius[j].Value*0.5f + radius.Value) * (targetRadius[j].Value*0.5f + radius.Value)))
+                    if (CollisionUtilities.CheckCollision(pos.Value, pos2.Value, (targetRadius[j].Value * 0.5f + radius.Value) * (targetRadius[j].Value * 0.5f + radius.Value)))
                     {
                         counter--;
                         health.Value = 0;
@@ -146,7 +141,7 @@ public class CastleToEnemy : JobComponentSystem
         public ComponentTypeHandle<Health> healthType;
         public ComponentTypeHandle<Damage> damageRecord;
         [ReadOnly] public ComponentTypeHandle<Translation> translationType;
-    
+
         [DeallocateOnJobCompletion]
         [NativeDisableParallelForRestriction]
         public NativeArray<Damage> targetDamage;
@@ -159,14 +154,14 @@ public class CastleToEnemy : JobComponentSystem
         [DeallocateOnJobCompletion]
         [NativeDisableParallelForRestriction]
         public NativeArray<Health> targetHealth;
-    
+
         public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
         {
             var chunkHealths = chunk.GetNativeArray(healthType);
             var chunkTranslations = chunk.GetNativeArray(translationType);
             var chunkRadius = chunk.GetNativeArray(radius);
             var chunkDamage = chunk.GetNativeArray(damageRecord);
-    
+
             for (int i = 0; i < chunk.Count; ++i)
             {
                 Health health = chunkHealths[i];
@@ -175,7 +170,7 @@ public class CastleToEnemy : JobComponentSystem
                 Translation pos = chunkTranslations[i];
                 Damage damageRec = chunkDamage[i];
                 damageRec.Value = 0;
-    
+
                 for (int j = 0; j < targetTrans.Length; j++)
                 {
                     if (targetHealth[j].Value <= 0) continue;
@@ -186,7 +181,7 @@ public class CastleToEnemy : JobComponentSystem
                         health.Value -= targetDamage[j].Value;
                     }
                 }
-    
+
                 chunkHealths[i] = health;
                 chunkDamage[i] = damageRec;
             }

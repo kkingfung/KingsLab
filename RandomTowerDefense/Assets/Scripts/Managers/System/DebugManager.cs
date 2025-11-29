@@ -1,102 +1,151 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using Unity.Simulation.Games;
+using RandomTowerDefense.Managers.Macro;
 
-public class DebugManager : MonoBehaviour
+namespace RandomTowerDefense.Managers.System
 {
-    private readonly float timescaleChg = 1f;
-
-    private float myTimeScale;
-    private int CurrSpawningPoint;
-    public WaveManager waveManager;
-
-    //Simulation Parameter
-    public bool isSimulationTest;
-    [HideInInspector]
-    public bool isFetchDone;
-
-    //public float towerrank_Damage = 0;
-    //public float towerlvl_Damage = 0;
-    //public float enemylvl_Health = 0;
-    //public float enemylvl_Speed = 0;
-
-    private void Awake()
+    /// <summary>
+    /// デバッグ管理システム - 開発テストユーティリティの管理
+    ///
+    /// 主な機能:
+    /// - ゲームプレイデバッグ用タイムスケール制御
+    /// - 自動テスト用シミュレーションサポート
+    /// - パフォーマンス監視と設定取得
+    /// - 開発ワークフロー用キーボードショートカット
+    /// - Unity Simulationとの統合でバッチテスト実行
+    /// </summary>
+    public class DebugManager : MonoBehaviour
     {
-        isFetchDone = false;
-        if (isSimulationTest)
+        #region Constants
+        private readonly float timescaleChg = 1f;
+        #endregion
+
+        #region Serialized Fields
+        [Header("🔧 Debug Configuration")]
+        public WaveManager waveManager;
+
+        [Header("🧪 Simulation Testing")]
+        public bool isSimulationTest;
+        #endregion
+
+        #region Private Fields
+        private float _myTimeScale;
+        private int _currSpawningPoint;
+        [HideInInspector]
+        public bool isFetchDone;
+        #endregion
+
+        //public float towerrank_Damage = 0;
+        //public float towerlvl_Damage = 0;
+        //public float enemylvl_Health = 0;
+        //public float enemylvl_Speed = 0;
+
+        #region Unity Lifecycle
+        private void Awake()
         {
-            //GameSimManager.Instance.FetchConfig(OnFetchConfigDone);
+            isFetchDone = false;
+            if (isSimulationTest)
+            {
+                // Simulation configuration fetching would go here
+                // GameSimManager.Instance.FetchConfig(OnFetchConfigDone);
+            }
+            else
+            {
+                isFetchDone = true;
+            }
         }
-        else
-            isFetchDone = true;
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        init();
-    }
+        private void Start()
+        {
+            Initialize();
+        }
 
-    //private void OnFetchConfigDone(GameSimConfigResponse gameSimConfigResponse)
-    //{
-    //    towerrank_Damage = gameSimConfigResponse.GetFloat("towerrank_Damage");
-    //    towerlvl_Damage = gameSimConfigResponse.GetFloat("towerlvl_Damage");
-    //    enemylvl_Health = gameSimConfigResponse.GetFloat("enemylvl_Health");
-    //    enemylvl_Speed = gameSimConfigResponse.GetFloat("enemylvl_Speed");
-    //
-    //    isFetchDone = true;
-    //}
+        //private void OnFetchConfigDone(GameSimConfigResponse gameSimConfigResponse)
+        //{
+        //    towerrank_Damage = gameSimConfigResponse.GetFloat("towerrank_Damage");
+        //    towerlvl_Damage = gameSimConfigResponse.GetFloat("towerlvl_Damage");
+        //    enemylvl_Health = gameSimConfigResponse.GetFloat("enemylvl_Health");
+        //    enemylvl_Speed = gameSimConfigResponse.GetFloat("enemylvl_Speed");
+        //
+        //    isFetchDone = true;
+        //}
 
-    public void MapResetted()
-    {
-        if (isSimulationTest == false) return;
-    //    GameSimManager.Instance.SetCounter("WaveArrived", waveManager.GetCurrentWaveNum());
-        //Debug.Log("QuitNow");
+        private void Update()
+        {
+            if (waveManager)
+            {
+                _currSpawningPoint = waveManager.SpawnPointByAI;
+            }
+
+            HandleDebugInput();
+        }
+        #endregion
+
+        #region Public API
+        /// <summary>
+        /// Called when map is reset during simulation testing
+        /// </summary>
+        public void MapResetted()
+        {
+            if (isSimulationTest == false) return;
+
+            // Record simulation metrics
+            // GameSimManager.Instance.SetCounter("WaveArrived", waveManager.GetCurrentWaveNum());
 
 #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
+            UnityEditor.EditorApplication.isPlaying = false;
 #else
-        Application.Quit();
+            Application.Quit();
 #endif
-    }
-
-    private void init()
-    {
-        myTimeScale = 1.0f;
-        CurrSpawningPoint = 0;
-        Time.timeScale = myTimeScale;
-        Time.fixedDeltaTime = Time.timeScale;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-        if (waveManager)
-            CurrSpawningPoint = waveManager.SpawnPointByAI;
-
-        if (Input.GetKeyDown(KeyCode.Keypad2))
-        {
-            init();
         }
-        else
-        if (Input.GetKeyDown(KeyCode.Keypad1))
-        {
-            ChangeSpeed(-1);
-        }
-        else
-        if (Input.GetKeyDown(KeyCode.Keypad3))
-        {
-            ChangeSpeed(+1);
-        }
-    }
+        #endregion
 
-    void ChangeSpeed(int decision)
-    {
-        myTimeScale += decision * timescaleChg;
-        if (myTimeScale < 0) myTimeScale = 0;
-        Time.timeScale = myTimeScale;
-        Time.fixedDeltaTime = Time.timeScale;
-        //Debug.Log(myTimeScale);
+        #region Private Methods
+        /// <summary>
+        /// Initialize debug manager with default settings
+        /// </summary>
+        private void Initialize()
+        {
+            _myTimeScale = 1.0f;
+            _currSpawningPoint = 0;
+            Time.timeScale = _myTimeScale;
+            Time.fixedDeltaTime = Time.timeScale;
+        }
+
+        /// <summary>
+        /// Handle keyboard input for debug controls
+        /// </summary>
+        private void HandleDebugInput()
+        {
+            if (Input.GetKeyDown(KeyCode.Keypad2))
+            {
+                Initialize(); // Reset time scale
+            }
+            else if (Input.GetKeyDown(KeyCode.Keypad1))
+            {
+                ChangeSpeed(-1); // Slow down
+            }
+            else if (Input.GetKeyDown(KeyCode.Keypad3))
+            {
+                ChangeSpeed(+1); // Speed up
+            }
+        }
+
+        /// <summary>
+        /// Change game time scale for debugging purposes
+        /// </summary>
+        /// <param name="direction">Direction to change speed (-1 for slower, +1 for faster)</param>
+        private void ChangeSpeed(int direction)
+        {
+            _myTimeScale += direction * timescaleChg;
+            if (_myTimeScale < 0)
+            {
+                _myTimeScale = 0;
+            }
+
+            Time.timeScale = _myTimeScale;
+            Time.fixedDeltaTime = Time.timeScale;
+        }
+        #endregion
     }
 }

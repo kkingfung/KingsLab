@@ -9,6 +9,7 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Rendering;
+using RandomTowerDefense.DOTS.Components;
 
 /// <summary>
 /// 敵エンティティとタワーの攻撃エンティティの衝突を検出し処理するシステム
@@ -60,7 +61,6 @@ public class EnemyToAttack : JobComponentSystem
                 targetWait = AttackGroup.ToComponentDataArray<WaitingTime>(Allocator.TempJob)
             };
             jobHandle = jobEvA.Schedule(enemyGroup, inputDependencies);
-            jobHandle.Complete();
         }
         return jobHandle;
     }

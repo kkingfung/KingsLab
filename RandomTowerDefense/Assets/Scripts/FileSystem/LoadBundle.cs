@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.Networking; 
+using UnityEngine.Networking;
 using System.Collections;
 
 using System.IO;
@@ -8,7 +8,7 @@ public static class LoadBundle
 {
     static AssetBundle bundle;
 
-    IEnumerator GetAssetBundle()
+    static IEnumerator GetAssetBundle()
     {
         UnityWebRequest www = new UnityWebRequest("http://www.my-server.com");
         DownloadHandlerAssetBundle handler = new DownloadHandlerAssetBundle(www.url, uint.MaxValue);
@@ -23,11 +23,11 @@ public static class LoadBundle
         {
             // AssetBundle を抽出
             bundle = handler.assetBundle;
-              TextAsset charDataFile = bundle.LoadAsset(filename) as TextAsset;
-              string[] linesFromfile = charDataFile.text.Split('\n');
+            TextAsset charDataFile = bundle.LoadAsset(filename) as TextAsset;
+            string[] linesFromfile = charDataFile.text.Split('\n');
 
-              var textFile = File.ReadAllText(charDataFile.text);
-              File.WriteAllText(filepath+filename, textFile);
+            var textFile = File.ReadAllText(charDataFile.text);
+            File.WriteAllText(filepath + filename, textFile);
         }
     }
 
@@ -40,6 +40,6 @@ public static class LoadBundle
         string[] linesFromfile = charDataFile.text.Split('\n');
 
         var textFile = File.ReadAllText(charDataFile.text);
-        File.WriteAllText(filepath+filename, textFile);
+        File.WriteAllText(filepath + filename, textFile);
     }
 }

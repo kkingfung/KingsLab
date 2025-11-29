@@ -1,239 +1,302 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-public class FastIKFabric : MonoBehaviour
+namespace RandomTowerDefense.ProcedualAnimation
 {
     /// <summary>
-    /// Chain length of bones
+    /// 高速IK FABRIKアルゴリズム - Forward And Backward Reaching Inverse Kinematicsシステム
+    ///
+    /// 主な機能:
+    /// - FABRIK（Forward And Backward Reaching IK）アルゴリズムによる高性能IK計算
+    /// - 前進・後退反復処理による自然な関節配置システム
+    /// - ルート空間座標系変換による高精度位置制御
+    /// - ポールベクトル制約による関節角度制限機能
+    /// - スナップバック機能による初期姿勢復帰制御
+    /// - 到達不能領域での自動ストレッチ機能
     /// </summary>
-    public int ChainLength = 2;
-
-    /// <summary>
-    /// Target the chain should bent to
-    /// </summary>
-    public Transform Target;
-    public Transform Pole;
-
-    /// <summary>
-    /// Solver iterations per update
-    /// </summary>
-    [Header("Solver Parameters")]
-    public int Iterations = 10;
-
-    /// <summary>
-    /// Distance when the solver stops
-    /// </summary>
-    public float Delta = 0.001f;
-
-    /// <summary>
-    /// Strength of going back to the start position.
-    /// </summary>
-    [Range(0, 1)]
-    public float SnapBackStrength = 1f;
-
-
-    protected float[] BonesLength; //Target to Origin
-    protected float CompleteLength;
-    protected Transform[] Bones;
-    protected Vector3[] Positions;
-    protected Vector3[] StartDirectionSucc;
-    protected Quaternion[] StartRotationBone;
-    protected Quaternion StartRotationTarget;
-    protected Transform Root;
-
-
-    // Start is called before the first frame update
-    void Awake()
+    public class FastIKFabric : MonoBehaviour
     {
-        Init();
-    }
+        #region Serialized Fields
 
-    void Init()
-    {
-        //initial array
-        Bones = new Transform[ChainLength + 1];
-        Positions = new Vector3[ChainLength + 1];
-        BonesLength = new float[ChainLength];
-        StartDirectionSucc = new Vector3[ChainLength + 1];
-        StartRotationBone = new Quaternion[ChainLength + 1];
+        [Header("IK設定")]
+        [SerializeField] [Range(1, 10)] [Tooltip("IKチェーンの長さ（関節数）")]
+        public int ChainLength = 2;
 
-        //find root
-        Root = transform;
-        for (var i = 0; i <= ChainLength; ++i)
+        [SerializeField] [Tooltip("IKターゲット位置オブジェクト")]
+        public Transform Target;
+
+        [SerializeField] [Tooltip("ポールベクトル制約用オブジェクト")]
+        public Transform Pole;
+
+        [Header("計算パラメータ")]
+        [SerializeField] [Range(1, 50)] [Tooltip("反復計算回数")]
+        public int Iterations = 10;
+
+        [SerializeField] [Range(0.0001f, 0.1f)] [Tooltip("収束判定闾値")]
+        public float Delta = 0.001f;
+
+        [SerializeField] [Range(0f, 1f)] [Tooltip("初期姿勢復帰強度")]
+        public float SnapBackStrength = 1f;
+
+        #endregion
+
+        #region Protected Fields
+
+        protected float[] _bonesLength; // ボーン長配列
+        protected float _completeLength; // 総チェーン長
+        protected Transform[] _bones; // ボーン配列
+        protected Vector3[] _positions; // 位置配列
+        protected Vector3[] _startDirectionSucc; // 初期方向配列
+        protected Quaternion[] _startRotationBone; // 初期回転配列
+        protected Quaternion _startRotationTarget; // ターゲット初期回転
+        protected Transform _root; // ルートトランスフォーム
+
+
+        #endregion
+
+        #region Unity Lifecycle
+
+        /// <summary>
+        /// 初期化処理 - システム初期化実行
+        /// </summary>
+        private void Awake()
         {
-            if (Root == null)
-                throw new UnityException("The chain value is longer than the ancestor chain!");
-            Root = Root.parent;
+            InitializeIKSystem();
         }
 
-        //init target
-        if (Target == null)
+        /// <summary>
+        /// フレーム後処理 - IK計算実行
+        /// </summary>
+        private void LateUpdate()
         {
-            Target = new GameObject(gameObject.name + " Target").transform;
-            SetPositionRootSpace(Target, GetPositionRootSpace(transform));
+            ResolveIK();
         }
-        StartRotationTarget = GetRotationRootSpace(Target);
 
+        #endregion
 
-        //init data
-        var current = transform;
-        CompleteLength = 0;
-        for (var i = Bones.Length - 1; i >= 0; i--)
+        #region Private Methods
+
+        /// <summary>
+        /// IKシステム初期化 - ボーンチェーン構築と初期状態記録
+        /// </summary>
+        private void InitializeIKSystem()
         {
-            Bones[i] = current;
-            StartRotationBone[i] = GetRotationRootSpace(current);
+            // 配列初期化
+            _bones = new Transform[ChainLength + 1];
+            _positions = new Vector3[ChainLength + 1];
+            _bonesLength = new float[ChainLength];
+            _startDirectionSucc = new Vector3[ChainLength + 1];
+            _startRotationBone = new Quaternion[ChainLength + 1];
 
-            if (i == Bones.Length - 1)
+            // ルート検索
+            _root = transform;
+            for (var i = 0; i <= ChainLength; ++i)
             {
-                //leaf
-                StartDirectionSucc[i] = GetPositionRootSpace(Target) - GetPositionRootSpace(current);
+                if (_root == null)
+                    throw new UnityException("The chain value is longer than the ancestor chain!");
+                _root = _root.parent;
+            }
+
+            // ターゲット初期化
+            if (Target == null)
+            {
+                Target = new GameObject(gameObject.name + " Target").transform;
+                SetPositionRootSpace(Target, GetPositionRootSpace(transform));
+            }
+            _startRotationTarget = GetRotationRootSpace(Target);
+
+            // ボーンデータ初期化
+            var current = transform;
+            _completeLength = 0;
+            for (var i = _bones.Length - 1; i >= 0; i--)
+            {
+                _bones[i] = current;
+                _startRotationBone[i] = GetRotationRootSpace(current);
+
+                if (i == _bones.Length - 1)
+                {
+                    // 末端ボーン
+                    _startDirectionSucc[i] = GetPositionRootSpace(Target) - GetPositionRootSpace(current);
+                }
+                else
+                {
+                    // 中間ボーン
+                    _startDirectionSucc[i] = GetPositionRootSpace(_bones[i + 1]) - GetPositionRootSpace(current);
+                    _bonesLength[i] = _startDirectionSucc[i].magnitude;
+                    _completeLength += _bonesLength[i];
+                }
+
+                current = current.parent;
+            }
+        }
+
+        /// <summary>
+        /// IK解決処理 - FABRIKアルゴリズム実行
+        /// </summary>
+        private void ResolveIK()
+        {
+            if (Target == null)
+                return;
+
+            if (_bonesLength.Length != ChainLength)
+                InitializeIKSystem();
+
+            // 現在位置取得
+            for (int i = 0; i < _bones.Length; ++i)
+                _positions[i] = GetPositionRootSpace(_bones[i]);
+
+            var targetPosition = GetPositionRootSpace(Target);
+            var targetRotation = GetRotationRootSpace(Target);
+
+            // 到達可能性判定
+            if ((targetPosition - GetPositionRootSpace(_bones[0])).sqrMagnitude >= _completeLength * _completeLength)
+            {
+                // 到達不能領域での直線ストレッチ処理
+                ExecuteStretchToTarget(targetPosition);
             }
             else
             {
-                //mid bone
-                StartDirectionSucc[i] = GetPositionRootSpace(Bones[i + 1]) - GetPositionRootSpace(current);
-                BonesLength[i] = StartDirectionSucc[i].magnitude;
-                CompleteLength += BonesLength[i];
+                // FABRIK反復処理実行
+                ExecuteFABRIKIteration(targetPosition);
             }
 
-            current = current.parent;
+            // ポールベクトル制約適用
+            ApplyPoleConstraint();
+
+            // 最終位置・回転設定
+            ApplyFinalTransforms(targetRotation);
         }
 
-
-
-    }
-
-    // Update is called once per frame
-    void LateUpdate()
-    {
-        ResolveIK();
-    }
-
-    private void ResolveIK()
-    {
-        if (Target == null)
-            return;
-
-        if (BonesLength.Length != ChainLength)
-            Init();
-
-        //Fabric
-
-        //  root
-        //  (bone0) (bonelen 0) (bone1) (bonelen 1) (bone2)...
-        //   x--------------------x--------------------x---...
-
-        //get position
-        for (int i = 0; i < Bones.Length; ++i)
-            Positions[i] = GetPositionRootSpace(Bones[i]);
-
-        var targetPosition = GetPositionRootSpace(Target);
-        var targetRotation = GetRotationRootSpace(Target);
-
-        //1st is possible to reach?
-        if ((targetPosition - GetPositionRootSpace(Bones[0])).sqrMagnitude >= CompleteLength * CompleteLength)
+        /// <summary>
+        /// ターゲットへの直線ストレッチ処理 - 到達不能領域での処理
+        /// </summary>
+        /// <param name="targetPosition">ターゲット位置</param>
+        private void ExecuteStretchToTarget(Vector3 targetPosition)
         {
-            //just strech it
-            var direction = (targetPosition - Positions[0]).normalized;
-            //set everything after root
-            for (int i = 1; i < Positions.Length; ++i)
-                Positions[i] = Positions[i - 1] + direction * BonesLength[i - 1];
+            var direction = (targetPosition - _positions[0]).normalized;
+            for (int i = 1; i < _positions.Length; ++i)
+                _positions[i] = _positions[i - 1] + direction * _bonesLength[i - 1];
         }
-        else
-        {
-            for (int i = 0; i < Positions.Length - 1; ++i)
-                Positions[i + 1] = Vector3.Lerp(Positions[i + 1], Positions[i] + StartDirectionSucc[i], SnapBackStrength);
 
+        /// <summary>
+        /// FABRIK反復処理実行 - 前進・後退アルゴリズム
+        /// </summary>
+        /// <param name="targetPosition">ターゲット位置</param>
+        private void ExecuteFABRIKIteration(Vector3 targetPosition)
+        {
+            // スナップバック適用
+            for (int i = 0; i < _positions.Length - 1; ++i)
+                _positions[i + 1] = Vector3.Lerp(_positions[i + 1], _positions[i] + _startDirectionSucc[i], SnapBackStrength);
+
+            // FABRIK反復計算
             for (int iteration = 0; iteration < Iterations; iteration++)
             {
-                //https://www.youtube.com/watch?v=UNoX65PRehA
-                //back
-                for (int i = Positions.Length - 1; i > 0; i--)
+                // 後退フェーズ（ターゲットから開始）
+                for (int i = _positions.Length - 1; i > 0; i--)
                 {
-                    if (i == Positions.Length - 1)
-                        Positions[i] = targetPosition; //set it to target
+                    if (i == _positions.Length - 1)
+                        _positions[i] = targetPosition;
                     else
-                        Positions[i] = Positions[i + 1] + (Positions[i] - Positions[i + 1]).normalized * BonesLength[i]; //set in line on distance
+                        _positions[i] = _positions[i + 1] + (_positions[i] - _positions[i + 1]).normalized * _bonesLength[i];
                 }
 
-                //forward
-                for (int i = 1; i < Positions.Length; ++i)
-                    Positions[i] = Positions[i - 1] + (Positions[i] - Positions[i - 1]).normalized * BonesLength[i - 1];
+                // 前進フェーズ（ルートから開始）
+                for (int i = 1; i < _positions.Length; ++i)
+                    _positions[i] = _positions[i - 1] + (_positions[i] - _positions[i - 1]).normalized * _bonesLength[i - 1];
 
-                //close enough?
-                if ((Positions[Positions.Length - 1] - targetPosition).sqrMagnitude < Delta * Delta)
+                // 収束判定
+                if ((_positions[_positions.Length - 1] - targetPosition).sqrMagnitude < Delta * Delta)
                     break;
             }
         }
 
-        //move towards pole
-        if (Pole != null)
+        /// <summary>
+        /// ポールベクトル制約適用 - 自然な関節角度制限処理
+        /// </summary>
+        private void ApplyPoleConstraint()
         {
-            var polePosition = GetPositionRootSpace(Pole);
-            for (int i = 1; i < Positions.Length - 1; ++i)
+            if (Pole != null)
             {
-                var plane = new Plane(Positions[i + 1] - Positions[i - 1], Positions[i - 1]);
-                var projectedPole = plane.ClosestPointOnPlane(polePosition);
-                var projectedBone = plane.ClosestPointOnPlane(Positions[i]);
-                var angle = Vector3.SignedAngle(projectedBone - Positions[i - 1], projectedPole - Positions[i - 1], plane.normal);
-                Positions[i] = Quaternion.AngleAxis(angle, plane.normal) * (Positions[i] - Positions[i - 1]) + Positions[i - 1];
+                var polePosition = GetPositionRootSpace(Pole);
+                for (int i = 1; i < _positions.Length - 1; ++i)
+                {
+                    var plane = new Plane(_positions[i + 1] - _positions[i - 1], _positions[i - 1]);
+                    var projectedPole = plane.ClosestPointOnPlane(polePosition);
+                    var projectedBone = plane.ClosestPointOnPlane(_positions[i]);
+                    var angle = Vector3.SignedAngle(projectedBone - _positions[i - 1], projectedPole - _positions[i - 1], plane.normal);
+                    _positions[i] = Quaternion.AngleAxis(angle, plane.normal) * (_positions[i] - _positions[i - 1]) + _positions[i - 1];
+                }
             }
         }
 
-        //set position & rotation
-        for (int i = 0; i < Positions.Length; ++i)
+        /// <summary>
+        /// 最終変換適用 - 位置と回転の設定
+        /// </summary>
+        /// <param name="targetRotation">ターゲット回転</param>
+        private void ApplyFinalTransforms(Quaternion targetRotation)
         {
-            if (i == Positions.Length - 1)
-                SetRotationRootSpace(Bones[i], Quaternion.Inverse(targetRotation) * StartRotationTarget * Quaternion.Inverse(StartRotationBone[i]));
-            else
-                SetRotationRootSpace(Bones[i], Quaternion.FromToRotation(StartDirectionSucc[i], Positions[i + 1] - Positions[i]) * Quaternion.Inverse(StartRotationBone[i]));
-            SetPositionRootSpace(Bones[i], Positions[i]);
+            for (int i = 0; i < _positions.Length; ++i)
+            {
+                if (i == _positions.Length - 1)
+                    SetRotationRootSpace(_bones[i], Quaternion.Inverse(targetRotation) * _startRotationTarget * Quaternion.Inverse(_startRotationBone[i]));
+                else
+                    SetRotationRootSpace(_bones[i], Quaternion.FromToRotation(_startDirectionSucc[i], _positions[i + 1] - _positions[i]) * Quaternion.Inverse(_startRotationBone[i]));
+                SetPositionRootSpace(_bones[i], _positions[i]);
+            }
         }
-    }
 
-    private Vector3 GetPositionRootSpace(Transform current)
-    {
-        if (Root == null)
-            return current.position;
-        else
-            return Quaternion.Inverse(Root.rotation) * (current.position - Root.position);
-    }
+        /// <summary>
+        /// ルート空間位置取得 - ワールド座標からルート相対座標への変換
+        /// </summary>
+        /// <param name="current">対象トランスフォーム</param>
+        /// <returns>ルート空間座標</returns>
+        private Vector3 GetPositionRootSpace(Transform current)
+        {
+            if (_root == null)
+                return current.position;
+            else
+                return Quaternion.Inverse(_root.rotation) * (current.position - _root.position);
+        }
 
-    private void SetPositionRootSpace(Transform current, Vector3 position)
-    {
-        if (Root == null)
-            current.position = position;
-        else
-            current.position = Root.rotation * position + Root.position;
-    }
+        /// <summary>
+        /// ルート空間位置設定 - ルート相対座標からワールド座標への変換
+        /// </summary>
+        /// <param name="current">対象トランスフォーム</param>
+        /// <param name="position">設定位置</param>
+        private void SetPositionRootSpace(Transform current, Vector3 position)
+        {
+            if (_root == null)
+                current.position = position;
+            else
+                current.position = _root.rotation * position + _root.position;
+        }
 
-    private Quaternion GetRotationRootSpace(Transform current)
-    {
-        //inverse(after) * before => rot: before -> after
-        if (Root == null)
-            return current.rotation;
-        else
-            return Quaternion.Inverse(current.rotation) * Root.rotation;
-    }
+        /// <summary>
+        /// ルート空間回転取得 - ワールド回転からルート相対回転への変換
+        /// </summary>
+        /// <param name="current">対象トランスフォーム</param>
+        /// <returns>ルート空間回転</returns>
+        private Quaternion GetRotationRootSpace(Transform current)
+        {
+            if (_root == null)
+                return current.rotation;
+            else
+                return Quaternion.Inverse(current.rotation) * _root.rotation;
+        }
 
-    private void SetRotationRootSpace(Transform current, Quaternion rotation)
-    {
-        if (Root == null)
-            current.rotation = rotation;
-        else
-            current.rotation = Root.rotation * rotation;
-    }
+        /// <summary>
+        /// ルート空間回転設定 - ルート相対回転からワールド回転への変換
+        /// </summary>
+        /// <param name="current">対象トランスフォーム</param>
+        /// <param name="rotation">設定回転</param>
+        private void SetRotationRootSpace(Transform current, Quaternion rotation)
+        {
+            if (_root == null)
+                current.rotation = rotation;
+            else
+                current.rotation = _root.rotation * rotation;
+        }
 
-    //void OnDrawGizmos()
-    //{
-    //    var current = this.transform;
-    //    for (int i = 0; i < ChainLength && current != null && current.parent != null; ++i)
-    //    {
-    //        var scale = Vector3.Distance(current.position, current.parent.position) * 0.1f;
-    //        Handles.matrix = Matrix4x4.TRS(current.position, Quaternion.FromToRotation(Vector3.up, current.parent.position - current.position), new Vector3(scale, Vector3.Distance(current.parent.position, current.position), scale));
-    //        Handles.color = Color.green;
-    //        Handles.DrawWireCube(Vector3.up * 0.5f, Vector3.one);
-    //        current = current.parent;
-    //    }
-    //}
+        #endregion
+    }
 }

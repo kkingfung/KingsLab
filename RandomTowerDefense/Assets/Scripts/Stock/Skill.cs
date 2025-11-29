@@ -5,6 +5,10 @@ using UnityEngine.VFX;
 using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine.Rendering;
+using RandomTowerDefense.DOTS.Spawner;
+using RandomTowerDefense.Units;
+using RandomTowerDefense.Info;
+using RandomTowerDefense.Managers.System;
 
 public class Skill : MonoBehaviour
 {
@@ -75,7 +79,8 @@ public class Skill : MonoBehaviour
         }
     }
 
-    private void OnEnable() {
+    private void OnEnable()
+    {
         targetEnm = new Vector3();
     }
     // Update is called once per frame
@@ -102,7 +107,7 @@ public class Skill : MonoBehaviour
             case Upgrades.StoreItems.MagicBlizzard:
                 if (ActionEnded == false)
                 {
-                    Vector3 result= playerManager.RaycastTest(LayerMask.GetMask("Arena"));
+                    Vector3 result = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
                     if (result.sqrMagnitude != 0)
                     {
                         this.transform.position = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
@@ -120,7 +125,7 @@ public class Skill : MonoBehaviour
         }
     }
 
-    public void Init(SkillSpawner skillSpawner,Upgrades.StoreItems actionID, SkillAttr attr, int entityID)
+    public void Init(SkillSpawner skillSpawner, Upgrades.StoreItems actionID, SkillAttr attr, int entityID)
     {
         this.actionID = actionID;
         this.attr = new SkillAttr(attr);
@@ -157,8 +162,8 @@ public class Skill : MonoBehaviour
 
         if (skillSpawner.hastargetArray[entityID])
         {
-                targetEnm = skillSpawner.targetArray[entityID];
-                return true;
+            targetEnm = skillSpawner.targetArray[entityID];
+            return true;
         }
         return false;
     }

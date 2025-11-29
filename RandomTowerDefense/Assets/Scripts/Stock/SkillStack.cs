@@ -1,58 +1,92 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using RandomTowerDefense.Units;
 
-static public class SkillStack
+namespace RandomTowerDefense.Systems
 {
-    static public readonly int maxStackNum = 4;
-
-    static private int currStackNum;
-    static private int[] stackDetail = { 0, 0, 0, 0 };
-
-    static public void init()
+    static public class SkillStack
     {
-        currStackNum = 0;
-        for (int i = 0; i < stackDetail.Length; ++i)
-            stackDetail[i] = 0;
-    }
+        #region Constants and Fields
+        /// <summary>
+        /// スキルストックの最大数
+        /// </summary>
+        static public readonly int maxStackNum = 4;
 
-    static public bool AddStock(Upgrades.StoreItems itemID)
-    {
-        if (CheckFullStocks())
-            return false;
-        int emptySlot = -1;
-        for (int i = 0; i < maxStackNum; ++i)
+        static private int currStackNum;
+        static private int[] stackDetail = { 0, 0, 0, 0 };
+        #endregion
+
+        #region Public Methods
+        static public void Init()
         {
-            if (GetStock(i) == 0)
-            {
-                emptySlot = i;
-                break;
-            }
+            currStackNum = 0;
+            for (int i = 0; i < stackDetail.Length; ++i)
+                stackDetail[i] = 0;
         }
 
-        stackDetail[emptySlot] = (int)itemID;
-        currStackNum++;
-        return true;
-    }
+        /// <summary>
+        /// 指定したスキルアイテムをストックに追加
+        /// </summary>
+        /// <param name="itemID">追加するスキルアイテムID</param>
+        /// <returns>追加に成功した場合true</returns>
+        static public bool AddStock(Upgrades.StoreItems itemID)
+        {
+            if (CheckFullStocks())
+            {
+                return false;
+            }
+            int emptySlot = -1;
+            for (int i = 0; i < maxStackNum; ++i)
+            {
+                if (RetrieveStock(i) == 0)
+                {
+                    emptySlot = i;
+                    break;
+                }
+            }
 
-    static public int UseStock(int StockID)
-    {
-        if (stackDetail[StockID] == 0)
-            return -1;
+            stackDetail[emptySlot] = (int)itemID;
+            currStackNum++;
+            return true;
+        }
 
-        int selectedItem = stackDetail[StockID];
-        stackDetail[StockID] = 0;
-        currStackNum--;
-        return selectedItem;
-    }
+        /// <summary>
+        /// 指定したスロットのスキルを使用し、ストックから削除
+        /// </summary>
+        /// <param name="StockID">使用するスロットID</param>
+        /// <returns>使用したスキルのID</returns>
+        static public int UseStock(int StockID)
+        {
+            if (stackDetail[StockID] == 0)
+            {
+                return -1;
+            }
 
-    static public int GetStock(int StockID)
-    {
-        return stackDetail[StockID];
-    }
+            int selectedItem = stackDetail[StockID];
+            stackDetail[StockID] = 0;
+            currStackNum--;
+            return selectedItem;
+        }
 
-    static public bool CheckFullStocks()
-    {
-        return currStackNum >= maxStackNum;
+        /// <summary>
+        /// 指定したスロットIDのスキルストックを取得
+        /// </summary>
+        /// <param name="StockID">取得するスロットのID</param>
+        /// <returns>ストックされたスキルのID</returns>
+        static public int RetrieveStock(int StockID)
+        {
+            return stackDetail[StockID];
+        }
+
+        /// <summary>
+        /// スキルストックが満杯かどうかをチェック
+        /// </summary>
+        /// <returns>ストックが満杯の場合true</returns>
+        static public bool CheckFullStocks()
+        {
+            return currStackNum >= maxStackNum;
+        }
+        #endregion
     }
 }

@@ -6,6 +6,7 @@ using RandomTowerDefense.Scene;
 using RandomTowerDefense.Managers.Macro;
 using RandomTowerDefense.Units;
 using RandomTowerDefense.Systems;
+using StoreItems = RandomTowerDefense.Units.UpgradesManager.StoreItems;
 
 namespace RandomTowerDefense.Managers.Macro
 {
@@ -29,15 +30,15 @@ namespace RandomTowerDefense.Managers.Macro
         private readonly Color OriColor = new Color(1, 0.675f, 0, 1);
 
         // Price arrays for different upgrade categories
-        private readonly int[] PriceForArmy1 = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
-        private readonly int[] PriceForArmy2 = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
-        private readonly int[] PriceForArmy3 = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
-        private readonly int[] PriceForArmy4 = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
+        private readonly int[] PriceForArmySoulEater = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
+        private readonly int[] PriceForArmyNightmare = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
+        private readonly int[] PriceForArmyTerrorBringer = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
+        private readonly int[] PriceForArmyUsurper = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
 
         private readonly int[] PriceForCastleHP = { 50, 50, 50, 50, 50, 50, 50, 50, 50, 50 };
-        private readonly int[] PriceForBonusBoss1 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-        private readonly int[] PriceForBonusBoss2 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-        private readonly int[] PriceForBonusBoss3 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        private readonly int[] PriceForBonusBossGreen = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        private readonly int[] PriceForBonusBossPurple = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        private readonly int[] PriceForBonusBossRed = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
         private readonly int[] PriceForMagicMeteor = { 5, 10, 15, 20, 25, 30, 35, 40, 45, 50 };
         private readonly int[] PriceForMagicBlizzard = { 8, 16, 24, 32, 40, 48, 56, 64, 72, 80 };
@@ -63,10 +64,13 @@ namespace RandomTowerDefense.Managers.Macro
         public InGameOperation sceneManager;
         public StageManager stageManager;
         public ResourceManager resourceManager;
+
+        public UpgradesManager upgradesManager;
+
         #endregion
 
         #region Private Fields
-        private Dictionary<Upgrades.StoreItems, int[]> _itemPrice;
+        private Dictionary<UpgradesManager.StoreItems, int[]> _itemPrice;
         private readonly int[] _pendToKart = { 0, 0, 0, 0 };
         private readonly int[] _costToKart = { 0, 0, 0, 0 };
         private readonly float[] _bonusBossCooldown = { 0, 0, 0 };
@@ -94,28 +98,64 @@ namespace RandomTowerDefense.Managers.Macro
         }
         #endregion
 
+        /// <summary>
+        /// 指定項目のレベルを増やす
+        /// </summary>
+        /// <param name="itemID">レベルアップする項目</param>
+        /// <returns>レベルアップ成功/失敗</returns>
+        static public bool OnStoreItemSold(UpgradesManager.StoreItems itemID, int lvUP)
+        {
+            var hasUpgrade = AddSkillLevel(itemID, lvUP);
+
+            //Checking StockItems
+            switch (itemID)
+            {
+                case StoreItems.CastleHP:
+                    castleSpawner.castle.AddedHealth();
+                    break;
+                case StoreItems.BonusBossGreen:
+                case StoreItems.BonusBossPurple:
+                case StoreItems.BonusBossRed:
+                    SkillStack.AddStock(itemID);
+                    storeManager.SetBossCD((int)(itemID - UpgradesManager.StoreItems.BonusBossGreen));
+                    break;
+                case UpgradesManager.StoreItems.ArmySoulEater:
+                case UpgradesManager.StoreItems.ArmyNightmare:
+                case UpgradesManager.StoreItems.ArmyTerrorBringer:
+                case UpgradesManager.StoreItems.ArmyUsurper:
+                    StoreLevel[itemID] += lvUP;
+                    break;
+                case StoreItems.MagicMeteor:
+                case StoreItems.MagicBlizzard:
+                case StoreItems.MagicMinions:
+                case StoreItems.MagicPetrification:
+                    SkillStack.AddStock(itemID);
+                    break;
+            }
+            return true;
+        }
         #region Private Methods
         /// <summary>
         /// Initialize the price dictionary with all store items
         /// </summary>
         private void InitializePriceDictionary()
         {
-            _itemPrice = new Dictionary<Upgrades.StoreItems, int[]>();
+            _itemPrice = new Dictionary<UpgradesManager.StoreItems, int[]>();
 
-            _itemPrice.Add(Upgrades.StoreItems.Army1, PriceForArmy1);
-            _itemPrice.Add(Upgrades.StoreItems.Army2, PriceForArmy2);
-            _itemPrice.Add(Upgrades.StoreItems.Army3, PriceForArmy3);
-            _itemPrice.Add(Upgrades.StoreItems.Army4, PriceForArmy4);
+            _itemPrice.Add(UpgradesManager.StoreItems.ArmySoulEater, PriceForArmySoulEater);
+            _itemPrice.Add(UpgradesManager.StoreItems.ArmyNightmare, PriceForArmyNightmare);
+            _itemPrice.Add(UpgradesManager.StoreItems.ArmyTerrorBringer, PriceForArmyTerrorBringer);
+            _itemPrice.Add(UpgradesManager.StoreItems.ArmyUsurper, PriceForArmyUsurper);
 
-            _itemPrice.Add(Upgrades.StoreItems.CastleHP, PriceForCastleHP);
-            _itemPrice.Add(Upgrades.StoreItems.BonusBoss1, PriceForBonusBoss1);
-            _itemPrice.Add(Upgrades.StoreItems.BonusBoss2, PriceForBonusBoss2);
-            _itemPrice.Add(Upgrades.StoreItems.BonusBoss3, PriceForBonusBoss3);
+            _itemPrice.Add(UpgradesManager.StoreItems.CastleHP, PriceForCastleHP);
+            _itemPrice.Add(UpgradesManager.StoreItems.BonusBossGreen, PriceForBonusBossGreen);
+            _itemPrice.Add(UpgradesManager.StoreItems.BonusBossPurple, PriceForBonusBossPurple);
+            _itemPrice.Add(UpgradesManager.StoreItems.BonusBossRed, PriceForBonusBossRed);
 
-            _itemPrice.Add(Upgrades.StoreItems.MagicMeteor, PriceForMagicMeteor);
-            _itemPrice.Add(Upgrades.StoreItems.MagicBlizzard, PriceForMagicBlizzard);
-            _itemPrice.Add(Upgrades.StoreItems.MagicPetrification, PriceForMagicPetrification);
-            _itemPrice.Add(Upgrades.StoreItems.MagicMinions, PriceForMagicMinions);
+            _itemPrice.Add(UpgradesManager.StoreItems.MagicMeteor, PriceForMagicMeteor);
+            _itemPrice.Add(UpgradesManager.StoreItems.MagicBlizzard, PriceForMagicBlizzard);
+            _itemPrice.Add(UpgradesManager.StoreItems.MagicPetrification, PriceForMagicPetrification);
+            _itemPrice.Add(UpgradesManager.StoreItems.MagicMinions, PriceForMagicMinions);
         }
 
         /// <summary>
@@ -142,7 +182,7 @@ namespace RandomTowerDefense.Managers.Macro
         private void UpdatePrice()
         {
 
-            int fullitemID = (sceneManager.currScreenShown + 1) * Upgrades.MaxItemPerSlot;
+            int fullitemID = (sceneManager.currScreenShown + 1) * UpgradesManager.MaxItemPerSlot;
 
             //Tower Items
             for (int i = 0; i < TowerPriceTextObj.Count; ++i)
@@ -165,9 +205,9 @@ namespace RandomTowerDefense.Managers.Macro
 
             for (int i = 0; i < ArmyPriceTextObj.Count; ++i)
             {
-                Upgrades.StoreItems itemID = Upgrades.StoreItems.Army1 + i % MaxItemPerCategory;
-                int price = _itemPrice[itemID][Upgrades.GetLevel(itemID)];
-                if (Upgrades.CheckArmyTopLevel(itemID))
+                UpgradesManager.StoreItems itemID = UpgradesManager.StoreItems.ArmySoulEater + i % MaxItemPerCategory;
+                int price = _itemPrice[itemID][upgradesManager.GetLevel(itemID)];
+                if (UpgradesManager.CheckArmyTopLevel(itemID))
                 {
                     ArmyPriceTextObj[i].text = price.ToString() + "G";
                     ArmyPriceTextObj[i].color = (price > resourceManager.GetCurrMaterial()) ? new Color(1, 0, 0, 1) : OriColor;
@@ -184,24 +224,24 @@ namespace RandomTowerDefense.Managers.Macro
                 switch (i % MaxItemPerCategory)
                 {
                     case 0:
-                        ArmyLvTextObj[i].text = "LV." + (Upgrades.CheckTopLevel(Upgrades.StoreItems.Army1) ? "MAX" :
-                            (Upgrades.GetLevel(Upgrades.StoreItems.Army1) + 1).ToString()); break;
+                        ArmyLvTextObj[i].text = "LV." + (UpgradesManager.CheckTopLevel(UpgradesManager.StoreItems.ArmySoulEater) ? "MAX" :
+                            (UpgradesManager.GetLevel(UpgradesManager.StoreItems.ArmySoulEater) + 1).ToString()); break;
                     case 1:
-                        ArmyLvTextObj[i].text = "LV." + (Upgrades.CheckTopLevel(Upgrades.StoreItems.Army2) ? "MAX" :
-                            (Upgrades.GetLevel(Upgrades.StoreItems.Army2) + 1).ToString()); break;
+                        ArmyLvTextObj[i].text = "LV." + (UpgradesManager.CheckTopLevel(UpgradesManager.StoreItems.ArmyNightmare) ? "MAX" :
+                            (UpgradesManager.GetLevel(UpgradesManager.StoreItems.ArmyNightmare) + 1).ToString()); break;
                     case 2:
-                        ArmyLvTextObj[i].text = "LV." + (Upgrades.CheckTopLevel(Upgrades.StoreItems.Army3) ? "MAX" :
-                            (Upgrades.GetLevel(Upgrades.StoreItems.Army3) + 1).ToString()); break;
+                        ArmyLvTextObj[i].text = "LV." + (UpgradesManager.CheckTopLevel(UpgradesManager.StoreItems.ArmyTerrorBringer) ? "MAX" :
+                            (UpgradesManager.GetLevel(UpgradesManager.StoreItems.ArmyTerrorBringer) + 1).ToString()); break;
                     case 3:
-                        ArmyLvTextObj[i].text = "LV." + (Upgrades.CheckTopLevel(Upgrades.StoreItems.Army4) ? "MAX" :
-                            (Upgrades.GetLevel(Upgrades.StoreItems.Army4) + 1).ToString()); break;
+                        ArmyLvTextObj[i].text = "LV." + (UpgradesManager.CheckTopLevel(UpgradesManager.StoreItems.ArmyUsurper) ? "MAX" :
+                            (UpgradesManager.GetLevel(UpgradesManager.StoreItems.ArmyUsurper) + 1).ToString()); break;
                 }
             }
 
             for (int i = 0; i < SkillPriceTextObj.Count; ++i)
             {
-                Upgrades.StoreItems itemID = Upgrades.StoreItems.MagicMeteor + i % MaxItemPerCategory;
-                int price = _itemPrice[itemID][Upgrades.GetLevel(itemID)];
+                UpgradesManager.StoreItems itemID = UpgradesManager.StoreItems.MagicMeteor + i % MaxItemPerCategory;
+                int price = _itemPrice[itemID][UpgradesManager.GetLevel(itemID)];
                 SkillPriceTextObj[i].text = price.ToString() + "G";
                 SkillPriceTextObj[i].color = (price > resourceManager.GetCurrMaterial() || SkillStack.CheckFullStocks()) ? new Color(1, 0, 0, 1) : OriColor;
             }
@@ -211,17 +251,17 @@ namespace RandomTowerDefense.Managers.Macro
                 switch (i % MaxItemPerCategory)
                 {
                     case 0:
-                        SkillLvTextObj[i].text = "LV." + (Upgrades.CheckTopLevel(Upgrades.StoreItems.MagicMeteor) ? "MAX" :
-                           (Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor) + 1).ToString()); break;
+                        SkillLvTextObj[i].text = "LV." + (upgradesManager.CheckTopLevel(UpgradesManager.StoreItems.MagicMeteor) ? "MAX" :
+                           (UpgradesManager.GetLevel(UpgradesManager.StoreItems.MagicMeteor) + 1).ToString()); break;
                     case 1:
-                        SkillLvTextObj[i].text = "LV." + (Upgrades.CheckTopLevel(Upgrades.StoreItems.MagicBlizzard) ? "MAX" :
-                        (Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) + 1).ToString()); break;
+                        SkillLvTextObj[i].text = "LV." + (upgradesManager.CheckTopLevel(UpgradesManager.StoreItems.MagicBlizzard) ? "MAX" :
+                        (UpgradesManager.GetLevel(UpgradesManager.StoreItems.MagicBlizzard) + 1).ToString()); break;
                     case 2:
-                        SkillLvTextObj[i].text = "LV." + (Upgrades.CheckTopLevel(Upgrades.StoreItems.MagicPetrification) ? "MAX" :
-                       (Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification) + 1).ToString()); break;
+                        SkillLvTextObj[i].text = "LV." + (upgradesManager.CheckTopLevel(UpgradesManager.StoreItems.MagicPetrification) ? "MAX" :
+                       (UpgradesManager.GetLevel(UpgradesManager.StoreItems.MagicPetrification) + 1).ToString()); break;
                     case 3:
-                        SkillLvTextObj[i].text = "LV." + (Upgrades.CheckTopLevel(Upgrades.StoreItems.MagicMinions) ? "MAX" :
-                       (Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) + 1).ToString()); break;
+                        SkillLvTextObj[i].text = "LV." + (upgradesManager.CheckTopLevel(UpgradesManager.StoreItems.MagicMinions) ? "MAX" :
+                       (UpgradesManager.GetLevel(UpgradesManager.StoreItems.MagicMinions) + 1).ToString()); break;
                 }
             }
         }
@@ -231,45 +271,45 @@ namespace RandomTowerDefense.Managers.Macro
         #region Public Methods
         public int GetPrice(int itemID)
         {
-            return GetPrice((Upgrades.StoreItems)itemID);
+            return GetPrice((UpgradesManager.StoreItems)itemID);
         }
 
-        public int GetPrice(Upgrades.StoreItems itemID)
+        public int GetPrice(UpgradesManager.StoreItems itemID)
         {
             if (_itemPrice.ContainsKey(itemID) == false) return 0;
 
             switch (itemID)
             {
-                case Upgrades.StoreItems.BonusBoss1:
+                case UpgradesManager.StoreItems.BonusBossGreen:
                     return _bonusBossCooldown[0] > 0 ? -1 : 0;
-                case Upgrades.StoreItems.BonusBoss2:
+                case UpgradesManager.StoreItems.BonusBossPurple:
                     return _bonusBossCooldown[1] > 0 ? -1 : 0;
-                case Upgrades.StoreItems.BonusBoss3:
+                case UpgradesManager.StoreItems.BonusBossRed:
                     return _bonusBossCooldown[2] > 0 ? -1 : 0;
             }
 
-            if (Upgrades.GetLevel(itemID) + 1 >= _itemPrice[itemID].Length)
+            if (upgradesManager.GetLevel(itemID) + 1 >= _itemPrice[itemID].Length)
             {
                 return -1;
             }
-            return _itemPrice[itemID][Upgrades.GetLevel(itemID)];
+            return _itemPrice[itemID][upgradesManager.GetLevel(itemID)];
         }
 
         public int GetCost(int itemID)
         {
-            return GetCost((Upgrades.StoreItems)itemID, _pendToKart[itemID % 10]);
+            return GetCost((UpgradesManager.StoreItems)itemID, _pendToKart[itemID % 10]);
         }
 
-        public int GetCost(Upgrades.StoreItems itemID, int additionLv)
+        public int GetCost(UpgradesManager.StoreItems itemID, int additionLv)
         {
             if (_itemPrice.ContainsKey(itemID) == false) return 0;
-            return _itemPrice[itemID][Upgrades.GetLevel(itemID) + additionLv];
+            return _itemPrice[itemID][upgradesManager.GetLevel(itemID) + additionLv];
         }
 
 
-        public void ItemSold(Upgrades.StoreItems itemID)
+        public void ItemSold(UpgradesManager.StoreItems itemID)
         {
-            Upgrades.StoreUpgrade(itemID, _pendToKart[(int)itemID % 10]);
+            UpgradesManager.StoreUpgrade(itemID, _pendToKart[(int)itemID % 10]);
 
             resourceManager.ChangeMaterial(-1 * _costToKart[(int)itemID % 10]);
 
@@ -293,20 +333,20 @@ namespace RandomTowerDefense.Managers.Macro
             return totalCost;
         }
 
-        public bool ItemPendingAdd(Upgrades.StoreItems itemID)
+        public bool ItemPendingAdd(UpgradesManager.StoreItems itemID)
         {
             int price = CheckEnoughResource(itemID);
             if (price >= 0)
             {
                 switch (itemID)
                 {
-                    case Upgrades.StoreItems.BonusBoss1:
-                    case Upgrades.StoreItems.BonusBoss2:
-                    case Upgrades.StoreItems.BonusBoss3:
-                    case Upgrades.StoreItems.MagicBlizzard:
-                    case Upgrades.StoreItems.MagicMeteor:
-                    case Upgrades.StoreItems.MagicPetrification:
-                    case Upgrades.StoreItems.MagicMinions:
+                    case UpgradesManager.StoreItems.BonusBossGreen:
+                    case UpgradesManager.StoreItems.BonusBossPurple:
+                    case UpgradesManager.StoreItems.BonusBossRed:
+                    case UpgradesManager.StoreItems.MagicBlizzard:
+                    case UpgradesManager.StoreItems.MagicMeteor:
+                    case UpgradesManager.StoreItems.MagicPetrification:
+                    case UpgradesManager.StoreItems.MagicMinions:
                         if (SkillStack.CheckFullStocks())
                             return false;
                         break;
@@ -320,7 +360,7 @@ namespace RandomTowerDefense.Managers.Macro
         }
 
 
-        public bool ItemPendingSubtract(Upgrades.StoreItems itemID)
+        public bool ItemPendingSubtract(UpgradesManager.StoreItems itemID)
         {
             if (_pendToKart[(int)itemID % 10] < 0) return false;
 
@@ -329,7 +369,7 @@ namespace RandomTowerDefense.Managers.Macro
             return true;
         }
 
-        public int CheckEnoughResource(Upgrades.StoreItems itemID)
+        public int CheckEnoughResource(UpgradesManager.StoreItems itemID)
         {
             int totalCosttoPurchase = CosttoPurchaseCalculation();
             int price = GetPrice(itemID);
@@ -350,7 +390,7 @@ namespace RandomTowerDefense.Managers.Macro
             return _bonusBossCooldown[bossID];
         }
 
-        public void RaycastAction(Upgrades.StoreItems itemID, int infoID)
+        public void RaycastAction(UpgradesManager.StoreItems itemID, int infoID)
         {
             if (ItemPendingAdd(itemID))
                 ItemSold(itemID);
@@ -378,7 +418,7 @@ namespace RandomTowerDefense.Managers.Macro
         public void RaycastAction(int fullitemID, int infoID)
         {
             //-1 :subtract 0:purchase 1:add
-            RaycastAction((Upgrades.StoreItems)fullitemID, infoID);
+            RaycastAction((UpgradesManager.StoreItems)fullitemID, infoID);
         }
 
         #endregion

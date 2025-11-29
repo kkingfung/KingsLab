@@ -10,7 +10,12 @@ namespace RandomTowerDefense.DOTS.Components
     public struct SlowRate : IComponentData
     {
         #region Public Fields
+
+        /// <summary>
+        /// 減速率の値
+        /// </summary>
         public float Value;
+
         #endregion
     }
 }

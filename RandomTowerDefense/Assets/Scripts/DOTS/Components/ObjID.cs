@@ -1,4 +1,5 @@
 ﻿using System;
+using UnityEngine;
 using Unity.Entities;
 
 namespace RandomTowerDefense.DOTS.Components
@@ -10,7 +11,12 @@ namespace RandomTowerDefense.DOTS.Components
     public struct ObjID : IComponentData
     {
         #region Public Fields
+
+        /// <summary>
+        /// オブジェクトID
+        /// </summary>
         public int Value;
+
         #endregion
     }
 }

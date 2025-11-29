@@ -48,11 +48,12 @@ namespace RandomTowerDefense.Managers.System
         public PlayerManager playerManager;
         public EnemySpawner enemySpawner;
 
+        public UpgradesManager upgradesManager;
         public Camera MainCamera;
 
         //private GameObject Skill;
 
-        private Dictionary<Upgrades.StoreItems, int> SkillUpgrader;
+        private Dictionary<UpgradesManager.StoreItems, int> SkillUpgrader;
 
         //Total Cast Number * Constant for each Magic 
         private readonly int[] SkillRequirement = { 5, 15, 30, 50, 75, 100, 130, 170, 210, 250 };
@@ -74,11 +75,11 @@ namespace RandomTowerDefense.Managers.System
             //playerManager = FindObjectOfType<PlayerManager>();
             //enemySpawner = FindObjectOfType<EnemySpawner>();
             //skillSpawner = FindObjectOfType<SkillSpawner>();
-            SkillUpgrader = new Dictionary<Upgrades.StoreItems, int>();
-            SkillUpgrader.Add(Upgrades.StoreItems.MagicMeteor, INITIAL_SKILL_LEVEL);
-            SkillUpgrader.Add(Upgrades.StoreItems.MagicBlizzard, INITIAL_SKILL_LEVEL);
-            SkillUpgrader.Add(Upgrades.StoreItems.MagicMinions, INITIAL_SKILL_LEVEL);
-            SkillUpgrader.Add(Upgrades.StoreItems.MagicPetrification, INITIAL_SKILL_LEVEL);
+            SkillUpgrader = new Dictionary<UpgradesManager.StoreItems, int>();
+            SkillUpgrader.Add(UpgradesManager.StoreItems.MagicMeteor, INITIAL_SKILL_LEVEL);
+            SkillUpgrader.Add(UpgradesManager.StoreItems.MagicBlizzard, INITIAL_SKILL_LEVEL);
+            SkillUpgrader.Add(UpgradesManager.StoreItems.MagicMinions, INITIAL_SKILL_LEVEL);
+            SkillUpgrader.Add(UpgradesManager.StoreItems.MagicPetrification, INITIAL_SKILL_LEVEL);
             maxActiveTime = INITIAL_MAX_ACTIVE_TIME;
             currActiveTime = INITIAL_CURR_ACTIVE_TIME;
 
@@ -101,18 +102,18 @@ namespace RandomTowerDefense.Managers.System
             }
         }
 
-        public void GainExp(Upgrades.StoreItems itemID, int exp)
+        public void GainExp(UpgradesManager.StoreItems itemID, int exp)
         {
             SkillUpgrader[itemID] += exp;
             SkillUpgrade(itemID);
         }
 
-        void SkillUpgrade(Upgrades.StoreItems itemID)
+        void SkillUpgrade(UpgradesManager.StoreItems itemID)
         {
             int currExp = SkillUpgrader[itemID];
-            if (currExp > SkillRequirement[Upgrades.GetLevel(itemID)])
+            if (currExp > SkillRequirement[upgradesManager.GetLevel(itemID)])
             {
-                if (Upgrades.AddSkillLevel(itemID, SKILL_LEVEL_INCREMENT))
+                if (upgradesManager.AddSkillLevel(itemID, SKILL_LEVEL_INCREMENT))
                     SkillUpgrader[itemID] = INITIAL_SKILL_LEVEL;
             }
         }
@@ -131,8 +132,8 @@ namespace RandomTowerDefense.Managers.System
             //}
 
             SkillAttr attr = SkillInfo.GetSkillInfo("SkillMeteor");
-            attr.damage = attr.damage * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor) * Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor) * METEOR_DAMAGE_MULTIPLIER);
-            GainExp(Upgrades.StoreItems.MagicMeteor, ExpPerActivation);
+            attr.Damage = attr.Damage * (1 + upgradesManager.GetLevel(UpgradesManager.StoreItems.MagicMeteor) * UpgradesManager.GetLevel(UpgradesManager.StoreItems.MagicMeteor) * METEOR_DAMAGE_MULTIPLIER);
+            GainExp(UpgradesManager.StoreItems.MagicMeteor, ExpPerActivation);
             StartCoroutine(MeteorSkillCoroutine(attr));
         }
         public void BlizzardSkill(Vector3 hitPos)
@@ -149,26 +150,26 @@ namespace RandomTowerDefense.Managers.System
             //}
 
             SkillAttr attr = SkillInfo.GetSkillInfo("SkillBlizzard");
-            attr.radius = attr.radius * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * BLIZZARD_RADIUS_MULTIPLIER);
-            //attr.damage = attr.damage * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) * 0.3f);
-            GainExp(Upgrades.StoreItems.MagicBlizzard, ExpPerActivation);
+            attr.Radius = attr.Radius * (1 + UpgradesManager.GetLevel(UpgradesManager.StoreItems.MagicBlizzard) * UpgradesManager.GetLevel(UpgradesManager.StoreItems.MagicBlizzard) * BLIZZARD_RADIUS_MULTIPLIER);
+            //attr.Damage = attr.Damage * (1 + UpgradesManager.GetLevel(UpgradesManager.StoreItems.MagicBlizzard) * UpgradesManager.GetLevel(UpgradesManager.StoreItems.MagicBlizzard) * 0.3f);
+            GainExp(UpgradesManager.StoreItems.MagicBlizzard, ExpPerActivation);
 
             StartCoroutine(BlizzardSkillCoroutine(attr));
         }
         public void PetrificationSkill(Vector3 hitPos)
         {
             SkillAttr attr = SkillInfo.GetSkillInfo("SkillPetrification");
-            attr.buffTime = attr.buffTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification) * Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification) * PETRIFICATION_BUFF_MULTIPLIER);
-            GainExp(Upgrades.StoreItems.MagicPetrification, ExpPerActivation);
+            attr.DebuffTime = attr.DebuffTime * (1 + upgradesManager.GetLevel(UpgradesManager.StoreItems.MagicPetrification) * UpgradesManager.GetLevel(UpgradesManager.StoreItems.MagicPetrification) * PETRIFICATION_BUFF_MULTIPLIER);
+            GainExp(UpgradesManager.StoreItems.MagicPetrification, ExpPerActivation);
 
             StartCoroutine(PetrificationCoroutine(attr));
         }
         public void MinionsSkill(Vector3 hitPos)
         {
             SkillAttr attr = SkillInfo.GetSkillInfo("SkillMinions");
-            attr.cycleTime = attr.cycleTime * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * MINIONS_CYCLE_MULTIPLIER);
-            attr.damage = attr.damage * (1 + Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) * MINIONS_DAMAGE_MULTIPLIER);
-            GainExp(Upgrades.StoreItems.MagicMinions, ExpPerActivation);
+            attr.cycleTime = attr.cycleTime * (1 + upgradesManager.GetLevel(UpgradesManager.StoreItems.MagicMinions) * UpgradesManager.GetLevel(UpgradesManager.StoreItems.MagicMinions) * MINIONS_CYCLE_MULTIPLIER);
+            attr.Damage = attr.Damage * (1 + upgradesManager.GetLevel(UpgradesManager.StoreItems.MagicMinions) * UpgradesManager.GetLevel(UpgradesManager.StoreItems.MagicMinions) * MINIONS_DAMAGE_MULTIPLIER);
+            GainExp(UpgradesManager.StoreItems.MagicMinions, ExpPerActivation);
 
             StartCoroutine(MinionsSkillCoroutine(attr));
         }
@@ -180,11 +181,11 @@ namespace RandomTowerDefense.Managers.System
 
         private IEnumerator MeteorSkillCoroutine(SkillAttr attr)
         {
-            float frame = attr.lifeTime + Time.time;
+            float frame = attr.LifeTime + Time.time;
 
             float frameToNext = Time.time;
 
-            maxActiveTime = attr.lifeTime;
+            maxActiveTime = attr.LifeTime;
             currActiveTime = maxActiveTime;
 
             while (frame - Time.time > 0)
@@ -194,9 +195,9 @@ namespace RandomTowerDefense.Managers.System
                     float3 pos = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
                     int[] entityID = skillSpawner.Spawn(METEOR_SKILL_ID, pos,
                         pos, new float3(),
-                        attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime);
+                        attr.Damage, attr.Radius, attr.WaitTime, attr.LifeTime, attr.WaitTime);
                     skillScript = skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>();
-                    skillScript.Init(skillSpawner, Upgrades.StoreItems.MagicMeteor, attr, entityID[0]);
+                    skillScript.Init(skillSpawner, UpgradesManager.StoreItems.MagicMeteor, attr, entityID[0]);
                     frameToNext = Time.time;
                 }
 
@@ -206,25 +207,25 @@ namespace RandomTowerDefense.Managers.System
             }
             skillScript = null;
             currActiveTime = INITIAL_CURR_ACTIVE_TIME;
-            GainExp(Upgrades.StoreItems.MagicMeteor,
-                SkillExp[Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor)]);
+            GainExp(UpgradesManager.StoreItems.MagicMeteor,
+                SkillExp[UpgradesManager.GetLevel(UpgradesManager.StoreItems.MagicMeteor)]);
             SkillAuraFire.enabled = false;
             SkillEnd();
         }
 
         private IEnumerator BlizzardSkillCoroutine(SkillAttr attr)
         {
-            float frame = attr.lifeTime + Time.time;
-            maxActiveTime = attr.lifeTime;
+            float frame = attr.LifeTime + Time.time;
+            maxActiveTime = attr.LifeTime;
             currActiveTime = maxActiveTime;
             float3 pos = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
             int[] entityID = skillSpawner.Spawn(BLIZZARD_SKILL_ID, pos, pos, new float3(),
-                attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime,
-                attr.slowRate, attr.buffTime);
+                attr.Damage, attr.Radius, attr.WaitTime, attr.LifeTime, attr.WaitTime,
+                attr.SlowRate, attr.DebuffTime);
 
             skillScript = skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>();
-            skillScript.Init(skillSpawner, Upgrades.StoreItems.MagicBlizzard, attr, entityID[0]);
-            skillScript.SetConstantForVFX(attr.waitTime);
+            skillScript.Init(skillSpawner, UpgradesManager.StoreItems.MagicBlizzard, attr, entityID[0]);
+            skillScript.SetConstantForVFX(attr.WaitTime);
 
             while (frame - Time.time > 0)
             {
@@ -234,8 +235,8 @@ namespace RandomTowerDefense.Managers.System
 
             skillScript = null;
             currActiveTime = INITIAL_CURR_ACTIVE_TIME;
-            GainExp(Upgrades.StoreItems.MagicBlizzard,
-                SkillExp[Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard)]);
+            GainExp(UpgradesManager.StoreItems.MagicBlizzard,
+                SkillExp[UpgradesManager.GetLevel(UpgradesManager.StoreItems.MagicBlizzard)]);
             SkillAuraSnow.enabled = false;
             skillSpawner.GameObjects[entityID[0]].SetActive(false);
             SkillEnd();
@@ -243,10 +244,10 @@ namespace RandomTowerDefense.Managers.System
 
         private IEnumerator PetrificationCoroutine(SkillAttr attr)
         {
-            float frame = attr.lifeTime + Time.time;
+            float frame = attr.LifeTime + Time.time;
             float record = Time.time;
             float frameToNext = Time.time;
-            maxActiveTime = attr.lifeTime;
+            maxActiveTime = attr.LifeTime;
             currActiveTime = maxActiveTime;
             float3 pos = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
 
@@ -255,11 +256,11 @@ namespace RandomTowerDefense.Managers.System
                 if (Time.time - frameToNext > attr.cycleTime)
                 {
                     int[] entityID = skillSpawner.Spawn(PETRIFICATION_SKILL_ID, pos, pos, new float3(),
-                        attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime,
-                        attr.slowRate, attr.buffTime);
+                        attr.Damage, attr.Radius, attr.WaitTime, attr.LifeTime, attr.WaitTime,
+                        attr.SlowRate, attr.DebuffTime);
                     skillScript = skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>();
-                    skillScript.Init(skillSpawner, Upgrades.StoreItems.MagicPetrification, attr, entityID[0]);
-                    skillScript.SetConstantForVFX((Time.time - record) / attr.lifeTime * VFX_CONSTANT_MULTIPLIER);
+                    skillScript.Init(skillSpawner, UpgradesManager.StoreItems.MagicPetrification, attr, entityID[0]);
+                    skillScript.SetConstantForVFX((Time.time - record) / attr.LifeTime * VFX_CONSTANT_MULTIPLIER);
 
                     frameToNext = Time.time;
                 }
@@ -268,16 +269,16 @@ namespace RandomTowerDefense.Managers.System
             }
             skillScript = null;
             currActiveTime = INITIAL_CURR_ACTIVE_TIME;
-            GainExp(Upgrades.StoreItems.MagicPetrification,
-                SkillExp[Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification)]);
+            GainExp(UpgradesManager.StoreItems.MagicPetrification,
+                SkillExp[UpgradesManager.GetLevel(UpgradesManager.StoreItems.MagicPetrification)]);
             SkillEnd();
         }
 
         private IEnumerator MinionsSkillCoroutine(SkillAttr attr)
         {
-            float frame = attr.lifeTime + Time.time;
+            float frame = attr.LifeTime + Time.time;
             float frameToNext = Time.time;
-            maxActiveTime = attr.lifeTime;
+            maxActiveTime = attr.LifeTime;
             currActiveTime = maxActiveTime;
 
             while (frame - Time.time > 0)
@@ -288,10 +289,11 @@ namespace RandomTowerDefense.Managers.System
                     {
                         float3 pos = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
 
-                        int[] entityID = skillSpawner.Spawn(MINIONS_SKILL_ID, Camera.main.transform.position, pos, new float3(),
-                            attr.damage, attr.radius, attr.waitTime, attr.lifeTime, attr.waitTime);
+                        int[] entityID = skillSpawner.Spawn(MINIONS_SKILL_ID,
+                            Camera.main.transform.position, pos, new float3(),
+                            attr.Damage, attr.Radius, attr.WaitTime, attr.LifeTime, attr.WaitTime);
                         skillScript = skillSpawner.GameObjects[entityID[0]].GetComponent<Skill>();
-                        skillScript.Init(skillSpawner, Upgrades.StoreItems.MagicMinions, attr, entityID[0]);
+                        skillScript.Init(skillSpawner, UpgradesManager.StoreItems.MagicMinions, attr, entityID[0]);
                     }
                     frameToNext = Time.time;
                 }
@@ -300,8 +302,8 @@ namespace RandomTowerDefense.Managers.System
             }
             skillScript = null;
             currActiveTime = INITIAL_CURR_ACTIVE_TIME;
-            GainExp(Upgrades.StoreItems.MagicMinions,
-                SkillExp[Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions)]);
+            GainExp(UpgradesManager.StoreItems.MagicMinions,
+                SkillExp[UpgradesManager.GetLevel(UpgradesManager.StoreItems.MagicMinions)]);
             SkillEnd();
         }
     }

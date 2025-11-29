@@ -26,25 +26,45 @@ namespace RandomTowerDefense.Managers.Macro
     public class StageManager : MonoBehaviour
     {
         #region Constants
+
+        /// <summary>
+        /// ダメージエフェクト表示時間
+        /// </summary>
         private readonly float timerForDmgVFX = 0.05f;
+
+        /// <summary>
+        /// ステージ表示位置
+        /// </summary>
         private readonly Vector3 displayPos = new Vector3(57.5f, 31f, 3.5f);
-        private const int EnemySpawnPtNum = 3;
+
+        /// <summary>
+        /// 敵スポーンポイント数
+        /// </summary>
+        private readonly int EnemySpawnPtNum = 3;
+
+        /// <summary>
+        /// フェードイン・アウト速度
+        /// </summary>
         private readonly float FadeRate = 0.02f;
+
         #endregion
 
         #region Enums
+
         public enum GameResult
         {
             Lose = -1,
             NotEndedYet = 0,
             Won = 1
         }
+
         #endregion
 
         #region Serialized Fields
+
         [Header("🎯 Spawn Configuration")]
         [HideInInspector]
-        public Coord[] SpawnPoint;
+        public FilledMapCoord[] SpawnPoint;
         public GameObject EnemySpawnPortPrefab;
         public GameObject WaveDisplayMeshPrefab;
 
@@ -84,7 +104,7 @@ namespace RandomTowerDefense.Managers.Macro
 
             if (mapGenerator)
             {
-                if (sceneManager.GetCurrIsland() != StageInfo.IslandNum - 1)
+                if (sceneManager.GetCurrIsland() != StageInfoDetail.IslandNum - 1)
                 {
                     mapGenerator.OnNewStage(sceneManager.GetCurrIsland());
                 }
@@ -96,6 +116,7 @@ namespace RandomTowerDefense.Managers.Macro
                 }
             }
         }
+
         // Start is called before the first frame update
         void Start()
         {
@@ -237,7 +258,7 @@ namespace RandomTowerDefense.Managers.Macro
             result = (int)GameResult.Won;
 
 
-            if (sceneManager.GetEnabledIsland() == sceneManager.GetCurrIsland() && sceneManager.GetEnabledIsland() < StageInfo.IslandNum - 1)
+            if (sceneManager.GetEnabledIsland() == sceneManager.GetCurrIsland() && sceneManager.GetEnabledIsland() < StageInfoDetail.IslandNum - 1)
                 PlayerPrefs.SetInt("IslandEnabled", sceneManager.GetCurrIsland() + 1);
 
             isReady = false;

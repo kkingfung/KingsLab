@@ -117,8 +117,8 @@ namespace RandomTowerDefense.Scene
 
             PlayerPrefs.SetFloat("waveNum", 1);
             PlayerPrefs.SetFloat("stageSize", 1);
-            PlayerPrefs.SetFloat("enmNum", 1);
-            PlayerPrefs.SetFloat("enmAttr", 1);
+            PlayerPrefs.SetFloat("enemyNum", 1);
+            PlayerPrefs.SetFloat("enemyAttr", 1);
             PlayerPrefs.SetFloat("obstaclePercent", 1);
             PlayerPrefs.SetFloat("spawnSpeed", 1);
             PlayerPrefs.SetFloat("hpMax", 10);

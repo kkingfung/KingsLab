@@ -43,20 +43,20 @@ namespace RandomTowerDefense.Managers.System
                 if (monsterName == "MetalonGreen" || monsterName == "MetalonPurple" || monsterName == "MetalonRed")
                 {
                     entityIDList = enemySpawner.Spawn(monsterName, SpawnPoint, new float3(),
-                    attr.health * (0.5f * (CustomData ? (int)StageInfo.enmAttributeEx : 1)
+                    attr.health * (0.5f * (CustomData ? (int)StageInfoList.enemyAttributeEx : 1)
                     //+ ((debugManager != null) ? debugManager.enemylvl_Health * waveNum : 0)
-                    ), attr.money * (CustomData ? (int)StageInfo.resourceEx : 1), attr.damage, attr.radius,
-                    attr.speed * (1 + 0.1f * (CustomData ? (int)StageInfo.enmAttributeEx : 1)
+                    ), attr.money * (CustomData ? (int)StageInfoList.resourceEx : 1), attr.Damage, attr.Radius,
+                    attr.speed * (1 + 0.1f * (CustomData ? (int)StageInfoList.enemyAttributeEx : 1)
                     //+ ((debugManager != null) ? debugManager.enemylvl_Speed * waveNum : 0)
                     ), attr.time);
                 }
                 else
                 {
                     entityIDList = enemySpawner.Spawn(monsterName, SpawnPoint, new float3(),
-                    attr.health * (waveNum * 0.5f * (CustomData ? (int)StageInfo.enmAttributeEx : 1)
+                    attr.health * (waveNum * 0.5f * (CustomData ? (int)StageInfoList.enemyAttributeEx : 1)
                     //+ ((debugManager != null) ? debugManager.enemylvl_Health * waveNum : 0)
-                    ), attr.money * (CustomData ? (int)StageInfo.resourceEx : 1), attr.damage, attr.radius,
-                    attr.speed * (1 + 0.1f * waveNum * (CustomData ? (int)StageInfo.enmAttributeEx : 1)
+                    ), attr.money * (CustomData ? (int)StageInfoList.resourceEx : 1), attr.Damage, attr.Radius,
+                    attr.speed * (1 + 0.1f * waveNum * (CustomData ? (int)StageInfoList.enemyAttributeEx : 1)
                     //+ ((debugManager != null) ? debugManager.enemylvl_Speed * waveNum : 0)
                     ), attr.time);
                 }
@@ -71,7 +71,7 @@ namespace RandomTowerDefense.Managers.System
 
         public void SpawnBonusBoss(int bossID, Vector3 SpawnPoint)
         {
-            bool CheckCustomData = sceneManager && (sceneManager.GetCurrIsland() == StageInfo.IslandNum - 1);
+            bool CheckCustomData = sceneManager && (sceneManager.GetCurrIsland() == StageInfoDetail.IslandNum - 1);
             switch (bossID)
             {
                 case 0:

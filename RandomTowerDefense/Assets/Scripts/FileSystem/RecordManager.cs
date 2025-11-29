@@ -26,7 +26,7 @@ public class RecordManager : MonoBehaviour
         stageRecords = new List<SaveObject>();
         stageRecords.Clear();
 
-        for (int i = 0; i < StageInfo.IslandNum; ++i)
+        for (int i = 0; i < StageInfoDetail.IslandNum; ++i)
         {
             SaveSystem.Init("Record" + i.ToString(), newRecordList);
             stageRecords.Add(SaveSystem.LoadObject<SaveObject>("Record" + i.ToString()));
@@ -39,7 +39,7 @@ public class RecordManager : MonoBehaviour
 
     private void OnDisable()
     {
-        for (int i = 0; i < StageInfo.IslandNum; ++i)
+        for (int i = 0; i < StageInfoDetail.IslandNum; ++i)
         {
             SaveSystem.SaveObject("Record" + i.ToString(), stageRecords[i], true);
         }
@@ -62,7 +62,7 @@ public class RecordManager : MonoBehaviour
 
     void updateUI()
     {
-        for (int i = 0; i < StageInfo.IslandNum; ++i)
+        for (int i = 0; i < StageInfoDetail.IslandNum; ++i)
         {
             AllRecordsName[i].Records[0].text = "1." + stageRecords[i].record1.name.Substring(0, 5).ToUpper();
             AllRecordsName[i].Records[1].text = "2." + stageRecords[i].record2.name.Substring(0, 5).ToUpper();

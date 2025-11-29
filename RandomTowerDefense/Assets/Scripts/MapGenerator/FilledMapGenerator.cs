@@ -27,7 +27,7 @@ namespace RandomTowerDefense.MapGenerator
         #region Serialized Fields
 
         [Header("マップ設定")]
-        [SerializeField] public Map[] maps;
+        [SerializeField] public FilledMapInfo[] maps;
         [SerializeField] public int mapIndex;
         [SerializeField] public bool Randomize;
 
@@ -36,7 +36,6 @@ namespace RandomTowerDefense.MapGenerator
         [SerializeField] public Transform obstaclePrefab;
         [SerializeField] public Transform mapFloor;
         [SerializeField] public Transform navmeshFloor;
-        [SerializeField] public Transform navmeshMaskPrefab;
 
         [Header("マップサイズ")]
         [SerializeField] public Vector2 maxMapSize;
@@ -51,45 +50,52 @@ namespace RandomTowerDefense.MapGenerator
         [SerializeField] public InGameOperation sceneManager;
         [SerializeField] public StageManager stageManager;
 
-        [Header("生成情報")]
-        [HideInInspector] public List<Pillar> PillarList;
-        [HideInInspector] public Vector3 originPos;
-
         #endregion
 
         #region Private Fields
 
-        private List<Coord> _allTileCoords;
-        private Queue<Coord> _shuffledTileCoords;
-        private Queue<Coord> _shuffledOpenTileCoords;
-        private Transform[,] _tileMap;
-        private Map _currentMap;
-        private Transform _mapHolder;
-        private System.Random _prng;
-
-        #endregion
-
-        #region Unity Lifecycle
-
-        /// <summary>
-        /// 初期化処理
-        /// </summary>
-        private void Start()
-        {
-            // システム参照はインスペクターで設定
-        }
-
-        /// <summary>
-        /// 毎フレーム更新
-        /// </summary>
-        private void Update()
-        {
-            // 現在使用中の更新処理なし
-        }
+        private List<FilledMapCoord> allTileCoords;
+        private Queue<FilledMapCoord> shuffledTileCoords;
+        private Queue<FilledMapCoord> shuffledOpenTileCoords;
+        private Transform[,] tileMap;
+        private FilledMapInfo currentMap;
+        private Transform mapHolder;
+        private System.Random prng;
+        private List<Pillar> pillarList;
+        private Vector3 originPos;
 
         #endregion
 
         #region Public API
+
+        /// <summary>
+        /// 柱リスト取得処理 - 現在のマップに存在する柱オブジェクトのリストを返す
+        /// </summary>
+        /// <returns>柱オブジェクトのリスト</returns>
+        public List<Pillar> GetPillarList() => pillarList;
+
+        /// <summary>
+        /// 現在のマップのXサイズ取得処理 - 現在生成されているマップの幅を返す
+        /// </summary>
+        /// <returns>マップの幅(int)</returns>
+        public int CurrMapX() => currentMap.mapSize.x;
+
+        /// <summary>
+        /// 現在のマップのYサイズ取得処理 - 現在生成されているマップの高さを返す
+        /// </summary>
+        /// <returns>マップの高さ(int)</returns>
+        public int CurrMapY() => currentMap.mapSize.y;
+
+        /// <summary>
+        /// マップの歩行可能性取得処理 - 指定座標のタイルが歩行可能かどうかを返す
+        /// </summary>
+        /// <param name="x">X座標</param>
+        /// <param name="y">Y座標</param>
+        /// <returns>タイルが歩行可能であるかどうかの真偽値</returns>
+        public bool GetMapWalkable(int x, int y)
+        {
+            return shuffledOpenTileCoords.Contains(new FilledMapCoord(x, y));
+        }
 
         /// <summary>
         /// 新ステージ開始時処理 - 指定ステージ番号のマップ生成
@@ -106,48 +112,50 @@ namespace RandomTowerDefense.MapGenerator
         /// </summary>
         public void GenerateMap()
         {
-            PillarList = new List<Pillar>();
-            _currentMap = maps[mapIndex];
+            pillarList = new List<Pillar>();
+            currentMap = maps[mapIndex];
 
             // AI訓練用の動的マップサイズ設定
-            if (sceneManager && (sceneManager.GetCurrIsland() == StageInfo.IslandNum - 1))
+            if (sceneManager && (sceneManager.GetCurrIsland() == StageInfoDetail.IslandNum - 1))
             {
-                float width = Mathf.Sqrt(StageInfo.stageSizeEx);
-                _currentMap.mapSize.x = (int)(width);
-                _currentMap.mapSize.y = (int)(StageInfo.stageSizeEx / width);
-                _currentMap.obstaclePercent = StageInfo.obstacleEx;
-                MapSize = new int2(_currentMap.mapSize.x, _currentMap.mapSize.y);
+                float width = Mathf.Sqrt(StageInfoList.stageSizeEx);
+                currentMap.mapSize.x = (int)(width);
+                currentMap.mapSize.y = (int)(StageInfoList.stageSizeEx / width);
+                currentMap.obstaclePercent = StageInfoList.obstacleEx;
+                MapSize = new int2(currentMap.mapSize.x, currentMap.mapSize.y);
             }
 
             // ランダムシード設定
             if (Randomize)
             {
-                _currentMap.seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
+                currentMap.seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
             }
 
-            _tileMap = new Transform[_currentMap.mapSize.x, _currentMap.mapSize.y];
-            _prng = new System.Random(_currentMap.seed);
+            tileMap = new Transform[currentMap.mapSize.x, currentMap.mapSize.y];
+            prng = new System.Random(currentMap.seed);
 
             // 座標リスト生成
-            _allTileCoords = new List<Coord>();
-            for (int x = 0; x < _currentMap.mapSize.x; x++)
+            allTileCoords = new List<FilledMapCoord>();
+            for (int x = 0; x < currentMap.mapSize.x; x++)
             {
-                for (int y = 0; y < _currentMap.mapSize.y; y++)
+                for (int y = 0; y < currentMap.mapSize.y; y++)
                 {
-                    _allTileCoords.Add(new Coord(x, y));
+                    allTileCoords.Add(new FilledMapCoord(x, y));
                 }
             }
 
             // 城とテレポートポイント用のスペース確保
             if (stageManager && stageManager.SpawnPoint.Length >= 4)
             {
-                stageManager.SpawnPoint[0] = new Coord(0, 0);
-                stageManager.SpawnPoint[1] = new Coord(_currentMap.mapSize.x - 1, 0);
-                stageManager.SpawnPoint[2] = new Coord(_currentMap.mapSize.x - 1, _currentMap.mapSize.y - 1);
-                stageManager.SpawnPoint[3] = new Coord(0, _currentMap.mapSize.y - 1);
+                stageManager.SpawnPoint[0] = new FilledMapCoord(0, 0);
+                stageManager.SpawnPoint[1] = new FilledMapCoord(currentMap.mapSize.x - 1, 0);
+                stageManager.SpawnPoint[2] = new FilledMapCoord(currentMap.mapSize.x - 1, currentMap.mapSize.y - 1);
+                stageManager.SpawnPoint[3] = new FilledMapCoord(0, currentMap.mapSize.y - 1);
             }
 
-            _shuffledTileCoords = new Queue<Coord>(RandomTowerDefense.Utilities.Utility.ShuffleArray<Coord>(_allTileCoords.ToArray(), _currentMap.seed));
+            shuffledTileCoords = new Queue<FilledMapCoord>(
+                RandomTowerDefense.Utilities.Utility.ShuffleArray<FilledMapCoord>(
+                    allTileCoords.ToArray(), currentMap.seed));
 
             // Create map holder object
             string holderName = "Generated Map";
@@ -156,54 +164,65 @@ namespace RandomTowerDefense.MapGenerator
                 DestroyImmediate(transform.Find(holderName).gameObject);
             }
 
-            _mapHolder = new GameObject(holderName).transform;
-            _mapHolder.parent = transform;
+            mapHolder = new GameObject(holderName).transform;
+            mapHolder.parent = transform;
 
             // Spawning tiles
-            for (int x = 0; x < _currentMap.mapSize.x; x++)
+            for (int x = 0; x < currentMap.mapSize.x; x++)
             {
-                for (int y = 0; y < _currentMap.mapSize.y; y++)
+                for (int y = 0; y < currentMap.mapSize.y; y++)
                 {
                     Vector3 tilePosition = CoordToPosition(x, y);
-                    Transform newTile = Instantiate(tilePrefab, this.transform.position + tilePosition, Quaternion.Euler(Vector3.right * 90)) as Transform;
+                    Transform newTile = Instantiate(tilePrefab,
+                        this.transform.position + tilePosition,
+                        Quaternion.Euler(Vector3.right * 90)) as Transform;
                     newTile.localScale = Vector3.one * (1 - outlinePercent) * tileSize;
-                    newTile.parent = _mapHolder;
-                    _tileMap[x, y] = newTile;
+                    newTile.parent = mapHolder;
+                    tileMap[x, y] = newTile;
                 }
             }
 
             // Spawning obstacles
-            bool[,] obstacleMap = new bool[(int)_currentMap.mapSize.x, (int)_currentMap.mapSize.y];
+            bool[,] obstacleMap = new bool[(int)currentMap.mapSize.x, (int)currentMap.mapSize.y];
 
-            int obstacleCount = (int)(_currentMap.mapSize.x * _currentMap.mapSize.y * _currentMap.obstaclePercent);
+            int obstacleCount = (int)(currentMap.mapSize.x * currentMap.mapSize.y * currentMap.obstaclePercent);
             int currentObstacleCount = 0;
-            List<Coord> allOpenCoords = new List<Coord>(_allTileCoords);
+            List<FilledMapCoord> allOpenCoords = new List<FilledMapCoord>(allTileCoords);
 
             for (int i = 0; i < obstacleCount; i++)
             {
-                Coord randomCoord = GetRandomCoord();
+                FilledMapCoord randomCoord = GetRandomCoord();
                 if (randomCoord.x == 0 && randomCoord.y == 0) continue;
-                if (randomCoord.x == _currentMap.mapSize.x - 1 && randomCoord.y == 0) continue;
-                if (randomCoord.x == 0 && randomCoord.y == _currentMap.mapSize.y - 1) continue;
-                if (randomCoord.x == _currentMap.mapSize.x - 1 && randomCoord.y == _currentMap.mapSize.y - 1) continue;
+                if (randomCoord.x == currentMap.mapSize.x - 1 && randomCoord.y == 0) continue;
+                if (randomCoord.x == 0 && randomCoord.y == currentMap.mapSize.y - 1) continue;
+                if (randomCoord.x == currentMap.mapSize.x - 1 && randomCoord.y == currentMap.mapSize.y - 1) continue;
 
                 obstacleMap[randomCoord.x, randomCoord.y] = true;
                 currentObstacleCount++;
 
-                if (randomCoord != _currentMap.MapCentre && MapIsFullyAccessible(obstacleMap, currentObstacleCount))
+                if (randomCoord != currentMap.MapCentre && MapIsFullyAccessible(obstacleMap, currentObstacleCount))
                 {
-                    float obstacleHeight = Mathf.Lerp(_currentMap.minObstacleHeight, _currentMap.maxObstacleHeight, (float)_prng.NextDouble());
+                    float obstacleHeight = Mathf.Lerp(
+                        currentMap.minObstacleHeight,
+                        currentMap.maxObstacleHeight,
+                        (float)prng.NextDouble());
                     Vector3 obstaclePosition = CoordToPosition(randomCoord.x, randomCoord.y);
 
-                    Transform newObstacle = Instantiate(obstaclePrefab, this.transform.position + obstaclePosition + Vector3.up * obstacleHeight / 2, Quaternion.identity) as Transform;
-                    newObstacle.parent = _mapHolder;
-                    newObstacle.localScale = new Vector3((1 - outlinePercent) * tileSize, obstacleHeight, (1 - outlinePercent) * tileSize);
-                    PillarList.Add(new Pillar(newObstacle.gameObject, randomCoord.x, randomCoord.y, obstacleHeight));
+                    Transform newObstacle = Instantiate(obstaclePrefab,
+                        this.transform.position + obstaclePosition + Vector3.up * obstacleHeight / 2,
+                        Quaternion.identity) as Transform;
+                    newObstacle.parent = mapHolder;
+                    newObstacle.localScale = new Vector3((1 - outlinePercent) * tileSize,
+                        obstacleHeight, (1 - outlinePercent) * tileSize);
+                    pillarList.Add(new Pillar(newObstacle.gameObject,
+                        randomCoord.x, randomCoord.y, obstacleHeight));
 
                     Renderer obstacleRenderer = newObstacle.GetComponent<Renderer>();
                     Material obstacleMaterial = new Material(obstacleRenderer.sharedMaterial);
-                    float colourPercent = randomCoord.y / (float)_currentMap.mapSize.y;
-                    //obstacleMaterial.color = Color.Lerp(_currentMap.foregroundColour,_currentMap.backgroundColour,colourPercent);
+                    float colourPercent = randomCoord.y / (float)currentMap.mapSize.y;
+                    obstacleMaterial.color = Color.Lerp(
+                        _currentMap.foregroundColour,
+                        _currentMap.backgroundColour, colourPercent);
                     obstacleRenderer.sharedMaterial = obstacleMaterial;
 
                     allOpenCoords.Remove(randomCoord);
@@ -215,18 +234,20 @@ namespace RandomTowerDefense.MapGenerator
                 }
             }
 
-            _shuffledOpenTileCoords = new Queue<Coord>(RandomTowerDefense.Utilities.Utility.ShuffleArray<Coord>(allOpenCoords.ToArray(), _currentMap.seed));
-            _shuffledOpenTileCoords.Enqueue(new Coord(0, 0));
+            shuffledOpenTileCoords = new Queue<FilledMapCoord>(
+                RandomTowerDefense.Utilities.Utility.ShuffleArray<FilledMapCoord>(
+                    allOpenCoords.ToArray(), currentMap.seed));
+            shuffledOpenTileCoords.Enqueue(new FilledMapCoord(0, 0));
 
-            _shuffledOpenTileCoords.Enqueue(new Coord(_currentMap.mapSize.x - 1, _currentMap.mapSize.y - 1));
-            _shuffledOpenTileCoords.Enqueue(new Coord(_currentMap.mapSize.x - 1, 0));
-            _shuffledOpenTileCoords.Enqueue(new Coord(0, _currentMap.mapSize.y - 1));
+            shuffledOpenTileCoords.Enqueue(new Coord(currentMap.mapSize.x - 1, currentMap.mapSize.y - 1));
+            shuffledOpenTileCoords.Enqueue(new Coord(currentMap.mapSize.x - 1, 0));
+            shuffledOpenTileCoords.Enqueue(new Coord(0, currentMap.mapSize.y - 1));
 
             //Ensure ONE and ONLY ONE road
             if (packedObstacles)
-                FillingNonNecessary(_shuffledOpenTileCoords, obstacleMap);
+                FillingNonNecessary(shuffledOpenTileCoords, obstacleMap);
 
-            foreach (Pillar pillar in PillarList)
+            foreach (Pillar pillar in pillarList)
             {
                 int counter = 0;
 
@@ -239,7 +260,8 @@ namespace RandomTowerDefense.MapGenerator
 
                         if (x == 0 ^ y == 0)
                         {
-                            if (neighbourX >= 0 && neighbourX < obstacleMap.GetLength(0) && neighbourY >= 0 && neighbourY < obstacleMap.GetLength(1))
+                            if (neighbourX >= 0 && neighbourX < obstacleMap.GetLength(0)
+                            && neighbourY >= 0 && neighbourY < obstacleMap.GetLength(1))
                             {
                                 if (obstacleMap[neighbourX, neighbourY] == false)
                                 {
@@ -252,44 +274,34 @@ namespace RandomTowerDefense.MapGenerator
                 pillar.surroundSpace = counter;
             }
 
-            //// Creating navmesh mask
-            //Transform maskLeft = Instantiate (navmeshMaskPrefab, this.transform.position + Vector3.left * (_currentMap.mapSize.x + maxMapSize.x) / 4f * tileSize, Quaternion.identity) as Transform;
-            //maskLeft.parent = _mapHolder;
-            //maskLeft.localScale = new Vector3 ((maxMapSize.x - _currentMap.mapSize.x) / 2f, 1, _currentMap.mapSize.y) * tileSize;
-
-            //Transform maskRight = Instantiate (navmeshMaskPrefab, this.transform.position + Vector3.right * (_currentMap.mapSize.x + maxMapSize.x) / 4f * tileSize, Quaternion.identity) as Transform;
-            //maskRight.parent = _mapHolder;
-            //maskRight.localScale = new Vector3 ((maxMapSize.x - _currentMap.mapSize.x) / 2f, 1, _currentMap.mapSize.y) * tileSize;
-
-            //Transform maskTop = Instantiate (navmeshMaskPrefab, this.transform.position + Vector3.forward * (_currentMap.mapSize.y + maxMapSize.y) / 4f * tileSize, Quaternion.identity) as Transform;
-            //maskTop.parent = _mapHolder;
-            //maskTop.localScale = new Vector3 (maxMapSize.x, 1, (maxMapSize.y-_currentMap.mapSize.y)/2f) * tileSize;
-
-            //Transform maskBottom = Instantiate (navmeshMaskPrefab, this.transform.position + Vector3.back * (_currentMap.mapSize.y + maxMapSize.y) / 4f * tileSize, Quaternion.identity) as Transform;
-            //maskBottom.parent = _mapHolder;
-            //maskBottom.localScale = new Vector3 (maxMapSize.x, 1, (maxMapSize.y-_currentMap.mapSize.y)/2f) * tileSize;
-
             navmeshFloor.localScale = new Vector3(maxMapSize.x, maxMapSize.y) * tileSize;
-            mapFloor.localScale = new Vector3(_currentMap.mapSize.x * tileSize, _currentMap.mapSize.y * tileSize);
+            mapFloor.localScale = new Vector3(
+                currentMap.mapSize.x * tileSize,
+                currentMap.mapSize.y * tileSize);
 
             originPos = this.transform.position + CoordToPosition(0, 0);
 
             PathfindingGridSetup.Instance.isActivated = false;
         }
 
-        void FillingNonNecessary(Queue<Coord> openTileList, bool[,] obstacleMap)
+        /// <summary>
+        /// 不要な開放タイルを障害物で埋める処理 - マップ内の通路を一本化
+        /// </summary>
+        /// <param name="openTileList">開放タイルのキュー</param>
+        /// <param name="obstacleMap">障害物マップの2D配列</param>
+        void FillingNonNecessary(Queue<FilledMapCoord> openTileList, bool[,] obstacleMap)
         {
-            List<Coord> tempList = openTileList.ToList<Coord>();
+            List<FilledMapCoord> tempList = openTileList.ToList<FilledMapCoord>();
             bool openTileRemoved = true;
             while (openTileRemoved)
             {
                 openTileRemoved = false;
-                foreach (Coord i in tempList)
+                foreach (FilledMapCoord i in tempList)
                 {
                     if (i.x == 0 && i.y == 0) continue;
-                    if (i.x == _currentMap.mapSize.x - 1 && i.y == 0) continue;
-                    if (i.x == 0 && i.y == _currentMap.mapSize.y - 1) continue;
-                    if (i.x == _currentMap.mapSize.x - 1 && i.y == _currentMap.mapSize.y - 1) continue;
+                    if (i.x == currentMap.mapSize.x - 1 && i.y == 0) continue;
+                    if (i.x == 0 && i.y == currentMap.mapSize.y - 1) continue;
+                    if (i.x == currentMap.mapSize.x - 1 && i.y == currentMap.mapSize.y - 1) continue;
 
                     int CntSurrounding = 0;
                     for (int x = -1; x <= 1; x++)
@@ -300,7 +312,8 @@ namespace RandomTowerDefense.MapGenerator
                             int neighbourY = i.y + y;
                             if (x == 0 ^ y == 0)
                             {
-                                if (neighbourX >= 0 && neighbourX < obstacleMap.GetLength(0) && neighbourY >= 0 && neighbourY < obstacleMap.GetLength(1))
+                                if (neighbourX >= 0 && neighbourX < obstacleMap.GetLength(0)
+                                    && neighbourY >= 0 && neighbourY < obstacleMap.GetLength(1))
                                 {
                                     if (obstacleMap[neighbourX, neighbourY] == false)
                                     {
@@ -316,18 +329,27 @@ namespace RandomTowerDefense.MapGenerator
                     if (CntSurrounding == 1)
                     {
                         //Build Obstacle
-                        float obstacleHeight = Mathf.Lerp(_currentMap.minObstacleHeight, _currentMap.maxObstacleHeight, (float)_prng.NextDouble());
+                        float obstacleHeight = Mathf.Lerp(currentMap.minObstacleHeight,
+                            currentMap.maxObstacleHeight, (float)prng.NextDouble());
                         Vector3 obstaclePosition = CoordToPosition(i.x, i.y);
 
-                        Transform newObstacle = Instantiate(obstaclePrefab, this.transform.position + obstaclePosition + Vector3.up * obstacleHeight / 2, Quaternion.identity) as Transform;
-                        newObstacle.parent = _mapHolder;
-                        newObstacle.localScale = new Vector3((1 - outlinePercent) * tileSize, obstacleHeight, (1 - outlinePercent) * tileSize);
-                        PillarList.Add(new Pillar(newObstacle.gameObject, i.x, i.y, obstacleHeight));
+                        Transform newObstacle = Instantiate(obstaclePrefab,
+                            this.transform.position + obstaclePosition + Vector3.up * obstacleHeight / 2,
+                            Quaternion.identity) as Transform;
+                        newObstacle.parent = mapHolder;
+                        newObstacle.localScale = new Vector3(
+                            (1 - outlinePercent) * tileSize,
+                            obstacleHeight,
+                            (1 - outlinePercent) * tileSize);
+                        pillarList.Add(new Pillar(newObstacle.gameObject, i.x, i.y, obstacleHeight));
 
                         Renderer obstacleRenderer = newObstacle.GetComponent<Renderer>();
                         Material obstacleMaterial = new Material(obstacleRenderer.sharedMaterial);
-                        float colourPercent = i.y / (float)_currentMap.mapSize.y;
-                        //obstacleMaterial.color = Color.Lerp(_currentMap.foregroundColour, _currentMap.backgroundColour, colourPercent);
+                        float colourPercent = i.y / (float)currentMap.mapSize.y;
+                        obstacleMaterial.color = Color.Lerp(
+                            _currentMap.foregroundColour,
+                            _currentMap.backgroundColour,
+                            colourPercent);
                         obstacleRenderer.sharedMaterial = obstacleMaterial;
 
                         //Restart Processing
@@ -338,22 +360,28 @@ namespace RandomTowerDefense.MapGenerator
                     }
                 }
             }
-            openTileList = new Queue<Coord>(tempList);
+            openTileList = new Queue<FilledMapCoord>(tempList);
         }
 
+        /// <summary>
+        /// マップの完全なアクセシビリティ検証 - フラッドフィルアルゴリズムを使用して全タイルへの到達可能性を確認
+        /// </summary>
+        /// <param name="obstacleMap">障害物マップの2D配列</param>
+        /// <param name="currentObstacleCount">現在の障害物数</param>
+        /// <returns>マップが完全にアクセシブルであるかどうかの真偽値</returns>
         bool MapIsFullyAccessible(bool[,] obstacleMap, int currentObstacleCount)
         {
             bool[,] mapFlags = new bool[obstacleMap.GetLength(0), obstacleMap.GetLength(1)];
 
-            Queue<Coord> queue = new Queue<Coord>();
-            queue.Enqueue(_currentMap.MapCentre);
-            mapFlags[_currentMap.MapCentre.x, _currentMap.MapCentre.y] = true;
+            Queue<FilledMapCoord> queue = new Queue<FilledMapCoord>();
+            queue.Enqueue(currentMap.MapCentre);
+            mapFlags[currentMap.MapCentre.x, currentMap.MapCentre.y] = true;
 
             int accessibleTileCount = 1;
 
             while (queue.Count > 0)
             {
-                Coord tile = queue.Dequeue();
+                FilledMapCoord tile = queue.Dequeue();
 
                 for (int x = -1; x <= 1; x++)
                 {
@@ -363,12 +391,14 @@ namespace RandomTowerDefense.MapGenerator
                         int neighbourY = tile.y + y;
                         if (x == 0 ^ y == 0)
                         {
-                            if (neighbourX >= 0 && neighbourX < obstacleMap.GetLength(0) && neighbourY >= 0 && neighbourY < obstacleMap.GetLength(1))
+                            if (neighbourX >= 0 && neighbourX < obstacleMap.GetLength(0)
+                                && neighbourY >= 0 && neighbourY < obstacleMap.GetLength(1))
                             {
-                                if (!mapFlags[neighbourX, neighbourY] && !obstacleMap[neighbourX, neighbourY])
+                                if (!mapFlags[neighbourX, neighbourY]
+                                    && !obstacleMap[neighbourX, neighbourY])
                                 {
                                     mapFlags[neighbourX, neighbourY] = true;
-                                    queue.Enqueue(new Coord(neighbourX, neighbourY));
+                                    queue.Enqueue(new FilledMapCoord(neighbourX, neighbourY));
                                     accessibleTileCount++;
                                 }
                             }
@@ -376,61 +406,96 @@ namespace RandomTowerDefense.MapGenerator
                     }
                 }
             }
-            int targetAccessibleTileCount = (int)(_currentMap.mapSize.x * _currentMap.mapSize.y - currentObstacleCount);
+            int targetAccessibleTileCount =
+                (int)(currentMap.mapSize.x * currentMap.mapSize.y - currentObstacleCount);
             return targetAccessibleTileCount == accessibleTileCount;
         }
 
-        public Vector3 CoordToPosition(Coord coord)
+        /// <summary>
+        /// 座標からワールド位置への変換処理
+        /// </summary>
+        /// <param name="coord">マップ座標</param>
+        /// <returns>ワールド位置ベクトル</returns>
+        public Vector3 CoordToPosition(FilledMapCoord coord)
         {
             return CoordToPosition(coord.x, coord.y);
         }
 
-        Vector3 CoordToPosition(int x, int y)
-        {
-            return new Vector3(-_currentMap.mapSize.x / 2f + 0.5f + x, 0, -_currentMap.mapSize.y / 2f + 0.5f + y) * tileSize;
-        }
+        /// <summary>
+        /// ワールド位置からタイル取得処理
+        /// </summary>
+        /// <param name="position">ワールド位置ベクトル</param>
+        /// <returns>対応するタイルのTransform</returns>
 
         public Transform GetTileFromPosition(Vector3 position)
         {
-            int x = Mathf.RoundToInt((position.x - transform.position.x) / tileSize + (_currentMap.mapSize.x - 1) / 2f);
-            int y = Mathf.RoundToInt((position.z - transform.position.z) / tileSize + (_currentMap.mapSize.y - 1) / 2f);
-            x = Mathf.Clamp(x, 0, _tileMap.GetLength(0) - 1);
-            y = Mathf.Clamp(y, 0, _tileMap.GetLength(1) - 1);
-            return _tileMap[x, y];
+            int x = Mathf.RoundToInt((position.x - transform.position.x)
+                / tileSize + (currentMap.mapSize.x - 1) / 2f);
+            int y = Mathf.RoundToInt((position.z - transform.position.z)
+                / tileSize + (currentMap.mapSize.y - 1) / 2f);
+            x = Mathf.Clamp(x, 0, tileMap.GetLength(0) - 1);
+            y = Mathf.Clamp(y, 0, tileMap.GetLength(1) - 1);
+            return tileMap[x, y];
         }
 
+        /// <summary>
+        /// ワールド位置からタイルID取得処理
+        /// </summary>
+        /// <param name="position">ワールド位置ベクトル</param>
+        /// <returns>対応するタイルのID(int2)</returns>
         public int2 GetTileIDFromPosition(Vector3 position)
         {
-            int x = Mathf.RoundToInt((position.x - transform.position.x) / tileSize + (_currentMap.mapSize.x - 1) / 2f);
-            int y = Mathf.RoundToInt((position.z - transform.position.z) / tileSize + (_currentMap.mapSize.y - 1) / 2f);
-            x = Mathf.Clamp(x, 0, _tileMap.GetLength(0) - 1);
-            y = Mathf.Clamp(y, 0, _tileMap.GetLength(1) - 1);
+            int x = Mathf.RoundToInt((position.x - transform.position.x)
+                / tileSize + (currentMap.mapSize.x - 1) / 2f);
+            int y = Mathf.RoundToInt((position.z - transform.position.z)
+                / tileSize + (currentMap.mapSize.y - 1) / 2f);
+            x = Mathf.Clamp(x, 0, tileMap.GetLength(0) - 1);
+            y = Mathf.Clamp(y, 0, tileMap.GetLength(1) - 1);
             return new int2(x, y);
         }
 
-        public Coord GetRandomCoord()
+        /// <summary>
+        /// ランダム座標取得処理
+        /// </summary>
+        /// <returns>ランダムに選ばれたマップ座標</returns>
+        public FilledMapCoord GetRandomCoord()
         {
-            Coord randomCoord = _shuffledTileCoords.Dequeue();
-            _shuffledTileCoords.Enqueue(randomCoord);
+            FilledMapCoord randomCoord = shuffledTileCoords.Dequeue();
+            shuffledTileCoords.Enqueue(randomCoord);
             return randomCoord;
         }
 
+        /// <summary>
+        /// ランダム開放タイル取得処理
+        /// </summary>
+        /// <returns>ランダムに選ばれた開放タイルのTransform</returns>
         public Transform GetRandomOpenTile()
         {
-            Coord randomCoord = _shuffledOpenTileCoords.Dequeue();
-            _shuffledOpenTileCoords.Enqueue(randomCoord);
-            return _tileMap[randomCoord.x, randomCoord.y];
+            FilledMapCoord randomCoord = shuffledOpenTileCoords.Dequeue();
+            shuffledOpenTileCoords.Enqueue(randomCoord);
+            return tileMap[randomCoord.x, randomCoord.y];
         }
 
+        /// <summary>
+        /// マップカスタマイズと生成処理 - 指定サイズでのマップ生成を実行
+        /// </summary>
+        /// <param name="width">マップ幅</param>
+        /// <param name="depth">マップ奥行き</param>
         public void CustomizeMapAndCreate(int width, int depth)
         {
-            maps[3].mapSize = new Coord(width, depth);
+            maps[3].mapSize = new FilledMapCoord(width, depth);
             OnNewStage(3);
         }
 
+        /// <summary>
+        /// 柱状態更新処理 - 指定柱の状態を更新し、高さを返す
+        /// </summary>
+        /// <param name="targetPillar">対象の柱オブジェクト</param>
+        /// <param name="toState">更新先の状態（デフォルトは1）</param>
+        /// <returns>更新された柱の高さ</returns>
         public float UpdatePillarStatus(GameObject targetPillar, int toState = 1)
         {
-            foreach (Pillar i in PillarList)
+            foreach (Pillar i in pillarList)
             {
                 if (i.obj != targetPillar) continue;
                 i.state = toState;
@@ -439,9 +504,14 @@ namespace RandomTowerDefense.MapGenerator
             return 0;
         }
 
+        /// <summary>
+        /// 柱状態確認処理 - 指定柱が空状態かどうかを確認
+        /// </summary>
+        /// <param name="targetPillar">対象の柱オブジェクト</param>
+        /// <returns>柱が空状態であるかどうかの真偽値</
         public bool ChkPillarStatusEmpty(GameObject targetPillar)
         {
-            foreach (Pillar i in PillarList)
+            foreach (Pillar i in pillarList)
             {
                 if (i.obj == null) continue;
                 if (i.obj != targetPillar) continue;
@@ -450,112 +520,21 @@ namespace RandomTowerDefense.MapGenerator
             return false;
         }
 
-        #endregion
-
-        #region Nested Types
-
         /// <summary>
-        /// マップ設定データクラス - SerializableObject対応マップパラメーター
+        /// 座標からワールド位置への変換処理
         /// </summary>
-        [System.Serializable]
-        public class Map
+        /// <param name="x">X座標</param>
+        /// <param name="y">Y座標</param>
+        /// <returns>ワールド位置ベクトル</returns>
+        Vector3 CoordToPosition(int x, int y)
         {
-            [Header("マップサイズ")]
-            public Coord mapSize;
-
-            [Header("障害物設定")]
-            [Range(0, 1)] public float obstaclePercent;
-            public float minObstacleHeight;
-            public float maxObstacleHeight;
-
-            [Header("生成設定")]
-            public int seed;
-
-            [Header("カラー設定")]
-            public Color foregroundColour;
-            public Color backgroundColour;
-
-            /// <summary>
-            /// マップ中心座標の自動計算
-            /// </summary>
-            public Coord MapCentre
-            {
-                get
-                {
-                    return new Coord(mapSize.x / 2, mapSize.y / 2);
-                }
-            }
-        }
-
-        public int CurrMapX()
-        {
-            return _currentMap.mapSize.x;
-        }
-        public int CurrMapY()
-        {
-            return _currentMap.mapSize.y;
-        }
-
-        public bool GetMapWalkable(int x, int y)
-        {
-            if (_shuffledOpenTileCoords.Contains(new Coord(x, y)))
-                return true;
-            return false;
+            var basePosition = new Vector3(
+                -currentMap.mapSize.x / 2f + 0.5f + x,
+                0,
+                -currentMap.mapSize.y / 2f + 0.5f + y);
+            return basePosition * tileSize;
         }
 
         #endregion
-    }
-
-
-    [System.Serializable]
-    public struct Coord
-    {
-        public int x;
-        public int y;
-
-        public Coord(int _x, int _y)
-        {
-            x = _x;
-            y = _y;
-        }
-        public override bool Equals(object obj)
-        {
-            return base.Equals(obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
-        public static bool operator ==(Coord c1, Coord c2)
-        {
-            return c1.x == c2.x && c1.y == c2.y;
-        }
-
-        public static bool operator !=(Coord c1, Coord c2)
-        {
-            return !(c1 == c2);
-        }
-
-
-    }
-
-
-    public class Pillar
-    {
-        public GameObject obj;
-        public Coord mapSize;
-        public int state;//0: Empty 1: Occupied
-        public float height;
-        public int surroundSpace;
-        public Pillar(GameObject obj, int _x, int _y, float height, int state = 0)
-        {
-            this.obj = obj;
-            mapSize.x = _x;
-            mapSize.y = _y;
-            this.state = state;
-            this.height = height;
-        }
     }
 }

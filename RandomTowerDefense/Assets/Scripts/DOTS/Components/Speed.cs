@@ -10,7 +10,12 @@ namespace RandomTowerDefense.DOTS.Components
     public struct Speed : IComponentData
     {
         #region Public Fields
+
+        /// <summary>
+        /// 移動速度の値
+        /// </summary>
         public float Value;
+
         #endregion
     }
 }

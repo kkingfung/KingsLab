@@ -10,45 +10,90 @@ using RandomTowerDefense.Units;
 using RandomTowerDefense.Info;
 using RandomTowerDefense.Managers.System;
 
+/// <summary>
+/// スキルクラス - スキルの動作を管理
+/// </summary>
 public class Skill : MonoBehaviour
 {
-    private Upgrades.StoreItems actionID;
-    private SkillAttr attr;
-
-    private bool ActionEnded;
-
+    /// <summary>
+    /// エンティティID
+    /// </summary>
     public int entityID;
 
-    public PlayerManager playerManager;//For Raycasting target Position
+    /// <summary>
+    /// プレイヤーマネージャー
+    /// </summary>
+    private PlayerManager playerManager;
 
-    [HideInInspector]
-    public Vector3 targetEnm;
+    /// <summary>
+    /// オーディオマネージャー
+    /// </summary>
+    private AudioManager audioManager;
 
-    public AudioManager audioManager;
+    /// <summary>
+    /// スキルスポーナー
+    /// </summary>
+    private SkillSpawner skillSpawner;
+
+    /// <summary>
+    /// スキルID
+    /// </summary>
+    private UpgradesManager.StoreItems actionID;
+
+    /// <summary>
+    /// スキル属性
+    /// </summary>
+    private SkillAttr attr;
+
+    /// <summary>
+    /// アクション終了フラグ
+    /// </summary>
+    private bool ActionEnded;
+
+    /// <summary>
+    /// ターゲットエネミー座標
+    /// </summary>
+    private Vector3 targetEnemy;
+
+    /// <summary>
+    /// オーディオソース
+    /// </summary>
     private AudioSource audioSource;
 
-    // private EnemySpawner enemySpawner;
-
-    public SkillSpawner skillSpawner;
-
+    /// <summary>
+    /// デフォルトターゲットオブジェクト
+    /// </summary>
     private GameObject defaultTarget;
+
+    /// <summary>
+    /// ビジュアルエフェクトコンポーネント
+    /// </summary>
     private VisualEffect VFX;
-    // Start is called before the first frame update
+
+    /// <summary>
+    /// 初期化処理
+    /// </summary>
     private void Start()
     {
         ActionEnded = false;
 
         playerManager = FindObjectOfType<PlayerManager>();
-        //enemySpawner = FindObjectOfType<EnemySpawner>();
         audioManager = FindObjectOfType<AudioManager>();
         audioSource = GetComponent<AudioSource>();
 
-        if (skillSpawner == null) skillSpawner = FindObjectOfType<SkillSpawner>();
-        if (VFX == null) VFX = this.GetComponent<VisualEffect>();
+        if (skillSpawner == null)
+        {
+            skillSpawner = FindObjectOfType<SkillSpawner>();
+        }
+
+        if (VFX == null)
+        {
+            VFX = this.GetComponent<VisualEffect>();
+        }
 
         switch (actionID)
         {
-            case Upgrades.StoreItems.MagicMeteor:
+            case UpgradesManager.StoreItems.MagicMeteor:
                 //this.transform.position = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
                 if (audioManager.enabledSE)
                 {
@@ -56,7 +101,7 @@ public class Skill : MonoBehaviour
                 }
                 //skillSpawner.UpdateEntityPos(entityID,transform.position);
                 break;
-            case Upgrades.StoreItems.MagicBlizzard:
+            case UpgradesManager.StoreItems.MagicBlizzard:
                 //this.transform.position = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
                 if (audioManager.enabledSE)
                 {
@@ -66,7 +111,7 @@ public class Skill : MonoBehaviour
                 }
                 //skillSpawner.UpdateEntityPos(entityID, transform.position);
                 break;
-            case Upgrades.StoreItems.MagicPetrification:
+            case UpgradesManager.StoreItems.MagicPetrification:
                 //this.transform.position = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
                 if (audioManager.enabledSE)
                 {
@@ -74,37 +119,37 @@ public class Skill : MonoBehaviour
                 }
                 // skillSpawner.UpdateEntityPos(entityID, transform.position);
                 break;
-            case Upgrades.StoreItems.MagicMinions:
+            case UpgradesManager.StoreItems.MagicMinions:
                 break;
         }
     }
 
     private void OnEnable()
     {
-        targetEnm = new Vector3();
+        targetEnemy = new Vector3();
     }
     // Update is called once per frame
     private void Update()
     {
         switch (actionID)
         {
-            case Upgrades.StoreItems.MagicMeteor:
-            case Upgrades.StoreItems.MagicPetrification:
+            case UpgradesManager.StoreItems.MagicMeteor:
+            case UpgradesManager.StoreItems.MagicPetrification:
                 break;
-            case Upgrades.StoreItems.MagicMinions:
+            case UpgradesManager.StoreItems.MagicMinions:
                 //Debug.Log(entityID + ":" + skillSpawner.hastargetArray[entityID]);
-                if (targetEnm.y == 0 && findEnm())
+                if (targetEnemy.y == 0 && findEnemy())
                 {
                     VFX.SetVector3("TargetLocation",
-                        targetEnm - this.transform.position);
+                        targetEnemy - this.transform.position);
                     if (audioManager.enabledSE)
                     {
                         audioSource.PlayOneShot(audioManager.GetAudio("se_MagicSummon"));
                     }
-                    skillSpawner.UpdateEntityPos(entityID, targetEnm);
+                    skillSpawner.UpdateEntityPos(entityID, targetEnemy);
                 }
                 break;
-            case Upgrades.StoreItems.MagicBlizzard:
+            case UpgradesManager.StoreItems.MagicBlizzard:
                 if (ActionEnded == false)
                 {
                     Vector3 result = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
@@ -114,8 +159,8 @@ public class Skill : MonoBehaviour
                         skillSpawner.UpdateEntityPos(entityID, this.transform.position);
                     }
 
-                    attr.lifeTime -= Time.deltaTime;
-                    if (!ActionEnded && attr.lifeTime < 0)
+                    attr.LifeTime -= Time.deltaTime;
+                    if (!ActionEnded && attr.LifeTime < 0)
                     {
                         this.gameObject.SetActive(false);
                         ActionEnded = true;
@@ -125,7 +170,7 @@ public class Skill : MonoBehaviour
         }
     }
 
-    public void Init(SkillSpawner skillSpawner, Upgrades.StoreItems actionID, SkillAttr attr, int entityID)
+    public void Init(SkillSpawner skillSpawner, UpgradesManager.StoreItems actionID, SkillAttr attr, int entityID)
     {
         this.actionID = actionID;
         this.attr = new SkillAttr(attr);
@@ -133,7 +178,7 @@ public class Skill : MonoBehaviour
         this.skillSpawner = skillSpawner;
         switch (actionID)
         {
-            case Upgrades.StoreItems.MagicMinions:
+            case UpgradesManager.StoreItems.MagicMinions:
                 EntityManager entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
                 entityManager.SetComponentData(skillSpawner.Entities[entityID], new Translation
                 {
@@ -147,22 +192,22 @@ public class Skill : MonoBehaviour
     {
         switch (actionID)
         {
-            case Upgrades.StoreItems.MagicPetrification:
+            case UpgradesManager.StoreItems.MagicPetrification:
                 if (VFX == null) VFX = this.GetComponent<VisualEffect>();
                 VFX.SetFloat("Radius", val * 1.5f);
-                VFX.SetFloat("Rotation", val / attr.lifeTime * 30.0f);
+                VFX.SetFloat("Rotation", val / attr.LifeTime * 30.0f);
                 break;
         }
     }
 
-    private bool findEnm()
+    private bool findEnemy()
     {
         //if (defaultTarget == null)
         //    defaultTarget = GameObject.FindGameObjectWithTag("DebugTag");
 
         if (skillSpawner.hastargetArray[entityID])
         {
-            targetEnm = skillSpawner.targetArray[entityID];
+            targetEnemy = skillSpawner.targetArray[entityID];
             return true;
         }
         return false;

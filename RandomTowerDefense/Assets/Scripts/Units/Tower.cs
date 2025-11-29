@@ -258,7 +258,7 @@ namespace RandomTowerDefense.Units
             }
             int[] entityID = attackSpawner.Spawn((int)type, this.transform.position
               + this.transform.forward * posAdj.z + this.transform.up * posAdj.y, atkEntityPos, this.transform.localRotation,
-              attr.attackSpd * transform.forward, attr.damage, attr.attackRadius,
+              attr.attackSpd * transform.forward, attr.Damage, attr.attackRadius,
               attr.attackWaittime, attr.attackLifetime);
 
             //this.AtkVFX.Add(attackSpawner.GameObjects[entityID[0]]);
@@ -305,9 +305,9 @@ namespace RandomTowerDefense.Units
                     break;
             }
 
-            atkCounter = attr.waitTime;
+            atkCounter = attr.WaitTime;
             animator.SetTrigger("Detected");
-            animator.SetInteger("ActionID", StageInfo.prng.Next(0, ActionSetNum - 1));
+            animator.SetInteger("ActionID", StageInfoList.prng.Next(0, ActionSetNum - 1));
         }
 
         /// <summary>
@@ -450,11 +450,11 @@ namespace RandomTowerDefense.Units
             attr = TowerInfo.GetTowerInfo(type);
 
             //Update by rank/level with factors
-            attr = new TowerAttr(attr.radius * (1 + 0.02f * rank + 0.005f * level),
-                attr.damage * (2f * rank + 0.5f * level
+            attr = new TowerAttr(attr.Radius * (1 + 0.02f * rank + 0.005f * level),
+                attr.Damage * (2f * rank + 0.5f * level
                 //+ ((debugManager != null) ? debugManager.towerrank_Damage * rank +
                 //debugManager.towerlvl_Damage * level: 0)
-                ), attr.waitTime * (1f - (0.1f * rank)),
+                ), attr.WaitTime * (1f - (0.1f * rank)),
                 3f, attr.attackWaittime,
                 attr.attackRadius, attr.attackSpd, attr.attackLifetime);
 
@@ -462,46 +462,46 @@ namespace RandomTowerDefense.Units
             switch (type)
             {
                 case TowerInfo.TowerInfoID.Enum_TowerNightmare:
-                    upgradeLv = Upgrades.GetLevel(Upgrades.StoreItems.Army1);
-                    attr.damage = attr.damage
+                    upgradeLv = UpgradesManager.GetLevel(UpgradesManager.StoreItems.ArmySoulEater);
+                    attr.Damage = attr.Damage
                        * (1 + (0.1f * upgradeLv * upgradeLv));
-                    attr.waitTime = attr.waitTime
+                    attr.WaitTime = attr.WaitTime
                        * (1 - (0.01f * upgradeLv * upgradeLv));
                     break;
                 case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-                    upgradeLv = Upgrades.GetLevel(Upgrades.StoreItems.Army2);
-                    attr.damage = attr.damage
+                    upgradeLv = UpgradesManager.GetLevel(UpgradesManager.StoreItems.ArmyNightmare);
+                    attr.Damage = attr.Damage
                        * (1 + (0.1f * upgradeLv * upgradeLv));
-                    attr.waitTime = attr.waitTime
+                    attr.WaitTime = attr.WaitTime
                        * (1 - (0.01f * upgradeLv * upgradeLv));
                     break;
                 case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
-                    upgradeLv = Upgrades.GetLevel(Upgrades.StoreItems.Army3);
-                    attr.damage = attr.damage
+                    upgradeLv = UpgradesManager.GetLevel(UpgradesManager.StoreItems.ArmyTerrorBringer);
+                    attr.Damage = attr.Damage
                         * (1 + (0.2f * upgradeLv * upgradeLv));
-                    attr.waitTime = attr.waitTime
+                    attr.WaitTime = attr.WaitTime
                        * (1 - (0.005f * upgradeLv * upgradeLv));
                     break;
                 case TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                    upgradeLv = Upgrades.GetLevel(Upgrades.StoreItems.Army4);
-                    attr.damage = attr.damage
+                    upgradeLv = UpgradesManager.GetLevel(UpgradesManager.StoreItems.ArmyUsurper);
+                    attr.Damage = attr.Damage
                         * (1 + (0.2f * upgradeLv * upgradeLv));
-                    attr.waitTime = attr.waitTime
+                    attr.WaitTime = attr.WaitTime
                        * (1 - (0.005f * upgradeLv * upgradeLv));
                     break;
             }
 
             entityManager.SetComponentData(towerSpawner.Entities[this.entityID], new Radius
             {
-                Value = attr.radius
+                Value = attr.Radius
             });
             entityManager.SetComponentData(towerSpawner.Entities[this.entityID], new Damage
             {
-                Value = attr.damage
+                Value = attr.Damage
             });
             entityManager.SetComponentData(towerSpawner.Entities[this.entityID], new WaitingTime
             {
-                Value = attr.waitTime
+                Value = attr.WaitTime
             });
 
             this.lvupVFXComponent.transform.localScale = Vector3.one * 10f;

@@ -105,7 +105,7 @@ namespace RandomTowerDefense.Managers.Macro
         // Start is called before the first frame update
         private void Start()
         {
-            _currAttr = StageInfo.GetStageInfo();
+            _currAttr = StageInfoList.GetStageInfo();
             sceneManager = FindObjectOfType<InGameOperation>();
             stageManager = FindObjectOfType<StageManager>();
             enemyManager = FindObjectOfType<EnemyManager>();
@@ -218,8 +218,8 @@ namespace RandomTowerDefense.Managers.Macro
         public DebugManager debugManager;
         private IEnumerator SpawnWave(WaveAttr wave)
         {
-            float spawnTimer = wave.enmStartTime;
-            bool CheckCustomData = sceneManager && (sceneManager.GetCurrIsland() == StageInfo.IslandNum - 1);
+            float spawnTimer = wave.enemyStartTime;
+            bool CheckCustomData = sceneManager && (sceneManager.GetCurrIsland() == StageInfoDetail.IslandNum - 1);
             isSpawning = true;
             while (stageManager.GetResult() == GAME_RESULT_ONGOING && isSpawning)
             {
@@ -227,33 +227,33 @@ namespace RandomTowerDefense.Managers.Macro
                 else { spawnTimer -= Time.deltaTime; }
                 if (spawnTimer < 0)
                 {
-                    for (int i = 0; i < wave.enmDetail.Count; ++i)
+                    for (int i = 0; i < wave.enemyDetail.Count; ++i)
                     {
-                        if (wave.enmDetail[i].waveID > _currentWaveNum)
+                        if (wave.enemyDetail[i].waveID > _currentWaveNum)
                         {
                             break;
                         }
-                        else if (wave.enmDetail[i].waveID < _currentWaveNum)
+                        else if (wave.enemyDetail[i].waveID < _currentWaveNum)
                         {
                             continue;
                         }
-                        else if (wave.enmDetail[i].waveID == _currentWaveNum)
+                        else if (wave.enemyDetail[i].waveID == _currentWaveNum)
                         {
-                            for (int j = wave.enmDetail[i].enmNum; j > 0; --j)
+                            for (int j = wave.enemyDetail[i].enemyNum; j > 0; --j)
                             {
                                 while (true)
                                 {
                                     if ((agent == null || agentCallWait == false) && readyToSpawn)
                                     {
-                                        enemyManager.SpawnMonster(wave.enmDetail[i].enmType,
-                                            stageManager.GetPortalPosition(SpawnPointByAI >= 0 ? SpawnPointByAI : wave.enmDetail[i].enmPort), CheckCustomData);
+                                        enemyManager.SpawnMonster(wave.enemyDetail[i].enemyType,
+                                            stageManager.GetPortalPosition(SpawnPointByAI >= 0 ? SpawnPointByAI : wave.enemyDetail[i].enemyPort), CheckCustomData);
                                         readyToSpawn = false;
                                         timeBGM = Time.time;
                                         break;
                                     }
                                     yield return new WaitForSeconds(COROUTINE_WAIT_TIME);
                                 }
-                                yield return new WaitForSeconds(wave.enmSpawnPeriod / Mathf.Max(StageInfo.spawnSpeedEx, MIN_SPAWN_SPEED));
+                                yield return new WaitForSeconds(wave.enemySpawnPeriod / Mathf.Max(StageInfoList.spawnSpeedEx, MIN_SPAWN_SPEED));
                             }
                         }
 

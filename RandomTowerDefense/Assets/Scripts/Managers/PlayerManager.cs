@@ -172,31 +172,31 @@ public class PlayerManager : MonoBehaviour
         //For non-sale
         switch (SkillStack.UseStock(StockSelected))
         {
-            case (int)Upgrades.StoreItems.BonusBoss1:
-                enemyManager.SpawnBonusBoss(0, stageManager.GetPortalPosition(StageInfo.prng.Next(0, 2)));
+            case (int)UpgradesManager.StoreItems.BonusBossGreen:
+                enemyManager.SpawnBonusBoss(0, stageManager.GetPortalPosition(StageInfoList.prng.Next(0, 2)));
                 break;
-            case (int)Upgrades.StoreItems.BonusBoss2:
-                enemyManager.SpawnBonusBoss(1, stageManager.GetPortalPosition(StageInfo.prng.Next(0, 2)));
+            case (int)UpgradesManager.StoreItems.BonusBossPurple:
+                enemyManager.SpawnBonusBoss(1, stageManager.GetPortalPosition(StageInfoList.prng.Next(0, 2)));
                 break;
-            case (int)Upgrades.StoreItems.BonusBoss3:
-                enemyManager.SpawnBonusBoss(2, stageManager.GetPortalPosition(StageInfo.prng.Next(0, 2)));
+            case (int)UpgradesManager.StoreItems.BonusBossRed:
+                enemyManager.SpawnBonusBoss(2, stageManager.GetPortalPosition(StageInfoList.prng.Next(0, 2)));
                 break;
-            case (int)Upgrades.StoreItems.MagicMeteor:
+            case (int)UpgradesManager.StoreItems.MagicMeteor:
                 //CurrentSkill = 
                 skillManager.MeteorSkill(hitPosition);
                 isSkillActive = true;
                 break;
-            case (int)Upgrades.StoreItems.MagicBlizzard:
+            case (int)UpgradesManager.StoreItems.MagicBlizzard:
                 //CurrentSkill = 
                 skillManager.BlizzardSkill(hitPosition);
                 isSkillActive = true;
                 break;
-            case (int)Upgrades.StoreItems.MagicMinions:
+            case (int)UpgradesManager.StoreItems.MagicMinions:
                 //CurrentSkill = 
                 skillManager.MinionsSkill(hitPosition);
                 isSkillActive = true;
                 break;
-            case (int)Upgrades.StoreItems.MagicPetrification:
+            case (int)UpgradesManager.StoreItems.MagicPetrification:
                 //CurrentSkill = 
                 skillManager.PetrificationSkill(hitPosition);
                 isSkillActive = true;

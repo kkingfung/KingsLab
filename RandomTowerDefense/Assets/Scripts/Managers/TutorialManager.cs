@@ -363,7 +363,7 @@ public class TutorialManager : MonoBehaviour
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
                     ChangeText("けど、今回は私の道具を\n貸してやるのだ");
-                    SkillStack.AddStock(Upgrades.StoreItems.MagicMeteor);
+                    SkillStack.AddStock(UpgradesManager.StoreItems.MagicMeteor);
                     StageProgress++;
                 }
                 break;

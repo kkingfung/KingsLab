@@ -94,8 +94,8 @@ public class ScoreCalculation : MonoBehaviour
         if (result == (int)StageManager.GameResult.Won)
         {
             score += ScoreForBase + ScoreForStage * currIsland;
-            score += ((currIsland != StageInfo.IslandNum - 1) ? 0 :
-                (int)((StageInfo.MaxMapDepth * StageInfo.MaxMapDepth - StageInfo.stageSizeEx) * ScoreForStageEx * (1 / Mathf.Max(0.1f, StageInfo.obstacleEx))));
+            score += ((currIsland != StageInfoDetail.IslandNum - 1) ? 0 :
+                (int)((DefaultStageInfos.MaxMapDepth * DefaultStageInfos.MaxMapDepth - StageInfoList.stageSizeEx) * ScoreForStageEx * (1 / Mathf.Max(0.1f, StageInfoList.obstacleEx))));
             scoreStr += score + "\n";
         }
         else
@@ -110,23 +110,23 @@ public class ScoreCalculation : MonoBehaviour
 
         //Resource
         scoreChg = resourceManager.GetCurrMaterial();
-        scoreChg = (int)(scoreChg * ((currIsland != StageInfo.IslandNum - 1) ? 1f :
-                (1f / Mathf.Max(StageInfo.resourceEx, 0.5f))));
+        scoreChg = (int)(scoreChg * ((currIsland != StageInfoDetail.IslandNum - 1) ? 1f :
+                (1f / Mathf.Max(StageInfoList.resourceEx, 0.5f))));
         score += scoreChg;
         scoreStr += "+" + scoreChg + "\n";
 
         //Upgrades
-        scoreChg = ScoreForUpgrades * Upgrades.allLevel();
+        scoreChg = ScoreForUpgrades * UpgradesManager.allLevel();
         score += scoreChg;
         scoreStr += "+" + scoreChg + "\n";
 
         //Remark: Special Function for extra mode
-        if (currIsland != StageInfo.IslandNum - 1)
+        if (currIsland != StageInfoDetail.IslandNum - 1)
         {
             if (result == (int)StageManager.GameResult.Won)
             {
-                score -= StageInfo.hpMaxEx * ScoreForStartHP;
-                scoreStr += "-" + StageInfo.hpMaxEx * ScoreForStartHP + "\n";
+                score -= StageInfoList.hpMaxEx * ScoreForStartHP;
+                scoreStr += "-" + StageInfoList.hpMaxEx * ScoreForStartHP + "\n";
             }
             else
             {
@@ -136,10 +136,10 @@ public class ScoreCalculation : MonoBehaviour
         }
         else
         {
-            if (StageInfo.waveNumEx > 50 || (result == (int)StageManager.GameResult.Won))
+            if (StageInfoList.waveNumEx > 50 || (result == (int)StageManager.GameResult.Won))
             {
-                score -= StageInfo.hpMaxEx * ScoreForStartHPEx;
-                scoreStr += "-" + StageInfo.hpMaxEx * ScoreForStartHPEx + "\n";
+                score -= StageInfoList.hpMaxEx * ScoreForStartHPEx;
+                scoreStr += "-" + StageInfoList.hpMaxEx * ScoreForStartHPEx + "\n";
             }
             else
             {

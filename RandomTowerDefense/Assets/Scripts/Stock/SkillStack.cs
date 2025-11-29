@@ -30,7 +30,7 @@ namespace RandomTowerDefense.Systems
         /// </summary>
         /// <param name="itemID">追加するスキルアイテムID</param>
         /// <returns>追加に成功した場合true</returns>
-        static public bool AddStock(Upgrades.StoreItems itemID)
+        static public bool AddStock(UpgradesManager.StoreItems itemID)
         {
             if (CheckFullStocks())
             {

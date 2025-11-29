@@ -53,16 +53,16 @@ namespace RandomTowerDefense.Common
             GameScene_RightArrow,
 
             // ゲームシーンストア（軍隊購入）
-            GameScene_StoreArmy1 = 20, // Nightmare
-            GameScene_StoreArmy2,      // SoulEater
-            GameScene_StoreArmy3,      // TerrorBringer
-            GameScene_StoreArmy4,      // Usurper
+            GameScene_StoreArmySoulEater = 20, // Nightmare
+            GameScene_StoreArmyNightmare,      // SoulEater
+            GameScene_StoreArmyTerrorBringer,      // TerrorBringer
+            GameScene_StoreArmyUsurper,      // Usurper
 
             // ゲームシーンストア（城とボーナスボス）
             GameScene_StoreCastleHP = 30,
-            GameScene_StoreBonusBoss1, // Green Metalon
-            GameScene_StoreBonusBoss2, // Purple Metalon
-            GameScene_StoreBonusBoss3, // Red Metalon
+            GameScene_StoreBonusBossGreen, // Green Metalon
+            GameScene_StoreBonusBossPurple, // Purple Metalon
+            GameScene_StoreBonusBossRed, // Red Metalon
 
             // ゲームシーンストア（魔法スキル）
             GameScene_StoreMagicMeteor = 40,      // Fire
@@ -135,18 +135,18 @@ namespace RandomTowerDefense.Common
             switch ((ActionTypeID)ActionID)
             {
                 // ゲームシーン（左側ストア）
-                case ActionTypeID.GameScene_StoreArmy1:
-                case ActionTypeID.GameScene_StoreArmy2:
-                case ActionTypeID.GameScene_StoreArmy3:
-                case ActionTypeID.GameScene_StoreArmy4:
+                case ActionTypeID.GameScene_StoreArmySoulEater:
+                case ActionTypeID.GameScene_StoreArmyNightmare:
+                case ActionTypeID.GameScene_StoreArmyTerrorBringer:
+                case ActionTypeID.GameScene_StoreArmyUsurper:
                     DarkenStoreSpr();
                     break;
 
                 // ゲームシーン（上側ストア）
                 case ActionTypeID.GameScene_StoreCastleHP:
-                case ActionTypeID.GameScene_StoreBonusBoss1:
-                case ActionTypeID.GameScene_StoreBonusBoss2:
-                case ActionTypeID.GameScene_StoreBonusBoss3:
+                case ActionTypeID.GameScene_StoreBonusBossGreen:
+                case ActionTypeID.GameScene_StoreBonusBossPurple:
+                case ActionTypeID.GameScene_StoreBonusBossRed:
                     DarkenStoreSpr();
                     break;
 
@@ -245,56 +245,56 @@ namespace RandomTowerDefense.Common
                     break;
 
                 // ゲームシーンストア（軍隊購入）
-                case ActionTypeID.GameScene_StoreArmy1:
-                    _storeManager.RaycastAction(Upgrades.StoreItems.Army1, InfoID);
+                case ActionTypeID.GameScene_StoreArmySoulEater:
+                    _storeManager.RaycastAction(UpgradesManager.StoreItems.ArmySoulEater, InfoID);
                     _audioManager.PlayAudio("se_Button");
                     break;
-                case ActionTypeID.GameScene_StoreArmy2:
-                    _storeManager.RaycastAction(Upgrades.StoreItems.Army2, InfoID);
+                case ActionTypeID.GameScene_StoreArmyNightmare:
+                    _storeManager.RaycastAction(UpgradesManager.StoreItems.ArmyNightmare, InfoID);
                     _audioManager.PlayAudio("se_Button");
                     break;
-                case ActionTypeID.GameScene_StoreArmy3:
-                    _storeManager.RaycastAction(Upgrades.StoreItems.Army3, InfoID);
+                case ActionTypeID.GameScene_StoreArmyTerrorBringer:
+                    _storeManager.RaycastAction(UpgradesManager.StoreItems.ArmyTerrorBringer, InfoID);
                     _audioManager.PlayAudio("se_Button");
                     break;
-                case ActionTypeID.GameScene_StoreArmy4:
-                    _storeManager.RaycastAction(Upgrades.StoreItems.Army4, InfoID);
+                case ActionTypeID.GameScene_StoreArmyUsurper:
+                    _storeManager.RaycastAction(UpgradesManager.StoreItems.ArmyUsurper, InfoID);
                     _audioManager.PlayAudio("se_Button");
                     break;
 
                 // ゲームシーンストア（城とボーナスボス）
                 case ActionTypeID.GameScene_StoreCastleHP:
-                    _storeManager.RaycastAction(Upgrades.StoreItems.CastleHP, InfoID);
+                    _storeManager.RaycastAction(UpgradesManager.StoreItems.CastleHP, InfoID);
                     _audioManager.PlayAudio("se_Button");
                     break;
-                case ActionTypeID.GameScene_StoreBonusBoss1:
-                    _storeManager.RaycastAction(Upgrades.StoreItems.BonusBoss1, InfoID);
+                case ActionTypeID.GameScene_StoreBonusBossGreen:
+                    _storeManager.RaycastAction(UpgradesManager.StoreItems.BonusBossGreen, InfoID);
                     _audioManager.PlayAudio("se_Button");
                     break;
-                case ActionTypeID.GameScene_StoreBonusBoss2:
-                    _storeManager.RaycastAction(Upgrades.StoreItems.BonusBoss2, InfoID);
+                case ActionTypeID.GameScene_StoreBonusBossPurple:
+                    _storeManager.RaycastAction(UpgradesManager.StoreItems.BonusBossPurple, InfoID);
                     _audioManager.PlayAudio("se_Button");
                     break;
-                case ActionTypeID.GameScene_StoreBonusBoss3:
-                    _storeManager.RaycastAction(Upgrades.StoreItems.BonusBoss3, InfoID);
+                case ActionTypeID.GameScene_StoreBonusBossRed:
+                    _storeManager.RaycastAction(UpgradesManager.StoreItems.BonusBossRed, InfoID);
                     _audioManager.PlayAudio("se_Button");
                     break;
 
                 // ゲームシーンストア（魔法スキル）
                 case ActionTypeID.GameScene_StoreMagicMeteor:
-                    _storeManager.RaycastAction(Upgrades.StoreItems.MagicMeteor, InfoID);
+                    _storeManager.RaycastAction(UpgradesManager.StoreItems.MagicMeteor, InfoID);
                     _audioManager.PlayAudio("se_Button");
                     break;
                 case ActionTypeID.GameScene_StoreMagicBlizzard:
-                    _storeManager.RaycastAction(Upgrades.StoreItems.MagicBlizzard, InfoID);
+                    _storeManager.RaycastAction(UpgradesManager.StoreItems.MagicBlizzard, InfoID);
                     _audioManager.PlayAudio("se_Button");
                     break;
                 case ActionTypeID.GameScene_StoreMagicMinions:
-                    _storeManager.RaycastAction(Upgrades.StoreItems.MagicMinions, InfoID);
+                    _storeManager.RaycastAction(UpgradesManager.StoreItems.MagicMinions, InfoID);
                     _audioManager.PlayAudio("se_Button");
                     break;
                 case ActionTypeID.GameScene_StoreMagicPetrification:
-                    _storeManager.RaycastAction(Upgrades.StoreItems.MagicPetrification, InfoID);
+                    _storeManager.RaycastAction(UpgradesManager.StoreItems.MagicPetrification, InfoID);
                     _audioManager.PlayAudio("se_Button");
                     break;
             }

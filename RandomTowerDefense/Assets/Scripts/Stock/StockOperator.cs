@@ -4,6 +4,7 @@ using System.Diagnostics;
 using UnityEngine;
 using RandomTowerDefense.Systems;
 using RandomTowerDefense.Units;
+
 public class StockOperator : MonoBehaviour
 {
     private readonly Vector3 TargetScale = new Vector3(0.4f, 0.4f, 0.4f);
@@ -45,31 +46,31 @@ public class StockOperator : MonoBehaviour
                     StockSlot[i].sprite = null;
                     StockSlot[i].material = MatNull;
                     break;
-                case (int)Upgrades.StoreItems.BonusBoss1:
+                case (int)UpgradesManager.StoreItems.BonusBossGreen:
                     StockSlot[i].sprite = SprBoss1;
                     StockSlot[i].material = MatBoss1;
                     break;
-                case (int)Upgrades.StoreItems.BonusBoss2:
+                case (int)UpgradesManager.StoreItems.BonusBossPurple:
                     StockSlot[i].sprite = SprBoss2;
                     StockSlot[i].material = MatBoss2;
                     break;
-                case (int)Upgrades.StoreItems.BonusBoss3:
+                case (int)UpgradesManager.StoreItems.BonusBossRed:
                     StockSlot[i].sprite = SprBoss3;
                     StockSlot[i].material = MatBoss3;
                     break;
-                case (int)Upgrades.StoreItems.MagicMeteor:
+                case (int)UpgradesManager.StoreItems.MagicMeteor:
                     StockSlot[i].sprite = SprMeteor;
                     StockSlot[i].material = MatMeteor;
                     break;
-                case (int)Upgrades.StoreItems.MagicBlizzard:
+                case (int)UpgradesManager.StoreItems.MagicBlizzard:
                     StockSlot[i].sprite = SprBlizzard;
                     StockSlot[i].material = MatBlizzard;
                     break;
-                case (int)Upgrades.StoreItems.MagicPetrification:
+                case (int)UpgradesManager.StoreItems.MagicPetrification:
                     StockSlot[i].sprite = SprPetrification;
                     StockSlot[i].material = MatPetrification;
                     break;
-                case (int)Upgrades.StoreItems.MagicMinions:
+                case (int)UpgradesManager.StoreItems.MagicMinions:
                     StockSlot[i].sprite = SprMinions;
                     StockSlot[i].material = MatMinions;
                     break;

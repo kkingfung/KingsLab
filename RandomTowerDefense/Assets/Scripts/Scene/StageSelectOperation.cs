@@ -106,7 +106,7 @@ namespace RandomTowerDefense.Scene
             RightCam.transform.position = RightCamStayPt[IslandNow];
             BottomCam.transform.position = BottomCamStayPt[IslandNow];
 
-            if (isDebugging) IslandEnabled = StageInfo.IslandNum;
+            if (isDebugging) IslandEnabled = StageInfoDetail.IslandNum;
             else IslandEnabled = PlayerPrefs.GetInt("IslandEnabled", 1);
 
             GameObject[] ClearMarks = GameObject.FindGameObjectsWithTag("ClearMark");
@@ -381,7 +381,7 @@ namespace RandomTowerDefense.Scene
         private void StageInfoOperation(int infoID, int chg)
         {
             CancelKeybroad = true;
-            float result = StageInfo.SaveDataInPrefs(infoID, chg);
+            float result = StageInfoDetail.SaveDataInPrefs(infoID, chg);
             StageCustomText[infoID].text = (result == 999) ? "∞" : result.ToString();
         }
 
@@ -436,7 +436,9 @@ namespace RandomTowerDefense.Scene
                     yield return new WaitForSeconds(0f);
                 }
 
-                if (keyboard.status == TouchScreenKeyboard.Status.Done || keyboard.status == TouchScreenKeyboard.Status.Canceled)
+                if (keyboard.status == TouchScreenKeyboard.Status.Done
+                || keyboard.status == TouchScreenKeyboard.Status.Canceled)
+                {
                     switch (infoID)
                     {
                         case 0:
@@ -445,13 +447,18 @@ namespace RandomTowerDefense.Scene
                             int InputValue;
                             if (int.TryParse(keyboard.text, out InputValue))
                             {
-                                if (infoID == 0) InputValue = Mathf.Clamp(InputValue, StageInfo.MinMapDepth * StageInfo.MinMapDepth, StageInfo.MaxMapDepth * StageInfo.MaxMapDepth);
-                                StageCustomText[infoID].text = InputValue.ToString();
-                                StageInfo.SaveDataInPrefs_DirectInput(infoID, InputValue);
+                                if (infoID == 0)
+                                {
+                                    InputValue = Mathf.Clamp(InputValue,
+                                        DefaultStageInfos.MinMapDepth * DefaultStageInfos.MinMapDepth,
+                                        DefaultStageInfos.MaxMapDepth * DefaultStageInfos.MaxMapDepth);
+                                    StageCustomText[infoID].text = InputValue.ToString();
+                                }
+                                StageInfoDetail.SaveDataInPrefs_DirectInput(infoID, InputValue);
                             }
                             else
                             {
-                                StageCustomText[infoID].text = StageInfo.SaveDataInPrefs(infoID, 0).ToString();
+                                StageCustomText[infoID].text = StageInfoDetail.SaveDataInPrefs(infoID, 0).ToString();
                             }
                             break;
                         case 2:
@@ -461,19 +468,22 @@ namespace RandomTowerDefense.Scene
                             float OutputValue;
                             if (float.TryParse(keyboard.text, out OutputValue))
                             {
-                                if (infoID == 5) OutputValue = Mathf.Clamp(OutputValue, StageInfo.MinObstaclePercent, StageInfo.MaxObstaclePercent);
+                                if (infoID == 5) OutputValue = Mathf.Clamp(OutputValue, StageInfoList.MinObstaclePercent, StageInfoList.MaxObstaclePercent);
                                 StageCustomText[infoID].text = OutputValue.ToString();
-                                StageInfo.SaveDataInPrefs_DirectInput(infoID, OutputValue);
+                                StageInfoDetail.SaveDataInPrefs_DirectInput(infoID, OutputValue);
                             }
                             else
                             {
-                                StageCustomText[infoID].text = StageInfo.SaveDataInPrefs(infoID, 0).ToString();
+                                StageCustomText[infoID].text = StageInfoDetail.SaveDataInPrefs(infoID, 0).ToString();
                             }
                             break;
                     }
+                }
+
                 keyboard = null;
             }
         }
+
         #endregion
 
         private IEnumerator SceneChgAnimation()

@@ -303,7 +303,7 @@ namespace RandomTowerDefense.AI
             int[] TotalRankInQuarteredMap = new int[4];
             if (towerSpawner == null || filledMapGenerator == null) return TotalRankInQuarteredMap;
             AgentCoord = filledMapGenerator.GetTileIDFromPosition(this.transform.position);
-            AgentCoord = new int2(StageInfo.stageSizeEx / 2, StageInfo.stageSizeEx / 2);
+            AgentCoord = new int2(StageInfoList.stageSizeEx / 2, StageInfoList.stageSizeEx / 2);
             MaxCoord = filledMapGenerator.MapSize;
 
             int[] SubTotalRankInQuarteredMap;
@@ -453,20 +453,20 @@ namespace RandomTowerDefense.AI
             foreach (GameObject i in allMonsters)
             {
                 if (i.activeSelf == false) continue;
-                int2 EnmCoord = filledMapGenerator.GetTileIDFromPosition(i.transform.position);
-                if (EnmCoord.x <= AgentCoord.x && EnmCoord.y >= AgentCoord.y)
+                int2 EnemyCoord = filledMapGenerator.GetTileIDFromPosition(i.transform.position);
+                if (EnemyCoord.x <= AgentCoord.x && EnemyCoord.y >= AgentCoord.y)
                 {
                     TotalRankInQuarteredMap[0]++;
                 }
-                else if (EnmCoord.x <= AgentCoord.x && EnmCoord.y >= AgentCoord.y)
+                else if (EnemyCoord.x <= AgentCoord.x && EnemyCoord.y >= AgentCoord.y)
                 {
                     TotalRankInQuarteredMap[1]++;
                 }
-                else if (EnmCoord.x <= AgentCoord.x && EnmCoord.y <= AgentCoord.y)
+                else if (EnemyCoord.x <= AgentCoord.x && EnemyCoord.y <= AgentCoord.y)
                 {
                     TotalRankInQuarteredMap[2]++;
                 }
-                else if (EnmCoord.x >= AgentCoord.x && EnmCoord.y >= AgentCoord.y)
+                else if (EnemyCoord.x >= AgentCoord.x && EnemyCoord.y >= AgentCoord.y)
                 {
                     TotalRankInQuarteredMap[3]++;
                 }
@@ -481,15 +481,15 @@ namespace RandomTowerDefense.AI
             GameObject targetPillar = null;
 
             int cnt = 0;
-            while (cnt < filledMapGenerator.PillarList.Count)
+            while (cnt < filledMapGenerator.pillarList.Count)
             {
-                int id = prng.Next(0, filledMapGenerator.PillarList.Count);
-                if (filledMapGenerator.PillarList[id].state == (isFree ? 0 : 1))
+                int id = prng.Next(0, filledMapGenerator.pillarList.Count);
+                if (filledMapGenerator.pillarList[id].state == (isFree ? 0 : 1))
                 {
-                    if (filledMapGenerator.PillarList[id].surroundSpace > 0)
-                        return filledMapGenerator.PillarList[id].obj;
+                    if (filledMapGenerator.pillarList[id].surroundSpace > 0)
+                        return filledMapGenerator.pillarList[id].obj;
                     if (targetPillar == null)
-                        targetPillar = filledMapGenerator.PillarList[id].obj;
+                        targetPillar = filledMapGenerator.pillarList[id].obj;
                 }
 
                 cnt++;
@@ -499,73 +499,75 @@ namespace RandomTowerDefense.AI
         private GameObject GetRandomFreePillar(int areaID)
         {
             Pillar targetPillar = null;
+            var pillarList = filledMapGenerator.GetPillarList();
             int cnt = 0;
-            while (cnt < filledMapGenerator.PillarList.Count)
+            while (cnt < pillarList.Count)
             {
-                int id = prng.Next(0, filledMapGenerator.PillarList.Count);
+                int id = prng.Next(0, pillarList.Count);
+                var pillar = pillarList[id];
                 switch (areaID)
                 {
                     case 0:
-                        if (filledMapGenerator.PillarList[id].mapSize.x <= AgentCoord.x
-                            && filledMapGenerator.PillarList[id].mapSize.y >= AgentCoord.y)
+                        if (pillar.mapSize.x <= AgentCoord.x
+                            && pillar.mapSize.y >= AgentCoord.y)
                         {
-                            if (filledMapGenerator.PillarList[id].state == 0)
+                            if (pillar.state == 0)
                             {
-                                if (filledMapGenerator.PillarList[id].surroundSpace > 0)
+                                if (pillar.surroundSpace > 0)
                                 {
-                                    filledMapGenerator.PillarList[id].state = 1;
-                                    return filledMapGenerator.PillarList[id].obj;
+                                    pillar.state = 1;
+                                    return pillar.obj;
                                 }
                                 if (targetPillar == null)
-                                    targetPillar = filledMapGenerator.PillarList[id];
+                                    targetPillar = pillar;
                             }
                         }
                         break;
                     case 1:
-                        if (filledMapGenerator.PillarList[id].mapSize.x >= AgentCoord.x
-                            && filledMapGenerator.PillarList[id].mapSize.y <= AgentCoord.y)
+                        if (pillar.mapSize.x >= AgentCoord.x
+                            && pillar.mapSize.y <= AgentCoord.y)
                         {
-                            if (filledMapGenerator.PillarList[id].state == 0)
+                            if (pillar.state == 0)
                             {
-                                if (filledMapGenerator.PillarList[id].surroundSpace > 0)
+                                if (pillar.surroundSpace > 0)
                                 {
-                                    filledMapGenerator.PillarList[id].state = 1;
-                                    return filledMapGenerator.PillarList[id].obj;
+                                    pillar.state = 1;
+                                    return pillar.obj;
                                 }
                                 if (targetPillar == null)
-                                    targetPillar = filledMapGenerator.PillarList[id];
+                                    targetPillar = pillar;
                             }
                         }
                         break;
                     case 2:
-                        if (filledMapGenerator.PillarList[id].mapSize.x <= AgentCoord.x
-                            && filledMapGenerator.PillarList[id].mapSize.y <= AgentCoord.y)
+                        if (pillar.mapSize.x <= AgentCoord.x
+                            && pillar.mapSize.y <= AgentCoord.y)
                         {
-                            if (filledMapGenerator.PillarList[id].state == 0)
+                            if (pillar.state == 0)
                             {
-                                if (filledMapGenerator.PillarList[id].surroundSpace > 0)
+                                if (pillar.surroundSpace > 0)
                                 {
-                                    filledMapGenerator.PillarList[id].state = 1;
-                                    return filledMapGenerator.PillarList[id].obj;
+                                    pillar.state = 1;
+                                    return pillar.obj;
                                 }
                                 if (targetPillar == null)
-                                    targetPillar = filledMapGenerator.PillarList[id];
+                                    targetPillar = pillar;
                             }
                         }
                         break;
                     case 3:
-                        if (filledMapGenerator.PillarList[id].mapSize.x >= AgentCoord.x
-                            && filledMapGenerator.PillarList[id].mapSize.y >= AgentCoord.y)
+                        if (pillar.mapSize.x >= AgentCoord.x
+                            && pillar.mapSize.y >= AgentCoord.y)
                         {
-                            if (filledMapGenerator.PillarList[id].state == 0)
+                            if (pillar.state == 0)
                             {
-                                if (filledMapGenerator.PillarList[id].surroundSpace > 0)
+                                if (pillar.surroundSpace > 0)
                                 {
-                                    filledMapGenerator.PillarList[id].state = 1;
-                                    return filledMapGenerator.PillarList[id].obj;
+                                    pillar.state = 1;
+                                    return pillar.obj;
                                 }
                                 if (targetPillar == null)
-                                    targetPillar = filledMapGenerator.PillarList[id];
+                                    targetPillar = pillar;
                             }
                         }
                         break;

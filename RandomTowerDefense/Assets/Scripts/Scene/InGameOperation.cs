@@ -140,18 +140,18 @@ namespace RandomTowerDefense.Scene
             if (UseRemoteConfig)
             {
                 ConfigManager.FetchCompleted += ApplyRemoteSettings;
-                //ConfigManager.FetchCompleted += StageInfo.InitByRemote;
+                //ConfigManager.FetchCompleted += StageInfoList.InitByRemote;
                 //ConfigManager.FetchCompleted += TowerInfo.InitByRemote;
                 //ConfigManager.FetchCompleted += EnemyInfo.InitByRemote;
                 //ConfigManager.FetchCompleted += SkillInfo.InitByRemote;
                 ConfigManager.FetchConfigs<userAttributes, appAttributes>(new userAttributes(), new appAttributes());
                 if (Directory.Exists("Assets/AssetBundles"))
                 {
-                    StageInfo.Init(true, "Assets/AssetBundles");
+                    StageInfoList.Init(true, "Assets/AssetBundles");
                 }
                 else
                 {
-                    StageInfo.Init(false, null);
+                    StageInfoList.Init(false, null);
                 }
                 //Debug.Log("UpdatedByRemoteConfig");
             }
@@ -162,7 +162,7 @@ namespace RandomTowerDefense.Scene
                 {
                     if (Directory.Exists("Assets/AssetBundles"))
                     {
-                        StageInfo.Init(true, "Assets/AssetBundles");
+                        StageInfoList.Init(true, "Assets/AssetBundles");
                         TowerInfo.InitByFile("Assets/AssetBundles/TowerInfo.txt");
                         EnemyInfo.InitByFile("Assets/AssetBundles/EnemyInfo.txt");
                         SkillInfo.InitByFile("Assets/AssetBundles/SkillInfo.txt");
@@ -170,7 +170,7 @@ namespace RandomTowerDefense.Scene
                     }
                     else
                     {
-                        StageInfo.Init(false, null);
+                        StageInfoList.Init(false, null);
                         TowerInfo.Init();
                         EnemyInfo.Init();
                         SkillInfo.Init();
@@ -179,7 +179,7 @@ namespace RandomTowerDefense.Scene
                 }
                 else
                 {
-                    StageInfo.Init(false, null);
+                    StageInfoList.Init(false, null);
                     TowerInfo.Init();
                     EnemyInfo.Init();
                     SkillInfo.Init();
@@ -188,7 +188,7 @@ namespace RandomTowerDefense.Scene
             }
 
             SkillStack.Init();
-            Upgrades.Init();
+            UpgradesManager.Init();
 
             IslandNow = PlayerPrefs.GetInt("IslandNow", 0);
             IslandEnabled = PlayerPrefs.GetInt("IslandEnabled", 1);
@@ -226,9 +226,9 @@ namespace RandomTowerDefense.Scene
             }
 
             if (UseFileAsset && Directory.Exists("Assets/AssetBundles"))
-                StageInfo.Init(true, "Assets/AssetBundles");
+                StageInfoList.Init(true, "Assets/AssetBundles");
             else
-                StageInfo.Init(false, null);
+                StageInfoList.Init(false, null);
 
             waveManager.doneDownloading = true;
         }
@@ -362,7 +362,7 @@ namespace RandomTowerDefense.Scene
                 if (UseRemoteConfig)
                 {
                     ConfigManager.FetchCompleted -= ApplyRemoteSettings;
-                    //ConfigManager.FetchCompleted -= StageInfo.InitByRemote;
+                    //ConfigManager.FetchCompleted -= StageInfoList.InitByRemote;
                     //ConfigManager.FetchCompleted -= TowerInfo.InitByRemote;
                     //ConfigManager.FetchCompleted -= EnemyInfo.InitByRemote;
                     //ConfigManager.FetchCompleted -= SkillInfo.InitByRemote;

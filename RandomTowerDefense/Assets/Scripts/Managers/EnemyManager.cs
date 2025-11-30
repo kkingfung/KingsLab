@@ -53,12 +53,12 @@ namespace RandomTowerDefense.Managers.System
                 else
                 {
                     entityIDList = enemySpawner.Spawn(monsterName, SpawnPoint, new float3(),
-                    attr.health * (waveNum * 0.5f * (CustomData ? (int)StageInfoList.enemyAttributeEx : 1)
-                    //+ ((debugManager != null) ? debugManager.enemylvl_Health * waveNum : 0)
-                    ), attr.money * (CustomData ? (int)StageInfoList.resourceEx : 1), attr.Damage, attr.Radius,
-                    attr.speed * (1 + 0.1f * waveNum * (CustomData ? (int)StageInfoList.enemyAttributeEx : 1)
-                    //+ ((debugManager != null) ? debugManager.enemylvl_Speed * waveNum : 0)
-                    ), attr.time);
+                        attr.health * waveNum * 0.5f * (CustomData ? (int)StageInfoList.enemyAttributeEx : 1),
+                        attr.money * (CustomData ? (int)StageInfoList.resourceEx : 1),
+                        attr.Damage,
+                        attr.Radius,
+                        attr.speed * (1 + 0.1f * waveNum * (CustomData ? (int)StageInfoList.enemyAttributeEx : 1)),
+                        attr.time);
                 }
             }
         }

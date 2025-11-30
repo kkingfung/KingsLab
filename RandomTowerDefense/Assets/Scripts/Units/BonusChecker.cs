@@ -55,21 +55,21 @@ namespace RandomTowerDefense.Units
         {
             if (TowerNewlyBuilt >= 0)
             {
-                if (TowerNewlyBuilt == 0 && !_allRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerNightmare])
-                    _allRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerNightmare]
-                        = MonsterList_Type(TowerInfo.TowerInfoID.Enum_TowerNightmare);
+                if (TowerNewlyBuilt == 0 && !_allRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.EnumTowerNightmare])
+                    _allRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.EnumTowerNightmare]
+                        = MonsterList_Type(TowerInfo.TowerInfoID.EnumTowerNightmare);
 
-                else if (TowerNewlyBuilt == 1 && !_allRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerSoulEater])
-                    _allRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerSoulEater]
-                        = MonsterList_Type(TowerInfo.TowerInfoID.Enum_TowerSoulEater);
+                else if (TowerNewlyBuilt == 1 && !_allRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.EnumTowerSoulEater])
+                    _allRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.EnumTowerSoulEater]
+                        = MonsterList_Type(TowerInfo.TowerInfoID.EnumTowerSoulEater);
 
-                else if (TowerNewlyBuilt == 2 && !_allRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer])
-                    _allRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer]
-                        = MonsterList_Type(TowerInfo.TowerInfoID.Enum_TowerTerrorBringer);
+                else if (TowerNewlyBuilt == 2 && !_allRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.EnumTowerTerrorBringer])
+                    _allRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.EnumTowerTerrorBringer]
+                        = MonsterList_Type(TowerInfo.TowerInfoID.EnumTowerTerrorBringer);
 
-                else if (TowerNewlyBuilt == 3 && !_allRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerUsurper])
-                    _allRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerUsurper]
-                       = MonsterList_Type(TowerInfo.TowerInfoID.Enum_TowerUsurper);
+                else if (TowerNewlyBuilt == 3 && !_allRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.EnumTowerUsurper])
+                    _allRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.EnumTowerUsurper]
+                       = MonsterList_Type(TowerInfo.TowerInfoID.EnumTowerUsurper);
 
                 TowerNewlyBuilt = -1;
             }
@@ -90,7 +90,7 @@ namespace RandomTowerDefense.Units
 
             switch (towerID)
             {
-                case TowerInfo.TowerInfoID.Enum_TowerNightmare:
+                case TowerInfo.TowerInfoID.EnumTowerNightmare:
                     for (int i = TowerSpawner.MonsterMaxRank; i > 0; --i)
                     {
                         switch (i)
@@ -116,7 +116,7 @@ namespace RandomTowerDefense.Units
                             return false;
                     }
                     break;
-                case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
+                case TowerInfo.TowerInfoID.EnumTowerSoulEater:
                     for (int i = TowerSpawner.MonsterMaxRank; i > 0; --i)
                     {
                         switch (i)
@@ -142,7 +142,7 @@ namespace RandomTowerDefense.Units
                             return false;
                     }
                     break;
-                case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
+                case TowerInfo.TowerInfoID.EnumTowerTerrorBringer:
                     for (int i = TowerSpawner.MonsterMaxRank; i > 0; --i)
                     {
                         switch (i)
@@ -168,7 +168,7 @@ namespace RandomTowerDefense.Units
                             return false;
                     }
                     break;
-                case TowerInfo.TowerInfoID.Enum_TowerUsurper:
+                case TowerInfo.TowerInfoID.EnumTowerUsurper:
                     for (int i = TowerSpawner.MonsterMaxRank; i > 0; --i)
                     {
                         switch (i)

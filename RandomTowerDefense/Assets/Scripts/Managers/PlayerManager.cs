@@ -173,13 +173,13 @@ public class PlayerManager : MonoBehaviour
         switch (SkillStack.UseStock(StockSelected))
         {
             case (int)UpgradesManager.StoreItems.BonusBossGreen:
-                enemyManager.SpawnBonusBoss(0, stageManager.GetPortalPosition(StageInfoList.prng.Next(0, 2)));
+                enemyManager.SpawnBonusBoss(0, stageManager.GetPortalPosition(DefaultStageInfos.Prng.Next(0, 2)));
                 break;
             case (int)UpgradesManager.StoreItems.BonusBossPurple:
-                enemyManager.SpawnBonusBoss(1, stageManager.GetPortalPosition(StageInfoList.prng.Next(0, 2)));
+                enemyManager.SpawnBonusBoss(1, stageManager.GetPortalPosition(DefaultStageInfos.Prng.Next(0, 2)));
                 break;
             case (int)UpgradesManager.StoreItems.BonusBossRed:
-                enemyManager.SpawnBonusBoss(2, stageManager.GetPortalPosition(StageInfoList.prng.Next(0, 2)));
+                enemyManager.SpawnBonusBoss(2, stageManager.GetPortalPosition(DefaultStageInfos.Prng.Next(0, 2)));
                 break;
             case (int)UpgradesManager.StoreItems.MagicMeteor:
                 //CurrentSkill = 

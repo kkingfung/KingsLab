@@ -23,13 +23,13 @@ namespace RandomTowerDefense.Managers
         {
             switch (type)
             {
-                case TowerInfo.TowerInfoID.Enum_TowerNightmare:
+                case TowerInfo.TowerInfoID.EnumTowerNightmare:
                     return GetNightmareListByRank(spawner, rank);
-                case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
+                case TowerInfo.TowerInfoID.EnumTowerSoulEater:
                     return GetSoulEaterListByRank(spawner, rank);
-                case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
+                case TowerInfo.TowerInfoID.EnumTowerTerrorBringer:
                     return GetTerrorBringerListByRank(spawner, rank);
-                case TowerInfo.TowerInfoID.Enum_TowerUsurper:
+                case TowerInfo.TowerInfoID.EnumTowerUsurper:
                     return GetUsurperListByRank(spawner, rank);
                 default:
                     return new List<GameObject>();
@@ -89,13 +89,13 @@ namespace RandomTowerDefense.Managers
         {
             switch (type)
             {
-                case TowerInfo.TowerInfoID.Enum_TowerNightmare:
+                case TowerInfo.TowerInfoID.EnumTowerNightmare:
                     return Color.yellow;
-                case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
+                case TowerInfo.TowerInfoID.EnumTowerSoulEater:
                     return Color.grey;
-                case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
+                case TowerInfo.TowerInfoID.EnumTowerTerrorBringer:
                     return Color.cyan;
-                case TowerInfo.TowerInfoID.Enum_TowerUsurper:
+                case TowerInfo.TowerInfoID.EnumTowerUsurper:
                     return Color.magenta;
                 default:
                     return Color.white;
@@ -111,13 +111,13 @@ namespace RandomTowerDefense.Managers
         {
             switch (type)
             {
-                case TowerInfo.TowerInfoID.Enum_TowerNightmare:
+                case TowerInfo.TowerInfoID.EnumTowerNightmare:
                     return new Vector4(1, 1, 0, 1);
-                case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
+                case TowerInfo.TowerInfoID.EnumTowerSoulEater:
                     return new Vector4(0, 1, 0, 1);
-                case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
+                case TowerInfo.TowerInfoID.EnumTowerTerrorBringer:
                     return new Vector4(0, 0, 1, 1);
-                case TowerInfo.TowerInfoID.Enum_TowerUsurper:
+                case TowerInfo.TowerInfoID.EnumTowerUsurper:
                     return new Vector4(1, 0, 0, 1);
                 default:
                     return new Vector4(1, 1, 1, 1);
@@ -137,13 +137,13 @@ namespace RandomTowerDefense.Managers
         {
             switch (type)
             {
-                case TowerInfo.TowerInfoID.Enum_TowerNightmare:
+                case TowerInfo.TowerInfoID.EnumTowerNightmare:
                     return nightmareAura;
-                case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
+                case TowerInfo.TowerInfoID.EnumTowerSoulEater:
                     return soulEaterAura;
-                case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
+                case TowerInfo.TowerInfoID.EnumTowerTerrorBringer:
                     return terrorBringerAura;
-                case TowerInfo.TowerInfoID.Enum_TowerUsurper:
+                case TowerInfo.TowerInfoID.EnumTowerUsurper:
                     return usurperAura;
                 default:
                     return null;

@@ -48,7 +48,6 @@ namespace RandomTowerDefense.Info
         /// </summary>
         public static StageAttr stageDetail;
 
-
         /// <summary>
         /// ステージ情報初期化メソッド
         /// </summary>
@@ -69,7 +68,7 @@ namespace RandomTowerDefense.Info
         /// </summary>
         /// <param name="infoID">ステージ情報ID</param>
         /// <param name="newInfo">ユーザー設定情報</param>
-        public static void SaveDataInPrefs_DirectInput(int infoID, float newInfo)
+        public static void SaveDataInPrefsByDirectInput(int infoID, float newInfo)
         {
             switch ((StageInfoID)infoID)
             {
@@ -86,7 +85,7 @@ namespace RandomTowerDefense.Info
                 case StageInfoID.EnumEnemyAttribute:
                     PlayerPrefs.SetFloat("enemyAttr", newInfo);
                     break;
-                case StageInfoID.Enum_spawnSpeed:
+                case StageInfoID.EnumSpawnSpeed:
                     PlayerPrefs.SetFloat("spawnSpeed", input);
                     break;
                 case StageInfoID.EnumObstaclePercent:
@@ -134,7 +133,7 @@ namespace RandomTowerDefense.Info
                     tempVal = (currentID + chg + obstacleFactor.Length) % obstacleFactor.Length;
                     PlayerPrefs.SetFloat("obstaclePercent", obstacleFactor[(int)tempVal]);
                     return obstacleFactor[(int)tempVal];
-                case StageInfoID.Enum_spawnSpeed:
+                case StageInfoID.EnumSpawnSpeed:
                     tempVal = (currentID + chg + spawnSpeedFactor.Length) % spawnSpeedFactor.Length;
                     PlayerPrefs.SetFloat("spawnSpeed", spawnSpeedFactor[(int)tempVal]);
                     return spawnSpeedFactor[(int)tempVal];
@@ -197,7 +196,7 @@ namespace RandomTowerDefense.Info
                         if (obstacleFactor[elementID] > tempVal) break;
                     }
                     break;
-                case StageInfoID.Enum_spawnSpeed:
+                case StageInfoID.EnumSpawnSpeed:
                     tempVal = PlayerPrefs.GetFloat("spawnSpeed", 1);
                     for (; elementID < spawnSpeedFactor.Length; elementID++)
                     {
@@ -275,17 +274,17 @@ namespace RandomTowerDefense.Info
         /// <returns>ステージ情報</returns>
         static StageAttr InitializeStageInfoWithFile(int islandId, string filepath) => islandId switch
         {
-            0 => new StageAttr(EasyStageWaveNum,
-                        PrepareStageInfoByFile(EasyStageWaveNum,
+            0 => new StageAttr(DefaultStageInfos.EasyStageWaveNum,
+                        PrepareStageInfoByFile(DefaultStageInfos.EasyStageWaveNum,
                             filepath + "/EasyStageInfoList.txt")),
-            1 => new StageAttr(NormalStageWaveNum,
-                        PrepareStageInfoByFile(NormalStageWaveNum,
+            1 => new StageAttr(DefaultStageInfos.NormalStageWaveNum,
+                        PrepareStageInfoByFile(DefaultStageInfos.NormalStageWaveNum,
                             filepath + "/NormalStageInfoList.txt")),
-            2 => new StageAttr(HardStageWaveNum,
-                        PrepareStageInfoByFile(HardStageWaveNum,
+            2 => new StageAttr(DefaultStageInfos.HardStageWaveNum,
+                        PrepareStageInfoByFile(DefaultStageInfos.HardStageWaveNum,
                             filepath + "/HardStageInfoList.txt")),
-            3 => new StageAttr((int)PlayerPrefs.GetFloat("waveNum", 10),
-                        PrepareCustomStageInfo((int)PlayerPrefs.GetFloat("waveNum", 10))),
+            3 => new StageAttr((int)PlayerPrefs.GetFloat("waveNumEx", 10),
+                        PrepareCustomStageInfo()),
             _ => throw new System.Exception("Invalid island ID"),
         };
 
@@ -297,13 +296,13 @@ namespace RandomTowerDefense.Info
         static StageAttr InitializeStageInfoWithoutFile(int islandId) => islandId switch
         {
             0 => stageDetail = new StageAttr(DefaultStageInfos.EasyStageWaveNum,
-                        PrepareEasyStageInfo(DefaultStageInfos.EasyStageWaveNum)),
+                DefaultStageInfos.PrepareEasyStageInfo(DefaultStageInfos.EasyStageWaveNum)),
             1 => stageDetail = new StageAttr(DefaultStageInfos.NormalStageWaveNum,
-                        PrepareNormalStageInfo(DefaultStageInfos.NormalStageWaveNum)),
+                DefaultStageInfos.PrepareNormalStageInfo(DefaultStageInfos.NormalStageWaveNum)),
             2 => stageDetail = new StageAttr(DefaultStageInfos.HardStageWaveNum,
-                        PrepareHardStageInfo(DefaultStageInfos.HardStageWaveNum)),
+                DefaultStageInfos.PrepareHardStageInfo(DefaultStageInfos.HardStageWaveNum)),
             3 => stageDetail = new StageAttr((int)PlayerPrefs.GetFloat("waveNum", 10),
-                        PrepareCustomStageInfo((int)PlayerPrefs.GetFloat("waveNum", 10))),
+                DefaultStageInfos.PrepareCustomStageInfo((int)PlayerPrefs.GetFloat("waveNum", 10))),
             _ => throw new System.Exception("Invalid island ID"),
         };
     }
@@ -322,6 +321,7 @@ namespace RandomTowerDefense.Info
         /// ノーマルステージのウェーブ数
         /// </summary>
         public static readonly int NormalStageWaveNum = 15;
+
         /// <summary>
         /// ハードステージのウェーブ数
         /// </summary>
@@ -539,13 +539,12 @@ namespace RandomTowerDefense.Info
         /// <summary>
         /// カスタムステージ情報を準備
         /// </summary>
-        /// <param name="waveNum">ウェブ数</param>
         /// <returns>ステージのウェブ情報リスト</returns>
-        private static WaveAttr[] PrepareCustomStageInfo(int waveNum)
+        private static WaveAttr[] PrepareCustomStageInfo()
         {
             var waveNumEx = (int)PlayerPrefs.GetFloat("waveNum", 1);
             var stageSizeEx = (int)PlayerPrefs.GetFloat("stageSize", 64);
-            var enemyNumEx = (float)PlayerPrefs.GetFloat("enemyNum", 1);
+            var enemyNumEx = (int)PlayerPrefs.GetFloat("enemyNum", 1);
             var enemyAttributeEx = (float)PlayerPrefs.GetFloat("enemyAttr", 1);
             var obstacleEx = (float)PlayerPrefs.GetFloat("obstaclePercent", 1);
             var spawnSpeedEx = (float)PlayerPrefs.GetFloat("spawnSpeed", 5);
@@ -553,29 +552,29 @@ namespace RandomTowerDefense.Info
             var resourceEx = (float)PlayerPrefs.GetFloat("resource", 1);
 
             // NOTE: 動かすための仮データ（最終的にConsole経由デ設定する）
-            var _waveArray = new WaveAttr[waveNum];
+            var _waveArray = new WaveAttr[waveNumEx];
             var _detail = new List<WaveDetail>();
-            for (int k = 1; k < waveNum; k++)
+            for (int k = 1; k < waveNumEx; k++)
             {
                 if (k < 10 - 1)
                 {
-                    _detail.Add(new EnemyDetail(k, 8 * (int)enemyNumEx,
+                    _detail.Add(new EnemyDetail(k, 8 * enemyNumEx,
                         Prng.Next(0, 3), DefaultStageInfos.MonsterCat0[Prng.Next() % DefaultStageInfos.MonsterCat0.Length]));
                 }
                 else if (k < 35 - 1)
                 {
-                    _detail.Add(new EnemyDetail(k, Prng.Next(5, 10) * (int)enemyNumEx,
+                    _detail.Add(new EnemyDetail(k, Prng.Next(5, 10) * enemyNumEx,
                         Prng.Next(0, 3), DefaultStageInfos.MonsterCat1[Prng.Next(0, DefaultStageInfos.MonsterCat1.Length)]));
-                    _detail.Add(new EnemyDetail(k, Prng.Next(5, 10) * (int)enemyNumEx,
+                    _detail.Add(new EnemyDetail(k, Prng.Next(5, 10) * enemyNumEx,
                         Prng.Next(0, 3), DefaultStageInfos.MonsterCat1[Prng.Next(0, DefaultStageInfos.MonsterCat1.Length)]));
                 }
                 else if (k < 50 - 1)
                 {
-                    _detail.Add(new EnemyDetail(k, Prng.Next(10, 15) * (int)enemyNumEx,
+                    _detail.Add(new EnemyDetail(k, Prng.Next(10, 15) * enemyNumEx,
                         Prng.Next(0, 3), DefaultStageInfos.MonsterCat2[Prng.Next(0, DefaultStageInfos.MonsterCat2.Length)]));
-                    _detail.Add(new EnemyDetail(k, Prng.Next(10, 15) * (int)enemyNumEx,
+                    _detail.Add(new EnemyDetail(k, Prng.Next(10, 15) * enemyNumEx,
                         Prng.Next(0, 3), DefaultStageInfos.MonsterCat2[Prng.Next(0, DefaultStageInfos.MonsterCat2.Length)]));
-                    _detail.Add(new EnemyDetail(k, Prng.Next(10, 15) * (int)enemyNumEx,
+                    _detail.Add(new EnemyDetail(k, Prng.Next(10, 15) * enemyNumEx,
                         Prng.Next(0, 3), DefaultStageInfos.MonsterCat2[Prng.Next(0, DefaultStageInfos.MonsterCat2.Length)]));
                 }
                 else
@@ -588,23 +587,23 @@ namespace RandomTowerDefense.Info
                         {
                             case 9:
                                 if (Prng.Next(0, 5) == 0)
-                                    _detail.Add(new EnemyDetail(k, 1 * (int)enemyNumEx, 1, "AttackBot"));
+                                    _detail.Add(new EnemyDetail(k, 1 * enemyNumEx, 1, "AttackBot"));
                                 else
                                 {
-                                    _detail.Add(new EnemyDetail(k, Prng.Next(1, 3) * (int)enemyNumEx,
+                                    _detail.Add(new EnemyDetail(k, Prng.Next(1, 3) * enemyNumEx,
                                         Prng.Next() % 3, "RobotSphere"));
-                                    _detail.Add(new EnemyDetail(k, Prng.Next(1, 3) * (int)enemyNumEx,
+                                    _detail.Add(new EnemyDetail(k, Prng.Next(1, 3) * enemyNumEx,
                                         Prng.Next() % 3, "RobotSphere"));
-                                    _detail.Add(new EnemyDetail(k, Prng.Next(1, 3) * (int)enemyNumEx,
+                                    _detail.Add(new EnemyDetail(k, Prng.Next(1, 3) * enemyNumEx,
                                         Prng.Next() % 3, "RobotSphere"));
                                 }
                                 break;
                             default:
-                                _detail.Add(new EnemyDetail(k, Prng.Next(5, 10) * (int)StageInfoDetail.enemyNumEx,
+                                _detail.Add(new EnemyDetail(k, Prng.Next(5, 10) * enemyNumEx,
                                     Prng.Next(0, 3), DefaultStageInfos.MonsterCat3[Prng.Next(0, DefaultStageInfos.MonsterCat3.Length)]));
-                                _detail.Add(new EnemyDetail(k, Prng.Next(5, 10) * (int)StageInfoDetail.enemyNumEx,
+                                _detail.Add(new EnemyDetail(k, Prng.Next(5, 10) * enemyNumEx,
                                     Prng.Next(0, 3), DefaultStageInfos.MonsterCat3[Prng.Next(0, DefaultStageInfos.MonsterCat3.Length)]));
-                                _detail.Add(new EnemyDetail(k, Prng.Next(5, 10) * (int)StageInfoDetail.enemyNumEx,
+                                _detail.Add(new EnemyDetail(k, Prng.Next(5, 10) * enemyNumEx,
                                     Prng.Next(0, 3), DefaultStageInfos.MonsterCat3[Prng.Next(0, DefaultStageInfos.MonsterCat3.Length)]));
                                 break;
                         }
@@ -615,7 +614,7 @@ namespace RandomTowerDefense.Info
 
             int j = 0;
 
-            for (int i = 0; i < waveNum; ++i)
+            for (int i = 0; i < waveNumEx; ++i)
             {
                 List<WaveDetail> detailPerWave = new List<WaveDetail>();
                 for (; j < _detail.Count && _detail[j].waveID <= i + 1; ++j)

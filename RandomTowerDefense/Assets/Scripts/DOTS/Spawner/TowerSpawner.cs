@@ -31,7 +31,7 @@ namespace RandomTowerDefense.DOTS.Spawner
 
         private EntityManager EntityManager;
 
-        //ToTowerSpawner
+        // ToTowerSpawner
         public List<GameObject> TowerNightmareRank1;
         public List<GameObject> TowerNightmareRank2;
         public List<GameObject> TowerNightmareRank3;
@@ -234,112 +234,112 @@ namespace RandomTowerDefense.DOTS.Spawner
         {
             switch (prefabID)
             {
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerNightmare + 0:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerNightmare + 0:
                     foreach (GameObject j in TowerNightmareRank1)
                     {
                         if (j.activeSelf) continue;
                         return j;
                     }
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerNightmare + 1:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerNightmare + 1:
                     foreach (GameObject j in TowerNightmareRank2)
                     {
                         if (j.activeSelf) continue;
                         return j;
                     }
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerNightmare + 2:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerNightmare + 2:
                     foreach (GameObject j in TowerNightmareRank3)
                     {
                         if (j.activeSelf) continue;
                         return j;
                     }
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerNightmare + 3:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerNightmare + 3:
                     foreach (GameObject j in TowerNightmareRank4)
                     {
                         if (j.activeSelf) continue;
                         return j;
                     }
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater + 0:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerSoulEater + 0:
                     foreach (GameObject j in TowerSoulEaterRank1)
                     {
                         if (j.activeSelf) continue;
                         return j;
                     }
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater + 1:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerSoulEater + 1:
                     foreach (GameObject j in TowerSoulEaterRank2)
                     {
                         if (j.activeSelf) continue;
                         return j;
                     }
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater + 2:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerSoulEater + 2:
                     foreach (GameObject j in TowerSoulEaterRank3)
                     {
                         if (j.activeSelf) continue;
                         return j;
                     }
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater + 3:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerSoulEater + 3:
                     foreach (GameObject j in TowerSoulEaterRank4)
                     {
                         if (j.activeSelf) continue;
                         return j;
                     }
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer + 0:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerTerrorBringer + 0:
                     foreach (GameObject j in TowerTerrorBringerRank1)
                     {
                         if (j.activeSelf) continue;
                         return j;
                     }
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer + 1:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerTerrorBringer + 1:
                     foreach (GameObject j in TowerTerrorBringerRank2)
                     {
                         if (j.activeSelf) continue;
                         return j;
                     }
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer + 2:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerTerrorBringer + 2:
                     foreach (GameObject j in TowerTerrorBringerRank3)
                     {
                         if (j.activeSelf) continue;
                         return j;
                     }
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer + 3:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerTerrorBringer + 3:
                     foreach (GameObject j in TowerTerrorBringerRank4)
                     {
                         if (j.activeSelf) continue;
                         return j;
                     }
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerUsurper + 0:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerUsurper + 0:
                     foreach (GameObject j in TowerUsurperRank1)
                     {
                         if (j.activeSelf) continue;
                         return j;
                     }
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerUsurper + 1:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerUsurper + 1:
                     foreach (GameObject j in TowerUsurperRank2)
                     {
                         if (j.activeSelf) continue;
                         return j;
                     }
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerUsurper + 2:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerUsurper + 2:
                     foreach (GameObject j in TowerUsurperRank3)
                     {
                         if (j.activeSelf) continue;
                         return j;
                     }
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerUsurper + 3:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerUsurper + 3:
                     foreach (GameObject j in TowerUsurperRank4)
                     {
                         if (j.activeSelf) continue;
@@ -354,52 +354,52 @@ namespace RandomTowerDefense.DOTS.Spawner
         {
             switch (prefabID)
             {
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerNightmare + 0:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerNightmare + 0:
                     TowerNightmareRank1.Add(obj);
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerNightmare + 1:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerNightmare + 1:
                     TowerNightmareRank2.Add(obj);
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerNightmare + 2:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerNightmare + 2:
                     TowerNightmareRank3.Add(obj);
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerNightmare + 3:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerNightmare + 3:
                     TowerNightmareRank4.Add(obj);
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater + 0:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerSoulEater + 0:
                     TowerSoulEaterRank1.Add(obj);
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater + 1:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerSoulEater + 1:
                     TowerSoulEaterRank2.Add(obj);
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater + 2:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerSoulEater + 2:
                     TowerSoulEaterRank3.Add(obj);
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater + 3:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerSoulEater + 3:
                     TowerSoulEaterRank4.Add(obj);
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer + 0:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerTerrorBringer + 0:
                     TowerTerrorBringerRank1.Add(obj);
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer + 1:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerTerrorBringer + 1:
                     TowerTerrorBringerRank2.Add(obj);
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer + 2:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerTerrorBringer + 2:
                     TowerTerrorBringerRank3.Add(obj);
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer + 3:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerTerrorBringer + 3:
                     TowerTerrorBringerRank4.Add(obj);
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerUsurper + 0:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerUsurper + 0:
                     TowerUsurperRank1.Add(obj);
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerUsurper + 1:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerUsurper + 1:
                     TowerUsurperRank2.Add(obj);
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerUsurper + 2:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerUsurper + 2:
                     TowerUsurperRank3.Add(obj);
                     break;
-                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.Enum_TowerUsurper + 3:
+                case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerUsurper + 3:
                     TowerUsurperRank4.Add(obj);
                     break;
             }

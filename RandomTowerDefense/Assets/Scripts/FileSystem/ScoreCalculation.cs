@@ -90,7 +90,7 @@ public class ScoreCalculation : MonoBehaviour
         int result = stageManager.GetResult();
         int currIsland = sceneManager.GetCurrIsland();
 
-        //Clear
+        // Clear
         if (result == (int)StageManager.GameResult.Won)
         {
             score += ScoreForBase + ScoreForStage * currIsland;
@@ -103,24 +103,24 @@ public class ScoreCalculation : MonoBehaviour
             scoreStr += 0 + "\n";
         }
 
-        //CastleHP
+        // CastleHP
         scoreChg = ScoreForCastleHP * stageManager.GetCurrHP();
         score += scoreChg;
         scoreStr += "+" + scoreChg + "\n";
 
-        //Resource
+        // Resource
         scoreChg = resourceManager.GetCurrMaterial();
         scoreChg = (int)(scoreChg * ((currIsland != StageInfoDetail.IslandNum - 1) ? 1f :
                 (1f / Mathf.Max(StageInfoList.resourceEx, 0.5f))));
         score += scoreChg;
         scoreStr += "+" + scoreChg + "\n";
 
-        //Upgrades
+        // Upgrades
         scoreChg = ScoreForUpgrades * UpgradesManager.allLevel();
         score += scoreChg;
         scoreStr += "+" + scoreChg + "\n";
 
-        //Remark: Special Function for extra mode
+        // Remark: Special Function for extra mode
         if (currIsland != StageInfoDetail.IslandNum - 1)
         {
             if (result == (int)StageManager.GameResult.Won)
@@ -193,7 +193,6 @@ public class ScoreCalculation : MonoBehaviour
                     i.text = playerName;
                 yield return new WaitForSeconds(0f);
             }
-            //if (keyboard.status == TouchScreenKeyboard.Status.Done || keyboard.status == TouchScreenKeyboard.Status.Canceled)
 
             keyboard = null;
         }

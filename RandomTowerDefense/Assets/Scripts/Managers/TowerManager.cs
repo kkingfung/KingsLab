@@ -156,7 +156,7 @@ namespace RandomTowerDefense.Managers.System
             {
                 Tower script;
 
-                var towerType = (TowerInfo.TowerInfoID)StageInfoList.prng.Next(0, NumTowerType);
+                var towerType = (TowerInfo.TowerInfoID)DefaultStageInfos.Prng.Next(0, NumTowerType);
                 int spawnIndex = TowerTypeHandler.GetTowerSpawnIndex(towerType, rank, MonsterColorNumber);
                 entityIDList = towerSpawner.Spawn(spawnIndex, location, castleSpawner.castle.transform.position);
                 tower = towerSpawner.GameObjects[entityIDList[0]];
@@ -192,7 +192,7 @@ namespace RandomTowerDefense.Managers.System
             tempList.Remove(targetedTower);
             while (tempList.Count > 0)
             {
-                GameObject chkTarget = tempList[StageInfoList.prng.Next(0, tempList.Count)];
+                GameObject chkTarget = tempList[DefaultStageInfos.Prng.Next(0, tempList.Count)];
                 tempList.Remove(chkTarget);
                 if (chkTarget.activeSelf)
                 {
@@ -215,7 +215,7 @@ namespace RandomTowerDefense.Managers.System
             // 選択したタワーを削除し、マージエフェクトを作成
             while (count-- > 0)
             {
-                GameObject candidate = candidateList[StageInfoList.prng.Next(0, candidateList.Count)];
+                GameObject candidate = candidateList[DefaultStageInfos.Prng.Next(0, candidateList.Count)];
                 candidateList.Remove(candidate);
 
                 GameObject temp = effectManager.Spawn(3, candidate.transform.position);

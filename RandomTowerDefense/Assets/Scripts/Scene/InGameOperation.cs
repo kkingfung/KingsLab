@@ -140,20 +140,19 @@ namespace RandomTowerDefense.Scene
             if (UseRemoteConfig)
             {
                 ConfigManager.FetchCompleted += ApplyRemoteSettings;
-                //ConfigManager.FetchCompleted += StageInfoList.InitByRemote;
-                //ConfigManager.FetchCompleted += TowerInfo.InitByRemote;
-                //ConfigManager.FetchCompleted += EnemyInfo.InitByRemote;
-                //ConfigManager.FetchCompleted += SkillInfo.InitByRemote;
+                ConfigManager.FetchCompleted += StageInfoList.InitByRemote;
+                ConfigManager.FetchCompleted += TowerInfo.InitByRemote;
+                ConfigManager.FetchCompleted += EnemyInfo.InitByRemote;
+                ConfigManager.FetchCompleted += SkillInfo.InitByRemote;
                 ConfigManager.FetchConfigs<userAttributes, appAttributes>(new userAttributes(), new appAttributes());
                 if (Directory.Exists("Assets/AssetBundles"))
                 {
-                    StageInfoList.Init(true, "Assets/AssetBundles");
+                    StageInfoDetail.Init(true, "Assets/AssetBundles");
                 }
                 else
                 {
-                    StageInfoList.Init(false, null);
+                    StageInfoDetail.Init(false, null);
                 }
-                //Debug.Log("UpdatedByRemoteConfig");
             }
             else
             {
@@ -162,28 +161,25 @@ namespace RandomTowerDefense.Scene
                 {
                     if (Directory.Exists("Assets/AssetBundles"))
                     {
-                        StageInfoList.Init(true, "Assets/AssetBundles");
+                        StageInfoDetail.Init(true, "Assets/AssetBundles");
                         TowerInfo.InitByFile("Assets/AssetBundles/TowerInfo.txt");
                         EnemyInfo.InitByFile("Assets/AssetBundles/EnemyInfo.txt");
                         SkillInfo.InitByFile("Assets/AssetBundles/SkillInfo.txt");
-                        //Debug.Log("UpdatedByFileAsset");
                     }
                     else
                     {
-                        StageInfoList.Init(false, null);
+                        StageInfoDetail.Init(false, null);
                         TowerInfo.Init();
                         EnemyInfo.Init();
                         SkillInfo.Init();
-                        //Debug.Log("UpdatedByScriptInput");
                     }
                 }
                 else
                 {
-                    StageInfoList.Init(false, null);
+                    StageInfoDetail.Init(false, null);
                     TowerInfo.Init();
                     EnemyInfo.Init();
                     SkillInfo.Init();
-                    //Debug.Log("UpdatedByScriptInput");
                 }
             }
 
@@ -226,9 +222,13 @@ namespace RandomTowerDefense.Scene
             }
 
             if (UseFileAsset && Directory.Exists("Assets/AssetBundles"))
-                StageInfoList.Init(true, "Assets/AssetBundles");
+            {
+                StageInfoDetail.Init(true, "Assets/AssetBundles");
+            }
             else
-                StageInfoList.Init(false, null);
+            {
+                StageInfoDetail.Init(false, null);
+            }
 
             waveManager.doneDownloading = true;
         }

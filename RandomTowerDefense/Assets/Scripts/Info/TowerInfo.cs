@@ -8,34 +8,6 @@ using System.IO;
 namespace RandomTowerDefense.Info
 {
     /// <summary>
-    /// タワーの戦闘属性情報を格納するクラス
-    /// </summary>
-    public class TowerAttr
-    {
-        public float damage;
-        public float waitTime;
-        public float lifetime;
-        public float radius;
-        public float attackLifetime;
-        public float attackWaittime;
-        public float attackRadius;
-        public float attackSpd;
-
-        public TowerAttr(float radius, float damage, float waitTime, float lifetime, float attackWaittime,
-            float attackRadius, float attackSpd, float attackLifetime)
-        {
-            this.damage = damage;
-            this.waitTime = waitTime;
-            this.radius = radius;
-            this.lifetime = lifetime;
-            this.attackLifetime = attackLifetime;
-            this.attackWaittime = attackWaittime;
-            this.attackRadius = attackRadius;
-            this.attackSpd = attackSpd;
-        }
-    }
-
-    /// <summary>
     /// タワー情報静的クラス - 4種類タワーの戦闘データ定義と管理
     ///
     /// 主な機能:
@@ -47,65 +19,87 @@ namespace RandomTowerDefense.Info
     /// </summary>
     public static class TowerInfo
     {
-        static Dictionary<TowerInfoID, TowerAttr> towerInfo;
-        public static bool infoUpdated = false;
-
+        /// <summary>
+        /// タワー情報ID列挙型
+        /// </summary>
         public enum TowerInfoID
         {
-            Enum_TowerNightmare = 0,
-            Enum_TowerSoulEater,
-            Enum_TowerTerrorBringer,
-            Enum_TowerUsurper
+            EnumTowerNightmare = 0,
+            EnumTowerSoulEater,
+            EnumTowerTerrorBringer,
+            EnumTowerUsurper
         }
 
+        /// <summary>
+        /// タワー属性クラス
+        /// </summary>
+        public static Dictionary<TowerInfoID, TowerAttr> TowerInfos => towerInfos;
+        /// <summary>
+        /// 情報更新フラグ
+        /// </summary>
+        public static bool InfoUpdated = false;
+
+        /// <summary>
+        /// タワー属性辞書
+        /// </summary>
+        static Dictionary<TowerInfoID, TowerAttr> towerInfos;
+
+        /// <summary>
+        /// 初期化メソッド
+        /// </summary>
         public static void Init()
         {
-            towerInfo = new Dictionary<TowerInfoID, TowerAttr>();
+            towerInfos = new Dictionary<TowerInfoID, TowerAttr>();
 
-            towerInfo.Add(TowerInfoID.Enum_TowerNightmare,
+            towerInfos.Add(TowerInfoID.EnumTowerNightmare,
                 new TowerAttr(
-                    3.5f, 25, //radius,damage
-                    3f, 5f, //wait,lifetime
-                    0.01f, 0.3f,//atkwait,atkrad
-                    0, 3));//atkspd,atklife
-            towerInfo.Add(TowerInfoID.Enum_TowerSoulEater,
+                    3.5f, 25, // radius, damage
+                    3f, 5f, // wait, lifetime
+                    0.01f, 0.3f, // atkwait, atkrad
+                    0, 3)); // atkspd, atklife
+            towerInfos.Add(TowerInfoID.EnumTowerSoulEater,
                 new TowerAttr(
-                    2.5f, 7,//radius,damage
-                    0.3f, 5, //wait,lifetime
-                    0f, 0.8f, //atkwait,atkrad
-                    5f, 3));//atkspd,atklife
-            towerInfo.Add(TowerInfoID.Enum_TowerTerrorBringer,
+                    2.5f, 7, // radius, damage
+                    0.3f, 5, // wait, lifetime
+                    0f, 0.8f, // atkwait, atkrad
+                    5f, 3)); // atkspd, atklife
+            towerInfos.Add(TowerInfoID.EnumTowerTerrorBringer,
                 new TowerAttr(
-                    4, 50,//radius,damage
-                    5f, 5,//wait,lifetime
-                    0.01f, 0.2f,//atkwait,atkrad
-                    0, 3));//atkspd,atklife
-            towerInfo.Add(TowerInfoID.Enum_TowerUsurper,
+                    4, 50, // radius, damage
+                    5f, 5, // wait, lifetime
+                    0.01f, 0.2f, // atkwait, atkrad
+                    0, 3)); // atkspd, atklife
+            towerInfos.Add(TowerInfoID.EnumTowerUsurper,
                 new TowerAttr(
-                    2, 5f,//radius,damage
-                    0.2f, 5,//wait,lifetime
-                    0f, 0.5f,//atkwait,atkrad
-                    3.5f, 1));//atkspd,atklife
+                    2, 5f, // radius, damage
+                    0.2f, 5, // wait, lifetime
+                    0f, 0.5f, // atkwait, atkrad
+                    3.5f, 1)); // atkspd, atklife
             infoUpdated = true;
         }
 
+        /// <summary>
+        /// ファイルから初期化メソッド
+        /// </summary>
+        /// <param name="filepath">ファイルパス</param>
         public static void InitByFile(string filepath)
         {
             StreamReader inp_stm = new StreamReader(filepath);
 
-            towerInfo = new Dictionary<TowerInfoID, TowerAttr>();
+            towerInfos = new Dictionary<TowerInfoID, TowerAttr>();
 
             while (!inp_stm.EndOfStream)
             {
                 string inp_ln = inp_stm.ReadLine();
                 string[] seperateInfo = inp_ln.Split(':');
                 if (seperateInfo.Length == 9)
-                    towerInfo.Add((TowerInfoID)int.Parse(seperateInfo[0]), new TowerAttr(
+                {
+                    towerInfos.Add((TowerInfoID)int.Parse(seperateInfo[0]), new TowerAttr(
                         float.Parse(seperateInfo[1]), float.Parse(seperateInfo[2]),
                         float.Parse(seperateInfo[3]), float.Parse(seperateInfo[4]),
                         float.Parse(seperateInfo[5]), float.Parse(seperateInfo[6]),
                         float.Parse(seperateInfo[7]), float.Parse(seperateInfo[8])));
-                // Debug.Log(seperateInfo.Length);
+                }
             }
 
             inp_stm.Close();
@@ -113,54 +107,61 @@ namespace RandomTowerDefense.Info
             infoUpdated = true;
         }
 
+        /// <summary>
+        /// リモート設定から初期化メソッド
+        /// </summary>
+        /// <param name="response">設定レスポンス</param>
         public static void InitByRemote(ConfigResponse response)
         {
-            towerInfo = new Dictionary<TowerInfoID, TowerAttr>();
-
-            towerInfo.Add(TowerInfoID.Enum_TowerNightmare,
+            towerInfos = new Dictionary<TowerInfoID, TowerAttr>();
+            var _appConfig = ConfigManager.appConfig;
+            towerInfos.Add(TowerInfoID.EnumTowerNightmare,
                 new TowerAttr(
-                    ConfigManager.appConfig.GetFloat("TowerNightmareRadius"), ConfigManager.appConfig.GetFloat("TowerNightmareDamage"), //radius,damage
-                    ConfigManager.appConfig.GetFloat("TowerNightmareWait"), ConfigManager.appConfig.GetFloat("TowerNightmareLife"), //wait,atklife
-                    ConfigManager.appConfig.GetFloat("TowerNightmareAtkWait"), ConfigManager.appConfig.GetFloat("TowerNightmareAtkRadius"),//atkwait,atkrad
-                    ConfigManager.appConfig.GetFloat("TowerNightmareAtkSpd"), ConfigManager.appConfig.GetFloat("TowerNightmareAtkLife")));//atkspd,lifetime
+                    _appConfig.GetFloat("TowerNightmareRadius"), _appConfig.GetFloat("TowerNightmareDamage"), //radius,damage
+                    _appConfig.GetFloat("TowerNightmareWait"), _appConfig.GetFloat("TowerNightmareLife"), // wait,atklife
+                    _appConfig.GetFloat("TowerNightmareAtkWait"), _appConfig.GetFloat("TowerNightmareAtkRadius"),//atkwait,atkrad
+                    _appConfig.GetFloat("TowerNightmareAtkSpd"), _appConfig.GetFloat("TowerNightmareAtkLife")));//atkspd,lifetime
 
-            towerInfo.Add(TowerInfoID.Enum_TowerSoulEater,
+            towerInfos.Add(TowerInfoID.EnumTowerSoulEater,
                 new TowerAttr(
-                    ConfigManager.appConfig.GetFloat("TowerSoulEaterRadius"), ConfigManager.appConfig.GetFloat("TowerSoulEaterDamage"), //radius,damage
-                    ConfigManager.appConfig.GetFloat("TowerSoulEaterWait"), ConfigManager.appConfig.GetFloat("TowerSoulEaterLife"), //wait,atklife
-                    ConfigManager.appConfig.GetFloat("TowerSoulEaterAtkWait"), ConfigManager.appConfig.GetFloat("TowerSoulEaterAtkRadius"),//atkwait,atkrad
-                    ConfigManager.appConfig.GetFloat("TowerSoulEaterAtkSpd"), ConfigManager.appConfig.GetFloat("TowerSoulEaterAtkLife")));//atkspd,lifetime
+                    _appConfig.GetFloat("TowerSoulEaterRadius"), _appConfig.GetFloat("TowerSoulEaterDamage"), //radius,damage
+                    _appConfig.GetFloat("TowerSoulEaterWait"), _appConfig.GetFloat("TowerSoulEaterLife"), //wait,atklife
+                    _appConfig.GetFloat("TowerSoulEaterAtkWait"), _appConfig.GetFloat("TowerSoulEaterAtkRadius"),//atkwait,atkrad
+                    _appConfig.GetFloat("TowerSoulEaterAtkSpd"), _appConfig.GetFloat("TowerSoulEaterAtkLife")));//atkspd,lifetime
 
-            towerInfo.Add(TowerInfoID.Enum_TowerTerrorBringer,
+            towerInfos.Add(TowerInfoID.EnumTowerTerrorBringer,
                 new TowerAttr(
-                    ConfigManager.appConfig.GetFloat("TowerTerrorBringerRadius"), ConfigManager.appConfig.GetFloat("TowerTerrorBringerDamage"), //radius,damage
-                    ConfigManager.appConfig.GetFloat("TowerTerrorBringerWait"), ConfigManager.appConfig.GetFloat("TowerTerrorBringerLife"), //wait,atklife
-                    ConfigManager.appConfig.GetFloat("TowerTerrorBringerAtkWait"), ConfigManager.appConfig.GetFloat("TowerTerrorBringerAtkRadius"),//atkwait,atkrad
-                    ConfigManager.appConfig.GetFloat("TowerTerrorBringerAtkSpd"), ConfigManager.appConfig.GetFloat("TowerTerrorBringerAtkLife")));//atkspd,lifetime
+                    _appConfig.GetFloat("TowerTerrorBringerRadius"), _appConfig.GetFloat("TowerTerrorBringerDamage"), //radius,damage
+                    _appConfig.GetFloat("TowerTerrorBringerWait"), _appConfig.GetFloat("TowerTerrorBringerLife"), //wait,atklife
+                    _appConfig.GetFloat("TowerTerrorBringerAtkWait"), _appConfig.GetFloat("TowerTerrorBringerAtkRadius"),//atkwait,atkrad
+                    _appConfig.GetFloat("TowerTerrorBringerAtkSpd"), _appConfig.GetFloat("TowerTerrorBringerAtkLife")));//atkspd,lifetime
 
-            towerInfo.Add(TowerInfoID.Enum_TowerUsurper,
+            towerInfos.Add(TowerInfoID.EnumTowerUsurper,
                 new TowerAttr(
-                    ConfigManager.appConfig.GetFloat("TowerUsurperRadius"), ConfigManager.appConfig.GetFloat("TowerUsurperDamage"), //radius,damage
-                    ConfigManager.appConfig.GetFloat("TowerUsurperWait"), ConfigManager.appConfig.GetFloat("TowerUsurperLife"), //wait,atklife
-                    ConfigManager.appConfig.GetFloat("TowerUsurperAtkWait"), ConfigManager.appConfig.GetFloat("TowerUsurperAtkRadius"),//atkwait,atkrad
-                    ConfigManager.appConfig.GetFloat("TowerUsurperAtkSpd"), ConfigManager.appConfig.GetFloat("TowerUsurperAtkLife")));//atkspd,lifetime
+                    _appConfig.GetFloat("TowerUsurperRadius"), _appConfig.GetFloat("TowerUsurperDamage"), //radius,damage
+                    _appConfig.GetFloat("TowerUsurperWait"), _appConfig.GetFloat("TowerUsurperLife"), //wait,atklife
+                    _appConfig.GetFloat("TowerUsurperAtkWait"), _appConfig.GetFloat("TowerUsurperAtkRadius"),//atkwait,atkrad
+                    _appConfig.GetFloat("TowerUsurperAtkSpd"), _appConfig.GetFloat("TowerUsurperAtkLife")));//atkspd,lifetime
 
             infoUpdated = true;
         }
 
-        static void Release()
-        {
-            towerInfo.Clear();
-        }
-
+        /// <summary>
+        /// タワー情報取得メソッド
+        /// </summary>
+        /// <param name="towerType"></param>
+        /// <returns></returns>
         public static TowerAttr GetTowerInfo(TowerInfoID towerType)
         {
+            return TowerInfos.TryGetValue(towerType, out TowerAttr value) ? value : null;
+        }
 
-            if (towerInfo.ContainsKey(towerType))
-            {
-                return towerInfo[towerType];
-            }
-            return null;
+        /// <summary>
+        /// 解放メソッド
+        /// </summary>
+        static void Release()
+        {
+            towerInfos.Clear();
         }
     }
 }

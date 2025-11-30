@@ -46,6 +46,8 @@ namespace RandomTowerDefense.MapGenerator
         [SerializeField] public float tileSize;
         [SerializeField] public bool packedObstacles;
 
+        [SerializeField] public Vector3 originPos;
+
         [Header("システム参照")]
         [SerializeField] public InGameOperation sceneManager;
         [SerializeField] public StageManager stageManager;
@@ -62,7 +64,6 @@ namespace RandomTowerDefense.MapGenerator
         private Transform mapHolder;
         private System.Random prng;
         private List<Pillar> pillarList;
-        private Vector3 originPos;
 
         #endregion
 

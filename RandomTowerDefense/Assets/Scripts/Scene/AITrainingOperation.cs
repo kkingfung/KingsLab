@@ -44,7 +44,7 @@ namespace RandomTowerDefense.Scene
             prng = new System.Random((int)Time.time);
 
             isFetchDone = false;
-            //StageInfo(Base) Assignment
+            // StageInfo(Base) Assignment
             IslandNow = 3;
             PlayerPrefs.SetInt("IslandNow", 3);
             PlayerPrefs.SetFloat("waveNum", 999);
@@ -55,47 +55,43 @@ namespace RandomTowerDefense.Scene
             if (UseRemoteConfig)
             {
                 ConfigManager.FetchCompleted += ApplyRemoteSettings;
-                //ConfigManager.FetchCompleted += StageInfoList.InitByRemote;
+                ConfigManager.FetchCompleted += StageInfoList.InitByRemote;
                 ConfigManager.FetchCompleted += TowerInfo.InitByRemote;
                 ConfigManager.FetchCompleted += EnemyInfo.InitByRemote;
                 ConfigManager.FetchCompleted += SkillInfo.InitByRemote;
                 ConfigManager.FetchConfigs<userAttributes, appAttributes>(new userAttributes(), new appAttributes());
                 if (Directory.Exists("Assets/AssetBundles"))
                 {
-                    StageInfoList.Init(true, "Assets/AssetBundles");
+                    StageInfoDetail.Init(true, "Assets/AssetBundles");
                 }
                 else
                 {
-                    StageInfoList.Init(false, null);
+                    StageInfoDetail.Init(false, null);
                 }
-                //Debug.Log("UpdatedByRemoteConfig");
             }
             else if (UseFileAsset)
             {
                 if (Directory.Exists("Assets/AssetBundles"))
                 {
-                    StageInfoList.Init(true, "Assets/AssetBundles");
+                    StageInfoDetail.Init(true, "Assets/AssetBundles");
                     TowerInfo.InitByFile("Assets/AssetBundles/TowerInfo.txt");
                     EnemyInfo.InitByFile("Assets/AssetBundles/EnemyInfo.txt");
                     SkillInfo.InitByFile("Assets/AssetBundles/SkillInfo.txt");
-                    // Debug.Log("UpdatedByFileAsset");
                 }
                 else
                 {
-                    StageInfoList.Init(false, null);
+                    StageInfoDetail.Init(false, null);
                     TowerInfo.Init();
                     EnemyInfo.Init();
                     SkillInfo.Init();
-                    //Debug.Log("UpdatedByScriptInput");
                 }
             }
             else
             {
-                StageInfoList.Init(false, null);
+                StageInfoDetail.Init(false, null);
                 TowerInfo.Init();
                 EnemyInfo.Init();
                 SkillInfo.Init();
-                //Debug.Log("UpdatedByScriptInput");
             }
 
             UpgradesManager.Init();
@@ -130,9 +126,13 @@ namespace RandomTowerDefense.Scene
             }
 
             if (UseFileAsset && Directory.Exists("Assets/AssetBundles"))
-                StageInfoList.Init(true, "Assets/AssetBundles");
+            {
+                StageInfoDetail.Init(true, "Assets/AssetBundles");
+            }
             else
-                StageInfoList.Init(false, null);
+            {
+                StageInfoDetail.Init(false, null);
+            }
         }
 
         // Start is called before the first frame update
@@ -212,10 +212,14 @@ namespace RandomTowerDefense.Scene
                         targetList = new List<GameObject>();
                         break;
                 }
+
+                tellMerge = false;
                 count = targetList.Count;
                 if (count > 2)
+                {
                     towerManager.MergeTower(targetList[prng.Next(0, count)]);
-                tellMerge = false;
+
+                }
             }
         }
     }

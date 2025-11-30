@@ -63,6 +63,7 @@ namespace RandomTowerDefense.Units
         #endregion
 
         #region Public Properties
+
         /// <summary>
         /// タワーの戦闘属性（ダメージ、範囲、打撃間隔など）
         /// </summary>
@@ -87,20 +88,24 @@ namespace RandomTowerDefense.Units
         /// タワーのタイプ（Nightmare、SoulEater、TerrorBringer、Usurper）
         /// </summary>
         public TowerInfo.TowerInfoID type;
+
         #endregion
 
         #region Private Fields
+
         private float atkCounter;
         private Vector3 atkEntityPos;
 
-        //private List<GameObject> AtkVFX;
+        private List<GameObject> AtkVFX;
         private GameObject auraVFX = null;
 
         private GameObject auraVFXPrefab;
         private GameObject lvupVFXPrefab;
+
         #endregion
 
         #region Manager References
+
         /// <summary>
         /// オーディオ管理クラスの参照
         /// </summary>
@@ -145,29 +150,32 @@ namespace RandomTowerDefense.Units
         {
             atkCounter = 0;
             entityID = -1;
-            //AtkVFX = new List<GameObject>();
+            AtkVFX = new List<GameObject>();
             animator = GetComponent<Animator>();
             boxCollider = GetComponent<BoxCollider>();
-            // audioSource = GetComponent<AudioSource>();
+            audioSource = GetComponent<AudioSource>();
 
             entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-            //defaultTarget = GameObject.FindGameObjectWithTag("DefaultTag");
+            defaultTarget = GameObject.FindGameObjectWithTag("DefaultTag");
             newlySpawned = true;
         }
 
         private void Start()
         {
-            //towerSpawner = FindObjectOfType<TowerSpawner>();
-            //audioManager = FindObjectOfType<AudioManager>();
-            //attackSpawner = FindObjectOfType<AttackSpawner>();
-            //filledMapGenerator = FindObjectOfType<FilledMapGenerator>();
-            //debugManager = FindObjectOfType<DebugManager>();
+            towerSpawner = FindObjectOfType<TowerSpawner>();
+            audioManager = FindObjectOfType<AudioManager>();
+            attackSpawner = FindObjectOfType<AttackSpawner>();
+            filledMapGenerator = FindObjectOfType<FilledMapGenerator>();
+            debugManager = FindObjectOfType<DebugManager>();
 
             oriScale = transform.localScale;
             transform.localScale = new Vector3();
             StartCoroutine(StartAnim());
         }
 
+        /// <summary>
+        /// タワーの出現アニメーション処理
+        /// </summary>
         private void OnEnable()
         {
             if (newlySpawned == false)
@@ -177,11 +185,17 @@ namespace RandomTowerDefense.Units
             }
         }
 
+        /// <summary>
+        /// タワーの出現アニメーション処理
+        /// </summary>
         private void OnDisable()
         {
             newlySpawned = false;
         }
 
+        /// <summary>
+        /// タワーの出現アニメーション処理
+        /// </summary>
         void Update()
         {
             if (atkCounter > 0)
@@ -208,14 +222,17 @@ namespace RandomTowerDefense.Units
                 }
             }
         }
-        public GameObject debug;
+
+        /// <summary>
+        /// タワーの出現アニメーション処理
+        /// </summary>
         public void Attack()
         {
             Vector3 posAdj = new Vector3();
 
             switch (type)
             {
-                case TowerInfo.TowerInfoID.Enum_TowerNightmare:
+                case TowerInfo.TowerInfoID.EnumTowerNightmare:
                     if (audioManager && audioManager.enabledSE)
                     {
                         audioManager.PlayAudio("se_Lighting");
@@ -226,7 +243,7 @@ namespace RandomTowerDefense.Units
                         GainExp(ExpPerAttack * NIGHTMARE_EXP_MULTIPLIER * (stageManager.GetCurrIsland() + 1));
                     }
                     break;
-                case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
+                case TowerInfo.TowerInfoID.EnumTowerSoulEater:
                     if (audioManager && audioManager.enabledSE)
                     {
                         audioManager.PlayAudio("se_Snail");
@@ -236,7 +253,7 @@ namespace RandomTowerDefense.Units
                     if (IsAtMaxLevel() == false)
                         GainExp(ExpPerAttack * SOULEATER_EXP_MULTIPLIER * (stageManager.GetCurrIsland() + 1));
                     break;
-                case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
+                case TowerInfo.TowerInfoID.EnumTowerTerrorBringer:
                     if (audioManager && audioManager.enabledSE)
                     {
                         audioManager.PlayAudio("se_Shot");
@@ -245,7 +262,7 @@ namespace RandomTowerDefense.Units
                     if (IsAtMaxLevel() == false)
                         GainExp(ExpPerAttack * TERRORBRINGER_EXP_MULTIPLIER * (stageManager.GetCurrIsland() + 1));
                     break;
-                case TowerInfo.TowerInfoID.Enum_TowerUsurper:
+                case TowerInfo.TowerInfoID.EnumTowerUsurper:
                     if (audioManager && audioManager.enabledSE)
                     {
                         audioManager.PlayAudio("se_Flame");
@@ -257,73 +274,50 @@ namespace RandomTowerDefense.Units
                     break;
             }
             int[] entityID = attackSpawner.Spawn((int)type, this.transform.position
-              + this.transform.forward * posAdj.z + this.transform.up * posAdj.y, atkEntityPos, this.transform.localRotation,
-              attr.attackSpd * transform.forward, attr.Damage, attr.attackRadius,
-              attr.attackWaittime, attr.attackLifetime);
+                + this.transform.forward * posAdj.z + this.transform.up * posAdj.y, atkEntityPos, this.transform.localRotation,
+                attr.AttackSpeed * transform.forward, attr.Damage, attr.AttackRadius,
+                attr.AttackWaittime, attr.AttackLifetime);
 
-            //this.AtkVFX.Add(attackSpawner.GameObjects[entityID[0]]);
+            this.AtkVFX.Add(attackSpawner.GameObjects[entityID[0]]);
             VisualEffect vfx = attackSpawner.GameObjects[entityID[0]].GetComponent<VisualEffect>();
 
             switch (type)
             {
-                case TowerInfo.TowerInfoID.Enum_TowerNightmare:
-                    //if (vfx.HasFloat("AuraSize") == false || vfx.HasVector3("TargetPos") == false || vfx.HasFloat("StarSize") == false)
-                    //{
-                    //    debug = vfx.gameObject;
-                    //    Debug.Log(-1);
-                    //}
-
+                case TowerInfo.TowerInfoID.EnumTowerNightmare:
                     vfx.SetVector3("TargetPos", towerSpawner.targetArray[this.entityID]);
                     vfx.SetFloat("StarSize", rank * NIGHTMARE_STAR_SIZE_MULTIPLIER);
                     vfx.SetFloat("AuraSize", rank * NIGHTMARE_AURA_SIZE_MULTIPLIER);
                     break;
-                case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-                    //if (vfx.HasFloat("Spawn rate") == false)
-                    //{
-                    //    debug = vfx.gameObject;
-                    //    Debug.Log(-1);
-                    //}
-
+                case TowerInfo.TowerInfoID.EnumTowerSoulEater:
                     vfx.SetFloat("Spawn rate", rank * SOULEATER_SPAWN_RATE_MULTIPLIER);
                     break;
-                case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
-                    //if (vfx.HasFloat("SkullSize") == false || vfx.HasVector3("TargetPos") == false)
-                    //{
-                    //    debug = vfx.gameObject;
-                    //    Debug.Log(-1);
-                    //}
+                case TowerInfo.TowerInfoID.EnumTowerTerrorBringer:
                     vfx.SetVector3("TargetPos", towerSpawner.targetArray[this.entityID]);
                     vfx.SetFloat("SkullSize", rank * TERRORBRINGER_SKULL_SIZE_MULTIPLIER + TERRORBRINGER_SKULL_SIZE_BASE);
                     break;
-                case TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                    //if (vfx.HasFloat("SizeMultiplier") == false)
-                    //{
-                    //    debug = vfx.gameObject;
-                    //    Debug.Log(-1);
-                    //}
+                case TowerInfo.TowerInfoID.EnumTowerUsurper:
                     vfx.SetFloat("SizeMultiplier", rank * USURPER_SIZE_MULTIPLIER);
                     break;
             }
 
             atkCounter = attr.WaitTime;
             animator.SetTrigger("Detected");
-            animator.SetInteger("ActionID", StageInfoList.prng.Next(0, ActionSetNum - 1));
+            animator.SetInteger("ActionID", DefaultStageInfos.Prng.Next(0, ActionSetNum - 1));
         }
 
         /// <summary>
-        /// ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /// タワーの破壊処理
         /// </summary>
         public void Destroy()
         {
-            //AlsoDestroy Entity
             filledMapGenerator.UpdatePillarStatus(pillar, 0);
             entityManager.RemoveComponent(towerSpawner.Entities[this.entityID], typeof(PlayerTag));
 
-            //foreach (GameObject i in AtkVFX)
-            //{
-            //    AtkVFX.Remove(i);
-            //    Destroy(i);
-            //}
+            foreach (GameObject i in AtkVFX)
+            {
+                AtkVFX.Remove(i);
+                Destroy(i);
+            }
 
             StartCoroutine(EndAnim());
         }
@@ -339,12 +333,12 @@ namespace RandomTowerDefense.Units
             this.entityID = entityID;
             auraVFXPrefab = AuraVFX;
             lvupVFXPrefab = LevelUpVFX;
-            //this.auraVFX = GameObject.Instantiate(auraVFXPrefab, this.transform.position, Quaternion.Euler(90f, 0, 0));
-            //this.auraVFX.transform.parent = this.transform;
-            //this.auraVFX.transform.localScale = Vector3.one * 10f;
-            //this.auraVFXComponent = auraVFX.GetComponentInChildren<VisualEffect>();
+            this.auraVFX = GameObject.Instantiate(auraVFXPrefab, this.transform.position, Quaternion.Euler(90f, 0, 0));
+            this.auraVFX.transform.parent = this.transform;
+            this.auraVFX.transform.localScale = Vector3.one * 10f;
+            this.auraVFXComponent = auraVFX.GetComponentInChildren<VisualEffect>();
 
-            //this.lvupVFXComponent = GetComponentInChildren<VisualEffect>();
+            this.lvupVFXComponent = GetComponentInChildren<VisualEffect>();
 
             if (this.lvupVFXComponent == null)
             {
@@ -359,16 +353,16 @@ namespace RandomTowerDefense.Units
 
             switch (type)
             {
-                case TowerInfo.TowerInfoID.Enum_TowerNightmare:
+                case TowerInfo.TowerInfoID.EnumTowerNightmare:
                     lvupVFXComponent.SetVector4("MainColor", new Vector4(0.6f, 0.46f, 0.3f, 1));
                     break;
-                case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
+                case TowerInfo.TowerInfoID.EnumTowerSoulEater:
                     lvupVFXComponent.SetVector4("MainColor", new Vector4(0, 0.4f, 0.1f, 1));
                     break;
-                case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
+                case TowerInfo.TowerInfoID.EnumTowerTerrorBringer:
                     lvupVFXComponent.SetVector4("MainColor", new Vector4(0.5f, 0.8f, 0.9f, 1));
                     break;
-                case TowerInfo.TowerInfoID.Enum_TowerUsurper:
+                case TowerInfo.TowerInfoID.EnumTowerUsurper:
                     lvupVFXComponent.SetVector4("MainColor", new Vector4(0.8f, 0, 0.1f, 1));
                     break;
             }
@@ -434,7 +428,7 @@ namespace RandomTowerDefense.Units
         public void SetLevel(int lv)
         {
             level = lv;
-            //auraVFXComponent.SetFloat("Spawn Rate", level * 5);
+            auraVFXComponent.SetFloat("Spawn Rate", level * 5);
             lvupVFXComponent.SetFloat("SizeMultiplier",
                 (float)level / MaxLevel[rank - 1] * (float)level / MaxLevel[rank - 1] * 5.0f);
             UpdateAttr();
@@ -451,39 +445,37 @@ namespace RandomTowerDefense.Units
 
             //Update by rank/level with factors
             attr = new TowerAttr(attr.Radius * (1 + 0.02f * rank + 0.005f * level),
-                attr.Damage * (2f * rank + 0.5f * level
-                //+ ((debugManager != null) ? debugManager.towerrank_Damage * rank +
-                //debugManager.towerlvl_Damage * level: 0)
-                ), attr.WaitTime * (1f - (0.1f * rank)),
-                3f, attr.attackWaittime,
-                attr.attackRadius, attr.attackSpd, attr.attackLifetime);
+                attr.Damage * (2f * rank + 0.5f * level),
+                attr.WaitTime * (1f - (0.1f * rank)),
+                3f, attr.AttackWaittime,
+                attr.AttackRadius, attr.AttackSpd, attr.AttackLifetime);
 
             int upgradeLv = 0;
             switch (type)
             {
-                case TowerInfo.TowerInfoID.Enum_TowerNightmare:
-                    upgradeLv = UpgradesManager.GetLevel(UpgradesManager.StoreItems.ArmySoulEater);
+                case TowerInfo.TowerInfoID.EnumTowerNightmare:
+                    upgradeLv = upgradesManager.GetLevel(UpgradesManager.StoreItems.ArmySoulEater);
                     attr.Damage = attr.Damage
                        * (1 + (0.1f * upgradeLv * upgradeLv));
                     attr.WaitTime = attr.WaitTime
                        * (1 - (0.01f * upgradeLv * upgradeLv));
                     break;
-                case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-                    upgradeLv = UpgradesManager.GetLevel(UpgradesManager.StoreItems.ArmyNightmare);
+                case TowerInfo.TowerInfoID.EnumTowerSoulEater:
+                    upgradeLv = upgradesManager.GetLevel(UpgradesManager.StoreItems.ArmyNightmare);
                     attr.Damage = attr.Damage
                        * (1 + (0.1f * upgradeLv * upgradeLv));
                     attr.WaitTime = attr.WaitTime
                        * (1 - (0.01f * upgradeLv * upgradeLv));
                     break;
-                case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
-                    upgradeLv = UpgradesManager.GetLevel(UpgradesManager.StoreItems.ArmyTerrorBringer);
+                case TowerInfo.TowerInfoID.EnumTowerTerrorBringer:
+                    upgradeLv = upgradesManager.GetLevel(UpgradesManager.StoreItems.ArmyTerrorBringer);
                     attr.Damage = attr.Damage
                         * (1 + (0.2f * upgradeLv * upgradeLv));
                     attr.WaitTime = attr.WaitTime
                        * (1 - (0.005f * upgradeLv * upgradeLv));
                     break;
-                case TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                    upgradeLv = UpgradesManager.GetLevel(UpgradesManager.StoreItems.ArmyUsurper);
+                case TowerInfo.TowerInfoID.EnumTowerUsurper:
+                    upgradeLv = upgradesManager.GetLevel(UpgradesManager.StoreItems.ArmyUsurper);
                     attr.Damage = attr.Damage
                         * (1 + (0.2f * upgradeLv * upgradeLv));
                     attr.WaitTime = attr.WaitTime
@@ -513,8 +505,7 @@ namespace RandomTowerDefense.Units
         /// <returns>レベルアップ可能な場合true</returns>
         public bool CanLevelUp()
         {
-            return true;
-            //return level == MaxLevel[rank - 1];
+            return level == MaxLevel[rank - 1];
         }
 
         /// <summary>
@@ -554,10 +545,10 @@ namespace RandomTowerDefense.Units
 
             if (auraVFX)
                 Destroy(auraVFX);
-            //if(lvupVFXComponent)
-            //    lvupVFXComponent.enabled = false;
+            if (lvupVFXComponent)
+                lvupVFXComponent.enabled = false;
             this.gameObject.SetActive(false);
-            //Destroy(this.gameObject);
+            Destroy(this.gameObject);
             StopCoroutine(EndAnim());
         }
 

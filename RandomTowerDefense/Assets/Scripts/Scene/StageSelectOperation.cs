@@ -454,7 +454,7 @@ namespace RandomTowerDefense.Scene
                                         DefaultStageInfos.MaxMapDepth * DefaultStageInfos.MaxMapDepth);
                                     StageCustomText[infoID].text = InputValue.ToString();
                                 }
-                                StageInfoDetail.SaveDataInPrefs_DirectInput(infoID, InputValue);
+                                StageInfoDetail.SaveDataInPrefsByDirectInput(infoID, InputValue);
                             }
                             else
                             {
@@ -465,12 +465,16 @@ namespace RandomTowerDefense.Scene
                         case 3:
                         case 5:
                         case 6:
-                            float OutputValue;
-                            if (float.TryParse(keyboard.text, out OutputValue))
+                            if (float.TryParse(keyboard.text, out float OutputValue))
                             {
-                                if (infoID == 5) OutputValue = Mathf.Clamp(OutputValue, StageInfoList.MinObstaclePercent, StageInfoList.MaxObstaclePercent);
+                                if (infoID == 5)
+                                {
+                                    OutputValue = Mathf.Clamp(OutputValue,
+                                        StageInfoList.MinObstaclePercent, StageInfoList.MaxObstaclePercent);
+                                }
+
                                 StageCustomText[infoID].text = OutputValue.ToString();
-                                StageInfoDetail.SaveDataInPrefs_DirectInput(infoID, OutputValue);
+                                StageInfoDetail.SaveDataInPrefsByDirectInput(infoID, OutputValue);
                             }
                             else
                             {

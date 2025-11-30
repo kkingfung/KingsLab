@@ -479,108 +479,76 @@ namespace RandomTowerDefense.AI
         private GameObject GetRandomFreePillar(bool isFree = true)
         {
             GameObject targetPillar = null;
-
+            var pillarList = filledMapGenerator.GetPillarList();
+            var totalPilliarCount = pillarList.Count;
             int cnt = 0;
-            while (cnt < filledMapGenerator.pillarList.Count)
+            while (cnt < totalPilliarCount)
             {
-                int id = prng.Next(0, filledMapGenerator.pillarList.Count);
-                if (filledMapGenerator.pillarList[id].state == (isFree ? 0 : 1))
+                int id = prng.Next(0, totalPilliarCount);
+                var pillar = pillarList[id];
+                if (pillar.state == (isFree ? 0 : 1))
                 {
-                    if (filledMapGenerator.pillarList[id].surroundSpace > 0)
-                        return filledMapGenerator.pillarList[id].obj;
+                    if (pillar.surroundSpace > 0)
+                    {
+                        return pillar.obj;
+                    }
+
                     if (targetPillar == null)
-                        targetPillar = filledMapGenerator.pillarList[id].obj;
+                    {
+                        targetPillar = pillar.obj;
+                    }
                 }
 
                 cnt++;
             }
             return targetPillar;
         }
+
+        /// <summary>
+        /// 指定エリア内のランダムな空きピラーを取得
+        /// </summary>
+        /// <param name="areaID">エリアID（0～3）</param>
+        /// <returns>ピラーのGameObject、見つからなければnull</returns>
         private GameObject GetRandomFreePillar(int areaID)
         {
             Pillar targetPillar = null;
             var pillarList = filledMapGenerator.GetPillarList();
-            int cnt = 0;
-            while (cnt < pillarList.Count)
+            var totalPilliarCount = pillarList.Count;
+            Func<Pillar, GameObject> getPillarCandidate = target =>
             {
-                int id = prng.Next(0, pillarList.Count);
-                var pillar = pillarList[id];
-                switch (areaID)
+                if (target.state == 0 && target.surroundSpace > 0)
                 {
-                    case 0:
-                        if (pillar.mapSize.x <= AgentCoord.x
-                            && pillar.mapSize.y >= AgentCoord.y)
-                        {
-                            if (pillar.state == 0)
-                            {
-                                if (pillar.surroundSpace > 0)
-                                {
-                                    pillar.state = 1;
-                                    return pillar.obj;
-                                }
-                                if (targetPillar == null)
-                                    targetPillar = pillar;
-                            }
-                        }
-                        break;
-                    case 1:
-                        if (pillar.mapSize.x >= AgentCoord.x
-                            && pillar.mapSize.y <= AgentCoord.y)
-                        {
-                            if (pillar.state == 0)
-                            {
-                                if (pillar.surroundSpace > 0)
-                                {
-                                    pillar.state = 1;
-                                    return pillar.obj;
-                                }
-                                if (targetPillar == null)
-                                    targetPillar = pillar;
-                            }
-                        }
-                        break;
-                    case 2:
-                        if (pillar.mapSize.x <= AgentCoord.x
-                            && pillar.mapSize.y <= AgentCoord.y)
-                        {
-                            if (pillar.state == 0)
-                            {
-                                if (pillar.surroundSpace > 0)
-                                {
-                                    pillar.state = 1;
-                                    return pillar.obj;
-                                }
-                                if (targetPillar == null)
-                                    targetPillar = pillar;
-                            }
-                        }
-                        break;
-                    case 3:
-                        if (pillar.mapSize.x >= AgentCoord.x
-                            && pillar.mapSize.y >= AgentCoord.y)
-                        {
-                            if (pillar.state == 0)
-                            {
-                                if (pillar.surroundSpace > 0)
-                                {
-                                    pillar.state = 1;
-                                    return pillar.obj;
-                                }
-                                if (targetPillar == null)
-                                    targetPillar = pillar;
-                            }
-                        }
-                        break;
+                    return target.obj;
                 }
+
+                return null;
+            };
+
+            int cnt = 0;
+            while (cnt < totalPilliarCount)
+            {
+                int id = prng.Next(0, totalPilliarCount);
+                var pillar = pillarList[id];
+                var result = getPillarCandidate(pillar);
+                if (result != null)
+                {
+                    pillar.state = 1;
+                    return result;
+                }
+
+                targetPillar = pillar;
                 cnt++;
             }
+
             if (targetPillar != null)
             {
                 targetPillar.state = 1;
                 return targetPillar.obj;
             }
+
             return null;
         }
+
         #endregion
     }
 }

@@ -225,23 +225,23 @@ namespace RandomTowerDefense.Managers.Macro
                 {
                     case 0:
                         ArmyLvTextObj[i].text = "LV." + (UpgradesManager.CheckTopLevel(UpgradesManager.StoreItems.ArmySoulEater) ? "MAX" :
-                            (UpgradesManager.GetLevel(UpgradesManager.StoreItems.ArmySoulEater) + 1).ToString()); break;
+                            (upgradesManager.GetLevel(UpgradesManager.StoreItems.ArmySoulEater) + 1).ToString()); break;
                     case 1:
                         ArmyLvTextObj[i].text = "LV." + (UpgradesManager.CheckTopLevel(UpgradesManager.StoreItems.ArmyNightmare) ? "MAX" :
-                            (UpgradesManager.GetLevel(UpgradesManager.StoreItems.ArmyNightmare) + 1).ToString()); break;
+                            (upgradesManager.GetLevel(UpgradesManager.StoreItems.ArmyNightmare) + 1).ToString()); break;
                     case 2:
                         ArmyLvTextObj[i].text = "LV." + (UpgradesManager.CheckTopLevel(UpgradesManager.StoreItems.ArmyTerrorBringer) ? "MAX" :
-                            (UpgradesManager.GetLevel(UpgradesManager.StoreItems.ArmyTerrorBringer) + 1).ToString()); break;
+                            (upgradesManager.GetLevel(UpgradesManager.StoreItems.ArmyTerrorBringer) + 1).ToString()); break;
                     case 3:
                         ArmyLvTextObj[i].text = "LV." + (UpgradesManager.CheckTopLevel(UpgradesManager.StoreItems.ArmyUsurper) ? "MAX" :
-                            (UpgradesManager.GetLevel(UpgradesManager.StoreItems.ArmyUsurper) + 1).ToString()); break;
+                            (upgradesManager.GetLevel(UpgradesManager.StoreItems.ArmyUsurper) + 1).ToString()); break;
                 }
             }
 
             for (int i = 0; i < SkillPriceTextObj.Count; ++i)
             {
                 UpgradesManager.StoreItems itemID = UpgradesManager.StoreItems.MagicMeteor + i % MaxItemPerCategory;
-                int price = _itemPrice[itemID][UpgradesManager.GetLevel(itemID)];
+                int price = _itemPrice[itemID][upgradesManager.GetLevel(itemID)];
                 SkillPriceTextObj[i].text = price.ToString() + "G";
                 SkillPriceTextObj[i].color = (price > resourceManager.GetCurrMaterial() || SkillStack.CheckFullStocks()) ? new Color(1, 0, 0, 1) : OriColor;
             }
@@ -252,16 +252,16 @@ namespace RandomTowerDefense.Managers.Macro
                 {
                     case 0:
                         SkillLvTextObj[i].text = "LV." + (upgradesManager.CheckTopLevel(UpgradesManager.StoreItems.MagicMeteor) ? "MAX" :
-                           (UpgradesManager.GetLevel(UpgradesManager.StoreItems.MagicMeteor) + 1).ToString()); break;
+                           (upgradesManager.GetLevel(UpgradesManager.StoreItems.MagicMeteor) + 1).ToString()); break;
                     case 1:
                         SkillLvTextObj[i].text = "LV." + (upgradesManager.CheckTopLevel(UpgradesManager.StoreItems.MagicBlizzard) ? "MAX" :
-                        (UpgradesManager.GetLevel(UpgradesManager.StoreItems.MagicBlizzard) + 1).ToString()); break;
+                        (upgradesManager.GetLevel(UpgradesManager.StoreItems.MagicBlizzard) + 1).ToString()); break;
                     case 2:
                         SkillLvTextObj[i].text = "LV." + (upgradesManager.CheckTopLevel(UpgradesManager.StoreItems.MagicPetrification) ? "MAX" :
-                       (UpgradesManager.GetLevel(UpgradesManager.StoreItems.MagicPetrification) + 1).ToString()); break;
+                       (upgradesManager.GetLevel(UpgradesManager.StoreItems.MagicPetrification) + 1).ToString()); break;
                     case 3:
                         SkillLvTextObj[i].text = "LV." + (upgradesManager.CheckTopLevel(UpgradesManager.StoreItems.MagicMinions) ? "MAX" :
-                       (UpgradesManager.GetLevel(UpgradesManager.StoreItems.MagicMinions) + 1).ToString()); break;
+                       (upgradesManager.GetLevel(UpgradesManager.StoreItems.MagicMinions) + 1).ToString()); break;
                 }
             }
         }

@@ -178,4 +178,4 @@ RandomTowerDefense/
 
 ---
 
-**Note:** 本作は、DOTS、ML-Agents、手続き生成、パフォーマンス最適化など、Unity の高度な技術を学ぶ学生プロジェクトです。
+**Note:** 本作は、DOTS、ML-Agents、プロシージャル生成、パフォーマンス最適化など、Unity の高度な技術を学ぶ学生プロジェクトです。

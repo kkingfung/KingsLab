@@ -28,10 +28,18 @@ using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace UnityMeshSimplifier
+namespace RandomTowerDefense.Utility.Math
 {
     /// <summary>
-    /// A double precision 3D vector.
+    /// Vector3d - 倍精度3Dベクトル構造体
+    ///
+    /// 主な機能:
+    /// - 高精度な3次元ベクトル演算
+    /// - Unity Vector3との相互変換
+    /// - 数学的演算子オーバーロード
+    /// - IEquatable実装による効率的な比較
+    /// - MethodImpl最適化による高性能計算
+    /// - 大規模シミュレーション対応の精度保証
     /// </summary>
     public struct Vector3d : IEquatable<Vector3d>
     {

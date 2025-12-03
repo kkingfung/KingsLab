@@ -119,10 +119,10 @@ namespace RandomTowerDefense.MapGenerator
             // AI訓練用の動的マップサイズ設定
             if (sceneManager && (sceneManager.GetCurrIsland() == StageInfoDetail.IslandNum - 1))
             {
-                float width = Mathf.Sqrt(StageInfoList.stageSizeEx);
+                float width = Mathf.Sqrt(StageInfoDetail.customStageInfo.StageSizeFactor);
                 currentMap.mapSize.x = (int)(width);
-                currentMap.mapSize.y = (int)(StageInfoList.stageSizeEx / width);
-                currentMap.obstaclePercent = StageInfoList.obstacleEx;
+                currentMap.mapSize.y = (int)(StageInfoDetail.customStageInfo.StageSizeFactor / width);
+                currentMap.obstaclePercent = StageInfoDetail.customStageInfo.ObstacleFactor;
                 MapSize = new int2(currentMap.mapSize.x, currentMap.mapSize.y);
             }
 
@@ -222,8 +222,8 @@ namespace RandomTowerDefense.MapGenerator
                     Material obstacleMaterial = new Material(obstacleRenderer.sharedMaterial);
                     float colourPercent = randomCoord.y / (float)currentMap.mapSize.y;
                     obstacleMaterial.color = Color.Lerp(
-                        _currentMap.foregroundColour,
-                        _currentMap.backgroundColour, colourPercent);
+                        currentMap.foregroundColour,
+                        currentMap.backgroundColour, colourPercent);
                     obstacleRenderer.sharedMaterial = obstacleMaterial;
 
                     allOpenCoords.Remove(randomCoord);
@@ -240,9 +240,9 @@ namespace RandomTowerDefense.MapGenerator
                     allOpenCoords.ToArray(), currentMap.seed));
             shuffledOpenTileCoords.Enqueue(new FilledMapCoord(0, 0));
 
-            shuffledOpenTileCoords.Enqueue(new Coord(currentMap.mapSize.x - 1, currentMap.mapSize.y - 1));
-            shuffledOpenTileCoords.Enqueue(new Coord(currentMap.mapSize.x - 1, 0));
-            shuffledOpenTileCoords.Enqueue(new Coord(0, currentMap.mapSize.y - 1));
+            shuffledOpenTileCoords.Enqueue(new FilledMapCoord(currentMap.mapSize.x - 1, currentMap.mapSize.y - 1));
+            shuffledOpenTileCoords.Enqueue(new FilledMapCoord(currentMap.mapSize.x - 1, 0));
+            shuffledOpenTileCoords.Enqueue(new FilledMapCoord(0, currentMap.mapSize.y - 1));
 
             //Ensure ONE and ONLY ONE road
             if (packedObstacles)
@@ -348,8 +348,8 @@ namespace RandomTowerDefense.MapGenerator
                         Material obstacleMaterial = new Material(obstacleRenderer.sharedMaterial);
                         float colourPercent = i.y / (float)currentMap.mapSize.y;
                         obstacleMaterial.color = Color.Lerp(
-                            _currentMap.foregroundColour,
-                            _currentMap.backgroundColour,
+                            currentMap.foregroundColour,
+                            currentMap.backgroundColour,
                             colourPercent);
                         obstacleRenderer.sharedMaterial = obstacleMaterial;
 

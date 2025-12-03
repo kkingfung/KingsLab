@@ -6,6 +6,7 @@ using RandomTowerDefense.Scene;
 using RandomTowerDefense.Managers.Macro;
 using RandomTowerDefense.Units;
 using RandomTowerDefense.Systems;
+using RandomTowerDefense.DOTS.Spawner;
 using StoreItems = RandomTowerDefense.Units.UpgradesManager.StoreItems;
 
 namespace RandomTowerDefense.Managers.Macro
@@ -29,7 +30,9 @@ namespace RandomTowerDefense.Managers.Macro
         private readonly int[] cdCounter = { 60, 90, 150 };
         private readonly Color OriColor = new Color(1, 0.675f, 0, 1);
 
-        // Price arrays for different upgrade categories
+        /// <summary>
+        /// 各アップグレードカテゴリの価格配列
+        /// </summary>
         private readonly int[] PriceForArmySoulEater = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
         private readonly int[] PriceForArmyNightmare = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
         private readonly int[] PriceForArmyTerrorBringer = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
@@ -66,6 +69,7 @@ namespace RandomTowerDefense.Managers.Macro
         public ResourceManager resourceManager;
 
         public UpgradesManager upgradesManager;
+        public CastleSpawner castleSpawner;
 
         #endregion
 
@@ -78,7 +82,7 @@ namespace RandomTowerDefense.Managers.Macro
 
         #region Unity Lifecycle
         /// <summary>
-        /// Initialize store system and price mappings
+        /// ストアシステムと価格マッピングの初期化
         /// </summary>
         private void Start()
         {
@@ -86,7 +90,7 @@ namespace RandomTowerDefense.Managers.Macro
         }
 
         /// <summary>
-        /// Update store state and UI elements
+        /// ストア状態とUI要素の更新
         /// </summary>
         private void Update()
         {
@@ -102,28 +106,30 @@ namespace RandomTowerDefense.Managers.Macro
         /// 指定項目のレベルを増やす
         /// </summary>
         /// <param name="itemID">レベルアップする項目</param>
+        /// <param name="lvUP">増加レベル数</param>
         /// <returns>レベルアップ成功/失敗</returns>
-        static public bool OnStoreItemSold(UpgradesManager.StoreItems itemID, int lvUP)
+        public bool OnStoreItemSold(UpgradesManager.StoreItems itemID, int lvUP)
         {
-            var hasUpgrade = AddSkillLevel(itemID, lvUP);
+            var hasUpgrade = upgradesManager.UpgradeLevel(itemID, lvUP);
 
-            //Checking StockItems
+            // ストックアイテムのチェック
             switch (itemID)
             {
                 case StoreItems.CastleHP:
-                    castleSpawner.castle.AddedHealth();
+                    if (castleSpawner != null && castleSpawner.castle != null)
+                        castleSpawner.castle.AddedHealth();
                     break;
                 case StoreItems.BonusBossGreen:
                 case StoreItems.BonusBossPurple:
                 case StoreItems.BonusBossRed:
                     SkillStack.AddStock(itemID);
-                    storeManager.SetBossCD((int)(itemID - UpgradesManager.StoreItems.BonusBossGreen));
+                    SetBossCD((int)(itemID - UpgradesManager.StoreItems.BonusBossGreen));
                     break;
                 case UpgradesManager.StoreItems.ArmySoulEater:
                 case UpgradesManager.StoreItems.ArmyNightmare:
                 case UpgradesManager.StoreItems.ArmyTerrorBringer:
                 case UpgradesManager.StoreItems.ArmyUsurper:
-                    StoreLevel[itemID] += lvUP;
+                    // 上記のupgradesManager.UpgradeLevelで既に処理済み
                     break;
                 case StoreItems.MagicMeteor:
                 case StoreItems.MagicBlizzard:
@@ -132,11 +138,11 @@ namespace RandomTowerDefense.Managers.Macro
                     SkillStack.AddStock(itemID);
                     break;
             }
-            return true;
+            return hasUpgrade;
         }
         #region Private Methods
         /// <summary>
-        /// Initialize the price dictionary with all store items
+        /// 全ストアアイテムの価格辞書を初期化
         /// </summary>
         private void InitializePriceDictionary()
         {
@@ -159,7 +165,7 @@ namespace RandomTowerDefense.Managers.Macro
         }
 
         /// <summary>
-        /// Update bonus boss cooldown timers
+        /// ボーナスボスのクールダウンタイマーを更新
         /// </summary>
         private void UpdateBonusBossCooldowns()
         {
@@ -177,17 +183,17 @@ namespace RandomTowerDefense.Managers.Macro
         }
 
         /// <summary>
-        /// Update all store item prices and UI displays
+        /// 全ストアアイテムの価格とUI表示を更新
         /// </summary>
         private void UpdatePrice()
         {
 
-            int fullitemID = (sceneManager.currScreenShown + 1) * UpgradesManager.MaxItemPerSlot;
+            int fullitemID = (sceneManager.currScreenShown + 1) * MaxItemPerCategory;
 
-            //Tower Items
+            // タワーアイテム
             for (int i = 0; i < TowerPriceTextObj.Count; ++i)
             {
-                //Currently all same price
+                // 現在全て同じ価格
                 int price = PriceForCastleHP[0];
                 TowerPriceTextObj[i].text = price.ToString() + "G";
                 TowerPriceTextObj[i].color = (price > resourceManager.GetCurrMaterial()) ? new Color(1, 0, 0, 1) : OriColor;
@@ -195,7 +201,7 @@ namespace RandomTowerDefense.Managers.Macro
             }
             for (int i = 0; i < TowerHPTextObj.Count; ++i)
                 TowerHPTextObj[i].text = stageManager.GetCurrHP().ToString() + "/" + stageManager.GetMaxHP().ToString();
-            //Bonus Boss Items
+            // ボーナスボスアイテム
             for (int i = 0; i < MonsterCDTextObj.Count; ++i)
             {
                 int cd = (int)(_bonusBossCooldown[i % _bonusBossCooldown.Length]);
@@ -207,7 +213,7 @@ namespace RandomTowerDefense.Managers.Macro
             {
                 UpgradesManager.StoreItems itemID = UpgradesManager.StoreItems.ArmySoulEater + i % MaxItemPerCategory;
                 int price = _itemPrice[itemID][upgradesManager.GetLevel(itemID)];
-                if (UpgradesManager.CheckArmyTopLevel(itemID))
+                if (upgradesManager.CheckTopLevel(itemID))
                 {
                     ArmyPriceTextObj[i].text = price.ToString() + "G";
                     ArmyPriceTextObj[i].color = (price > resourceManager.GetCurrMaterial()) ? new Color(1, 0, 0, 1) : OriColor;
@@ -224,16 +230,16 @@ namespace RandomTowerDefense.Managers.Macro
                 switch (i % MaxItemPerCategory)
                 {
                     case 0:
-                        ArmyLvTextObj[i].text = "LV." + (UpgradesManager.CheckTopLevel(UpgradesManager.StoreItems.ArmySoulEater) ? "MAX" :
+                        ArmyLvTextObj[i].text = "LV." + (!upgradesManager.CheckTopLevel(UpgradesManager.StoreItems.ArmySoulEater) ? "MAX" :
                             (upgradesManager.GetLevel(UpgradesManager.StoreItems.ArmySoulEater) + 1).ToString()); break;
                     case 1:
-                        ArmyLvTextObj[i].text = "LV." + (UpgradesManager.CheckTopLevel(UpgradesManager.StoreItems.ArmyNightmare) ? "MAX" :
+                        ArmyLvTextObj[i].text = "LV." + (!upgradesManager.CheckTopLevel(UpgradesManager.StoreItems.ArmyNightmare) ? "MAX" :
                             (upgradesManager.GetLevel(UpgradesManager.StoreItems.ArmyNightmare) + 1).ToString()); break;
                     case 2:
-                        ArmyLvTextObj[i].text = "LV." + (UpgradesManager.CheckTopLevel(UpgradesManager.StoreItems.ArmyTerrorBringer) ? "MAX" :
+                        ArmyLvTextObj[i].text = "LV." + (!upgradesManager.CheckTopLevel(UpgradesManager.StoreItems.ArmyTerrorBringer) ? "MAX" :
                             (upgradesManager.GetLevel(UpgradesManager.StoreItems.ArmyTerrorBringer) + 1).ToString()); break;
                     case 3:
-                        ArmyLvTextObj[i].text = "LV." + (UpgradesManager.CheckTopLevel(UpgradesManager.StoreItems.ArmyUsurper) ? "MAX" :
+                        ArmyLvTextObj[i].text = "LV." + (!upgradesManager.CheckTopLevel(UpgradesManager.StoreItems.ArmyUsurper) ? "MAX" :
                             (upgradesManager.GetLevel(UpgradesManager.StoreItems.ArmyUsurper) + 1).ToString()); break;
                 }
             }
@@ -395,7 +401,7 @@ namespace RandomTowerDefense.Managers.Macro
             if (ItemPendingAdd(itemID))
                 ItemSold(itemID);
 
-            //-1 :subtract 0:purchase 1:add
+            // -1: 減算, 0: 購入, 1: 追加
             switch (infoID)
             {
                 case -1:
@@ -417,7 +423,7 @@ namespace RandomTowerDefense.Managers.Macro
         /// <param name="infoID">情報ID (-1: 減算, 0: 購入, 1: 追加)</param>
         public void RaycastAction(int fullitemID, int infoID)
         {
-            //-1 :subtract 0:purchase 1:add
+            // -1: 減算, 0: 購入, 1: 追加
             RaycastAction((UpgradesManager.StoreItems)fullitemID, infoID);
         }
 

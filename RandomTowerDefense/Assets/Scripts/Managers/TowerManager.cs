@@ -58,6 +58,7 @@ namespace RandomTowerDefense.Managers.System
         public EffectSpawner effectManager;
         public DebugManager debugManager;
         public BonusChecker bonusChecker;
+        public UpgradesManager upgradesManager;
         #endregion
 
         #region Unity Lifecycle
@@ -161,7 +162,7 @@ namespace RandomTowerDefense.Managers.System
                 entityIDList = towerSpawner.Spawn(spawnIndex, location, castleSpawner.castle.transform.position);
                 tower = towerSpawner.GameObjects[entityIDList[0]];
                 script = tower.GetComponent<Tower>();
-                script.LinkingManagers(stageManager, towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager, bonusChecker, debugManager);
+                script.LinkingManagers(stageManager, towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager, upgradesManager, bonusChecker, debugManager);
                 var aura = TowerTypeHandler.GetTowerAura(towerType, TowerNightmareAura, TowerSoulEaterAura, TowerTerrorBringerAura, TowerUsurperAura);
                 script.NewTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, aura, towerType, 1, rank);
                 tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);

@@ -11,6 +11,7 @@ using RandomTowerDefense.MapGenerator;
 using RandomTowerDefense.AI;
 using RandomTowerDefense.DOTS.Tags;
 using RandomTowerDefense.DOTS.Components;
+using RandomTowerDefense.DOTS.Pathfinding;
 using RandomTowerDefense.Units;
 
 namespace RandomTowerDefense.DOTS.Spawner

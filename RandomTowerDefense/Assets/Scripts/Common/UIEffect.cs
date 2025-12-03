@@ -20,202 +20,474 @@ namespace RandomTowerDefense.Common
     /// </summary>
     public class UIEffect : MonoBehaviour
     {
-        private readonly Vector3 enlargeVec = new Vector3(0.03f, 0.03f, 0);
-
-        public int EffectID = 0;
-        public int uiID = 0;//For any purposes
-        public float magnitude = 0;
-        public Camera targetCam = null;
-        public Camera subCam = null;
-
-        private Text text;
-        private Slider slider;
-        private Image image;
-        private TextMesh textMesh;
-        private SpriteRenderer spr;
-
-        //private Vector3 oriPos;
-        private Vector3 oriPosRect;
-        private Vector3 oriRot;
-        private Vector3 oriScale;
-        private Color oriColour;
-
-        private float alpha;
-
-        private string fullText;
-        private float textCnt;
-
-        public List<GameObject> relatedObjs;
-
-        private List<TextMesh> relatedObjsTextMesh;
-        private List<SpriteRenderer> relatedObjsSpriteRenderer;
-        private RectTransform rectTrans;
-        private StageSelectOperation selectionSceneManager;
-        private InGameOperation gameSceneManager;
-        private PlayerManager playerManager;
-        private InputManager inputManager;
-
-        // Start is called before the first frame update
-        private void Start()
+        /// <summary>
+        /// エフェクトIDタイプ列挙型
+        /// </summary>
+        public enum EffectIDType
         {
-            text = this.GetComponent<Text>();
-            slider = this.GetComponentInParent<Slider>();
-            image = this.GetComponentInParent<Image>();
-            if (image) oriColour = image.color;
-
-            textMesh = this.GetComponentInParent<TextMesh>();
-            spr = this.GetComponentInParent<SpriteRenderer>();
-            if (image == null && spr) oriColour = spr.color;
-
-            selectionSceneManager = FindObjectOfType<StageSelectOperation>();
-            gameSceneManager = FindObjectOfType<InGameOperation>();
-            playerManager = GameObject.FindObjectOfType<PlayerManager>();
-            inputManager = GameObject.FindObjectOfType<InputManager>();
-            //oriPos = this.transform.localPosition;
-            if (this.GetComponent<RectTransform>())
-
-                oriRot = this.transform.localEulerAngles;
-            oriScale = this.transform.localScale;
-            alpha = 0f;
-            textCnt = 0;
-            if (textMesh) fullText = textMesh.text;
-            else if (text) fullText = text.text;
-
-            relatedObjsTextMesh = new List<TextMesh>();
-            relatedObjsSpriteRenderer = new List<SpriteRenderer>();
-            foreach (GameObject i in relatedObjs)
-            {
-                relatedObjsTextMesh.Add(i.GetComponent<TextMesh>());
-                relatedObjsSpriteRenderer.Add(i.GetComponent<SpriteRenderer>());
-            }
-            rectTrans = this.GetComponent<RectTransform>();
-            if (rectTrans)
-                oriPosRect = new Vector3(rectTrans.localPosition.x, rectTrans.localPosition.y, rectTrans.localPosition.z);
-
+            TitleRecord = -1,
+            TitleInstruction = 0,
+            SelectionArrowVertical = 1,
+            SelectionArrowHorizontal = 2,
+            OptionCanvasGyro = 3,
+            CustomIslandInfo = 4,
+            IslandInfo = 5,
+            BossSprite = 6,
+            ClearMark = 7,
+            BossFrame = 8,
+            SellingMark = 9,
+            WaveNumber = 10,
+            ScoreInformation = 11
         }
 
-        // Update is called once per frame
+        #region Constants
+
+        /// <summary>
+        /// UI拡大ベクトル値
+        /// </summary>
+        private static readonly Vector3 ENLARGE_VECTOR = new Vector3(0.03f, 0.03f, 0);
+
+        /// <summary>
+        /// レイキャスト最大距離
+        /// </summary>
+        private const float RAYCAST_MAX_DISTANCE = 200f;
+
+        /// <summary>
+        /// アルファ減少レート
+        /// </summary>
+        private const float ALPHA_DECREASE_RATE = 0.005f;
+
+        /// <summary>
+        /// アルファ増加レート
+        /// </summary>
+        private const float ALPHA_INCREASE_RATE = 0.1f;
+
+        /// <summary>
+        /// テキスト表示速度
+        /// </summary>
+        private const float TEXT_DISPLAY_SPEED = 0.5f;
+
+        /// <summary>
+        /// 最小アルファ値
+        /// </summary>
+        private const float MIN_ALPHA_VALUE = 0.0f;
+
+        /// <summary>
+        /// 最大アルファ値
+        /// </summary>
+        private const float MAX_ALPHA_VALUE = 1.0f;
+
+        #endregion
+
+        #region Public Properties
+
+        // int から enum に変更
+        [SerializeField] public EffectIDType EffectID = EffectIDType.TitleInstruction;
+        /// <summary>
+        /// UI識別子（汎用目的）
+        /// </summary>
+        [SerializeField] public int uiID = 0;
+        [SerializeField] public float magnitude = 0;
+        [SerializeField] public Camera targetCam = null;
+        [SerializeField] public Camera subCam = null;
+        [SerializeField] public List<GameObject> relatedObjs;
+
+        #endregion
+
+        #region Private Fields
+
+        private Text _text;
+        private Slider _slider;
+        private Image _image;
+        private TextMesh _textMesh;
+        private SpriteRenderer _spr;
+
+        private Vector3 _oriPosRect;
+        private Vector3 _oriRot;
+        private Vector3 _oriScale;
+        private Color _oriColour;
+
+        private float _alpha;
+        private string _fullText;
+        private float _textCnt;
+
+        private List<TextMesh> _relatedObjsTextMesh;
+        private List<SpriteRenderer> _relatedObjsSpriteRenderer;
+        private RectTransform _rectTrans;
+
+        #endregion
+
+        #region Manager References
+
+        private StageSelectOperation _selectionSceneManager;
+        private InGameOperation _gameSceneManager;
+        private PlayerManager _playerManager;
+        private InputManager _inputManager;
+
+        #endregion
+
+        #region Unity Lifecycle
+
+        /// <summary>
+        /// 初期化処理 - コンポーネント参照取得とUIエフェクトセットアップ
+        /// </summary>
+        private void Start()
+        {
+            InitializeComponents();
+            InitializeManagerReferences();
+            InitializeTransformProperties();
+            InitializeTextProperties();
+            InitializeRelatedObjects();
+        }
+
+        /// <summary>
+        /// 毎フレーム更新 - エフェクトIDに基づくUI効果処理
+        /// </summary>
         private void Update()
         {
             switch (EffectID)
             {
-                case -1://for Title Scene Record
-                    RaycastHit hit;
-                    Ray ray = new Ray();
-
-                    //Get Ray according to orientation
-                    if (Screen.width > Screen.height)
-                    {
-                        if (inputManager.GetUseTouch())
-                        {
-                            if (Input.touchCount > 0)
-                                ray = targetCam.ScreenPointToRay(Input.GetTouch(0).position);
-                        }
-                        else { ray = targetCam.ScreenPointToRay(Input.mousePosition); }
-
-                    }
-                    else
-                    {
-                        if (inputManager.GetUseTouch())
-                        {
-                            if (Input.touchCount > 0)
-                                ray = subCam.ScreenPointToRay(Input.GetTouch(0).position);
-                        }
-                        else { ray = subCam.ScreenPointToRay(Input.mousePosition); }
-                    }
-
-                    float temp;
-                    if (Physics.Raycast(ray, out hit, 200, LayerMask.GetMask("RecordBroad")))
-                    {
-                        for (int i = 0; i < relatedObjs.Count; ++i)
-                        {
-                            if (relatedObjsTextMesh[i])
-                                relatedObjsTextMesh[i].color = new Color(relatedObjsTextMesh[i].color.r, relatedObjsTextMesh[i].color.g, relatedObjsTextMesh[i].color.b, 1f);
-                            else if (relatedObjsSpriteRenderer[i])
-                                relatedObjsSpriteRenderer[i].color = new Color(relatedObjsSpriteRenderer[i].color.r, relatedObjsSpriteRenderer[i].color.g, relatedObjsSpriteRenderer[i].color.b, 1f);
-                        }
-                    }
-                    else
-                    {
-                        for (int i = 0; i < relatedObjs.Count; ++i)
-                        {
-                            if (relatedObjsTextMesh[i])
-                            {
-                                temp = Mathf.Max(0.0f, relatedObjsTextMesh[i].color.a - 0.005f);
-                                relatedObjsTextMesh[i].color = new Color(relatedObjsTextMesh[i].color.r, relatedObjsTextMesh[i].color.g, relatedObjsTextMesh[i].color.b, temp);
-                            }
-                            else if (relatedObjsSpriteRenderer[i])
-                            {
-                                temp = Mathf.Max(0.0f, relatedObjsSpriteRenderer[i].color.a - 0.005f);
-                                relatedObjsSpriteRenderer[i].color = new Color(relatedObjsSpriteRenderer[i].color.r, relatedObjsSpriteRenderer[i].color.g, relatedObjsSpriteRenderer[i].color.b, temp);
-                            }
-                        }
-                    }
+                case EffectIDType.TitleRecord: // -1
+                    HandleTitleSceneRecord();
                     break;
-                case 0://for Title Scene Instruction
-                    if (text) text.color = new Color(text.color.r, text.color.g, text.color.b, Mathf.Abs(Mathf.Sin(Time.time * magnitude)));
+                case EffectIDType.TitleInstruction: // 0
+                    HandleTitleSceneInstruction();
                     break;
-                case 1://for Selection Scene Arrow Vertical
-                    rectTrans.localPosition = oriPosRect + Mathf.Sin(Time.time) * magnitude * targetCam.transform.forward;
+                case EffectIDType.SelectionArrowVertical: // 1
+                    HandleSelectionArrowVertical();
                     break;
-                case 2://for Selection Scene Arrow Horizontal
-                    rectTrans.localPosition = oriPosRect + Mathf.Sin(Time.time) * magnitude * targetCam.transform.right;
+                case EffectIDType.SelectionArrowHorizontal: // 2
+                    HandleSelectionArrowHorizontal();
                     break;
-                case 3://for Option Canva Gyro
-                    if (slider) this.transform.localEulerAngles = new Vector3(
-                          oriRot.x, oriRot.y, oriRot.z - 360f * slider.value);
+                case EffectIDType.OptionCanvasGyro: // 3
+                    HandleOptionCanvasGyro();
                     break;
-                case 4://for Selection Scene Custom Island Information
-                    if (spr == null) break;
-                    alpha = (selectionSceneManager.CurrentIslandNum() == selectionSceneManager.NextIslandNum()
-                        && selectionSceneManager.CurrentIslandNum() == uiID) ? (alpha < 1f ? alpha + .1f : 1f) : 0;
-                    spr.color = new Color(oriColour.r, oriColour.g, oriColour.b, alpha);
+                case EffectIDType.CustomIslandInfo: // 4
+                    HandleCustomIslandInfo();
                     break;
-                case 5://for Selection Scene Island Information
-                    if (selectionSceneManager == null || textMesh == null) break;
-                    textCnt = (selectionSceneManager.CurrentIslandNum() == uiID) ? Mathf.Min(textCnt + 1, fullText.Length) : 0;
-                    textMesh.text = fullText.Substring(0, (int)textCnt);
+                case EffectIDType.IslandInfo: // 5
+                    HandleIslandInfo();
                     break;
-                case 6://for Selection Scene Boss Spr
-                    if (selectionSceneManager == null || spr == null) break;
-                    //spr.color = (selectionSceneManager.EnabledtIslandNum()  -1 > uiID) ? oriColour : Color.black;
-                    spr.color = Color.black;
+                case EffectIDType.BossSprite: // 6
+                    HandleBossSprite();
                     break;
-                case 7://for Selection Scene Clear Mark
-                    if (selectionSceneManager == null || image == null) break;
-                    image.color = (selectionSceneManager.EnabledtIslandNum() - 1 > uiID) ? oriColour : Color.clear;
+                case EffectIDType.ClearMark: // 7
+                    HandleClearMark();
                     break;
-                case 8://for Selection Scene Boss Frame
-                       //this.transform.localScale = oriScale - Mathf.Sin(Time.time*12.0f) * enlargeVec;
+                case EffectIDType.BossFrame: // 8
+                    HandleBossFrame();
                     break;
-                case 9://for Game Scene SellingMark
-                    if (playerManager.isSelling && gameSceneManager.GetOptionStatus() != true && gameSceneManager.currScreenShown == (int)InGameOperation.ScreenShownID.SSIDArena)
-                    {
-                        image.color = new Color(image.color.r, image.color.g, image.color.b, Mathf.Abs(Mathf.Sin(Time.time * magnitude)));
-                    }
-                    else
-                    {
-                        image.color = new Color(image.color.r, image.color.g, image.color.b, 0);
-                    }
+                case EffectIDType.SellingMark: // 9
+                    HandleSellingMark();
                     break;
-                case 10://for Game Scene Wave Num
-                    if (text && text.color.a > 0)
-                    {
-                        text.color = new Color(text.color.r, text.color.g, text.color.b, text.color.a - magnitude);
-                    }
+                case EffectIDType.WaveNumber: // 10
+                    HandleWaveNumber();
                     break;
-                case 11://for Game Scene Score Information
-                    if (text == null) break;
-                    textCnt = Mathf.Min(textCnt + 0.5f, fullText.Length);
-                    text.text = fullText.Substring(0, (int)textCnt);
+                case EffectIDType.ScoreInformation: // 11
+                    HandleScoreInfo();
                     break;
             }
         }
 
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// スコア表示用リセット処理
+        /// </summary>
         public void ResetForScoreShow()
         {
-            textCnt = 0;
-            if (text) fullText = text.text;
+            _textCnt = 0;
+            if (_text) _fullText = _text.text;
         }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// コンポーネント参照初期化
+        /// </summary>
+        private void InitializeComponents()
+        {
+            _text = GetComponent<Text>();
+            _slider = GetComponentInParent<Slider>();
+            _image = GetComponentInParent<Image>();
+            if (_image) _oriColour = _image.color;
+
+            _textMesh = GetComponentInParent<TextMesh>();
+            _spr = GetComponentInParent<SpriteRenderer>();
+            if (_image == null && _spr) _oriColour = _spr.color;
+        }
+
+        /// <summary>
+        /// マネージャー参照初期化
+        /// </summary>
+        private void InitializeManagerReferences()
+        {
+            _selectionSceneManager = FindObjectOfType<StageSelectOperation>();
+            _gameSceneManager = FindObjectOfType<InGameOperation>();
+            _playerManager = FindObjectOfType<PlayerManager>();
+            _inputManager = FindObjectOfType<InputManager>();
+        }
+
+        /// <summary>
+        /// トランスフォームプロパティ初期化
+        /// </summary>
+        private void InitializeTransformProperties()
+        {
+            _oriRot = transform.localEulerAngles;
+            _oriScale = transform.localScale;
+            _alpha = 0f;
+
+            _rectTrans = GetComponent<RectTransform>();
+            if (_rectTrans)
+            {
+                _oriPosRect = new Vector3(_rectTrans.localPosition.x, _rectTrans.localPosition.y, _rectTrans.localPosition.z);
+            }
+        }
+
+        /// <summary>
+        /// テキストプロパティ初期化
+        /// </summary>
+        private void InitializeTextProperties()
+        {
+            _textCnt = 0;
+            if (_textMesh) _fullText = _textMesh.text;
+            else if (_text) _fullText = _text.text;
+        }
+
+        /// <summary>
+        /// 関連オブジェクト初期化
+        /// </summary>
+        private void InitializeRelatedObjects()
+        {
+            _relatedObjsTextMesh = new List<TextMesh>();
+            _relatedObjsSpriteRenderer = new List<SpriteRenderer>();
+            foreach (GameObject obj in relatedObjs)
+            {
+                _relatedObjsTextMesh.Add(obj.GetComponent<TextMesh>());
+                _relatedObjsSpriteRenderer.Add(obj.GetComponent<SpriteRenderer>());
+            }
+        }
+
+        /// <summary>
+        /// タイトルシーンレコード処理
+        /// </summary>
+        private void HandleTitleSceneRecord()
+        {
+            RaycastHit hit;
+            Ray ray = GetInputRay();
+
+            if (Physics.Raycast(ray, out hit, RAYCAST_MAX_DISTANCE, LayerMask.GetMask("RecordBroad")))
+            {
+                ShowRelatedObjects();
+            }
+            else
+            {
+                HideRelatedObjects();
+            }
+        }
+
+        /// <summary>
+        /// 入力レイを取得
+        /// </summary>
+        /// <returns>入力に基づくRayオブジェクト</returns>
+        private Ray GetInputRay()
+        {
+            Ray ray = new Ray();
+            Camera cam = (Screen.width > Screen.height) ? targetCam : subCam;
+
+            if (_inputManager.GetUseTouch())
+            {
+                if (Input.touchCount > 0)
+                    ray = cam.ScreenPointToRay(Input.GetTouch(0).position);
+            }
+            else
+            {
+                ray = cam.ScreenPointToRay(Input.mousePosition);
+            }
+
+            return ray;
+        }
+
+        /// <summary>
+        /// 関連オブジェクト表示
+        /// </summary>
+        private void ShowRelatedObjects()
+        {
+            for (int i = 0; i < relatedObjs.Count; ++i)
+            {
+                if (_relatedObjsTextMesh[i])
+                {
+                    _relatedObjsTextMesh[i].color = new Color(_relatedObjsTextMesh[i].color.r,
+                        _relatedObjsTextMesh[i].color.g, _relatedObjsTextMesh[i].color.b, 1f);
+                }
+                else if (_relatedObjsSpriteRenderer[i])
+                {
+                    _relatedObjsSpriteRenderer[i].color = new Color(_relatedObjsSpriteRenderer[i].color.r,
+                        _relatedObjsSpriteRenderer[i].color.g, _relatedObjsSpriteRenderer[i].color.b, 1f);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 関連オブジェクト非表示
+        /// </summary>
+        private void HideRelatedObjects()
+        {
+            for (int i = 0; i < relatedObjs.Count; ++i)
+            {
+                if (_relatedObjsTextMesh[i])
+                {
+                    float alpha = Mathf.Max(MIN_ALPHA_VALUE, _relatedObjsTextMesh[i].color.a - ALPHA_DECREASE_RATE);
+                    _relatedObjsTextMesh[i].color = new Color(_relatedObjsTextMesh[i].color.r,
+                        _relatedObjsTextMesh[i].color.g, _relatedObjsTextMesh[i].color.b, alpha);
+                }
+                else if (_relatedObjsSpriteRenderer[i])
+                {
+                    float alpha = Mathf.Max(MIN_ALPHA_VALUE, _relatedObjsSpriteRenderer[i].color.a - ALPHA_DECREASE_RATE);
+                    _relatedObjsSpriteRenderer[i].color = new Color(_relatedObjsSpriteRenderer[i].color.r,
+                        _relatedObjsSpriteRenderer[i].color.g, _relatedObjsSpriteRenderer[i].color.b, alpha);
+                }
+            }
+        }
+
+        /// <summary>
+        /// タイトルシーン指示処理
+        /// </summary>
+        private void HandleTitleSceneInstruction()
+        {
+            if (_text) _text.color = new Color(_text.color.r, _text.color.g, _text.color.b,
+                Mathf.Abs(Mathf.Sin(Time.time * magnitude)));
+        }
+
+        /// <summary>
+        /// 選択シーン垂直矢印処理
+        /// </summary>
+        private void HandleSelectionArrowVertical()
+        {
+            _rectTrans.localPosition = _oriPosRect + Mathf.Sin(Time.time) * magnitude * targetCam.transform.forward;
+        }
+
+        /// <summary>
+        /// 選択シーン水平矢印処理
+        /// </summary>
+        private void HandleSelectionArrowHorizontal()
+        {
+            _rectTrans.localPosition = _oriPosRect + Mathf.Sin(Time.time) * magnitude * targetCam.transform.right;
+        }
+
+        /// <summary>
+        /// オプションキャンバスジャイロ処理
+        /// </summary>
+        private void HandleOptionCanvasGyro()
+        {
+            if (_slider)
+            {
+                transform.localEulerAngles = new Vector3(_oriRot.x, _oriRot.y, _oriRot.z - 360f * _slider.value);
+            }
+        }
+
+        /// <summary>
+        /// カスタム島情報処理
+        /// </summary>
+        private void HandleCustomIslandInfo()
+        {
+            if (_spr == null) return;
+
+            _alpha = (_selectionSceneManager.CurrentIslandNum() == _selectionSceneManager.NextIslandNum() &&
+                     _selectionSceneManager.CurrentIslandNum() == uiID) ?
+                     (_alpha < MAX_ALPHA_VALUE ? _alpha + ALPHA_INCREASE_RATE : MAX_ALPHA_VALUE) : 0;
+
+            _spr.color = new Color(_oriColour.r, _oriColour.g, _oriColour.b, _alpha);
+        }
+
+        /// <summary>
+        /// 島情報処理
+        /// </summary>
+        private void HandleIslandInfo()
+        {
+            if (_selectionSceneManager == null || _textMesh == null) return;
+
+            _textCnt = (_selectionSceneManager.CurrentIslandNum() == uiID) ?
+                      Mathf.Min(_textCnt + 1, _fullText.Length) : 0;
+
+            _textMesh.text = _fullText.Substring(0, (int)_textCnt);
+        }
+
+        /// <summary>
+        /// ボススプライト処理
+        /// </summary>
+        private void HandleBossSprite()
+        {
+            if (_selectionSceneManager == null || _spr == null) return;
+            _spr.color = Color.black;
+        }
+
+        /// <summary>
+        /// クリアマーク処理
+        /// </summary>
+        private void HandleClearMark()
+        {
+            if (_selectionSceneManager == null || _image == null) return;
+
+            _image.color = (_selectionSceneManager.EnabledtIslandNum() - 1 > uiID) ?
+                          _oriColour : Color.clear;
+        }
+
+        /// <summary>
+        /// ボスフレーム処理
+        /// </summary>
+        private void HandleBossFrame()
+        {
+            /// <summary>
+            /// 現在は空実装 - 必要に応じて実装可能
+            /// </summary>
+        }
+
+        /// <summary>
+        /// 販売マーク処理
+        /// </summary>
+        private void HandleSellingMark()
+        {
+            if (_playerManager.isSelling &&
+                !_gameSceneManager.GetOptionStatus() &&
+                _gameSceneManager.currScreenShown == (int)InGameOperation.ScreenShownID.SSIDArena)
+            {
+                _image.color = new Color(_image.color.r, _image.color.g, _image.color.b,
+                    Mathf.Abs(Mathf.Sin(Time.time * magnitude)));
+            }
+            else
+            {
+                _image.color = new Color(_image.color.r, _image.color.g, _image.color.b, 0);
+            }
+        }
+
+        /// <summary>
+        /// ウェーブ番号処理
+        /// </summary>
+        private void HandleWaveNumber()
+        {
+            if (_text && _text.color.a > 0)
+            {
+                _text.color = new Color(_text.color.r, _text.color.g, _text.color.b,
+                    _text.color.a - magnitude);
+            }
+        }
+
+        /// <summary>
+        /// スコア情報処理
+        /// </summary>
+        private void HandleScoreInfo()
+        {
+            if (_text == null) return;
+
+            _textCnt = Mathf.Min(_textCnt + TEXT_DISPLAY_SPEED, _fullText.Length);
+            _text.text = _fullText.Substring(0, (int)_textCnt);
+        }
+
+        #endregion
     }
 }

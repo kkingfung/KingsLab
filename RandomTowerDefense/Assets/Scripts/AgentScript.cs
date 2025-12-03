@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Mathematics;
@@ -303,7 +304,7 @@ namespace RandomTowerDefense.AI
             int[] TotalRankInQuarteredMap = new int[4];
             if (towerSpawner == null || filledMapGenerator == null) return TotalRankInQuarteredMap;
             AgentCoord = filledMapGenerator.GetTileIDFromPosition(this.transform.position);
-            AgentCoord = new int2(StageInfoList.stageSizeEx / 2, StageInfoList.stageSizeEx / 2);
+            AgentCoord = new int2(StageInfoDetail.customStageInfo.StageSizeFactor / 2, StageInfoDetail.customStageInfo.StageSizeFactor / 2);
             MaxCoord = filledMapGenerator.MapSize;
 
             int[] SubTotalRankInQuarteredMap;
@@ -406,7 +407,7 @@ namespace RandomTowerDefense.AI
         {
             int[] TotalRankInQuarteredMap = new int[4];
             if (filledMapGenerator == null) return TotalRankInQuarteredMap;
-            List<Pillar> allPillar = filledMapGenerator.PillarList;
+            List<Pillar> allPillar = filledMapGenerator.GetPillarList();
             if (allPillar == null || allPillar.Count == 0) return TotalRankInQuarteredMap;
 
             AgentCoord = filledMapGenerator.GetTileIDFromPosition(this.transform.position);

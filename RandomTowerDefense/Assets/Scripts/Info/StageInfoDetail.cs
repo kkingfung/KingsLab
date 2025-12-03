@@ -42,11 +42,23 @@ namespace RandomTowerDefense.Info
         /// 島の数
         /// </summary>
         public static readonly int IslandNum = 4;
+    // ファイル解析用定数
+    private const int WAVE_ID_INDEX = 0;
+    private const int ENEMY_COUNT_INDEX = 1;
+    private const int ENEMY_TYPE_INDEX = 2;
+    private const int ENEMY_NAME_INDEX = 3;
+    private const int DEFAULT_WAVE_NUM_EX = 10;
+    private const int ULTRA_WAVE_DIFFICULTY_CASE = 9;
 
         /// <summary>
         /// ステージ情報
         /// </summary>
         public static StageAttr stageDetail;
+
+        /// <summary>
+        /// カスタムステージ情報インスタンス
+        /// </summary>
+        public static StageInfo customStageInfo;
 
         /// <summary>
         /// ステージ情報初期化メソッド
@@ -61,6 +73,25 @@ namespace RandomTowerDefense.Info
             stageDetail = useFile ?
                 InitializeStageInfoWithFile(currentIsland, filepath)
                 : InitializeStageInfoWithoutFile(currentIsland);
+        }
+
+        /// <summary>
+        /// カスタマイズデータを更新
+        /// </summary>
+        private static void UpdateCustomizedData()
+        {
+            // カスタムステージ用のパラメータを更新
+            customStageInfo = new StageInfo
+            {
+                WaveNumFactor = (int)PlayerPrefs.GetFloat("waveNum", DEFAULT_WAVE_NUM_EX),
+                StageSizeFactor = (int)PlayerPrefs.GetFloat("stageSize", 64),
+                EnemyNumFactor = PlayerPrefs.GetFloat("enemyNum", 1f),
+                EnemyAttributeFactor = PlayerPrefs.GetFloat("enemyAttr", 1f),
+                ObstacleFactor = PlayerPrefs.GetFloat("obstaclePercent", 1f),
+                SpawnSpeedFactor = PlayerPrefs.GetFloat("spawnSpeed", 5f),
+                HpMaxFactor = (int)PlayerPrefs.GetFloat("hpMax", 10),
+                ResourceFactor = PlayerPrefs.GetFloat("resource", 1f)
+            };
         }
 
         /// <summary>
@@ -86,7 +117,7 @@ namespace RandomTowerDefense.Info
                     PlayerPrefs.SetFloat("enemyAttr", newInfo);
                     break;
                 case StageInfoID.EnumSpawnSpeed:
-                    PlayerPrefs.SetFloat("spawnSpeed", input);
+                    PlayerPrefs.SetFloat("spawnSpeed", newInfo);
                     break;
                 case StageInfoID.EnumObstaclePercent:
                     PlayerPrefs.SetFloat("obstaclePercent", Mathf.Clamp(newInfo,
@@ -240,9 +271,9 @@ namespace RandomTowerDefense.Info
 
                 if (seperateInfo.Length == IslandNum)
                 {
-                    var detail = new EnemyDetail(
-                        int.Parse(seperateInfo[0]), int.Parse(seperateInfo[1]));
-                    _detail.Add(detail, int.Parse(seperateInfo[2]), seperateInfo[3]);
+                    var detail = new WaveDetail(
+                        int.Parse(seperateInfo[WAVE_ID_INDEX]), int.Parse(seperateInfo[ENEMY_COUNT_INDEX]));
+                    _detail.Add(detail, int.Parse(seperateInfo[ENEMY_TYPE_INDEX]), seperateInfo[ENEMY_NAME_INDEX]);
                 }
             }
 
@@ -275,15 +306,15 @@ namespace RandomTowerDefense.Info
         static StageAttr InitializeStageInfoWithFile(int islandId, string filepath) => islandId switch
         {
             0 => new StageAttr(DefaultStageInfos.EasyStageWaveNum,
-                        PrepareStageInfoByFile(DefaultStageInfos.EasyStageWaveNum,
+                        PrepareStageInfoWithFile(DefaultStageInfos.EasyStageWaveNum,
                             filepath + "/EasyStageInfoList.txt")),
             1 => new StageAttr(DefaultStageInfos.NormalStageWaveNum,
-                        PrepareStageInfoByFile(DefaultStageInfos.NormalStageWaveNum,
+                        PrepareStageInfoWithFile(DefaultStageInfos.NormalStageWaveNum,
                             filepath + "/NormalStageInfoList.txt")),
             2 => new StageAttr(DefaultStageInfos.HardStageWaveNum,
-                        PrepareStageInfoByFile(DefaultStageInfos.HardStageWaveNum,
+                        PrepareStageInfoWithFile(DefaultStageInfos.HardStageWaveNum,
                             filepath + "/HardStageInfoList.txt")),
-            3 => new StageAttr((int)PlayerPrefs.GetFloat("waveNumEx", 10),
+            3 => new StageAttr((int)PlayerPrefs.GetFloat("waveNumEx", DEFAULT_WAVE_NUM_EX),
                         PrepareCustomStageInfo()),
             _ => throw new System.Exception("Invalid island ID"),
         };
@@ -301,8 +332,8 @@ namespace RandomTowerDefense.Info
                 DefaultStageInfos.PrepareNormalStageInfo(DefaultStageInfos.NormalStageWaveNum)),
             2 => stageDetail = new StageAttr(DefaultStageInfos.HardStageWaveNum,
                 DefaultStageInfos.PrepareHardStageInfo(DefaultStageInfos.HardStageWaveNum)),
-            3 => stageDetail = new StageAttr((int)PlayerPrefs.GetFloat("waveNum", 10),
-                DefaultStageInfos.PrepareCustomStageInfo((int)PlayerPrefs.GetFloat("waveNum", 10))),
+            3 => stageDetail = new StageAttr((int)PlayerPrefs.GetFloat("waveNum", DEFAULT_WAVE_NUM_EX),
+                DefaultStageInfos.PrepareCustomStageInfo((int)PlayerPrefs.GetFloat("waveNum", DEFAULT_WAVE_NUM_EX))),
             _ => throw new System.Exception("Invalid island ID"),
         };
     }
@@ -398,20 +429,20 @@ namespace RandomTowerDefense.Info
 
             List<WaveDetail> detail = new List<WaveDetail>();
             int waveIDCnt = 1;
-            detail.Add(new EnemyDetail(waveIDCnt++, 5, 1, "Slime"));
-            detail.Add(new EnemyDetail(waveIDCnt++, 5, 1, "Mushroom"));
-            detail.Add(new EnemyDetail(waveIDCnt++, 10, 1, "Slime"));
-            detail.Add(new EnemyDetail(waveIDCnt++, 10, 1, "TurtleShell"));
-            detail.Add(new EnemyDetail(waveIDCnt++, 1, 1, "StoneMonster"));
+            detail.Add(new WaveDetail(waveIDCnt++, 5, 1, "Slime"));
+            detail.Add(new WaveDetail(waveIDCnt++, 5, 1, "Mushroom"));
+            detail.Add(new WaveDetail(waveIDCnt++, 10, 1, "Slime"));
+            detail.Add(new WaveDetail(waveIDCnt++, 10, 1, "TurtleShell"));
+            detail.Add(new WaveDetail(waveIDCnt++, 1, 1, "StoneMonster"));
 
             int j = 0;
 
             for (int i = 0; i < waveNum; ++i)
             {
                 List<WaveDetail> detailPerWave = new List<WaveDetail>();
-                for (; j < detail.Count && detail[j].waveID <= i + 1; ++j)
+                for (; j < detail.Count && detail[j].WaveID <= i + 1; ++j)
                 {
-                    if (detail[j].waveID == i + 1)
+                    if (detail[j].WaveID == i + 1)
                     {
                         detailPerWave.Add(detail[j]);
                     }
@@ -433,22 +464,22 @@ namespace RandomTowerDefense.Info
 
             List<WaveDetail> detail = new List<WaveDetail>();
             int waveIDCnt = 1;
-            detail.Add(new EnemyDetail(waveIDCnt++, 5, 1, "Slime"));
-            detail.Add(new EnemyDetail(waveIDCnt++, 5, 1, "Mushroom"));
-            detail.Add(new EnemyDetail(waveIDCnt++, 8, 2, "Slime"));
-            detail.Add(new EnemyDetail(waveIDCnt++, 8, 1, "Mushroom"));
-            detail.Add(new EnemyDetail(waveIDCnt++, 10, 0, "TurtleShell"));
+            detail.Add(new WaveDetail(waveIDCnt++, 5, 1, "Slime"));
+            detail.Add(new WaveDetail(waveIDCnt++, 5, 1, "Mushroom"));
+            detail.Add(new WaveDetail(waveIDCnt++, 8, 2, "Slime"));
+            detail.Add(new WaveDetail(waveIDCnt++, 8, 1, "Mushroom"));
+            detail.Add(new WaveDetail(waveIDCnt++, 10, 0, "TurtleShell"));
 
-            detail.Add(new EnemyDetail(waveIDCnt++, 10, 1, "Footman"));
-            detail.Add(new EnemyDetail(waveIDCnt++, 10, 1, "Slime"));
-            detail.Add(new EnemyDetail(waveIDCnt++, 15, 2, "Grunt"));
-            detail.Add(new EnemyDetail(waveIDCnt++, 15, 2, "Skeleton"));
-            detail.Add(new EnemyDetail(waveIDCnt++, 15, 0, "Footman"));
+            detail.Add(new WaveDetail(waveIDCnt++, 10, 1, "Footman"));
+            detail.Add(new WaveDetail(waveIDCnt++, 10, 1, "Slime"));
+            detail.Add(new WaveDetail(waveIDCnt++, 15, 2, "Grunt"));
+            detail.Add(new WaveDetail(waveIDCnt++, 15, 2, "Skeleton"));
+            detail.Add(new WaveDetail(waveIDCnt++, 15, 0, "Footman"));
 
-            detail.Add(new EnemyDetail(waveIDCnt++, 15, 0, "FootmanS"));
-            detail.Add(new EnemyDetail(waveIDCnt++, 20, 1, "Skeleton"));
-            detail.Add(new EnemyDetail(waveIDCnt++, 10, 0, "GruntS"));
-            detail.Add(new EnemyDetail(waveIDCnt++, 15, 2, "TurtleShell"));
+            detail.Add(new WaveDetail(waveIDCnt++, 15, 0, "FootmanS"));
+            detail.Add(new WaveDetail(waveIDCnt++, 20, 1, "Skeleton"));
+            detail.Add(new WaveDetail(waveIDCnt++, 10, 0, "GruntS"));
+            detail.Add(new WaveDetail(waveIDCnt++, 15, 2, "TurtleShell"));
             detail.Add(new WaveDetail(waveIDCnt, 1, 0, "Bull"));
             detail.Add(new WaveDetail(waveIDCnt, 1, 2, "Bull"));
             detail.Add(new WaveDetail(waveIDCnt, 1, 1, "Bull"));
@@ -458,9 +489,9 @@ namespace RandomTowerDefense.Info
             for (int i = 0; i < waveNum; ++i)
             {
                 List<WaveDetail> detailPerWave = new List<WaveDetail>();
-                for (; j < detail.Count && detail[j].waveID <= i + 1; ++j)
+                for (; j < detail.Count && detail[j].WaveID <= i + 1; ++j)
                 {
-                    if (detail[j].waveID == i + 1)
+                    if (detail[j].WaveID == i + 1)
                     {
                         detailPerWave.Add(detail[j]);
                     }
@@ -524,9 +555,9 @@ namespace RandomTowerDefense.Info
             for (int i = 0; i < waveNum; ++i)
             {
                 List<WaveDetail> detailPerWave = new List<WaveDetail>();
-                for (; j < detail.Count && detail[j].waveID <= i + 1; ++j)
+                for (; j < detail.Count && detail[j].WaveID <= i + 1; ++j)
                 {
-                    if (detail[j].waveID == i + 1)
+                    if (detail[j].WaveID == i + 1)
                     {
                         detailPerWave.Add(detail[j]);
                     }
@@ -558,23 +589,23 @@ namespace RandomTowerDefense.Info
             {
                 if (k < 10 - 1)
                 {
-                    _detail.Add(new EnemyDetail(k, 8 * enemyNumEx,
+                    _detail.Add(new WaveDetail(k, 8 * enemyNumEx,
                         Prng.Next(0, 3), DefaultStageInfos.MonsterCat0[Prng.Next() % DefaultStageInfos.MonsterCat0.Length]));
                 }
                 else if (k < 35 - 1)
                 {
-                    _detail.Add(new EnemyDetail(k, Prng.Next(5, 10) * enemyNumEx,
+                    _detail.Add(new WaveDetail(k, Prng.Next(5, 10) * enemyNumEx,
                         Prng.Next(0, 3), DefaultStageInfos.MonsterCat1[Prng.Next(0, DefaultStageInfos.MonsterCat1.Length)]));
-                    _detail.Add(new EnemyDetail(k, Prng.Next(5, 10) * enemyNumEx,
+                    _detail.Add(new WaveDetail(k, Prng.Next(5, 10) * enemyNumEx,
                         Prng.Next(0, 3), DefaultStageInfos.MonsterCat1[Prng.Next(0, DefaultStageInfos.MonsterCat1.Length)]));
                 }
                 else if (k < 50 - 1)
                 {
-                    _detail.Add(new EnemyDetail(k, Prng.Next(10, 15) * enemyNumEx,
+                    _detail.Add(new WaveDetail(k, Prng.Next(10, 15) * enemyNumEx,
                         Prng.Next(0, 3), DefaultStageInfos.MonsterCat2[Prng.Next(0, DefaultStageInfos.MonsterCat2.Length)]));
-                    _detail.Add(new EnemyDetail(k, Prng.Next(10, 15) * enemyNumEx,
+                    _detail.Add(new WaveDetail(k, Prng.Next(10, 15) * enemyNumEx,
                         Prng.Next(0, 3), DefaultStageInfos.MonsterCat2[Prng.Next(0, DefaultStageInfos.MonsterCat2.Length)]));
-                    _detail.Add(new EnemyDetail(k, Prng.Next(10, 15) * enemyNumEx,
+                    _detail.Add(new WaveDetail(k, Prng.Next(10, 15) * enemyNumEx,
                         Prng.Next(0, 3), DefaultStageInfos.MonsterCat2[Prng.Next(0, DefaultStageInfos.MonsterCat2.Length)]));
                 }
                 else
@@ -585,25 +616,25 @@ namespace RandomTowerDefense.Info
                     {
                         switch (k % 10)
                         {
-                            case 9:
+                            case ULTRA_WAVE_DIFFICULTY_CASE:
                                 if (Prng.Next(0, 5) == 0)
-                                    _detail.Add(new EnemyDetail(k, 1 * enemyNumEx, 1, "AttackBot"));
+                                    _detail.Add(new WaveDetail(k, 1 * enemyNumEx, 1, "AttackBot"));
                                 else
                                 {
-                                    _detail.Add(new EnemyDetail(k, Prng.Next(1, 3) * enemyNumEx,
+                                    _detail.Add(new WaveDetail(k, Prng.Next(1, 3) * enemyNumEx,
                                         Prng.Next() % 3, "RobotSphere"));
-                                    _detail.Add(new EnemyDetail(k, Prng.Next(1, 3) * enemyNumEx,
+                                    _detail.Add(new WaveDetail(k, Prng.Next(1, 3) * enemyNumEx,
                                         Prng.Next() % 3, "RobotSphere"));
-                                    _detail.Add(new EnemyDetail(k, Prng.Next(1, 3) * enemyNumEx,
+                                    _detail.Add(new WaveDetail(k, Prng.Next(1, 3) * enemyNumEx,
                                         Prng.Next() % 3, "RobotSphere"));
                                 }
                                 break;
                             default:
-                                _detail.Add(new EnemyDetail(k, Prng.Next(5, 10) * enemyNumEx,
+                                _detail.Add(new WaveDetail(k, Prng.Next(5, 10) * enemyNumEx,
                                     Prng.Next(0, 3), DefaultStageInfos.MonsterCat3[Prng.Next(0, DefaultStageInfos.MonsterCat3.Length)]));
-                                _detail.Add(new EnemyDetail(k, Prng.Next(5, 10) * enemyNumEx,
+                                _detail.Add(new WaveDetail(k, Prng.Next(5, 10) * enemyNumEx,
                                     Prng.Next(0, 3), DefaultStageInfos.MonsterCat3[Prng.Next(0, DefaultStageInfos.MonsterCat3.Length)]));
-                                _detail.Add(new EnemyDetail(k, Prng.Next(5, 10) * enemyNumEx,
+                                _detail.Add(new WaveDetail(k, Prng.Next(5, 10) * enemyNumEx,
                                     Prng.Next(0, 3), DefaultStageInfos.MonsterCat3[Prng.Next(0, DefaultStageInfos.MonsterCat3.Length)]));
                                 break;
                         }

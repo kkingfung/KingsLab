@@ -18,10 +18,69 @@ namespace RandomTowerDefense.Info
     /// </summary>
     public static class SkillInfo
     {
+        #region Constants
+
         /// <summary>
-        /// スキル属性クラス - 各スキルの詳細なパラメータを格納
+        /// 全スキル名配列 - 4種類の魔法スキル
         /// </summary>
-        static Dictionary<string, SkillAttr> skillInfo;
+        private static readonly string[] AllSkillNames = {
+            "SkillMeteor", "SkillBlizzard",
+            "SkillPetrification", "SkillMinions"
+        };
+
+        /// <summary>
+        /// スキル設定ファイルの期待するパラメータ数
+        /// </summary>
+        private const int EXPECTED_SKILL_PARAMETER_COUNT = 8;
+
+        // Meteorスキル定数
+        private const float METEOR_RADIUS = 2.5f;
+        private const float METEOR_DAMAGE = 8.0f;
+        private const float METEOR_RESPAWN_CYCLE = 2.5f;
+        private const float METEOR_WAIT_TO_ACTION = 0.5f;
+        private const float METEOR_LIFETIME = 15.0f;
+        private const float METEOR_SLOW_RATE = 0.0f;
+        private const float METEOR_DEBUFF_TIME = 0.0f;
+
+        // Blizzardスキル定数
+        private const float BLIZZARD_RADIUS = 5.0f;
+        private const float BLIZZARD_DAMAGE = 0.0f;
+        private const float BLIZZARD_RESPAWN_CYCLE = 5.0f;
+        private const float BLIZZARD_WAIT_TO_ACTION = 0.0f;
+        private const float BLIZZARD_LIFETIME = 15.0f;
+        private const float BLIZZARD_SLOW_RATE = 0.01f;
+        private const float BLIZZARD_DEBUFF_TIME = 3.0f;
+
+        // Petrificationスキル定数
+        private const float PETRIFICATION_RADIUS = 1000.0f;
+        private const float PETRIFICATION_DAMAGE = 0.0f;
+        private const float PETRIFICATION_RESPAWN_CYCLE = 0.2f;
+        private const float PETRIFICATION_WAIT_TO_ACTION = 0.0f;
+        private const float PETRIFICATION_LIFETIME = 5.0f;
+        private const float PETRIFICATION_SLOW_RATE = 1.0f;
+        private const float PETRIFICATION_DEBUFF_TIME = 0.0015f;
+
+        // Minionsスキル定数
+        private const float MINIONS_RADIUS = 1.0f;
+        private const float MINIONS_DAMAGE = 3.0f;
+        private const float MINIONS_RESPAWN_CYCLE = 0.1f;
+        private const float MINIONS_WAIT_TO_ACTION = 1.0f;
+        private const float MINIONS_LIFETIME = 10.0f;
+        private const float MINIONS_SLOW_RATE = 0.0f;
+        private const float MINIONS_DEBUFF_TIME = 0.0f;
+
+        #endregion
+
+        #region Private Fields
+
+        /// <summary>
+        /// スキル情報辞書
+        /// </summary>
+        private static Dictionary<string, SkillAttr> skillInfo;
+
+        #endregion
+
+        #region Public Methods
 
         /// <summary>
         /// 初期化メソッド - デフォルトのスキル属性を設定
@@ -31,28 +90,28 @@ namespace RandomTowerDefense.Info
             skillInfo = new Dictionary<string, SkillAttr>();
 
             skillInfo.Add("SkillMeteor", new SkillAttr(
-                2.5f, 8f, // radius,damage
-                2.5f, 0.5f, // respawn cycle,wait to action
-                15, 0, // lifetime,slowrate(include petrify)
-                0)); // debufftime
+                METEOR_RADIUS, METEOR_DAMAGE, // 範囲、ダメージ
+                METEOR_RESPAWN_CYCLE, METEOR_WAIT_TO_ACTION, // 再生サイクル、アクション待機時間
+                METEOR_LIFETIME, METEOR_SLOW_RATE, // 生存時間、減速率（石化含む）
+                METEOR_DEBUFF_TIME)); // デバフ時間
 
             skillInfo.Add("SkillBlizzard", new SkillAttr(
-                5, 0f, // radius,damage
-                5, 0f, // respawn cycle,wait to action
-                15, 0.01f, // lifetime,slowrate(include petrify)
-                3.0f)); // debufftime
+                BLIZZARD_RADIUS, BLIZZARD_DAMAGE, // 範囲、ダメージ
+                BLIZZARD_RESPAWN_CYCLE, BLIZZARD_WAIT_TO_ACTION, // 再生サイクル、アクション待機時間
+                BLIZZARD_LIFETIME, BLIZZARD_SLOW_RATE, // 生存時間、減速率（石化含む）
+                BLIZZARD_DEBUFF_TIME)); // デバフ時間
 
             skillInfo.Add("SkillPetrification", new SkillAttr(
-                1000, 0, // radius,damage
-                0.2f, 0f, // respawn cycle,wait to action
-                5, 1.0f, // lifetime,slowrate(include petrify)
-                0.0015f));// debufftime
+                PETRIFICATION_RADIUS, PETRIFICATION_DAMAGE, // 範囲、ダメージ
+                PETRIFICATION_RESPAWN_CYCLE, PETRIFICATION_WAIT_TO_ACTION, // 再生サイクル、アクション待機時間
+                PETRIFICATION_LIFETIME, PETRIFICATION_SLOW_RATE, // 生存時間、減速率（石化含む）
+                PETRIFICATION_DEBUFF_TIME));// デバフ時間
 
             skillInfo.Add("SkillMinions", new SkillAttr(
-                1, 3f, // radius,damage
-                0.1f, 1f, // respawn cycle,wait to action
-                10, 0, // lifetime,slowrate(include petrify)
-                0)); // debufftime
+                MINIONS_RADIUS, MINIONS_DAMAGE, // 範囲、ダメージ
+                MINIONS_RESPAWN_CYCLE, MINIONS_WAIT_TO_ACTION, // 再生サイクル、アクション待機時間
+                MINIONS_LIFETIME, MINIONS_SLOW_RATE, // 生存時間、減速率（石化含む）
+                METEOR_DEBUFF_TIME)); // デバフ時間
         }
 
         /// <summary>
@@ -69,7 +128,7 @@ namespace RandomTowerDefense.Info
             {
                 string inp_ln = inp_stm.ReadLine();
                 string[] seperateInfo = inp_ln.Split(':');
-                if (seperateInfo.Length == 8)
+                if (seperateInfo.Length == EXPECTED_SKILL_PARAMETER_COUNT)
                 {
                     skillInfo.Add(seperateInfo[0], new SkillAttr(
                         float.Parse(seperateInfo[1]), float.Parse(seperateInfo[2]),
@@ -90,13 +149,7 @@ namespace RandomTowerDefense.Info
         {
             skillInfo = new Dictionary<string, SkillAttr>();
 
-            string[] allNames =
-            {
-                "SkillMeteor", "SkillBlizzard",
-                "SkillPetrification", "SkillMinions"
-            };
-
-            foreach (string name in allNames)
+            foreach (string name in AllSkillNames)
             {
                 var attr = new SkillAttr(
                     ConfigManager.appConfig.GetFloat(name + "Radius"),
@@ -112,21 +165,27 @@ namespace RandomTowerDefense.Info
         }
 
         /// <summary>
+        /// スキル情報取得メソッド - 指定されたスキル名に対応するスキル属性を返す
+        /// </summary>
+        /// <param name="skillName">取得するスキルの名前</param>
+        /// <returns>対応するスキル属性オブジェクト、見つからない場合はnull</returns>
+        public static SkillAttr GetSkillInfo(string skillName)
+        {
+            return skillInfo.TryGetValue(skillName, out var attr) ? attr : null;
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
         /// リソース解放メソッド - スキル情報のクリア
         /// </summary>
-        public static void Release()
+        private static void Release()
         {
             skillInfo.Clear();
         }
 
-        /// <summary>
-        /// スキル情報取得メソッド - 指定されたスキル名に対応するスキル属性を返す
-        /// </summary>
-        /// <param name="skillName">取得するスキルの名前</param>
-        /// <returns>対応するスキル属性オブジェクト</returns>
-        public static SkillAttr GetSkillInfo(string skillName)
-        {
-            return skillInfo.TyGetValue(skillName, out var attr) ? attr : null;
-        }
+        #endregion
     }
 }

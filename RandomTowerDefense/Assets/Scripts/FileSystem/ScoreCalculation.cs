@@ -7,6 +7,7 @@ using RandomTowerDefense.Scene;
 using RandomTowerDefense.Common;
 using RandomTowerDefense.Info;
 using RandomTowerDefense.Units;
+using RandomTowerDefense.FileSystem;
 
 public class ScoreCalculation : MonoBehaviour
 {
@@ -19,6 +20,12 @@ public class ScoreCalculation : MonoBehaviour
     private readonly int ScoreForUpgrades = 100;
 
     private readonly int RecordCharNum = 5;
+    // スコア計算用定数
+    private const float MIN_OBSTACLE_FACTOR = 0.1f;
+    private const float RESOURCE_FACTOR_MULTIPLIER = 1.0f;
+    private const float MIN_RESOURCE_FACTOR = 0.5f;
+    private const int WAVE_NUM_FACTOR_THRESHOLD = 50;
+    private const float WAIT_TIME_SECONDS = 0f;
 
     public List<Text> ScoreObj;
     public List<Text> RankObj;
@@ -41,8 +48,9 @@ public class ScoreCalculation : MonoBehaviour
     private List<UIEffect> uiEffect;
     //For Calculation
     public ResourceManager resourceManager;
+    public UpgradesManager upgradesManager;
 
-    // Start is called before the first frame update
+    // 開始時に呼び出される
     private void Start()
     {
         Inputting = false;
@@ -90,12 +98,12 @@ public class ScoreCalculation : MonoBehaviour
         int result = stageManager.GetResult();
         int currIsland = sceneManager.GetCurrIsland();
 
-        // Clear
+        // クリア
         if (result == (int)StageManager.GameResult.Won)
         {
             score += ScoreForBase + ScoreForStage * currIsland;
             score += ((currIsland != StageInfoDetail.IslandNum - 1) ? 0 :
-                (int)((DefaultStageInfos.MaxMapDepth * DefaultStageInfos.MaxMapDepth - StageInfoList.stageSizeEx) * ScoreForStageEx * (1 / Mathf.Max(0.1f, StageInfoList.obstacleEx))));
+                (int)((DefaultStageInfos.MaxMapDepth * DefaultStageInfos.MaxMapDepth - StageInfoDetail.customStageInfo.StageSizeFactor) * ScoreForStageEx * (1 / Mathf.Max(MIN_OBSTACLE_FACTOR, StageInfoDetail.customStageInfo.ObstacleFactor))));
             scoreStr += score + "\n";
         }
         else
@@ -103,30 +111,30 @@ public class ScoreCalculation : MonoBehaviour
             scoreStr += 0 + "\n";
         }
 
-        // CastleHP
+        // 城のHP
         scoreChg = ScoreForCastleHP * stageManager.GetCurrHP();
         score += scoreChg;
         scoreStr += "+" + scoreChg + "\n";
 
-        // Resource
+        // リソース
         scoreChg = resourceManager.GetCurrMaterial();
-        scoreChg = (int)(scoreChg * ((currIsland != StageInfoDetail.IslandNum - 1) ? 1f :
-                (1f / Mathf.Max(StageInfoList.resourceEx, 0.5f))));
+        scoreChg = (int)(scoreChg * ((currIsland != StageInfoDetail.IslandNum - 1) ? RESOURCE_FACTOR_MULTIPLIER :
+                (RESOURCE_FACTOR_MULTIPLIER / Mathf.Max(StageInfoDetail.customStageInfo.ResourceFactor, 0.5f))));
         score += scoreChg;
         scoreStr += "+" + scoreChg + "\n";
 
-        // Upgrades
-        scoreChg = ScoreForUpgrades * UpgradesManager.allLevel();
+        // アップグレード
+        scoreChg = ScoreForUpgrades * (upgradesManager ? upgradesManager.GetTotalLevel() : 0);
         score += scoreChg;
         scoreStr += "+" + scoreChg + "\n";
 
-        // Remark: Special Function for extra mode
+        // 備考: エクストラモード用特別関数
         if (currIsland != StageInfoDetail.IslandNum - 1)
         {
             if (result == (int)StageManager.GameResult.Won)
             {
-                score -= StageInfoList.hpMaxEx * ScoreForStartHP;
-                scoreStr += "-" + StageInfoList.hpMaxEx * ScoreForStartHP + "\n";
+                score -= StageInfoDetail.customStageInfo.HpMaxFactor * ScoreForStartHP;
+                scoreStr += "-" + StageInfoDetail.customStageInfo.HpMaxFactor * ScoreForStartHP + "\n";
             }
             else
             {
@@ -136,10 +144,10 @@ public class ScoreCalculation : MonoBehaviour
         }
         else
         {
-            if (StageInfoList.waveNumEx > 50 || (result == (int)StageManager.GameResult.Won))
+            if (StageInfoDetail.customStageInfo.WaveNumFactor > WAVE_NUM_FACTOR_THRESHOLD || (result == (int)StageManager.GameResult.Won))
             {
-                score -= StageInfoList.hpMaxEx * ScoreForStartHPEx;
-                scoreStr += "-" + StageInfoList.hpMaxEx * ScoreForStartHPEx + "\n";
+                score -= StageInfoDetail.customStageInfo.HpMaxFactor * ScoreForStartHPEx;
+                scoreStr += "-" + StageInfoDetail.customStageInfo.HpMaxFactor * ScoreForStartHPEx + "\n";
             }
             else
             {
@@ -191,7 +199,7 @@ public class ScoreCalculation : MonoBehaviour
                 playerName = keyboard.text;
                 foreach (Text i in NameObj)
                     i.text = playerName;
-                yield return new WaitForSeconds(0f);
+                yield return new WaitForSeconds(WAIT_TIME_SECONDS);
             }
 
             keyboard = null;

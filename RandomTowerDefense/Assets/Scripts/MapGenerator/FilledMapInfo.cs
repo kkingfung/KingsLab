@@ -38,7 +38,7 @@ namespace RandomTowerDefense.MapGenerator
         {
             get
             {
-                return new Coord(mapSize.x / 2, mapSize.y / 2);
+                return new FilledMapCoord(mapSize.x / 2, mapSize.y / 2);
             }
         }
     }

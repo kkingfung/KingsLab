@@ -7,6 +7,7 @@ using UnityEngine.VFX;
 using RandomTowerDefense.Managers.Macro;
 using RandomTowerDefense.Managers.System;
 using RandomTowerDefense.Common;
+using RandomTowerDefense.FileSystem;
 
 namespace RandomTowerDefense.Scene
 {
@@ -22,99 +23,220 @@ namespace RandomTowerDefense.Scene
     /// </summary>
     public class TitleOperation : ISceneChange
     {
-        //Camera Start/Stay/End Point
-        [Header("Camera Settings")]
-        public GameObject DarkenCam;
-        public List<GameObject> EggCam;
+        #region Constants
 
-        public GameObject RightCam;
-        public Camera RightCamComponent;
-        public List<Vector3> RightCamStartPt;
-        public List<Vector3> RightCamStayPt;
-        public List<Vector3> RightCamEndPt;
-        public GameObject BottomCam;
-        public Camera BottomCamComponent;
-        public List<Vector3> BottomCamStartPt;
-        public List<Vector3> BottomCamStayPt;
-        public List<Vector3> BottomCamEndPt;
+        private const float _timeWait = 0.2f;
+        private const float _targetCamAngle = -45f;
+        private const int _maxRecStatus = 4;
+        private const float _maxRecTimer = 0.5f;
+        private const float _maxRecWaitTimer = 5;
 
-        [Header("Button Settings")]
-        public List<Button> StartButton;
-        public List<Button> OptionButton;
-        public List<Button> CreditButton;
+        #endregion
 
-        [Header("Petrify Settings")]
-        public List<Image> PetrifyImgs;
-        public List<RawImage> PetrifyRImgs;
-        public List<SpriteRenderer> PetrifySpr;
-        public List<Material> PetrifyMat;
+        #region Enums
 
-        [Header("Other Settings")]
-        public List<GameObject> TitleImg;
-        public List<RawImage> TitleImgRaw;
-        public List<Text> TitleImgText;
-
-        public List<GameObject> TitleEffectImg;
-        private List<VisualEffect> TitleEffectImgVFX;
-        public List<string> bundleUrl;
-        public List<string> bundleName;
-
-        public GameObject BoidSpawn;
-        public RawImage LandscapeFadeImg;
-        public RawImage PortraitFadeImg;
-
-        private FadeEffect LandscapeFade;
-        private FadeEffect PortraitFade;
-
-        //Manager
-        public AudioManager AudioManager;
-        public CameraManager CameraManager;
-        public CanvaManager CanvaManager;
-        public InputManager InputManager;
-        public GyroscopeManager GyroscopeManager;
-
-        private bool isOpening;
-        private bool isWaiting;
-        private bool showCredit;
-        private float TimeRecord = 0;
-        private const float TimeWait = 0.2f;
-
-        //CameraAnimation
-        private const float targetCamAngle = -45f;
-
-        enum RecordCameraState
+        /// <summary>
+        /// カメラ状態管理列挙型
+        /// </summary>
+        private enum RecordCameraState
         {
             StarttoStay,
             Stay,
             StaytoExit,
             Exit
-        };
+        }
 
-        private int currentRecStatusRightCam;
-        private int nextRecStatusRightCam;
-        private RecordCameraState rightCamState;
+        #endregion
 
-        private int currentRecStatusBottomCam;
-        private int nextRecStatusBottomCam;
-        private RecordCameraState bottomCamState;
+        #region Serialized Fields
 
-        private const int maxRecStatus = 4;
-        private const float maxRecTimer = 0.5f;
-        private const float maxRecWaitTimer = 5;
+        [Header("Camera Settings")]
+        [SerializeField] public GameObject DarkenCam;
+        [SerializeField] public List<GameObject> EggCam;
+        [SerializeField] public GameObject RightCam;
+        [SerializeField] public List<Vector3> RightCamStartPt;
+        [SerializeField] public List<Vector3> RightCamStayPt;
+        [SerializeField] public List<Vector3> RightCamEndPt;
+        [SerializeField] public GameObject BottomCam;
+        [SerializeField] public List<Vector3> BottomCamStartPt;
+        [SerializeField] public List<Vector3> BottomCamStayPt;
+        [SerializeField] public List<Vector3> BottomCamEndPt;
 
+        [Header("Button Settings")]
+        [SerializeField] public List<Button> StartButton;
+        [SerializeField] public List<Button> OptionButton;
+        [SerializeField] public List<Button> CreditButton;
+
+        [Header("Petrify Settings")]
+        [SerializeField] public List<Image> PetrifyImgs;
+        [SerializeField] public List<RawImage> PetrifyRImgs;
+        [SerializeField] public List<SpriteRenderer> PetrifySpr;
+        [SerializeField] public List<Material> PetrifyMat;
+
+        [Header("Title Settings")]
+        [SerializeField] public List<GameObject> TitleImg;
+        [SerializeField] public List<GameObject> TitleEffectImg;
+        [SerializeField] public List<string> bundleUrl;
+        [SerializeField] public List<string> bundleName;
+        [SerializeField] public GameObject BoidSpawn;
+        [SerializeField] public RawImage LandscapeFadeImg;
+        [SerializeField] public RawImage PortraitFadeImg;
+
+        #endregion
+
+        #region Private Fields
+
+        private Camera _rightCamComponent;
+        private Camera _bottomCamComponent;
+        private List<RawImage> _titleImgRaw;
+        private List<Text> _titleImgText;
+        private List<VisualEffect> _titleEffectImgVFX;
+        private FadeEffect _landscapeFade;
+        private FadeEffect _portraitFade;
+
+        private bool _isOpening;
+        private bool _isWaiting;
+        private bool _showCredit;
+        private float _timeRecord = 0;
+
+        private int _currentRecStatusRightCam;
+        private int _nextRecStatusRightCam;
+        private RecordCameraState _rightCamState;
+        private int _currentRecStatusBottomCam;
+        private int _nextRecStatusBottomCam;
+        private RecordCameraState _bottomCamState;
+
+        #endregion
+
+        #region Manager References
+
+        [Header("Manager References")]
+        [SerializeField] public AudioManager AudioManager;
+        [SerializeField] public CameraManager CameraManager;
+        [SerializeField] public CanvaManager CanvaManager;
+        [SerializeField] public InputManager InputManager;
+        [SerializeField] public GyroscopeManager GyroscopeManager;
+
+        #endregion
+
+        #region Unity Lifecycle
+
+        /// <summary>
+        /// ゲームオブジェクト有効化時処理
+        /// </summary>
         private void OnEnable()
         {
-            //BoidSpawn.SetActive(true);
             Time.timeScale = 1;
         }
+
+        /// <summary>
+        /// 初期化処理 - PlayerPrefs設定とゲーム状態初期化
+        /// </summary>
         protected override void Awake()
         {
             base.Awake();
+            InitializePlayerPrefs();
+        }
 
+        /// <summary>
+        /// スタート処理 - UIコンポーネント初期化とエフェクト設定
+        /// </summary>
+        private void Start()
+        {
+            InitializeGameState();
+            InitializeCameraState();
+            InitializeComponents();
+            InitializePetrifyEffects();
+            InitializeTitleElements();
+            InitializeAssetBundles();
+
+            AudioManager.PlayAudio("bgm_Opening");
+        }
+
+        /// <summary>
+        /// 毎フレーム更新 - UI状態管理と入力処理
+        /// </summary>
+        protected override void Update()
+        {
+            base.Update();
+
+            UpdateButtonInteractability();
+
+            if (HandleSceneTransition()) return;
+            if (_isWaiting || isSceneFinished) return;
+
+            HandleInputEvents();
+            HandleCameraOperations();
+
+            DarkenCam.SetActive(isOption || _showCredit);
+        }
+
+        /// <summary>
+        /// フレーム終了時処理 - オプション時のカメラ制御
+        /// </summary>
+        private void LateUpdate()
+        {
+            if (isOption)
+            {
+                _rightCamComponent.enabled = false;
+                _bottomCamComponent.enabled = false;
+            }
+        }
+
+        #endregion
+        #region Public Methods
+
+        /// <summary>
+        /// ステージ選択シーンへの移行処理
+        /// </summary>
+        public void MoveToStageSelection()
+        {
+            if (Time.time - _timeRecord < _timeWait) return;
+
+            StartCoroutine(PetrifyAnimation());
+            _timeRecord = Time.time;
+            _isWaiting = true;
+            AudioManager.PlayAudio("se_Button");
+        }
+
+        /// <summary>
+        /// オプション状態切り替え処理
+        /// </summary>
+        public void OptionStatus()
+        {
+            if (Time.time - _timeRecord < _timeWait) return;
+
+            isOption = !isOption;
+            CanvaManager.isOption = isOption;
+            GyroscopeManager.isFunctioning = !isOption;
+            _timeRecord = Time.time;
+            AudioManager.PlayAudio("se_Button");
+        }
+
+        /// <summary>
+        /// クレジット表示切り替え処理
+        /// </summary>
+        public void EnableCredit()
+        {
+            if (Time.time - _timeRecord < _timeWait) return;
+
+            _showCredit = !_showCredit;
+            UpdateCameraStatusForCredit();
+            _timeRecord = Time.time;
+
+            if (_showCredit) AudioManager.PlayAudio("se_Button");
+        }
+
+        #endregion
+        #region Private Methods
+
+        /// <summary>
+        /// PlayerPrefs初期化
+        /// </summary>
+        private void InitializePlayerPrefs()
+        {
             PlayerPrefs.SetInt("StageID", 0);
-
             PlayerPrefs.SetFloat("zoomRate", 0f);
-
             PlayerPrefs.SetFloat("waveNum", 1);
             PlayerPrefs.SetFloat("stageSize", 1);
             PlayerPrefs.SetFloat("enemyNum", 1);
@@ -124,381 +246,449 @@ namespace RandomTowerDefense.Scene
             PlayerPrefs.SetFloat("hpMax", 10);
             PlayerPrefs.SetFloat("resource", 1);
         }
-        // Start is called before the first frame update
-        private void Start()
+
+        /// <summary>
+        /// ゲーム状態初期化
+        /// </summary>
+        private void InitializeGameState()
         {
-            isOpening = true;
+            _isOpening = true;
             isOption = false;
-            showCredit = false;
+            _showCredit = false;
+        }
 
-            rightCamState = RecordCameraState.Exit;
-            currentRecStatusRightCam = 1;
-            nextRecStatusRightCam = (currentRecStatusRightCam % maxRecStatus) + 1;
-            bottomCamState = RecordCameraState.Exit;
-            currentRecStatusBottomCam = 1;
-            nextRecStatusBottomCam = (currentRecStatusBottomCam % maxRecStatus) + 1;
+        /// <summary>
+        /// カメラ状態初期化
+        /// </summary>
+        private void InitializeCameraState()
+        {
+            _rightCamState = RecordCameraState.Exit;
+            _currentRecStatusRightCam = 1;
+            _nextRecStatusRightCam = (_currentRecStatusRightCam % _maxRecStatus) + 1;
+            _bottomCamState = RecordCameraState.Exit;
+            _currentRecStatusBottomCam = 1;
+            _nextRecStatusBottomCam = (_currentRecStatusBottomCam % _maxRecStatus) + 1;
+        }
 
-            //InputManager = FindObjectOfType<InputManager>();
-            //AudioManager = FindObjectOfType<AudioManager>();
-            //CameraManager = FindObjectOfType<CameraManager>();
-            //CanvaManager = FindObjectOfType<CanvaManager>();
-            //GyroscopeManager = FindObjectOfType<GyroscopeManager>();
+        /// <summary>
+        /// コンポーネント初期化
+        /// </summary>
+        private void InitializeComponents()
+        {
+            _landscapeFade = LandscapeFadeImg.gameObject.GetComponent<FadeEffect>();
+            _portraitFade = PortraitFadeImg.gameObject.GetComponent<FadeEffect>();
+            _rightCamComponent = RightCam.GetComponent<Camera>();
+            _bottomCamComponent = BottomCam.GetComponent<Camera>();
+        }
 
-            LandscapeFade = LandscapeFadeImg.gameObject.GetComponent<FadeEffect>();
-            PortraitFade = PortraitFadeImg.gameObject.GetComponent<FadeEffect>();
-
-            AudioManager.PlayAudio("bgm_Opening");
-            PlayerPrefs.SetFloat("zoomRate", 0f);
-
+        /// <summary>
+        /// ペトリファイエフェクト初期化
+        /// </summary>
+        private void InitializePetrifyEffects()
+        {
             foreach (Material mat in PetrifyMat)
             {
                 mat.SetFloat("_Progress", 0);
             }
 
-            if (PetrifyImgs.Count > 0)
+            foreach (Image img in PetrifyImgs)
             {
-                foreach (Image i in PetrifyImgs)
-                    i.material.SetFloat("_Progress", 0);
-            }
-            if (PetrifyRImgs.Count > 0)
-            {
-                foreach (RawImage i in PetrifyRImgs)
-                    i.material.SetFloat("_Progress", 0);
-            }
-            if (PetrifySpr.Count > 0)
-            {
-                foreach (SpriteRenderer i in PetrifySpr)
-                    i.material.SetFloat("_Progress", 0);
+                img.material.SetFloat("_Progress", 0);
             }
 
-            TitleImgRaw = new List<RawImage>();
-            TitleImgText = new List<Text>();
-            foreach (GameObject i in TitleImg)
+            foreach (RawImage rawImg in PetrifyRImgs)
             {
-                TitleImgRaw.Add(i.GetComponent<RawImage>());
-                TitleImgText.Add(i.GetComponent<Text>());
+                rawImg.material.SetFloat("_Progress", 0);
             }
 
-            TitleEffectImgVFX = new List<VisualEffect>();
-            foreach (GameObject i in TitleEffectImg)
+            foreach (SpriteRenderer spr in PetrifySpr)
             {
-                TitleEffectImgVFX.Add(i.GetComponent<VisualEffect>());
-                TitleEffectImgVFX[TitleEffectImgVFX.Count - 1].Stop();
+                spr.material.SetFloat("_Progress", 0);
             }
-
-            RightCamComponent = RightCam.GetComponent<Camera>();
-            BottomCamComponent = BottomCam.GetComponent<Camera>();
-
-            for (int i = 0; i < bundleUrl.Count; ++i)
-                LoadBundle.LoadAssetBundle(bundleUrl[i], bundleName[i], "Assets/AssetBundles");
         }
 
-        // Update is called once per frame
-        protected override void Update()
+        /// <summary>
+        /// タイトル要素初期化
+        /// </summary>
+        private void InitializeTitleElements()
         {
-            base.Update();
-
-            foreach (Button i in StartButton)
-                i.interactable = !showCredit && !isOption && !isWaiting;
-            foreach (Button i in OptionButton)
-                i.interactable = !showCredit && !isWaiting;
-            foreach (Button i in CreditButton)
-                i.interactable = !isOption && !isWaiting;
-
-            //Change Scene
-            if (isSceneFinished && ((LandscapeFade && LandscapeFade.isReady) || (PortraitFade && PortraitFade.isReady)))
+            _titleImgRaw = new List<RawImage>();
+            _titleImgText = new List<Text>();
+            foreach (GameObject obj in TitleImg)
             {
-                SceneManager.LoadScene("LoadingScene");
-                return;
+                _titleImgRaw.Add(obj.GetComponent<RawImage>());
+                _titleImgText.Add(obj.GetComponent<Text>());
             }
 
-            if (isSceneFinished || isWaiting) return;
-
-            if (isOpening && InputManager.GetAnyInput())
+            _titleEffectImgVFX = new List<VisualEffect>();
+            foreach (GameObject obj in TitleEffectImg)
             {
-                isWaiting = true;
-                foreach (VisualEffect i in TitleEffectImgVFX)
+                var vfx = obj.GetComponent<VisualEffect>();
+                _titleEffectImgVFX.Add(vfx);
+                vfx.Stop();
+            }
+        }
+
+        /// <summary>
+        /// アセットバンドル初期化
+        /// </summary>
+        private void InitializeAssetBundles()
+        {
+            for (int i = 0; i < bundleUrl.Count; ++i)
+            {
+                LoadBundle.LoadAssetBundle(bundleUrl[i], bundleName[i], "Assets/AssetBundles");
+            }
+        }
+
+        /// <summary>
+        /// ボタンインタラクション状態更新
+        /// </summary>
+        private void UpdateButtonInteractability()
+        {
+            bool canInteractStart = !_showCredit && !isOption && !_isWaiting;
+            bool canInteractOption = !_showCredit && !_isWaiting;
+            bool canInteractCredit = !isOption && !_isWaiting;
+
+            foreach (Button button in StartButton)
+                button.interactable = canInteractStart;
+            foreach (Button button in OptionButton)
+                button.interactable = canInteractOption;
+            foreach (Button button in CreditButton)
+                button.interactable = canInteractCredit;
+        }
+
+        /// <summary>
+        /// シーン遷移処理
+        /// </summary>
+        /// <returns>true if scene transition occurred</returns>
+        private bool HandleSceneTransition()
+        {
+            if (isSceneFinished && ((_landscapeFade && _landscapeFade.isReady) || (_portraitFade && _portraitFade.isReady)))
+            {
+                SceneManager.LoadScene("LoadingScene");
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// 入力イベント処理
+        /// </summary>
+        private void HandleInputEvents()
+        {
+            if (_isOpening && InputManager.GetAnyInput())
+            {
+                _isWaiting = true;
+                foreach (VisualEffect vfx in _titleEffectImgVFX)
                 {
-                    i.Play();
+                    vfx.Play();
                 }
                 StartCoroutine(PreparationToMain());
             }
 
-            if (showCredit && InputManager.GetAnyInput())
+            if (_showCredit && InputManager.GetAnyInput())
             {
                 EnableCredit();
             }
+        }
 
-            if (!isOpening)
+        /// <summary>
+        /// カメラ操作処理
+        /// </summary>
+        private void HandleCameraOperations()
+        {
+            if (!_isOpening)
             {
-                if (rightCamState == RecordCameraState.Exit)
+                if (_rightCamState == RecordCameraState.Exit)
                     StartCoroutine(RecRightCamOperation());
-                if (bottomCamState == RecordCameraState.Exit)
+                if (_bottomCamState == RecordCameraState.Exit)
                     StartCoroutine(RecBottomCamOperation());
             }
-
-            DarkenCam.SetActive(isOption || showCredit);
         }
 
-        private void LateUpdate()
+        /// <summary>
+        /// クレジット用カメラ状態更新
+        /// </summary>
+        private void UpdateCameraStatusForCredit()
         {
-            if (isOption)
+            if (_showCredit)
             {
-                RightCamComponent.enabled = false;
-                BottomCamComponent.enabled = false;
-            }
-        }
-        #region CommonOperation
-        public void MoveToStageSelection()
-        {
-            if (Time.time - TimeRecord < TimeWait) return;
-            StartCoroutine(PetrifyAnimation());
-            TimeRecord = Time.time;
-            isWaiting = true;
-            AudioManager.PlayAudio("se_Button");
-        }
-
-        public void OptionStatus()
-        {
-            if (Time.time - TimeRecord < TimeWait) return;
-            isOption = !isOption;
-            CanvaManager.isOption = isOption;
-            GyroscopeManager.isFunctioning = !isOption;
-            TimeRecord = Time.time;
-            AudioManager.PlayAudio("se_Button");
-        }
-
-        public void EnableCredit()
-        {
-            if (Time.time - TimeRecord < TimeWait) return;
-            showCredit = !showCredit;
-            if (showCredit)
-            {
-                nextRecStatusRightCam = 0;
-                nextRecStatusBottomCam = 0;
+                _nextRecStatusRightCam = 0;
+                _nextRecStatusBottomCam = 0;
             }
             else
             {
-                nextRecStatusRightCam = 1;
-                nextRecStatusBottomCam = 1;
+                _nextRecStatusRightCam = 1;
+                _nextRecStatusBottomCam = 1;
             }
-            TimeRecord = Time.time;
-            if (showCredit) AudioManager.PlayAudio("se_Button");
         }
+
+        /// <summary>
+        /// ペトリファイアニメーションコルーチン
+        /// </summary>
+        /// <returns>コルーチンの進行状況</returns>
         private IEnumerator PetrifyAnimation()
         {
             float progress = 0f;
             int frame = 15;
-            float rate = 1 / (float)frame;
+            float rate = 1f / frame;
+
             while (frame-- > 0)
             {
                 progress += rate;
-                foreach (Image i in PetrifyImgs)
-                {
-                    //i.material.EnableKeyword("_Progress");
-                    i.material.SetFloat("_Progress", progress);
-                }
-                foreach (RawImage i in PetrifyRImgs)
-                {
-                    //i.material.EnableKeyword("_Progress");
-                    i.material.SetFloat("_Progress", progress);
-                }
-                foreach (SpriteRenderer i in PetrifySpr)
-                {
-                    //i.material.EnableKeyword("_Progress");
-                    i.material.SetFloat("_Progress", progress);
-                }
-                yield return new WaitForSeconds(0f);
+                SetPetrifyProgress(progress);
+                yield return null;
             }
+
             SetNextScene("StageSelection");
             SceneOut();
             isSceneFinished = true;
         }
+
+        /// <summary>
+        /// ペトリファイ進行度設定
+        /// </summary>
+        /// <param name="progress">進行度値</param>
+        private void SetPetrifyProgress(float progress)
+        {
+            foreach (Image img in PetrifyImgs)
+            {
+                img.material.SetFloat("_Progress", progress);
+            }
+            foreach (RawImage rawImg in PetrifyRImgs)
+            {
+                rawImg.material.SetFloat("_Progress", progress);
+            }
+            foreach (SpriteRenderer spr in PetrifySpr)
+            {
+                spr.material.SetFloat("_Progress", progress);
+            }
+        }
+
         #endregion
 
-        #region CamOperation
+        #region Camera Operations
+
+        /// <summary>
+        /// 右カメラ操作コルーチン
+        /// </summary>
+        /// <returns>コルーチンの進行状況</returns>
         private IEnumerator RecRightCamOperation()
         {
-            Vector3 spd;
-            float timer = 0;
+            yield return StartCoroutine(ExecuteCameraTransition(
+                RightCam.transform,
+                RightCamStartPt[_currentRecStatusRightCam],
+                RightCamStayPt[_currentRecStatusRightCam],
+                RightCamEndPt[_currentRecStatusRightCam],
+                (state) => _rightCamState = state,
+                () => _showCredit && _currentRecStatusRightCam == 0
+            ));
 
-            //StarttoStay
-            rightCamState = RecordCameraState.StarttoStay;
-            RightCam.transform.position = RightCamStartPt[currentRecStatusRightCam];
-
-            spd = RightCamStayPt[currentRecStatusRightCam] - RightCamStartPt[currentRecStatusRightCam];
-            spd /= maxRecTimer;
-
-            while (timer < maxRecTimer)
-            {
-                timer += Time.deltaTime;
-                if (timer > maxRecTimer) timer = maxRecTimer;
-                RightCam.transform.position = RightCamStartPt[currentRecStatusRightCam] + spd * timer;
-                yield return new WaitForSeconds(0f);
-            }
-
-            //Stay
-            rightCamState = RecordCameraState.Stay;
-            timer = 0;
-            if (showCredit)
-            {
-                while (showCredit && currentRecStatusRightCam == 0)
-                    yield return new WaitForSeconds(0f);
-            }
-            else
-            {
-                while (timer < maxRecWaitTimer && !showCredit)
-                {
-                    timer += Time.deltaTime;
-                    yield return new WaitForSeconds(0f);
-                }
-            }
-
-            //StaytoExit
-            rightCamState = RecordCameraState.StaytoExit;
-            spd = RightCamEndPt[currentRecStatusRightCam] - RightCamStayPt[currentRecStatusRightCam];
-            spd /= maxRecTimer;
-            timer = 0;
-
-            while (timer < maxRecTimer)
-            {
-                timer += Time.deltaTime;
-                if (timer > maxRecTimer) timer = maxRecTimer;
-                RightCam.transform.position = RightCamStayPt[currentRecStatusRightCam] + spd * timer;
-                yield return new WaitForSeconds(0f);
-            }
-
-            //Exit
-            rightCamState = RecordCameraState.Exit;
-            currentRecStatusRightCam = nextRecStatusRightCam;
-            nextRecStatusRightCam = (currentRecStatusRightCam % maxRecStatus) + 1;
+            _currentRecStatusRightCam = _nextRecStatusRightCam;
+            _nextRecStatusRightCam = (_currentRecStatusRightCam % _maxRecStatus) + 1;
         }
 
+        /// <summary>
+        /// 下カメラ操作コルーチン
+        /// </summary>
+        /// <returns>コルーチンの進行状況</returns>
         private IEnumerator RecBottomCamOperation()
         {
-            Vector3 spd;
-            float timer = 0;
+            yield return StartCoroutine(ExecuteCameraTransition(
+                BottomCam.transform,
+                BottomCamStartPt[_currentRecStatusBottomCam],
+                BottomCamStayPt[_currentRecStatusBottomCam],
+                BottomCamEndPt[_currentRecStatusBottomCam],
+                (state) => _bottomCamState = state,
+                () => _showCredit && _currentRecStatusBottomCam == 0
+            ));
 
-            //StarttoStay
-            bottomCamState = RecordCameraState.StarttoStay;
-            BottomCam.transform.position = BottomCamStartPt[currentRecStatusBottomCam];
+            _currentRecStatusBottomCam = _nextRecStatusBottomCam;
+            _nextRecStatusBottomCam = (_currentRecStatusBottomCam % _maxRecStatus) + 1;
+        }
 
-            spd = BottomCamStayPt[currentRecStatusBottomCam] - BottomCamStartPt[currentRecStatusBottomCam];
-            spd /= maxRecTimer;
+        /// <summary>
+        /// カメラ遷移実行コルーチン
+        /// </summary>
+        /// <param name="cameraTransform">カメラのTransform</param>
+        /// <param name="startPos">開始位置</param>
+        /// <param name="stayPos">停止位置</param>
+        /// <param name="endPos">終了位置</param>
+        /// <param name="stateCallback">状態更新コールバック</param>
+        /// <param name="creditCondition">クレジット条件チェック</param>
+        /// <returns>コルーチンの進行状況</returns>
+        private IEnumerator ExecuteCameraTransition(
+            Transform cameraTransform,
+            Vector3 startPos,
+            Vector3 stayPos,
+            Vector3 endPos,
+            System.Action<RecordCameraState> stateCallback,
+            System.Func<bool> creditCondition)
+        {
+            // Start to Stay
+            stateCallback(RecordCameraState.StarttoStay);
+            yield return StartCoroutine(MoveCameraToPosition(cameraTransform, startPos, stayPos));
 
-            while (timer < maxRecTimer)
+            // Stay
+            stateCallback(RecordCameraState.Stay);
+            if (creditCondition())
             {
-                timer += Time.deltaTime;
-                if (timer > maxRecTimer) timer = maxRecTimer;
-                BottomCam.transform.position = BottomCamStartPt[currentRecStatusBottomCam] + spd * timer;
-                yield return new WaitForSeconds(0f);
-            }
-
-            //Stay
-            bottomCamState = RecordCameraState.Stay;
-            timer = 0;
-            if (showCredit)
-            {
-                while (showCredit && currentRecStatusBottomCam == 0)
-                    yield return new WaitForSeconds(1f);
+                while (creditCondition())
+                    yield return null;
             }
             else
             {
-                while (timer < maxRecWaitTimer && !showCredit)
+                float timer = 0;
+                while (timer < _maxRecWaitTimer && !_showCredit)
                 {
                     timer += Time.deltaTime;
-                    yield return new WaitForSeconds(0f);
+                    yield return null;
                 }
             }
 
-            //StaytoExit
-            bottomCamState = RecordCameraState.StaytoExit;
-            spd = BottomCamEndPt[currentRecStatusBottomCam] - BottomCamStayPt[currentRecStatusBottomCam];
-            spd /= maxRecTimer;
-            timer = 0;
+            // Stay to Exit
+            stateCallback(RecordCameraState.StaytoExit);
+            yield return StartCoroutine(MoveCameraToPosition(cameraTransform, stayPos, endPos));
 
-            while (timer < maxRecTimer)
+            // Exit
+            stateCallback(RecordCameraState.Exit);
+        }
+
+        /// <summary>
+        /// カメラ位置移動コルーチン
+        /// </summary>
+        /// <param name="cameraTransform">カメラのTransform</param>
+        /// <param name="fromPos">開始位置</param>
+        /// <param name="toPos">目標位置</param>
+        /// <returns>コルーチンの進行状況</returns>
+        private IEnumerator MoveCameraToPosition(Transform cameraTransform, Vector3 fromPos, Vector3 toPos)
+        {
+            cameraTransform.position = fromPos;
+            Vector3 speed = (toPos - fromPos) / _maxRecTimer;
+            float timer = 0;
+
+            while (timer < _maxRecTimer)
             {
                 timer += Time.deltaTime;
-                if (timer > maxRecTimer) timer = maxRecTimer;
-                BottomCam.transform.position = BottomCamStayPt[currentRecStatusBottomCam] + spd * timer;
-                yield return new WaitForSeconds(0f);
+                if (timer > _maxRecTimer) timer = _maxRecTimer;
+                cameraTransform.position = fromPos + speed * timer;
+                yield return null;
             }
-
-            //Exit
-            bottomCamState = RecordCameraState.Exit;
-            currentRecStatusBottomCam = nextRecStatusBottomCam;
-            nextRecStatusBottomCam = (currentRecStatusBottomCam % maxRecStatus) + 1;
         }
+
         #endregion
 
-        #region OpeningOperation
-        void OpeningAnimation()
+        #region Opening Operations
+
+        /// <summary>
+        /// オープニングアニメーション実行
+        /// </summary>
+        private void OpeningAnimation()
         {
-            CameraManager.RotateCam(targetCamAngle);
+            CameraManager.RotateCam(_targetCamAngle);
 
-            GameObject[] Upper = GameObject.FindGameObjectsWithTag("UpperEgg");
-            StartCoroutine(UpperEggAnimation(Upper[0], 0.4f));
-            StartCoroutine(UpperEggAnimation(Upper[1], 0.4f));
+            GameObject[] upperEggs = GameObject.FindGameObjectsWithTag("UpperEgg");
+            if (upperEggs.Length >= 2)
+            {
+                StartCoroutine(UpperEggAnimation(upperEggs[0], 0.4f));
+                StartCoroutine(UpperEggAnimation(upperEggs[1], 0.4f));
+            }
 
-            GameObject[] Lower = GameObject.FindGameObjectsWithTag("LowerEgg");
-            StartCoroutine(LowerEggAnimation(Lower[0], -0.5f));
-            StartCoroutine(LowerEggAnimation(Lower[1], -0.2f));
+            GameObject[] lowerEggs = GameObject.FindGameObjectsWithTag("LowerEgg");
+            if (lowerEggs.Length >= 2)
+            {
+                StartCoroutine(LowerEggAnimation(lowerEggs[0], -0.5f));
+                StartCoroutine(LowerEggAnimation(lowerEggs[1], -0.2f));
+            }
 
-            isOpening = false;
-
-            //AudioManager.PlayAudio("bgm_Title",true);
+            _isOpening = false;
             AudioManager.PlayAudio("se_Button");
         }
 
-        private IEnumerator UpperEggAnimation(GameObject Upper, float dist)
+        /// <summary>
+        /// 上側エッグアニメーションコルーチン
+        /// </summary>
+        /// <param name="upperEgg">上側エッグオブジェクト</param>
+        /// <param name="distance">移動距離</param>
+        /// <returns>コルーチンの進行状況</returns>
+        private IEnumerator UpperEggAnimation(GameObject upperEgg, float distance)
         {
-            int frame = 30;
-            float posChgsbyFrame = (dist - this.transform.localPosition.y) / frame;
-            while (frame-- > 0)
+            int frames = 30;
+            float posChangePerFrame = (distance - transform.localPosition.y) / frames;
+
+            while (frames-- > 0)
             {
-                Upper.transform.localPosition = new Vector3(Upper.transform.localPosition.x,
-                    Upper.transform.localPosition.y + posChgsbyFrame, Upper.transform.localPosition.z);
-                yield return new WaitForSeconds(0f);
+                Vector3 currentPos = upperEgg.transform.localPosition;
+                upperEgg.transform.localPosition = new Vector3(
+                    currentPos.x,
+                    currentPos.y + posChangePerFrame,
+                    currentPos.z
+                );
+                yield return null;
             }
         }
 
-        private IEnumerator LowerEggAnimation(GameObject Lower, float dist)
+        /// <summary>
+        /// 下側エッグアニメーションコルーチン
+        /// </summary>
+        /// <param name="lowerEgg">下側エッグオブジェクト</param>
+        /// <param name="distance">移動距離</param>
+        /// <returns>コルーチンの進行状況</returns>
+        private IEnumerator LowerEggAnimation(GameObject lowerEgg, float distance)
         {
-            int frame = 50;
-            float posChgsbyFrame = (dist - this.transform.localPosition.y) / frame;
-            while (frame-- > 0)
+            int frames = 50;
+            float posChangePerFrame = (distance - transform.localPosition.y) / frames;
+
+            while (frames-- > 0)
             {
-                Lower.transform.localPosition = new Vector3(Lower.transform.localPosition.x,
-                        Lower.transform.localPosition.y + posChgsbyFrame, Lower.transform.localPosition.z);
-                yield return new WaitForSeconds(0f);
+                Vector3 currentPos = lowerEgg.transform.localPosition;
+                lowerEgg.transform.localPosition = new Vector3(
+                    currentPos.x,
+                    currentPos.y + posChangePerFrame,
+                    currentPos.z
+                );
+                yield return null;
             }
 
-            foreach (GameObject i in EggCam)
-                i.SetActive(false);
+            foreach (GameObject eggCam in EggCam)
+                eggCam.SetActive(false);
         }
+
+        /// <summary>
+        /// メインシーン切り替え準備コルーチン
+        /// </summary>
+        /// <returns>コルーチンの進行状況</returns>
         private IEnumerator PreparationToMain()
         {
-            int frame = 20;
+            int frames = 20;
 
-            while (frame-- > 0)
+            while (frames-- > 0)
             {
+                float alpha = frames / 20f;
+                float colorIntensity = frames / 40f;
+
                 for (int i = 0; i < TitleImg.Count; ++i)
                 {
-                    if (TitleImgRaw[i])
-                        TitleImgRaw[i].color = new Color(frame / 40f, frame / 40f, frame / 40f, frame / 40f);
-                    if (TitleImgText[i])
-                        TitleImgText[i].color = new Color(1, 1, 1, frame / 20f);
+                    if (_titleImgRaw[i])
+                    {
+                        _titleImgRaw[i].color = new Color(colorIntensity, colorIntensity, colorIntensity, colorIntensity);
+                    }
+                    if (_titleImgText[i])
+                    {
+                        _titleImgText[i].color = new Color(1, 1, 1, alpha);
+                    }
                 }
 
-                yield return new WaitForSeconds(0f);
+                yield return null;
             }
 
             OpeningAnimation();
-            isWaiting = false;
-            if (CameraManager) CameraManager.isOpening = isOpening;
-            if (CanvaManager) CanvaManager.isOpening = isOpening;
+            _isWaiting = false;
+
+            if (CameraManager) CameraManager.isOpening = _isOpening;
+            if (CanvaManager) CanvaManager.isOpening = _isOpening;
         }
+
         #endregion
     }
 }

@@ -105,12 +105,12 @@ namespace RandomTowerDefense.Managers.Macro
         // Start is called before the first frame update
         private void Start()
         {
-            _currAttr = StageInfoList.GetStageInfo();
+            _currAttr = StageInfoDetail.stageDetail;
             sceneManager = FindObjectOfType<InGameOperation>();
             stageManager = FindObjectOfType<StageManager>();
             enemyManager = FindObjectOfType<EnemyManager>();
             tutorialManager = FindObjectOfType<TutorialManager>();
-            _totalWaveNum = _currAttr.waveNum;
+            _totalWaveNum = _currAttr.WaveNum;
             _currentWaveNum = INITIAL_WAVE_NUMBER;
             _fireworkCounter = INITIAL_FIREWORK_COUNTER;
             _allSpawned = false;
@@ -167,7 +167,7 @@ namespace RandomTowerDefense.Managers.Macro
 
             if (waveNumMesh)
                 waveNumMesh.text = "WAVE " + _currentWaveNum;
-            StartCoroutine(SpawnWave(_currAttr.waveDetail[_currentWaveNum - WAVE_ARRAY_INDEX_OFFSET]));
+            StartCoroutine(SpawnWave(_currAttr.WaveAttrs[_currentWaveNum - WAVE_ARRAY_INDEX_OFFSET]));
             return false;
         }
 
@@ -208,7 +208,7 @@ namespace RandomTowerDefense.Managers.Macro
             }
             else if (stageManager.GetResult() == GAME_RESULT_ONGOING)
             {
-                if (isSpawning == false && Time.time - _waveTimer > _currAttr.waveWaitTime)
+                if (isSpawning == false && Time.time - _waveTimer > _currAttr.WaveWaitTime)
                 {
                     WaveChg();
                     _waveTimer = Time.time;
@@ -218,7 +218,7 @@ namespace RandomTowerDefense.Managers.Macro
         public DebugManager debugManager;
         private IEnumerator SpawnWave(WaveAttr wave)
         {
-            float spawnTimer = wave.enemyStartTime;
+            float spawnTimer = wave.EnemyStartTime;
             bool CheckCustomData = sceneManager && (sceneManager.GetCurrIsland() == StageInfoDetail.IslandNum - 1);
             isSpawning = true;
             while (stageManager.GetResult() == GAME_RESULT_ONGOING && isSpawning)
@@ -227,33 +227,33 @@ namespace RandomTowerDefense.Managers.Macro
                 else { spawnTimer -= Time.deltaTime; }
                 if (spawnTimer < 0)
                 {
-                    for (int i = 0; i < wave.enemyDetail.Count; ++i)
+                    for (int i = 0; i < wave.WaveDetails.Count; ++i)
                     {
-                        if (wave.enemyDetail[i].waveID > _currentWaveNum)
+                        if (wave.WaveDetails[i].WaveID > _currentWaveNum)
                         {
                             break;
                         }
-                        else if (wave.enemyDetail[i].waveID < _currentWaveNum)
+                        else if (wave.WaveDetails[i].WaveID < _currentWaveNum)
                         {
                             continue;
                         }
-                        else if (wave.enemyDetail[i].waveID == _currentWaveNum)
+                        else if (wave.WaveDetails[i].WaveID == _currentWaveNum)
                         {
-                            for (int j = wave.enemyDetail[i].enemyNum; j > 0; --j)
+                            for (int j = wave.WaveDetails[i].EnemyNumber; j > 0; --j)
                             {
                                 while (true)
                                 {
                                     if ((agent == null || agentCallWait == false) && readyToSpawn)
                                     {
-                                        enemyManager.SpawnMonster(wave.enemyDetail[i].enemyType,
-                                            stageManager.GetPortalPosition(SpawnPointByAI >= 0 ? SpawnPointByAI : wave.enemyDetail[i].enemyPort), CheckCustomData);
+                                        enemyManager.SpawnMonster(wave.WaveDetails[i].EnemyType,
+                                            stageManager.GetPortalPosition(SpawnPointByAI >= 0 ? SpawnPointByAI : wave.WaveDetails[i].EnemyPort), CheckCustomData);
                                         readyToSpawn = false;
                                         timeBGM = Time.time;
                                         break;
                                     }
                                     yield return new WaitForSeconds(COROUTINE_WAIT_TIME);
                                 }
-                                yield return new WaitForSeconds(wave.enemySpawnPeriod / Mathf.Max(StageInfoList.spawnSpeedEx, MIN_SPAWN_SPEED));
+                                yield return new WaitForSeconds(wave.EnemySpawnPeriod / Mathf.Max(StageInfoDetail.customStageInfo.SpawnSpeedFactor, MIN_SPAWN_SPEED));
                             }
                         }
 

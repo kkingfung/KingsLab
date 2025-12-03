@@ -19,6 +19,55 @@ namespace RandomTowerDefense.Info
     /// </summary>
     public static class TowerInfo
     {
+        #region Constants
+
+        // Nightmare タワー用定数
+        private const float NIGHTMARE_RADIUS = 3.5f;
+        private const float NIGHTMARE_DAMAGE = 25f;
+        private const float NIGHTMARE_WAIT = 3f;
+        private const float NIGHTMARE_LIFETIME = 5f;
+        private const float NIGHTMARE_ATK_WAIT = 0.01f;
+        private const float NIGHTMARE_ATK_RADIUS = 0.3f;
+        private const float NIGHTMARE_ATK_SPEED = 0f;
+        private const float NIGHTMARE_ATK_LIFETIME = 3f;
+
+        // SoulEater タワー用定数
+        private const float SOULEATER_RADIUS = 2.5f;
+        private const float SOULEATER_DAMAGE = 7f;
+        private const float SOULEATER_WAIT = 0.3f;
+        private const float SOULEATER_LIFETIME = 5f;
+        private const float SOULEATER_ATK_WAIT = 0f;
+        private const float SOULEATER_ATK_RADIUS = 0.8f;
+        private const float SOULEATER_ATK_SPEED = 5f;
+        private const float SOULEATER_ATK_LIFETIME = 3f;
+
+        // TerrorBringer タワー用定数
+        private const float TERRORBRINGER_RADIUS = 4f;
+        private const float TERRORBRINGER_DAMAGE = 50f;
+        private const float TERRORBRINGER_WAIT = 5f;
+        private const float TERRORBRINGER_LIFETIME = 5f;
+        private const float TERRORBRINGER_ATK_WAIT = 0.01f;
+        private const float TERRORBRINGER_ATK_RADIUS = 0.2f;
+        private const float TERRORBRINGER_ATK_SPEED = 0f;
+        private const float TERRORBRINGER_ATK_LIFETIME = 3f;
+
+        // Usurper タワー用定数
+        private const float USURPER_RADIUS = 2f;
+        private const float USURPER_DAMAGE = 5f;
+        private const float USURPER_WAIT = 0.2f;
+        private const float USURPER_LIFETIME = 5f;
+        private const float USURPER_ATK_WAIT = 0f;
+        private const float USURPER_ATK_RADIUS = 0.5f;
+        private const float USURPER_ATK_SPEED = 3.5f;
+        private const float USURPER_ATK_LIFETIME = 1f;
+
+        // ファイル解析用定数
+        private const int EXPECTED_PARAMETER_COUNT = 9;
+
+        #endregion
+
+        #region Enums
+
         /// <summary>
         /// タワー情報ID列挙型
         /// </summary>
@@ -30,19 +79,32 @@ namespace RandomTowerDefense.Info
             EnumTowerUsurper
         }
 
+        #endregion
+
+        #region Public Properties
+
         /// <summary>
-        /// タワー属性クラス
+        /// タワー属性辞書への読み取り専用アクセス
         /// </summary>
         public static Dictionary<TowerInfoID, TowerAttr> TowerInfos => towerInfos;
+
         /// <summary>
         /// 情報更新フラグ
         /// </summary>
         public static bool InfoUpdated = false;
 
+        #endregion
+
+        #region Private Fields
+
         /// <summary>
         /// タワー属性辞書
         /// </summary>
-        static Dictionary<TowerInfoID, TowerAttr> towerInfos;
+        private static Dictionary<TowerInfoID, TowerAttr> towerInfos;
+
+        #endregion
+
+        #region Public Methods
 
         /// <summary>
         /// 初期化メソッド
@@ -53,29 +115,29 @@ namespace RandomTowerDefense.Info
 
             towerInfos.Add(TowerInfoID.EnumTowerNightmare,
                 new TowerAttr(
-                    3.5f, 25, // radius, damage
-                    3f, 5f, // wait, lifetime
-                    0.01f, 0.3f, // atkwait, atkrad
-                    0, 3)); // atkspd, atklife
+                    NIGHTMARE_RADIUS, NIGHTMARE_DAMAGE, // 攻撃半径, ダメージ
+                    NIGHTMARE_WAIT, NIGHTMARE_LIFETIME, // 待機時間, 持続時間
+                    NIGHTMARE_ATK_WAIT, NIGHTMARE_ATK_RADIUS, // 攻撃待機時間, 攻撃範囲
+                    NIGHTMARE_ATK_SPEED, NIGHTMARE_ATK_LIFETIME)); // 攻撃速度, 攻撃持続時間
             towerInfos.Add(TowerInfoID.EnumTowerSoulEater,
                 new TowerAttr(
-                    2.5f, 7, // radius, damage
-                    0.3f, 5, // wait, lifetime
-                    0f, 0.8f, // atkwait, atkrad
-                    5f, 3)); // atkspd, atklife
+                    SOULEATER_RADIUS, SOULEATER_DAMAGE, // 攻撃半径, ダメージ
+                    SOULEATER_WAIT, SOULEATER_LIFETIME, // 待機時間, 持続時間
+                    SOULEATER_ATK_WAIT, SOULEATER_ATK_RADIUS, // 攻撃待機時間, 攻撃範囲
+                    SOULEATER_ATK_SPEED, SOULEATER_ATK_LIFETIME)); // 攻撃速度, 攻撃持続時間
             towerInfos.Add(TowerInfoID.EnumTowerTerrorBringer,
                 new TowerAttr(
-                    4, 50, // radius, damage
-                    5f, 5, // wait, lifetime
-                    0.01f, 0.2f, // atkwait, atkrad
-                    0, 3)); // atkspd, atklife
+                    TERRORBRINGER_RADIUS, TERRORBRINGER_DAMAGE, // 攻撃半径, ダメージ
+                    TERRORBRINGER_WAIT, TERRORBRINGER_LIFETIME, // 待機時間, 持続時間
+                    TERRORBRINGER_ATK_WAIT, TERRORBRINGER_ATK_RADIUS, // 攻撃待機時間, 攻撃範囲
+                    TERRORBRINGER_ATK_SPEED, TERRORBRINGER_ATK_LIFETIME)); // 攻撃速度, 攻撃持続時間
             towerInfos.Add(TowerInfoID.EnumTowerUsurper,
                 new TowerAttr(
-                    2, 5f, // radius, damage
-                    0.2f, 5, // wait, lifetime
-                    0f, 0.5f, // atkwait, atkrad
-                    3.5f, 1)); // atkspd, atklife
-            infoUpdated = true;
+                    USURPER_RADIUS, USURPER_DAMAGE, // 攻撃半径, ダメージ
+                    USURPER_WAIT, USURPER_LIFETIME, // 待機時間, 持続時間
+                    USURPER_ATK_WAIT, USURPER_ATK_RADIUS, // 攻撃待機時間, 攻撃範囲
+                    USURPER_ATK_SPEED, USURPER_ATK_LIFETIME)); // 攻撃速度, 攻撃持続時間
+            InfoUpdated = true;
         }
 
         /// <summary>
@@ -92,7 +154,7 @@ namespace RandomTowerDefense.Info
             {
                 string inp_ln = inp_stm.ReadLine();
                 string[] seperateInfo = inp_ln.Split(':');
-                if (seperateInfo.Length == 9)
+                if (seperateInfo.Length == EXPECTED_PARAMETER_COUNT)
                 {
                     towerInfos.Add((TowerInfoID)int.Parse(seperateInfo[0]), new TowerAttr(
                         float.Parse(seperateInfo[1]), float.Parse(seperateInfo[2]),
@@ -104,7 +166,7 @@ namespace RandomTowerDefense.Info
 
             inp_stm.Close();
 
-            infoUpdated = true;
+            InfoUpdated = true;
         }
 
         /// <summary>
@@ -143,25 +205,31 @@ namespace RandomTowerDefense.Info
                     _appConfig.GetFloat("TowerUsurperAtkWait"), _appConfig.GetFloat("TowerUsurperAtkRadius"),//atkwait,atkrad
                     _appConfig.GetFloat("TowerUsurperAtkSpd"), _appConfig.GetFloat("TowerUsurperAtkLife")));//atkspd,lifetime
 
-            infoUpdated = true;
+            InfoUpdated = true;
         }
 
         /// <summary>
         /// タワー情報取得メソッド
         /// </summary>
-        /// <param name="towerType"></param>
-        /// <returns></returns>
+        /// <param name="towerType">取得するタワーのタイプ</param>
+        /// <returns>対応するタワー属性データ、見つからない場合はnull</returns>
         public static TowerAttr GetTowerInfo(TowerInfoID towerType)
         {
             return TowerInfos.TryGetValue(towerType, out TowerAttr value) ? value : null;
         }
 
+        #endregion
+
+        #region Private Methods
+
         /// <summary>
-        /// 解放メソッド
+        /// リソース解放メソッド
         /// </summary>
-        static void Release()
+        private static void Release()
         {
             towerInfos.Clear();
         }
+
+        #endregion
     }
 }

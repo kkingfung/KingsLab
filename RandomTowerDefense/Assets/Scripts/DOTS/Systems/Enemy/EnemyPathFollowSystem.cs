@@ -5,6 +5,7 @@ using Unity.Mathematics;
 using Unity.Jobs;
 using RandomTowerDefense.DOTS.Tags;
 using RandomTowerDefense.DOTS.Components;
+using RandomTowerDefense.DOTS.Pathfinding;
 
 //[DisableAutoCreation]
 /// <summary>

@@ -43,22 +43,22 @@ namespace RandomTowerDefense.Managers.System
                 if (monsterName == "MetalonGreen" || monsterName == "MetalonPurple" || monsterName == "MetalonRed")
                 {
                     entityIDList = enemySpawner.Spawn(monsterName, SpawnPoint, new float3(),
-                    attr.health * (0.5f * (CustomData ? (int)StageInfoList.enemyAttributeEx : 1)
+                    attr.Health * (0.5f * (CustomData ? (int)StageInfoDetail.customStageInfo.EnemyAttributeFactor : 1)
                     //+ ((debugManager != null) ? debugManager.enemylvl_Health * waveNum : 0)
-                    ), attr.money * (CustomData ? (int)StageInfoList.resourceEx : 1), attr.Damage, attr.Radius,
-                    attr.speed * (1 + 0.1f * (CustomData ? (int)StageInfoList.enemyAttributeEx : 1)
+                    ), attr.Money * (CustomData ? (int)StageInfoDetail.customStageInfo.ResourceFactor : 1), attr.Damage, attr.Radius,
+                    attr.Speed * (1 + 0.1f * (CustomData ? (int)StageInfoDetail.customStageInfo.EnemyAttributeFactor : 1)
                     //+ ((debugManager != null) ? debugManager.enemylvl_Speed * waveNum : 0)
-                    ), attr.time);
+                    ), attr.Time);
                 }
                 else
                 {
                     entityIDList = enemySpawner.Spawn(monsterName, SpawnPoint, new float3(),
-                        attr.health * waveNum * 0.5f * (CustomData ? (int)StageInfoList.enemyAttributeEx : 1),
-                        attr.money * (CustomData ? (int)StageInfoList.resourceEx : 1),
+                        attr.Health * waveNum * 0.5f * (CustomData ? (int)StageInfoDetail.customStageInfo.EnemyAttributeFactor : 1),
+                        attr.Money * (CustomData ? (int)StageInfoDetail.customStageInfo.ResourceFactor : 1),
                         attr.Damage,
                         attr.Radius,
-                        attr.speed * (1 + 0.1f * waveNum * (CustomData ? (int)StageInfoList.enemyAttributeEx : 1)),
-                        attr.time);
+                        attr.Speed * (1 + 0.1f * waveNum * (CustomData ? (int)StageInfoDetail.customStageInfo.EnemyAttributeFactor : 1)),
+                        attr.Time);
                 }
             }
         }

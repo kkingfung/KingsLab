@@ -313,7 +313,7 @@ public class PlayerManager : MonoBehaviour
             {
                 if (hitPillar.transform == null)
                     Physics.Raycast(ray, out hitPillar, 100, LayerMask.GetMask("Pillar"));
-                if (hitPillar.transform != null && TowerInfo.infoUpdated)
+                if (hitPillar.transform != null && TowerInfo.InfoUpdated)
                     towerManager.BuildTower(hitPillar.transform.gameObject);
             }
         }

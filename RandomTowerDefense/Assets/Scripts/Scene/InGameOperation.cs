@@ -11,6 +11,7 @@ using RandomTowerDefense.Managers.Macro;
 using RandomTowerDefense.Info;
 using RandomTowerDefense.Systems;
 using RandomTowerDefense.Units;
+using RandomTowerDefense.FileSystem;
 
 namespace RandomTowerDefense.Scene
 {
@@ -29,8 +30,44 @@ namespace RandomTowerDefense.Scene
     /// </summary>
     public class InGameOperation : ISceneChange
     {
-        private readonly float tutorialTimeFactor = 1f;//0.2f;
-        private readonly int BasicFloorMatSize = 3;
+        #region Constants
+
+        /// <summary>
+        /// チュートリアル時間調整因子
+        /// </summary>
+        private const float TUTORIAL_TIME_FACTOR = 1f; // 通常時間係数（デバッグ用：0.2f）
+
+        /// <summary>
+        /// 基本床マテリアルサイズ
+        /// </summary>
+        private const int BASIC_FLOOR_MATERIAL_SIZE = 3;
+
+        /// <summary>
+        /// 初期島番号
+        /// </summary>
+        private const int INITIAL_ISLAND_INDEX = 0;
+
+        /// <summary>
+        /// 初期有効島数
+        /// </summary>
+        private const int INITIAL_ENABLED_ISLANDS = 1;
+
+        /// <summary>
+        /// 初期画面表示位置
+        /// </summary>
+        private const int INITIAL_SCREEN_POSITION = 0;
+
+        /// <summary>
+        /// ダブルヒット防止待機時間（秒）
+        /// </summary>
+        private const float TIME_WAIT_FOR_DOUBLE_HIT_PREVENTION = 0.01f;
+
+        /// <summary>
+        /// 最大カメラ位置変更時間（秒）
+        /// </summary>
+        private const float MAX_CAMERA_POSITION_CHANGE_TIME = 0.2f;
+
+        #endregion
 
         public enum ScreenShownID
         {
@@ -40,12 +77,17 @@ namespace RandomTowerDefense.Scene
             SSIDTopRight = 3,
         }
 
-        //Camera Start/Stay/End Point
+        /// <summary>
+        /// カメラ開始/停止/終了ポイント設定
+        /// </summary>
         [Header("MainCamera Settings")]
         public GameObject MainCam;
         public List<Vector3> MainCamStayPt;
         public List<Vector3> MainCamRotationAngle;
-        public GameObject StoreGp;//MainWith MainCam
+        /// <summary>
+        /// ストアグループ（メインカメラと連動）
+        /// </summary>
+        public GameObject StoreGp;
         public GameObject DarkenCam;
 
         [Header("UI Settings")]
@@ -89,21 +131,48 @@ namespace RandomTowerDefense.Scene
         private Material ArenaEffectMat;
         public List<Image> AimMarkImg;
 
-        //public bool isDebugging;//For ingame Debugger
-        private bool isTutorial;//For 1st Stage Only
-                                //public VolumeProfile volumeProfile; // For Spare
+        /// <summary>
+        /// インゲームデバッガー用フラグ（未使用）
+        /// </summary>
+        //public bool isDebugging;
 
-        protected int IslandNow = 0;//For changing colour of Sea/Sky
-        protected int IslandEnabled = 0;//Check when win
+        /// <summary>
+        /// チュートリアルフラグ（第1ステージのみ）
+        /// </summary>
+        private bool isTutorial;
+
+        /// <summary>
+        /// ボリュームプロファイル（予備）
+        /// </summary>
+        //public VolumeProfile volumeProfile;
+
+        /// <summary>
+        /// 現在の島番号（海と空の色変更用）
+        /// </summary>
+        protected int IslandNow = INITIAL_ISLAND_INDEX;
+
+        /// <summary>
+        /// 有効な島の数（勝利判定用）
+        /// </summary>
+        protected int IslandEnabled = INITIAL_ENABLED_ISLANDS;
 
         [HideInInspector]
-        public int currScreenShown;//0:Main, 1:Top-Left, 2:Top, 3:Top-Right
+        /// <summary>
+        /// 現在表示中の画面（0:メイン、1:左上、2:上、3:右上）
+        /// </summary>
+        public int currScreenShown;
+
         [HideInInspector]
-        public int nextScreenShown = 0;
+        /// <summary>
+        /// 次に表示する画面
+        /// </summary>
+        public int nextScreenShown = INITIAL_SCREEN_POSITION;
         private bool isScreenChanging = false;
 
         [Header("Manager Linkages")]
-        //Manager
+        /// <summary>
+        /// ゲーム管理システム群
+        /// </summary>
         public AudioManager AudioManager;
         public CameraManager CameraManager;
         public CanvaManager CanvaManager;
@@ -116,15 +185,19 @@ namespace RandomTowerDefense.Scene
         public ScoreCalculation scoreCalculation;
         public RecordManager recordManager;
 
-        //Prevent DoubleHit
+        /// <summary>
+        /// ダブルヒット防止用時間記録
+        /// </summary>
         private float TimeRecord = 0;
-        private const float TimeWait = 0.01f;
+
+        /// <summary>
+        /// シーン変更待機フラグ
+        /// </summary>
         private bool WaitSceneChg;
 
-        //CameraOperation
-        private readonly float maxCamPosChgTime = 0.2f;
-
-        //RemoteConfig
+        /// <summary>
+        /// リモート設定構造体定義
+        /// </summary>
         public struct userAttributes { }
         public struct appAttributes { }
 
@@ -186,8 +259,8 @@ namespace RandomTowerDefense.Scene
             SkillStack.Init();
             UpgradesManager.Init();
 
-            IslandNow = PlayerPrefs.GetInt("IslandNow", 0);
-            IslandEnabled = PlayerPrefs.GetInt("IslandEnabled", 1);
+            IslandNow = PlayerPrefs.GetInt("IslandNow", INITIAL_ISLAND_INDEX);
+            IslandEnabled = PlayerPrefs.GetInt("IslandEnabled", INITIAL_ENABLED_ISLANDS);
             isTutorial = (IslandNow == 0);
             WaitSceneChg = false;
         }
@@ -448,7 +521,7 @@ namespace RandomTowerDefense.Scene
             {
                 return;
             }
-            if (Time.time - TimeRecord < TimeWait)
+            if (Time.time - TimeRecord < TIME_WAIT_FOR_DOUBLE_HIT_PREVENTION)
             {
                 return;
             }
@@ -464,7 +537,7 @@ namespace RandomTowerDefense.Scene
 
         public void OptionStatus()
         {
-            if (Time.time - TimeRecord < TimeWait)
+            if (Time.time - TimeRecord < TIME_WAIT_FOR_DOUBLE_HIT_PREVENTION)
             {
                 return;
             }
@@ -607,14 +680,14 @@ namespace RandomTowerDefense.Scene
             while (spd.z > 180f) spd.z -= 360f;
             while (spd.z < -180f) spd.z += 360f;
 
-            spd /= maxCamPosChgTime;
+            spd /= MAX_CAMERA_POSITION_CHANGE_TIME;
 
-            while (timer < maxCamPosChgTime)
+            while (timer < MAX_CAMERA_POSITION_CHANGE_TIME)
             {
                 InputManager.isDragging = false;
                 timer += Time.deltaTime;
-                if (timer > maxCamPosChgTime) timer = maxCamPosChgTime;
-                MainCam.transform.localEulerAngles = MainCamRotationAngle[nextScreenShown] - spd * (maxCamPosChgTime - timer);
+                if (timer > MAX_CAMERA_POSITION_CHANGE_TIME) timer = MAX_CAMERA_POSITION_CHANGE_TIME;
+                MainCam.transform.localEulerAngles = MainCamRotationAngle[nextScreenShown] - spd * (MAX_CAMERA_POSITION_CHANGE_TIME - timer);
                 yield return new WaitForSeconds(0f);
             }
 

@@ -128,7 +128,7 @@ namespace RandomTowerDefense.DOTS.Systems
 
             JobHandle jobHandle = inputDependencies;
 
-            if (enemyGroup.CalculateEntityCount() > 0)
+            if (_enemyGroup.CalculateEntityCount() > 0)
             {
                 //castle by enemy
                 var jobCvE = new CollisionJobCvE()
@@ -136,12 +136,12 @@ namespace RandomTowerDefense.DOTS.Systems
                     healthType = healthType,
                     translationType = transformType,
                     radius = radiusType,
-                    targetDamage = enemyGroup.ToComponentDataArray<Damage>(Allocator.TempJob),
-                    targetRadius = enemyGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
-                    targetTrans = enemyGroup.ToComponentDataArray<Translation>(Allocator.TempJob),
-                    targetHealth = enemyGroup.ToComponentDataArray<Health>(Allocator.TempJob)
+                    targetDamage = _enemyGroup.ToComponentDataArray<Damage>(Allocator.TempJob),
+                    targetRadius = _enemyGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
+                    targetTrans = _enemyGroup.ToComponentDataArray<Translation>(Allocator.TempJob),
+                    targetHealth = _enemyGroup.ToComponentDataArray<Health>(Allocator.TempJob)
                 };
-                jobHandle = jobCvE.Schedule(castleGroup, inputDependencies);
+                jobHandle = jobCvE.Schedule(_castleGroup, inputDependencies);
                 jobHandle.Complete();
 
                 //enemy by castle
@@ -150,97 +150,97 @@ namespace RandomTowerDefense.DOTS.Systems
                     healthType = healthType,
                     translationType = transformType,
                     radius = radiusType,
-                    targetRadius = castleGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
-                    targetTrans = castleGroup.ToComponentDataArray<Translation>(Allocator.TempJob)
+                    targetRadius = _castleGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
+                    targetTrans = _castleGroup.ToComponentDataArray<Translation>(Allocator.TempJob)
                 };
-                jobHandle = jobEvC.Schedule(enemyGroup, inputDependencies);
+                jobHandle = jobEvC.Schedule(_enemyGroup, inputDependencies);
                 jobHandle.Complete();
             }
 
             //enemy by Attack
-            if (AttackGroup.CalculateEntityCount() > 0 && enemyGroup.CalculateEntityCount() > 0)
+            if (_attackGroup.CalculateEntityCount() > 0 && _enemyGroup.CalculateEntityCount() > 0)
             {
                 var jobEvA = new CollisionJobEvA()
                 {
                     radiusType = radiusType,
                     healthType = healthType,
                     translationType = transformType,
-                    targetRadius = AttackGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
-                    targetDamage = AttackGroup.ToComponentDataArray<Damage>(Allocator.TempJob),
-                    targetTrans = AttackGroup.ToComponentDataArray<Translation>(Allocator.TempJob),
-                    targetAction = AttackGroup.ToComponentDataArray<ActionTime>(Allocator.TempJob),
-                    targetWait = AttackGroup.ToComponentDataArray<WaitingTime>(Allocator.TempJob)
+                    targetRadius = _attackGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
+                    targetDamage = _attackGroup.ToComponentDataArray<Damage>(Allocator.TempJob),
+                    targetTrans = _attackGroup.ToComponentDataArray<Translation>(Allocator.TempJob),
+                    targetAction = _attackGroup.ToComponentDataArray<ActionTime>(Allocator.TempJob),
+                    targetWait = _attackGroup.ToComponentDataArray<WaitingTime>(Allocator.TempJob)
                 };
-                jobHandle = jobEvA.Schedule(enemyGroup, inputDependencies);
+                jobHandle = jobEvA.Schedule(_enemyGroup, inputDependencies);
                 jobHandle.Complete();
             }
 
             //enemy by meteor
-            if (MeteorGroup.CalculateEntityCount() > 0 && enemyGroup.CalculateEntityCount() > 0)
+            if (_meteorGroup.CalculateEntityCount() > 0 && _enemyGroup.CalculateEntityCount() > 0)
             {
                 var JobEvSM1 = new CollisionJobEvSM()
                 {
                     radiusType = radiusType,
                     healthType = healthType,
                     translationType = transformType,
-                    targetRadius = MeteorGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
-                    targetDamage = MeteorGroup.ToComponentDataArray<Damage>(Allocator.TempJob),
-                    targetTrans = MeteorGroup.ToComponentDataArray<Translation>(Allocator.TempJob),
-                    targetWait = MeteorGroup.ToComponentDataArray<WaitingTime>(Allocator.TempJob)
+                    targetRadius = _meteorGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
+                    targetDamage = _meteorGroup.ToComponentDataArray<Damage>(Allocator.TempJob),
+                    targetTrans = _meteorGroup.ToComponentDataArray<Translation>(Allocator.TempJob),
+                    targetWait = _meteorGroup.ToComponentDataArray<WaitingTime>(Allocator.TempJob)
                 };
-                jobHandle = JobEvSM1.Schedule(enemyGroup, inputDependencies);
+                jobHandle = JobEvSM1.Schedule(_enemyGroup, inputDependencies);
                 jobHandle.Complete();
             }
 
             //enemy by minions
-            if (MinionsGroup.CalculateEntityCount() > 0 && enemyGroup.CalculateEntityCount() > 0)
+            if (_minionsGroup.CalculateEntityCount() > 0 && _enemyGroup.CalculateEntityCount() > 0)
             {
                 var JobEvSM2 = new CollisionJobEvSM()
                 {
                     radiusType = radiusType,
                     healthType = healthType,
                     translationType = transformType,
-                    targetRadius = MinionsGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
-                    targetDamage = MinionsGroup.ToComponentDataArray<Damage>(Allocator.TempJob),
-                    targetTrans = MinionsGroup.ToComponentDataArray<Translation>(Allocator.TempJob),
-                    targetWait = MinionsGroup.ToComponentDataArray<WaitingTime>(Allocator.TempJob)
+                    targetRadius = _minionsGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
+                    targetDamage = _minionsGroup.ToComponentDataArray<Damage>(Allocator.TempJob),
+                    targetTrans = _minionsGroup.ToComponentDataArray<Translation>(Allocator.TempJob),
+                    targetWait = _minionsGroup.ToComponentDataArray<WaitingTime>(Allocator.TempJob)
                 };
-                jobHandle = JobEvSM2.Schedule(enemyGroup, inputDependencies);
+                jobHandle = JobEvSM2.Schedule(_enemyGroup, inputDependencies);
                 jobHandle.Complete();
             }
 
             //enemy by blizzard
-            if (BlizzardGroup.CalculateEntityCount() > 0 && enemyGroup.CalculateEntityCount() > 0)
+            if (_blizzardGroup.CalculateEntityCount() > 0 && _enemyGroup.CalculateEntityCount() > 0)
             {
                 var jobEvSB = new CollisionJobEvSB()
                 {
                     radiusType = radiusType,
                     healthType = healthType,
                     translationType = transformType,
-                    targetRadius = BlizzardGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
-                    targetDamage = BlizzardGroup.ToComponentDataArray<Damage>(Allocator.TempJob),
-                    targetTrans = BlizzardGroup.ToComponentDataArray<Translation>(Allocator.TempJob),
+                    targetRadius = _blizzardGroup.ToComponentDataArray<Radius>(Allocator.TempJob),
+                    targetDamage = _blizzardGroup.ToComponentDataArray<Damage>(Allocator.TempJob),
+                    targetTrans = _blizzardGroup.ToComponentDataArray<Translation>(Allocator.TempJob),
                     slowType = slowType,
                     buffType = buffType,
-                    targetSlow = BlizzardGroup.ToComponentDataArray<SlowRate>(Allocator.TempJob),
-                    targetBuff = BlizzardGroup.ToComponentDataArray<BuffTime>(Allocator.TempJob)
+                    targetSlow = _blizzardGroup.ToComponentDataArray<SlowRate>(Allocator.TempJob),
+                    targetBuff = _blizzardGroup.ToComponentDataArray<BuffTime>(Allocator.TempJob)
                 };
-                jobHandle = jobEvSB.Schedule(enemyGroup, inputDependencies);
+                jobHandle = jobEvSB.Schedule(_enemyGroup, inputDependencies);
                 jobHandle.Complete();
             }
 
             //enemy by petrification
-            if (PetrificationGroup.CalculateEntityCount() > 0 && enemyGroup.CalculateEntityCount() > 0)
+            if (_petrificationGroup.CalculateEntityCount() > 0 && _enemyGroup.CalculateEntityCount() > 0)
             {
                 var jobEvSP = new CollisionJobEvSP()
                 {
                     petrifyType = petrifyType,
                     buffType = buffType,
                     healthType = healthType,
-                    targetPetrify = PetrificationGroup.ToComponentDataArray<SlowRate>(Allocator.TempJob),
-                    targetBuff = PetrificationGroup.ToComponentDataArray<BuffTime>(Allocator.TempJob),
+                    targetPetrify = _petrificationGroup.ToComponentDataArray<SlowRate>(Allocator.TempJob),
+                    targetBuff = _petrificationGroup.ToComponentDataArray<BuffTime>(Allocator.TempJob),
                 };
-                jobHandle = jobEvSP.Schedule(enemyGroup, inputDependencies);
+                jobHandle = jobEvSP.Schedule(_enemyGroup, inputDependencies);
             }
             return jobHandle;
         }

@@ -7,14 +7,22 @@ using Unity.Mathematics;
 using RandomTowerDefense.DOTS.Tags;
 using RandomTowerDefense.DOTS.Components;
 
-public class AttackUpdateSystem : ComponentSystem
+namespace RandomTowerDefense.DOTS.Systems.Skills
 {
-    protected override void OnUpdate()
+    /// <summary>
+    /// 攻撃エンティティの移動と位置更新を処理するシステム
+    /// </summary>
+    public class AttackUpdateSystem : ComponentSystem
     {
-        EntityManager entityManager = World.EntityManager;
-        Entities.WithAll<AttackTag>().ForEach((Entity unitEntity, ref Translation transform, ref ActionTime action, ref WaitingTime wait, ref Velocity velocity, ref Radius radius) =>
+        /// <summary>
+        /// 攻撃エンティティの更新処理
+        /// </summary>
+        protected override void OnUpdate()
         {
-            transform.Value += velocity.Value * Time.DeltaTime;
+            EntityManager entityManager = World.EntityManager;
+            Entities.WithAll<AttackTag>().ForEach((Entity unitEntity, ref Translation transform, ref ActionTime action, ref WaitingTime wait, ref Velocity velocity, ref Radius radius) =>
+            {
+                transform.Value += velocity.Value * Time.DeltaTime;
             //if (action.Value > 0 && wait.Value <= 0)
             //{
             //    Debug.DrawLine(transform.Value, transform.Value + new float3(0, 1, 0), Color.magenta);
@@ -25,5 +33,6 @@ public class AttackUpdateSystem : ComponentSystem
             //    Debug.DrawLine(transform.Value, transform.Value + new float3(0, 0, -radius.Value), Color.black);
             //}
         });
+        }
     }
 }

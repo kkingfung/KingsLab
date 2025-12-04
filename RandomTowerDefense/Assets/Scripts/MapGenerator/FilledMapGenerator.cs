@@ -26,30 +26,84 @@ namespace RandomTowerDefense.MapGenerator
     {
         #region Serialized Fields
 
+        /// <summary>
+        /// マップ設定配列
+        /// </summary>
         [Header("マップ設定")]
         [SerializeField] public FilledMapInfo[] maps;
+
+        /// <summary>
+        /// 現在のマップインデックス
+        /// </summary>
         [SerializeField] public int mapIndex;
+
+        /// <summary>
+        /// ランダムシード使用フラグ
+        /// </summary>
         [SerializeField] public bool Randomize;
 
+        /// <summary>
+        /// タイルプレハブ
+        /// </summary>
         [Header("プレファブ")]
         [SerializeField] public Transform tilePrefab;
+
+        /// <summary>
+        /// 障害物プレハブ
+        /// </summary>
         [SerializeField] public Transform obstaclePrefab;
+
+        /// <summary>
+        /// マップフロアオブジェクト
+        /// </summary>
         [SerializeField] public Transform mapFloor;
+
+        /// <summary>
+        /// ナビメッシュフロアオブジェクト
+        /// </summary>
         [SerializeField] public Transform navmeshFloor;
 
+        /// <summary>
+        /// 最大マップサイズ
+        /// </summary>
         [Header("マップサイズ")]
         [SerializeField] public Vector2 maxMapSize;
+
+        /// <summary>
+        /// 現在のマップサイズ
+        /// </summary>
         [SerializeField] public int2 MapSize;
 
+        /// <summary>
+        /// タイルアウトライン表示率（0.0～1.0）
+        /// </summary>
         [Header("外観設定")]
         [SerializeField][Range(0, 1)] public float outlinePercent;
+
+        /// <summary>
+        /// タイルサイズ
+        /// </summary>
         [SerializeField] public float tileSize;
+
+        /// <summary>
+        /// 障害物密集配置フラグ
+        /// </summary>
         [SerializeField] public bool packedObstacles;
 
+        /// <summary>
+        /// マップ原点位置
+        /// </summary>
         [SerializeField] public Vector3 originPos;
 
+        /// <summary>
+        /// インゲームシーンマネージャー参照
+        /// </summary>
         [Header("システム参照")]
         [SerializeField] public InGameOperation sceneManager;
+
+        /// <summary>
+        /// ステージマネージャー参照
+        /// </summary>
         [SerializeField] public StageManager stageManager;
 
         #endregion

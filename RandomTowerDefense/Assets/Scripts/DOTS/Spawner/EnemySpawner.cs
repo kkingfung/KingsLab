@@ -29,102 +29,224 @@ namespace RandomTowerDefense.DOTS.Spawner
     /// </summary>
     public class EnemySpawner : MonoBehaviour
     {
-        private readonly int count = 50;
+        private readonly int _count = 50;
+
+        /// <summary>
+        /// シングルトンインスタンス
+        /// </summary>
         public static EnemySpawner Instance { get; private set; }
+
+        /// <summary>
+        /// 敵プレハブオブジェクトリスト
+        /// </summary>
         public List<GameObject> PrefabObject;
+
+        /// <summary>
+        /// 敵死亡時のエフェクト
+        /// </summary>
         [Header("MonsterVFX")]
         public GameObject DieEffect;
+
+        /// <summary>
+        /// アイテムドロップエフェクト
+        /// </summary>
         public GameObject DropEffect;
 
+        // ボーナス敵プレハブ
+        /// <summary>緑Metalon（ボーナス敵）プレハブ</summary>
         [Header("MonsterAsset")]
         public GameObject MetalonGreen;
+        /// <summary>紫Metalon（ボーナス敵）プレハブ</summary>
         public GameObject MetalonPurple;
+        /// <summary>赤Metalon（ボーナス敵）プレハブ</summary>
         public GameObject MetalonRed;
 
+        // ステージ4敵プレハブ
+        /// <summary>AttackBot（ステージ4）プレハブ</summary>
         public GameObject AttackBot;
+        /// <summary>RobotSphere（ステージ4）プレハブ</summary>
         public GameObject RobotSphere;
 
+        // ボス敵プレハブ
+        /// <summary>Dragon（ボス敵）プレハブ</summary>
         public GameObject Dragon;
+        /// <summary>Bull（ボス敵）プレハブ</summary>
         public GameObject Bull;
+        /// <summary>StoneMonster（ボス敵）プレハブ</summary>
         public GameObject StoneMonster;
 
+        // ステージ3敵プレハブ
+        /// <summary>FreeLichS（ステージ3）プレハブ</summary>
         public GameObject FreeLichS;
+        /// <summary>FreeLich（ステージ3）プレハブ</summary>
         public GameObject FreeLich;
+        /// <summary>GolemS（ステージ3）プレハブ</summary>
         public GameObject GolemS;
+        /// <summary>Golem（ステージ3）プレハブ</summary>
         public GameObject Golem;
+        /// <summary>SkeletonArmed（ステージ3）プレハブ</summary>
         public GameObject SkeletonArmed;
+        /// <summary>SpiderGhost（ステージ3）プレハブ</summary>
         public GameObject SpiderGhost;
 
+        // ステージ2敵プレハブ
+        /// <summary>Skeleton（ステージ2）プレハブ</summary>
         public GameObject Skeleton;
+        /// <summary>GruntS（ステージ2）プレハブ</summary>
         public GameObject GruntS;
+        /// <summary>FootmanS（ステージ2）プレハブ</summary>
         public GameObject FootmanS;
+        /// <summary>Grunt（ステージ2）プレハブ</summary>
         public GameObject Grunt;
+        /// <summary>Footman（ステージ2）プレハブ</summary>
         public GameObject Footman;
 
+        // ステージ1敵プレハブ
+        /// <summary>TurtleShell（ステージ1）プレハブ</summary>
         public GameObject TurtleShell;
+        /// <summary>Mushroom（ステージ1）プレハブ</summary>
         public GameObject Mushroom;
+        /// <summary>Slime（ステージ1）プレハブ</summary>
         public GameObject Slime;
 
+        // 追加敵プレハブ
+        /// <summary>PigChef（追加敵）プレハブ</summary>
         public GameObject PigChef;
+        /// <summary>PhoenixChick（追加敵）プレハブ</summary>
         public GameObject PhoenixChick;
+        /// <summary>RockCritter（追加敵）プレハブ</summary>
         public GameObject RockCritter;
 
+        // ボーナス敵プールリスト
+        /// <summary>緑Metalonプールリスト</summary>
         public List<GameObject> ListMetalonGreen;
+        /// <summary>紫Metalonプールリスト</summary>
         public List<GameObject> ListMetalonPurple;
+        /// <summary>赤Metalonプールリスト</summary>
         public List<GameObject> ListMetalonRed;
 
+        // ステージ4敵プールリスト
+        /// <summary>AttackBotプールリスト</summary>
         public List<GameObject> ListAttackBot;
+        /// <summary>RobotSphereプールリスト</summary>
         public List<GameObject> ListRobotSphere;
 
+        // ボス敵プールリスト
+        /// <summary>Dragonプールリスト</summary>
         public List<GameObject> ListDragon;
+        /// <summary>Bullプールリスト</summary>
         public List<GameObject> ListBull;
+        /// <summary>StoneMonsterプールリスト</summary>
         public List<GameObject> ListStoneMonster;
 
+        // ステージ3敵プールリスト
+        /// <summary>FreeLichSプールリスト</summary>
         public List<GameObject> ListFreeLichS;
+        /// <summary>FreeLichプールリスト</summary>
         public List<GameObject> ListFreeLich;
+        /// <summary>GolemSプールリスト</summary>
         public List<GameObject> ListGolemS;
+        /// <summary>Golemプールリスト</summary>
         public List<GameObject> ListGolem;
+        /// <summary>SkeletonArmedプールリスト</summary>
         public List<GameObject> ListSkeletonArmed;
+        /// <summary>SpiderGhostプールリスト</summary>
         public List<GameObject> ListSpiderGhost;
 
+        // ステージ2敵プールリスト
+        /// <summary>Skeletonプールリスト</summary>
         public List<GameObject> ListSkeleton;
+        /// <summary>GruntSプールリスト</summary>
         public List<GameObject> ListGruntS;
+        /// <summary>FootmanSプールリスト</summary>
         public List<GameObject> ListFootmanS;
+        /// <summary>Gruntプールリスト</summary>
         public List<GameObject> ListGrunt;
+        /// <summary>Footmanプールリスト</summary>
         public List<GameObject> ListFootman;
 
+        // ステージ1敵プールリスト
+        /// <summary>TurtleShellプールリスト</summary>
         public List<GameObject> ListTurtleShell;
+        /// <summary>Mushroomプールリスト</summary>
         public List<GameObject> ListMushroom;
+        /// <summary>Slimeプールリスト</summary>
         public List<GameObject> ListSlime;
 
+        // 追加敵プールリスト
+        /// <summary>PigChefプールリスト</summary>
         public List<GameObject> ListPigChef;
+        /// <summary>PhoenixChickプールリスト</summary>
         public List<GameObject> ListPhoenixChick;
+        /// <summary>RockCritterプールリスト</summary>
         public List<GameObject> ListRockCritter;
 
+        /// <summary>
+        /// 全敵種類のプレハブ辞書（名前 → プレハブ）
+        /// </summary>
         public Dictionary<string, GameObject> allMonsterPrefabList;
-        public Dictionary<string, List<GameObject>> allMonsterList;
-        private EntityManager EntityManager;
 
-        //Array
+        /// <summary>
+        /// 全敵種類のプールリスト辞書（名前 → プールリスト）
+        /// </summary>
+        public Dictionary<string, List<GameObject>> allMonsterList;
+
+        private EntityManager _entityManager;
+
+        /// <summary>
+        /// アクティブ敵ゲームオブジェクト配列
+        /// </summary>
         [HideInInspector]
         public GameObject[] GameObjects;
+
+        /// <summary>
+        /// トランスフォームアクセス配列（Job System用）
+        /// </summary>
         public TransformAccessArray TransformAccessArray;
+
+        /// <summary>
+        /// 敵HP配列
+        /// </summary>
         public NativeArray<float> healthArray;
+
+        /// <summary>
+        /// 敵石化効果配列
+        /// </summary>
         public NativeArray<float> petrifyArray;
+
+        /// <summary>
+        /// 敵スロー効果配列
+        /// </summary>
         public NativeArray<float> slowArray;
 
-        //Bridge
+        /// <summary>
+        /// 敵エンティティ配列
+        /// </summary>
         public NativeArray<Entity> Entities;
 
-        //For input
-        private Transform[] transforms;
+        // 入力用トランスフォーム
+        private Transform[] _transforms;
 
+        /// <summary>
+        /// マップジェネレーター参照
+        /// </summary>
         public FilledMapGenerator mapGenerator;
 
+        /// <summary>
+        /// エフェクトスポーナー参照
+        /// </summary>
         public EffectSpawner effectManager;
+
         private CastleSpawner castleSpawner;
+
+        /// <summary>
+        /// ML-Agentsエージェント参照
+        /// </summary>
         public AgentScript agent;
 
+        /// <summary>
+        /// 初期化処理 - シングルトンインスタンス設定と敵辞書初期化
+        /// </summary>
         private void Awake()
         {
             if (Instance == null)
@@ -134,21 +256,21 @@ namespace RandomTowerDefense.DOTS.Spawner
 
             allMonsterPrefabList = new Dictionary<string, GameObject>();
 
-            //Bonus
+            // ボーナス敵
             allMonsterPrefabList.Add("MetalonGreen", MetalonGreen);
             allMonsterPrefabList.Add("MetalonPurple", MetalonPurple);
             allMonsterPrefabList.Add("MetalonRed", MetalonRed);
 
-            //Stage 4
+            // ステージ4
             allMonsterPrefabList.Add("AttackBot", AttackBot);
             allMonsterPrefabList.Add("RobotSphere", RobotSphere);
 
-            //Bosses
+            // ボス敵
             allMonsterPrefabList.Add("Dragon", Dragon);
             allMonsterPrefabList.Add("Bull", Bull);
             allMonsterPrefabList.Add("StoneMonster", StoneMonster);
 
-            //Stage 3
+            // ステージ3
             allMonsterPrefabList.Add("FreeLichS", FreeLichS);
             allMonsterPrefabList.Add("FreeLich", FreeLich);
             allMonsterPrefabList.Add("GolemS", GolemS);
@@ -156,23 +278,27 @@ namespace RandomTowerDefense.DOTS.Spawner
             allMonsterPrefabList.Add("SkeletonArmed", SkeletonArmed);
             allMonsterPrefabList.Add("SpiderGhost", SpiderGhost);
 
-            //Stage 2
+            // ステージ2
             allMonsterPrefabList.Add("Skeleton", Skeleton);
             allMonsterPrefabList.Add("GruntS", GruntS);
             allMonsterPrefabList.Add("FootmanS", FootmanS);
             allMonsterPrefabList.Add("Grunt", Grunt);
             allMonsterPrefabList.Add("Footman", Footman);
 
-            //Stage 1
+            // ステージ1
             allMonsterPrefabList.Add("TurtleShell", TurtleShell);
             allMonsterPrefabList.Add("Mushroom", Mushroom);
             allMonsterPrefabList.Add("Slime", Slime);
 
-            //Addition
+            // 追加敵
             allMonsterPrefabList.Add("PigChef", PigChef);
             allMonsterPrefabList.Add("PhoenixChick", PhoenixChick);
             allMonsterPrefabList.Add("RockCritter", RockCritter);
         }
+
+        /// <summary>
+        /// 無効化時処理 - ネイティブ配列の解放
+        /// </summary>
         private void OnDisable()
         {
             if (Entities.IsCreated)
@@ -181,7 +307,7 @@ namespace RandomTowerDefense.DOTS.Spawner
             if (TransformAccessArray.isCreated)
                 TransformAccessArray.Dispose();
 
-            //Disposing Array
+            // 配列の破棄
             if (healthArray.IsCreated)
                 healthArray.Dispose();
             if (slowArray.IsCreated)
@@ -190,6 +316,9 @@ namespace RandomTowerDefense.DOTS.Spawner
                 petrifyArray.Dispose();
         }
 
+        /// <summary>
+        /// 開始時処理 - プール、辞書、エンティティの初期化
+        /// </summary>
         private void Start()
         {
             ListMetalonGreen = new List<GameObject>();
@@ -226,21 +355,21 @@ namespace RandomTowerDefense.DOTS.Spawner
 
             allMonsterList = new Dictionary<string, List<GameObject>>();
 
-            //Bonus
+            // ボーナス敵
             allMonsterList.Add("MetalonGreen", ListMetalonGreen);
             allMonsterList.Add("MetalonPurple", ListMetalonPurple);
             allMonsterList.Add("MetalonRed", ListMetalonRed);
 
-            //Stage 4
+            // ステージ4
             allMonsterList.Add("AttackBot", ListAttackBot);
             allMonsterList.Add("RobotSphere", ListRobotSphere);
 
-            //Bosses
+            // ボス敵
             allMonsterList.Add("Dragon", ListDragon);
             allMonsterList.Add("Bull", ListBull);
             allMonsterList.Add("StoneMonster", ListStoneMonster);
 
-            //Stage 3
+            // ステージ3
             allMonsterList.Add("FreeLichS", ListFreeLichS);
             allMonsterList.Add("FreeLich", ListFreeLich);
             allMonsterList.Add("GolemS", ListGolemS);
@@ -248,79 +377,99 @@ namespace RandomTowerDefense.DOTS.Spawner
             allMonsterList.Add("SkeletonArmed", ListSkeletonArmed);
             allMonsterList.Add("SpiderGhost", ListSpiderGhost);
 
-            //Stage 2
+            // ステージ2
             allMonsterList.Add("Skeleton", ListSkeleton);
             allMonsterList.Add("GruntS", ListGruntS);
             allMonsterList.Add("FootmanS", ListFootmanS);
             allMonsterList.Add("Grunt", ListGrunt);
             allMonsterList.Add("Footman", ListFootman);
 
-            //Stage 1
+            // ステージ1
             allMonsterList.Add("TurtleShell", ListTurtleShell);
             allMonsterList.Add("Mushroom", ListMushroom);
             allMonsterList.Add("Slime", ListSlime);
 
-            //Addition
+            // 追加敵
             allMonsterList.Add("PigChef", ListPigChef);
             allMonsterList.Add("PhoenixChick", ListPhoenixChick);
             allMonsterList.Add("RockCritter", ListRockCritter);
 
-            EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
             castleSpawner = FindObjectOfType<CastleSpawner>();
             mapGenerator = FindObjectOfType<FilledMapGenerator>();
 
-            //Prepare input
-            GameObjects = new GameObject[count];
-            transforms = new Transform[count];
+            // 入力データの準備
+            GameObjects = new GameObject[_count];
+            _transforms = new Transform[_count];
 
-            Entities = new NativeArray<Entity>(count, Allocator.Persistent);
-            var archetype = EntityManager.CreateArchetype(
+            Entities = new NativeArray<Entity>(_count, Allocator.Persistent);
+            var archetype = _entityManager.CreateArchetype(
                  typeof(Health), typeof(Damage), typeof(Speed),
                typeof(Radius), typeof(PetrifyAmt), typeof(Lifetime), typeof(SlowRate),
                 typeof(BuffTime), typeof(PathFollow), typeof(LocalToWorld)
                 );
-            EntityManager.CreateEntity(archetype, Entities);
+            _entityManager.CreateEntity(archetype, Entities);
 
-            for (int i = 0; i < count; ++i)
+            for (int i = 0; i < _count; ++i)
             {
-                EntityManager.AddBuffer<PathPosition>(Entities[i]);
+                _entityManager.AddBuffer<PathPosition>(Entities[i]);
             }
 
-            TransformAccessArray = new TransformAccessArray(transforms);
-            healthArray = new NativeArray<float>(count, Allocator.Persistent);
-            slowArray = new NativeArray<float>(count, Allocator.Persistent);
-            petrifyArray = new NativeArray<float>(count, Allocator.Persistent);
+            TransformAccessArray = new TransformAccessArray(_transforms);
+            healthArray = new NativeArray<float>(_count, Allocator.Persistent);
+            slowArray = new NativeArray<float>(_count, Allocator.Persistent);
+            petrifyArray = new NativeArray<float>(_count, Allocator.Persistent);
         }
 
+        /// <summary>
+        /// 毎フレーム更新 - 敵位置とステータス配列の同期
+        /// </summary>
         private void Update()
         {
             for (int i = 0; i < GameObjects.Length; ++i)
             {
                 if (GameObjects[i] == null) continue;
                 if (GameObjects[i].activeSelf == false) continue;
-                GameObjects[i].transform.position = EntityManager.GetComponentData<Translation>(Entities[i]).Value;
+                GameObjects[i].transform.position = _entityManager.GetComponentData<Translation>(Entities[i]).Value;
             }
             UpdateArrays();
         }
 
+        /// <summary>
+        /// 敵ステータス配列をECSエンティティと同期更新
+        /// </summary>
         public void UpdateArrays()
         {
             for (int i = 0; i < GameObjects.Length; ++i)
             {
                 if (GameObjects[i] == null) continue;
                 if (GameObjects[i].activeSelf == false) continue;
-                healthArray[i] = EntityManager.GetComponentData<Health>(Entities[i]).Value;
-                slowArray[i] = EntityManager.GetComponentData<SlowRate>(Entities[i]).Value;
-                petrifyArray[i] = EntityManager.GetComponentData<PetrifyAmt>(Entities[i]).Value;
+                healthArray[i] = _entityManager.GetComponentData<Health>(Entities[i]).Value;
+                slowArray[i] = _entityManager.GetComponentData<SlowRate>(Entities[i]).Value;
+                petrifyArray[i] = _entityManager.GetComponentData<PetrifyAmt>(Entities[i]).Value;
             }
         }
 
+        /// <summary>
+        /// 敵をスポーン
+        /// </summary>
+        /// <param name="Name">敵の名前（辞書キー）</param>
+        /// <param name="Position">スポーン位置（ワールド座標）</param>
+        /// <param name="Rotation">回転</param>
+        /// <param name="health">HP</param>
+        /// <param name="money">撃破時の報酬金額</param>
+        /// <param name="damage">ダメージ量</param>
+        /// <param name="radius">半径</param>
+        /// <param name="speed">移動速度</param>
+        /// <param name="lifetime">生存時間</param>
+        /// <param name="num">スポーン数（デフォルト: 1）</param>
+        /// <returns>スポーンされたインデックス配列</returns>
         public int[] Spawn(string Name, float3 Position, float3 Rotation, float health, int money,
             float damage, float radius, float speed, float lifetime, int num = 1)
         {
             int spawnCnt = 0;
             int[] spawnIndexList = new int[num];
-            for (int i = 0; i < count && spawnCnt < num; ++i)
+            for (int i = 0; i < _count && spawnCnt < num; ++i)
             {
                 if (GameObjects[i] != null && GameObjects[i].activeSelf) continue;
                 GameObjects[i] = SpawnFromList(Name);
@@ -337,65 +486,65 @@ namespace RandomTowerDefense.DOTS.Spawner
                 GameObjects[i].transform.localScale = allMonsterPrefabList[Name].transform.localScale;
                 GameObjects[i].transform.localRotation = Quaternion.identity;
                 GameObjects[i].GetComponent<Enemy>().Init(i, money, agent);
-                transforms[i] = GameObjects[i].transform;
+                _transforms[i] = GameObjects[i].transform;
                 healthArray[i] = health;
                 slowArray[i] = 0;
                 petrifyArray[i] = 0;
-                //AddtoEntities
-                EntityManager.SetComponentData(Entities[i], new Health
+                // エンティティへ追加
+                _entityManager.SetComponentData(Entities[i], new Health
                 {
                     Value = health,
                 });
-                EntityManager.SetComponentData(Entities[i], new Damage
+                _entityManager.SetComponentData(Entities[i], new Damage
                 {
                     Value = damage,
                 });
-                EntityManager.SetComponentData(Entities[i], new Speed
+                _entityManager.SetComponentData(Entities[i], new Speed
                 {
                     Value = speed,
                 });
-                EntityManager.SetComponentData(Entities[i], new Radius
+                _entityManager.SetComponentData(Entities[i], new Radius
                 {
                     Value = radius,
                 });
-                EntityManager.SetComponentData(Entities[i], new Lifetime
+                _entityManager.SetComponentData(Entities[i], new Lifetime
                 {
                     Value = lifetime,
                 });
-                EntityManager.SetComponentData(Entities[i], new PetrifyAmt
+                _entityManager.SetComponentData(Entities[i], new PetrifyAmt
                 {
                     Value = 0,
                 });
-                EntityManager.SetComponentData(Entities[i], new SlowRate
+                _entityManager.SetComponentData(Entities[i], new SlowRate
                 {
                     Value = 0,
                 });
-                EntityManager.SetComponentData(Entities[i], new BuffTime
+                _entityManager.SetComponentData(Entities[i], new BuffTime
                 {
                     Value = 0,
                 });
 
-                EntityManager.SetComponentData(Entities[i], new Translation
+                _entityManager.SetComponentData(Entities[i], new Translation
                 {
                     Value = Position
                 });
 
-                if (EntityManager.HasComponent<QuadrantEntity>(Entities[i]) == false)
-                    EntityManager.AddComponent<QuadrantEntity>(Entities[i]);
-                EntityManager.SetComponentData(Entities[i], new QuadrantEntity
+                if (_entityManager.HasComponent<QuadrantEntity>(Entities[i]) == false)
+                    _entityManager.AddComponent<QuadrantEntity>(Entities[i]);
+                _entityManager.SetComponentData(Entities[i], new QuadrantEntity
                 {
                     typeEnum = QuadrantEntity.TypeEnum.EnemyTag
                 });
 
-                if (EntityManager.HasComponent<EnemyTag>(Entities[i]) == false)
-                    EntityManager.AddComponent<EnemyTag>(Entities[i]);
+                if (_entityManager.HasComponent<EnemyTag>(Entities[i]) == false)
+                    _entityManager.AddComponent<EnemyTag>(Entities[i]);
 
-                if (EntityManager.HasComponent<PathFollow>(Entities[i]) == false)
-                    EntityManager.AddComponent<PathFollow>(Entities[i]);
+                if (_entityManager.HasComponent<PathFollow>(Entities[i]) == false)
+                    _entityManager.AddComponent<PathFollow>(Entities[i]);
 
-                if (EntityManager.HasComponent<PathfindingParams>(Entities[i]) == false)
+                if (_entityManager.HasComponent<PathfindingParams>(Entities[i]) == false)
                 {
-                    EntityManager.AddComponentData(Entities[i], new PathfindingParams
+                    _entityManager.AddComponentData(Entities[i], new PathfindingParams
                     {
                         startPosition = mapGenerator.GetTileIDFromPosition(Position),
                         endPosition = new int2(0, 0),
@@ -406,12 +555,16 @@ namespace RandomTowerDefense.DOTS.Spawner
                 spawnIndexList[spawnCnt++] = i;
             }
 
-            //Change Whenever Spawned (Not Needed?)
-            TransformAccessArray = new TransformAccessArray(transforms);
+            // スポーン時に変更（不要な可能性あり）
+            TransformAccessArray = new TransformAccessArray(_transforms);
 
             return spawnIndexList;
         }
 
+        /// <summary>
+        /// 現在アクティブな敵ゲームオブジェクトのリストを取得
+        /// </summary>
+        /// <returns>アクティブな敵のリスト</returns>
         public List<GameObject> AllAliveMonstersList()
         {
             List<GameObject> result = new List<GameObject>();

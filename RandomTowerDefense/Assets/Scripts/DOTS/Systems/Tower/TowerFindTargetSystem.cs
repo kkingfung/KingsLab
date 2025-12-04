@@ -112,11 +112,11 @@ namespace RandomTowerDefense.DOTS.Systems.Tower
 
         }
 
-        private EndSimulationEntityCommandBufferSystem endSimulationEntityCommandBufferSystem;
+        private EndSimulationEntityCommandBufferSystem _endSimulationEntityCommandBufferSystem;
 
         protected override void OnCreate()
         {
-            endSimulationEntityCommandBufferSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+            _endSimulationEntityCommandBufferSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
             base.OnCreate();
         }
 
@@ -140,11 +140,11 @@ namespace RandomTowerDefense.DOTS.Systems.Tower
                 quadrantEntityType = quadrantEntityType,
                 castlePosType = castlePosType,
                 quadrantMultiHashMap = QuadrantSystem.quadrantMultiHashMap,
-                entityCommandBuffer = endSimulationEntityCommandBufferSystem.CreateCommandBuffer().AsParallelWriter(),
+                entityCommandBuffer = _endSimulationEntityCommandBufferSystem.CreateCommandBuffer().AsParallelWriter(),
             };
             JobHandle jobHandle = findTargetQuadrantSystemJob.Schedule(unitQuery, inputDeps);
 
-            endSimulationEntityCommandBufferSystem.AddJobHandleForProducer(jobHandle);
+            _endSimulationEntityCommandBufferSystem.AddJobHandleForProducer(jobHandle);
 
             return jobHandle;
         }

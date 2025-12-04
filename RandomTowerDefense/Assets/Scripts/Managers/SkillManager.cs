@@ -113,7 +113,7 @@ namespace RandomTowerDefense.Managers.System
             int currExp = SkillUpgrader[itemID];
             if (currExp > SkillRequirement[upgradesManager.GetLevel(itemID)])
             {
-                if (upgradesManager.AddSkillLevel(itemID, SKILL_LEVEL_INCREMENT))
+                if (upgradesManager.UpgradeLevel(itemID, SKILL_LEVEL_INCREMENT))
                     SkillUpgrader[itemID] = INITIAL_SKILL_LEVEL;
             }
         }
@@ -190,7 +190,7 @@ namespace RandomTowerDefense.Managers.System
 
             while (frame - Time.time > 0)
             {
-                if (Time.time - frameToNext > attr.cycleTime)
+                if (Time.time - frameToNext > attr.CycleTime)
                 {
                     float3 pos = playerManager.RaycastTest(LayerMask.GetMask("Arena"));
                     int[] entityID = skillSpawner.Spawn(METEOR_SKILL_ID, pos,
@@ -253,7 +253,7 @@ namespace RandomTowerDefense.Managers.System
 
             while (frame - Time.time > 0)
             {
-                if (Time.time - frameToNext > attr.cycleTime)
+                if (Time.time - frameToNext > attr.CycleTime)
                 {
                     int[] entityID = skillSpawner.Spawn(PETRIFICATION_SKILL_ID, pos, pos, new float3(),
                         attr.Damage, attr.Radius, attr.WaitTime, attr.LifeTime, attr.WaitTime,
@@ -283,7 +283,7 @@ namespace RandomTowerDefense.Managers.System
 
             while (frame - Time.time > 0)
             {
-                if (Time.time - frameToNext > attr.cycleTime)
+                if (Time.time - frameToNext > attr.CycleTime)
                 {
                     if (enemySpawner && enemySpawner.AllAliveMonstersList().Count > 0)
                     {

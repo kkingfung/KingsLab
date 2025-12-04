@@ -213,7 +213,6 @@ namespace RandomTowerDefense.Scene
             if (UseRemoteConfig)
             {
                 ConfigManager.FetchCompleted += ApplyRemoteSettings;
-                ConfigManager.FetchCompleted += StageInfoList.InitByRemote;
                 ConfigManager.FetchCompleted += TowerInfo.InitByRemote;
                 ConfigManager.FetchCompleted += EnemyInfo.InitByRemote;
                 ConfigManager.FetchCompleted += SkillInfo.InitByRemote;
@@ -257,7 +256,6 @@ namespace RandomTowerDefense.Scene
             }
 
             SkillStack.Init();
-            UpgradesManager.Init();
 
             IslandNow = PlayerPrefs.GetInt("IslandNow", INITIAL_ISLAND_INDEX);
             IslandEnabled = PlayerPrefs.GetInt("IslandEnabled", INITIAL_ENABLED_ISLANDS);
@@ -360,7 +358,7 @@ namespace RandomTowerDefense.Scene
                     i.material.SetFloat("_Progress", 0);
             }
 
-            FloorMat.SetFloat("_ShapesSides", BasicFloorMatSize + IslandNow);
+            FloorMat.SetFloat("_ShapesSides", BASIC_FLOOR_MATERIAL_SIZE + IslandNow);
             foreach (Text i in UIIslandName)
             {
                 switch (IslandNow)
@@ -418,9 +416,9 @@ namespace RandomTowerDefense.Scene
             {
                 if (tutorialManager.WaitingResponds)
                 {
-                    if (timeManager.timeFactor != tutorialTimeFactor)
+                    if (timeManager.timeFactor != TUTORIAL_TIME_FACTOR)
                     {
-                        timeManager.timeFactor = tutorialTimeFactor;
+                        timeManager.timeFactor = TUTORIAL_TIME_FACTOR;
                         timeManager.TimeControl();
                     }
                 }

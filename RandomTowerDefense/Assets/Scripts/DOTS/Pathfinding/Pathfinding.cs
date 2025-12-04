@@ -24,16 +24,16 @@ namespace RandomTowerDefense.DOTS.Pathfinding
         #endregion
 
         #region Private Fields
-        private static int gridWidth;
-        private static int gridHeight;
+        private static int _gridWidth;
+        private static int _gridHeight;
 
-        private Dictionary<int2, PathNode[]> PathNodeArrayList;
-        private NativeArray<PathNode> pathNodeArray;
+        private Dictionary<int2, PathNode[]> _pathNodeArrayList;
+        private NativeArray<PathNode> _pathNodeArray;
 
-        private bool chgPath;
+        private bool _chgPath;
 
-        // Adjust in source code ONLY
-        private bool goalFixed = true;
+        // ソースコードのみで調整
+        private bool _goalFixed = true;
         #endregion
 
         #region Unity Lifecycle
@@ -43,8 +43,8 @@ namespace RandomTowerDefense.DOTS.Pathfinding
         /// </summary>
         protected override void OnCreate()
         {
-            chgPath = false;
-            PathNodeArrayList = new Dictionary<int2, PathNode[]>();
+            _chgPath = false;
+            _pathNodeArrayList = new Dictionary<int2, PathNode[]>();
         }
 
         /// <summary>
@@ -53,8 +53,8 @@ namespace RandomTowerDefense.DOTS.Pathfinding
         /// </summary>
         protected override void OnDestroy()
         {
-            if (pathNodeArray.IsCreated)
-                pathNodeArray.Dispose();
+            if (_pathNodeArray.IsCreated)
+                _pathNodeArray.Dispose();
         }
 
         /// <summary>
@@ -66,14 +66,14 @@ namespace RandomTowerDefense.DOTS.Pathfinding
             if (PathfindingGridSetup.Instance == null) return;
             if (PathfindingGridSetup.Instance.Reset)
             {
-                PathNodeArrayList = new Dictionary<int2, PathNode[]>();
-                if (pathNodeArray.IsCreated)
-                    pathNodeArray.Dispose();
+                _pathNodeArrayList = new Dictionary<int2, PathNode[]>();
+                if (_pathNodeArray.IsCreated)
+                    _pathNodeArray.Dispose();
                 PathfindingGridSetup.Instance.Reset = false;
             }
-            gridWidth = PathfindingGridSetup.Instance.pathfindingGrid.GetWidth();
-            gridHeight = PathfindingGridSetup.Instance.pathfindingGrid.GetHeight();
-            int2 gridSize = new int2(gridWidth, gridHeight);
+            _gridWidth = PathfindingGridSetup.Instance.pathfindingGrid.GetWidth();
+            _gridHeight = PathfindingGridSetup.Instance.pathfindingGrid.GetHeight();
+            int2 gridSize = new int2(_gridWidth, _gridHeight);
 
             List<FindPathJob> findPathJobList = new List<FindPathJob>();
             NativeList<JobHandle> jobHandleList = new NativeList<JobHandle>(Allocator.Temp);
@@ -81,10 +81,10 @@ namespace RandomTowerDefense.DOTS.Pathfinding
             Entities.WithAll<EnemyTag>().ForEach((Entity entity, ref PathfindingParams pathfindingParams) =>
             {
                 FindPathJob findPathJob;
-                if (goalFixed == false)
+                if (_goalFixed == false)
                 {
-                    pathNodeArray = GetPathNodeArray();
-                    NativeArray<PathNode> tmpPathNodeArray = new NativeArray<PathNode>(pathNodeArray, Allocator.TempJob);
+                    _pathNodeArray = GetPathNodeArray();
+                    NativeArray<PathNode> tmpPathNodeArray = new NativeArray<PathNode>(_pathNodeArray, Allocator.TempJob);
 
                     findPathJob = new FindPathJob
                     {
@@ -93,21 +93,21 @@ namespace RandomTowerDefense.DOTS.Pathfinding
                         startPosition = pathfindingParams.startPosition,
                         endPosition = pathfindingParams.endPosition,
                         entity = entity,
-                        chgPath = chgPath
+                        chgPath = _chgPath
                     };
                     findPathJobList.Add(findPathJob);
                     jobHandleList.Add(findPathJob.Schedule());
                     JobHandle.CompleteAll(jobHandleList);
 
                     PathNode[] array = findPathJob.pathNodeArray.ToArray();
-                    PathNodeArrayList.Add(pathfindingParams.startPosition, array);
-                    chgPath = !chgPath;
+                    _pathNodeArrayList.Add(pathfindingParams.startPosition, array);
+                    _chgPath = !_chgPath;
                 }
                 else
                 {
-                    if (PathNodeArrayList.ContainsKey(pathfindingParams.startPosition))
+                    if (_pathNodeArrayList.ContainsKey(pathfindingParams.startPosition))
                     {
-                        NativeArray<PathNode> tmpPathNodeArray = new NativeArray<PathNode>(PathNodeArrayList[pathfindingParams.startPosition], Allocator.TempJob);
+                        NativeArray<PathNode> tmpPathNodeArray = new NativeArray<PathNode>(_pathNodeArrayList[pathfindingParams.startPosition], Allocator.TempJob);
 
                         findPathJob = new FindPathJob
                         {
@@ -116,14 +116,14 @@ namespace RandomTowerDefense.DOTS.Pathfinding
                             startPosition = pathfindingParams.startPosition,
                             endPosition = pathfindingParams.endPosition,
                             entity = entity,
-                            chgPath = chgPath
+                            chgPath = _chgPath
                         };
                         findPathJobList.Add(findPathJob);
                     }
                     else
                     {
-                        pathNodeArray = GetPathNodeArray();
-                        NativeArray<PathNode> tmpPathNodeArray = new NativeArray<PathNode>(pathNodeArray, Allocator.TempJob);
+                        _pathNodeArray = GetPathNodeArray();
+                        NativeArray<PathNode> tmpPathNodeArray = new NativeArray<PathNode>(_pathNodeArray, Allocator.TempJob);
 
                         findPathJob = new FindPathJob
                         {
@@ -132,7 +132,7 @@ namespace RandomTowerDefense.DOTS.Pathfinding
                             startPosition = pathfindingParams.startPosition,
                             endPosition = pathfindingParams.endPosition,
                             entity = entity,
-                            chgPath = chgPath
+                            chgPath = _chgPath
                         };
                         findPathJobList.Add(findPathJob);
                         jobHandleList.Add(findPathJob.Schedule());
@@ -140,8 +140,8 @@ namespace RandomTowerDefense.DOTS.Pathfinding
                         JobHandle.CompleteAll(jobHandleList);
 
                         //PathNode[] array = findPathJob.pathNodeArray.ToArray();
-                        //PathNodeArrayList.Add(pathfindingParams.startPosition, array);
-                        chgPath = !chgPath;
+                        //_pathNodeArrayList.Add(pathfindingParams.startPosition, array);
+                        _chgPath = !_chgPath;
                     }
                 }
                 PostUpdateCommands.RemoveComponent<PathfindingParams>(entity);
@@ -160,7 +160,7 @@ namespace RandomTowerDefense.DOTS.Pathfinding
                 }.Run();
             }
 
-            pathNodeArray.Dispose();
+            _pathNodeArray.Dispose();
         }
         #endregion
 
@@ -533,16 +533,24 @@ namespace RandomTowerDefense.DOTS.Pathfinding
         /// </summary>
         public struct PathNode : IHeapItem<PathNode>
         {
+            /// <summary>グリッドX座標</summary>
             public int x;
+            /// <summary>グリッドY座標</summary>
             public int y;
 
+            /// <summary>配列内のインデックス</summary>
             public int index;
 
+            /// <summary>開始点からこのノードまでのコスト</summary>
             public int gCost;
+            /// <summary>このノードから目標までの推定コスト</summary>
             public int hCost;
+            /// <summary>総合コスト（g + h）</summary>
             public int fCost;
 
+            /// <summary>歩行可能かどうか</summary>
             public bool isWalkable;
+            /// <summary>このノードに到達した元ノードのインデックス</summary>
             public int cameFromNodeIndex;
             int heapIndex;
 

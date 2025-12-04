@@ -470,7 +470,7 @@ namespace RandomTowerDefense.Scene
                                 if (infoID == 5)
                                 {
                                     OutputValue = Mathf.Clamp(OutputValue,
-                                        StageInfoList.MinObstaclePercent, StageInfoList.MaxObstaclePercent);
+                                        DefaultStageInfos.MinObstaclePercent, DefaultStageInfos.MaxObstaclePercent);
                                 }
 
                                 StageCustomText[infoID].text = OutputValue.ToString();

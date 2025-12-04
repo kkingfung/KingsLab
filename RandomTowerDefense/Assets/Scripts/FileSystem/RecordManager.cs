@@ -14,6 +14,9 @@ namespace RandomTowerDefense.FileSystem
     [System.Serializable]
     public class UIRecordList
     {
+        /// <summary>
+        /// レコード表示用TextMeshリスト
+        /// </summary>
         [SerializeField] public List<TextMesh> Records;
     }
 
@@ -32,10 +35,20 @@ namespace RandomTowerDefense.FileSystem
     {
         #region Serialized Fields
 
+        /// <summary>
+        /// 全ステージのプレイヤー名表示UIリスト
+        /// </summary>
         [Header("UI Record Display")]
         [SerializeField] public List<UIRecordList> AllRecordsName;
+
+        /// <summary>
+        /// 全ステージのスコア表示UIリスト
+        /// </summary>
         [SerializeField] public List<UIRecordList> AllRecordsScore;
 
+        /// <summary>
+        /// 新規レコードリスト作成フラグ
+        /// </summary>
         [Header("Settings")]
         [SerializeField] public bool newRecordList;
 
@@ -43,6 +56,9 @@ namespace RandomTowerDefense.FileSystem
 
         #region Public Properties
 
+        /// <summary>
+        /// 最後に記録されたランク位置
+        /// </summary>
         public int rank { get; private set; }
 
         #endregion

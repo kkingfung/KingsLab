@@ -99,7 +99,7 @@ namespace RandomTowerDefense.Managers.Macro
         public VisualEffect dmgVFX;
         void Awake()
         {
-            SpawnPoint = new Coord[EnemySpawnPtNum + 1];
+            SpawnPoint = new FilledMapCoord[EnemySpawnPtNum + 1];
             EnemySpawnPort = new GameObject[EnemySpawnPtNum];
             if (dmgVFX) dmgVFX.Stop();
 

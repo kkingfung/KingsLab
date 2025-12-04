@@ -9,8 +9,20 @@ using RandomTowerDefense.Info;
 using RandomTowerDefense.Units;
 using RandomTowerDefense.FileSystem;
 
+/// <summary>
+/// スコア計算システム - ゲーム終了時のスコア算出とランキング管理
+///
+/// 主な機能:
+/// - ステージクリア時のスコア計算処理
+/// - 城HP、リソース、アップグレードレベルのスコア換算
+/// - エクストラモード対応スコア補正システム
+/// - プレイヤー名入力とランキング登録
+/// - タッチスクリーンキーボード統合
+/// - スコア表示UI更新とエフェクト管理
+/// </summary>
 public class ScoreCalculation : MonoBehaviour
 {
+    // スコア計算用定数
     private readonly int ScoreForBase = 5000;
     private readonly int ScoreForStage = 500;
     private readonly int ScoreForStageEx = 10;
@@ -27,8 +39,19 @@ public class ScoreCalculation : MonoBehaviour
     private const int WAVE_NUM_FACTOR_THRESHOLD = 50;
     private const float WAIT_TIME_SECONDS = 0f;
 
+    /// <summary>
+    /// スコア表示用UIテキストリスト
+    /// </summary>
     public List<Text> ScoreObj;
+
+    /// <summary>
+    /// ランク表示用UIテキストリスト
+    /// </summary>
     public List<Text> RankObj;
+
+    /// <summary>
+    /// プレイヤー名表示用UIテキストリスト
+    /// </summary>
     public List<Text> NameObj;
 
     private int rank;
@@ -36,21 +59,45 @@ public class ScoreCalculation : MonoBehaviour
     private int score;
     private string scoreStr;
 
+    /// <summary>
+    /// キーボード入力中フラグ
+    /// </summary>
     [HideInInspector]
     public bool Inputting;
 
     private TouchScreenKeyboard keyboard;
     private bool CancelKeybroad = false;
+
+    /// <summary>
+    /// インゲームシーンマネージャー参照
+    /// </summary>
     public InGameOperation sceneManager;
+
+    /// <summary>
+    /// レコードマネージャー参照
+    /// </summary>
     public RecordManager recordManager;
+
+    /// <summary>
+    /// ステージマネージャー参照
+    /// </summary>
     public StageManager stageManager;
 
     private List<UIEffect> uiEffect;
-    //For Calculation
+
+    /// <summary>
+    /// リソースマネージャー参照（スコア計算用）
+    /// </summary>
     public ResourceManager resourceManager;
+
+    /// <summary>
+    /// アップグレードマネージャー参照（スコア計算用）
+    /// </summary>
     public UpgradesManager upgradesManager;
 
-    // 開始時に呼び出される
+    /// <summary>
+    /// 開始時処理 - 初期化とUIエフェクト設定
+    /// </summary>
     private void Start()
     {
         Inputting = false;
@@ -65,10 +112,17 @@ public class ScoreCalculation : MonoBehaviour
             uiEffect.Add(ScoreObj[i].gameObject.GetComponent<UIEffect>());
     }
 
+    /// <summary>
+    /// 無効化時処理 - プレイヤー名の最終保存
+    /// </summary>
     private void OnDisable()
     {
         recordManager.UpdateRecordName(recordManager.rank, playerName);
     }
+
+    /// <summary>
+    /// 遅延更新処理 - ランクと名前表示の更新
+    /// </summary>
     private void LateUpdate()
     {
         if (rank <= RecordCharNum)
@@ -89,6 +143,9 @@ public class ScoreCalculation : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// スコア計算とランキング登録処理
+    /// </summary>
     public void CalculationScore()
     {
         score = 0;
@@ -171,6 +228,9 @@ public class ScoreCalculation : MonoBehaviour
         rank = recordManager.RecordComparison(currIsland, "ZYXWV", score);
     }
 
+    /// <summary>
+    /// タッチスクリーンキーボードを開く処理
+    /// </summary>
     public void TouchKeybroad()
     {
         if (rank > RecordCharNum)
@@ -190,6 +250,10 @@ public class ScoreCalculation : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// タッチスクリーンキーボード入力更新コルーチン
+    /// </summary>
+    /// <returns>コルーチン</returns>
     private IEnumerator TouchScreenInputUpdate()
     {
         if (keyboard != null)

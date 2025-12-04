@@ -101,7 +101,7 @@ public class MinionsFindTargetSystem : JobComponentSystem
                         float distSq = math.distancesq(unitPosition, quadrantData.position);
                         if (closestTargetEntity == Entity.Null)
                         {
-                            // No target
+                            // ターゲットなし
                             closestTargetEntity = quadrantData.entity;
                             closestTargetDistance = distSq;
                             closestTargetPosition = quadrantData.position;
@@ -110,7 +110,7 @@ public class MinionsFindTargetSystem : JobComponentSystem
                         {
                             if (distSq < closestTargetDistance)
                             {
-                                // This target is closer
+                                // このターゲットがより近い
                                 closestTargetEntity = quadrantData.entity;
                                 closestTargetDistance = distSq;
                                 closestTargetPosition = quadrantData.position;
@@ -124,11 +124,11 @@ public class MinionsFindTargetSystem : JobComponentSystem
 
     }
 
-    private EndSimulationEntityCommandBufferSystem endSimulationEntityCommandBufferSystem;
+    private EndSimulationEntityCommandBufferSystem _endSimulationEntityCommandBufferSystem;
 
     protected override void OnCreate()
     {
-        endSimulationEntityCommandBufferSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+        _endSimulationEntityCommandBufferSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
         base.OnCreate();
     }
 
@@ -156,11 +156,11 @@ public class MinionsFindTargetSystem : JobComponentSystem
             activeType = activeType,
             quadrantEntityType = quadrantEntityType,
             quadrantMultiHashMap = QuadrantSystem.quadrantMultiHashMap,
-            entityCommandBuffer = endSimulationEntityCommandBufferSystem.CreateCommandBuffer().AsParallelWriter(),
+            entityCommandBuffer = _endSimulationEntityCommandBufferSystem.CreateCommandBuffer().AsParallelWriter(),
         };
         JobHandle jobHandle = findTargetQuadrantSystemJob.Schedule(unitQuery, inputDeps);
 
-        endSimulationEntityCommandBufferSystem.AddJobHandleForProducer(jobHandle);
+        _endSimulationEntityCommandBufferSystem.AddJobHandleForProducer(jobHandle);
 
         return jobHandle;
     }

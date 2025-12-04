@@ -29,7 +29,7 @@ public class EnemyPathFollowSystem : JobComponentSystem
         {
             if (health.Value > 0)
             {
-                // Has path to follow
+                // 追従するパスが存在
                 PathPosition pathPosition = pathPositionBuffer[pathFollow.pathIndex];
                 float3 pathActualPos = PathfindingGridSetup.Instance.pathfindingGrid.GetWorldPosition((int)pathPosition.position.x, (int)pathPosition.position.y);
 
@@ -52,7 +52,7 @@ public class EnemyPathFollowSystem : JobComponentSystem
 
                 if (math.distance(transform.Value, targetPosition) < .1f)
                 {
-                    // Next waypoint
+                    // 次のウェイポイントへ
                     pathFollow.pathIndex--;
                 }
             }
@@ -80,11 +80,11 @@ public class EnemyPathFollowSystem : JobComponentSystem
 /// </summary>
 public class PathFollowGetNewPathSystem : JobComponentSystem
 {
-    private EndSimulationEntityCommandBufferSystem endSimulationEntityCommandBufferSystem;
+    private EndSimulationEntityCommandBufferSystem _endSimulationEntityCommandBufferSystem;
 
     protected override void OnCreate()
     {
-        endSimulationEntityCommandBufferSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+        _endSimulationEntityCommandBufferSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
     }
 
     /// <summary>
@@ -99,7 +99,7 @@ public class PathFollowGetNewPathSystem : JobComponentSystem
         float3 originPosition = PathfindingGridSetup.Instance.pathfindingGrid.GetWorldPosition(0, 0);
         float cellSize = PathfindingGridSetup.Instance.pathfindingGrid.GetCellSize();
 
-        EntityCommandBuffer.ParallelWriter entityCommandBuffer = endSimulationEntityCommandBufferSystem.CreateCommandBuffer().AsParallelWriter();
+        EntityCommandBuffer.ParallelWriter entityCommandBuffer = _endSimulationEntityCommandBufferSystem.CreateCommandBuffer().AsParallelWriter();
 
         JobHandle jobHandle = Entities.WithNone<PathfindingParams>().ForEach((Entity entity, int entityInQueryIndex, in PathFollow pathFollow, in Translation transform) =>
         {
@@ -109,7 +109,7 @@ public class PathFollowGetNewPathSystem : JobComponentSystem
                 GetXY(transform.Value + new float3(1, 0, 1) * cellSize * +.5f, originPosition, cellSize, out int startX, out int startY);
                 ValidateGridPosition(ref startX, ref startY, mapWidth, mapHeight);
 
-                //Fixed target position to Castle
+                // 城への固定ターゲット位置
                 int endX = 0;
                 int endY = 0;
 
@@ -121,7 +121,7 @@ public class PathFollowGetNewPathSystem : JobComponentSystem
             }
         }).Schedule(inputDeps);
 
-        endSimulationEntityCommandBufferSystem.AddJobHandleForProducer(jobHandle);
+        _endSimulationEntityCommandBufferSystem.AddJobHandleForProducer(jobHandle);
 
         return jobHandle;
     }

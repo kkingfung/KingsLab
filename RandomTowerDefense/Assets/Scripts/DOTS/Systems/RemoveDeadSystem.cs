@@ -17,10 +17,10 @@ namespace RandomTowerDefense.DOTS.Systems
     [UpdateInGroup(typeof(InitializationSystemGroup))]
     public class RemoveDeadSystem : JobComponentSystem
     {
-        EndSimulationEntityCommandBufferSystem endSimulationEcbSystem;
+        private EndSimulationEntityCommandBufferSystem _endSimulationEcbSystem;
         protected override void OnCreate()
         {
-            endSimulationEcbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
+            _endSimulationEcbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
         }
         /// <summary>
         /// 死亡した敵エンティティの削除処理を更新
@@ -29,7 +29,7 @@ namespace RandomTowerDefense.DOTS.Systems
         /// <returns>ジョブハンドル</returns>
         protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
-            EntityCommandBuffer ecb = endSimulationEcbSystem.CreateCommandBuffer();
+            EntityCommandBuffer ecb = _endSimulationEcbSystem.CreateCommandBuffer();
             EntityCommandBuffer.ParallelWriter ecbc = ecb.AsParallelWriter();
 
             return Entities.WithAll<EnemyTag>().ForEach((Entity entity, int entityInQueryIndex, ref Health health) =>

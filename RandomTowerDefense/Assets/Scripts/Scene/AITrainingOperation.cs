@@ -55,7 +55,6 @@ namespace RandomTowerDefense.Scene
             InitializeRandomGenerator();
             InitializeTrainingSettings();
             InitializeConfigurationSystems();
-            UpgradesManager.Init();
         }
 
         /// <summary>
@@ -126,7 +125,6 @@ namespace RandomTowerDefense.Scene
         private void SetupRemoteConfiguration()
         {
             ConfigManager.FetchCompleted += ApplyRemoteSettings;
-            ConfigManager.FetchCompleted += StageInfoList.InitByRemote;
             ConfigManager.FetchCompleted += TowerInfo.InitByRemote;
             ConfigManager.FetchCompleted += EnemyInfo.InitByRemote;
             ConfigManager.FetchCompleted += SkillInfo.InitByRemote;
@@ -185,7 +183,7 @@ namespace RandomTowerDefense.Scene
         {
             if (resourceManager.GetCurrMaterial() >= 100)
             {
-                if (pillar && TowerInfo.infoUpdated)
+                if (pillar && TowerInfo.InfoUpdated)
                 {
                     towerManager.BuildTower(pillar);
                     pillar = null;

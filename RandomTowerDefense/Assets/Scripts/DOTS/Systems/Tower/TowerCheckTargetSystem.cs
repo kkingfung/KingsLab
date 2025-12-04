@@ -37,7 +37,7 @@ namespace RandomTowerDefense.DOTS.Systems.Tower
                         target.targetHealth = targetHealth.Value;
                         if (CheckCollision(transform.Value, targetpos.Value, radius.Value * radius.Value) == false)
                         {
-                            // far to target, destroy it
+                            // ターゲットが遠すぎる場合は削除
                             //PostUpdateCommands.DestroyEntity(hasTarget.targetEntity);
                             //PostUpdateCommands.RemoveComponent(unitEntity, typeof(Target));
                             target.targetEntity = Entity.Null;

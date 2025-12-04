@@ -42,13 +42,32 @@ namespace RandomTowerDefense.Info
         /// 島の数
         /// </summary>
         public static readonly int IslandNum = 4;
-    // ファイル解析用定数
-    private const int WAVE_ID_INDEX = 0;
-    private const int ENEMY_COUNT_INDEX = 1;
-    private const int ENEMY_TYPE_INDEX = 2;
-    private const int ENEMY_NAME_INDEX = 3;
-    private const int DEFAULT_WAVE_NUM_EX = 10;
-    private const int ULTRA_WAVE_DIFFICULTY_CASE = 9;
+
+        // ファイル解析用定数
+        private const int WAVE_ID_INDEX = 0;
+        private const int ENEMY_COUNT_INDEX = 1;
+        private const int ENEMY_TYPE_INDEX = 2;
+        private const int ENEMY_NAME_INDEX = 3;
+        private const int DEFAULT_WAVE_NUM_EX = 10;
+        private const int ULTRA_WAVE_DIFFICULTY_CASE = 9;
+
+        // マップサイズ制限定数
+        private const int MinMapDepth = 8;
+        private const int MaxMapDepth = 128;
+
+        // 障害物割合制限定数
+        private const float MinObstaclePercent = 0.0f;
+        private const float MaxObstaclePercent = 1.0f;
+
+        // ステージ設定用係数配列
+        private static readonly int[] waveNumFactor = { 10, 25, 50, 100, 200 };
+        private static readonly int[] stageSizeFactor = { 32, 64, 96, 128 };
+        private static readonly float[] enemyNumFactor = { 1.0f, 1.5f, 2.0f, 3.0f };
+        private static readonly float[] enemyAttributeFactor = { 1.0f, 1.5f, 2.0f, 3.0f };
+        private static readonly float[] obstacleFactor = { 0.0f, 0.1f, 0.3f, 0.5f, 0.7f };
+        private static readonly int[] hpMaxFactor = { 5, 10, 20, 50 };
+        private static readonly float[] resourceFactor = { 0.5f, 1.0f, 1.5f, 2.0f };
+        private static readonly float[] spawnSpeedFactor = { 1.0f, 3.0f, 5.0f, 10.0f };
 
         /// <summary>
         /// ステージ情報
@@ -272,8 +291,11 @@ namespace RandomTowerDefense.Info
                 if (seperateInfo.Length == IslandNum)
                 {
                     var detail = new WaveDetail(
-                        int.Parse(seperateInfo[WAVE_ID_INDEX]), int.Parse(seperateInfo[ENEMY_COUNT_INDEX]));
-                    _detail.Add(detail, int.Parse(seperateInfo[ENEMY_TYPE_INDEX]), seperateInfo[ENEMY_NAME_INDEX]);
+                        int.Parse(seperateInfo[WAVE_ID_INDEX]),
+                        int.Parse(seperateInfo[ENEMY_COUNT_INDEX]),
+                        int.Parse(seperateInfo[ENEMY_TYPE_INDEX]),
+                        seperateInfo[ENEMY_NAME_INDEX]);
+                    _detail.Add(detail);
                 }
             }
 
@@ -284,9 +306,9 @@ namespace RandomTowerDefense.Info
             for (int i = 0; i < waveNum; ++i)
             {
                 List<WaveDetail> detailPerWave = new List<WaveDetail>();
-                for (; j < _detail.Count && _detail[j].waveID <= i + 1; ++j)
+                for (; j < _detail.Count && _detail[j].WaveID <= i + 1; ++j)
                 {
-                    if (_detail[j].waveID == i + 1)
+                    if (_detail[j].WaveID == i + 1)
                     {
                         detailPerWave.Add(_detail[j]);
                     }
@@ -315,7 +337,7 @@ namespace RandomTowerDefense.Info
                         PrepareStageInfoWithFile(DefaultStageInfos.HardStageWaveNum,
                             filepath + "/HardStageInfoList.txt")),
             3 => new StageAttr((int)PlayerPrefs.GetFloat("waveNumEx", DEFAULT_WAVE_NUM_EX),
-                        PrepareCustomStageInfo()),
+                        DefaultStageInfos.PrepareCustomStageInfo((int)PlayerPrefs.GetFloat("waveNumEx", DEFAULT_WAVE_NUM_EX))),
             _ => throw new System.Exception("Invalid island ID"),
         };
 
@@ -383,6 +405,11 @@ namespace RandomTowerDefense.Info
         public static readonly System.Random Prng = new System.Random((int)Time.time);
 
         /// <summary>
+        /// Ultraウェーブ難易度ケース
+        /// </summary>
+        private const int ULTRA_WAVE_DIFFICULTY_CASE = 9;
+
+        /// <summary>
         /// モンスターカテゴリ別出現タイプリスト(グループ 0)
         /// </summary>
         public static readonly string[] MonsterCat0 = {
@@ -423,7 +450,7 @@ namespace RandomTowerDefense.Info
         /// </summary>
         /// <param name="waveNum">ウェブ数</param>
         /// <returns>ステージのウェブ情報リスト</returns>
-        private static WaveAttr[] PrepareEasyStageInfo(int waveNum)
+        public static WaveAttr[] PrepareEasyStageInfo(int waveNum)
         {
             WaveAttr[] waveArray = new WaveAttr[waveNum];
 
@@ -458,7 +485,7 @@ namespace RandomTowerDefense.Info
         /// </summary>
         /// <param name="waveNum">ウェブ数</param>
         /// <returns>ステージのウェブ情報リスト</returns>
-        private static WaveAttr[] PrepareNormalStageInfo(int waveNum)
+        public static WaveAttr[] PrepareNormalStageInfo(int waveNum)
         {
             WaveAttr[] waveArray = new WaveAttr[waveNum];
 
@@ -506,7 +533,7 @@ namespace RandomTowerDefense.Info
         /// </summary>
         /// <param name="waveNum">ウェブ数</param>
         /// <returns>ステージのウェブ情報リスト</returns>
-        private static WaveAttr[] PrepareHardStageInfo(int waveNum)
+        public static WaveAttr[] PrepareHardStageInfo(int waveNum)
         {
             WaveAttr[] waveArray = new WaveAttr[waveNum];
             List<WaveDetail> detail = new List<WaveDetail>();
@@ -570,10 +597,10 @@ namespace RandomTowerDefense.Info
         /// <summary>
         /// カスタムステージ情報を準備
         /// </summary>
+        /// <param name="waveNumEx">ウェーブ数</param>
         /// <returns>ステージのウェブ情報リスト</returns>
-        private static WaveAttr[] PrepareCustomStageInfo()
+        public static WaveAttr[] PrepareCustomStageInfo(int waveNumEx)
         {
-            var waveNumEx = (int)PlayerPrefs.GetFloat("waveNum", 1);
             var stageSizeEx = (int)PlayerPrefs.GetFloat("stageSize", 64);
             var enemyNumEx = (int)PlayerPrefs.GetFloat("enemyNum", 1);
             var enemyAttributeEx = (float)PlayerPrefs.GetFloat("enemyAttr", 1);
@@ -648,9 +675,9 @@ namespace RandomTowerDefense.Info
             for (int i = 0; i < waveNumEx; ++i)
             {
                 List<WaveDetail> detailPerWave = new List<WaveDetail>();
-                for (; j < _detail.Count && _detail[j].waveID <= i + 1; ++j)
+                for (; j < _detail.Count && _detail[j].WaveID <= i + 1; ++j)
                 {
-                    if (_detail[j].waveID == i + 1)
+                    if (_detail[j].WaveID == i + 1)
                     {
                         detailPerWave.Add(_detail[j]);
                     }

@@ -275,7 +275,9 @@ namespace RandomTowerDefense.FileSystem
     [Serializable]
     public struct Record
     {
+        /// <summary>プレイヤー名</summary>
         public string name;
+        /// <summary>スコア値</summary>
         public int score;
 
         /// <summary>
@@ -304,11 +306,17 @@ namespace RandomTowerDefense.FileSystem
 
         #region Public Fields
 
+        /// <summary>ステージID</summary>
         public int stageID;
+        /// <summary>1位レコード</summary>
         public Record record1;
+        /// <summary>2位レコード</summary>
         public Record record2;
+        /// <summary>3位レコード</summary>
         public Record record3;
+        /// <summary>4位レコード</summary>
         public Record record4;
+        /// <summary>5位レコード</summary>
         public Record record5;
 
         #endregion

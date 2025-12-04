@@ -32,50 +32,51 @@ namespace RandomTowerDefense.AI
         public AITrainingOperation trainingSceneManager;
         public FilledMapGenerator filledMapGenerator;
 
-        public EnemySpawner enemySpawner;//GetEnemyInfo For TowerBuildDecision
+        /// <summary>タワー構築決定用の敵スポーナー</summary>
+        public EnemySpawner enemySpawner;
         public StageManager stageManager;
-        public TowerSpawner towerSpawner;//GetAllTowerInfo For EnemySpawningDecision
+        /// <summary>敵スポーン決定用のタワースポーナー</summary>
+        public TowerSpawner towerSpawner;
         public WaveManager waveManager;
         public DebugManager debugManager;
 
-        //For Reset Episode
+        /// <summary>エピソードリセット用マネージャー</summary>
         public TowerManager towerManager;
         public ResourceManager resourceManager;
 
-        private bool isTower;
+        private bool _isTower;
         public bool isLearning;
 
-        private int2 AgentCoord;
-        private int2 MaxCoord;
-        private Vector3 CastlePos;
+        private int2 _agentCoord;
+        private int2 _maxCoord;
 
-        private int counter;
-        private int HpRecord;
-        private int WaveRecord;
+        private int _counter;
+        private int _hpRecord;
+        private int _waveRecord;
 
-        private int loseCounter;
+        private int _loseCounter;
 
-        int[] TowerDistribution;
-        int[] EnemyDistribution;
-        int[] PillarDistribution;
+        private int[] _towerDistribution;
+        private int[] _enemyDistribution;
+        private int[] _pillarDistribution;
 
-        private System.Random prng;
+        private System.Random _prng;
 
         public override void Initialize()
         {
             waveManager.SpawnPointByAI = 1;
-            counter = 0;
-            HpRecord = 1;
-            WaveRecord = 0;
-            isTower = GetComponent<BehaviorParameters>().TeamId == 0 ? false : true;
-            prng = new System.Random((int)Time.time);
+            _counter = 0;
+            _hpRecord = 1;
+            _waveRecord = 0;
+            _isTower = GetComponent<BehaviorParameters>().TeamId == 0 ? false : true;
+            _prng = new System.Random((int)Time.time);
         }
 
         private void Reset()
         {
             waveManager.SetCurrWAveNum(0);
-            counter = 0;
-            loseCounter = 0;
+            _counter = 0;
+            _loseCounter = 0;
             if (trainingSceneManager)
                 trainingSceneManager.pillar = null;
 
@@ -93,7 +94,7 @@ namespace RandomTowerDefense.AI
                 towerManager.RemoveTowerFromList(tower);
             }
 
-            PillarDistribution = null;
+            _pillarDistribution = null;
 
             filledMapGenerator.GenerateMap();
             resourceManager.ResetMaterial();
@@ -111,13 +112,13 @@ namespace RandomTowerDefense.AI
             if (waveManager)
                 CheckWave();
 
-            if (isTower == false)
+            if (_isTower == false)
             {
                 RequestDecision();
                 if (waveManager && waveManager.isSpawning && towerSpawner)
                 {
-                    if (counter < 100)
-                        counter++;
+                    if (_counter < 100)
+                        _counter++;
                 }
             }
             else
@@ -129,13 +130,13 @@ namespace RandomTowerDefense.AI
                         RequestDecision();
                     }
 
-                    if (isLearning && loseCounter > 25)
+                    if (isLearning && _loseCounter > 25)
                     {
                         int currWaveNum = waveManager.GetCurrentWaveNum();
                         AddReward(currWaveNum * currWaveNum);
                         if (PathfindingGridSetup.Instance != null && PathfindingGridSetup.Instance.isActivated == true)
                         {
-                            AddReward(-1f * loseCounter);
+                            AddReward(-1f * _loseCounter);
                             if (debugManager)
                                 debugManager.MapResetted();
                             EndEpisode();
@@ -147,40 +148,40 @@ namespace RandomTowerDefense.AI
 
         public override void CollectObservations(VectorSensor sensor)
         {
-            sensor.AddObservation(isTower ? 1f : -1f);
+            sensor.AddObservation(_isTower ? 1f : -1f);
 
-            TowerDistribution = CntTowerRankTotal();
-            if (TowerDistribution.Length == 4)
+            _towerDistribution = CntTowerRankTotal();
+            if (_towerDistribution.Length == 4)
             {
-                sensor.AddObservation((float)TowerDistribution[0]);
-                sensor.AddObservation((float)TowerDistribution[1]);
-                sensor.AddObservation((float)TowerDistribution[2]);
-                sensor.AddObservation((float)TowerDistribution[3]);
+                sensor.AddObservation((float)_towerDistribution[0]);
+                sensor.AddObservation((float)_towerDistribution[1]);
+                sensor.AddObservation((float)_towerDistribution[2]);
+                sensor.AddObservation((float)_towerDistribution[3]);
             }
 
-            EnemyDistribution = CntEnemyTotal();
-            if (EnemyDistribution.Length == 4)
+            _enemyDistribution = CntEnemyTotal();
+            if (_enemyDistribution.Length == 4)
             {
-                sensor.AddObservation((float)EnemyDistribution[0]);
-                sensor.AddObservation((float)EnemyDistribution[1]);
-                sensor.AddObservation((float)EnemyDistribution[2]);
-                sensor.AddObservation((float)EnemyDistribution[3]);
+                sensor.AddObservation((float)_enemyDistribution[0]);
+                sensor.AddObservation((float)_enemyDistribution[1]);
+                sensor.AddObservation((float)_enemyDistribution[2]);
+                sensor.AddObservation((float)_enemyDistribution[3]);
             }
 
-            if ((PillarDistribution == null))
-                PillarDistribution = CntPillarTotal();
-            if (PillarDistribution.Length == 4)
+            if ((_pillarDistribution == null))
+                _pillarDistribution = CntPillarTotal();
+            if (_pillarDistribution.Length == 4)
             {
-                sensor.AddObservation((float)EnemyDistribution[0]);
-                sensor.AddObservation((float)EnemyDistribution[1]);
-                sensor.AddObservation((float)EnemyDistribution[2]);
-                sensor.AddObservation((float)EnemyDistribution[3]);
+                sensor.AddObservation((float)_enemyDistribution[0]);
+                sensor.AddObservation((float)_enemyDistribution[1]);
+                sensor.AddObservation((float)_enemyDistribution[2]);
+                sensor.AddObservation((float)_enemyDistribution[3]);
             }
         }
 
         public override void OnActionReceived(float[] vectorAction)
         {
-            if (isTower == false)
+            if (_isTower == false)
             {
                 int temp = waveManager.SpawnPointByAI;
                 if (vectorAction[0] < -0.3)
@@ -191,9 +192,9 @@ namespace RandomTowerDefense.AI
                     waveManager.SpawnPointByAI = 1;
 
                 if (temp == waveManager.SpawnPointByAI)
-                    AddReward(-1 * counter / 100.0f);
+                    AddReward(-1 * _counter / 100.0f);
                 else
-                    counter = 0;
+                    _counter = 0;
 
                 if (vectorAction[1] > 0)
                 {
@@ -228,25 +229,22 @@ namespace RandomTowerDefense.AI
 
         public override void Heuristic(float[] actionsOut)
         {
-            if (!isTower)
+            if (!_isTower)
             {
                 if (Input.GetKey(KeyCode.Keypad4))
                 {
                     waveManager.SpawnPointByAI = 0;
-                    //Debug.Log(waveManager.SpawnPointByAI);
                 }
                 else if (Input.GetKey(KeyCode.Keypad5))
                 {
                     waveManager.SpawnPointByAI = 1;
-                    //Debug.Log(waveManager.SpawnPointByAI);
                 }
                 else if (Input.GetKey(KeyCode.Keypad6))
                 {
                     waveManager.SpawnPointByAI = 2;
-                    //Debug.Log(waveManager.SpawnPointByAI);
                 }
             }
-            if (isTower && Input.GetKey(KeyCode.Keypad0))
+            if (_isTower && Input.GetKey(KeyCode.Keypad0))
                 trainingSceneManager.pillar = GetRandomFreePillar(true);
         }
 
@@ -257,41 +255,45 @@ namespace RandomTowerDefense.AI
 
         public void EnemyDisappear(Vector3 EnemyOriPos, Vector3 EnemyDiePos)
         {
-            if (isTower == false)
-                //Adding Reward
+            if (_isTower == false)
+            {
+                // 報酬付与: 敵の移動距離に基づく
                 AddReward((EnemyOriPos - EnemyDiePos).sqrMagnitude / 1000f);
+            }
             else
+            {
                 AddReward(1);
+            }
         }
 
         public void CheckCastleHP()
         {
             int CurrHp = stageManager.GetHealth();
-            if (CurrHp != HpRecord)
+            if (CurrHp != _hpRecord)
             {
-                if (isTower == true)
+                if (_isTower == true)
                 {
-                    if (HpRecord > CurrHp)
+                    if (_hpRecord > CurrHp)
                     {
-                        loseCounter += HpRecord - CurrHp;
-                        AddReward(CurrHp - HpRecord);
+                        _loseCounter += _hpRecord - CurrHp;
+                        AddReward(CurrHp - _hpRecord);
                     }
                 }
                 else
                     AddReward(100);
-                HpRecord = CurrHp;
+                _hpRecord = CurrHp;
             }
         }
         public void CheckWave()
         {
             int CurrWave = waveManager.GetCurrentWaveNum();
-            if (CurrWave != WaveRecord)
+            if (CurrWave != _waveRecord)
             {
-                if (isTower == true)
+                if (_isTower == true)
                 {
                     AddReward(CurrWave * CurrWave);
                 }
-                WaveRecord = CurrWave;
+                _waveRecord = CurrWave;
             }
         }
         #region MakingDecisionForEnemy
@@ -303,9 +305,9 @@ namespace RandomTowerDefense.AI
         {
             int[] TotalRankInQuarteredMap = new int[4];
             if (towerSpawner == null || filledMapGenerator == null) return TotalRankInQuarteredMap;
-            AgentCoord = filledMapGenerator.GetTileIDFromPosition(this.transform.position);
-            AgentCoord = new int2(StageInfoDetail.customStageInfo.StageSizeFactor / 2, StageInfoDetail.customStageInfo.StageSizeFactor / 2);
-            MaxCoord = filledMapGenerator.MapSize;
+            _agentCoord = filledMapGenerator.GetTileIDFromPosition(this.transform.position);
+            _agentCoord = new int2(StageInfoDetail.customStageInfo.StageSizeFactor / 2, StageInfoDetail.customStageInfo.StageSizeFactor / 2);
+            _maxCoord = filledMapGenerator.MapSize;
 
             int[] SubTotalRankInQuarteredMap;
 
@@ -375,9 +377,9 @@ namespace RandomTowerDefense.AI
             {
                 if (i.activeSelf == false) continue;
                 int2 coordTarget = filledMapGenerator.GetTileIDFromPosition(i.transform.position);
-                if (coordTarget.x < AgentCoord.x)
+                if (coordTarget.x < _agentCoord.x)
                 {
-                    if (coordTarget.y < AgentCoord.y)
+                    if (coordTarget.y < _agentCoord.y)
                     {
                         SubTotalRankInQuarteredMap[2]++;
                     }
@@ -388,7 +390,7 @@ namespace RandomTowerDefense.AI
                 }
                 else
                 {
-                    if (coordTarget.y < AgentCoord.y)
+                    if (coordTarget.y < _agentCoord.y)
                     {
                         SubTotalRankInQuarteredMap[3]++;
                     }
@@ -410,25 +412,25 @@ namespace RandomTowerDefense.AI
             List<Pillar> allPillar = filledMapGenerator.GetPillarList();
             if (allPillar == null || allPillar.Count == 0) return TotalRankInQuarteredMap;
 
-            AgentCoord = filledMapGenerator.GetTileIDFromPosition(this.transform.position);
-            MaxCoord = filledMapGenerator.MapSize;
+            _agentCoord = filledMapGenerator.GetTileIDFromPosition(this.transform.position);
+            _maxCoord = filledMapGenerator.MapSize;
 
             foreach (Pillar i in allPillar)
             {
                 int2 PillarCoord = new int2(i.mapSize.x, i.mapSize.y);
-                if (PillarCoord.x <= AgentCoord.x && PillarCoord.y >= AgentCoord.y)
+                if (PillarCoord.x <= _agentCoord.x && PillarCoord.y >= _agentCoord.y)
                 {
                     TotalRankInQuarteredMap[0]++;
                 }
-                else if (PillarCoord.x <= AgentCoord.x && PillarCoord.y >= AgentCoord.y)
+                else if (PillarCoord.x <= _agentCoord.x && PillarCoord.y >= _agentCoord.y)
                 {
                     TotalRankInQuarteredMap[1]++;
                 }
-                else if (PillarCoord.x <= AgentCoord.x && PillarCoord.y <= AgentCoord.y)
+                else if (PillarCoord.x <= _agentCoord.x && PillarCoord.y <= _agentCoord.y)
                 {
                     TotalRankInQuarteredMap[2]++;
                 }
-                else if (PillarCoord.x >= AgentCoord.x && PillarCoord.y >= AgentCoord.y)
+                else if (PillarCoord.x >= _agentCoord.x && PillarCoord.y >= _agentCoord.y)
                 {
                     TotalRankInQuarteredMap[3]++;
                 }
@@ -448,26 +450,26 @@ namespace RandomTowerDefense.AI
             List<GameObject> allMonsters = enemySpawner.AllAliveMonstersList();
             if (allMonsters.Count == 0) return TotalRankInQuarteredMap;
 
-            AgentCoord = filledMapGenerator.GetTileIDFromPosition(this.transform.position);
-            MaxCoord = filledMapGenerator.MapSize;
+            _agentCoord = filledMapGenerator.GetTileIDFromPosition(this.transform.position);
+            _maxCoord = filledMapGenerator.MapSize;
 
             foreach (GameObject i in allMonsters)
             {
                 if (i.activeSelf == false) continue;
                 int2 EnemyCoord = filledMapGenerator.GetTileIDFromPosition(i.transform.position);
-                if (EnemyCoord.x <= AgentCoord.x && EnemyCoord.y >= AgentCoord.y)
+                if (EnemyCoord.x <= _agentCoord.x && EnemyCoord.y >= _agentCoord.y)
                 {
                     TotalRankInQuarteredMap[0]++;
                 }
-                else if (EnemyCoord.x <= AgentCoord.x && EnemyCoord.y >= AgentCoord.y)
+                else if (EnemyCoord.x <= _agentCoord.x && EnemyCoord.y >= _agentCoord.y)
                 {
                     TotalRankInQuarteredMap[1]++;
                 }
-                else if (EnemyCoord.x <= AgentCoord.x && EnemyCoord.y <= AgentCoord.y)
+                else if (EnemyCoord.x <= _agentCoord.x && EnemyCoord.y <= _agentCoord.y)
                 {
                     TotalRankInQuarteredMap[2]++;
                 }
-                else if (EnemyCoord.x >= AgentCoord.x && EnemyCoord.y >= AgentCoord.y)
+                else if (EnemyCoord.x >= _agentCoord.x && EnemyCoord.y >= _agentCoord.y)
                 {
                     TotalRankInQuarteredMap[3]++;
                 }
@@ -485,7 +487,7 @@ namespace RandomTowerDefense.AI
             int cnt = 0;
             while (cnt < totalPilliarCount)
             {
-                int id = prng.Next(0, totalPilliarCount);
+                int id = _prng.Next(0, totalPilliarCount);
                 var pillar = pillarList[id];
                 if (pillar.state == (isFree ? 0 : 1))
                 {
@@ -528,7 +530,7 @@ namespace RandomTowerDefense.AI
             int cnt = 0;
             while (cnt < totalPilliarCount)
             {
-                int id = prng.Next(0, totalPilliarCount);
+                int id = _prng.Next(0, totalPilliarCount);
                 var pillar = pillarList[id];
                 var result = getPillarCandidate(pillar);
                 if (result != null)

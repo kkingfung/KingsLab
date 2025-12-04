@@ -17,22 +17,6 @@ namespace RandomTowerDefense.Common
     /// </summary>
     public class FadeEffect : MonoBehaviour
     {
-        #region Enums
-
-        /// <summary>
-        /// レンダラータイプ識別用列挙型
-        /// </summary>
-        private enum EnumRenderType
-        {
-            NotChecked = 0,
-            FoundMeshRenderer,
-            FoundRawImg,
-            FoundSprRenderer,
-            FoundImage,
-        }
-
-        #endregion
-
         #region Constants
 
         /// <summary>
@@ -63,7 +47,6 @@ namespace RandomTowerDefense.Common
 
         #region Private Fields
 
-        private EnumRenderType _renderType;
         private float _threshold = FADE_MIN_THRESHOLD;
         private float _thresholdRecord;
         private Material _fadeMat;
@@ -147,7 +130,7 @@ namespace RandomTowerDefense.Common
             if (meshRenderer)
             {
                 _fadeMat = meshRenderer.material;
-                _renderType = EnumRenderType.FoundMeshRenderer;
+                // MeshRendererを検出
                 return;
             }
 
@@ -155,7 +138,7 @@ namespace RandomTowerDefense.Common
             if (rawImage)
             {
                 _fadeMat = rawImage.material;
-                _renderType = EnumRenderType.FoundRawImg;
+                // RawImageを検出
                 return;
             }
 
@@ -163,7 +146,7 @@ namespace RandomTowerDefense.Common
             if (spriteRenderer)
             {
                 _fadeMat = spriteRenderer.material;
-                _renderType = EnumRenderType.FoundSprRenderer;
+                // SpriteRendererを検出
                 return;
             }
 
@@ -171,7 +154,7 @@ namespace RandomTowerDefense.Common
             if (image)
             {
                 _fadeMat = image.material;
-                _renderType = EnumRenderType.FoundImage;
+                // Imageを検出
             }
         }
 

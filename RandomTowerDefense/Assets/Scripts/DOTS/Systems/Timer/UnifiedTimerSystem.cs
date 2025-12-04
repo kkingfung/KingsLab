@@ -42,7 +42,7 @@ namespace RandomTowerDefense.DOTS.Systems.Timer
         /// <returns>すべてのタイマー更新後の最終ジョブハンドル</returns>
         protected override JobHandle OnUpdate(JobHandle inputDeps)
         {
-            float deltaTime = UnityEngine.Time.DeltaTime;
+            float deltaTime = UnityEngine.Time.deltaTime;
 
             // フレーム不安定性対策：極小デルタタイムをクランプ
             if (deltaTime < MIN_DELTA_TIME)

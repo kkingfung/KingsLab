@@ -16,19 +16,43 @@ namespace RandomTowerDefense.MapGenerator
     [System.Serializable]
     public class FilledMapInfo
     {
+        /// <summary>
+        /// マップサイズ
+        /// </summary>
         [Header("マップサイズ")]
         public FilledMapCoord mapSize;
 
+        /// <summary>
+        /// 障害物出現率（0.0～1.0）
+        /// </summary>
         [Header("障害物設定")]
         [Range(0, 1)] public float obstaclePercent;
+
+        /// <summary>
+        /// 障害物の最小高さ
+        /// </summary>
         public float minObstacleHeight;
+
+        /// <summary>
+        /// 障害物の最大高さ
+        /// </summary>
         public float maxObstacleHeight;
 
+        /// <summary>
+        /// ランダム生成用シード値
+        /// </summary>
         [Header("生成設定")]
         public int seed;
 
+        /// <summary>
+        /// 前景カラー
+        /// </summary>
         [Header("カラー設定")]
         public Color foregroundColour;
+
+        /// <summary>
+        /// 背景カラー
+        /// </summary>
         public Color backgroundColour;
 
         /// <summary>

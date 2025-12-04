@@ -24,48 +24,125 @@ namespace RandomTowerDefense.DOTS.Spawner
     /// </summary>
     public class TowerSpawner : MonoBehaviour
     {
+        /// <summary>
+        /// タワーの最大ランク数
+        /// </summary>
         public const int MonsterMaxRank = 4;
-        private readonly int count = 45;
+        private readonly int _count = 45;
+
+        /// <summary>
+        /// シングルトンインスタンス
+        /// </summary>
         public static TowerSpawner Instance { get; private set; }
+
+        /// <summary>
+        /// タワープレハブオブジェクトリスト
+        /// </summary>
         public List<GameObject> PrefabObject;
 
-        private EntityManager EntityManager;
+        private EntityManager _entityManager;
 
-        // ToTowerSpawner
+        /// <summary>
+        /// Nightmareタワーランク1プールリスト
+        /// </summary>
         public List<GameObject> TowerNightmareRank1;
+        /// <summary>
+        /// Nightmareタワーランク2プールリスト
+        /// </summary>
         public List<GameObject> TowerNightmareRank2;
+        /// <summary>
+        /// Nightmareタワーランク3プールリスト
+        /// </summary>
         public List<GameObject> TowerNightmareRank3;
+        /// <summary>
+        /// Nightmareタワーランク4プールリスト
+        /// </summary>
         public List<GameObject> TowerNightmareRank4;
 
+        /// <summary>
+        /// SoulEaterタワーランク1プールリスト
+        /// </summary>
         public List<GameObject> TowerSoulEaterRank1;
+        /// <summary>
+        /// SoulEaterタワーランク2プールリスト
+        /// </summary>
         public List<GameObject> TowerSoulEaterRank2;
+        /// <summary>
+        /// SoulEaterタワーランク3プールリスト
+        /// </summary>
         public List<GameObject> TowerSoulEaterRank3;
+        /// <summary>
+        /// SoulEaterタワーランク4プールリスト
+        /// </summary>
         public List<GameObject> TowerSoulEaterRank4;
 
+        /// <summary>
+        /// TerrorBringerタワーランク1プールリスト
+        /// </summary>
         public List<GameObject> TowerTerrorBringerRank1;
+        /// <summary>
+        /// TerrorBringerタワーランク2プールリスト
+        /// </summary>
         public List<GameObject> TowerTerrorBringerRank2;
+        /// <summary>
+        /// TerrorBringerタワーランク3プールリスト
+        /// </summary>
         public List<GameObject> TowerTerrorBringerRank3;
+        /// <summary>
+        /// TerrorBringerタワーランク4プールリスト
+        /// </summary>
         public List<GameObject> TowerTerrorBringerRank4;
 
+        /// <summary>
+        /// Usurperタワーランク1プールリスト
+        /// </summary>
         public List<GameObject> TowerUsurperRank1;
+        /// <summary>
+        /// Usurperタワーランク2プールリスト
+        /// </summary>
         public List<GameObject> TowerUsurperRank2;
+        /// <summary>
+        /// Usurperタワーランク3プールリスト
+        /// </summary>
         public List<GameObject> TowerUsurperRank3;
+        /// <summary>
+        /// Usurperタワーランク4プールリスト
+        /// </summary>
         public List<GameObject> TowerUsurperRank4;
 
-        //Array
+        /// <summary>
+        /// トランスフォームアクセス配列（Job System用）
+        /// </summary>
         [HideInInspector]
         public TransformAccessArray TransformAccessArray;
+
+        /// <summary>
+        /// タワーターゲット位置配列
+        /// </summary>
         public NativeArray<float3> targetArray;
+
+        /// <summary>
+        /// タワーターゲット存在フラグ配列
+        /// </summary>
         public NativeArray<bool> hastargetArray;
 
-        //Bridge
+        /// <summary>
+        /// アクティブタワーゲームオブジェクト配列
+        /// </summary>
         [HideInInspector]
         public GameObject[] GameObjects;
+
+        /// <summary>
+        /// タワーエンティティ配列
+        /// </summary>
         public NativeArray<Entity> Entities;
 
-        //For input
-        private Transform[] transforms;
+        // 入力用トランスフォーム
+        private Transform[] _transforms;
 
+        /// <summary>
+        /// 初期化処理 - シングルトンインスタンス設定
+        /// </summary>
         private void Awake()
         {
             if (Instance == null)
@@ -74,6 +151,9 @@ namespace RandomTowerDefense.DOTS.Spawner
                 Destroy(gameObject);
         }
 
+        /// <summary>
+        /// 無効化時処理 - ネイティブ配列の解放
+        /// </summary>
         private void OnDisable()
         {
             if (Entities.IsCreated)
@@ -82,12 +162,16 @@ namespace RandomTowerDefense.DOTS.Spawner
             if (TransformAccessArray.isCreated)
                 TransformAccessArray.Dispose();
 
-            //Disposing Array
+            // 配列の破棄
             if (targetArray.IsCreated)
                 targetArray.Dispose();
             if (hastargetArray.IsCreated)
                 hastargetArray.Dispose();
         }
+
+        /// <summary>
+        /// 開始時処理 - プールとエンティティの初期化
+        /// </summary>
         private void Start()
         {
             TowerNightmareRank1 = new List<GameObject>();
@@ -110,42 +194,48 @@ namespace RandomTowerDefense.DOTS.Spawner
             TowerUsurperRank3 = new List<GameObject>();
             TowerUsurperRank4 = new List<GameObject>();
 
-            EntityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
+            _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
 
-            //Prepare input
-            GameObjects = new GameObject[count];
-            transforms = new Transform[count];
+            // 入力データの準備
+            GameObjects = new GameObject[_count];
+            _transforms = new Transform[_count];
 
-            Entities = new NativeArray<Entity>(count, Allocator.Persistent);
-            var archetype = EntityManager.CreateArchetype(
+            Entities = new NativeArray<Entity>(_count, Allocator.Persistent);
+            var archetype = _entityManager.CreateArchetype(
                  typeof(WaitingTime), typeof(Radius), typeof(CastlePos),
                  typeof(Damage), typeof(LocalToWorld),
                 ComponentType.ReadOnly<Translation>()
                 );
-            EntityManager.CreateEntity(archetype, Entities);
+            _entityManager.CreateEntity(archetype, Entities);
 
 
-            TransformAccessArray = new TransformAccessArray(transforms);
-            targetArray = new NativeArray<float3>(count, Allocator.Persistent);
-            hastargetArray = new NativeArray<bool>(count, Allocator.Persistent);
+            TransformAccessArray = new TransformAccessArray(_transforms);
+            targetArray = new NativeArray<float3>(_count, Allocator.Persistent);
+            hastargetArray = new NativeArray<bool>(_count, Allocator.Persistent);
         }
 
+        /// <summary>
+        /// 毎フレーム更新 - タワー配列の同期
+        /// </summary>
         private void Update()
         {
             UpdateArrays();
         }
 
+        /// <summary>
+        /// タワー配列をECSエンティティと同期更新
+        /// </summary>
         public void UpdateArrays()
         {
             for (int i = 0; i < GameObjects.Length; ++i)
             {
                 if (GameObjects[i] == null) continue;
                 if (GameObjects[i].activeSelf == false) continue;
-                if (EntityManager.HasComponent<Target>(Entities[i]))
+                if (_entityManager.HasComponent<Target>(Entities[i]))
                 {
-                    Target target = EntityManager.GetComponentData<Target>(Entities[i]);
+                    Target target = _entityManager.GetComponentData<Target>(Entities[i]);
                     targetArray[i] = target.targetPos;
-                    hastargetArray[i] = EntityManager.HasComponent<EnemyTag>(target.targetEntity);
+                    hastargetArray[i] = _entityManager.HasComponent<EnemyTag>(target.targetEntity);
                     //Debug.DrawLine(target.targetPos, GameObjects[i].transform.position, Color.cyan);
                 }
                 else
@@ -155,11 +245,19 @@ namespace RandomTowerDefense.DOTS.Spawner
             }
         }
 
+        /// <summary>
+        /// タワーをスポーン
+        /// </summary>
+        /// <param name="prefabID">プレハブID（タワー種別 × 4 + ランク）</param>
+        /// <param name="Position">スポーン位置（ワールド座標）</param>
+        /// <param name="CastlePosition">城の位置</param>
+        /// <param name="num">スポーン数（デフォルト: 1）</param>
+        /// <returns>スポーンされたインデックス配列</returns>
         public int[] Spawn(int prefabID, float3 Position, float3 CastlePosition, int num = 1)
         {
             int spawnCnt = 0;
             int[] spawnIndexList = new int[num];
-            for (int i = 0; i < count && spawnCnt < num; ++i)
+            for (int i = 0; i < _count && spawnCnt < num; ++i)
             {
                 if (GameObjects[i] != null && GameObjects[i].activeSelf) continue;
 
@@ -176,50 +274,54 @@ namespace RandomTowerDefense.DOTS.Spawner
                 }
                 GameObjects[i].transform.position = Position;
                 GameObjects[i].transform.localRotation = Quaternion.identity;
-                transforms[i] = GameObjects[i].transform;
+                _transforms[i] = GameObjects[i].transform;
                 hastargetArray[i] = false;
                 targetArray[i] = Position;
 
-                //AddtoEntities
-                EntityManager.SetComponentData(Entities[i], new WaitingTime
+                // エンティティへ追加
+                _entityManager.SetComponentData(Entities[i], new WaitingTime
                 {
                     Value = float.MaxValue,
                 });
 
-                EntityManager.SetComponentData(Entities[i], new Radius
+                _entityManager.SetComponentData(Entities[i], new Radius
                 {
                     Value = 0,
                 });
 
-                EntityManager.SetComponentData(Entities[i], new Translation
+                _entityManager.SetComponentData(Entities[i], new Translation
                 {
                     Value = Position
                 });
 
-                if (EntityManager.HasComponent<QuadrantEntity>(Entities[i]) == false)
-                    EntityManager.AddComponent<QuadrantEntity>(Entities[i]);
-                EntityManager.SetComponentData(Entities[i], new QuadrantEntity
+                if (_entityManager.HasComponent<QuadrantEntity>(Entities[i]) == false)
+                    _entityManager.AddComponent<QuadrantEntity>(Entities[i]);
+                _entityManager.SetComponentData(Entities[i], new QuadrantEntity
                 {
                     typeEnum = QuadrantEntity.TypeEnum.PlayerTag
                 });
 
-                EntityManager.SetComponentData(Entities[i], new CastlePos
+                _entityManager.SetComponentData(Entities[i], new CastlePos
                 {
                     Value = CastlePosition,
                 });
 
-                if (EntityManager.HasComponent<PlayerTag>(Entities[i]) == false)
-                    EntityManager.AddComponent<PlayerTag>(Entities[i]);
+                if (_entityManager.HasComponent<PlayerTag>(Entities[i]) == false)
+                    _entityManager.AddComponent<PlayerTag>(Entities[i]);
 
 
                 spawnIndexList[spawnCnt++] = i;
             }
 
-            //Change Whenever Spawned (Not Needed?)
-            TransformAccessArray = new TransformAccessArray(transforms);
+            // スポーン時に変更（不要な可能性あり）
+            TransformAccessArray = new TransformAccessArray(_transforms);
             return spawnIndexList;
         }
 
+        /// <summary>
+        /// 現在アクティブなタワーゲームオブジェクトのリストを取得
+        /// </summary>
+        /// <returns>アクティブなタワーのリスト</returns>
         public List<GameObject> AllAliveObjList()
         {
             List<GameObject> result = new List<GameObject>();

@@ -315,7 +315,7 @@ namespace RandomTowerDefense.Managers.Macro
 
         public void ItemSold(UpgradesManager.StoreItems itemID)
         {
-            UpgradesManager.StoreUpgrade(itemID, _pendToKart[(int)itemID % 10]);
+            upgradesManager.UpgradeLevel(itemID, _pendToKart[(int)itemID % 10]);
 
             resourceManager.ChangeMaterial(-1 * _costToKart[(int)itemID % 10]);
 

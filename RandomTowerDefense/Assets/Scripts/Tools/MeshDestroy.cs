@@ -57,16 +57,27 @@ namespace RandomTowerDefense.Tools
         /// カスケード切断回数
         /// </summary>
         public int CutCascades = DEFAULT_CUT_CASCADE;
+
+        /// <summary>
+        /// 爆発力
+        /// </summary>
         public float ExplodeForce = 0;
 
         private Mesh _originalMesh;
 
         #endregion
 
+        /// <summary>
+        /// 初期化処理 - オリジナルメッシュの取得
+        /// </summary>
         private void Start()
         {
             _originalMesh = GetComponent<MeshFilter>().mesh;
         }
+
+        /// <summary>
+        /// メッシュ破壊処理 - プロシージャルメッシュ切断とフラグメント生成
+        /// </summary>
         public void DestroyMesh()
         {
             _originalMesh.RecalculateBounds();
@@ -121,6 +132,13 @@ namespace RandomTowerDefense.Tools
             gameObject.SetActive(false);
         }
 
+        /// <summary>
+        /// メッシュ生成処理 - 指定プレーンで切断されたメッシュパートを生成
+        /// </summary>
+        /// <param name="original">元のメッシュパート</param>
+        /// <param name="plane">切断プレーン</param>
+        /// <param name="left">左側フラグ</param>
+        /// <returns>生成されたメッシュパート</returns>
         private PartMesh GenerateMesh(PartMesh original, Plane plane, bool left)
         {
             var partMesh = new PartMesh() { };
@@ -231,6 +249,16 @@ namespace RandomTowerDefense.Tools
             return partMesh;
         }
 
+        /// <summary>
+        /// エッジ追加処理 - 切断面のエッジ三角形を追加
+        /// </summary>
+        /// <param name="subMesh">サブメッシュインデックス</param>
+        /// <param name="partMesh">メッシュパート</param>
+        /// <param name="normal">法線ベクトル</param>
+        /// <param name="vertex1">頂点1</param>
+        /// <param name="vertex2">頂点2</param>
+        /// <param name="uv1">UV座標1</param>
+        /// <param name="uv2">UV座標2</param>
         private void AddEdge(int subMesh, PartMesh partMesh, Vector3 normal, Vector3 vertex1, Vector3 vertex2, Vector2 uv1, Vector2 uv2)
         {
             if (!_edgeSet)
@@ -256,24 +284,55 @@ namespace RandomTowerDefense.Tools
             }
         }
 
+        /// <summary>
+        /// メッシュパートクラス - 切断されたメッシュフラグメントのデータ構造
+        /// </summary>
         public class PartMesh
         {
             private List<Vector3> _Verticies = new List<Vector3>();
             private List<Vector3> _Normals = new List<Vector3>();
             private List<List<int>> _Triangles = new List<List<int>>();
             private List<Vector2> _UVs = new List<Vector2>();
+
+            /// <summary>頂点配列</summary>
             public Vector3[] Vertices;
+
+            /// <summary>法線配列</summary>
             public Vector3[] Normals;
+
+            /// <summary>三角形インデックス配列</summary>
             public int[][] Triangles;
+
+            /// <summary>UV座標配列</summary>
             public Vector2[] UV;
+
+            /// <summary>生成されたゲームオブジェクト</summary>
             public GameObject GameObject;
+
+            /// <summary>バウンディングボックス</summary>
             public Bounds Bounds = new Bounds();
 
+            /// <summary>
+            /// コンストラクタ
+            /// </summary>
             public PartMesh()
             {
 
             }
 
+            /// <summary>
+            /// 三角形追加処理 - メッシュに三角形を追加
+            /// </summary>
+            /// <param name="submesh">サブメッシュインデックス</param>
+            /// <param name="vert1">頂点1</param>
+            /// <param name="vert2">頂点2</param>
+            /// <param name="vert3">頂点3</param>
+            /// <param name="normal1">法線1</param>
+            /// <param name="normal2">法線2</param>
+            /// <param name="normal3">法線3</param>
+            /// <param name="uv1">UV座標1</param>
+            /// <param name="uv2">UV座標2</param>
+            /// <param name="uv3">UV座標3</param>
             public void AddTriangle(int submesh, Vector3 vert1, Vector3 vert2, Vector3 vert3, Vector3 normal1, Vector3 normal2, Vector3 normal3, Vector2 uv1, Vector2 uv2, Vector2 uv3)
             {
                 if (_Triangles.Count - 1 < submesh)
@@ -300,6 +359,9 @@ namespace RandomTowerDefense.Tools
                 Bounds.max = Vector3.Min(Bounds.max, vert3);
             }
 
+            /// <summary>
+            /// 配列充填処理 - リストから配列へデータをコピー
+            /// </summary>
             public void FillArrays()
             {
                 Vertices = _Verticies.ToArray();
@@ -310,6 +372,11 @@ namespace RandomTowerDefense.Tools
                     Triangles[i] = _Triangles[i].ToArray();
             }
 
+            /// <summary>
+            /// GameObject生成処理 - メッシュからGameObjectを作成
+            /// </summary>
+            /// <param name="original">元のMeshDestroyコンポーネント</param>
+            /// <param name="originalMesh">元のメッシュ</param>
             public void MakeGameobject(MeshDestroy original, Mesh originalMesh)
             {
                 GameObject = new GameObject(original.name);

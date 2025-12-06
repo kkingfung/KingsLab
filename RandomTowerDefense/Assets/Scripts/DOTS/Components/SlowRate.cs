@@ -1,9 +1,22 @@
 ﻿using System;
 using Unity.Entities;
 
-[Serializable]
-public struct SlowRate : IComponentData
+namespace RandomTowerDefense.DOTS.Components
 {
-    public float Value;
+    /// <summary>
+    /// エンティティの減速率を管理するコンポーネント
+    /// </summary>
+    [Serializable]
+    public struct SlowRate : IComponentData
+    {
+        #region Public Fields
+
+        /// <summary>
+        /// 減速率の値
+        /// </summary>
+        public float Value;
+
+        #endregion
+    }
 }
 

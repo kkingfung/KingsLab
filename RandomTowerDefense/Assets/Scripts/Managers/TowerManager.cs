@@ -4,377 +4,258 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.VFX;
+using RandomTowerDefense.Managers.Macro;
+using RandomTowerDefense.DOTS.Spawner;
+using RandomTowerDefense.MapGenerator;
+using RandomTowerDefense.Units;
+using RandomTowerDefense.Info;
 
-public class TowerManager : MonoBehaviour
+namespace RandomTowerDefense.Managers.System
 {
-    private readonly int NumReqToMerge = 3;
-    private readonly int MonsterColorNumber = 4;
-    private readonly int NumTowerType = 4;
-
-    [Header("Tower Settings")]
-    public GameObject TowerBuild;
-    public GameObject TowerLevelUp;
-    public GameObject TowerDisappear;
-    public GameObject TowerSell;
-
-    //[Header("TowerAtk Settings")]
-    //public GameObject TowerNightmareAtk;
-    //public GameObject TowerSoulEaterAtk;
-    //public GameObject TowerTerrorBringerAtk;
-    //public GameObject TowerUsurperAtk;
-
-    [Header("TowerAura Settings")]
-    public GameObject TowerNightmareAura;
-    public GameObject TowerSoulEaterAura;
-    public GameObject TowerTerrorBringerAura;
-    public GameObject TowerUsurperAura;
-
-    //[HideInInspector]
-    //public List<GameObject> TowerNightmareList;
-    //[HideInInspector]
-    //public List<GameObject> TowerSoulEaterList;
-    //[HideInInspector]
-    //public List<GameObject> TowerTerrorBringerList;
-    //[HideInInspector]
-    //public List<GameObject> TowerUsurperList;
-
-    [Header("TowerInfo Settings")]
-    public List<GameObject> TargetInfo;
-    private List<Text> TargetInfoText;
-    public List<Slider> TargetInfoSlider;
-
-    public StageManager stageManager;
-    public ResourceManager resourceManager;
-    public FilledMapGenerator filledMapGenerator;
-    //public InGameOperation sceneManager;
-    //public TutorialManager tutorialManager;
-    public TowerSpawner towerSpawner;
-    public CastleSpawner castleSpawner;
-
-    public AudioManager audioManager;
-    public AttackSpawner attackSpawner;
-    public EffectSpawner effectManager;
-
-    public DebugManager debugManager;
-    public BonusChecker bonusChecker;
-    // Start is called before the first frame update
-    void Start()
+    /// <summary>
+    /// タワーの建設、マージ、売却、UI更新を含むすべてのタワー操作を管理
+    /// ランダムなタワータイプの割り当てとランクを通じたタワーの進行を処理
+    /// DOTSスポーナーシステムとビジュアルエフェクト管理と統合
+    /// 4つのタワータイプをサポート: Nightmare、SoulEater、TerrorBringer、Usurper
+    /// </summary>
+    public class TowerManager : MonoBehaviour
     {
-        //TowerNightmareList = new List<GameObject>();
-        //TowerSoulEaterList = new List<GameObject>();
-        //TowerTerrorBringerList = new List<GameObject>();
-        //TowerUsurperList = new List<GameObject>();
+        #region Constants
+        private readonly int NumReqToMerge = 3;
+        private readonly int MonsterColorNumber = 4;
+        private readonly int NumTowerType = 4;
+        #endregion
 
-        //resourceManager = FindObjectOfType<ResourceManager>();
-        //filledMapGenerator = FindObjectOfType<FilledMapGenerator>();
-        //sceneManager = FindObjectOfType<InGameOperation>();
-        //towerSpawner = FindObjectOfType<TowerSpawner>();
-        //tutorialManager = FindObjectOfType<TutorialManager>();
-        //castleSpawner = FindObjectOfType<CastleSpawner>();
+        #region Tower Prefabs
+        [Header("Tower Settings")]
+        public GameObject TowerBuild;
+        public GameObject TowerLevelUp;
+        public GameObject TowerDisappear;
+        public GameObject TowerSell;
 
-        TargetInfoText = new List<Text>();
-        foreach (GameObject i in TargetInfo)
+        [Header("TowerAura Settings")]
+        public GameObject TowerNightmareAura;
+        public GameObject TowerSoulEaterAura;
+        public GameObject TowerTerrorBringerAura;
+        public GameObject TowerUsurperAura;
+        #endregion
+
+        #region UI Components
+        [Header("TowerInfo Settings")]
+        public List<GameObject> TargetInfo;
+        private List<Text> targetInfoText;
+        public List<Slider> TargetInfoSlider;
+        #endregion
+
+        #region Manager References
+        public StageManager stageManager;
+        public ResourceManager resourceManager;
+        public FilledMapGenerator filledMapGenerator;
+        public TowerSpawner towerSpawner;
+        public CastleSpawner castleSpawner;
+        public AudioManager audioManager;
+        public AttackSpawner attackSpawner;
+        public EffectSpawner effectManager;
+        public DebugManager debugManager;
+        public BonusChecker bonusChecker;
+        public UpgradesManager upgradesManager;
+        #endregion
+
+        #region Unity Lifecycle
+        /// <summary>
+        /// タワー情報テキストコンポーネントを初期化
+        /// </summary>
+        void Start()
         {
-            TargetInfoText.Add(i.GetComponent<Text>());
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void UpdateInfo(GameObject target)
-    {
-        for(int i = 0; i < TargetInfo.Count; ++i) {
-            TargetInfo[i].SetActive(target != null);
-            foreach (Slider j in TargetInfoSlider)
+            targetInfoText = new List<Text>();
+            foreach (GameObject i in TargetInfo)
             {
-                j.transform.gameObject.SetActive(target != null);
+                targetInfoText.Add(i.GetComponent<Text>());
             }
-            if (target == null) continue;
+        }
 
-            if (TargetInfoText[i])
+        /// <summary>
+        /// 毎フレーム呼び出されるUnity更新メソッド（現在未使用）
+        /// </summary>
+        void Update()
+        {
+
+        }
+        #endregion
+
+        #region Public API
+        /// <summary>
+        /// 指定したターゲットのUI情報を更新
+        /// </summary>
+        /// <param name="target">情報を表示するターゲット（nullの場合はUIを非表示）</param>
+        public void UpdateInfo(GameObject target)
+        {
+            for (int i = 0; i < TargetInfo.Count; ++i)
             {
-                Tower towerinfo = target.GetComponent<Tower>();
-                TargetInfoText[i].text = "Rank" + (towerinfo.CheckMaxRank() ? "MAX" : towerinfo.rank.ToString())
-                    + " Lv" + (towerinfo.CheckMaxLevel() ? "MAX" : towerinfo.level.ToString());
-
-                switch (towerinfo.type)
-                {
-                    case TowerInfo.TowerInfoID.Enum_TowerNightmare:
-                        TargetInfoText[i].color = Color.yellow;
-                        break;
-                    case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-                        TargetInfoText[i].color = Color.grey;
-                        break;
-                    case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
-                        TargetInfoText[i].color = Color.cyan;
-                        break;
-                    case TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                        TargetInfoText[i].color = Color.magenta;
-                        break;
-                }
+                TargetInfo[i].SetActive(target != null);
                 foreach (Slider j in TargetInfoSlider)
                 {
-                    j.maxValue = towerinfo.RequiredExp();
-                    j.value= Mathf.Min(towerinfo.exp, j.maxValue);
+                    j.transform.gameObject.SetActive(target != null);
+                }
+                if (target == null)
+                {
+                    continue;
+                }
+
+                if (targetInfoText[i])
+                {
+                    Tower towerinfo = target.GetComponent<Tower>();
+                    targetInfoText[i].text = "Rank" + (towerinfo.IsAtMaxRank() ? "MAX" : towerinfo.rank.ToString())
+                        + " Lv" + (towerinfo.IsAtMaxLevel() ? "MAX" : towerinfo.level.ToString());
+
+                    targetInfoText[i].color = TowerTypeHandler.GetTowerColor(towerinfo.type);
+                    foreach (Slider j in TargetInfoSlider)
+                    {
+                        j.maxValue = towerinfo.GetRequiredExp();
+                        j.value = Mathf.Min(towerinfo.exp, j.maxValue);
+                    }
                 }
             }
         }
-    }
 
-    public void BuildTower(GameObject pillar, int rank = 1)
-    {
-        if (pillar == null) return;
-        if (rank == 1 && filledMapGenerator.ChkPillarStatusEmpty(pillar) == false) return;
-
-        Vector3 location = pillar.transform.position + Vector3.up * filledMapGenerator.UpdatePillarStatus(pillar);
-        filledMapGenerator.UpdatePillarStatus(pillar,BuildTower(pillar, location, rank)?1:0);
-    }
-    public bool BuildTower(GameObject pillar, Vector3 location, int rank = 1)
-    {
-        GameObject tower;
-        int[] entityIDList;
-        if (resourceManager.ChkAndBuild(rank) == false)
+        /// <summary>
+        /// 指定した柱の位置にタワーを建設
+        /// </summary>
+        /// <param name="pillar">タワーを建設する柱</param>
+        /// <param name="rank">タワーのランク（デフォルト: 1）</param>
+        public void BuildTower(GameObject pillar, int rank = 1)
         {
-            return false;
-        }
-
-        {
-            Tower script;
-
-            switch (StageInfo.prng.Next(0, NumTowerType))
+            if (pillar == null)
             {
-                case (int)TowerInfo.TowerInfoID.Enum_TowerNightmare:
-                    entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerNightmare,
-                        location, castleSpawner.castle.transform.position);
-                    tower = towerSpawner.GameObjects[entityIDList[0]];
-                    script = tower.GetComponent<Tower>();
-                    script.linkingManagers(stageManager,towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager, bonusChecker, debugManager);
-                    script.newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerNightmareAura,
-                        TowerInfo.TowerInfoID.Enum_TowerNightmare, 1, rank);
-                    tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
-                    //TowerNightmareList.Add(tower);
-                    if (bonusChecker) bonusChecker.TowerNewlyBuilt = 0;
-                    break;
-                case (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-                    entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerSoulEater,
-                        location, castleSpawner.castle.transform.position);
-                    tower = towerSpawner.GameObjects[entityIDList[0]];
-                    script = tower.GetComponent<Tower>();
-                    script.linkingManagers(stageManager, towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager, bonusChecker, debugManager);
-                    script.newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerSoulEaterAura,
-                        TowerInfo.TowerInfoID.Enum_TowerSoulEater, 1, rank);
-                    tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
-                    //TowerSoulEaterList.Add(tower);
-                    if (bonusChecker) bonusChecker.TowerNewlyBuilt = 1;
-                    break;
-                case (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
-                    entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer,
-                        location, castleSpawner.castle.transform.position);
-                    tower = towerSpawner.GameObjects[entityIDList[0]];
-                    script = tower.GetComponent<Tower>();
-                    script.linkingManagers(stageManager, towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager, bonusChecker, debugManager);
-                    script.newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerTerrorBringerAura,
-                        TowerInfo.TowerInfoID.Enum_TowerTerrorBringer, 1, rank);
-                    tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
-                    //TowerTerrorBringerList.Add(tower);
-                    if (bonusChecker) bonusChecker.TowerNewlyBuilt = 2;
-                    break;
-                case (int)TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                    entityIDList = towerSpawner.Spawn(rank - 1 + MonsterColorNumber * (int)TowerInfo.TowerInfoID.Enum_TowerUsurper,
-                        location, castleSpawner.castle.transform.position);
-                    tower = towerSpawner.GameObjects[entityIDList[0]];
-                    script = tower.GetComponent<Tower>();
-                    script.linkingManagers(stageManager, towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager,bonusChecker, debugManager);
-                    script.newTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, TowerUsurperAura,
-                        TowerInfo.TowerInfoID.Enum_TowerUsurper, 1, rank);
-                    tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
-                    //TowerUsurperList.Add(tower);
-                    if (bonusChecker) bonusChecker.TowerNewlyBuilt = 3;
-                    break;
+                return;
             }
-        }
-        effectManager.Spawn(0, location);
-        return true;
-    }
-
-    public bool MergeTower(GameObject targetedTower)
-    {
-        //if (TowerNightmareList.Contains(targetedTower)) type = TowerInfo.TowerInfoID.Enum_TowerNightmare;
-        //else if (TowerSoulEaterList.Contains(targetedTower)) type = TowerInfo.TowerInfoID.Enum_TowerSoulEater;
-        //else if (TowerTerrorBringerList.Contains(targetedTower)) type = TowerInfo.TowerInfoID.Enum_TowerTerrorBringer;
-        //else if (TowerUsurperList.Contains(targetedTower)) type = TowerInfo.TowerInfoID.Enum_TowerUsurper;
-        //else return false;
-
-        Tower targetedTowerScript = targetedTower.GetComponent<Tower>();
-        //count same towers at max level
-        List<GameObject> candidateList = new List<GameObject>();
-        List<GameObject> tempList;
-        int count = 0;
-        //Find Candidates
-        switch (targetedTowerScript.type)
-        {
-            case TowerInfo.TowerInfoID.Enum_TowerNightmare:
-                switch (targetedTowerScript.rank) {
-                    case 1:
-                        tempList = new List<GameObject>(towerSpawner.TowerNightmareRank1);
-                        break;
-                    case 2:
-                        tempList = new List<GameObject>(towerSpawner.TowerNightmareRank2);
-                        break;
-                    case 3:
-                        tempList = new List<GameObject>(towerSpawner.TowerNightmareRank3);
-                        break;
-                    default:
-                        tempList = new List<GameObject>();
-                        break;
-                }
-                break;
-            case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-                switch (targetedTowerScript.rank)
-                {
-                    case 1:
-                        tempList = new List<GameObject>(towerSpawner.TowerSoulEaterRank1);
-                        break;
-                    case 2:
-                        tempList = new List<GameObject>(towerSpawner.TowerSoulEaterRank2);
-                        break;
-                    case 3:
-                        tempList = new List<GameObject>(towerSpawner.TowerSoulEaterRank3);
-                        break;
-                    default:
-                        tempList = new List<GameObject>();
-                        break;
-                }
-                break;
-            case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
-                switch (targetedTowerScript.rank)
-                {
-                    case 1:
-                        tempList = new List<GameObject>(towerSpawner.TowerTerrorBringerRank1);
-                        break;
-                    case 2:
-                        tempList = new List<GameObject>(towerSpawner.TowerTerrorBringerRank2);
-                        break;
-                    case 3:
-                        tempList = new List<GameObject>(towerSpawner.TowerTerrorBringerRank3);
-                        break;
-                    default:
-                        tempList = new List<GameObject>();
-                        break;
-                }
-                break;
-            case TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                switch (targetedTowerScript.rank)
-                {
-                    case 1:
-                        tempList = new List<GameObject>(towerSpawner.TowerUsurperRank1);
-                        break;
-                    case 2:
-                        tempList = new List<GameObject>(towerSpawner.TowerUsurperRank2);
-                        break;
-                    case 3:
-                        tempList = new List<GameObject>(towerSpawner.TowerUsurperRank3);
-                        break;
-                    default:
-                        tempList = new List<GameObject>();
-                        break;
-                }
-                break;
-            default:
-                tempList = new List<GameObject>();
-                break;
-        }
-
-        tempList.Remove(targetedTower);
-        while (tempList.Count > 0)
-        {
-            GameObject chkTarget = tempList[StageInfo.prng.Next(0, tempList.Count)];
-            tempList.Remove(chkTarget);
-            if (chkTarget.activeSelf)
+            if (rank == 1 && filledMapGenerator.ChkPillarStatusEmpty(pillar) == false)
             {
-                Tower chkTowerScript = chkTarget.GetComponent<Tower>();
-                if (chkTowerScript.CheckLevel())
+                return;
+            }
+
+            Vector3 location = pillar.transform.position + Vector3.up * filledMapGenerator.UpdatePillarStatus(pillar);
+            filledMapGenerator.UpdatePillarStatus(pillar, BuildTower(pillar, location, rank) ? 1 : 0);
+        }
+
+        /// <summary>
+        /// 指定した位置にタワーを建設
+        /// </summary>
+        /// <param name="pillar">タワーを建設する柱</param>
+        /// <param name="location">建設位置</param>
+        /// <param name="rank">タワーのランク（デフォルト: 1）</param>
+        /// <returns>建設が成功した場合true</returns>
+        public bool BuildTower(GameObject pillar, Vector3 location, int rank = 1)
+        {
+            GameObject tower;
+            int[] entityIDList;
+            if (resourceManager.ChkAndBuild(rank) == false)
+            {
+                return false;
+            }
+
+            {
+                Tower script;
+
+                var towerType = (TowerInfo.TowerInfoID)DefaultStageInfos.Prng.Next(0, NumTowerType);
+                int spawnIndex = TowerTypeHandler.GetTowerSpawnIndex(towerType, rank, MonsterColorNumber);
+                entityIDList = towerSpawner.Spawn(spawnIndex, location, castleSpawner.castle.transform.position);
+                tower = towerSpawner.GameObjects[entityIDList[0]];
+                script = tower.GetComponent<Tower>();
+                script.LinkingManagers(stageManager, towerSpawner, audioManager, attackSpawner, filledMapGenerator, resourceManager, upgradesManager, bonusChecker, debugManager);
+                var aura = TowerTypeHandler.GetTowerAura(towerType, TowerNightmareAura, TowerSoulEaterAura, TowerTerrorBringerAura, TowerUsurperAura);
+                script.NewTower(entityIDList[0], towerSpawner, pillar, TowerLevelUp, aura, towerType, 1, rank);
+                tower.transform.localScale = 0.1f * new Vector3(1, 1, 1);
+                if (bonusChecker)
+                {
+                    bonusChecker.TowerNewlyBuilt = (int)towerType;
+                }
+            }
+            effectManager.Spawn(0, location);
+            return true;
+        }
+
+        /// <summary>
+        /// 指定したタワーを他の同じタイプのタワーとマージ
+        /// </summary>
+        /// <param name="targetedTower">マージの対象となるタワー</param>
+        /// <returns>マージが成功した場合true</returns>
+        public bool MergeTower(GameObject targetedTower)
+        {
+
+            Tower targetedTowerScript = targetedTower.GetComponent<Tower>();
+            // マージ用に同じタイプとランクの最大レベルのタワーを探す
+            List<GameObject> candidateList = new List<GameObject>();
+            List<GameObject> tempList;
+            int count = 0;
+            tempList = TowerTypeHandler.GetTowerListByTypeAndRank(towerSpawner, targetedTowerScript.type, targetedTowerScript.rank);
+
+            tempList.Remove(targetedTower);
+            while (tempList.Count > 0)
+            {
+                GameObject chkTarget = tempList[DefaultStageInfos.Prng.Next(0, tempList.Count)];
+                tempList.Remove(chkTarget);
+                if (chkTarget != null && chkTarget.activeSelf)
                 {
                     candidateList.Add(chkTarget);
                     count++;
                 }
             }
-        }
 
-        if (count < NumReqToMerge - 1) return false;
-
-        count = NumReqToMerge-1;
-
-        //Remove Candidates
-        while (count-- > 0) {
-            GameObject candidate = candidateList[StageInfo.prng.Next(0, candidateList.Count)];
-            candidateList.Remove(candidate);
-            
-            GameObject temp = effectManager.Spawn(3, candidate.transform.position); 
-            VisualEffect tempVFX = temp.GetComponent<VisualEffect>();
-            Tower candidateTowerScript = candidate.GetComponent<Tower>();
-            if (tempVFX != null)
+            if (count < NumReqToMerge - 1)
             {
-                switch (candidateTowerScript.type)
-                {
-                    case TowerInfo.TowerInfoID.Enum_TowerNightmare:
-                        tempVFX.SetVector4("MainColor", new Vector4(1, 1, 0, 1));
-                        break;
-                    case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-                        tempVFX.SetVector4("MainColor", new Vector4(0, 1, 0, 1));
-                        break;
-                    case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
-                        tempVFX.SetVector4("MainColor", new Vector4(0, 0, 1, 1));
-                        break;
-                    case TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                        tempVFX.SetVector4("MainColor", new Vector4(1, 0, 0, 1));
-                        break;
-                }
-                tempVFX.SetVector3("TargetLocation", targetedTower.transform.position - candidate.transform.position);
+                return false;
             }
-            removeTowerFromList(candidate);
+
+            count = NumReqToMerge - 1;
+
+            // 選択したタワーを削除し、マージエフェクトを作成
+            while (count-- > 0)
+            {
+                GameObject candidate = candidateList[DefaultStageInfos.Prng.Next(0, candidateList.Count)];
+                candidateList.Remove(candidate);
+
+                GameObject temp = effectManager.Spawn(3, candidate.transform.position);
+                VisualEffect tempVFX = temp.GetComponent<VisualEffect>();
+                Tower candidateTowerScript = candidate.GetComponent<Tower>();
+                if (tempVFX != null)
+                {
+                    tempVFX.SetVector4("MainColor", TowerTypeHandler.GetTowerVFXColor(candidateTowerScript.type));
+                    tempVFX.SetVector3("TargetLocation", targetedTower.transform.position - candidate.transform.position);
+                }
+                RemoveTowerFromList(candidate);
+            }
+            RemoveTowerFromList(targetedTower);
+
+            // 新しいランクのアップグレードされたタワーを建設
+            BuildTower(targetedTowerScript.pillar, targetedTower.transform.position, targetedTowerScript.rank + 1);
+
+            return true;
         }
-        removeTowerFromList(targetedTower);
 
-        //Build 
-        BuildTower(targetedTowerScript.pillar,targetedTower.transform.position, targetedTowerScript.rank + 1);
-
-        return true;
-    }
-
-    public void removeTowerFromList(GameObject targetedTower)
-    {
-        Tower targetedTowerScript = targetedTower.GetComponent<Tower>();
-        //switch (targetedTowerScript.type)
-        //{
-        //    case TowerInfo.TowerInfoID.Enum_TowerNightmare:
-        //        //TowerNightmareList.Remove(targetedTower);
-        //        break;
-        //    case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-        //        //TowerSoulEaterList.Remove(targetedTower);
-        //        break;
-        //    case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
-        //        //TowerTerrorBringerList.Remove(targetedTower);
-        //        break;
-        //    case TowerInfo.TowerInfoID.Enum_TowerUsurper:
-        //        //TowerUsurperList.Remove(targetedTower);
-        //        break;
-        //}
-        targetedTowerScript.Destroy();
-    }
-
-    public void SellTower(Tower targetedTower)
-    {
-        if (resourceManager.SellTower(targetedTower))
+        /// <summary>
+        /// 指定したタワーをリストから削除し破棄
+        /// </summary>
+        /// <param name="targetedTower">削除するタワー</param>
+        public void RemoveTowerFromList(GameObject targetedTower)
         {
-            filledMapGenerator.UpdatePillarStatus(targetedTower.gameObject,0);
-            effectManager.Spawn(5, targetedTower.transform.position);
-            //GameObject.Instantiate(TowerSell, targetedTower.transform.position, Quaternion.identity);
-            removeTowerFromList(targetedTower.gameObject);
+            Tower targetedTowerScript = targetedTower.GetComponent<Tower>();
+            targetedTowerScript.Destroy();
+        }
+
+        /// <summary>
+        /// 指定したタワーを売却しリソースを取得
+        /// </summary>
+        /// <param name="targetedTower">売却するタワー</param>
+        public void SellTower(Tower targetedTower)
+        {
+            if (resourceManager.SellTower(targetedTower))
+            {
+                filledMapGenerator.UpdatePillarStatus(targetedTower.gameObject, 0);
+                effectManager.Spawn(5, targetedTower.transform.position);
+                RemoveTowerFromList(targetedTower.gameObject);
+            }
+            #endregion
         }
     }
 }

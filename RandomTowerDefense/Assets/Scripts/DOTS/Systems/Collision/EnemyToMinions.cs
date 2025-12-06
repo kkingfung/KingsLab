@@ -9,8 +9,14 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Rendering;
+using RandomTowerDefense.DOTS.Components;
+using RandomTowerDefense.DOTS.Tags;
+using RandomTowerDefense.DOTS.Systems;
 
-
+/// <summary>
+/// 敵エンティティとミニオンスキルエンティティの衝突を検出し処理するシステム
+/// ミニオンによる敵へのダメージ適用を管理
+/// </summary>
 public class EnemyToMinions : JobComponentSystem
 {
     EntityQuery enemyGroup;
@@ -20,6 +26,11 @@ public class EnemyToMinions : JobComponentSystem
     {
     }
 
+    /// <summary>
+    /// 敵エンティティとミニオンスキルの衝突を処理
+    /// </summary>
+    /// <param name="inputDependencies">入力依存関係</param>
+    /// <returns>ジョブハンドル</returns>
     protected override JobHandle OnUpdate(JobHandle inputDependencies)
     {
         enemyGroup = GetEntityQuery(typeof(Health), typeof(Radius), typeof(Damage), typeof(SlowRate),
@@ -58,22 +69,10 @@ public class EnemyToMinions : JobComponentSystem
                 targetWait = MinionsGroup.ToComponentDataArray<WaitingTime>(Allocator.TempJob)
             };
             jobHandle = JobEvSM2.Schedule(enemyGroup, inputDependencies);
-            jobHandle.Complete();
         }
         return jobHandle;
     }
 
-    //Common Function
-    static float GetDistance(float3 posA, float3 posB)
-    {
-        float3 delta = posA - posB;
-        return delta.x * delta.x + delta.z * delta.z;
-    }
-
-    static bool CheckCollision(float3 posA, float3 posB, float radiusSqr)
-    {
-        return GetDistance(posA, posB) <= radiusSqr;
-    }
 
     //enemy by meteor/minions
     #region JobEvSM
@@ -118,19 +117,12 @@ public class EnemyToMinions : JobComponentSystem
 
                     Translation pos2 = targetTrans[j];
 
-                    if (CheckCollision(pos.Value, pos2.Value, targetRadius[j].Value + radius.Value))
+                    if (CollisionUtilities.CheckCollision(pos.Value, pos2.Value, targetRadius[j].Value + radius.Value))
                     {
-                        //Debug.DrawLine(pos.Value, pos.Value + new float3(0, 1, 0), Color.red);
                         damage += targetDamage[j].Value;
-                        //Debug.Log("Damaged");
                     }
                     else
                     {
-                        //Debug.DrawLine(pos.Value, pos.Value + new float3(0, 1, 0), Color.green);
-                        //Debug.Log(GetDistance(pos.Value, pos2.Value));
-                        //Debug.Log(pos.Value);
-                        //Debug.Log(pos2.Value);
-                        //Debug.Log("NotHitted");
                     }
                 }
 

@@ -2,173 +2,295 @@
 using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
+using RandomTowerDefense.Scene;
+using RandomTowerDefense.Utility.Math;
 
-public class CreatureController : MonoBehaviour {
-    public float moveInputFactor = 5f;
-    public Vector3 inputVelocity;
-    public Vector3 worldVelocity;
-    public float walkSpeed = 2f;
-    public float rotateInputFactor = 10f;
-    public float rotationSpeed = 10f;
-    public float averageRotationRadius = 3f;
-    private float mSpeed = 0;
-    private float rSpeed = 0;
+namespace RandomTowerDefense.ProcedualAnimation
+{
+    /// <summary>
+    /// クリーチャーコントローラー - プロシージュラルアニメーションと歩行制御システム
+    ///
+    /// 主な機能:
+    /// - プロシージュラル脚配置システムの統合制御
+    /// - 動的歩容アルゴリズムとタイミング管理
+    /// - 地形アラインメントと表面距離計算
+    /// - ランダムターゲット移動と待機システム
+    /// - 3D空間での回転と移動速度調整
+    /// - 脚の速度ベクトル計算と回転予測
+    /// - IKシステム連携とリアルタイムアニメーション
+    /// </summary>
+    public class CreatureController : MonoBehaviour
+    {
+        #region Serialized Fields
 
-    public ProceduralLegPlacement[] legs;
-    public int index;
-    public bool dynamicGait = false;
-    public float timeBetweenSteps = 0.25f;
-    public float stepDurationRatio = 2f;
-    [Tooltip("Used if dynamicGait is true to calculate timeBetweenSteps")] public float maxTargetDistance = 1f;
-    public float lastStep = 0;
+        [Header("移動設定")]
+        [SerializeField] public float moveInputFactor = 5f;
+        [SerializeField] public Vector3 inputVelocity;
+        [SerializeField] public Vector3 worldVelocity;
+        [SerializeField] public float walkSpeed = 2f;
+        [SerializeField] public float rotateInputFactor = 10f;
+        [SerializeField] public float rotationSpeed = 10f;
+        [SerializeField] public float averageRotationRadius = 3f;
 
-    [Header("Alignment")]
-    public bool useAlignment = true;
-    public int[] nextLegTri;
-    public AnimationCurve sensitivityCurve;
-    public float desiredSurfaceDist = -1f;
-    public float dist;
-    public bool grounded = false;
+        [Header("脚管理システム")]
+        [SerializeField] public ProceduralLegPlacement[] legs;
+        [SerializeField] public int index;
+        [SerializeField] public bool dynamicGait = false;
+        [SerializeField] public float timeBetweenSteps = 0.25f;
+        [SerializeField] public float stepDurationRatio = 2f;
+        [SerializeField]
+        [Tooltip("動的歩容使用時のtimeBetweenSteps計算用")]
+        public float maxTargetDistance = 1f;
+        [SerializeField] public float lastStep = 0;
 
-    [Header("TargetLocation")]
-    public Vector3 TargetLocation;
-    private Vector3 TargetPosition;
-    private float WaitingTimer;
-    private float WaitingRecord;
-    private StageSelectOperation sceneManager;
+        [Header("地形アラインメント")]
+        [SerializeField] public bool useAlignment = true;
+        [SerializeField] public int[] nextLegTri;
+        [SerializeField] public AnimationCurve sensitivityCurve;
+        [SerializeField] public float desiredSurfaceDist = -1f;
+        [SerializeField] public float dist;
+        [SerializeField] public bool grounded = false;
 
-    void Start() {
-        sceneManager = FindObjectOfType<StageSelectOperation>();
-        for (int i = 0; i < legs.Length; ++i) {
-            averageRotationRadius += legs[i].restingPosition.z;
-        }
-        averageRotationRadius /= legs.Length;
+        [Header("ターゲット位置")]
+        [SerializeField] public Vector3 TargetLocation;
 
-        WaitingRecord = Time.time;
-        WaitingTimer = 0;
-    }
+        #endregion
 
-    void Update() {
-        if (useAlignment) CalculateOrientation();
+        #region Private Fields
 
-        Move();
+        private float _mSpeed = 0;
+        private float _rSpeed = 0;
+        private Vector3 _targetPosition;
+        private float _waitingTimer;
+        private float _waitingRecord;
+        private StageSelectOperation _sceneManager;
 
-        if (dynamicGait) {
-            if (grounded) {
-                timeBetweenSteps = maxTargetDistance / Mathf.Max(worldVelocity.magnitude, Mathf.Abs(2 * Mathf.PI * rSpeed * Mathf.Deg2Rad * averageRotationRadius));
-            } else {
-                timeBetweenSteps = 0.25f;
-            }
-        }
+        #endregion
 
-        if (Time.time > lastStep + (timeBetweenSteps / legs.Length) && legs != null) {
-            index = (index + 1) % legs.Length;
-            if (legs[index] == null) return;
+        #region Unity Lifecycle
 
-            for (int i = 0; i < legs.Length; ++i) {
-                legs[i].MoveVelocity(CalculateLegVelocity(i));
-            }
-
-            legs[index].stepDuration = Mathf.Min(1f, (timeBetweenSteps / legs.Length) * stepDurationRatio);
-            legs[index].worldVelocity = CalculateLegVelocity(index);
-            if (legs[index].worldVelocity.sqrMagnitude > 1) 
-            legs[index].Step();
-            lastStep = Time.time;
-        }
-    }
-
-    public Vector3 CalculateLegVelocity(int legIndex) {
-        Vector3 legPoint = (legs[legIndex].restingPosition);
-        Vector3 legDirection = legPoint - transform.position;
-        Vector3 rotationalPoint = ((Quaternion.AngleAxis((rSpeed * timeBetweenSteps) / 2f, transform.up) * legDirection) + transform.position) - legPoint;
-        //DrawArc(transform.position, legDirection, rSpeed / 2f, 10f, Color.black, 1f);
-        return rotationalPoint + (worldVelocity * timeBetweenSteps) / 2f;
-    }
-
-    private void Move() {
-        if (Time.time - WaitingRecord < WaitingTimer)
-            return;
-        if ((TargetPosition.ToXZ() - transform.position.ToXZ()).sqrMagnitude < 1f)
+        /// <summary>
+        /// 初期化処理 - システム参照取得とタイマー設定
+        /// </summary>
+        private void Start()
         {
-            UpdateTargetPosition();
-        }
+            _sceneManager = FindObjectOfType<StageSelectOperation>();
 
-        mSpeed =  walkSpeed;
-        //Vector3 localInput = Vector3.ClampMagnitude(transform.TransformDirection(new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical"))), 1f);
-        Vector3 localInput = Vector3.ClampMagnitude(TargetPosition-this.transform.position, 1);
-        inputVelocity = Vector3.MoveTowards(inputVelocity, localInput, Time.deltaTime * moveInputFactor);
-        worldVelocity = inputVelocity * mSpeed;
-
-        Vector2 NormDir = (TargetPosition.ToXZ() - transform.position.ToXZ());
-        float Angle = Mathf.Acos(Vector2.Dot(NormDir.normalized, transform.right.ToXZ().normalized));
-
-        rSpeed = Mathf.MoveTowards(rSpeed, ((Mathf.Rad2Deg * Angle < 90f) ? 1 : -1) * rotationSpeed, rotateInputFactor * Time.deltaTime);
-        transform.Rotate(0f, rSpeed * Time.deltaTime, 0f);
-        //rSpeed = ((Mathf.Rad2Deg * Angle < 90f) ? 1 : -1)  * rotationSpeed;
-        //transform.Rotate(0f, rSpeed * Time.deltaTime, 0f);
-
-        transform.position += (worldVelocity * Time.deltaTime);
-    }
-
-    private void CalculateOrientation() {
-        Vector3 up = Vector3.zero;
-        float avgSurfaceDist = 0;
-
-        grounded = false;
-
-        Vector3 point, a, b, c;
-
-        // Takes The Cross Product Of Each Leg And Calculates An Average Up
-        for (int i = 0; i < legs.Length; ++i) {
-            point = legs[i].stepPoint;
-            avgSurfaceDist += transform.InverseTransformPoint(point).y;
-            a = (transform.position - point).normalized;
-            b = ((legs[nextLegTri[i]].stepPoint) - point).normalized;
-            c = Vector3.Cross(a, b);
-            up += c * sensitivityCurve.Evaluate(c.magnitude) + (legs[i].stepNormal == Vector3.zero ? transform.forward : legs[i].stepNormal);
-            grounded |= legs[i].legGrounded;
-
-            Debug.DrawRay(point, a, Color.red, 0);
-
-            Debug.DrawRay(point, b, Color.green, 0);
-
-            Debug.DrawRay(point, c, Color.blue, 0);
-        }
-        up /= legs.Length;
-        avgSurfaceDist /= legs.Length;
-        dist = avgSurfaceDist;
-        Debug.DrawRay(transform.position, up, Color.red, 0);
-
-        // Asigns Up Using Vector3.ProjectOnPlane To Preserve Forward Orientation
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.ProjectOnPlane(transform.forward, up), up), 22.5f * Time.deltaTime);
-        if (grounded) {
-            transform.Translate(0, -(-avgSurfaceDist + desiredSurfaceDist) * 0.5f, 0, Space.Self);
-        } else {
-            // Simple Gravity
-            transform.Translate(0, -20 * Time.deltaTime, 0, Space.World);
-        }
-    }
-
-    public void OnDrawGizmosSelected() {
-        Gizmos.DrawWireSphere(transform.position, averageRotationRadius);
-    }
-
-    public void DrawArc(Vector3 point, Vector3 dir, float angle, float stepSize, Color color, float duration) {
-        if (angle < 0) {
-            for (float i = 0; i > angle + 1; i -= stepSize) {
-                Debug.DrawLine(point + Quaternion.AngleAxis(i, transform.up) * dir, point + Quaternion.AngleAxis(Mathf.Clamp(i - stepSize, angle, 0), transform.up) * dir, color, duration);
+            // 平均回転半径計算
+            for (int i = 0; i < legs.Length; ++i)
+            {
+                averageRotationRadius += legs[i].restingPosition.z;
             }
-        } else {
-            for (float i = 0; i < angle - 1; i += stepSize) {
-                Debug.DrawLine(point + Quaternion.AngleAxis(i, transform.up) * dir, point + Quaternion.AngleAxis(Mathf.Clamp(i + stepSize, 0, angle), transform.up) * dir, color, duration);
+            averageRotationRadius /= legs.Length;
+
+            _waitingRecord = Time.time;
+            _waitingTimer = 0;
+        }
+
+        /// <summary>
+        /// 毎フレーム更新 - 脚の動作と位置管理
+        /// </summary>
+        private void Update()
+        {
+            // 地形アラインメント処理
+            if (useAlignment)
+            {
+                CalculateOrientation();
+            }
+
+            Move();
+
+            // 動的歩容計算
+            if (dynamicGait)
+            {
+                if (grounded)
+                {
+                    timeBetweenSteps = maxTargetDistance / Mathf.Max(worldVelocity.magnitude,
+                        Mathf.Abs(2 * Mathf.PI * _rSpeed * Mathf.Deg2Rad * averageRotationRadius));
+                }
+                else
+                {
+                    timeBetweenSteps = 0.25f;
+                }
+            }
+
+            // ステップ処理
+            if (Time.time > lastStep + (timeBetweenSteps / legs.Length) && legs != null)
+            {
+                index = (index + 1) % legs.Length;
+                if (legs[index] == null) return;
+
+                // 全脚の速度更新
+                for (int i = 0; i < legs.Length; ++i)
+                {
+                    legs[i].MoveVelocity(CalculateLegVelocity(i));
+                }
+
+                // アクティブ脚のステップ処理
+                legs[index].stepDuration = Mathf.Min(1f, (timeBetweenSteps / legs.Length) * stepDurationRatio);
+                legs[index].worldVelocity = CalculateLegVelocity(index);
+                if (legs[index].worldVelocity.sqrMagnitude > 1)
+                {
+                    legs[index].Step();
+                }
+                lastStep = Time.time;
             }
         }
-    }
 
-    private void UpdateTargetPosition() {
-        WaitingTimer = Random.Range(2,5);
-        WaitingRecord = Time.time;
-        Vector3 dir = new Vector3(Random.Range(-50f, 50f), 0, Random.Range(-50f, 50f));
-        TargetPosition = TargetLocation+ dir;
+        #endregion
+
+        #region Public API
+
+        /// <summary>
+        /// 脚速度計算 - 指定脚インデックスの移動速度ベクトル算出
+        /// </summary>
+        /// <param name="legIndex">脚インデックス</param>
+        /// <returns>脚の世界速度ベクトル</returns>
+        public Vector3 CalculateLegVelocity(int legIndex)
+        {
+            Vector3 legPoint = (legs[legIndex].restingPosition);
+            Vector3 legDirection = legPoint - transform.position;
+            Vector3 rotationalPoint = ((Quaternion.AngleAxis((_rSpeed * timeBetweenSteps) / 2f, transform.up) * legDirection) + transform.position) - legPoint;
+            return rotationalPoint + (worldVelocity * timeBetweenSteps) / 2f;
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// 移動処理 - ターゲット位置への移動と回転制御
+        /// </summary>
+        private void Move()
+        {
+            // 待機時間チェック
+            if (Time.time - _waitingRecord < _waitingTimer)
+                return;
+
+            // ターゲット到達チェック
+            if ((_targetPosition.ToXZ() - transform.position.ToXZ()).sqrMagnitude < 1f)
+            {
+                UpdateTargetPosition();
+            }
+
+            // 移動速度設定
+            _mSpeed = walkSpeed;
+            Vector3 localInput = Vector3.ClampMagnitude(_targetPosition - this.transform.position, 1);
+            inputVelocity = Vector3.MoveTowards(inputVelocity, localInput, Time.deltaTime * moveInputFactor);
+            worldVelocity = inputVelocity * _mSpeed;
+
+            // 回転計算
+            Vector2 normDir = (_targetPosition.ToXZ() - transform.position.ToXZ());
+            float angle = Mathf.Acos(Vector2.Dot(normDir.normalized, transform.right.ToXZ().normalized));
+
+            _rSpeed = Mathf.MoveTowards(_rSpeed, ((Mathf.Rad2Deg * angle < 90f) ? 1 : -1) * rotationSpeed, rotateInputFactor * Time.deltaTime);
+            transform.Rotate(0f, _rSpeed * Time.deltaTime, 0f);
+
+            // 位置更新
+            transform.position += (worldVelocity * Time.deltaTime);
+        }
+
+        /// <summary>
+        /// 地形向き計算 - 脚の接地点から最適な姿勢を算出
+        /// </summary>
+        private void CalculateOrientation()
+        {
+            Vector3 up = Vector3.zero;
+            float avgSurfaceDist = 0;
+            grounded = false;
+
+            Vector3 point, a, b, c;
+
+            // 各脚の外積を計算して平均上方向を求める
+            for (int i = 0; i < legs.Length; ++i)
+            {
+                point = legs[i].stepPoint;
+                avgSurfaceDist += transform.InverseTransformPoint(point).y;
+                a = (transform.position - point).normalized;
+                b = ((legs[nextLegTri[i]].stepPoint) - point).normalized;
+                c = Vector3.Cross(a, b);
+                up += c * sensitivityCurve.Evaluate(c.magnitude) + (legs[i].stepNormal == Vector3.zero ? transform.forward : legs[i].stepNormal);
+                grounded |= legs[i].legGrounded;
+
+                // デバッグ描画
+                Debug.DrawRay(point, a, Color.red, 0);
+                Debug.DrawRay(point, b, Color.green, 0);
+                Debug.DrawRay(point, c, Color.blue, 0);
+            }
+
+            up /= legs.Length;
+            avgSurfaceDist /= legs.Length;
+            dist = avgSurfaceDist;
+            Debug.DrawRay(transform.position, up, Color.red, 0);
+
+            // 前進方向を保持しながら上方向を適用
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.ProjectOnPlane(transform.forward, up), up), 22.5f * Time.deltaTime);
+
+            if (grounded)
+            {
+                transform.Translate(0, -(-avgSurfaceDist + desiredSurfaceDist) * 0.5f, 0, Space.Self);
+            }
+            else
+            {
+                // 簡易重力
+                transform.Translate(0, -20 * Time.deltaTime, 0, Space.World);
+            }
+        }
+
+        #endregion
+
+        #region Debug and Utilities
+
+        /// <summary>
+        /// Gizmo描画 - 平均回転半径の可視化
+        /// </summary>
+        public void OnDrawGizmosSelected()
+        {
+            Gizmos.DrawWireSphere(transform.position, averageRotationRadius);
+        }
+
+        /// <summary>
+        /// 円弧描画 - デバッグ用円弧ライン描画
+        /// </summary>
+        /// <param name="point">開始点</param>
+        /// <param name="dir">方向ベクトル</param>
+        /// <param name="angle">角度</param>
+        /// <param name="stepSize">ステップサイズ</param>
+        /// <param name="color">色</param>
+        /// <param name="duration">描画時間</param>
+        public void DrawArc(Vector3 point, Vector3 dir, float angle, float stepSize, Color color, float duration)
+        {
+            if (angle < 0)
+            {
+                for (float i = 0; i > angle + 1; i -= stepSize)
+                {
+                    Debug.DrawLine(point + Quaternion.AngleAxis(i, transform.up) * dir,
+                        point + Quaternion.AngleAxis(Mathf.Clamp(i - stepSize, angle, 0), transform.up) * dir,
+                        color, duration);
+                }
+            }
+            else
+            {
+                for (float i = 0; i < angle - 1; i += stepSize)
+                {
+                    Debug.DrawLine(point + Quaternion.AngleAxis(i, transform.up) * dir,
+                        point + Quaternion.AngleAxis(Mathf.Clamp(i + stepSize, 0, angle), transform.up) * dir,
+                        color, duration);
+                }
+            }
+        }
+
+        /// <summary>
+        /// ターゲット位置更新 - ランダムな新しい目標位置設定
+        /// </summary>
+        private void UpdateTargetPosition()
+        {
+            _waitingTimer = Random.Range(2, 5);
+            _waitingRecord = Time.time;
+            Vector3 dir = new Vector3(Random.Range(-50f, 50f), 0, Random.Range(-50f, 50f));
+            _targetPosition = TargetLocation + dir;
+        }
+
+        #endregion
     }
 }

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using RandomTowerDefense.Systems;
+using RandomTowerDefense.Units;
 
 public class StockOperator : MonoBehaviour
 {
@@ -25,7 +27,7 @@ public class StockOperator : MonoBehaviour
     public Material MatBoss1;
     public Material MatBoss2;
     public Material MatBoss3;
-                    
+
     public Material MatMeteor;
     public Material MatBlizzard;
     public Material MatPetrification;
@@ -38,37 +40,37 @@ public class StockOperator : MonoBehaviour
 
         for (int i = 0; i < StockSlot.Count; ++i)
         {
-            switch (SkillStack.GetStock(i))
+            switch (SkillStack.RetrieveStock(i))
             {
                 default:
                     StockSlot[i].sprite = null;
                     StockSlot[i].material = MatNull;
                     break;
-                case (int)Upgrades.StoreItems.BonusBoss1:
+                case (int)UpgradesManager.StoreItems.BonusBossGreen:
                     StockSlot[i].sprite = SprBoss1;
                     StockSlot[i].material = MatBoss1;
                     break;
-                case (int)Upgrades.StoreItems.BonusBoss2: 
+                case (int)UpgradesManager.StoreItems.BonusBossPurple:
                     StockSlot[i].sprite = SprBoss2;
                     StockSlot[i].material = MatBoss2;
                     break;
-                case (int)Upgrades.StoreItems.BonusBoss3:
+                case (int)UpgradesManager.StoreItems.BonusBossRed:
                     StockSlot[i].sprite = SprBoss3;
                     StockSlot[i].material = MatBoss3;
                     break;
-                case (int)Upgrades.StoreItems.MagicMeteor: 
+                case (int)UpgradesManager.StoreItems.MagicMeteor:
                     StockSlot[i].sprite = SprMeteor;
                     StockSlot[i].material = MatMeteor;
                     break;
-                case (int)Upgrades.StoreItems.MagicBlizzard:
+                case (int)UpgradesManager.StoreItems.MagicBlizzard:
                     StockSlot[i].sprite = SprBlizzard;
                     StockSlot[i].material = MatBlizzard;
                     break;
-                case (int)Upgrades.StoreItems.MagicPetrification:
+                case (int)UpgradesManager.StoreItems.MagicPetrification:
                     StockSlot[i].sprite = SprPetrification;
                     StockSlot[i].material = MatPetrification;
                     break;
-                case (int)Upgrades.StoreItems.MagicMinions: 
+                case (int)UpgradesManager.StoreItems.MagicMinions:
                     StockSlot[i].sprite = SprMinions;
                     StockSlot[i].material = MatMinions;
                     break;
@@ -86,11 +88,11 @@ public class StockOperator : MonoBehaviour
     {
         int frame = AnimTotalFrameDefault;
         float rotateChgsbyFrame = (Rotation * 360f - this.transform.localEulerAngles.z) / frame;
-        float scaleChgsbyFrame = ((TargetScale.x -PlayerPrefs.GetFloat("zoomRate",0)*(TargetScale.x- ScaleFactorWhenZoom)) - this.transform.localScale.x) / frame;
+        float scaleChgsbyFrame = ((TargetScale.x - PlayerPrefs.GetFloat("zoomRate", 0) * (TargetScale.x - ScaleFactorWhenZoom)) - this.transform.localScale.x) / frame;
         while (frame-- > 0)
         {
             this.transform.localEulerAngles = new Vector3(this.transform.localEulerAngles.x,
-                this.transform.localEulerAngles.y, this.transform.localEulerAngles.z+ rotateChgsbyFrame);
+                this.transform.localEulerAngles.y, this.transform.localEulerAngles.z + rotateChgsbyFrame);
             this.transform.localScale = new Vector3(this.transform.localScale.x + scaleChgsbyFrame,
     this.transform.localScale.y + scaleChgsbyFrame, this.transform.localScale.z + scaleChgsbyFrame);
             yield return new WaitForSeconds(0f);

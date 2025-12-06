@@ -27,46 +27,55 @@ SOFTWARE.
 using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityMeshSimplifier;
 
-namespace UnityMeshSimplifier
+namespace RandomTowerDefense.Utility.Math
 {
     /// <summary>
-    /// A double precision 3D vector.
+    /// Vector3d - 倍精度3次元ベクトル構造体
+    ///
+    /// 主な機能:
+    /// - 高精度な3次元ベクトル演算
+    /// - Unity の Vector3 との相互変換
+    /// - 演算子オーバーロードによる直感的な演算
+    /// - IEquatable による効率的な比較処理
+    /// - MethodImpl によるパフォーマンス最適化
+    /// - 大規模シミュレーション向けの精度確保
     /// </summary>
     public struct Vector3d : IEquatable<Vector3d>
     {
         #region Static Read-Only
         /// <summary>
-        /// The zero vector.
+        /// ゼロベクトル。
         /// </summary>
         public static readonly Vector3d zero = new Vector3d(0, 0, 0);
         #endregion
 
-        #region Consts
+#region Constants
         /// <summary>
-        /// The vector epsilon.
+        /// ベクトルのイプシロン（極小値）。
         /// </summary>
         public const double Epsilon = double.Epsilon;
         #endregion
 
         #region Fields
         /// <summary>
-        /// The x component.
+        /// x 成分。
         /// </summary>
         public double x;
         /// <summary>
-        /// The y component.
+        /// y 成分。
         /// </summary>
         public double y;
         /// <summary>
-        /// The z component.
+        /// z 成分。
         /// </summary>
         public double z;
         #endregion
 
-        #region Properties
+#region Public Properties
         /// <summary>
-        /// Gets the magnitude of this vector.
+        /// このベクトルの長さ（大きさ）を取得します。
         /// </summary>
         public double Magnitude
         {
@@ -75,7 +84,7 @@ namespace UnityMeshSimplifier
         }
 
         /// <summary>
-        /// Gets the squared magnitude of this vector.
+        /// このベクトルの二乗長（長さの二乗）を取得します。
         /// </summary>
         public double MagnitudeSqr
         {
@@ -84,7 +93,7 @@ namespace UnityMeshSimplifier
         }
 
         /// <summary>
-        /// Gets a normalized vector from this vector.
+        /// このベクトルの正規化ベクトルを取得します。
         /// </summary>
         public Vector3d Normalized
         {
@@ -98,9 +107,9 @@ namespace UnityMeshSimplifier
         }
 
         /// <summary>
-        /// Gets or sets a specific component by index in this vector.
+        /// インデックスで指定した成分（0=x,1=y,2=z）を取得または設定します。
         /// </summary>
-        /// <param name="index">The component index.</param>
+        /// <param name="index">成分のインデックス。</param>
         public double this[int index]
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -139,11 +148,11 @@ namespace UnityMeshSimplifier
         }
         #endregion
 
-        #region Constructor
+#region Constructors
         /// <summary>
-        /// Creates a new vector with one value for all components.
+        /// すべての成分に同じ値を設定して新しいベクトルを作成します。
         /// </summary>
-        /// <param name="value">The value.</param>
+        /// <param name="value">成分に設定する値。</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3d(double value)
         {
@@ -153,11 +162,11 @@ namespace UnityMeshSimplifier
         }
 
         /// <summary>
-        /// Creates a new vector.
+        /// 指定した x, y, z 値で新しいベクトルを作成します。
         /// </summary>
-        /// <param name="x">The x value.</param>
-        /// <param name="y">The y value.</param>
-        /// <param name="z">The z value.</param>
+        /// <param name="x">x 成分。</param>
+        /// <param name="y">y 成分。</param>
+        /// <param name="z">z 成分。</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3d(double x, double y, double z)
         {
@@ -167,9 +176,9 @@ namespace UnityMeshSimplifier
         }
 
         /// <summary>
-        /// Creates a new vector from a single precision vector.
+        /// 単精度ベクトル（UnityEngine.Vector3）から新しい倍精度ベクトルを作成します。
         /// </summary>
-        /// <param name="vector">The single precision vector.</param>
+        /// <param name="vector">変換元の単精度ベクトル。</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3d(Vector3 vector)
         {
@@ -181,11 +190,11 @@ namespace UnityMeshSimplifier
 
         #region Operators
         /// <summary>
-        /// Adds two vectors.
+        /// 2 つのベクトルを加算します。
         /// </summary>
-        /// <param name="a">The first vector.</param>
-        /// <param name="b">The second vector.</param>
-        /// <returns>The resulting vector.</returns>
+        /// <param name="a">左オペランド。</param>
+        /// <param name="b">右オペランド。</param>
+        /// <returns>加算結果のベクトル。</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d operator +(Vector3d a, Vector3d b)
         {
@@ -193,11 +202,11 @@ namespace UnityMeshSimplifier
         }
 
         /// <summary>
-        /// Subtracts two vectors.
+        /// 2 つのベクトルを減算します。
         /// </summary>
-        /// <param name="a">The first vector.</param>
-        /// <param name="b">The second vector.</param>
-        /// <returns>The resulting vector.</returns>
+        /// <param name="a">左オペランド。</param>
+        /// <param name="b">右オペランド。</param>
+        /// <returns>減算結果のベクトル。</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d operator -(Vector3d a, Vector3d b)
         {
@@ -205,11 +214,11 @@ namespace UnityMeshSimplifier
         }
 
         /// <summary>
-        /// Scales the vector uniformly.
+        /// ベクトルをスカラーで乗算します（右スカラー）。
         /// </summary>
-        /// <param name="a">The vector.</param>
-        /// <param name="d">The scaling value.</param>
-        /// <returns>The resulting vector.</returns>
+        /// <param name="a">ベクトル。</param>
+        /// <param name="d">スカラー値。</param>
+        /// <returns>スケーリング後のベクトル。</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d operator *(Vector3d a, double d)
         {
@@ -217,11 +226,11 @@ namespace UnityMeshSimplifier
         }
 
         /// <summary>
-        /// Scales the vector uniformly.
+        /// ベクトルをスカラーで乗算します（左スカラー）。
         /// </summary>
-        /// <param name="d">The scaling vlaue.</param>
-        /// <param name="a">The vector.</param>
-        /// <returns>The resulting vector.</returns>
+        /// <param name="d">スカラー値。</param>
+        /// <param name="a">ベクトル。</param>
+        /// <returns>スケーリング後のベクトル。</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d operator *(double d, Vector3d a)
         {
@@ -229,11 +238,11 @@ namespace UnityMeshSimplifier
         }
 
         /// <summary>
-        /// Divides the vector with a float.
+        /// ベクトルをスカラーで除算します。
         /// </summary>
-        /// <param name="a">The vector.</param>
-        /// <param name="d">The dividing float value.</param>
-        /// <returns>The resulting vector.</returns>
+        /// <param name="a">ベクトル。</param>
+        /// <param name="d">除算値（スカラー）。</param>
+        /// <returns>除算結果のベクトル。</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d operator /(Vector3d a, double d)
         {
@@ -241,10 +250,10 @@ namespace UnityMeshSimplifier
         }
 
         /// <summary>
-        /// Subtracts the vector from a zero vector.
+        /// ベクトルを符号反転します。
         /// </summary>
-        /// <param name="a">The vector.</param>
-        /// <returns>The resulting vector.</returns>
+        /// <param name="a">ベクトル。</param>
+        /// <returns>反転されたベクトル。</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3d operator -(Vector3d a)
         {
@@ -252,11 +261,11 @@ namespace UnityMeshSimplifier
         }
 
         /// <summary>
-        /// Returns if two vectors equals eachother.
+        /// 2 つのベクトルが等しいかどうかを返します。
         /// </summary>
-        /// <param name="lhs">The left hand side vector.</param>
-        /// <param name="rhs">The right hand side vector.</param>
-        /// <returns>If equals.</returns>
+        /// <param name="lhs">左辺ベクトル。</param>
+        /// <param name="rhs">右辺ベクトル。</param>
+        /// <returns>等しい場合は true。</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator ==(Vector3d lhs, Vector3d rhs)
         {
@@ -264,11 +273,11 @@ namespace UnityMeshSimplifier
         }
 
         /// <summary>
-        /// Returns if two vectors don't equal eachother.
+        /// 2 つのベクトルが等しくないかどうかを返します。
         /// </summary>
-        /// <param name="lhs">The left hand side vector.</param>
-        /// <param name="rhs">The right hand side vector.</param>
-        /// <returns>If not equals.</returns>
+        /// <param name="lhs">左辺ベクトル。</param>
+        /// <param name="rhs">右辺ベクトル。</param>
+        /// <returns>等しくない場合は true。</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool operator !=(Vector3d lhs, Vector3d rhs)
         {
@@ -276,9 +285,9 @@ namespace UnityMeshSimplifier
         }
 
         /// <summary>
-        /// Implicitly converts from a single-precision vector into a double-precision vector.
+        /// 単精度ベクトルから倍精度ベクトルへの暗黙変換。
         /// </summary>
-        /// <param name="v">The single-precision vector.</param>
+        /// <param name="v">単精度ベクトル。</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static implicit operator Vector3d(Vector3 v)
         {
@@ -286,9 +295,9 @@ namespace UnityMeshSimplifier
         }
 
         /// <summary>
-        /// Implicitly converts from a double-precision vector into a single-precision vector.
+        /// 倍精度ベクトルから単精度ベクトルへの明示的変換。
         /// </summary>
-        /// <param name="v">The double-precision vector.</param>
+        /// <param name="v">倍精度ベクトル。</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static explicit operator Vector3(Vector3d v)
         {
@@ -296,14 +305,14 @@ namespace UnityMeshSimplifier
         }
         #endregion
 
-        #region Public Methods
+        #region Public API
         #region Instance
         /// <summary>
-        /// Set x, y and z components of an existing vector.
+        /// 既存ベクトルの x,y,z 成分を設定します。
         /// </summary>
-        /// <param name="x">The x value.</param>
-        /// <param name="y">The y value.</param>
-        /// <param name="z">The z value.</param>
+        /// <param name="x">x 値。</param>
+        /// <param name="y">y 値。</param>
+        /// <param name="z">z 値。</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Set(double x, double y, double z)
         {
@@ -313,9 +322,9 @@ namespace UnityMeshSimplifier
         }
 
         /// <summary>
-        /// Multiplies with another vector component-wise.
+        /// 他ベクトルと成分ごとに乗算します。
         /// </summary>
-        /// <param name="scale">The vector to multiply with.</param>
+        /// <param name="scale">乗算するベクトル。</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Scale(ref Vector3d scale)
         {
@@ -325,7 +334,7 @@ namespace UnityMeshSimplifier
         }
 
         /// <summary>
-        /// Normalizes this vector.
+        /// このベクトルを正規化します。
         /// </summary>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Normalize()
@@ -344,10 +353,10 @@ namespace UnityMeshSimplifier
         }
 
         /// <summary>
-        /// Clamps this vector between a specific range.
+        /// ベクトルを指定範囲でクランプします。
         /// </summary>
-        /// <param name="min">The minimum component value.</param>
-        /// <param name="max">The maximum component value.</param>
+        /// <param name="min">最小成分値。</param>
+        /// <param name="max">最大成分値。</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Clamp(double min, double max)
         {
@@ -364,19 +373,19 @@ namespace UnityMeshSimplifier
 
         #region Object
         /// <summary>
-        /// Returns a hash code for this vector.
+        /// このベクトルのハッシュコードを返します。
         /// </summary>
-        /// <returns>The hash code.</returns>
+        /// <returns>ハッシュコード。</returns>
         public override int GetHashCode()
         {
             return x.GetHashCode() ^ y.GetHashCode() << 2 ^ z.GetHashCode() >> 2;
         }
 
         /// <summary>
-        /// Returns if this vector is equal to another one.
+        /// 別のオブジェクトと等価かどうかを返します。
         /// </summary>
-        /// <param name="other">The other vector to compare to.</param>
-        /// <returns>If equals.</returns>
+        /// <param name="other">比較対象のオブジェクト。</param>
+        /// <returns>等価なら true。</returns>
         public override bool Equals(object other)
         {
             if (!(other is Vector3d))
@@ -388,29 +397,29 @@ namespace UnityMeshSimplifier
         }
 
         /// <summary>
-        /// Returns if this vector is equal to another one.
+        /// 別の Vector3d と等価かどうかを返します。
         /// </summary>
-        /// <param name="other">The other vector to compare to.</param>
-        /// <returns>If equals.</returns>
+        /// <param name="other">比較対象のベクトル。</param>
+        /// <returns>等価なら true。</returns>
         public bool Equals(Vector3d other)
         {
             return (x == other.x && y == other.y && z == other.z);
         }
 
         /// <summary>
-        /// Returns a nicely formatted string for this vector.
+        /// フォーマット済みの文字列を返します。
         /// </summary>
-        /// <returns>The string.</returns>
+        /// <returns>フォーマットされた文字列。</returns>
         public override string ToString()
         {
             return string.Format("({0:F1}, {1:F1}, {2:F1})", x, y, z);
         }
 
         /// <summary>
-        /// Returns a nicely formatted string for this vector.
+        /// 指定フォーマットで文字列を返します。
         /// </summary>
-        /// <param name="format">The float format.</param>
-        /// <returns>The string.</returns>
+        /// <param name="format">フォーマット指定子。</param>
+        /// <returns>フォーマットされた文字列。</returns>
         public string ToString(string format)
         {
             return string.Format("({0}, {1}, {2})", x.ToString(format), y.ToString(format), z.ToString(format));
@@ -419,10 +428,11 @@ namespace UnityMeshSimplifier
 
         #region Static
         /// <summary>
-        /// Dot Product of two vectors.
+        /// 2 つのベクトルのドット積を計算します。
         /// </summary>
-        /// <param name="lhs">The left hand side vector.</param>
-        /// <param name="rhs">The right hand side vector.</param>
+        /// <param name="lhs">左辺ベクトル。</param>
+        /// <param name="rhs">右辺ベクトル。</param>
+        /// <returns>ドット積の値。</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Dot(ref Vector3d lhs, ref Vector3d rhs)
         {
@@ -430,11 +440,11 @@ namespace UnityMeshSimplifier
         }
 
         /// <summary>
-        /// Cross Product of two vectors.
+        /// 2 つのベクトルのクロス積を計算します。
         /// </summary>
-        /// <param name="lhs">The left hand side vector.</param>
-        /// <param name="rhs">The right hand side vector.</param>
-        /// <param name="result">The resulting vector.</param>
+        /// <param name="lhs">左辺ベクトル。</param>
+        /// <param name="rhs">右辺ベクトル。</param>
+        /// <param name="result">結果のベクトル（出力）。</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Cross(ref Vector3d lhs, ref Vector3d rhs, out Vector3d result)
         {
@@ -442,11 +452,11 @@ namespace UnityMeshSimplifier
         }
 
         /// <summary>
-        /// Calculates the angle between two vectors.
+        /// 2 つのベクトル間の角度を計算します。
         /// </summary>
-        /// <param name="from">The from vector.</param>
-        /// <param name="to">The to vector.</param>
-        /// <returns>The angle.</returns>
+        /// <param name="from">始点ベクトル。</param>
+        /// <param name="to">終点ベクトル。</param>
+        /// <returns>角度（度）。</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Angle(ref Vector3d from, ref Vector3d to)
         {
@@ -456,12 +466,12 @@ namespace UnityMeshSimplifier
         }
 
         /// <summary>
-        /// Performs a linear interpolation between two vectors.
+        /// 2 つのベクトルを線形補間します。
         /// </summary>
-        /// <param name="a">The vector to interpolate from.</param>
-        /// <param name="b">The vector to interpolate to.</param>
-        /// <param name="t">The time fraction.</param>
-        /// <param name="result">The resulting vector.</param>
+        /// <param name="a">補間開始ベクトル。</param>
+        /// <param name="b">補間終了ベクトル。</param>
+        /// <param name="t">補間係数（0..1）。</param>
+        /// <param name="result">補間結果（出力）。</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Lerp(ref Vector3d a, ref Vector3d b, double t, out Vector3d result)
         {
@@ -469,11 +479,11 @@ namespace UnityMeshSimplifier
         }
 
         /// <summary>
-        /// Multiplies two vectors component-wise.
+        /// 2 つのベクトルを成分ごとに乗算します。
         /// </summary>
-        /// <param name="a">The first vector.</param>
-        /// <param name="b">The second vector.</param>
-        /// <param name="result">The resulting vector.</param>
+        /// <param name="a">1 つ目のベクトル。</param>
+        /// <param name="b">2 つ目のベクトル。</param>
+        /// <param name="result">結果のベクトル（出力）。</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Scale(ref Vector3d a, ref Vector3d b, out Vector3d result)
         {
@@ -481,10 +491,10 @@ namespace UnityMeshSimplifier
         }
 
         /// <summary>
-        /// Normalizes a vector.
+        /// ベクトルを正規化します（出力パラメータ形式）。
         /// </summary>
-        /// <param name="value">The vector to normalize.</param>
-        /// <param name="result">The resulting normalized vector.</param>
+        /// <param name="value">正規化するベクトル。</param>
+        /// <param name="result">正規化結果（出力）。</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Normalize(ref Vector3d value, out Vector3d result)
         {

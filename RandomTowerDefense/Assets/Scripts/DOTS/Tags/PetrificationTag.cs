@@ -1,5 +1,11 @@
 ﻿using System;
 using Unity.Entities;
 
-[Serializable]
-public struct PetrificationTag : IComponentData { }
+namespace RandomTowerDefense.DOTS.Tags
+{
+    /// <summary>
+    /// 石化スキルエンティティを識別するためのタグ
+    /// </summary>
+    [Serializable]
+    public struct PetrificationTag : IComponentData { }
+}

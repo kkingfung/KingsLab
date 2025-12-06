@@ -3,123 +3,199 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class FadeEffect : MonoBehaviour
+namespace RandomTowerDefense.Common
 {
-    //private enum EnumRenderType
-    //{
-    //    NotChecked = 0,
-    //    FoundMeshRenderer,
-    //    FoundRawImg,
-    //    FoundSprRenderer,
-    //    FoundImage,
-    //}
-    //private EnumRenderType rendertype;
-
-    private float Threshold = 0.0f;
-    private readonly float FadeRate = 0.02f;
-    private float ThresholdRecord;
-    Material FadeMat;
-    public bool isReady { get; private set;}
-
-    private void Start()
+    /// <summary>
+    /// フェードエフェクトユーティリティ - シーン長移時のフェードイン・アウト処理
+    ///
+    /// 主な機能:
+    /// - マルチレンダラー対応（MeshRenderer、RawImage、SpriteRenderer、Image）
+    /// - シェーダーベースフェード効果とPlayerPrefs連携
+    /// - コルーチンベーススムーズアニメーション
+    /// - フェード完了状態追跡とコールバック連携
+    /// - 動的マテリアル検出とシェーダーパラメーター制御
+    /// </summary>
+    public class FadeEffect : MonoBehaviour
     {
-        if (FadeMat == null)
-            GetFadeMaterial();
-        FadeMat.SetFloat("_FadeThreshold", 1f);
-        PlayerPrefs.SetFloat("_FadeThreshold", 1f);
-        ThresholdRecord = Threshold;
-    }
+        #region Constants
 
-    private void OnEnable()
-    {
-        Threshold = PlayerPrefs.GetFloat("_FadeThreshold");
-    }
-    private void Update() {
-        //Threshold = PlayerPrefs.GetFloat("_FadeThreshold");
-        if (ThresholdRecord != Threshold)
+        /// <summary>
+        /// フェード処理レート（フレーム毎のアルファ変化量）
+        /// </summary>
+        private const float FADE_RATE = 0.02f;
+
+        /// <summary>
+        /// フェード最小しきい値（完全透明）
+        /// </summary>
+        private const float FADE_MIN_THRESHOLD = 0.0f;
+
+        /// <summary>
+        /// フェード最大しきい値（完全不透明）
+        /// </summary>
+        private const float FADE_MAX_THRESHOLD = 1.0f;
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// フェード処理完了フラグ
+        /// </summary>
+        public bool isReady { get; private set; }
+
+        #endregion
+
+        #region Private Fields
+
+        private float _threshold = FADE_MIN_THRESHOLD;
+        private float _thresholdRecord;
+        private Material _fadeMat;
+
+        #endregion
+
+        #region Unity Lifecycle
+
+        /// <summary>
+        /// 初期化処理 - フェードマテリアル設定とPlayerPrefs初期化
+        /// </summary>
+        private void Start()
         {
-            FadeMat.SetFloat("_FadeThreshold", Threshold);
-            ThresholdRecord = Threshold;
+            if (_fadeMat == null)
+                GetFadeMaterial();
+
+            _fadeMat.SetFloat("_FadeThreshold", FADE_MAX_THRESHOLD);
+            PlayerPrefs.SetFloat("_FadeThreshold", FADE_MAX_THRESHOLD);
+            _thresholdRecord = _threshold;
         }
-      
-    }
-    public void GetFadeMaterial()
-    {
-        MeshRenderer chkMeshRender = GetComponent<MeshRenderer>();
-        if (chkMeshRender)
+
+        /// <summary>
+        /// ゲームオブジェクト有効化時処理
+        /// </summary>
+        private void OnEnable()
         {
-            FadeMat = chkMeshRender.material;
-            //rendertype = EnumRenderType.FoundMeshRenderer;
+            _threshold = PlayerPrefs.GetFloat("_FadeThreshold");
         }
-        else
+
+        /// <summary>
+        /// 毎フレーム更新 - しきい値変更検知とシェーダーパラメーター更新
+        /// </summary>
+        private void Update()
         {
-            RawImage chkRawImg = GetComponent<RawImage>();
-            if (chkRawImg)
+            if (_thresholdRecord != _threshold)
             {
-                FadeMat = chkRawImg.material;
-                //rendertype = EnumRenderType.FoundRawImg;
-            }
-            else
-            {
-                SpriteRenderer chkSprRender = GetComponent<SpriteRenderer>();
-                if (chkSprRender)
-                {
-                    FadeMat = chkSprRender.material;
-                    //rendertype = EnumRenderType.FoundSprRenderer;
-                }
-                else
-                {
-                    Image chkImage = GetComponent<Image>();
-                    if (chkImage)
-                    {
-                        FadeMat = chkImage.material;
-                        //rendertype = EnumRenderType.FoundImage;
-                    }
-                }
+                _fadeMat.SetFloat("_FadeThreshold", _threshold);
+                _thresholdRecord = _threshold;
             }
         }
-    }
 
-    public void FadeIn() {
-        Threshold = 0.0f;
-        PlayerPrefs.SetFloat("_FadeThreshold", Threshold);
-        isReady = false;
-        if (this.gameObject.activeInHierarchy)
-            StartCoroutine(FadeInRoutine());
-    }
-    public void FadeOut()
-    {
-        Threshold = 1.0f;
-        PlayerPrefs.SetFloat("_FadeThreshold", Threshold);
-        isReady = false;
-        if (this.gameObject.activeInHierarchy)
-            StartCoroutine(FadeOutRoutine());
-    }
+        #endregion
+        #region Public API
 
-    private IEnumerator FadeOutRoutine()
-    {
-        if (FadeMat == null)
-            GetFadeMaterial();
-
-        while (Threshold > 0f) {
-            Threshold -= FadeRate;
-            PlayerPrefs.SetFloat("_FadeThreshold", Threshold);
-            yield return new WaitForSeconds(0f);
-        }
-        isReady = true;
-    }
-
-    private IEnumerator FadeInRoutine()
-    {
-        if (FadeMat == null)
-            GetFadeMaterial();
-
-        while (Threshold < 1f)
+        /// <summary>
+        /// フェードイン実行 - 画面を暗転から通常表示へ
+        /// </summary>
+        public void FadeIn()
         {
-            Threshold += FadeRate;
-            PlayerPrefs.SetFloat("_FadeThreshold", Threshold);
-            yield return new WaitForSeconds(0f);
+            _threshold = FADE_MIN_THRESHOLD;
+            PlayerPrefs.SetFloat("_FadeThreshold", _threshold);
+            isReady = false;
+
+            if (gameObject.activeInHierarchy)
+                StartCoroutine(FadeInRoutine());
         }
-        isReady = true;
+
+        /// <summary>
+        /// フェードアウト実行 - 画面を通常表示から暗転へ
+        /// </summary>
+        public void FadeOut()
+        {
+            _threshold = 1.0f;
+            PlayerPrefs.SetFloat("_FadeThreshold", _threshold);
+            isReady = false;
+
+            if (gameObject.activeInHierarchy)
+                StartCoroutine(FadeOutRoutine());
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// フェードマテリアル取得 - レンダラーコンポーネントからマテリアル検出
+        /// </summary>
+        public void GetFadeMaterial()
+        {
+            MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+            if (meshRenderer)
+            {
+                _fadeMat = meshRenderer.material;
+                // MeshRendererを検出
+                return;
+            }
+
+            RawImage rawImage = GetComponent<RawImage>();
+            if (rawImage)
+            {
+                _fadeMat = rawImage.material;
+                // RawImageを検出
+                return;
+            }
+
+            SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+            if (spriteRenderer)
+            {
+                _fadeMat = spriteRenderer.material;
+                // SpriteRendererを検出
+                return;
+            }
+
+            Image image = GetComponent<Image>();
+            if (image)
+            {
+                _fadeMat = image.material;
+                // Imageを検出
+            }
+        }
+
+        /// <summary>
+        /// フェードアウトコルーチン - しきい値を段階的に減少
+        /// </summary>
+        /// <returns>コルーチンの進行状況</returns>
+        private IEnumerator FadeOutRoutine()
+        {
+            if (_fadeMat == null)
+                GetFadeMaterial();
+
+            while (_threshold > 0f)
+            {
+                _threshold -= FADE_RATE;
+                PlayerPrefs.SetFloat("_FadeThreshold", _threshold);
+                yield return null;
+            }
+
+            isReady = true;
+        }
+
+        /// <summary>
+        /// フェードインコルーチン - しきい値を段階的に増加
+        /// </summary>
+        /// <returns>コルーチンの進行状況</returns>
+        private IEnumerator FadeInRoutine()
+        {
+            if (_fadeMat == null)
+                GetFadeMaterial();
+
+            while (_threshold < FADE_MAX_THRESHOLD)
+            {
+                _threshold += FADE_RATE;
+                PlayerPrefs.SetFloat("_FadeThreshold", _threshold);
+                yield return null;
+            }
+
+            isReady = true;
+        }
+
+        #endregion
     }
 }

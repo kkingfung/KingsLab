@@ -3,7 +3,13 @@ using Unity.Entities;
 using Unity.Jobs;
 using Unity.Transforms;
 using UnityEngine;
+using RandomTowerDefense.DOTS.Tags;
+using RandomTowerDefense.DOTS.Components;
 
+/// <summary>
+/// スキルエンティティの生存時間管理と破棄を処理するシステム
+/// 生存時間が終了したスキルエンティティからSkillTagを削除
+/// </summary>
 public class SkillDestroy : JobComponentSystem
 {
 	//private EntityManager entityManager;
@@ -14,6 +20,11 @@ public class SkillDestroy : JobComponentSystem
 		endSimulationEcbSystem = World.GetOrCreateSystem<EndSimulationEntityCommandBufferSystem>();
 	}
 
+	/// <summary>
+	/// スキルエンティティの生存時間更新と破棄処理
+	/// </summary>
+	/// <param name="inputDeps">入力依存関係</param>
+	/// <returns>ジョブハンドル</returns>
 	protected override JobHandle OnUpdate(JobHandle inputDeps)
 	{
 		EntityCommandBuffer ecb = endSimulationEcbSystem.CreateCommandBuffer();

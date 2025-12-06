@@ -26,61 +26,62 @@ SOFTWARE.
 
 using System;
 using System.Runtime.CompilerServices;
+using RandomTowerDefense.Utility.Math;
 
 namespace UnityMeshSimplifier
 {
     /// <summary>
-    /// Math helpers.
+    /// 数学ヘルパー
     /// </summary>
     public static class MathHelper
     {
-        public  static int RandAdj(int x, int y, int range)
+        public static int RandAdj(int x, int y, int range)
         {
             UnityEngine.Random.InitState(y + (x << 4) + (x << 1) + (y >> 2));
 
             return ((int)UnityEngine.Random.value & (range - 1));
         }
 
-        #region Consts
+#region Constants
         /// <summary>
-        /// The Pi constant.
+        /// 円周率（float）
         /// </summary>
         public const float PI = 3.14159274f;
 
         /// <summary>
-        /// The Pi constant.
+        /// 円周率（double）
         /// </summary>
         public const double PId = 3.1415926535897932384626433832795;
 
         /// <summary>
-        /// Degrees to radian constant.
+        /// 度からラジアンへの変換定数（float）
         /// </summary>
         public const float Deg2Rad = PI / 180f;
 
         /// <summary>
-        /// Degrees to radian constant.
+        /// 度からラジアンへの変換定数（double）
         /// </summary>
         public const double Deg2Radd = PId / 180.0;
 
         /// <summary>
-        /// Radians to degrees constant.
+        /// ラジアンから度への変換定数（float）
         /// </summary>
         public const float Rad2Deg = 180f / PI;
 
         /// <summary>
-        /// Radians to degrees constant.
+        /// ラジアンから度への変換定数（double）
         /// </summary>
         public const double Rad2Degd = 180.0 / PId;
         #endregion
 
         #region Min
         /// <summary>
-        /// Returns the minimum of three values.
+        /// 3つの値のうち最小の値を返す
         /// </summary>
-        /// <param name="val1">The first value.</param>
-        /// <param name="val2">The second value.</param>
-        /// <param name="val3">The third value.</param>
-        /// <returns>The minimum value.</returns>
+        /// <param name="val1">1つ目の値</param>
+        /// <param name="val2">2つ目の値</param>
+        /// <param name="val3">3つ目の値</param>
+        /// <returns>最小値</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Min(double val1, double val2, double val3)
         {
@@ -90,12 +91,12 @@ namespace UnityMeshSimplifier
 
         #region Clamping
         /// <summary>
-        /// Clamps a value between a minimum and a maximum value.
+        /// 値を最小値と最大値の範囲にクランプする
         /// </summary>
-        /// <param name="value">The value to clamp.</param>
-        /// <param name="min">The minimum value.</param>
-        /// <param name="max">The maximum value.</param>
-        /// <returns>The clamped value.</returns>
+        /// <param name="value">クランプする値</param>
+        /// <param name="min">最小値</param>
+        /// <param name="max">最大値</param>
+        /// <returns>クランプ後の値</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double Clamp(double value, double min, double max)
         {
@@ -105,12 +106,12 @@ namespace UnityMeshSimplifier
 
         #region Triangle Area
         /// <summary>
-        /// Calculates the area of a triangle.
+        /// 三角形の面積を計算する
         /// </summary>
-        /// <param name="p0">The first point.</param>
-        /// <param name="p1">The second point.</param>
-        /// <param name="p2">The third point.</param>
-        /// <returns>The triangle area.</returns>
+        /// <param name="p0">1点目</param>
+        /// <param name="p1">2点目</param>
+        /// <param name="p2">3点目</param>
+        /// <returns>三角形の面積</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double TriangleArea(ref Vector3d p0, ref Vector3d p1, ref Vector3d p2)
         {

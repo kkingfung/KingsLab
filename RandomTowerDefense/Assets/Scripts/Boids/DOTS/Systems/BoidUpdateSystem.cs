@@ -27,7 +27,7 @@ namespace RandomTowerDefense.Boids.DOTS.Systems
     /// </summary>
     public class BoidUpdateSystem : JobComponentSystem
     {
-        #region System Lifecycle
+        #region ECS Lifecycle
 
         /// <summary>
         /// システム更新処理 - ボイドエンティティの行動と移動統合更新

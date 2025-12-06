@@ -18,22 +18,38 @@ namespace RandomTowerDefense.Managers.System
     /// </summary>
     public class EffectSpawner : MonoBehaviour
 {
+    /// <summary>ビルドエフェクトプレハブ</summary>
     public GameObject PrefabBuild;
+    /// <summary>死亡エフェクトプレハブ</summary>
     public GameObject PrefabDieVfx;
+    /// <summary>マネードロップエフェクトプレハブ</summary>
     public GameObject PrefabMoneyDropVfx;
+    /// <summary>消失エフェクトプレハブ</summary>
     public GameObject PrefabDisappearVfx;
+    /// <summary>インパクトエフェクトプレハブ</summary>
     public GameObject PrefabImpactVfx;
+    /// <summary>売却エフェクトプレハブ</summary>
     public GameObject PrefabSellVfx;
 
+    /// <summary>ビルドVFXプールリスト</summary>
     public List<GameObject> BuildVFXList;
+    /// <summary>死亡VFXプールリスト</summary>
     public List<GameObject> DieVFXList;
+    /// <summary>マネードロップVFXプールリスト</summary>
     public List<GameObject> MoneyDropVFXList;
+    /// <summary>消失VFXプールリスト</summary>
     public List<GameObject> DisappearVFXList;
+    /// <summary>インパクトVFXプールリスト</summary>
     public List<GameObject> ImpactVFXList;
+    /// <summary>売却VFXプールリスト</summary>
     public List<GameObject> SellVFXList;
 
+    /// <summary>シングルトンインスタンス</summary>
     public static EffectSpawner Instance { get; private set; }
 
+    /// <summary>
+    /// シングルトンインスタンスの初期化
+    /// </summary>
     private void Awake()
     {
         if (Instance == null)
@@ -42,6 +58,9 @@ namespace RandomTowerDefense.Managers.System
             Destroy(gameObject);
     }
 
+    /// <summary>
+    /// エフェクトプールの初期化処理
+    /// </summary>
     private void Start()
     {
         //BuildVFXList = new List<GameObject>();
@@ -52,6 +71,12 @@ namespace RandomTowerDefense.Managers.System
         //SellVFXList = new List<GameObject>();
     }
 
+    /// <summary>
+    /// 指定タイプのエフェクトを指定位置にスポーン
+    /// </summary>
+    /// <param name="prefabID">エフェクトタイプID（0:ビルド、1:死亡、2:マネードロップ、3:消失、4:インパクト、5:売却）</param>
+    /// <param name="Position">スポーン位置</param>
+    /// <returns>スポーンされたエフェクトGameObject（タイプ3以外の場合null）</returns>
     public GameObject Spawn(int prefabID, float3 Position)
     {
         if (prefabID != 3)

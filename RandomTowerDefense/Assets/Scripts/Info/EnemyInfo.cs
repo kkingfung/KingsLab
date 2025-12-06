@@ -63,7 +63,7 @@ namespace RandomTowerDefense.Info
 
         #endregion
 
-        #region Constructor
+#region Constructors
 
         /// <summary>
         /// エネミー属性コンストラクタ
@@ -125,7 +125,7 @@ namespace RandomTowerDefense.Info
 
         #endregion
 
-        #region Public Methods
+        #region Public API
 
         /// <summary>
         /// 敵情報初期化メソッド - デフォルト値でステータス設定

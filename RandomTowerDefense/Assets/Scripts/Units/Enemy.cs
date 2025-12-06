@@ -63,9 +63,18 @@ namespace RandomTowerDefense.Units
         #endregion
 
         #region Serialized Fields
+        /// <summary>
+        /// 敵生成管理クラスの参照
+        /// </summary>
         [Header("🎮 Manager References")]
         public EnemySpawner enemySpawner;
+        /// <summary>
+        /// リソース管理クラスの参照
+        /// </summary>
         public ResourceManager resourceManager;
+        /// <summary>
+        /// エフェクト生成管理クラスの参照
+        /// </summary>
         public EffectSpawner effectManager;
         #endregion
 
@@ -88,7 +97,13 @@ namespace RandomTowerDefense.Units
         private List<Material> matsPetrify;
         private List<Material> matsSlow;
 
+        /// <summary>
+        /// アニメーションコントローラー
+        /// </summary>
         public Animator animator;
+        /// <summary>
+        /// HP表示スライダーUI
+        /// </summary>
         public Slider HpBar;
         private RectTransform HpBarRot;
 
@@ -254,6 +269,10 @@ namespace RandomTowerDefense.Units
                 animator.SetTrigger("Reused");
         }
 
+        /// <summary>
+        /// ダメージ処理 - HP減少時のビジュアルフィードバックと死亡判定
+        /// </summary>
+        /// <param name="currHP">現在のHP値</param>
         public void Damaged(float currHP)
         {
             if (isSync == false) return;
@@ -269,6 +288,9 @@ namespace RandomTowerDefense.Units
             }
         }
 
+        /// <summary>
+        /// 死亡処理 - オブジェクトプールへの返却とクリーンアップ
+        /// </summary>
         public void Die()
         {
             transform.localScale = _oriScale;
@@ -277,6 +299,9 @@ namespace RandomTowerDefense.Units
             StartCoroutine(EndAnim());
         }
 
+        /// <summary>
+        /// 石化状態エフェクト更新処理
+        /// </summary>
         public void Petrified()
         {
             float petrifyAmt = enemySpawner.petrifyArray[_entityID];
@@ -288,6 +313,9 @@ namespace RandomTowerDefense.Units
                 j.SetFloat("_Progress", petrifyAmt);
             }
         }
+        /// <summary>
+        /// スロー状態エフェクト更新処理
+        /// </summary>
         public void Slowed()
         {
             float slow = enemySpawner.slowArray[_entityID];
@@ -300,6 +328,10 @@ namespace RandomTowerDefense.Units
             }
         }
 
+        /// <summary>
+        /// 死亡アニメーション処理 - エフェクト再生とリソース報酬支給
+        /// </summary>
+        /// <returns>コルーチンイテレータ</returns>
         private IEnumerator DieAnimation()
         {
             if (animator)
@@ -315,6 +347,10 @@ namespace RandomTowerDefense.Units
             Die();
         }
 
+        /// <summary>
+        /// 終了アニメーション処理 - スケール縮小とオブジェクト破棄
+        /// </summary>
+        /// <returns>コルーチンイテレータ</returns>
         private IEnumerator EndAnim()
         {
             float timeCounter = 0;
@@ -335,6 +371,10 @@ namespace RandomTowerDefense.Units
             Destroy(this.gameObject);
         }
 
+        /// <summary>
+        /// 出現アニメーション処理 - スケール拡大と初期化
+        /// </summary>
+        /// <returns>コルーチンイテレータ</returns>
         private IEnumerator StartAnim()
         {
             float timeCounter = 0;

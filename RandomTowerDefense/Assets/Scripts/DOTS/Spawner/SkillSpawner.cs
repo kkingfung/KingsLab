@@ -209,6 +209,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                     case 0:
                         foreach (GameObject j in MeteorList)
                         {
+                            if (j == null) continue;
                             if (j.activeSelf) continue;
                             GameObjects[i] = j;
                             reuse = true;
@@ -218,6 +219,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                     case 1:
                         foreach (GameObject j in BlizzardList)
                         {
+                            if (j == null) continue;
                             if (j.activeSelf) continue;
                             GameObjects[i] = j;
                             reuse = true;
@@ -227,6 +229,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                     case 2:
                         foreach (GameObject j in PetrificationList)
                         {
+                            if (j == null) continue;
                             if (j.activeSelf) continue;
                             GameObjects[i] = j;
                             reuse = true;
@@ -236,6 +239,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                     case 3:
                         foreach (GameObject j in MinionsList)
                         {
+                            if (j == null) continue;
                             if (j.activeSelf) continue;
                             GameObjects[i] = j;
                             reuse = true;

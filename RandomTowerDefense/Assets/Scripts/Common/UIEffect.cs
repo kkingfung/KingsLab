@@ -191,7 +191,7 @@ namespace RandomTowerDefense.Common
 
         #endregion
 
-        #region Public Methods
+        #region Public API
 
         /// <summary>
         /// スコア表示用リセット処理

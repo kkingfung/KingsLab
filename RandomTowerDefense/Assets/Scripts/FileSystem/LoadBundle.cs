@@ -23,7 +23,7 @@ namespace RandomTowerDefense.FileSystem
 
         #endregion
 
-        #region Public Methods
+        #region Public API
 
         /// <summary>
         /// アセットバンドル読み込みと出力処理

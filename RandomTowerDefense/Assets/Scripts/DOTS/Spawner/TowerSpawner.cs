@@ -314,6 +314,8 @@ namespace RandomTowerDefense.DOTS.Spawner
             }
 
             // スポーン時に変更（不要な可能性あり）
+            if (TransformAccessArray.isCreated)
+                TransformAccessArray.Dispose();
             TransformAccessArray = new TransformAccessArray(_transforms);
             return spawnIndexList;
         }
@@ -339,6 +341,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerNightmare + 0:
                     foreach (GameObject j in TowerNightmareRank1)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -346,6 +349,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerNightmare + 1:
                     foreach (GameObject j in TowerNightmareRank2)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -353,6 +357,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerNightmare + 2:
                     foreach (GameObject j in TowerNightmareRank3)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -360,6 +365,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerNightmare + 3:
                     foreach (GameObject j in TowerNightmareRank4)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -367,6 +373,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerSoulEater + 0:
                     foreach (GameObject j in TowerSoulEaterRank1)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -374,6 +381,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerSoulEater + 1:
                     foreach (GameObject j in TowerSoulEaterRank2)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -381,6 +389,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerSoulEater + 2:
                     foreach (GameObject j in TowerSoulEaterRank3)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -388,6 +397,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerSoulEater + 3:
                     foreach (GameObject j in TowerSoulEaterRank4)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -395,6 +405,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerTerrorBringer + 0:
                     foreach (GameObject j in TowerTerrorBringerRank1)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -402,6 +413,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerTerrorBringer + 1:
                     foreach (GameObject j in TowerTerrorBringerRank2)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -409,6 +421,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerTerrorBringer + 2:
                     foreach (GameObject j in TowerTerrorBringerRank3)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -416,6 +429,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerTerrorBringer + 3:
                     foreach (GameObject j in TowerTerrorBringerRank4)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -423,6 +437,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerUsurper + 0:
                     foreach (GameObject j in TowerUsurperRank1)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -430,6 +445,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerUsurper + 1:
                     foreach (GameObject j in TowerUsurperRank2)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -437,6 +453,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerUsurper + 2:
                     foreach (GameObject j in TowerUsurperRank3)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -444,6 +461,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case MonsterMaxRank * (int)TowerInfo.TowerInfoID.EnumTowerUsurper + 3:
                     foreach (GameObject j in TowerUsurperRank4)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }

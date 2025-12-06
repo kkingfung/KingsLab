@@ -22,13 +22,25 @@ namespace RandomTowerDefense.Units
     public class Castle : MonoBehaviour
     {
         #region Public Properties
+        /// <summary>
+        /// 城の最大HP値
+        /// </summary>
         public int MaxCastleHP;
+        /// <summary>
+        /// 城の現在HP値
+        /// </summary>
         public int CurrCastleHP;
         #endregion
 
         #region Serialized Fields
+        /// <summary>
+        /// シールド視覚エフェクトオブジェクト
+        /// </summary>
         [Header("🔰 Visual Components")]
         public GameObject Shield;
+        /// <summary>
+        /// HP表示テキストメッシュ
+        /// </summary>
         public TextMesh HPText;
         #endregion
 

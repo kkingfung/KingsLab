@@ -104,7 +104,7 @@ namespace RandomTowerDefense.FileSystem
         }
 
         #endregion
-        #region Public Methods
+        #region Public API
 
         /// <summary>
         /// スコア比較とランキング挿入処理
@@ -141,7 +141,6 @@ namespace RandomTowerDefense.FileSystem
             int currentIsland = _sceneManager.GetCurrIsland();
             if (currentIsland < 0 || currentIsland >= _stageRecords.Count)
             {
-                Debug.LogError($"Invalid island ID: {currentIsland}");
                 return;
             }
 

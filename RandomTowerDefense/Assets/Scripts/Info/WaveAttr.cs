@@ -44,7 +44,7 @@ namespace RandomTowerDefense.Info
 
         #endregion
 
-        #region Public Methods
+        #region Public API
 
         /// <summary>
         /// コンストラクタ

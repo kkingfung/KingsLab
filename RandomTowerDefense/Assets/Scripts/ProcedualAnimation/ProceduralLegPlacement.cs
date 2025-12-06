@@ -79,7 +79,7 @@ namespace RandomTowerDefense.ProcedualAnimation
 
         #endregion
 
-        #region Properties
+#region Public Properties
 
         /// <summary>
         /// 安息位置 - ワールド座標での安息位置

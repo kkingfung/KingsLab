@@ -25,13 +25,25 @@ namespace RandomTowerDefense.Units
         #endregion
 
         #region Serialized Fields
+        /// <summary>
+        /// リソース管理クラスの参照
+        /// </summary>
         [Header("🎮 Manager References")]
         public ResourceManager resourceManager;
+        /// <summary>
+        /// タワー生成管理クラスの参照
+        /// </summary>
         public TowerSpawner towerSpawner;
         #endregion
 
         #region Public Properties
+        /// <summary>
+        /// 新しく建設されたタワーのタイプID（-1の場合は未設定）
+        /// </summary>
         public int TowerNewlyBuilt;
+        /// <summary>
+        /// タワーレベル変更フラグ - ボーナス判定のトリガー
+        /// </summary>
         public bool TowerLevelChg;
         #endregion
 
@@ -88,6 +100,11 @@ namespace RandomTowerDefense.Units
             }
         }
 
+        /// <summary>
+        /// 指定タワータイプの全ランクが存在するか確認しボーナス支給
+        /// </summary>
+        /// <param name="towerID">確認するタワータイプ</param>
+        /// <returns>全ランクが存在する場合true</returns>
         bool MonsterList_Type(TowerInfo.TowerInfoID towerID)
         {
             int result = 0x00000;
@@ -203,11 +220,16 @@ namespace RandomTowerDefense.Units
             return true;
         }
 
+        /// <summary>
+        /// 指定リスト内にアクティブなタワーが存在するかチェック
+        /// </summary>
+        /// <param name="towerList">確認するタワーリスト</param>
+        /// <returns>アクティブなタワーが存在する場合true</returns>
         bool CheckActivenessInList(List<GameObject> towerList)
         {
             foreach (GameObject i in towerList)
             {
-                if (i.activeSelf == false)
+                if (i == null || i.activeSelf == false)
                     continue;
                 return true;
             }

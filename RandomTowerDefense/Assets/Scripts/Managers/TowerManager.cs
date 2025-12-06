@@ -83,7 +83,7 @@ namespace RandomTowerDefense.Managers.System
         }
         #endregion
 
-        #region Public Methods
+        #region Public API
         /// <summary>
         /// 指定したターゲットのUI情報を更新
         /// </summary>
@@ -195,14 +195,10 @@ namespace RandomTowerDefense.Managers.System
             {
                 GameObject chkTarget = tempList[DefaultStageInfos.Prng.Next(0, tempList.Count)];
                 tempList.Remove(chkTarget);
-                if (chkTarget.activeSelf)
+                if (chkTarget != null && chkTarget.activeSelf)
                 {
-                    Tower chkTowerScript = chkTarget.GetComponent<Tower>();
-                    if (chkTowerScript.CanLevelUp())
-                    {
-                        candidateList.Add(chkTarget);
-                        count++;
-                    }
+                    candidateList.Add(chkTarget);
+                    count++;
                 }
             }
 

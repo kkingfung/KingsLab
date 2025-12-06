@@ -17,7 +17,7 @@ namespace RandomTowerDefense.Systems
         static private int[] stackDetail = { 0, 0, 0, 0 };
         #endregion
 
-        #region Public Methods
+        #region Public API
         static public void Init()
         {
             currStackNum = 0;

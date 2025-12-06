@@ -54,8 +54,6 @@ namespace RandomTowerDefense.Scene
         public List<Material> PetrifyMat;
         [Header("Other Settings")]
         public List<TextMesh> StageCustomText;
-        public List<TextMesh> StageCustomTextDirect;
-        public List<VisualEffect> SceneChgPS;
 
         public List<GameObject> Terrains;
 
@@ -505,8 +503,6 @@ namespace RandomTowerDefense.Scene
                 bloom.intensity.value = bloomVal;
                 yield return new WaitForSeconds(0f);
             }
-            foreach (VisualEffect i in SceneChgPS)
-                i.Stop();
         }
 
         public int CurrentIslandNum() { return IslandNow; }

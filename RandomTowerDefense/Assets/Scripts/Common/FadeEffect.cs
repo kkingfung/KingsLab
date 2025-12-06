@@ -89,7 +89,7 @@ namespace RandomTowerDefense.Common
         }
 
         #endregion
-        #region Public Methods
+        #region Public API
 
         /// <summary>
         /// フェードイン実行 - 画面を暗転から通常表示へ

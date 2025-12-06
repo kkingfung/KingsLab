@@ -33,7 +33,7 @@ namespace RandomTowerDefense.Boids.DOTS.Systems
 
         #endregion
 
-        #region System Lifecycle
+        #region ECS Lifecycle
 
         /// <summary>
         /// システム作成時初期化 - エンティティクエリ設定

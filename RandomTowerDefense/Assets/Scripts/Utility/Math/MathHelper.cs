@@ -42,7 +42,7 @@ namespace UnityMeshSimplifier
             return ((int)UnityEngine.Random.value & (range - 1));
         }
 
-        #region Consts
+#region Constants
         /// <summary>
         /// 円周率（float）
         /// </summary>

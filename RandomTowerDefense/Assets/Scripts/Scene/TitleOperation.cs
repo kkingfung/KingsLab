@@ -184,7 +184,7 @@ namespace RandomTowerDefense.Scene
         }
 
         #endregion
-        #region Public Methods
+        #region Public API
 
         /// <summary>
         /// ステージ選択シーンへの移行処理

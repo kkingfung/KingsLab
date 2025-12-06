@@ -38,7 +38,7 @@ namespace RandomTowerDefense.Managers.Macro
         private readonly int[] PriceForArmyTerrorBringer = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
         private readonly int[] PriceForArmyUsurper = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
 
-        private readonly int[] PriceForCastleHP = { 50, 50, 50, 50, 50, 50, 50, 50, 50, 50 };
+        private readonly int[] PriceForCastleHP = { 50, 100, 150, 200, 250, 300, 350, 400, 450, 500 };
         private readonly int[] PriceForBonusBossGreen = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         private readonly int[] PriceForBonusBossPurple = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         private readonly int[] PriceForBonusBossRed = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -274,12 +274,23 @@ namespace RandomTowerDefense.Managers.Macro
 
         #endregion
 
-        #region Public Methods
+        #region Public API
+
+        /// <summary>
+        /// 指定アイテムIDの価格を取得
+        /// </summary>
+        /// <param name="itemID">整数形式のアイテムID</param>
+        /// <returns>アイテム価格（-1はクールダウン中または最大レベル）</returns>
         public int GetPrice(int itemID)
         {
             return GetPrice((UpgradesManager.StoreItems)itemID);
         }
 
+        /// <summary>
+        /// 指定アイテムの現在の価格を取得
+        /// </summary>
+        /// <param name="itemID">アイテムID</param>
+        /// <returns>アイテム価格（-1はクールダウン中または最大レベル、0は無料）</returns>
         public int GetPrice(UpgradesManager.StoreItems itemID)
         {
             if (_itemPrice.ContainsKey(itemID) == false) return 0;
@@ -301,18 +312,32 @@ namespace RandomTowerDefense.Managers.Macro
             return _itemPrice[itemID][upgradesManager.GetLevel(itemID)];
         }
 
+        /// <summary>
+        /// 指定アイテムのコストを取得
+        /// </summary>
+        /// <param name="itemID">整数形式のアイテムID</param>
+        /// <returns>アイテムコスト</returns>
         public int GetCost(int itemID)
         {
             return GetCost((UpgradesManager.StoreItems)itemID, _pendToKart[itemID % 10]);
         }
 
+        /// <summary>
+        /// 追加レベルを含むアイテムのコストを取得
+        /// </summary>
+        /// <param name="itemID">アイテムID</param>
+        /// <param name="additionLv">追加レベル数</param>
+        /// <returns>アイテムコスト</returns>
         public int GetCost(UpgradesManager.StoreItems itemID, int additionLv)
         {
             if (_itemPrice.ContainsKey(itemID) == false) return 0;
             return _itemPrice[itemID][upgradesManager.GetLevel(itemID) + additionLv];
         }
 
-
+        /// <summary>
+        /// アイテム販売処理 - リソースを消費してアップグレードを適用
+        /// </summary>
+        /// <param name="itemID">販売するアイテムID</param>
         public void ItemSold(UpgradesManager.StoreItems itemID)
         {
             upgradesManager.UpgradeLevel(itemID, _pendToKart[(int)itemID % 10]);
@@ -323,6 +348,9 @@ namespace RandomTowerDefense.Managers.Macro
             _costToKart[(int)itemID % 10] = 0;
         }
 
+        /// <summary>
+        /// 購入待機リストとコストをクリア
+        /// </summary>
         public void ClearToPurchase()
         {
             for (int i = 0, s = _pendToKart.Length; i < s; ++i)
@@ -331,6 +359,10 @@ namespace RandomTowerDefense.Managers.Macro
                 _costToKart[i] = 0;
         }
 
+        /// <summary>
+        /// 購入待機中のアイテム総コストを計算
+        /// </summary>
+        /// <returns>総コスト</returns>
         public int CosttoPurchaseCalculation()
         {
             int totalCost = 0;
@@ -339,6 +371,11 @@ namespace RandomTowerDefense.Managers.Macro
             return totalCost;
         }
 
+        /// <summary>
+        /// アイテムを購入待機リストに追加
+        /// </summary>
+        /// <param name="itemID">追加するアイテムID</param>
+        /// <returns>追加成功/失敗</returns>
         public bool ItemPendingAdd(UpgradesManager.StoreItems itemID)
         {
             int price = CheckEnoughResource(itemID);
@@ -365,7 +402,11 @@ namespace RandomTowerDefense.Managers.Macro
             return false;
         }
 
-
+        /// <summary>
+        /// アイテムを購入待機リストから削除
+        /// </summary>
+        /// <param name="itemID">削除するアイテムID</param>
+        /// <returns>削除成功/失敗</returns>
         public bool ItemPendingSubtract(UpgradesManager.StoreItems itemID)
         {
             if (_pendToKart[(int)itemID % 10] < 0) return false;
@@ -375,6 +416,11 @@ namespace RandomTowerDefense.Managers.Macro
             return true;
         }
 
+        /// <summary>
+        /// リソースが十分かチェック
+        /// </summary>
+        /// <param name="itemID">チェックするアイテムID</param>
+        /// <returns>購入可能な場合は価格、不可能な場合は-1</returns>
         public int CheckEnoughResource(UpgradesManager.StoreItems itemID)
         {
             int totalCosttoPurchase = CosttoPurchaseCalculation();
@@ -386,21 +432,33 @@ namespace RandomTowerDefense.Managers.Macro
             return -1;
         }
 
+        /// <summary>
+        /// ボーナスボスのクールダウンを設定
+        /// </summary>
+        /// <param name="bossID">ボスID（0: Green, 1: Purple, 2: Red）</param>
         public void SetBossCD(int bossID)
         {
             _bonusBossCooldown[bossID] = cdCounter[bossID];
         }
 
+        /// <summary>
+        /// ボーナスボスの現在のクールダウンを取得
+        /// </summary>
+        /// <param name="bossID">ボスID（0: Green, 1: Purple, 2: Red）</param>
+        /// <returns>残りクールダウン時間</returns>
         public float GetBossCD(int bossID)
         {
             return _bonusBossCooldown[bossID];
         }
 
+        /// <summary>
+        /// レイキャストアクション - ストアアイテムとの相互作用を処理
+        /// </summary>
+        /// <param name="itemID">アイテムID</param>
+        /// <param name="infoID">情報ID (-1: 減算, 0: 購入, 1: 追加)</param>
         public void RaycastAction(UpgradesManager.StoreItems itemID, int infoID)
         {
-            if (ItemPendingAdd(itemID))
-                ItemSold(itemID);
-
+            UnityEngine.Debug.LogWarning("StoreManager: RaycastAction called for itemID " + itemID.ToString() + " with infoID " + infoID.ToString());
             // -1: 減算, 0: 購入, 1: 追加
             switch (infoID)
             {
@@ -411,18 +469,23 @@ namespace RandomTowerDefense.Managers.Macro
                     ItemSold(itemID);
                     break;
                 case 1:
-                    ItemPendingAdd(itemID);
+                    if (ItemPendingAdd(itemID))
+                    {
+                        OnStoreItemSold(itemID, 1);
+                    }
+
                     break;
             }
         }
 
         /// <summary>
-        /// レイキャストアクション - ストアアイテムとの相互作用を処理
+        /// レイキャストアクション（整数オーバーロード） - ストアアイテムとの相互作用を処理
         /// </summary>
-        /// <param name="fullitemID">アイテムID</param>
+        /// <param name="fullitemID">整数形式のアイテムID</param>
         /// <param name="infoID">情報ID (-1: 減算, 0: 購入, 1: 追加)</param>
         public void RaycastAction(int fullitemID, int infoID)
         {
+            UnityEngine.Debug.LogWarning("StoreManager: RaycastAction called for itemID " + fullitemID.ToString() + " with infoID " + infoID.ToString());
             // -1: 減算, 0: 購入, 1: 追加
             RaycastAction((UpgradesManager.StoreItems)fullitemID, infoID);
         }

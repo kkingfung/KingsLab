@@ -98,6 +98,9 @@ namespace RandomTowerDefense.DOTS.Spawner
         {
             if (Entities.IsCreated)
                 Entities.Dispose();
+
+            if (TransformAccessArray.isCreated)
+                TransformAccessArray.Dispose();
         }
 
         /// <summary>
@@ -157,6 +160,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                     case 0:
                         foreach (GameObject j in TowerNightmareAttack)
                         {
+                            if (j == null) continue;
                             if (j.activeSelf) continue;
                             GameObjects[i] = j;
                             reuse = true;
@@ -166,6 +170,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                     case 1:
                         foreach (GameObject j in TowerSoulEaterAttack)
                         {
+                            if (j == null) continue;
                             if (j.activeSelf) continue;
                             GameObjects[i] = j;
                             reuse = true;
@@ -175,6 +180,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                     case 2:
                         foreach (GameObject j in TowerTerrorBringerAttack)
                         {
+                            if (j == null) continue;
                             if (j.activeSelf) continue;
                             GameObjects[i] = j;
                             reuse = true;
@@ -184,6 +190,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                     case 3:
                         foreach (GameObject j in TowerUsurperAttack)
                         {
+                            if (j == null) continue;
                             if (j.activeSelf) continue;
                             GameObjects[i] = j;
                             reuse = true;
@@ -263,6 +270,8 @@ namespace RandomTowerDefense.DOTS.Spawner
             }
 
             // スポーン時に変更（不要な可能性あり）
+            if (TransformAccessArray.isCreated)
+                TransformAccessArray.Dispose();
             TransformAccessArray = new TransformAccessArray(_transforms);
             return spawnIndexList;
         }

@@ -41,17 +41,6 @@ namespace RandomTowerDefense.DOTS.Spawner
         /// </summary>
         public List<GameObject> PrefabObject;
 
-        /// <summary>
-        /// 敵死亡時のエフェクト
-        /// </summary>
-        [Header("MonsterVFX")]
-        public GameObject DieEffect;
-
-        /// <summary>
-        /// アイテムドロップエフェクト
-        /// </summary>
-        public GameObject DropEffect;
-
         // ボーナス敵プレハブ
         /// <summary>緑Metalon（ボーナス敵）プレハブ</summary>
         [Header("MonsterAsset")]
@@ -406,7 +395,7 @@ namespace RandomTowerDefense.DOTS.Spawner
             var archetype = _entityManager.CreateArchetype(
                  typeof(Health), typeof(Damage), typeof(Speed),
                typeof(Radius), typeof(PetrifyAmt), typeof(Lifetime), typeof(SlowRate),
-                typeof(BuffTime), typeof(PathFollow), typeof(LocalToWorld)
+                typeof(BuffTime), typeof(PathFollow), typeof(LocalToWorld), typeof(Translation)
                 );
             _entityManager.CreateEntity(archetype, Entities);
 
@@ -556,6 +545,8 @@ namespace RandomTowerDefense.DOTS.Spawner
             }
 
             // スポーン時に変更（不要な可能性あり）
+            if (TransformAccessArray.isCreated)
+                TransformAccessArray.Dispose();
             TransformAccessArray = new TransformAccessArray(_transforms);
 
             return spawnIndexList;
@@ -583,6 +574,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case "MetalonGreen":
                     foreach (GameObject j in ListMetalonGreen)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -590,6 +582,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case "MetalonPurple":
                     foreach (GameObject j in ListMetalonPurple)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -597,6 +590,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case "MetalonRed":
                     foreach (GameObject j in ListMetalonRed)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -605,6 +599,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case "AttackBot":
                     foreach (GameObject j in ListAttackBot)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -612,6 +607,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case "RobotSphere":
                     foreach (GameObject j in ListRobotSphere)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -620,6 +616,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case "Dragon":
                     foreach (GameObject j in ListDragon)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -627,6 +624,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case "Bull":
                     foreach (GameObject j in ListBull)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -634,6 +632,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case "StoneMonster":
                     foreach (GameObject j in ListStoneMonster)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -642,6 +641,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case "FreeLichS":
                     foreach (GameObject j in ListFreeLichS)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -649,6 +649,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case "FreeLich":
                     foreach (GameObject j in ListFreeLich)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -656,6 +657,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case "GolemS":
                     foreach (GameObject j in ListGolemS)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -663,6 +665,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case "Golem":
                     foreach (GameObject j in ListGolem)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -670,6 +673,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case "SkeletonArmed":
                     foreach (GameObject j in ListSkeletonArmed)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -677,6 +681,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case "SpiderGhost":
                     foreach (GameObject j in ListSpiderGhost)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -685,6 +690,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case "Skeleton":
                     foreach (GameObject j in ListSkeleton)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -692,6 +698,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case "GruntS":
                     foreach (GameObject j in ListGruntS)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -699,6 +706,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case "FootmanS":
                     foreach (GameObject j in ListFootmanS)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -706,6 +714,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case "Grunt":
                     foreach (GameObject j in ListGrunt)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -713,6 +722,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case "Footman":
                     foreach (GameObject j in ListFootman)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -721,6 +731,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case "TurtleShell":
                     foreach (GameObject j in ListTurtleShell)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -728,6 +739,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case "Mushroom":
                     foreach (GameObject j in ListMushroom)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -735,6 +747,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case "Slime":
                     foreach (GameObject j in ListSlime)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -743,6 +756,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case "PigChef":
                     foreach (GameObject j in ListPigChef)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -750,6 +764,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case "PhoenixChick":
                     foreach (GameObject j in ListPhoenixChick)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }
@@ -757,6 +772,7 @@ namespace RandomTowerDefense.DOTS.Spawner
                 case "RockCritter":
                     foreach (GameObject j in ListRockCritter)
                     {
+                        if (j == null) continue;
                         if (j.activeSelf) continue;
                         return j;
                     }

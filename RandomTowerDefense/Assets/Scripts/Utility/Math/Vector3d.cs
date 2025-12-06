@@ -51,7 +51,7 @@ namespace RandomTowerDefense.Utility.Math
         public static readonly Vector3d zero = new Vector3d(0, 0, 0);
         #endregion
 
-        #region Consts
+#region Constants
         /// <summary>
         /// ベクトルのイプシロン（極小値）。
         /// </summary>
@@ -73,7 +73,7 @@ namespace RandomTowerDefense.Utility.Math
         public double z;
         #endregion
 
-        #region Properties
+#region Public Properties
         /// <summary>
         /// このベクトルの長さ（大きさ）を取得します。
         /// </summary>
@@ -148,7 +148,7 @@ namespace RandomTowerDefense.Utility.Math
         }
         #endregion
 
-        #region Constructor
+#region Constructors
         /// <summary>
         /// すべての成分に同じ値を設定して新しいベクトルを作成します。
         /// </summary>
@@ -305,7 +305,7 @@ namespace RandomTowerDefense.Utility.Math
         }
         #endregion
 
-        #region Public Methods
+        #region Public API
         #region Instance
         /// <summary>
         /// 既存ベクトルの x,y,z 成分を設定します。

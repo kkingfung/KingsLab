@@ -57,7 +57,7 @@ namespace RandomTowerDefense.Tools
 
         #endregion
 
-        #region Properties
+#region Public Properties
 
         /// <summary>
         /// プロファイラー有効状態
@@ -143,7 +143,7 @@ namespace RandomTowerDefense.Tools
 
         #endregion
 
-        #region Public Methods
+        #region Public API
 
         /// <summary>
         /// 統計情報のCSVエクスポート（デバッグ用）

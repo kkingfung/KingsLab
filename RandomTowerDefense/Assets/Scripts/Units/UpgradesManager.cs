@@ -118,7 +118,7 @@ namespace RandomTowerDefense.Units
 
         #endregion
 
-        #region Public Methods
+        #region Public API
 
         /// <summary>
         /// アップグレードシステムの初期化 - 全項目をレベル0で初期化

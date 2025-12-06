@@ -27,7 +27,7 @@ public class EnemyPathFollowSystem : JobComponentSystem
             ref Translation transform, ref Health health, ref Speed speed, ref SlowRate slow, ref PetrifyAmt petrifyAmt,
             ref PathFollow pathFollow) =>
         {
-            if (health.Value > 0)
+            if (health.Value > 0 && pathFollow.pathIndex >= 0 && pathFollow.pathIndex < pathPositionBuffer.Length)
             {
                 // 追従するパスが存在
                 PathPosition pathPosition = pathPositionBuffer[pathFollow.pathIndex];

@@ -9,22 +9,49 @@ using RandomTowerDefense.Managers.Macro;
 using RandomTowerDefense.Systems;
 using RandomTowerDefense.Units;
 
+/// <summary>
+/// チュートリアル管理システム - 新規プレイヤー向け段階的学習システム
+///
+/// 主な機能:
+/// - 段階的チュートリアル進行管理（情報、初Wave、ストア、完了）
+/// - ランドスケープ/ポートレート両対応UI表示制御
+/// - 文字送りエフェクトによるインストラクション表示
+/// - プレイヤー行動待機と自動進行制御
+/// - 過去インストラクション振り返り機能
+/// - チュートリアル完了後のフリーバトルへ遷移
+/// - タイムスケール調整によるゲーム進行制御
+/// </summary>
 public class TutorialManager : MonoBehaviour
 {
+    #region Enums
+    /// <summary>
+    /// チュートリアル段階ID列挙型
+    /// </summary>
     public enum TutorialStageID
     {
+        /// <summary>初期情報表示段階</summary>
         TutorialProgress_Info = 0,
+        /// <summary>初Wave体験段階</summary>
         TutorialProgress_FirstWave,
+        /// <summary>ストア・スキル説明段階</summary>
         TutorialProgress_StoreSkill,
+        /// <summary>チュートリアル完了段階</summary>
         TutorialProgress_Finish,
+        /// <summary>フリーバトル段階</summary>
         TutorialProgress_FreeBattle,
     }
+    #endregion
 
+    #region Public Properties
+    /// <summary>タワー建設可能フラグ</summary>
     [HideInInspector]
     public bool FreeToBuild;
 
+    /// <summary>プレイヤー応答待ちフラグ</summary>
     public bool WaitingResponds;
+    #endregion
 
+    #region Private Fields
     private TutorialStageID tutorialStage;
     private int StageProgress;
 
@@ -32,22 +59,37 @@ public class TutorialManager : MonoBehaviour
     private float textCnt;
 
     private int reviewStage;
+    #endregion
 
+    #region Serialized Fields
+    [Header("📱 UI Elements - Landscape")]
     public List<Text> InstructionText_Landscape;
-    public List<Text> InstructionText_Protrait;
     public List<GameObject> InstructionSprite_Landscape;
+
+    [Header("📱 UI Elements - Portrait")]
+    public List<Text> InstructionText_Protrait;
     public List<GameObject> InstructionSprite_Protrait;
+
+    [Header("📜 History")]
     public List<Button> HistoryIcons;
 
+    [Header("🎮 Manager References")]
     public InGameOperation SceneManager;
     public TowerSpawner towerSpawner;
     public EnemySpawner enemySpawner;
     public SkillSpawner skillSpawner;
     public TimeManager timeManager;
     public ResourceManager resourceManager;
+    #endregion
 
+    #region Private Fields (Continued)
     private float timeWait;
-    // Start is called before the first frame update
+    #endregion
+
+    #region Unity Lifecycle
+    /// <summary>
+    /// チュートリアルシステム初期化 - 全状態をリセットしてチュートリアル開始準備
+    /// </summary>
     void Start()
     {
         WaitingResponds = false;
@@ -69,7 +111,9 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// 毎フレーム更新 - 現在のチュートリアル段階に応じた処理を実行
+    /// </summary>
     void Update()
     {
         switch (tutorialStage)
@@ -104,6 +148,10 @@ public class TutorialManager : MonoBehaviour
         FixedUpdateText();
         UpdateActiveness();
     }
+
+    #endregion
+
+    #region Private Methods
 
     private void UpdateActiveness()
     {
@@ -451,6 +499,10 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Public API
+
     public void SetTutorialStage(TutorialStageID stage)
     {
         tutorialStage = stage;
@@ -485,4 +537,5 @@ public class TutorialManager : MonoBehaviour
         StageProgress = reviewStage;
     }
 
+    #endregion
 }

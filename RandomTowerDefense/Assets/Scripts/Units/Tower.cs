@@ -118,7 +118,6 @@ namespace RandomTowerDefense.Units
         private GameObject lvupVFXPrefab;
 
         private AudioSource audioSource;
-        private GameObject defaultTarget;
 
         #endregion
 
@@ -258,7 +257,7 @@ namespace RandomTowerDefense.Units
 
         #endregion
 
-        #region Public Methods
+        #region Public API
 
         /// <summary>
         /// タワーの攻撃実行処理 - タイプ別VFX生成と効果音再生
@@ -347,11 +346,15 @@ namespace RandomTowerDefense.Units
         /// </summary>
         private void CleanupVFXComponents()
         {
-            foreach (GameObject i in AtkVFX)
+            if (AtkVFX == null) return;
+            for (int i = AtkVFX.Count - 1; i >= 0; i--)
             {
-                AtkVFX.Remove(i);
-                Destroy(i);
+                if (AtkVFX[i] != null)
+                {
+                    Destroy(AtkVFX[i]);
+                }
             }
+            AtkVFX.Clear();
         }
 
         /// <summary>
@@ -459,7 +462,7 @@ namespace RandomTowerDefense.Units
             if (_lvupVFXComponent != null)
             {
                 _lvupVFXComponent.SetFloat("SizeMultiplier",
-                    (float)level / MaxLevel[rank - 1] * (float)level / MaxLevel[rank - 1]  * AURA_VFX_LEVEL_MULTIPLIER);
+                    (float)level / MaxLevel[rank - 1] * (float)level / MaxLevel[rank - 1] * AURA_VFX_LEVEL_MULTIPLIER);
             }
         }
 
@@ -506,7 +509,6 @@ namespace RandomTowerDefense.Units
         private void InitializeECSIntegration()
         {
             _entityManager = World.DefaultGameObjectInjectionWorld.EntityManager;
-            defaultTarget = GameObject.FindGameObjectWithTag("DefaultTag");
         }
 
         /// <summary>
@@ -556,10 +558,12 @@ namespace RandomTowerDefense.Units
             if (!_entityManager.HasComponent<Target>(entity)) return;
 
             Target target = _entityManager.GetComponentData<Target>(entity);
-            if (target.targetHealth <= 0) return;
+            if (target.IsTargetAlive)
+            {
 
-            // ターゲット方向計算と攻撃実行
-            SetTargetDirectionAndAttack(target.targetPos);
+                // ターゲット方向計算と攻撃実行
+                SetTargetDirectionAndAttack(target.targetPos);
+            }
         }
 
         /// <summary>
@@ -662,10 +666,6 @@ namespace RandomTowerDefense.Units
         {
             auraVFXPrefab = AuraVFX;
             lvupVFXPrefab = LevelUpVFX;
-            this.auraVFX = GameObject.Instantiate(auraVFXPrefab, this.transform.position, Quaternion.Euler(90f, 0, 0));
-            this.auraVFX.transform.parent = this.transform;
-            this.auraVFX.transform.localScale = Vector3.one * AURA_VFX_DEFAULT_SCALE;
-            this._auraVFXComponent = auraVFX.GetComponentInChildren<VisualEffect>();
 
             this._lvupVFXComponent = GetComponentInChildren<VisualEffect>();
 
@@ -679,6 +679,12 @@ namespace RandomTowerDefense.Units
             {
                 this._lvupVFXComponent.gameObject.transform.position = this.transform.position;
             }
+
+            this.auraVFX = GameObject.Instantiate(auraVFXPrefab, this.transform.position, Quaternion.Euler(90f, 0, 0));
+            this.auraVFX.transform.parent = this.transform;
+            this.auraVFX.transform.localScale = Vector3.one * AURA_VFX_DEFAULT_SCALE;
+            this._auraVFXComponent = auraVFX.GetComponentInChildren<VisualEffect>();
+
         }
 
         /// <summary>

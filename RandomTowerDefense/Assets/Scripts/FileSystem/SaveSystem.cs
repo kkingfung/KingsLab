@@ -29,7 +29,7 @@ namespace RandomTowerDefense.FileSystem
 
         #endregion
 
-        #region Public Methods
+        #region Public API
 
         /// <summary>
         /// セーブシステム初期化 - ディレクトリ作成とデフォルトデータセットアップ
@@ -321,7 +321,7 @@ namespace RandomTowerDefense.FileSystem
 
         #endregion
 
-        #region Public Methods
+        #region Public API
 
         /// <summary>
         /// 新しいスコアをランキングに挿入

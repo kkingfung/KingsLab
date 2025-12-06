@@ -160,7 +160,8 @@ namespace RandomTowerDefense.DOTS.Pathfinding
                 }.Run();
             }
 
-            _pathNodeArray.Dispose();
+            if (_pathNodeArray.IsCreated)
+                _pathNodeArray.Dispose();
         }
         #endregion
 

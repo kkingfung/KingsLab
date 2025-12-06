@@ -80,7 +80,7 @@ namespace RandomTowerDefense.Info
 
         #endregion
 
-        #region Public Methods
+        #region Public API
 
         /// <summary>
         /// 初期化メソッド - デフォルトのスキル属性を設定

@@ -229,8 +229,6 @@ namespace RandomTowerDefense.Managers.Macro
         {
             if (Time.timeScale == 0) return;
 
-            _gyroscopeManager.SetYawChg(Input.GetAxis("Horizontal") * Time.deltaTime * -50f);
-
             for (int i = 0; i < GyroCamGp.Count; ++i)
             {
                 float verticalInput = Input.GetAxis("Vertical") * Time.deltaTime * -50f / Time.timeScale;

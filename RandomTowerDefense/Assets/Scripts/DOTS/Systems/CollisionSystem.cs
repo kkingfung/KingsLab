@@ -267,9 +267,9 @@ namespace RandomTowerDefense.DOTS.Systems
             [ReadOnly] public ComponentTypeHandle<Radius> radius;
             public ComponentTypeHandle<Health> healthType;
             [ReadOnly] public ComponentTypeHandle<Translation> translationType;
-            [DeallocateOnJobCompletion]
+            [ReadOnly][DeallocateOnJobCompletion]
             public NativeArray<Radius> targetRadius;
-            [DeallocateOnJobCompletion]
+            [ReadOnly][DeallocateOnJobCompletion]
             public NativeArray<Translation> targetTrans;
 
             public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
@@ -277,6 +277,9 @@ namespace RandomTowerDefense.DOTS.Systems
                 var chunkHealths = chunk.GetNativeArray(healthType);
                 var chunkTranslations = chunk.GetNativeArray(translationType);
                 var chunkRadius = chunk.GetNativeArray(radius);
+
+                // Early exit if no targets to check against
+                if (targetTrans.Length == 0) return;
 
                 for (int i = 0; i < chunk.Count; ++i)
                 {
@@ -286,7 +289,8 @@ namespace RandomTowerDefense.DOTS.Systems
                     Radius radius = chunkRadius[i];
                     Translation pos = chunkTranslations[i];
 
-                    for (int j = 0; j < targetTrans.Length && damage <= 0; j++)
+                    int targetCount = math.min(targetTrans.Length, targetRadius.Length);
+                    for (int j = 0; j < targetCount && damage <= 0; j++)
                     {
                         Translation pos2 = targetTrans[j];
                         if (CheckCollision(pos.Value, pos2.Value, targetRadius[j].Value + radius.Value))
@@ -312,13 +316,13 @@ namespace RandomTowerDefense.DOTS.Systems
             [ReadOnly] public ComponentTypeHandle<Radius> radius;
             public ComponentTypeHandle<Health> healthType;
             [ReadOnly] public ComponentTypeHandle<Translation> translationType;
-            [DeallocateOnJobCompletion]
+            [ReadOnly][DeallocateOnJobCompletion]
             public NativeArray<Damage> targetDamage;
-            [DeallocateOnJobCompletion]
+            [ReadOnly][DeallocateOnJobCompletion]
             public NativeArray<Radius> targetRadius;
-            [DeallocateOnJobCompletion]
+            [ReadOnly][DeallocateOnJobCompletion]
             public NativeArray<Translation> targetTrans;
-            [DeallocateOnJobCompletion]
+            [ReadOnly][DeallocateOnJobCompletion]
             public NativeArray<Health> targetHealth;
 
             public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
@@ -326,6 +330,9 @@ namespace RandomTowerDefense.DOTS.Systems
                 var chunkHealths = chunk.GetNativeArray(healthType);
                 var chunkTranslations = chunk.GetNativeArray(translationType);
                 var chunkRadius = chunk.GetNativeArray(radius);
+
+                // Early exit if no targets to check against
+                if (targetTrans.Length == 0) return;
 
                 for (int i = 0; i < chunk.Count; ++i)
                 {
@@ -335,7 +342,8 @@ namespace RandomTowerDefense.DOTS.Systems
                     Radius radius = chunkRadius[i];
                     Translation pos = chunkTranslations[i];
 
-                    for (int j = 0; j < targetTrans.Length; j++)
+                    int targetCount = math.min(targetTrans.Length, math.min(targetHealth.Length, math.min(targetRadius.Length, targetDamage.Length)));
+                    for (int j = 0; j < targetCount; j++)
                     {
                         if (targetHealth[j].Value <= 0) continue;
                         Translation pos2 = targetTrans[j];
@@ -362,15 +370,15 @@ namespace RandomTowerDefense.DOTS.Systems
             [ReadOnly] public ComponentTypeHandle<Radius> radiusType;
             public ComponentTypeHandle<Health> healthType;
             [ReadOnly] public ComponentTypeHandle<Translation> translationType;
-            [DeallocateOnJobCompletion]
+            [ReadOnly][DeallocateOnJobCompletion]
             public NativeArray<Damage> targetDamage;
-            [DeallocateOnJobCompletion]
+            [ReadOnly][DeallocateOnJobCompletion]
             public NativeArray<Radius> targetRadius;
-            [DeallocateOnJobCompletion]
+            [ReadOnly][DeallocateOnJobCompletion]
             public NativeArray<Translation> targetTrans;
-            [DeallocateOnJobCompletion]
+            [ReadOnly][DeallocateOnJobCompletion]
             public NativeArray<ActionTime> targetAction;
-            [DeallocateOnJobCompletion]
+            [ReadOnly][DeallocateOnJobCompletion]
             public NativeArray<WaitingTime> targetWait;
 
             public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
@@ -378,6 +386,9 @@ namespace RandomTowerDefense.DOTS.Systems
                 var chunkHealths = chunk.GetNativeArray(healthType);
                 var chunkTranslations = chunk.GetNativeArray(translationType);
                 var chunkRadius = chunk.GetNativeArray(radiusType);
+
+                // Early exit if no targets to check against
+                if (targetTrans.Length == 0) return;
 
                 for (int i = 0; i < chunk.Count; ++i)
                 {
@@ -387,7 +398,8 @@ namespace RandomTowerDefense.DOTS.Systems
                     Radius radius = chunkRadius[i];
                     Translation pos = chunkTranslations[i];
 
-                    for (int j = 0; j < targetTrans.Length; j++)
+                    int targetCount = math.min(targetTrans.Length, math.min(targetRadius.Length, math.min(targetDamage.Length, math.min(targetAction.Length, targetWait.Length))));
+                    for (int j = 0; j < targetCount; j++)
                     {
                         if (targetAction[j].Value <= 0) continue;
                         if (targetWait[j].Value > 0) continue;
@@ -416,13 +428,13 @@ namespace RandomTowerDefense.DOTS.Systems
             [ReadOnly] public ComponentTypeHandle<Radius> radiusType;
             public ComponentTypeHandle<Health> healthType;
             [ReadOnly] public ComponentTypeHandle<Translation> translationType;
-            [DeallocateOnJobCompletion]
+            [ReadOnly][DeallocateOnJobCompletion]
             public NativeArray<Damage> targetDamage;
-            [DeallocateOnJobCompletion]
+            [ReadOnly][DeallocateOnJobCompletion]
             public NativeArray<Radius> targetRadius;
-            [DeallocateOnJobCompletion]
+            [ReadOnly][DeallocateOnJobCompletion]
             public NativeArray<Translation> targetTrans;
-            [DeallocateOnJobCompletion]
+            [ReadOnly][DeallocateOnJobCompletion]
             public NativeArray<WaitingTime> targetWait;
 
             public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
@@ -430,6 +442,9 @@ namespace RandomTowerDefense.DOTS.Systems
                 var chunkHealths = chunk.GetNativeArray(healthType);
                 var chunkTranslations = chunk.GetNativeArray(translationType);
                 var chunkRadius = chunk.GetNativeArray(radiusType);
+
+                // Early exit if no targets to check against
+                if (targetTrans.Length == 0) return;
 
                 for (int i = 0; i < chunk.Count; ++i)
                 {
@@ -439,7 +454,8 @@ namespace RandomTowerDefense.DOTS.Systems
                     Radius radius = chunkRadius[i];
                     Translation pos = chunkTranslations[i];
 
-                    for (int j = 0; j < targetTrans.Length; j++)
+                    int targetCount = math.min(targetTrans.Length, math.min(targetRadius.Length, math.min(targetDamage.Length, targetWait.Length)));
+                    for (int j = 0; j < targetCount; j++)
                     {
                         if (targetWait[j].Value > 0) continue;
                         Translation pos2 = targetTrans[j];
@@ -469,15 +485,15 @@ namespace RandomTowerDefense.DOTS.Systems
             [ReadOnly] public ComponentTypeHandle<Translation> translationType;
             public ComponentTypeHandle<SlowRate> slowType;
             public ComponentTypeHandle<BuffTime> buffType;
-            [DeallocateOnJobCompletion]
+            [ReadOnly][DeallocateOnJobCompletion]
             public NativeArray<Damage> targetDamage;
-            [DeallocateOnJobCompletion]
+            [ReadOnly][DeallocateOnJobCompletion]
             public NativeArray<Radius> targetRadius;
-            [DeallocateOnJobCompletion]
+            [ReadOnly][DeallocateOnJobCompletion]
             public NativeArray<Translation> targetTrans;
-            [DeallocateOnJobCompletion]
+            [ReadOnly][DeallocateOnJobCompletion]
             public NativeArray<SlowRate> targetSlow;
-            [DeallocateOnJobCompletion]
+            [ReadOnly][DeallocateOnJobCompletion]
             public NativeArray<BuffTime> targetBuff;
 
             public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
@@ -487,6 +503,9 @@ namespace RandomTowerDefense.DOTS.Systems
                 var chunkRadius = chunk.GetNativeArray(radiusType);
                 var chunkSlow = chunk.GetNativeArray(slowType);
                 var chunkBuff = chunk.GetNativeArray(buffType);
+
+                // Early exit if no targets to check against
+                if (targetTrans.Length == 0) return;
 
                 for (int i = 0; i < chunk.Count; ++i)
                 {
@@ -498,7 +517,8 @@ namespace RandomTowerDefense.DOTS.Systems
                     SlowRate slow = chunkSlow[i];
                     BuffTime buff = chunkBuff[i];
 
-                    for (int j = 0; j < targetTrans.Length; j++)
+                    int targetCount = math.min(targetTrans.Length, math.min(targetRadius.Length, math.min(targetDamage.Length, math.min(targetSlow.Length, targetBuff.Length))));
+                    for (int j = 0; j < targetCount; j++)
                     {
                         Translation pos2 = targetTrans[j];
                         if (CheckCollision(pos.Value, pos2.Value, targetRadius[j].Value + radius.Value))
@@ -529,9 +549,9 @@ namespace RandomTowerDefense.DOTS.Systems
             public ComponentTypeHandle<Health> healthType;
             public ComponentTypeHandle<PetrifyAmt> petrifyType;
             public ComponentTypeHandle<BuffTime> buffType;
-            [DeallocateOnJobCompletion]
+            [ReadOnly][DeallocateOnJobCompletion]
             public NativeArray<SlowRate> targetPetrify;
-            [DeallocateOnJobCompletion]
+            [ReadOnly][DeallocateOnJobCompletion]
             public NativeArray<BuffTime> targetBuff;
 
             public void Execute(ArchetypeChunk chunk, int chunkIndex, int firstEntityIndex)
@@ -540,6 +560,9 @@ namespace RandomTowerDefense.DOTS.Systems
                 var chunkPetrify = chunk.GetNativeArray(petrifyType);
                 var chunkBuff = chunk.GetNativeArray(buffType);
 
+                // Early exit if no targets to check against
+                if (targetPetrify.Length == 0) return;
+
                 for (int i = 0; i < chunk.Count; ++i)
                 {
                     Health health = chunkHP[i];
@@ -547,7 +570,8 @@ namespace RandomTowerDefense.DOTS.Systems
                     PetrifyAmt petrifyAmt = chunkPetrify[i];
                     BuffTime buff = chunkBuff[i];
 
-                    for (int j = 0; j < targetPetrify.Length; j++)
+                    int targetCount = math.min(targetPetrify.Length, targetBuff.Length);
+                    for (int j = 0; j < targetCount; j++)
                     {
                         petrifyAmt.Value = targetPetrify[j].Value;
                         buff.Value += targetBuff[j].Value;

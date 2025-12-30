@@ -914,6 +914,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0bf10365e57006443bbfcbdec3d57f72, type: 3}
+--- !u!114 &761765316 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7230004028665658216, guid: 0bf10365e57006443bbfcbdec3d57f72, type: 3}
+  m_PrefabInstance: {fileID: 761765315}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46594a45a01a28842ba19b6d18120b48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &903472227 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3076270889337058690, guid: 3505ded4f2b53eb44812431b33b42b7c, type: 3}
@@ -1337,20 +1348,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClickPrefab: {fileID: 0}
+  ApplyClickEfc: 0
   ButtonsOtr: []
   ButtonsInGame: []
-  LBMTest: {fileID: 0}
-  ApplyClickEfc: 0
-  isDragging: 0
+  LBMTest: {fileID: 761765316}
   playerManager: {fileID: 0}
-  cameraManager: {fileID: 0}
+  cameraManager: {fileID: 2018536929}
   sceneManagerSel: {fileID: 0}
   sceneManager: {fileID: 0}
+  refCamL: {fileID: 84682717}
+  refCamP: {fileID: 2071277378}
+  refCamLSub: {fileID: 84682717}
+  refCamPSub: {fileID: 2071277378}
+  isDragging: 0
   TapTimeRecord: 0
-  refCamL: {fileID: 0}
-  refCamP: {fileID: 0}
-  refCamLSub: {fileID: 0}
-  refCamPSub: {fileID: 0}
 --- !u!4 &1628707969
 Transform:
   m_ObjectHideFlags: 0

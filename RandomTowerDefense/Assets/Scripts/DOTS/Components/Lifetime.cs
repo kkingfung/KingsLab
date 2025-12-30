@@ -1,9 +1,17 @@
 ﻿using System;
 using Unity.Entities;
 
-[Serializable]
-public struct Lifetime : IComponentData
+namespace RandomTowerDefense.DOTS.Components
 {
-    public float Value;
+    /// <summary>
+    /// エンティティの生存時間を管理するコンポーネント
+    /// </summary>
+    [Serializable]
+    public struct Lifetime : IComponentData
+    {
+        #region Public Fields
+        public float Value;
+        #endregion
+    }
 }
 

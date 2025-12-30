@@ -6511,17 +6511,6 @@ MonoBehaviour:
   - {fileID: 76048097}
   - {fileID: 763538101}
   - {fileID: 1072944909}
-  StageCustomTextDirect:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  SceneChgPS:
-  - {fileID: 0}
-  - {fileID: 0}
   Terrains:
   - {fileID: 1529080725}
   - {fileID: 1211613938}
@@ -6532,7 +6521,9 @@ MonoBehaviour:
   isDebugging: 1
   volumeProfile: {fileID: 11400000, guid: e4c50da676bcf554f9d4f7113acbea66, type: 2}
   AudioManager: {fileID: 1346953367}
+  CameraManager: {fileID: 383562971}
   CanvaManager: {fileID: 2086256300}
+  InputManager: {fileID: 1644384249}
   GyroscopeManager: {fileID: 1303349404}
 --- !u!1 &655241689
 GameObject:
@@ -12001,16 +11992,17 @@ MonoBehaviour:
   gyroDiffUI:
   - {fileID: 1076880604}
   - {fileID: 2100975303}
+  sensitivity: 0
   senseSlider:
   - {fileID: 230918389}
   - {fileID: 1636148109}
-  LeftShake: 0
-  RightShake: 0
-  VerticalShake: 0
   inputManager: {fileID: 1644384249}
   cameraManager: {fileID: 383562971}
   sceneManager: {fileID: 650776876}
   gamesceneManager: {fileID: 0}
+  LeftShake: 0
+  RightShake: 0
+  VerticalShake: 0
 --- !u!1 &1346788697
 GameObject:
   m_ObjectHideFlags: 0
@@ -12171,11 +12163,11 @@ MonoBehaviour:
   seUI:
   - {fileID: 1396864340}
   - {fileID: 164033444}
-  enabledBGM: 0
-  enabledSE: 0
   titleOperation: {fileID: 0}
   stageSelectOperation: {fileID: 650776876}
   inGameOperation: {fileID: 0}
+  enabledBGM: 0
+  enabledSE: 0
 --- !u!4 &1346953368
 Transform:
   m_ObjectHideFlags: 0
@@ -14913,6 +14905,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ClickPrefab: {fileID: 4650432991836946194, guid: 40b1dc16cbf53a64b928dd91b5454d85, type: 3}
+  ApplyClickEfc: 0
   ButtonsOtr:
   - {fileID: 2103673085}
   - {fileID: 2007871756}
@@ -14934,17 +14927,16 @@ MonoBehaviour:
   - {fileID: 458357438}
   ButtonsInGame: []
   LBMTest: {fileID: 0}
-  ApplyClickEfc: 0
-  isDragging: 0
   playerManager: {fileID: 0}
   cameraManager: {fileID: 383562971}
   sceneManagerSel: {fileID: 650776876}
   sceneManager: {fileID: 0}
-  TapTimeRecord: 0
   refCamL: {fileID: 1566493579}
   refCamP: {fileID: 894084725}
   refCamLSub: {fileID: 0}
   refCamPSub: {fileID: 0}
+  isDragging: 0
+  TapTimeRecord: 0
 --- !u!4 &1644384250
 Transform:
   m_ObjectHideFlags: 0

@@ -1,9 +1,17 @@
 ﻿using System;
 using Unity.Entities;
 
-[Serializable]
-public struct BuffTime : IComponentData
+namespace RandomTowerDefense.DOTS.Components
 {
-    public float Value;
+    /// <summary>
+    /// バフの持続時間を管理するコンポーネント
+    /// </summary>
+    [Serializable]
+    public struct BuffTime : IComponentData
+    {
+        #region Public Fields
+        public float Value;
+        #endregion
+    }
 }
 

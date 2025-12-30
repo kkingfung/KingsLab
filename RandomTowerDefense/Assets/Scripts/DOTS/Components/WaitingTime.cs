@@ -1,10 +1,17 @@
 ﻿using System;
 using Unity.Entities;
 
-//Wait until Next Repeated Collision Check
-[Serializable]
-public struct WaitingTime : IComponentData
+namespace RandomTowerDefense.DOTS.Components
 {
-    public float Value;
+    /// <summary>
+    /// 次の繰り返し衝突チェックまでの待機時間を管理するコンポーネント
+    /// </summary>
+    [Serializable]
+    public struct WaitingTime : IComponentData
+    {
+        #region Public Fields
+        public float Value;
+        #endregion
+    }
 }
 

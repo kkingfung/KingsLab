@@ -2,22 +2,56 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using RandomTowerDefense.DOTS.Spawner;
+using RandomTowerDefense.Scene;
+using RandomTowerDefense.Managers.System;
+using RandomTowerDefense.Managers.Macro;
+using RandomTowerDefense.Systems;
+using RandomTowerDefense.Units;
 
+/// <summary>
+/// チュートリアル管理システム - 新規プレイヤー向け段階的学習システム
+///
+/// 主な機能:
+/// - 段階的チュートリアル進行管理（情報、初Wave、ストア、完了）
+/// - ランドスケープ/ポートレート両対応UI表示制御
+/// - 文字送りエフェクトによるインストラクション表示
+/// - プレイヤー行動待機と自動進行制御
+/// - 過去インストラクション振り返り機能
+/// - チュートリアル完了後のフリーバトルへ遷移
+/// - タイムスケール調整によるゲーム進行制御
+/// </summary>
 public class TutorialManager : MonoBehaviour
 {
-    public enum TutorialStageID {
+    #region Enums
+    /// <summary>
+    /// チュートリアル段階ID列挙型
+    /// </summary>
+    public enum TutorialStageID
+    {
+        /// <summary>初期情報表示段階</summary>
         TutorialProgress_Info = 0,
+        /// <summary>初Wave体験段階</summary>
         TutorialProgress_FirstWave,
+        /// <summary>ストア・スキル説明段階</summary>
         TutorialProgress_StoreSkill,
+        /// <summary>チュートリアル完了段階</summary>
         TutorialProgress_Finish,
+        /// <summary>フリーバトル段階</summary>
         TutorialProgress_FreeBattle,
     }
+    #endregion
 
+    #region Public Properties
+    /// <summary>タワー建設可能フラグ</summary>
     [HideInInspector]
     public bool FreeToBuild;
 
+    /// <summary>プレイヤー応答待ちフラグ</summary>
     public bool WaitingResponds;
+    #endregion
 
+    #region Private Fields
     private TutorialStageID tutorialStage;
     private int StageProgress;
 
@@ -25,22 +59,37 @@ public class TutorialManager : MonoBehaviour
     private float textCnt;
 
     private int reviewStage;
+    #endregion
 
+    #region Serialized Fields
+    [Header("📱 UI Elements - Landscape")]
     public List<Text> InstructionText_Landscape;
-    public List<Text> InstructionText_Protrait;
     public List<GameObject> InstructionSprite_Landscape;
+
+    [Header("📱 UI Elements - Portrait")]
+    public List<Text> InstructionText_Protrait;
     public List<GameObject> InstructionSprite_Protrait;
+
+    [Header("📜 History")]
     public List<Button> HistoryIcons;
 
+    [Header("🎮 Manager References")]
     public InGameOperation SceneManager;
     public TowerSpawner towerSpawner;
     public EnemySpawner enemySpawner;
     public SkillSpawner skillSpawner;
     public TimeManager timeManager;
     public ResourceManager resourceManager;
+    #endregion
 
+    #region Private Fields (Continued)
     private float timeWait;
-    // Start is called before the first frame update
+    #endregion
+
+    #region Unity Lifecycle
+    /// <summary>
+    /// チュートリアルシステム初期化 - 全状態をリセットしてチュートリアル開始準備
+    /// </summary>
     void Start()
     {
         WaitingResponds = false;
@@ -56,15 +105,19 @@ public class TutorialManager : MonoBehaviour
         //enemySpawner = FindObjectOfType<EnemySpawner>();
         //skillSpawner = FindObjectOfType<SkillSpawner>();
         //timeManager = FindObjectOfType<TimeManager>();
-        if (SceneManager.CheckIfTutorial() == false) {
+        if (SceneManager.CheckIfTutorial() == false)
+        {
             DestroyAllRelated();
         }
     }
 
-    // Update is called once per frame
+    /// <summary>
+    /// 毎フレーム更新 - 現在のチュートリアル段階に応じた処理を実行
+    /// </summary>
     void Update()
     {
-        switch (tutorialStage) { 
+        switch (tutorialStage)
+        {
             case TutorialStageID.TutorialProgress_Info:
                 WaitingResponds = true;
                 Update_TutorialInfo();
@@ -90,17 +143,22 @@ public class TutorialManager : MonoBehaviour
                 return;
         }
         foreach (Button i in HistoryIcons)
-            i.interactable = !WaitingResponds && tutorialStage< TutorialStageID.TutorialProgress_FreeBattle;
+            i.interactable = !WaitingResponds && tutorialStage < TutorialStageID.TutorialProgress_FreeBattle;
 
         FixedUpdateText();
         UpdateActiveness();
     }
 
-    private void UpdateActiveness() {
+    #endregion
+
+    #region Private Methods
+
+    private void UpdateActiveness()
+    {
         foreach (Text i in InstructionText_Landscape)
-            i.enabled = SceneManager.OrientationLand && WaitingResponds && fullText!="";
+            i.enabled = SceneManager.OrientationLand && WaitingResponds && fullText != "";
         foreach (GameObject i in InstructionSprite_Landscape)
-            i.SetActive(SceneManager.OrientationLand && WaitingResponds && fullText != "") ;
+            i.SetActive(SceneManager.OrientationLand && WaitingResponds && fullText != "");
 
         foreach (Text i in InstructionText_Protrait)
             i.enabled = !SceneManager.OrientationLand && WaitingResponds && fullText != "";
@@ -128,7 +186,8 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-    private void Update_TutorialInfo() {
+    private void Update_TutorialInfo()
+    {
         switch (StageProgress)
         {
             case 0:
@@ -139,7 +198,7 @@ public class TutorialManager : MonoBehaviour
                 break;
             case 1:
                 if (Input.GetMouseButtonUp(0) ||
-                    (Input.touchCount>0 && Input.touches[0].phase==TouchPhase.Ended))
+                    (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
                     ChangeText("今日は初任務だけど、\n心配要らないのだ");
                     StageProgress++;
@@ -188,7 +247,7 @@ public class TutorialManager : MonoBehaviour
                 break;
             case 7:
                 WaitingResponds = false;
-                if ( towerSpawner.AllAliveObjList().Count>0)
+                if (towerSpawner.AllAliveObjList().Count > 0)
                 {
                     ChangeText("");
                     StageProgress++;
@@ -299,7 +358,7 @@ public class TutorialManager : MonoBehaviour
             case 1:
                 WaitingResponds = false;
                 reviewStage = 1;
-                if (enemySpawner.AllAliveMonstersList().Count>0)
+                if (enemySpawner.AllAliveMonstersList().Count > 0)
                 {
                     StageProgress++;
                 }
@@ -307,7 +366,8 @@ public class TutorialManager : MonoBehaviour
             case 2:
                 WaitingResponds = false;
                 reviewStage = 2;
-                if (enemySpawner.AllAliveMonstersList().Count <= 0) {
+                if (enemySpawner.AllAliveMonstersList().Count <= 0)
+                {
                     StageProgress = 0;
                     tutorialStage++;
                     reviewStage = 0;
@@ -351,7 +411,7 @@ public class TutorialManager : MonoBehaviour
                     (Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended))
                 {
                     ChangeText("けど、今回は私の道具を\n貸してやるのだ");
-                    SkillStack.AddStock(Upgrades.StoreItems.MagicMeteor);
+                    SkillStack.AddStock(UpgradesManager.StoreItems.MagicMeteor);
                     StageProgress++;
                 }
                 break;
@@ -378,7 +438,7 @@ public class TutorialManager : MonoBehaviour
                 break;
             case 8:
                 WaitingResponds = false;
-                if (skillSpawner.AllAliveSkillsList().Count>0)
+                if (skillSpawner.AllAliveSkillsList().Count > 0)
                 {
                     StageProgress = 0;
                     tutorialStage++;
@@ -439,6 +499,10 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Public API
+
     public void SetTutorialStage(TutorialStageID stage)
     {
         tutorialStage = stage;
@@ -453,7 +517,8 @@ public class TutorialManager : MonoBehaviour
         return StageProgress;
     }
 
-    public void DestroyAllRelated() {
+    public void DestroyAllRelated()
+    {
         foreach (Text i in InstructionText_Landscape)
             if (i) Destroy(i.gameObject);
         foreach (GameObject i in InstructionSprite_Landscape)
@@ -467,8 +532,10 @@ public class TutorialManager : MonoBehaviour
         Destroy(this);
     }
 
-    public void ViewHistory() {
+    public void ViewHistory()
+    {
         StageProgress = reviewStage;
     }
 
+    #endregion
 }

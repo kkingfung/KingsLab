@@ -9,8 +9,13 @@ using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Rendering;
+using RandomTowerDefense.DOTS.Components;
+using RandomTowerDefense.DOTS.Tags;
 
-
+/// <summary>
+/// 敵に対する石化スキル効果を処理するECSシステム
+/// 石化スキルの範囲内の敵に石化量とバフ持続時間を適用
+/// </summary>
 public class EnemyToPetrification : JobComponentSystem
 {
     EntityQuery enemyGroup;
@@ -53,19 +58,10 @@ public class EnemyToPetrification : JobComponentSystem
         return jobHandle;
     }
 
-    //Common Function
-    static float GetDistance(float3 posA, float3 posB)
-    {
-        float3 delta = posA - posB;
-        return delta.x * delta.x + delta.z * delta.z;
-    }
 
-    static bool CheckCollision(float3 posA, float3 posB, float radiusSqr)
-    {
-        return GetDistance(posA, posB) <= radiusSqr;
-    }
-
-    //enemy by petrification
+    /// <summary>
+    /// 範囲内の敵に石化効果を適用するジョブ
+    /// </summary>
     #region JobEvSP
     [BurstCompile]
     struct CollisionJobEvSP : IJobChunk
@@ -97,10 +93,9 @@ public class EnemyToPetrification : JobComponentSystem
                 petrifyAmt.Value = targetPetrify[0].Value;
                 buff.Value += targetBuff[0].Value;
 
-                //Constraint according to FPS
+                // バフ持続時間を最大1秒に制限
                 if (buff.Value > 1)
                     buff.Value = 1;
-                //Debug.Log("Petrified");
 
                 chunkPetrify[i] = petrifyAmt;
                 chunkBuff[i] = buff;

@@ -1,7 +1,9 @@
 # RandomTowerDefense
 
 Unity DOTS と ML-Agents を活用した、AI 駆動型の高度なタワーディフェンスゲームです。KingsLab による学校の最終年度プロジェクトとして制作されました。
-現在は職場での経験を活かし、各処理の作り直しを進めています。その後、ゲーム性を維持しつつ操作性と UI の改善を行う予定です。（対応ブランチ: refactor）
+現在は職場での経験を活かし、各処理の作り直しを進めました（対応ブランチ: refactor）
+
+<img src="/Result.PNG" width="500"><img src="/Result2.PNG" width="500"> 
 
 <img src="/Result.PNG" width="500"><img src="/Result2.PNG" width="500"> 
 
@@ -12,6 +14,7 @@ RandomTowerDefense は、タワーを配置する際に種類がランダムで�
 
 **開発期間:** 3か月  （リメーク含まらない）
 **エンジン:** Unity (DOTS/ECS アーキテクチャ)
+**プラットフォーム:** モバイル (iOS/Android)
 
 ## Key Features
 ### Gameplay Mechanics
@@ -59,7 +62,7 @@ RandomTowerDefense は、タワーを配置する際に種類がランダムで�
 
 ## Technologies Used
 
-- **Unity 2021+**（DOTS/ECS）
+- **Unity 2020.3.9f1**（DOTS/ECS）
 - **Unity ML-Agents**（強化学習）
 - **Unity VFX Graph**（GPU 加速パーティクル）
 - **Unity Burst Compiler**
@@ -73,10 +76,11 @@ RandomTowerDefense は、タワーを配置する際に種類がランダムで�
 RandomTowerDefense/
 ├── Assets/
 │   ├── Scripts/
-│   │   ├── DOTS/            　# ECS 実装
+│   │   ├── DOTS/              # ECS 実装
 │   │   │   ├── Components/    # ECS データコンポーネント
 │   │   │   ├── Systems/       # Job ベースのシステム（ターゲット、衝突、タイマー）
 │   │   │   ├── Pathfinding/   # ECS での A* パスファインディング
+│   │   │   ├── Physics/       # DOTS 物理システム
 │   │   │   ├── Spawner/       # エンティティスポーンシステム
 │   │   │   └── Tags/          # ECS タグ
 │   │   ├── Managers/          # ゲームステート管理
@@ -85,17 +89,71 @@ RandomTowerDefense/
 │   │   ├── Units/             # タワー、敵、城の実装
 │   │   ├── Info/              # タワー/敵データ定義
 │   │   ├── Boids/             # 群れ行動シミュレーション
+│   │   │   └── DOTS/          # Boids の DOTS 実装
 │   │   ├── ProcedualAnimation/ # IK 手続きアニメーション
+│   │   │   └── InverseKinetic/ # IK システム実装
 │   │   ├── MapGenerator/      # マップ生成
 │   │   ├── Scene/             # シーン管理
+│   │   ├── FileSystem/        # ファイル管理
+│   │   ├── Stock/             # ストック/インベントリシステム
+│   │   ├── Toolkit/           # ツールキットユーティリティ
 │   │   ├── Tools/             # 開発用ツール
+│   │   ├── Utility/           # 汎用ユーティリティ
+│   │   │   └── Math/          # 数学ユーティリティ
 │   │   └── Common/            # 共通ユーティリティ
-│   ├── Materials/             # マテリアル
 │   ├── Prefabs/               # プレハブ
+│   │   ├── Boids/             # Boids プレハブ
+│   │   ├── Chests/            # チェストプレハブ
+│   │   ├── MainCharacters/    # メインキャラクター
+│   │   ├── Monsters/          # 敵プレハブ
+│   │   ├── MapGenerator/      # マップジェネレータ
+│   │   ├── ProcedualAniPrefab/ # 手続きアニメーション
+│   │   └── UI/                # UI プレハブ
 │   ├── Scenes/                # Unity シーン
+│   │   ├── GameScene/         # ゲームシーン
+│   │   ├── TitleScene/        # タイトルシーン
+│   │   ├── StageSelection/    # ステージ選択
+│   │   └── LoadingScene/      # ローディング
+│   ├── Materials/             # マテリアル
+│   │   ├── Tower/             # タワーマテリアル
+│   │   ├── Effect/            # エフェクトマテリアル
+│   │   ├── Environment/       # 環境マテリアル
+│   │   └── Terrain/           # 地形マテリアル
+│   ├── Meshes/                # 3D モデル
+│   │   ├── Characters/        # キャラクターモデル
+│   │   ├── Environment/       # 環境モデル
+│   │   ├── Effects/           # エフェクトモデル
+│   │   └── Items/             # アイテムモデル
+│   ├── Sprites/               # 2D スプライト・テクスチャ
+│   │   ├── UIicons/           # UI アイコン
+│   │   ├── CharacterSpr/      # キャラクタースプライト
+│   │   └── Terrain/           # 地形テクスチャ
+│   ├── Audios/                # オーディオアセット
+│   │   ├── BGM/               # 背景音楽
+│   │   ├── SE_Attack/         # 攻撃効果音
+│   │   └── SE_Magic/          # 魔法効果音
 │   ├── Shaders/               # カスタムシェーダ
+│   │   ├── Custom/            # カスタムシェーダ
+│   │   ├── Terrain/           # 地形シェーダ
+│   │   └── Includes/          # シェーダインクルード
+│   ├── ParticleSystems/       # VFX Graph エフェクト
+│   │   ├── Skills/            # スキルエフェクト
+│   │   ├── Units/             # ユニットエフェクト
+│   │   └── Map/               # マップエフェクト
 │   ├── ML-Agents/             # AI トレーニング設定
-│   └── ParticleSystems/       # VFX Graph エフェクト
+│   │   ├── ML-Agents config/  # トレーニング設定
+│   │   └── ML-Agents runs/    # トレーニング結果
+│   ├── Settings/              # プロジェクト設定
+│   │   ├── URP/               # URP 設定
+│   │   └── Terrain/           # 地形設定
+│   ├── Terrain/               # 地形データ
+│   ├── Resources/             # Unity Resources
+│   ├── Fonts/                 # フォント
+│   ├── Skybox/                # スカイボックス
+│   ├── Editor/                # エディタースクリプト
+│   ├── 3rdParty/              # サードパーティアセット
+│   └── TestingLab/            # テスト環境
+├── Demos/                     # デモシーン
 ├── ProjectSettings/           # Unity プロジェクト設定
 └── Packages/                  # パッケージ依存
 ```
@@ -120,7 +178,7 @@ RandomTowerDefense/
 ## Setup Instructions
 
 ### Prerequisites
-- Unity 2021.x 以降
+- Unity 2020.3.x 以降
 - ML-Agents Python パッケージ（AI トレーニング用）
 - Git LFS（大容量アセット用）
 
@@ -131,7 +189,7 @@ RandomTowerDefense/
    ```
 2. Unity Hub でプロジェクトを開く
 3. Unity がすべてのアセットをインポート（初回は数分かかる場合があります）
-4. メインシーンを開く: `Assets/Scenes/[MainScene].unity`
+4. メインシーンを開く: `Assets/Scenes/TitleScene.unity`
 
 ### Building
 本番ビルド前に:
@@ -190,6 +248,7 @@ RandomTowerDefense puts a unique twist on the tower defense genre: tower types a
 
 **Development Time:** 3 months
 **Engine:** Unity (DOTS/ECS Architecture)
+**Platform:** Mobile (iOS/Android)
 
 ## Key Features
 
@@ -238,7 +297,7 @@ The game uses a hybrid ECS architecture combining traditional Unity GameObjects 
 
 ## Technologies Used
 
-- **Unity 2021+** with DOTS/ECS
+- **Unity 2020.3.9f1** with DOTS/ECS
 - **Unity ML-Agents** for reinforcement learning
 - **Unity VFX Graph** for GPU-accelerated particle effects
 - **Unity Burst Compiler** for performance optimization
@@ -256,6 +315,7 @@ RandomTowerDefense/
 │   │   │   ├── Components/    # ECS data components
 │   │   │   ├── Systems/       # Job-based systems (targeting, collision, timers)
 │   │   │   ├── Pathfinding/   # A* pathfinding with ECS
+│   │   │   ├── Physics/       # DOTS physics systems
 │   │   │   ├── Spawner/       # Entity spawning systems
 │   │   │   └── Tags/          # ECS entity tags
 │   │   ├── Managers/          # Game state controllers
@@ -264,17 +324,71 @@ RandomTowerDefense/
 │   │   ├── Units/             # Tower, Enemy, Castle implementations
 │   │   ├── Info/              # Data definitions (tower types, enemy stats)
 │   │   ├── Boids/             # Flocking simulation
+│   │   │   └── DOTS/          # DOTS implementation for boids
 │   │   ├── ProcedualAnimation/ # IK system for creature locomotion
+│   │   │   └── InverseKinetic/ # IK system implementation
 │   │   ├── MapGenerator/      # Procedural level generation
 │   │   ├── Scene/             # Scene management and transitions
+│   │   ├── FileSystem/        # File management
+│   │   ├── Stock/             # Stock/inventory systems
+│   │   ├── Toolkit/           # Toolkit utilities
 │   │   ├── Tools/             # Development utilities
+│   │   ├── Utility/           # General utilities
+│   │   │   └── Math/          # Math utilities
 │   │   └── Common/            # Shared utilities
-│   ├── Materials/             # Rendering materials
 │   ├── Prefabs/               # Game object prefabs
+│   │   ├── Boids/             # Boids prefabs
+│   │   ├── Chests/            # Chest prefabs
+│   │   ├── MainCharacters/    # Main characters
+│   │   ├── Monsters/          # Enemy prefabs
+│   │   ├── MapGenerator/      # Map generator prefabs
+│   │   ├── ProcedualAniPrefab/ # Procedural animation prefabs
+│   │   └── UI/                # UI prefabs
 │   ├── Scenes/                # Unity scenes
+│   │   ├── GameScene/         # Main game scene
+│   │   ├── TitleScene/        # Title screen
+│   │   ├── StageSelection/    # Stage selection
+│   │   └── LoadingScene/      # Loading screen
+│   ├── Materials/             # Rendering materials
+│   │   ├── Tower/             # Tower materials
+│   │   ├── Effect/            # Effect materials
+│   │   ├── Environment/       # Environment materials
+│   │   └── Terrain/           # Terrain materials
+│   ├── Meshes/                # 3D models
+│   │   ├── Characters/        # Character models
+│   │   ├── Environment/       # Environment models
+│   │   ├── Effects/           # Effect models
+│   │   └── Items/             # Item models
+│   ├── Sprites/               # 2D sprites and textures
+│   │   ├── UIicons/           # UI icons
+│   │   ├── CharacterSpr/      # Character sprites
+│   │   └── Terrain/           # Terrain textures
+│   ├── Audios/                # Audio assets
+│   │   ├── BGM/               # Background music
+│   │   ├── SE_Attack/         # Attack sound effects
+│   │   └── SE_Magic/          # Magic sound effects
 │   ├── Shaders/               # Custom shaders
+│   │   ├── Custom/            # Custom shaders
+│   │   ├── Terrain/           # Terrain shaders
+│   │   └── Includes/          # Shader includes
+│   ├── ParticleSystems/       # VFX Graph effects
+│   │   ├── Skills/            # Skill effects
+│   │   ├── Units/             # Unit effects
+│   │   └── Map/               # Map effects
 │   ├── ML-Agents/             # AI training configurations
-│   └── ParticleSystems/       # VFX Graph effects
+│   │   ├── ML-Agents config/  # Training configurations
+│   │   └── ML-Agents runs/    # Training results
+│   ├── Settings/              # Project settings
+│   │   ├── URP/               # Universal Render Pipeline settings
+│   │   └── Terrain/           # Terrain settings
+│   ├── Terrain/               # Terrain data
+│   ├── Resources/             # Unity Resources folder
+│   ├── Fonts/                 # Font assets
+│   ├── Skybox/                # Skybox assets
+│   ├── Editor/                # Editor scripts
+│   ├── 3rdParty/              # Third-party assets
+│   └── TestingLab/            # Testing environment
+├── Demos/                     # Demo scenes
 ├── ProjectSettings/           # Unity project settings
 └── Packages/                  # Package dependencies
 ```
@@ -301,7 +415,7 @@ RandomTowerDefense/
 ## Setup Instructions
 
 ### Prerequisites
-- Unity 2021.x or later
+- Unity 2020.3.x or later
 - ML-Agents Python package (for AI training)
 - Git LFS (for large assets)
 
@@ -312,7 +426,7 @@ RandomTowerDefense/
    ```
 2. Open the project in Unity Hub
 3. Let Unity import all assets (first import may take several minutes)
-4. Open the main scene: `Assets/Scenes/[MainScene].unity`
+4. Open the main scene: `Assets/Scenes/TitleScene.unity`
 
 ### Building
 Before building for production:

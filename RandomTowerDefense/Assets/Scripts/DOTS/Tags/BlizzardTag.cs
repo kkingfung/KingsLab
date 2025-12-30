@@ -1,5 +1,11 @@
 ﻿using System;
 using Unity.Entities;
 
-[Serializable]
-public struct BlizzardTag : IComponentData { }
+namespace RandomTowerDefense.DOTS.Tags
+{
+    /// <summary>
+    /// ブリザードスキルエンティティを識別するためのタグ
+    /// </summary>
+    [Serializable]
+    public struct BlizzardTag : IComponentData { }
+}

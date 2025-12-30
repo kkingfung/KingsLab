@@ -1,9 +1,17 @@
 ﻿using System;
 using Unity.Entities;
 
-[Serializable]
-public struct Rank : IComponentData
+namespace RandomTowerDefense.DOTS.Components
 {
-    public int Value;
+    /// <summary>
+    /// エンティティのランク情報を管理するコンポーネント
+    /// </summary>
+    [Serializable]
+    public struct Rank : IComponentData
+    {
+        #region Public Fields
+        public int Value;
+        #endregion
+    }
 }
 

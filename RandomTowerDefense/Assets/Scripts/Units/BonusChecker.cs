@@ -1,234 +1,341 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using RandomTowerDefense.DOTS.Spawner;
+using RandomTowerDefense.Info;
+using RandomTowerDefense.Managers.Macro;
 
-public class BonusChecker : MonoBehaviour
+namespace RandomTowerDefense.Units
 {
-    private readonly int[] BonusForAllMonstersByRankChk = { 100, 250, 500, 800 };
-    private readonly int BonusForAllRanksByTypeChk = 2000;
-
-    public ResourceManager resourceManager;
-    public TowerSpawner towerSpawner;
-    bool[] AllMonstersByRankBonus= { false,false,false,false};
-    bool[] AllRanksByMonsterBonus= { false,false,false,false};
-
-    public int TowerNewlyBuilt;
-    public bool TowerLevelChg;
-
-    // Start is called before the first frame update
-    void Start()
+    /// <summary>
+    /// ボーナスチェッカーシステム - タワー組み合わせボーナスの検出と支給
+    ///
+    /// 主な機能:
+    /// - 同ランク全タワータイプボーナス検出
+    /// - 同タイプ全ランクタワーボーナス検出
+    /// - リソース報酬自動支給システム
+    /// - リアルタイムボーナス状態監視
+    /// - パフォーマンスフレンドリーボーナス計算
+    /// </summary>
+    public class BonusChecker : MonoBehaviour
     {
-        //towerSpawner = FindObjectOfType<TowerSpawner>();
-        //resourceManager = FindObjectOfType<ResourceManager>();
+        #region Constants
+        private readonly int[] BonusForAllMonstersByRankChk = { 100, 250, 500, 800 };
+        private readonly int BonusForAllRanksByTypeChk = 2000;
+        #endregion
 
-        TowerNewlyBuilt = -1;
-        TowerLevelChg = false;
-    }
+        #region Serialized Fields
+        /// <summary>
+        /// リソース管理クラスの参照
+        /// </summary>
+        [Header("🎮 Manager References")]
+        public ResourceManager resourceManager;
+        /// <summary>
+        /// タワー生成管理クラスの参照
+        /// </summary>
+        public TowerSpawner towerSpawner;
+        #endregion
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (TowerNewlyBuilt >= 0)
+        #region Public Properties
+        /// <summary>
+        /// 新しく建設されたタワーのタイプID（-1の場合は未設定）
+        /// </summary>
+        public int TowerNewlyBuilt;
+        /// <summary>
+        /// タワーレベル変更フラグ - ボーナス判定のトリガー
+        /// </summary>
+        public bool TowerLevelChg;
+        #endregion
+
+        #region Private Fields
+        private readonly bool[] _allMonstersByRankBonus = { false, false, false, false };
+        private readonly bool[] _allRanksByMonsterBonus = { false, false, false, false };
+        #endregion
+
+        /// <summary>
+        /// 初期化処理 - ボーナスチェッカーの初期状態設定
+        /// </summary>
+        void Start()
         {
-            if (TowerNewlyBuilt==0 && !AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerNightmare])
-                AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerNightmare]
-                    = MonsterList_Type(TowerInfo.TowerInfoID.Enum_TowerNightmare);
-
-            else if (TowerNewlyBuilt == 1 && !AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerSoulEater])
-                AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerSoulEater]
-                    = MonsterList_Type(TowerInfo.TowerInfoID.Enum_TowerSoulEater);
-
-            else if (TowerNewlyBuilt == 2 && !AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer])
-                AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerTerrorBringer]
-                    = MonsterList_Type(TowerInfo.TowerInfoID.Enum_TowerTerrorBringer);
-
-            else if (TowerNewlyBuilt == 3 && !AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerUsurper])
-                AllRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.Enum_TowerUsurper]
-                   = MonsterList_Type(TowerInfo.TowerInfoID.Enum_TowerUsurper);
+            //towerSpawner = FindObjectOfType<TowerSpawner>();
+            //resourceManager = FindObjectOfType<ResourceManager>();
 
             TowerNewlyBuilt = -1;
-        }
-        if (TowerLevelChg)
-        {
-            for (int i = 0; i < AllMonstersByRankBonus.Length; ++i)
-            {
-                if (!AllMonstersByRankBonus[i])
-                    AllMonstersByRankBonus[i] = MonseterList_Rank(i + 1);
-            }
             TowerLevelChg = false;
         }
-    }
 
-    bool MonsterList_Type(TowerInfo.TowerInfoID towerID) {
-        int result = 0x00000;
-
-        switch (towerID) 
+        /// <summary>
+        /// 毎フレーム更新 - タワー状態変化の検知とボーナス判定
+        /// </summary>
+        void Update()
         {
-            case TowerInfo.TowerInfoID.Enum_TowerNightmare:
-                for (int i = TowerSpawner.MonsterMaxRank; i > 0; --i) {
-                    switch (i) {
-                        case 1:
-                            if (CheckActivenessInList(towerSpawner.TowerNightmareRank1))
-                                result |= (0x1 << (i));
-                            break;
-                        case 2:
-                            if (CheckActivenessInList(towerSpawner.TowerNightmareRank2))
-                                result |= (0x1 << (i));
-                            break;
-                        case 3:
-                            if (CheckActivenessInList(towerSpawner.TowerNightmareRank3))
-                                result |= (0x1 << (i));
-                            break;
-                        case 4:
-                            if (CheckActivenessInList(towerSpawner.TowerNightmareRank4))
-                                result |= (0x1 << (i));
-                            break;
-                    }
-                    if (result == 0x00000)
-                        return false;
-                }
-                break;
-            case TowerInfo.TowerInfoID.Enum_TowerSoulEater:
-                for (int i = TowerSpawner.MonsterMaxRank; i > 0; --i)
+            if (TowerNewlyBuilt >= 0)
+            {
+                if (TowerNewlyBuilt == 0 && !_allRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.EnumTowerNightmare])
+                    _allRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.EnumTowerNightmare]
+                        = MonsterList_Type(TowerInfo.TowerInfoID.EnumTowerNightmare);
+
+                else if (TowerNewlyBuilt == 1 && !_allRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.EnumTowerSoulEater])
+                    _allRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.EnumTowerSoulEater]
+                        = MonsterList_Type(TowerInfo.TowerInfoID.EnumTowerSoulEater);
+
+                else if (TowerNewlyBuilt == 2 && !_allRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.EnumTowerTerrorBringer])
+                    _allRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.EnumTowerTerrorBringer]
+                        = MonsterList_Type(TowerInfo.TowerInfoID.EnumTowerTerrorBringer);
+
+                else if (TowerNewlyBuilt == 3 && !_allRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.EnumTowerUsurper])
+                    _allRanksByMonsterBonus[(int)TowerInfo.TowerInfoID.EnumTowerUsurper]
+                       = MonsterList_Type(TowerInfo.TowerInfoID.EnumTowerUsurper);
+
+                TowerNewlyBuilt = -1;
+            }
+            if (TowerLevelChg)
+            {
+                for (int i = 0; i < _allMonstersByRankBonus.Length; ++i)
                 {
-                    switch (i)
-                    {
-                        case 1:
-                            if (CheckActivenessInList(towerSpawner.TowerSoulEaterRank1))
-                                result |= (0x1 << (i));
-                            break;
-                        case 2:
-                            if (CheckActivenessInList(towerSpawner.TowerSoulEaterRank2))
-                                result |= (0x1 << (i));
-                            break;
-                        case 3:
-                            if (CheckActivenessInList(towerSpawner.TowerSoulEaterRank3))
-                                result |= (0x1 << (i));
-                            break;
-                        case 4:
-                            if (CheckActivenessInList(towerSpawner.TowerSoulEaterRank4))
-                                result |= (0x1 << (i));
-                            break;
-                    }
-                    if (result == 0x00000)
-                        return false;
+                    if (!_allMonstersByRankBonus[i])
+                        _allMonstersByRankBonus[i] = CheckAllMonstersByRank(i + 1);
                 }
-                break;
-            case TowerInfo.TowerInfoID.Enum_TowerTerrorBringer:
-                for (int i = TowerSpawner.MonsterMaxRank; i > 0; --i)
-                {
-                    switch (i)
-                    {
-                        case 1:
-                            if (CheckActivenessInList(towerSpawner.TowerTerrorBringerRank1))
-                                result |= (0x1 << (i));
-                            break;
-                        case 2:
-                            if (CheckActivenessInList(towerSpawner.TowerTerrorBringerRank2))
-                                result |= (0x1 << (i));
-                            break;
-                        case 3:
-                            if (CheckActivenessInList(towerSpawner.TowerTerrorBringerRank3))
-                                result |= (0x1 << (i));
-                            break;
-                        case 4:
-                            if (CheckActivenessInList(towerSpawner.TowerTerrorBringerRank4))
-                                result |= (0x1 << (i));
-                            break;
-                    }
-                    if (result == 0x00000)
-                        return false;
-                }
-                break;
-            case TowerInfo.TowerInfoID.Enum_TowerUsurper:
-                for (int i = TowerSpawner.MonsterMaxRank; i > 0; --i)
-                {
-                    switch (i)
-                    {
-                        case 1:
-                            if (CheckActivenessInList(towerSpawner.TowerUsurperRank1))
-                                result |= (0x1 << (i));
-                            break;
-                        case 2:
-                            if (CheckActivenessInList(towerSpawner.TowerUsurperRank2))
-                                result |= (0x1 << (i));
-                            break;
-                        case 3:
-                            if (CheckActivenessInList(towerSpawner.TowerUsurperRank3))
-                                result |= (0x1 << (i));
-                            break;
-                        case 4:
-                            if (CheckActivenessInList(towerSpawner.TowerUsurperRank4))
-                                result |= (0x1 << (i));
-                            break;
-                    }
-                    if (result == 0x00000)
-                        return false;
-                }
-                break;
+                TowerLevelChg = false;
+            }
         }
-        resourceManager.ChangeMaterial(BonusForAllRanksByTypeChk);
-        return true;
-    }
 
-    bool CheckActivenessInList(List<GameObject> towerList)
-    {
-        foreach (GameObject i in towerList)
+        /// <summary>
+        /// 指定タワータイプの全ランクが存在するか確認しボーナス支給
+        /// </summary>
+        /// <param name="towerID">確認するタワータイプ</param>
+        /// <returns>全ランクが存在する場合true</returns>
+        bool MonsterList_Type(TowerInfo.TowerInfoID towerID)
         {
-            if (i.activeSelf == false)
-                continue;
+            int result = 0x00000;
+
+            switch (towerID)
+            {
+                case TowerInfo.TowerInfoID.EnumTowerNightmare:
+                    for (int i = TowerSpawner.MonsterMaxRank; i > 0; --i)
+                    {
+                        switch (i)
+                        {
+                            case 1:
+                                if (CheckActivenessInList(towerSpawner.TowerNightmareRank1))
+                                    result |= (0x1 << (i));
+                                break;
+                            case 2:
+                                if (CheckActivenessInList(towerSpawner.TowerNightmareRank2))
+                                    result |= (0x1 << (i));
+                                break;
+                            case 3:
+                                if (CheckActivenessInList(towerSpawner.TowerNightmareRank3))
+                                    result |= (0x1 << (i));
+                                break;
+                            case 4:
+                                if (CheckActivenessInList(towerSpawner.TowerNightmareRank4))
+                                    result |= (0x1 << (i));
+                                break;
+                        }
+                        if (result == 0x00000)
+                            return false;
+                    }
+                    break;
+                case TowerInfo.TowerInfoID.EnumTowerSoulEater:
+                    for (int i = TowerSpawner.MonsterMaxRank; i > 0; --i)
+                    {
+                        switch (i)
+                        {
+                            case 1:
+                                if (CheckActivenessInList(towerSpawner.TowerSoulEaterRank1))
+                                    result |= (0x1 << (i));
+                                break;
+                            case 2:
+                                if (CheckActivenessInList(towerSpawner.TowerSoulEaterRank2))
+                                    result |= (0x1 << (i));
+                                break;
+                            case 3:
+                                if (CheckActivenessInList(towerSpawner.TowerSoulEaterRank3))
+                                    result |= (0x1 << (i));
+                                break;
+                            case 4:
+                                if (CheckActivenessInList(towerSpawner.TowerSoulEaterRank4))
+                                    result |= (0x1 << (i));
+                                break;
+                        }
+                        if (result == 0x00000)
+                            return false;
+                    }
+                    break;
+                case TowerInfo.TowerInfoID.EnumTowerTerrorBringer:
+                    for (int i = TowerSpawner.MonsterMaxRank; i > 0; --i)
+                    {
+                        switch (i)
+                        {
+                            case 1:
+                                if (CheckActivenessInList(towerSpawner.TowerTerrorBringerRank1))
+                                    result |= (0x1 << (i));
+                                break;
+                            case 2:
+                                if (CheckActivenessInList(towerSpawner.TowerTerrorBringerRank2))
+                                    result |= (0x1 << (i));
+                                break;
+                            case 3:
+                                if (CheckActivenessInList(towerSpawner.TowerTerrorBringerRank3))
+                                    result |= (0x1 << (i));
+                                break;
+                            case 4:
+                                if (CheckActivenessInList(towerSpawner.TowerTerrorBringerRank4))
+                                    result |= (0x1 << (i));
+                                break;
+                        }
+                        if (result == 0x00000)
+                            return false;
+                    }
+                    break;
+                case TowerInfo.TowerInfoID.EnumTowerUsurper:
+                    for (int i = TowerSpawner.MonsterMaxRank; i > 0; --i)
+                    {
+                        switch (i)
+                        {
+                            case 1:
+                                if (CheckActivenessInList(towerSpawner.TowerUsurperRank1))
+                                    result |= (0x1 << (i));
+                                break;
+                            case 2:
+                                if (CheckActivenessInList(towerSpawner.TowerUsurperRank2))
+                                    result |= (0x1 << (i));
+                                break;
+                            case 3:
+                                if (CheckActivenessInList(towerSpawner.TowerUsurperRank3))
+                                    result |= (0x1 << (i));
+                                break;
+                            case 4:
+                                if (CheckActivenessInList(towerSpawner.TowerUsurperRank4))
+                                    result |= (0x1 << (i));
+                                break;
+                        }
+                        if (result == 0x00000)
+                            return false;
+                    }
+                    break;
+            }
+            resourceManager.ChangeMaterial(BonusForAllRanksByTypeChk);
             return true;
         }
-        return false;
-    }
 
-    bool MonseterList_Rank(int rank)
-    {
-        switch (rank)
+        /// <summary>
+        /// 指定リスト内にアクティブなタワーが存在するかチェック
+        /// </summary>
+        /// <param name="towerList">確認するタワーリスト</param>
+        /// <returns>アクティブなタワーが存在する場合true</returns>
+        bool CheckActivenessInList(List<GameObject> towerList)
         {
-            case 1:
-                if (CheckActivenessInList(towerSpawner.TowerNightmareRank1) == false)
-                    return false;
-                if (CheckActivenessInList(towerSpawner.TowerSoulEaterRank1) == false)
-                    return false;
-                if (CheckActivenessInList(towerSpawner.TowerTerrorBringerRank1) == false)
-                    return false;
-                if (CheckActivenessInList(towerSpawner.TowerUsurperRank1) == false)
-                    return false;
-                break;
-            case 2:
-                if (CheckActivenessInList(towerSpawner.TowerNightmareRank2) == false)
-                    return false;
-                if (CheckActivenessInList(towerSpawner.TowerSoulEaterRank2) == false)
-                    return false;
-                if (CheckActivenessInList(towerSpawner.TowerTerrorBringerRank2) == false)
-                    return false;
-                if (CheckActivenessInList(towerSpawner.TowerUsurperRank2) == false)
-                    return false;
-                break;
-            case 3:
-                if (CheckActivenessInList(towerSpawner.TowerNightmareRank3) == false)
-                    return false;
-                if (CheckActivenessInList(towerSpawner.TowerSoulEaterRank3) == false)
-                    return false;
-                if (CheckActivenessInList(towerSpawner.TowerTerrorBringerRank3) == false)
-                    return false;
-                if (CheckActivenessInList(towerSpawner.TowerUsurperRank3) == false)
-                    return false;
-                break;
-            case 4:
-                if (CheckActivenessInList(towerSpawner.TowerNightmareRank4) == false)
-                    return false;
-                if (CheckActivenessInList(towerSpawner.TowerSoulEaterRank4) == false)
-                    return false;
-                if (CheckActivenessInList(towerSpawner.TowerTerrorBringerRank4) == false)
-                    return false;
-                if (CheckActivenessInList(towerSpawner.TowerUsurperRank4) == false)
-                    return false;
-                break;
+            foreach (GameObject i in towerList)
+            {
+                if (i == null || i.activeSelf == false)
+                    continue;
+                return true;
+            }
+            return false;
         }
 
-        resourceManager.ChangeMaterial(BonusForAllMonstersByRankChk[rank-1]);
-        return true;
+        /// <summary>
+        /// 指定ランクで全タワータイプが揃っているか確認しボーナス支給
+        /// </summary>
+        /// <param name="rank">確認するランク（1-4）</param>
+        /// <returns>全タワータイプが揃っている場合true</returns>
+        private bool CheckAllMonstersByRank(int rank)
+        {
+            if (rank < 1 || rank > 4) return false;
+
+            bool hasAllTypes = CheckAllTowerTypesForRank(rank);
+
+            if (hasAllTypes)
+            {
+                resourceManager.ChangeMaterial(BonusForAllMonstersByRankChk[rank - 1]);
+            }
+
+            return hasAllTypes;
+        }
+
+        /// <summary>
+        /// 指定ランクで全てのタワータイプが存在するかチェック
+        /// </summary>
+        /// <param name="rank">確認するランク</param>
+        /// <returns>全タワータイプが存在する場合true</returns>
+        private bool CheckAllTowerTypesForRank(int rank)
+        {
+            var towerTypes = new[]
+            {
+                TowerInfo.TowerInfoID.EnumTowerNightmare,
+                TowerInfo.TowerInfoID.EnumTowerSoulEater,
+                TowerInfo.TowerInfoID.EnumTowerTerrorBringer,
+                TowerInfo.TowerInfoID.EnumTowerUsurper
+            };
+
+            foreach (var towerType in towerTypes)
+            {
+                if (!HasActiveTowerOfTypeAndRank(towerType, rank))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// 指定タイプとランクのタワーがアクティブに存在するかチェック
+        /// </summary>
+        /// <param name="towerType">タワータイプ</param>
+        /// <param name="rank">タワーランク（1-4）</param>
+        /// <returns>該当タワーが存在する場合true</returns>
+        private bool HasActiveTowerOfTypeAndRank(TowerInfo.TowerInfoID towerType, int rank)
+        {
+            List<GameObject> towerList = null;
+
+            switch (towerType)
+            {
+                case TowerInfo.TowerInfoID.EnumTowerNightmare:
+                    towerList = rank switch
+                    {
+                        1 => towerSpawner.TowerNightmareRank1,
+                        2 => towerSpawner.TowerNightmareRank2,
+                        3 => towerSpawner.TowerNightmareRank3,
+                        4 => towerSpawner.TowerNightmareRank4,
+                        _ => null
+                    };
+                    break;
+                case TowerInfo.TowerInfoID.EnumTowerSoulEater:
+                    towerList = rank switch
+                    {
+                        1 => towerSpawner.TowerSoulEaterRank1,
+                        2 => towerSpawner.TowerSoulEaterRank2,
+                        3 => towerSpawner.TowerSoulEaterRank3,
+                        4 => towerSpawner.TowerSoulEaterRank4,
+                        _ => null
+                    };
+                    break;
+                case TowerInfo.TowerInfoID.EnumTowerTerrorBringer:
+                    towerList = rank switch
+                    {
+                        1 => towerSpawner.TowerTerrorBringerRank1,
+                        2 => towerSpawner.TowerTerrorBringerRank2,
+                        3 => towerSpawner.TowerTerrorBringerRank3,
+                        4 => towerSpawner.TowerTerrorBringerRank4,
+                        _ => null
+                    };
+                    break;
+                case TowerInfo.TowerInfoID.EnumTowerUsurper:
+                    towerList = rank switch
+                    {
+                        1 => towerSpawner.TowerUsurperRank1,
+                        2 => towerSpawner.TowerUsurperRank2,
+                        3 => towerSpawner.TowerUsurperRank3,
+                        4 => towerSpawner.TowerUsurperRank4,
+                        _ => null
+                    };
+                    break;
+            }
+
+            return towerList != null && CheckActivenessInList(towerList);
+        }
     }
 }

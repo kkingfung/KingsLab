@@ -2,309 +2,494 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using RandomTowerDefense.Scene;
+using RandomTowerDefense.Managers.Macro;
+using RandomTowerDefense.Units;
+using RandomTowerDefense.Systems;
+using RandomTowerDefense.DOTS.Spawner;
+using StoreItems = RandomTowerDefense.Units.UpgradesManager.StoreItems;
 
-public class StoreManager : MonoBehaviour
+namespace RandomTowerDefense.Managers.Macro
 {
-    private readonly int MaxItemPerCategory = 4;
-    private readonly int[] cdCounter = { 60 , 90 , 150 };
-    private readonly Color OriColor = new Color(1, 0.675f, 0, 1 );
-    private Dictionary<Upgrades.StoreItems, int[]> ItemPrice;
-
-    public List<TextMesh> ArmyLvTextObj;
-    public List<TextMesh> ArmyPriceTextObj;
-
-    public List<TextMesh> TowerHPTextObj;
-    public List<TextMesh> TowerPriceTextObj;
-    public List<TextMesh> MonsterCDTextObj;
-
-    public List<TextMesh> SkillPriceTextObj;
-    public List<TextMesh> SkillLvTextObj;
-
-    public InGameOperation sceneManager;
-    public StageManager stageManager;
-    public ResourceManager resourceManager;
-
-    private int[] pendToKart= { 0,0,0,0};
-    private int[] costToKart = { 0, 0, 0, 0 };
-
-    private float[] bonusBossCooldown = { 0, 0, 0};
-
-    private readonly int[] PriceForArmy1 = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
-    private readonly int[] PriceForArmy2 = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
-    private readonly int[] PriceForArmy3 = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
-    private readonly int[] PriceForArmy4 = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
-
-    private readonly int[] PriceForCastleHP = { 50, 50, 50, 50, 50, 50, 50, 50, 50, 50 };
-    private readonly int[] PriceForBonusBoss1 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-    private readonly int[] PriceForBonusBoss2 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-    private readonly int[] PriceForBonusBoss3 = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-
-    private readonly int[] PriceForMagicMeteor = { 5, 10, 15, 20, 25, 30, 35, 40, 45, 50 };
-    private readonly int[] PriceForMagicBlizzard = { 8, 16, 24, 32, 40, 48, 56, 64, 72, 80 };
-    private readonly int[] PriceForMagicMinions = { 5, 10, 15, 20, 25, 30, 35, 40, 45, 50 };
-    private readonly int[] PriceForMagicPetrification = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 };
-
-    // Start is called before the first frame update
-    private void Start()
+    /// <summary>
+    /// アップグレード購入とアイテム管理を統合するモジュール
+    ///
+    /// 主な機能:
+    /// - 複数ティア構成のタワーアップグレードシステム
+    /// - 城体力の強化購入
+    /// - 魔法スキルの成長およびクールダウン管理
+    /// - アップグレードレベルに応じた動的価格設定
+    /// - リソース連携とコスト検証
+    /// - リアルタイム価格表示のUI統合
+    /// - クールダウンを伴うボーナスボス能力
+    /// </summary>
+    public class StoreManager : MonoBehaviour
     {
-        //sceneManager = FindObjectOfType<InGameOperation>();
-        //resourceManager = FindObjectOfType<ResourceManager>();
-        //stageManager = FindObjectOfType<StageManager>();
+        #region Constants
+        private readonly int MaxItemPerCategory = 4;
+        private readonly int[] cdCounter = { 60, 90, 150 };
+        private readonly Color OriColor = new Color(1, 0.675f, 0, 1);
 
-        ItemPrice = new Dictionary<Upgrades.StoreItems, int[]>();
+        /// <summary>
+        /// 各アップグレードカテゴリの価格配列
+        /// </summary>
+        private readonly int[] PriceForArmySoulEater = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
+        private readonly int[] PriceForArmyNightmare = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
+        private readonly int[] PriceForArmyTerrorBringer = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
+        private readonly int[] PriceForArmyUsurper = { 50, 75, 100, 150, 200, 250, 350, 450, 550, 700 };
 
-        ItemPrice.Add(Upgrades.StoreItems.Army1, PriceForArmy1);
-        ItemPrice.Add(Upgrades.StoreItems.Army2, PriceForArmy2);
-        ItemPrice.Add(Upgrades.StoreItems.Army3, PriceForArmy3);
-        ItemPrice.Add(Upgrades.StoreItems.Army4, PriceForArmy4);
+        private readonly int[] PriceForCastleHP = { 50, 100, 150, 200, 250, 300, 350, 400, 450, 500 };
+        private readonly int[] PriceForBonusBossGreen = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        private readonly int[] PriceForBonusBossPurple = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        private readonly int[] PriceForBonusBossRed = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-        ItemPrice.Add(Upgrades.StoreItems.CastleHP, PriceForCastleHP);
-        ItemPrice.Add(Upgrades.StoreItems.BonusBoss1, PriceForBonusBoss1);
-        ItemPrice.Add(Upgrades.StoreItems.BonusBoss2, PriceForBonusBoss2);
-        ItemPrice.Add(Upgrades.StoreItems.BonusBoss3, PriceForBonusBoss3);
+        private readonly int[] PriceForMagicMeteor = { 5, 10, 15, 20, 25, 30, 35, 40, 45, 50 };
+        private readonly int[] PriceForMagicBlizzard = { 8, 16, 24, 32, 40, 48, 56, 64, 72, 80 };
+        private readonly int[] PriceForMagicMinions = { 5, 10, 15, 20, 25, 30, 35, 40, 45, 50 };
+        private readonly int[] PriceForMagicPetrification = { 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 };
+        #endregion
 
-        ItemPrice.Add(Upgrades.StoreItems.MagicMeteor, PriceForMagicMeteor);
-        ItemPrice.Add(Upgrades.StoreItems.MagicBlizzard, PriceForMagicBlizzard);
-        ItemPrice.Add(Upgrades.StoreItems.MagicPetrification, PriceForMagicPetrification);
-        ItemPrice.Add(Upgrades.StoreItems.MagicMinions, PriceForMagicMinions);
-    }
+        #region Serialized Fields
+        [Header("🪖 Army Upgrade UI")]
+        public List<TextMesh> ArmyLvTextObj;
+        public List<TextMesh> ArmyPriceTextObj;
 
-    private void Update()
-    {
-        if (sceneManager.currScreenShown != 0)
+        [Header("🏰 Tower/Castle UI")]
+        public List<TextMesh> TowerHPTextObj;
+        public List<TextMesh> TowerPriceTextObj;
+        public List<TextMesh> MonsterCDTextObj;
+
+        [Header("✨ Magic Skills UI")]
+        public List<TextMesh> SkillPriceTextObj;
+        public List<TextMesh> SkillLvTextObj;
+
+        [Header("🎮 Manager References")]
+        public InGameOperation sceneManager;
+        public StageManager stageManager;
+        public ResourceManager resourceManager;
+
+        public UpgradesManager upgradesManager;
+        public CastleSpawner castleSpawner;
+
+        #endregion
+
+        #region Private Fields
+        private Dictionary<UpgradesManager.StoreItems, int[]> _itemPrice;
+        private readonly int[] _pendToKart = { 0, 0, 0, 0 };
+        private readonly int[] _costToKart = { 0, 0, 0, 0 };
+        private readonly float[] _bonusBossCooldown = { 0, 0, 0 };
+        #endregion
+
+        #region Unity Lifecycle
+        /// <summary>
+        /// ストアシステムと価格マッピングの初期化
+        /// </summary>
+        private void Start()
         {
-            for (int i = 0, s = bonusBossCooldown.Length; i < s; ++i)
-            {
-                if (bonusBossCooldown[i] > 0)
-                {
-                    bonusBossCooldown[i]-=Time.deltaTime;
-                }
-                if (sceneManager.CheckIfTutorial())
-                    bonusBossCooldown[i] = 99;
-            }
-
-            UpdatePrice();
+            InitializePriceDictionary();
         }
-    }
 
-    private void UpdatePrice() {
-
-        //int fullitemID = (sceneManager.currScreenShown + 1) * Upgrades.MaxItemPerSlot;
-
-        //Tower Items
-        for (int i = 0; i < TowerPriceTextObj.Count; ++i)
+        /// <summary>
+        /// ストア状態とUI要素の更新
+        /// </summary>
+        private void Update()
         {
-            //Currently all same price
-            int price = PriceForCastleHP[0];
-            TowerPriceTextObj[i].text = price.ToString() + "G";
-            TowerPriceTextObj[i].color = (price > resourceManager.GetCurrMaterial()) ? new Color(1, 0, 0, 1) : OriColor;
-
-        }
-        for (int i = 0; i < TowerHPTextObj.Count; ++i)
-            TowerHPTextObj[i].text = stageManager.GetCurrHP().ToString() + "/" + stageManager.GetMaxHP().ToString();
-        //Bonus Boss Items
-        for (int i = 0; i < MonsterCDTextObj.Count; ++i)
-        {
-            int cd = (int)(bonusBossCooldown[i % bonusBossCooldown.Length]);
-            MonsterCDTextObj[i].text = "CD" + cd.ToString();
-            MonsterCDTextObj[i].color = (cd > 0 || SkillStack.CheckFullStocks()) ? new Color(1, 0, 0, 1) : OriColor;
-        }
-
-        for (int i = 0; i < ArmyPriceTextObj.Count; ++i)
-        {
-            Upgrades.StoreItems itemID = Upgrades.StoreItems.Army1 + i % MaxItemPerCategory;
-            int price = ItemPrice[itemID][Upgrades.GetLevel(itemID)];
-            if (Upgrades.CheckArmyTopLevel(itemID))
+            if (sceneManager && sceneManager.currScreenShown != 0)
             {
-                ArmyPriceTextObj[i].text = price.ToString() + "G";
-                ArmyPriceTextObj[i].color = (price > resourceManager.GetCurrMaterial()) ? new Color(1, 0, 0, 1) : OriColor;
-            }
-            else
-            {
-                ArmyPriceTextObj[i].text = "";
-                ArmyPriceTextObj[i].color = new Color(0, 0, 0, 1);
+                UpdateBonusBossCooldowns();
+                UpdatePrice();
             }
         }
+        #endregion
 
-        for (int i = 0; i < ArmyLvTextObj.Count; ++i)
+        /// <summary>
+        /// 指定項目のレベルを増やす
+        /// </summary>
+        /// <param name="itemID">レベルアップする項目</param>
+        /// <param name="lvUP">増加レベル数</param>
+        /// <returns>レベルアップ成功/失敗</returns>
+        public bool OnStoreItemSold(UpgradesManager.StoreItems itemID, int lvUP)
         {
-            switch (i % MaxItemPerCategory)
-            {
-                case 0: ArmyLvTextObj[i].text = "LV." + (Upgrades.CheckTopLevel(Upgrades.StoreItems.Army1) ? "MAX" :
-                        (Upgrades.GetLevel(Upgrades.StoreItems.Army1)+1).ToString()); break;
-                case 1: ArmyLvTextObj[i].text = "LV." + (Upgrades.CheckTopLevel(Upgrades.StoreItems.Army2) ? "MAX" :
-                        (Upgrades.GetLevel(Upgrades.StoreItems.Army2) + 1).ToString()); break;
-                case 2: ArmyLvTextObj[i].text = "LV." + (Upgrades.CheckTopLevel(Upgrades.StoreItems.Army3) ? "MAX" :
-                        (Upgrades.GetLevel(Upgrades.StoreItems.Army3) + 1).ToString()); break;
-                case 3: ArmyLvTextObj[i].text = "LV." + (Upgrades.CheckTopLevel(Upgrades.StoreItems.Army4) ? "MAX" :
-                        (Upgrades.GetLevel(Upgrades.StoreItems.Army4) + 1).ToString()); break;
-            }
-        }
+            var hasUpgrade = upgradesManager.UpgradeLevel(itemID, lvUP);
 
-        for (int i = 0; i < SkillPriceTextObj.Count; ++i)
-        {
-            Upgrades.StoreItems itemID = Upgrades.StoreItems.MagicMeteor + i % MaxItemPerCategory;
-            int price = ItemPrice[itemID][Upgrades.GetLevel(itemID)];
-            SkillPriceTextObj[i].text = price.ToString() + "G";
-            SkillPriceTextObj[i].color = (price > resourceManager.GetCurrMaterial() || SkillStack.CheckFullStocks()) ? new Color(1, 0, 0, 1) : OriColor;
-        }
-
-        for (int i = 0; i < SkillLvTextObj.Count; ++i)
-        {
-            switch (i % MaxItemPerCategory)
-            {
-                case 0:
-                    SkillLvTextObj[i].text = "LV." + (Upgrades.CheckTopLevel(Upgrades.StoreItems.MagicMeteor) ? "MAX" :
-                       (Upgrades.GetLevel(Upgrades.StoreItems.MagicMeteor) + 1).ToString()); break;
-                case 1:
-                    SkillLvTextObj[i].text = "LV." + (Upgrades.CheckTopLevel(Upgrades.StoreItems.MagicBlizzard) ? "MAX" :
-                    (Upgrades.GetLevel(Upgrades.StoreItems.MagicBlizzard) + 1).ToString()); break;
-                case 2:
-                    SkillLvTextObj[i].text = "LV." + (Upgrades.CheckTopLevel(Upgrades.StoreItems.MagicPetrification) ? "MAX" :
-                   (Upgrades.GetLevel(Upgrades.StoreItems.MagicPetrification) + 1).ToString()); break; 
-                case 3:
-                    SkillLvTextObj[i].text = "LV." + (Upgrades.CheckTopLevel(Upgrades.StoreItems.MagicMinions) ? "MAX" :
-                   (Upgrades.GetLevel(Upgrades.StoreItems.MagicMinions) + 1).ToString()); break; 
-            }
-        }
-    }
-
-    public int GetPrice(int itemID) {
-        return GetPrice((Upgrades.StoreItems)itemID);
-    }
-
-    public int GetPrice(Upgrades.StoreItems itemID)
-    {
-        if (ItemPrice.ContainsKey(itemID) == false) return 0;
-
-        switch (itemID)
-        {
-            case Upgrades.StoreItems.BonusBoss1:
-                return bonusBossCooldown[0] > 0 ? -1 : 0;
-            case Upgrades.StoreItems.BonusBoss2:
-                return bonusBossCooldown[1] > 0 ? -1 : 0;
-            case Upgrades.StoreItems.BonusBoss3:
-                return bonusBossCooldown[2] > 0 ? -1 : 0;
-        }
-
-        if (Upgrades.GetLevel(itemID)+1 >= ItemPrice[itemID].Length) {
-            return -1;
-        }
-        return ItemPrice[itemID][Upgrades.GetLevel(itemID)];
-    }
-
-    public int GetCost(int itemID) {
-        return GetCost((Upgrades.StoreItems)itemID, pendToKart[itemID%10]);
-    }
-
-    public int GetCost(Upgrades.StoreItems itemID,int additionLv)
-    {
-        if (ItemPrice.ContainsKey(itemID) == false) return 0;
-        return ItemPrice[itemID][Upgrades.GetLevel(itemID)+ additionLv];
-    }
-
-
-    public void ItemSold(Upgrades.StoreItems itemID)
-    {
-        Upgrades.StoreUpgrade(itemID, pendToKart[(int)itemID % 10]);
-
-        resourceManager.ChangeMaterial(-1 * costToKart[(int)itemID % 10]);
-
-        pendToKart[(int)itemID % 10] = 0;
-        costToKart[(int)itemID % 10] = 0;
-    }
-
-    public void ClearToPurchase()
-    {
-        for (int i = 0, s = pendToKart.Length; i < s; ++i)
-            pendToKart[i] = 0;
-        for (int i = 0, s = costToKart.Length; i < s; ++i)
-            costToKart[i] = 0;
-    }
-
-    public int CosttoPurchaseCalculation()
-    {
-        int totalCost = 0;
-        for (int i = 0, s = costToKart.Length; i < s; ++i)
-            totalCost += costToKart[i];
-        return totalCost;
-    }
-
-    public bool ItemPendingAdd(Upgrades.StoreItems itemID)
-    {
-        int price = CheckEnoughResource(itemID);
-        if (price >= 0)
-        {
+            // ストックアイテムのチェック
             switch (itemID)
             {
-                case Upgrades.StoreItems.BonusBoss1:
-                case Upgrades.StoreItems.BonusBoss2:
-                case Upgrades.StoreItems.BonusBoss3:
-                case Upgrades.StoreItems.MagicBlizzard:
-                case Upgrades.StoreItems.MagicMeteor:
-                case Upgrades.StoreItems.MagicPetrification:
-                case Upgrades.StoreItems.MagicMinions:
-                    if (SkillStack.CheckFullStocks()) 
-                        return false;
+                case StoreItems.CastleHP:
+                    if (castleSpawner != null && castleSpawner.castle != null)
+                        castleSpawner.castle.AddedHealth();
+                    break;
+                case StoreItems.BonusBossGreen:
+                case StoreItems.BonusBossPurple:
+                case StoreItems.BonusBossRed:
+                    SkillStack.AddStock(itemID);
+                    SetBossCD((int)(itemID - UpgradesManager.StoreItems.BonusBossGreen));
+                    break;
+                case UpgradesManager.StoreItems.ArmySoulEater:
+                case UpgradesManager.StoreItems.ArmyNightmare:
+                case UpgradesManager.StoreItems.ArmyTerrorBringer:
+                case UpgradesManager.StoreItems.ArmyUsurper:
+                    // 上記のupgradesManager.UpgradeLevelで既に処理済み
+                    break;
+                case StoreItems.MagicMeteor:
+                case StoreItems.MagicBlizzard:
+                case StoreItems.MagicMinions:
+                case StoreItems.MagicPetrification:
+                    SkillStack.AddStock(itemID);
                     break;
             }
+            return hasUpgrade;
+        }
+        #region Private Methods
+        /// <summary>
+        /// 全ストアアイテムの価格辞書を初期化
+        /// </summary>
+        private void InitializePriceDictionary()
+        {
+            _itemPrice = new Dictionary<UpgradesManager.StoreItems, int[]>();
 
-            pendToKart[(int)itemID % 10]++;
-            costToKart[(int)itemID % 10] += price;
+            _itemPrice.Add(UpgradesManager.StoreItems.ArmySoulEater, PriceForArmySoulEater);
+            _itemPrice.Add(UpgradesManager.StoreItems.ArmyNightmare, PriceForArmyNightmare);
+            _itemPrice.Add(UpgradesManager.StoreItems.ArmyTerrorBringer, PriceForArmyTerrorBringer);
+            _itemPrice.Add(UpgradesManager.StoreItems.ArmyUsurper, PriceForArmyUsurper);
+
+            _itemPrice.Add(UpgradesManager.StoreItems.CastleHP, PriceForCastleHP);
+            _itemPrice.Add(UpgradesManager.StoreItems.BonusBossGreen, PriceForBonusBossGreen);
+            _itemPrice.Add(UpgradesManager.StoreItems.BonusBossPurple, PriceForBonusBossPurple);
+            _itemPrice.Add(UpgradesManager.StoreItems.BonusBossRed, PriceForBonusBossRed);
+
+            _itemPrice.Add(UpgradesManager.StoreItems.MagicMeteor, PriceForMagicMeteor);
+            _itemPrice.Add(UpgradesManager.StoreItems.MagicBlizzard, PriceForMagicBlizzard);
+            _itemPrice.Add(UpgradesManager.StoreItems.MagicPetrification, PriceForMagicPetrification);
+            _itemPrice.Add(UpgradesManager.StoreItems.MagicMinions, PriceForMagicMinions);
+        }
+
+        /// <summary>
+        /// ボーナスボスのクールダウンタイマーを更新
+        /// </summary>
+        private void UpdateBonusBossCooldowns()
+        {
+            for (int i = 0, s = _bonusBossCooldown.Length; i < s; ++i)
+            {
+                if (_bonusBossCooldown[i] > 0)
+                {
+                    _bonusBossCooldown[i] -= Time.deltaTime;
+                }
+                if (sceneManager.CheckIfTutorial())
+                {
+                    _bonusBossCooldown[i] = 99;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 全ストアアイテムの価格とUI表示を更新
+        /// </summary>
+        private void UpdatePrice()
+        {
+
+            int fullitemID = (sceneManager.currScreenShown + 1) * MaxItemPerCategory;
+
+            // タワーアイテム
+            for (int i = 0; i < TowerPriceTextObj.Count; ++i)
+            {
+                // 現在全て同じ価格
+                int price = PriceForCastleHP[0];
+                TowerPriceTextObj[i].text = price.ToString() + "G";
+                TowerPriceTextObj[i].color = (price > resourceManager.GetCurrMaterial()) ? new Color(1, 0, 0, 1) : OriColor;
+
+            }
+            for (int i = 0; i < TowerHPTextObj.Count; ++i)
+                TowerHPTextObj[i].text = stageManager.GetCurrHP().ToString() + "/" + stageManager.GetMaxHP().ToString();
+            // ボーナスボスアイテム
+            for (int i = 0; i < MonsterCDTextObj.Count; ++i)
+            {
+                int cd = (int)(_bonusBossCooldown[i % _bonusBossCooldown.Length]);
+                MonsterCDTextObj[i].text = "CD" + cd.ToString();
+                MonsterCDTextObj[i].color = (cd > 0 || SkillStack.CheckFullStocks()) ? new Color(1, 0, 0, 1) : OriColor;
+            }
+
+            for (int i = 0; i < ArmyPriceTextObj.Count; ++i)
+            {
+                UpgradesManager.StoreItems itemID = UpgradesManager.StoreItems.ArmySoulEater + i % MaxItemPerCategory;
+                int price = _itemPrice[itemID][upgradesManager.GetLevel(itemID)];
+                if (upgradesManager.CheckTopLevel(itemID))
+                {
+                    ArmyPriceTextObj[i].text = price.ToString() + "G";
+                    ArmyPriceTextObj[i].color = (price > resourceManager.GetCurrMaterial()) ? new Color(1, 0, 0, 1) : OriColor;
+                }
+                else
+                {
+                    ArmyPriceTextObj[i].text = "";
+                    ArmyPriceTextObj[i].color = new Color(0, 0, 0, 1);
+                }
+            }
+
+            for (int i = 0; i < ArmyLvTextObj.Count; ++i)
+            {
+                switch (i % MaxItemPerCategory)
+                {
+                    case 0:
+                        ArmyLvTextObj[i].text = "LV." + (!upgradesManager.CheckTopLevel(UpgradesManager.StoreItems.ArmySoulEater) ? "MAX" :
+                            (upgradesManager.GetLevel(UpgradesManager.StoreItems.ArmySoulEater) + 1).ToString()); break;
+                    case 1:
+                        ArmyLvTextObj[i].text = "LV." + (!upgradesManager.CheckTopLevel(UpgradesManager.StoreItems.ArmyNightmare) ? "MAX" :
+                            (upgradesManager.GetLevel(UpgradesManager.StoreItems.ArmyNightmare) + 1).ToString()); break;
+                    case 2:
+                        ArmyLvTextObj[i].text = "LV." + (!upgradesManager.CheckTopLevel(UpgradesManager.StoreItems.ArmyTerrorBringer) ? "MAX" :
+                            (upgradesManager.GetLevel(UpgradesManager.StoreItems.ArmyTerrorBringer) + 1).ToString()); break;
+                    case 3:
+                        ArmyLvTextObj[i].text = "LV." + (!upgradesManager.CheckTopLevel(UpgradesManager.StoreItems.ArmyUsurper) ? "MAX" :
+                            (upgradesManager.GetLevel(UpgradesManager.StoreItems.ArmyUsurper) + 1).ToString()); break;
+                }
+            }
+
+            for (int i = 0; i < SkillPriceTextObj.Count; ++i)
+            {
+                UpgradesManager.StoreItems itemID = UpgradesManager.StoreItems.MagicMeteor + i % MaxItemPerCategory;
+                int price = _itemPrice[itemID][upgradesManager.GetLevel(itemID)];
+                SkillPriceTextObj[i].text = price.ToString() + "G";
+                SkillPriceTextObj[i].color = (price > resourceManager.GetCurrMaterial() || SkillStack.CheckFullStocks()) ? new Color(1, 0, 0, 1) : OriColor;
+            }
+
+            for (int i = 0; i < SkillLvTextObj.Count; ++i)
+            {
+                switch (i % MaxItemPerCategory)
+                {
+                    case 0:
+                        SkillLvTextObj[i].text = "LV." + (upgradesManager.CheckTopLevel(UpgradesManager.StoreItems.MagicMeteor) ? "MAX" :
+                           (upgradesManager.GetLevel(UpgradesManager.StoreItems.MagicMeteor) + 1).ToString()); break;
+                    case 1:
+                        SkillLvTextObj[i].text = "LV." + (upgradesManager.CheckTopLevel(UpgradesManager.StoreItems.MagicBlizzard) ? "MAX" :
+                        (upgradesManager.GetLevel(UpgradesManager.StoreItems.MagicBlizzard) + 1).ToString()); break;
+                    case 2:
+                        SkillLvTextObj[i].text = "LV." + (upgradesManager.CheckTopLevel(UpgradesManager.StoreItems.MagicPetrification) ? "MAX" :
+                       (upgradesManager.GetLevel(UpgradesManager.StoreItems.MagicPetrification) + 1).ToString()); break;
+                    case 3:
+                        SkillLvTextObj[i].text = "LV." + (upgradesManager.CheckTopLevel(UpgradesManager.StoreItems.MagicMinions) ? "MAX" :
+                       (upgradesManager.GetLevel(UpgradesManager.StoreItems.MagicMinions) + 1).ToString()); break;
+                }
+            }
+        }
+
+        #endregion
+
+        #region Public API
+
+        /// <summary>
+        /// 指定アイテムIDの価格を取得
+        /// </summary>
+        /// <param name="itemID">整数形式のアイテムID</param>
+        /// <returns>アイテム価格（-1はクールダウン中または最大レベル）</returns>
+        public int GetPrice(int itemID)
+        {
+            return GetPrice((UpgradesManager.StoreItems)itemID);
+        }
+
+        /// <summary>
+        /// 指定アイテムの現在の価格を取得
+        /// </summary>
+        /// <param name="itemID">アイテムID</param>
+        /// <returns>アイテム価格（-1はクールダウン中または最大レベル、0は無料）</returns>
+        public int GetPrice(UpgradesManager.StoreItems itemID)
+        {
+            if (_itemPrice.ContainsKey(itemID) == false) return 0;
+
+            switch (itemID)
+            {
+                case UpgradesManager.StoreItems.BonusBossGreen:
+                    return _bonusBossCooldown[0] > 0 ? -1 : 0;
+                case UpgradesManager.StoreItems.BonusBossPurple:
+                    return _bonusBossCooldown[1] > 0 ? -1 : 0;
+                case UpgradesManager.StoreItems.BonusBossRed:
+                    return _bonusBossCooldown[2] > 0 ? -1 : 0;
+            }
+
+            if (upgradesManager.GetLevel(itemID) + 1 >= _itemPrice[itemID].Length)
+            {
+                return -1;
+            }
+            return _itemPrice[itemID][upgradesManager.GetLevel(itemID)];
+        }
+
+        /// <summary>
+        /// 指定アイテムのコストを取得
+        /// </summary>
+        /// <param name="itemID">整数形式のアイテムID</param>
+        /// <returns>アイテムコスト</returns>
+        public int GetCost(int itemID)
+        {
+            return GetCost((UpgradesManager.StoreItems)itemID, _pendToKart[itemID % 10]);
+        }
+
+        /// <summary>
+        /// 追加レベルを含むアイテムのコストを取得
+        /// </summary>
+        /// <param name="itemID">アイテムID</param>
+        /// <param name="additionLv">追加レベル数</param>
+        /// <returns>アイテムコスト</returns>
+        public int GetCost(UpgradesManager.StoreItems itemID, int additionLv)
+        {
+            if (_itemPrice.ContainsKey(itemID) == false) return 0;
+            return _itemPrice[itemID][upgradesManager.GetLevel(itemID) + additionLv];
+        }
+
+        /// <summary>
+        /// アイテム販売処理 - リソースを消費してアップグレードを適用
+        /// </summary>
+        /// <param name="itemID">販売するアイテムID</param>
+        public void ItemSold(UpgradesManager.StoreItems itemID)
+        {
+            upgradesManager.UpgradeLevel(itemID, _pendToKart[(int)itemID % 10]);
+
+            resourceManager.ChangeMaterial(-1 * _costToKart[(int)itemID % 10]);
+
+            _pendToKart[(int)itemID % 10] = 0;
+            _costToKart[(int)itemID % 10] = 0;
+        }
+
+        /// <summary>
+        /// 購入待機リストとコストをクリア
+        /// </summary>
+        public void ClearToPurchase()
+        {
+            for (int i = 0, s = _pendToKart.Length; i < s; ++i)
+                _pendToKart[i] = 0;
+            for (int i = 0, s = _costToKart.Length; i < s; ++i)
+                _costToKart[i] = 0;
+        }
+
+        /// <summary>
+        /// 購入待機中のアイテム総コストを計算
+        /// </summary>
+        /// <returns>総コスト</returns>
+        public int CosttoPurchaseCalculation()
+        {
+            int totalCost = 0;
+            for (int i = 0, s = _costToKart.Length; i < s; ++i)
+                totalCost += _costToKart[i];
+            return totalCost;
+        }
+
+        /// <summary>
+        /// アイテムを購入待機リストに追加
+        /// </summary>
+        /// <param name="itemID">追加するアイテムID</param>
+        /// <returns>追加成功/失敗</returns>
+        public bool ItemPendingAdd(UpgradesManager.StoreItems itemID)
+        {
+            int price = CheckEnoughResource(itemID);
+            if (price >= 0)
+            {
+                switch (itemID)
+                {
+                    case UpgradesManager.StoreItems.BonusBossGreen:
+                    case UpgradesManager.StoreItems.BonusBossPurple:
+                    case UpgradesManager.StoreItems.BonusBossRed:
+                    case UpgradesManager.StoreItems.MagicBlizzard:
+                    case UpgradesManager.StoreItems.MagicMeteor:
+                    case UpgradesManager.StoreItems.MagicPetrification:
+                    case UpgradesManager.StoreItems.MagicMinions:
+                        if (SkillStack.CheckFullStocks())
+                            return false;
+                        break;
+                }
+
+                _pendToKart[(int)itemID % 10]++;
+                _costToKart[(int)itemID % 10] += price;
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// アイテムを購入待機リストから削除
+        /// </summary>
+        /// <param name="itemID">削除するアイテムID</param>
+        /// <returns>削除成功/失敗</returns>
+        public bool ItemPendingSubtract(UpgradesManager.StoreItems itemID)
+        {
+            if (_pendToKart[(int)itemID % 10] < 0) return false;
+
+            _pendToKart[(int)itemID % 10]--;
+            _costToKart[(int)itemID % 10] -= GetCost((int)itemID);
             return true;
         }
-        return false;
-    }
 
-    public int CheckEnoughResource(Upgrades.StoreItems itemID)
-    {
-        int totalCosttoPurchase = CosttoPurchaseCalculation();
-        int price = GetPrice(itemID);
-        if (price < 0) return -1;
-        if (price == 0) return 0;
-        if (resourceManager.GetCurrMaterial() - totalCosttoPurchase >= price)
-            return price;
-        return -1;
-    }
+        /// <summary>
+        /// リソースが十分かチェック
+        /// </summary>
+        /// <param name="itemID">チェックするアイテムID</param>
+        /// <returns>購入可能な場合は価格、不可能な場合は-1</returns>
+        public int CheckEnoughResource(UpgradesManager.StoreItems itemID)
+        {
+            int totalCosttoPurchase = CosttoPurchaseCalculation();
+            int price = GetPrice(itemID);
+            if (price < 0) return -1;
+            if (price == 0) return 0;
+            if (resourceManager.GetCurrMaterial() - totalCosttoPurchase >= price)
+                return price;
+            return -1;
+        }
 
-    public bool ItemPendingSubtract(int itemID)
-    {
-        if (pendToKart[itemID % 10] < 0) return false;
+        /// <summary>
+        /// ボーナスボスのクールダウンを設定
+        /// </summary>
+        /// <param name="bossID">ボスID（0: Green, 1: Purple, 2: Red）</param>
+        public void SetBossCD(int bossID)
+        {
+            _bonusBossCooldown[bossID] = cdCounter[bossID];
+        }
 
-        pendToKart[itemID % 10]--;
-        costToKart[itemID % 10] -= GetCost(itemID);
-        return true;
-    }
+        /// <summary>
+        /// ボーナスボスの現在のクールダウンを取得
+        /// </summary>
+        /// <param name="bossID">ボスID（0: Green, 1: Purple, 2: Red）</param>
+        /// <returns>残りクールダウン時間</returns>
+        public float GetBossCD(int bossID)
+        {
+            return _bonusBossCooldown[bossID];
+        }
 
-    public void SetBossCD(int bossID)
-    {
-        bonusBossCooldown[bossID] = cdCounter[bossID];
-    }
+        /// <summary>
+        /// レイキャストアクション - ストアアイテムとの相互作用を処理
+        /// </summary>
+        /// <param name="itemID">アイテムID</param>
+        /// <param name="infoID">情報ID (-1: 減算, 0: 購入, 1: 追加)</param>
+        public void RaycastAction(UpgradesManager.StoreItems itemID, int infoID)
+        {
+            UnityEngine.Debug.LogWarning("StoreManager: RaycastAction called for itemID " + itemID.ToString() + " with infoID " + infoID.ToString());
+            // -1: 減算, 0: 購入, 1: 追加
+            switch (infoID)
+            {
+                case -1:
+                    ItemPendingSubtract(itemID);
+                    break;
+                case 0:
+                    ItemSold(itemID);
+                    break;
+                case 1:
+                    if (ItemPendingAdd(itemID))
+                    {
+                        OnStoreItemSold(itemID, 1);
+                    }
 
-    public float GetBossCD(int bossID) {
-        return bonusBossCooldown[bossID];
-    }
+                    break;
+            }
+        }
 
-    public void raycastAction(Upgrades.StoreItems itemID, int infoID)
-    {
-        if(ItemPendingAdd(itemID))
-        ItemSold(itemID);
+        /// <summary>
+        /// レイキャストアクション（整数オーバーロード） - ストアアイテムとの相互作用を処理
+        /// </summary>
+        /// <param name="fullitemID">整数形式のアイテムID</param>
+        /// <param name="infoID">情報ID (-1: 減算, 0: 購入, 1: 追加)</param>
+        public void RaycastAction(int fullitemID, int infoID)
+        {
+            UnityEngine.Debug.LogWarning("StoreManager: RaycastAction called for itemID " + fullitemID.ToString() + " with infoID " + infoID.ToString());
+            // -1: 減算, 0: 購入, 1: 追加
+            RaycastAction((UpgradesManager.StoreItems)fullitemID, infoID);
+        }
 
-        //-1 :subtract 0:purchase 1:add
-        //switch (infoID) {
-        //    case -1:
-        //        ItemPendingSubtract(itemID);
-        //        break;
-        //    case 0:
-        //        ItemSold(itemID);
-        //        break;
-        //    case 1:
-        //        ItemPendingAdd(itemID);
-        //        break;
-        //}
-    }
-
-    public void raycastAction(int fullitemID,int infoID) { //-1 :subtract 0:purchase 1:add
-        raycastAction((Upgrades.StoreItems)fullitemID, infoID);
+        #endregion
     }
 }

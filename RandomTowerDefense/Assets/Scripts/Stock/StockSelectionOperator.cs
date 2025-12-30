@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using RandomTowerDefense.Managers.System;
 
 public class StockSelectionOperator : MonoBehaviour
 {
@@ -15,8 +16,8 @@ public class StockSelectionOperator : MonoBehaviour
     void Update()
     {
         if (isTouch && Input.touchCount > 0)
-            transform.localEulerAngles = new Vector3(0, 0, 
-                (-90f+ Mathf.Rad2Deg * Mathf.Atan2(Input.touches[0].position.y-DragRefPos.y, Input.touches[0].position.x - DragRefPos.x)));
+            transform.localEulerAngles = new Vector3(0, 0,
+                (-90f + Mathf.Rad2Deg * Mathf.Atan2(Input.touches[0].position.y - DragRefPos.y, Input.touches[0].position.x - DragRefPos.x)));
         if (!isTouch)
             transform.localEulerAngles = new Vector3(0, 0,
                 (-90f + Mathf.Rad2Deg * Mathf.Atan2(Input.mousePosition.y - DragRefPos.y, Input.mousePosition.x - DragRefPos.x)));

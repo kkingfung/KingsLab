@@ -1,9 +1,17 @@
 ﻿using System;
 using Unity.Entities;
 
-[Serializable]
-public struct Type : IComponentData
+namespace RandomTowerDefense.DOTS.Components
 {
-    public int Value;
+    /// <summary>
+    /// エンティティのタイプを管理するコンポーネント
+    /// </summary>
+    [Serializable]
+    public struct Type : IComponentData
+    {
+        #region Public Fields
+        public int Value;
+        #endregion
+    }
 }
 

@@ -6,10 +6,10 @@ using UnityEngine.Windows;
 
 using System.IO;
 
-public class BuildBundle:Editor
+public class BuildBundle : Editor
 {
     [MenuItem("Assets/ BuildAssetBundles")]
-    static void Build() 
+    static void Build()
     {
         // 成果物を出力するフォルダを指定する（プロジェクトフォルダからの相対パス）
         var targetDir = "Assets/AssetBundles";
@@ -34,15 +34,15 @@ public class BuildBundle:Editor
 
         var buildEasyStage = new AssetBundleBuild();
         buildEasyStage.assetBundleName = "EasyStageInfo";
-        buildEasyStage.assetNames = new string[1] { targetDir + "EasyStageInfo.txt" };
+        buildEasyStage.assetNames = new string[1] { targetDir + "EasyStageInfoList.txt" };
 
         var buildNormalStage = new AssetBundleBuild();
         buildNormalStage.assetBundleName = "NormalStageInfo";
-        buildNormalStage.assetNames = new string[1] { targetDir + "NormalStageInfo.txt" };
+        buildNormalStage.assetNames = new string[1] { targetDir + "NormalStageInfoList.txt" };
 
         var buildHardStage = new AssetBundleBuild();
         buildHardStage.assetBundleName = "HardStageInfo";
-        buildHardStage.assetNames = new string[1] { targetDir + "HardStageInfo.txt" };
+        buildHardStage.assetNames = new string[1] { targetDir + "HardStageInfoList.txt" };
 
         builds.Add(buildTower);
         builds.Add(buildEnemy);

@@ -1,5 +1,11 @@
 ﻿using System;
 using Unity.Entities;
 
-[Serializable]
-public struct MinionsTag : IComponentData { }
+namespace RandomTowerDefense.DOTS.Tags
+{
+    /// <summary>
+    /// ミニオンスコキルエンティティを識別するためのタグ
+    /// </summary>
+    [Serializable]
+    public struct MinionsTag : IComponentData { }
+}

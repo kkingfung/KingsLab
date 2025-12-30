@@ -2,41 +2,66 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PRNG {
+namespace RandomTowerDefense.Utility
+{
+    /// <summary>
+    /// 擬似乱数生成器クラス - 決定論的なランダム値生成を提供
+    /// </summary>
+    public class PRNG
+    {
 
-	public enum Weight { None, Lower, Upper, Centre, Ends }
-	System.Random prng;
-	int seed;
+        /// <summary>
+        /// 重み付け戦略の列挙
+        /// </summary>
+        public enum Weight { None, Lower, Upper, Centre, Ends }
+        System.Random prng;
+        int seed;
 
-	public int Seed {
-		get {
-			return seed;
-		}
-	}
+        /// <summary>
+        /// 現在使用中の乱数シード値
+        /// </summary>
+        public int Seed {
+            get {
+                return seed;
+            }
+        }
 
-	public PRNG (int seed) {
-		this.seed = seed;
-		prng = new System.Random (this.seed);
-	}
+        /// <summary>
+        /// 整数シードで初期化
+        /// </summary>
+        /// <param name="seed">乱数生成用のシード値</param>
+        public PRNG(int seed) {
+            this.seed = seed;
+            prng = new System.Random(this.seed);
+        }
 
-	public PRNG (string seed) {
-		this.seed = seed.GetHashCode ();
-		prng = new System.Random (this.seed);
-	}
+        /// <summary>
+        /// 文字列シードで初期化（ハッシュ値を使用）
+        /// </summary>
+        /// <param name="seed">文字列シード</param>
+        public PRNG(string seed) {
+            this.seed = seed.GetHashCode();
+            prng = new System.Random(this.seed);
+        }
 
-	public PRNG () {
-		prng = new System.Random ();
-	}
+        /// <summary>
+        /// システム時間ベースのランダムシードで初期化
+        /// </summary>
+        public PRNG() {
+            prng = new System.Random();
+        }
 
-	/// Returns a random integer value [min, max)
-	public int Range (int min, int max) {
-		return prng.Next (min, max);
-	}
+        /// Returns a random integer value [min, max)
+        public int Range(int min, int max)
+        {
+            return prng.Next(min, max);
+        }
 
-	/// Returns a random float value [min, max)
-	public float Range (float min, float max) {
-		return Mathf.Lerp (min, max, (float) prng.NextDouble ());
-	}
+        /// Returns a random float value [min, max)
+        public float Range(float min, float max)
+        {
+            return Mathf.Lerp(min, max, (float)prng.NextDouble());
+        }
 
 	// Returns a vector4 where each component is a random number in range [min, max)
 	public Vector4 RangeVector4 (float minInclusive, float maxExclusive) {
@@ -228,81 +253,83 @@ public class PRNG {
 		}
 	}
 
-}
+    }
 
-public class Chance
-{
-	float value;
+    public class Chance
+    {
+        float value;
 
-	public Chance(System.Random prng)
-	{
-		value = (float)prng.NextDouble();
-	}
+        public Chance(System.Random prng)
+        {
+            value = (float)prng.NextDouble();
+        }
 
-	public Chance(PRNG prng)
-	{
-		value = prng.Value();
-	}
+        public Chance(PRNG prng)
+        {
+            value = prng.Value();
+        }
 
-	public bool Percent(float percent)
-	{
-		if (value <= 0)
-		{
-			return false;
-		}
+        public bool Percent(float percent)
+        {
+            if (value <= 0)
+            {
+                return false;
+            }
 
-		float t = percent / 100f;
-		value -= t;
-		return value <= 0;
-	}
+            float t = percent / 100f;
+            value -= t;
+            return value <= 0;
+        }
 
-	public int StackOverflowNoise(int seed) {
-		int n = (seed << 13) ^ seed;
-		n *= n * 15731;
-		n += 789221;
-		n *= n;
-		n += 1376312589;
-		return n;
-	}
+        public int StackOverflowNoise(int seed)
+        {
+            int n = (seed << 13) ^ seed;
+            n *= n * 15731;
+            n += 789221;
+            n *= n;
+            n += 1376312589;
+            return n;
+        }
 
-	public int LibNoise(int seed)
-	{
-		int n = (seed >> 13) ^ seed;
-		n *= n * 60493;
-		n += 19990303;
-		n *= n;
-		n += 1376312589;
-		return n;
-	}
+        public int LibNoise(int seed)
+        {
+            int n = (seed >> 13) ^ seed;
+            n *= n * 60493;
+            n += 19990303;
+            n *= n;
+            n += 1376312589;
+            return n;
+        }
 
-	//Fastest Noise
-	public uint Squirrel3_1D(int position, int seed=0)
-	{
-		const uint BIT_NOISE1 = 0xB5297A4D;
-		const uint BIT_NOISE2 = 0x68E31DA4;
-		const uint BIT_NOISE3 = 0x1B56C4E9;
+        //Fastest Noise
+        public uint Squirrel3_1D(int position, int seed = 0)
+        {
+            const uint BIT_NOISE1 = 0xB5297A4D;
+            const uint BIT_NOISE2 = 0x68E31DA4;
+            const uint BIT_NOISE3 = 0x1B56C4E9;
 
-		uint n = (uint)position;
-		n *= BIT_NOISE1;
-		n += (uint)seed;
-		n ^= (n >> 8);
-		n += BIT_NOISE2;
-		n ^= (n << 8);
-		n *= BIT_NOISE3;
-		n ^= (n >> 8);
-		return n;
-	}
+            uint n = (uint)position;
+            n *= BIT_NOISE1;
+            n += (uint)seed;
+            n ^= (n >> 8);
+            n += BIT_NOISE2;
+            n ^= (n << 8);
+            n *= BIT_NOISE3;
+            n ^= (n >> 8);
+            return n;
+        }
 
-	public uint Squirrel3_2D(int posX, int posY, int seed = 0)
-	{
-		const int PRIME_NUM = 198491317;
-		return Squirrel3_1D(posX+ PRIME_NUM* posY, seed);
-	}
+        public uint Squirrel3_2D(int posX, int posY, int seed = 0)
+        {
+            const int PRIME_NUM = 198491317;
+            return Squirrel3_1D(posX + PRIME_NUM * posY, seed);
+        }
 
-	public uint Squirrel3_3D(int posX, int posY, int posZ, int seed = 0)
-	{
-		const int PRIME_NUM1 = 198491317;
-		const int PRIME_NUM2 = 6542989;
-		return Squirrel3_1D(posX + PRIME_NUM1 * posY+ PRIME_NUM2* posZ, seed);
-	}
+        public uint Squirrel3_3D(int posX, int posY, int posZ, int seed = 0)
+        {
+            const int PRIME_NUM1 = 198491317;
+            const int PRIME_NUM2 = 6542989;
+            return Squirrel3_1D(posX + PRIME_NUM1 * posY + PRIME_NUM2 * posZ, seed);
+        }
+    }
 }

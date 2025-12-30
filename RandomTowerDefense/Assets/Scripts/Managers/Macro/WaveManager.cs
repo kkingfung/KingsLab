@@ -4,210 +4,271 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.VFX;
+using RandomTowerDefense.Scene;
+using RandomTowerDefense.Managers.System;
+using RandomTowerDefense.AI;
+using RandomTowerDefense.Info;
 
-public class WaveManager : MonoBehaviour
+namespace RandomTowerDefense.Managers.Macro
 {
-    //private readonly float WaveChgSpeedFactor = 2.0f;
-    //private readonly int FireworkMax=120;
-    private readonly float BGMSpawnThreshold = 0.1f;//0.02f;
-
-     //SpawnReferringToBGM
-    [HideInInspector]
-    public float timeBGM;
-    private float[] dataBGM;
-    private float dataBGMPrev;
-    [HideInInspector]
-    public bool readyToSpawn;
-    [HideInInspector]
-    public bool doneDownloading=false;
-
-    private int TotalWaveNum;
-    private int CurrentWaveNum;
-    private float WaveTimer;
-    private StageAttr CurrAttr;
-    private bool inTutorial;
-    private bool allSpawned;
-    public bool isSpawning;
-
-    public int SpawnPointByAI;
-
-
-    public List<VisualEffect> FireWork;
-    public List<Text> waveNumUI;
-    [HideInInspector]
-    public TextMesh waveNumMesh;
-
-    //private int fireworkcounter;
-    public InGameOperation sceneManager;
-    public TutorialManager tutorialManager;
-    public StageManager stageManager;
-    public AudioManager audioManager;
-    public EnemyManager enemyManager;
-    public bool agentCallWait;
-    public AgentScript agent;
-    // Start is called before the first frame update
-    private void Start()
+    /// <summary>
+    /// ウェーブ管理システム - 敵ウェーブ生成と管理の制御
+    ///
+    /// 主な機能:
+    /// - ステージ設定に基づく動的敵ウェーブスポーン
+    /// - BGM同期敵スポーンタイミングシステム
+    /// - ウェーブ遷移用視覚エフェクト連携
+    /// - インテリジェントスポーンポイント選択用AIエージェント統合
+    /// - チュートリアルモードウェーブ管理
+    /// - ウェーブ進行追跡とUI更新
+    /// - リズムベーススポーン用オーディオ波形解析
+    /// </summary>
+    public class WaveManager : MonoBehaviour
     {
-        CurrAttr = StageInfo.GetStageInfo();
-        //sceneManager = FindObjectOfType<InGameOperation>();
-        //stageManager = FindObjectOfType<StageManager>();
-        //enemySpawner = FindObjectOfType<EnemySpawner>();
-        //tutorialManager = FindObjectOfType<TutorialManager>();
-        TotalWaveNum = CurrAttr.waveNum;
-        CurrentWaveNum = 0;
-        //fireworkcounter = 0;
-        allSpawned = false;
-        agentCallWait = false;
+        #region Constants
+        private readonly int FireworkMax = 120;
+        private readonly float BGMSpawnThreshold = 0.1f; // BGM amplitude threshold for spawning
 
-        foreach (Text i in waveNumUI)
+        // オーディオ解析定数
+        private const int AUDIO_SAMPLE_RATE = 44100;
+        private const float BGM_TIME_OFFSET = 0.35f;
+        private const float BGM_TIME_SCALE = 0.25f;
+
+        // 初期化定数
+        private const int INITIAL_WAVE_NUMBER = 0;
+        private const int INITIAL_FIREWORK_COUNTER = 0;
+        private const int INVALID_SPAWN_POINT = -1;
+        private const int EMPTY_COUNT = 0;
+
+        // UI透明度定数
+        private const float UI_TRANSPARENT_ALPHA = 0.0f;
+        private const float UI_OPAQUE_ALPHA = 1.0f;
+
+        // ウェーブ進行定数
+        private const int WAVE_ARRAY_INDEX_OFFSET = 1;
+        private const int TUTORIAL_ISLAND_ID = 0;
+        private const int GAME_RESULT_ONGOING = 0;
+        private const int MIN_SPAWN_SPEED = 1;
+
+        // コルーチン待機時間定数
+        private const float COROUTINE_WAIT_TIME = 0.0f;
+        #endregion
+
+        #region Public Properties
+        // BGM-synchronized spawning
+        [HideInInspector]
+        public float timeBGM;
+        [HideInInspector]
+        public bool readyToSpawn;
+        [HideInInspector]
+        public bool doneDownloading = false;
+        public bool isSpawning;
+        public int SpawnPointByAI;
+        #endregion
+
+        #region Private Fields
+        // Audio analysis data
+        private float[] _dataBGM;
+        private float _dataBGMPrev;
+
+        // Wave management
+        private int _totalWaveNum;
+        private int _currentWaveNum;
+        private float _waveTimer;
+        private StageAttr _currAttr;
+        private bool _inTutorial;
+        private bool _allSpawned;
+        private int _fireworkCounter;
+        #endregion
+
+
+        #region Serialized Fields
+        [Header("✨ Visual Effects")]
+        public List<VisualEffect> FireWork;
+
+        [Header("📝 UI Elements")]
+        public List<Text> waveNumUI;
+        [HideInInspector]
+        public TextMesh waveNumMesh;
+
+        [Header("🎮 Manager References")]
+        public InGameOperation sceneManager;
+        public TutorialManager tutorialManager;
+        public StageManager stageManager;
+        public AudioManager audioManager;
+        public EnemyManager enemyManager;
+
+        [Header("🤖 AI Integration")]
+        public bool agentCallWait;
+        public AgentScript agent;
+        #endregion
+        // Start is called before the first frame update
+        private void Start()
         {
-            i.text = "";
-            i.color = new Color(i.color.r, i.color.g, i.color.b, 0.0f);
-        }
+            _currAttr = StageInfoDetail.stageDetail;
+            sceneManager = FindObjectOfType<InGameOperation>();
+            stageManager = FindObjectOfType<StageManager>();
+            enemyManager = FindObjectOfType<EnemyManager>();
+            tutorialManager = FindObjectOfType<TutorialManager>();
+            _totalWaveNum = _currAttr.WaveNum;
+            _currentWaveNum = INITIAL_WAVE_NUMBER;
+            _fireworkCounter = INITIAL_FIREWORK_COUNTER;
+            _allSpawned = false;
+            agentCallWait = false;
 
-        if (sceneManager.GetCurrIsland() != 0)
-        {
-            inTutorial = false;
-            WaveChg();
-        }
-        else
-        {
-            inTutorial = true;
-        }
-        WaveTimer = Time.time;
-
-        SpawnPointByAI = -1;
-
-        audioManager.PlayAudio("bgm_Battle", true);
-        dataBGM = audioManager.GetClipWaveform("bgm_Battle");
-        timeBGM = Time.time;
-        dataBGMPrev = dataBGM[((int)timeBGM * 44100) % dataBGM.Length];
-        readyToSpawn = false;
-    }
-
-    public int GetTotalWaveNum() { return TotalWaveNum; }
-    public int GetCurrentWaveNum() { return CurrentWaveNum; }
-
-    public bool WaveChg()
-    {
-        if (doneDownloading == false) return false;
-        CurrentWaveNum++;
-
-        //fireworkcounter = FireworkMax;
-        //foreach (VisualEffect i in FireWork)
-        //    i.Play();
-
-        if (CurrentWaveNum > TotalWaveNum)
-        {
-            allSpawned = true;
-            return true;
-        }
-        foreach (Text i in waveNumUI)
-        {
-            i.text = "WAVE " + CurrentWaveNum;
-            i.color = new Color(i.color.r, i.color.g, i.color.b, 1.0f);
-        }
-
-        if (waveNumMesh)
-            waveNumMesh.text = "WAVE " + CurrentWaveNum;
-        StartCoroutine(SpawnWave(CurrAttr.waveDetail[CurrentWaveNum - 1]));
-        return false;
-    }
-    // Update is called once per frame
-    private void Update()
-    {
-        if (readyToSpawn == false && Time.time - timeBGM >= 0.35f)
-        {
-            //if (dataBGM[(int)(timeBGM * 0.25f* 44100) % dataBGM.Length] - dataBGMPrev > BGMSpawnThreshold)
-            if (dataBGM[(int)(timeBGM * 0.25f * 44100) % dataBGM.Length] > BGMSpawnThreshold)
-                readyToSpawn = true;
-            //dataBGMPrev = dataBGM[(int)(timeBGM * 0.25f* 44100) % dataBGM.Length];
-            timeBGM += 0.25f;
-        }
-
-        //if (fireworkcounter > 0) {
-        //    if (--fireworkcounter == 0) {
-        //        foreach (VisualEffect i in FireWork)
-        //            i.Stop();
-        //    }
-        //}
-
-        if (allSpawned && enemyManager.AllAliveMonstersList().Count == 0)
-        {
-            stageManager.SetWin();
-            return;
-        }
-
-        if (inTutorial)
-        {
-            if (tutorialManager && tutorialManager.GetTutorialStage() >= TutorialManager.TutorialStageID.TutorialProgress_FirstWave)
+            foreach (Text i in waveNumUI)
             {
-                WaveChg();
-                WaveTimer = Time.time;
-                inTutorial = false;
+                i.text = "";
+                i.color = new Color(i.color.r, i.color.g, i.color.b, UI_TRANSPARENT_ALPHA);
             }
-        }
-        else if (stageManager.GetResult() == 0)
-        {
-            if (isSpawning==false && Time.time - WaveTimer > CurrAttr.waveWaitTime)
+
+            if (sceneManager.GetCurrIsland() != TUTORIAL_ISLAND_ID)
             {
+                _inTutorial = false;
                 WaveChg();
-                //WaveTimer = Time.time;
             }
-        }
-    }
-    public DebugManager debugManager;
-    private IEnumerator SpawnWave(WaveAttr wave)
-    {
-        float spawnTimer = wave.enmStartTime;
-        bool CheckCustomData = sceneManager && (sceneManager.GetCurrIsland() == StageInfo.IslandNum - 1);
-        isSpawning = true;
-        while (stageManager.GetResult() == 0 && isSpawning)
-        {
-            if (tutorialManager && tutorialManager.WaitingResponds) { }
-            else { spawnTimer -= Time.deltaTime; }
-            if (spawnTimer < 0)
+            else
             {
-                for (int i = 0; i < wave.enmDetail.Count; ++i)
+                _inTutorial = true;
+            }
+            _waveTimer = Time.time;
+
+            SpawnPointByAI = INVALID_SPAWN_POINT;
+
+            audioManager.PlayAudio("bgm_Battle", true);
+            _dataBGM = audioManager.GetClipWaveform("bgm_Battle");
+            timeBGM = Time.time;
+            _dataBGMPrev = _dataBGM[((int)timeBGM * AUDIO_SAMPLE_RATE) % _dataBGM.Length];
+            readyToSpawn = false;
+        }
+
+        public int GetTotalWaveNum() { return _totalWaveNum; }
+        public int GetCurrentWaveNum() { return _currentWaveNum; }
+
+        public bool WaveChg()
+        {
+            if (doneDownloading == false) return false;
+            _currentWaveNum++;
+
+            _fireworkCounter = FireworkMax;
+            foreach (VisualEffect i in FireWork)
+                i.Play();
+
+            if (_currentWaveNum > _totalWaveNum)
+            {
+                _allSpawned = true;
+                return true;
+            }
+            foreach (Text i in waveNumUI)
+            {
+                i.text = "WAVE " + _currentWaveNum;
+                i.color = new Color(i.color.r, i.color.g, i.color.b, UI_OPAQUE_ALPHA);
+            }
+
+            if (waveNumMesh)
+                waveNumMesh.text = "WAVE " + _currentWaveNum;
+            StartCoroutine(SpawnWave(_currAttr.WaveAttrs[_currentWaveNum - WAVE_ARRAY_INDEX_OFFSET]));
+            return false;
+        }
+
+        // Update is called once per frame
+        private void Update()
+        {
+            if (readyToSpawn == false && Time.time - timeBGM >= BGM_TIME_OFFSET)
+            {
+                if (_dataBGM[(int)(timeBGM * BGM_TIME_SCALE * AUDIO_SAMPLE_RATE) % _dataBGM.Length] > BGMSpawnThreshold)
+                    readyToSpawn = true;
+                _dataBGMPrev = _dataBGM[(int)(timeBGM * BGM_TIME_SCALE * AUDIO_SAMPLE_RATE) % _dataBGM.Length];
+                timeBGM += BGM_TIME_SCALE;
+            }
+
+            if (_fireworkCounter > 0)
+            {
+                if (--_fireworkCounter == INITIAL_FIREWORK_COUNTER)
                 {
-                    if (wave.enmDetail[i].waveID > CurrentWaveNum)
-                    {
-                        break;
-                    }
-                    else if (wave.enmDetail[i].waveID < CurrentWaveNum)
-                    {
-                        continue;
-                    }
-                    else if (wave.enmDetail[i].waveID == CurrentWaveNum)
-                    {
-                        for (int j = wave.enmDetail[i].enmNum; j > 0; --j)
-                        {
-                            while (true) 
-                            {
-                                if ((agent == null || agentCallWait == false) && readyToSpawn)
-                                {
-                                    enemyManager.SpawnMonster(wave.enmDetail[i].enmType,
-                                        stageManager.GetPortalPosition(SpawnPointByAI >= 0 ? SpawnPointByAI : wave.enmDetail[i].enmPort), CheckCustomData);
-                                    readyToSpawn = false;
-                                    timeBGM = Time.time;
-                                    break;
-                                }
-                                yield return new WaitForSeconds(0);
-                            }
-                            yield return new WaitForSeconds(wave.enmSpawnPeriod / Mathf.Max(StageInfo.spawnSpeedEx, 1));
-                        }
-                    }
-    
+                    foreach (VisualEffect i in FireWork)
+                        i.Stop();
                 }
-                isSpawning = false;
-                WaveTimer = Time.time;
             }
 
-            yield return new WaitForSeconds(0f);
-        }
-    }
+            if (_allSpawned && enemyManager.AllAliveMonstersList().Count == EMPTY_COUNT)
+            {
+                stageManager.SetWin();
+                return;
+            }
 
-    public void SetCurrWAveNum(int num) {
-        CurrentWaveNum = num;
+            if (_inTutorial)
+            {
+                if (tutorialManager && tutorialManager.GetTutorialStage() >= TutorialManager.TutorialStageID.TutorialProgress_FirstWave)
+                {
+                    WaveChg();
+                    _waveTimer = Time.time;
+                    _inTutorial = false;
+                }
+            }
+            else if (stageManager.GetResult() == GAME_RESULT_ONGOING)
+            {
+                if (isSpawning == false && Time.time - _waveTimer > _currAttr.WaveWaitTime)
+                {
+                    WaveChg();
+                    _waveTimer = Time.time;
+                }
+            }
+        }
+        public DebugManager debugManager;
+        private IEnumerator SpawnWave(WaveAttr wave)
+        {
+            float spawnTimer = wave.EnemyStartTime;
+            bool CheckCustomData = sceneManager && (sceneManager.GetCurrIsland() == StageInfoDetail.IslandNum - 1);
+            isSpawning = true;
+            while (stageManager.GetResult() == GAME_RESULT_ONGOING && isSpawning)
+            {
+                if (tutorialManager && tutorialManager.WaitingResponds) { }
+                else { spawnTimer -= Time.deltaTime; }
+                if (spawnTimer < 0)
+                {
+                    for (int i = 0; i < wave.WaveDetails.Count; ++i)
+                    {
+                        if (wave.WaveDetails[i].WaveID > _currentWaveNum)
+                        {
+                            break;
+                        }
+                        else if (wave.WaveDetails[i].WaveID < _currentWaveNum)
+                        {
+                            continue;
+                        }
+                        else if (wave.WaveDetails[i].WaveID == _currentWaveNum)
+                        {
+                            for (int j = wave.WaveDetails[i].EnemyNumber; j > 0; --j)
+                            {
+                                while (true)
+                                {
+                                    if ((agent == null || agentCallWait == false) && readyToSpawn)
+                                    {
+                                        enemyManager.SpawnMonster(wave.WaveDetails[i].EnemyType,
+                                            stageManager.GetPortalPosition(SpawnPointByAI >= 0 ? SpawnPointByAI : wave.WaveDetails[i].EnemyPort), CheckCustomData);
+                                        readyToSpawn = false;
+                                        timeBGM = Time.time;
+                                        break;
+                                    }
+                                    yield return new WaitForSeconds(COROUTINE_WAIT_TIME);
+                                }
+                                yield return new WaitForSeconds(wave.EnemySpawnPeriod / Mathf.Max(StageInfoDetail.customStageInfo.SpawnSpeedFactor, MIN_SPAWN_SPEED));
+                            }
+                        }
+
+                    }
+                    isSpawning = false;
+                    _waveTimer = Time.time;
+                }
+
+                yield return new WaitForSeconds(COROUTINE_WAIT_TIME);
+            }
+        }
+
+        public void SetCurrWAveNum(int num)
+        {
+            _currentWaveNum = num;
+        }
     }
 }

@@ -3,6 +3,8 @@
 Unity DOTS と ML-Agents を活用した、AI 駆動型の高度なタワーディフェンスゲームです。KingsLab による学校の最終年度プロジェクトとして制作されました。
 現在は職場での経験を活かし、各処理の作り直しを進めています。その後、ゲーム性を維持しつつ操作性と UI の改善を行う予定です。（対応ブランチ: refactor）
 
+<img src="/Result.PNG" width="500"><img src="/Result2.PNG" width="500"> 
+
 ## Overview
 
 RandomTowerDefense は、タワーを配置する際に種類がランダムで決まる独自の仕組みにより、ローグライク的な戦略体験を提供します。  
